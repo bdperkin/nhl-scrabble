@@ -118,6 +118,10 @@ jobs:
         with:
           enable-cache: false
 
+      - name: Install docformatter for pre-commit
+        run: |
+          uv pip install docformatter --system
+
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.0
         env:
