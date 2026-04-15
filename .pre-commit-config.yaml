@@ -103,6 +103,14 @@ repos:
           - mdformat-tables  # Table formatting
         args: []  # Config is in pyproject.toml
 
+  - repo: https://github.com/PyCQA/doc8
+    rev: v1.1.1
+    hooks:
+      - id: doc8
+        # Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)
+        args: []  # Config is in pyproject.toml
+        files: \.(rst|txt)$
+
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.5.18
     hooks:

@@ -406,6 +406,35 @@ quiet-level = 0  # Show all issues (comprehensive)
 # - Application directories: src (matches project src layout)
 # - Aligns with ruff's import handling and isort configuration
 
+# Doc8 configuration
+[tool.doc8]
+# Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)
+# Align with ruff's line-length = 100 for consistency
+max-line-length = 100  # Match ruff's line-length
+# Check file extensions
+extensions = [".rst", ".txt"]  # Standard RST extensions
+# Ignore paths (align with other tool exclusions)
+ignore-path = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    "htmlcov",
+]
+# Ignore specific checks (none by default for comprehensive checking)
+ignore = []
+# Enable verbose output
+verbose = false
+# Check that files end with a newline (matches end-of-file-fixer)
+file-encoding = "utf-8"
+
 # Mdformat configuration
 [tool.mdformat]
 # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)

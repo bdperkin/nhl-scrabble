@@ -74,6 +74,7 @@ jobs:
           - flake8
           - absolufy-imports
           - autopep8
+          - doc8
 
     steps:
       - name: Checkout code
