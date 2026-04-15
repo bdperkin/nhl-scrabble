@@ -714,3 +714,48 @@ preview = false  # Disable preview features for stability
 
 [tool.uv.sources]
 # Optional: Configure custom package sources here if needed
+
+# ============================================================================
+# Interrogate - Docstring Coverage Checking
+# ============================================================================
+
+[tool.interrogate]
+# Comprehensive docstring coverage checking (matches ruff's ALL rules philosophy)
+fail-under = 100.0  # Require 100% docstring coverage (current coverage is 100%)
+verbose = 2  # Maximum verbosity (-vv)
+quiet = false  # Print output
+color = true  # Enable color output
+
+# What to check (comprehensive by default)
+ignore-init-method = false  # Check __init__ methods
+ignore-init-module = false  # Check __init__.py modules
+ignore-magic = false  # Check magic methods
+ignore-module = false  # Check module-level docstrings
+ignore-nested-functions = false  # Check nested functions
+ignore-nested-classes = false  # Check nested classes
+ignore-overloaded-functions = false  # Check @typing.overload functions
+ignore-private = false  # Check private methods (__)
+ignore-semiprivate = false  # Check semiprivate methods (_)
+ignore-property-decorators = false  # Check property decorators
+ignore-setters = false  # Check property setters
+
+# File patterns
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
+]
+
+# Python file extensions
+ext = []  # Only .py files (default)
+
+# Docstring style
+style = "sphinx"  # Sphinx-style docstrings (default)
+
+# Output options
+omit-covered-files = false  # Show all files even if 100% covered
