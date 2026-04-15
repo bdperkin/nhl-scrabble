@@ -69,6 +69,7 @@ jobs:
           - codespell
           - pymarkdown
           - mdformat
+          - pyroma
           - validate-pyproject
           - tox-ini-fmt
           - yamllint

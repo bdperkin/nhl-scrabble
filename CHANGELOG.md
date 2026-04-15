@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Pyroma Integration** - Python package metadata quality rating
+
+  - Quality checker for Python package metadata and project setup
+  - Pre-commit hook (local) for automatic metadata quality checks
+  - Tox environment (pyroma) for standalone quality rating
+  - Added to CI/CD pipeline for continuous metadata quality validation
+  - Rates project metadata on a 10-point scale
+  - Checks: package name, version, description, classifiers, license, readme, keywords, author info
+  - Current project rating: 10/10 ("Your cheese is so fresh most people think it's a cream: Mascarpone")
+  - Works harmoniously with validate-pyproject for comprehensive metadata validation
+  - 48 total pre-commit hooks for comprehensive code quality
+
 - **Tox-ini-fmt Integration** - Tox configuration file formatting
 
   - Formatter for tox.ini files enforcing tox 4 best practices
@@ -20,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removes deprecated fields (minversion, isolated_build now defaults)
   - Updates minimum version requirements (tox>=4.2, tox-uv>=1)
   - Works harmoniously with tox 4 and tox-uv for consistent configuration
-  - 47 total pre-commit hooks for comprehensive code quality
+  - 47 total pre-commit hooks (before pyroma addition)
 
 - **Autoflake Integration** - Unused import and variable removal
 
