@@ -332,6 +332,16 @@ skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,buil
 count = true
 quiet-level = 0  # Show all issues (comprehensive)
 
+# Validate-pyproject configuration
+# Note: validate-pyproject validates this file (pyproject.toml) against PEP standards
+# It doesn't have configuration options itself - it validates the project metadata
+# Comprehensive validation (matches ruff's ALL rules philosophy):
+# - PEP 517: Build system declaration
+# - PEP 518: Specifying build system requirements
+# - PEP 621: Project metadata in pyproject.toml
+# - PEP 631: Dependency specification
+# All validations are enabled by default, ensuring complete compliance
+
 # PyMarkdown configuration
 [tool.pymarkdown]
 # Comprehensive by default (matches ruff's ALL rules philosophy)

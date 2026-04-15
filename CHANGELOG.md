@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Validate-pyproject Integration** - pyproject.toml validation against PEP standards
+  - Comprehensive validation matching ruff's ALL rules philosophy
+  - Pre-commit hook for automated pyproject.toml validation
+  - Tox environment (validate-pyproject) for standalone validation
+  - Added to CI/CD pipeline for continuous project metadata validation
+  - Validates against PEP 517 (build system), PEP 518 (build requirements), PEP 621 (project metadata), PEP 631 (dependencies)
+  - All validations enabled by default, ensuring complete PEP compliance
 - **PyMarkdown Integration** - Markdown linting and formatting
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
   - Pre-commit hook for automated markdown linting
@@ -23,10 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (34 total):
+- Comprehensive pre-commit hooks (35 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
+  - Project validation hooks (1): validate-pyproject for pyproject.toml validation
   - Spelling hooks (1): codespell for code and documentation spell checking
   - Markdown hooks (1): pymarkdown for markdown linting and formatting
   - UV hook (1): uv-lock for dependency lock file validation
