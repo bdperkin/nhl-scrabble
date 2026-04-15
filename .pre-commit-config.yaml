@@ -5,6 +5,12 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
+  # Sync pre-commit hook versions with dependency specifications
+  - repo: https://github.com/pre-commit/sync-pre-commit-deps
+    rev: v0.0.1
+    hooks:
+      - id: sync-pre-commit-deps
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
