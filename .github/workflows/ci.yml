@@ -73,6 +73,7 @@ jobs:
           - yamllint
           - flake8
           - absolufy-imports
+          - autopep8
 
     steps:
       - name: Checkout code
