@@ -58,7 +58,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tox-env: [py310, py311, py312, py313, ruff-check, mypy, coverage, codespell, pymarkdown, validate-pyproject]
+        tox-env:
+          - py310
+          - py311
+          - py312
+          - py313
+          - ruff-check
+          - mypy
+          - coverage
+          - codespell
+          - pymarkdown
+          - validate-pyproject
+          - yamllint
 
     steps:
       - name: Checkout code

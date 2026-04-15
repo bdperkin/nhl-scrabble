@@ -1,0 +1,27 @@
+# Yamllint configuration
+# Comprehensive YAML linting (matches ruff's ALL rules philosophy)
+# Enable all rules by default with selective pragmatic disables
+
+extends: default
+
+rules:
+  # Line length - align with ruff's line-length = 100 for consistency
+  line-length:
+    max: 100
+    allow-non-breakable-inline-mappings: true
+
+  # Document start (---) - not always necessary, disable for practical use
+  document-start: disable
+
+  # Indentation - standard 2 spaces for YAML
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+
+  # Comments - allow flexibility in comment formatting
+  comments:
+    min-spaces-from-content: 1
+
+  # Truthy values - disable overly strict checking (yes/no are common and clear)
+  truthy: disable

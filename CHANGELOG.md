@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Yamllint Integration** - YAML file validation and linting
+  - Comprehensive configuration matching ruff's ALL rules philosophy
+  - Pre-commit hook for automated YAML linting
+  - Tox environment (yamllint) for standalone YAML checking
+  - Added to CI/CD pipeline for continuous YAML validation
+  - Configuration in .yamllint file (yamllint doesn't support pyproject.toml)
+  - Extends default configuration with selective pragmatic disables
+  - Line length: 100 (aligns with ruff's line-length)
+  - Document start: disabled (not always necessary)
+  - Truthy values: disabled (yes/no are common and clear)
+  - Fixed line-length issue in .github/workflows/ci.yml (converted to multi-line array)
 - **Validate-pyproject Integration** - pyproject.toml validation against PEP standards
   - Comprehensive validation matching ruff's ALL rules philosophy
   - Pre-commit hook for automated pyproject.toml validation
@@ -30,11 +41,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (35 total):
+- Comprehensive pre-commit hooks (36 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
   - Project validation hooks (1): validate-pyproject for pyproject.toml validation
+  - YAML linting hooks (1): yamllint for YAML file validation and linting
   - Spelling hooks (1): codespell for code and documentation spell checking
   - Markdown hooks (1): pymarkdown for markdown linting and formatting
   - UV hook (1): uv-lock for dependency lock file validation
