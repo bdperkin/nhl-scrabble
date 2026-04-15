@@ -72,6 +72,7 @@ jobs:
           - validate-pyproject
           - yamllint
           - flake8
+          - absolufy-imports
 
     steps:
       - name: Checkout code
