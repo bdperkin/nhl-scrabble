@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Flake8 Integration** - Python code linting and style checking
+  - Comprehensive configuration matching ruff's ALL rules philosophy as closely as possible
+  - Pre-commit hook for automated Python linting (complementary to ruff)
+  - Tox environment (flake8) for standalone linting
+  - Added to CI/CD pipeline for continuous code quality validation
+  - Configuration in pyproject.toml via flake8-pyproject plugin
+  - Line length: 100 (aligns with ruff's line-length)
+  - Max complexity: 10 (matches ruff's mccabe max-complexity)
+  - Per-file ignores for __init__.py and tests (matches ruff's approach)
+  - Note: Provides additional validation alongside ruff for comprehensive coverage
 - **Yamllint Integration** - YAML file validation and linting
   - Comprehensive configuration matching ruff's ALL rules philosophy
   - Pre-commit hook for automated YAML linting
@@ -41,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (36 total):
+- Comprehensive pre-commit hooks (37 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
@@ -50,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Spelling hooks (1): codespell for code and documentation spell checking
   - Markdown hooks (1): pymarkdown for markdown linting and formatting
   - UV hook (1): uv-lock for dependency lock file validation
+  - Flake8 hooks (1): flake8 for Python code linting and style checking
   - Ruff hooks (2): ruff-check (linting), ruff-format (formatting)
   - MyPy hook (1): strict type checking
 - UV lock file (uv.lock) with 1,957 lines for deterministic dependency resolution

@@ -90,6 +90,14 @@ repos:
     hooks:
       - id: uv-lock
 
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        # Comprehensive linting (matches ruff's ALL rules philosophy)
+        additional_dependencies: [flake8-pyproject]
+        args: []  # Config is in pyproject.toml via flake8-pyproject
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:

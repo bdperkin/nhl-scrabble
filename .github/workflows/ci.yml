@@ -70,6 +70,7 @@ jobs:
           - pymarkdown
           - validate-pyproject
           - yamllint
+          - flake8
 
     steps:
       - name: Checkout code
