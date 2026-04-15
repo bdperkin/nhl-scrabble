@@ -1,9 +1,16 @@
 # NHL Scrabble Score Analyzer
 
-[![Python 3.10-3.15](https://img.shields.io/badge/python-3.10--3.15-blue.svg)](https://www.python.org/downloads/)
+[![CI](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml)
+[![Python 3.10-3.13](https://img.shields.io/badge/python-3.10--3.13-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://codecov.io/gh/bdperkin/nhl-scrabble/branch/main/graph/badge.svg)](https://codecov.io/gh/bdperkin/nhl-scrabble)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Powered by UV](https://img.shields.io/badge/powered%20by-uv-black?logo=astral)](https://github.com/astral-sh/uv)
+[![GitHub stars](https://img.shields.io/github/stars/bdperkin/nhl-scrabble?style=social)](https://github.com/bdperkin/nhl-scrabble/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/bdperkin/nhl-scrabble)](https://github.com/bdperkin/nhl-scrabble/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/bdperkin/nhl-scrabble)](https://github.com/bdperkin/nhl-scrabble/commits/main)
 
 A Python application that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. Generate comprehensive reports showing team, division, and conference standings complete with playoff brackets!
 
@@ -18,7 +25,7 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
   - League-wide statistics and fun facts
 - 🎯 **Flexible Output** - Text or JSON format output
 - ⚙️ **Configurable** - Customize via environment variables or command-line options
-- 🧪 **Well-Tested** - Comprehensive test suite with >80% coverage
+- 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules
 - 📦 **Modern Python** - Uses type hints, dataclasses, and follows best practices
 - 🛠️ **Developer-Friendly** - Self-documenting Makefile with 55 targets for all development tasks
 - ⚡ **Lightning Fast** - Optional uv support for 10-100x faster package installation
@@ -41,7 +48,7 @@ pip install -e ".[dev]"
 
 ### Requirements
 
-- Python 3.10-3.15
+- Python 3.10-3.13
 - Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`
 - Note: UV acceleration is automatic when using tox (via tox-uv plugin)
 
@@ -253,7 +260,7 @@ pytest tests/integration -m integration
 The project supports testing across multiple Python versions using [tox](https://tox.wiki/):
 
 ```bash
-# Test across all Python versions (3.10, 3.11, 3.12, 3.13, 3.14, 3.15)
+# Test across all Python versions (3.10, 3.11, 3.12, 3.13)
 make tox
 
 # Run in parallel for faster results
@@ -269,7 +276,7 @@ make tox-envs       # Alternative way to list environments
 
 # Use dynamic pattern rule for any tox environment:
 make tox-py310      # Test Python 3.10 (handled by pattern rule)
-make tox-py315      # Test Python 3.15 (handled by pattern rule)
+make tox-py313      # Test Python 3.13 (handled by pattern rule)
 make tox-coverage   # Coverage report (handled by pattern rule)
 make tox-ruff-check # Linting (handled by pattern rule)
 make tox-mypy       # Type checking (handled by pattern rule)
@@ -277,7 +284,7 @@ make tox-ci         # Simulate full CI pipeline (handled by pattern rule)
 
 # Or use tox directly:
 tox -e py310        # Test Python 3.10
-tox -e py315        # Test Python 3.15
+tox -e py313        # Test Python 3.13
 tox -e coverage     # Coverage report
 tox -e ruff-check   # Linting
 tox -e mypy         # Type checking
@@ -380,7 +387,7 @@ nhl-scrabble/
 │   └── fixtures/              # Test fixtures
 ├── docs/                      # Documentation
 ├── pyproject.toml             # Project & UV configuration
-├── .python-version            # Python versions (3.10-3.15)
+├── .python-version            # Python versions (3.10-3.13)
 └── tox.ini                    # Testing automation
 ```
 
@@ -476,7 +483,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
-- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13, 3.14, 3.15
+- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13
 
 ---
 
