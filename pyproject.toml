@@ -137,6 +137,19 @@ exclude = [
     ".ruff_cache",
 ]
 
+# Autopep8 configuration
+[tool.autopep8]
+# Comprehensive PEP 8 formatting (matches ruff's ALL rules philosophy as closely as possible)
+# Align with ruff's configuration
+max_line_length = 100  # Match ruff's line-length
+aggressive = 2  # Apply aggressive fixes (level 2 for comprehensive but safe changes)
+# Ignore errors that conflict with ruff-format or are handled better by ruff
+ignore = "E501,W503,E203"  # Comma-separated list
+# Selectively enable certain fixes
+select = ""  # Empty = enable all fixes except ignored
+# Number of jobs for parallel processing (0 = auto-detect)
+jobs = 0
+
 # Ruff configuration
 [tool.ruff]
 target-version = "py310"

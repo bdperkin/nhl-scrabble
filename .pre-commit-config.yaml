@@ -116,6 +116,14 @@ repos:
         additional_dependencies: [flake8-pyproject]
         args: []  # Config is in pyproject.toml via flake8-pyproject
 
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.0.4
+    hooks:
+      - id: autopep8
+        # Comprehensive PEP 8 formatting (runs before ruff-format)
+        # Note: May conflict with ruff-format; autopep8 runs first, ruff-format finalizes
+        args: [--in-place, --aggressive, --aggressive]  # Additional config in pyproject.toml
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:

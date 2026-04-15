@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Autopep8 Integration** - PEP 8 auto-formatting with aggressive conflict resolution
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook runs BEFORE ruff-format (autopep8 first pass, ruff-format finalization)
+  - Tox environment (autopep8) for standalone formatting checks
+  - Added to CI/CD pipeline for continuous code formatting validation
+  - Configuration: max_line_length=100, aggressive=2, ignores E501/W503/E203 (align with ruff)
+  - Hook order: autopep8 → ruff-check → ruff-format (allows both formatters to work together)
+  - Note: Potential conflicts managed by running autopep8 first, then ruff-format finalizes
 - **Absolufy-imports Integration** - Convert relative imports to absolute imports
   - Comprehensive configuration matching ruff's ALL rules philosophy
   - Pre-commit hook configured to process only src/ directory files
@@ -68,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (39 total):
+- Comprehensive pre-commit hooks (40 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
@@ -79,7 +87,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Markdown hooks (2): pymarkdown for markdown linting, mdformat for markdown formatting
   - UV hook (1): uv-lock for dependency lock file validation
   - Flake8 hooks (1): flake8 for Python code linting and style checking
-  - Ruff hooks (2): ruff-check (linting), ruff-format (formatting)
+  - Autopep8 hooks (1): autopep8 for PEP 8 auto-formatting (runs before ruff-format)
+  - Ruff hooks (2): ruff-check (linting), ruff-format (formatting finalization)
   - MyPy hook (1): strict type checking
 - UV lock file (uv.lock) with 1,957 lines for deterministic dependency resolution
 - Comprehensive UV configuration in pyproject.toml aligned with ruff's "ALL rules" philosophy
