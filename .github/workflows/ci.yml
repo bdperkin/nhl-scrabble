@@ -74,6 +74,7 @@ jobs:
           - flake8
           - isort
           - absolufy-imports
+          - autoflake
           - black
           - docformatter
           - autopep8

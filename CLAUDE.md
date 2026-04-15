@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.13
 **License:** MIT
-**Pre-commit Hooks:** 45 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 46 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (45 Comprehensive Checks)
+## Pre-commit Hooks (46 Comprehensive Checks)
 
-The project uses 45 pre-commit hooks for automatic code quality validation:
+The project uses 46 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -181,6 +181,10 @@ The project uses 45 pre-commit hooks for automatic code quality validation:
 **Flake8 Hooks (1 from pycqa/flake8):**
 
 - `flake8`: Python code linting and style checking (comprehensive configuration via flake8-pyproject)
+
+**Autoflake Hooks (1 from PyCQA/autoflake):**
+
+- `autoflake`: Remove unused imports and variables (aligns with ruff's F401 and F841 rules, ignores __init__.py imports)
 
 **Black Hooks (1 from psf/black-pre-commit-mirror):**
 
