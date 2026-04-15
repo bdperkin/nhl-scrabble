@@ -330,6 +330,31 @@ make uv-pip ARGS="list"
 
 **Note:** Individual uv-* Makefile targets have been removed. UV is now integrated via tox-uv and works automatically with all tox commands. See [docs/TOX-UV.md](docs/TOX-UV.md) for complete tox-uv documentation.
 
+### Pre-commit Hooks
+
+The project uses comprehensive pre-commit hooks (32 total) for automatic code quality checks:
+
+```bash
+# Install pre-commit hooks (one-time setup)
+pre-commit install
+
+# Run all hooks manually
+pre-commit run --all-files
+
+# Update hook versions
+pre-commit autoupdate
+```
+
+**Hook Categories:**
+- **Meta hooks** (3): Configuration validation (check-hooks-apply, check-useless-excludes, sync-pre-commit-deps)
+- **File quality** (18): Formatting, syntax, security (trailing-whitespace, check-yaml, detect-private-key, etc.)
+- **Python quality** (7): Code patterns (blanket-noqa, mock-methods, eval, type-annotations, etc.)
+- **UV** (1): Dependency lock file validation (uv-lock)
+- **Ruff** (2): Comprehensive linting and formatting (ruff-check, ruff-format)
+- **MyPy** (1): Strict type checking
+
+All hooks run automatically on commit, ensuring code quality before changes are committed.
+
 ### Code Quality
 
 Using Make (recommended):
@@ -379,13 +404,16 @@ nhl-scrabble/
 │   ├── reports/               # Report generators
 │   ├── cli.py                 # CLI interface
 │   ├── config.py              # Configuration
-│   └── logging_config.py      # Logging setup
+│   ├── logging_config.py      # Logging setup
+│   └── py.typed               # PEP 561 type marker
 ├── tests/                     # Test suite
 │   ├── unit/                  # Unit tests
 │   ├── integration/           # Integration tests
 │   └── fixtures/              # Test fixtures
 ├── docs/                      # Documentation
 ├── pyproject.toml             # Project & UV configuration
+├── uv.lock                    # Dependency lock file (1,957 lines)
+├── .pre-commit-config.yaml    # Pre-commit hooks (32 hooks)
 ├── .python-version            # Python versions (3.10-3.13)
 └── tox.ini                    # Testing automation
 ```
@@ -482,6 +510,8 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
+- **Pre-commit Hooks**: 32 hooks (meta, pre-commit-hooks, pygrep-hooks, uv, ruff, mypy)
+- **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
 - **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13
 
 ---

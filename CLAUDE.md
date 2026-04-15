@@ -7,8 +7,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 NHL Scrabble Score Analyzer is a professional Python package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
 
 **Current Version:** 2.0.0
-**Python:** 3.10-3.15
+**Python:** 3.10-3.13
 **License:** MIT
+**Pre-commit Hooks:** 32 hooks (comprehensive quality checks)
+**Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
 
@@ -108,15 +110,117 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
+## Pre-commit Hooks (32 Comprehensive Checks)
+
+The project uses 32 pre-commit hooks for automatic code quality validation:
+
+### Hook Categories
+
+**Meta Hooks (3):**
+- `check-hooks-apply`: Validates all hooks apply to repository files
+- `check-useless-excludes`: Detects useless exclude patterns
+- `sync-pre-commit-deps`: Syncs hook versions with pyproject.toml
+
+**File Quality Hooks (18 from pre-commit-hooks):**
+- Whitespace: `trailing-whitespace`, `end-of-file-fixer`, `mixed-line-ending`, `fix-byte-order-marker`
+- Syntax: `check-yaml`, `check-toml`, `check-json`, `check-ast`
+- Python: `check-builtin-literals`, `check-docstring-first`, `debug-statements`, `name-tests-test`
+- Security: `detect-private-key`
+- Git: `check-added-large-files`, `check-merge-conflict`, `check-case-conflict`, `destroyed-symlinks`
+- Executable: `check-shebang-scripts-are-executable`
+
+**Python Quality Hooks (7 from pygrep-hooks):**
+- `python-check-blanket-noqa`: Enforce specific noqa codes (# noqa: F401)
+- `python-check-blanket-type-ignore`: Enforce specific type: ignore codes
+- `python-check-mock-methods`: Prevent mock testing mistakes
+- `python-no-eval`: Detect eval() usage (security)
+- `python-no-log-warn`: Enforce logging.warning() vs deprecated logging.warn()
+- `python-use-type-annotations`: Enforce PEP 484 annotations vs type comments
+- `text-unicode-replacement-char`: Detect Unicode replacement character (U+FFFD)
+
+**UV Hook (1 from uv-pre-commit):**
+- `uv-lock`: Maintains uv.lock file consistency with pyproject.toml
+
+**Ruff Hooks (2 from ruff-pre-commit):**
+- `ruff-check`: Comprehensive linting with ALL rules (--fix, --exit-non-zero-on-fix)
+- `ruff-format`: Code formatting (quote-style: double, indent-style: space)
+
+**MyPy Hook (1 from mirrors-mypy):**
+- `mypy`: Strict type checking (strict mode with comprehensive options)
+
+### Pre-commit Usage
+
+```bash
+# Install hooks (one-time)
+pre-commit install
+
+# Run all hooks manually
+pre-commit run --all-files
+
+# Run specific hook
+pre-commit run ruff-check --all-files
+
+# Update hook versions
+pre-commit autoupdate
+
+# Skip hooks (not recommended)
+SKIP=mypy git commit -m "message"
+```
+
+All hooks run automatically on `git commit`, ensuring code quality before changes enter the repository.
+
 ## Development Tools
 
 ### UV Ecosystem (10-100x Faster)
 
-The project uses UV via tox-uv for maximum performance:
+The project uses comprehensive UV configuration aligned with ruff's "ALL rules" philosophy:
 
-1. **Tox-UV Plugin** - Automatic UV integration for all tox operations
-2. **Global Caching** - UV's global package cache shared across all environments
-3. **Parallel Downloads** - UV downloads packages concurrently
+#### UV Configuration (pyproject.toml)
+
+**Strict Dependency Resolution (like ruff's ALL rules):**
+```toml
+[tool.uv]
+managed = true
+package = true
+compile-bytecode = true
+link-mode = "copy"
+
+# Comprehensive resolution (matches ruff's ALL rules philosophy)
+resolution = "highest"  # Use highest compatible versions
+
+# Dependency constraints (like ruff's base ruleset)
+constraint-dependencies = []  # Strict baseline
+override-dependencies = []    # Selective exceptions (like ruff ignores)
+
+# Deterministic resolution (like ruff's consistent checking)
+index-strategy = "first-match"  # Predictable package resolution
+keyring-provider = "disabled"   # Reproducible across environments
+
+# Python management
+python-preference = "managed"  # Consistent Python versions
+
+# Stability
+preview = false  # Disable experimental features (like avoiding experimental ruff rules)
+
+# Caching
+cache-keys = []  # Strict cache control
+```
+
+**Philosophy Alignment:**
+| UV Setting | Ruff Equivalent | Purpose |
+|------------|-----------------|---------|
+| `resolution = "highest"` | `select = ["ALL"]` | Comprehensive by default |
+| `override-dependencies` | `ignore = [...]` | Selective practical exceptions |
+| `index-strategy = "first-match"` | Consistent rules | Deterministic behavior |
+| `keyring-provider = "disabled"` | Reproducible | Same behavior everywhere |
+
+#### Lock File (uv.lock)
+
+**1,957-line deterministic dependency lock:**
+- All direct and transitive dependencies with exact versions
+- Hash verification for all packages
+- Platform-specific resolutions
+- Maintained automatically by `uv-lock` pre-commit hook
 
 ```bash
 # Check UV is available (optional)
@@ -128,6 +232,10 @@ make tox-parallel    # Even faster with parallel execution
 
 # Direct UV pip access (advanced)
 make uv-pip ARGS="list"
+
+# Lock file is auto-maintained by pre-commit hook
+# Manual update if needed:
+uv lock
 ```
 
 ### Makefile (55 Targets)
@@ -592,14 +700,16 @@ The project uses UV automatically via tox-uv:
 ## Project Statistics
 
 - **Package:** nhl-scrabble 2.0.0
-- **Python:** 3.10, 3.11, 3.12, 3.13, 3.14, 3.15
+- **Python:** 3.10, 3.11, 3.12, 3.13
 - **Lines of Code:** ~1,866 (src)
 - **Lines of Tests:** ~680 (tests)
-- **Test Coverage:** >80% on core modules
+- **Test Coverage:** 49.93% overall, >90% on core modules
 - **Modules:** 15 core modules
-- **Tests:** 36+ tests
+- **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Documentation:** 8 comprehensive guides (25+ KB total)
+- **Pre-commit Hooks:** 32 hooks (meta, file quality, Python quality, UV, ruff, mypy)
+- **Dependency Lock:** uv.lock with 1,957 lines
+- **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization
 
 ## External Resources
