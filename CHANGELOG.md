@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Interrogate Integration** - Python docstring coverage checking
+
+  - Comprehensive docstring coverage checker matching ruff's ALL rules philosophy
+  - Pre-commit hook (econchick/interrogate) for automatic docstring coverage validation
+  - Tox environment (interrogate) for standalone docstring coverage checks
+  - Added to CI/CD pipeline for continuous documentation quality validation
+  - Configuration in pyproject.toml requiring 100% docstring coverage
+  - Checks: modules, classes, methods, functions, __init__ methods, magic methods, nested functions/classes
+  - Comprehensive by default: checks all public and private code (no ignores)
+  - Current project coverage: 100% (93 items, all documented)
+  - Verbose output (level 2) showing detailed coverage breakdown per module
+  - Sphinx-style docstrings enforced (default style)
+  - Works harmoniously with ruff's pydocstyle rules (D) for docstring format validation
+  - 49 total pre-commit hooks for comprehensive code quality
+
 - **Pyroma Integration** - Python package metadata quality rating
 
   - Quality checker for Python package metadata and project setup
@@ -19,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Checks: package name, version, description, classifiers, license, readme, keywords, author info
   - Current project rating: 10/10 ("Your cheese is so fresh most people think it's a cream: Mascarpone")
   - Works harmoniously with validate-pyproject for comprehensive metadata validation
-  - 48 total pre-commit hooks for comprehensive code quality
+  - 48 total pre-commit hooks (before interrogate addition)
 
 - **Tox-ini-fmt Integration** - Tox configuration file formatting
 
