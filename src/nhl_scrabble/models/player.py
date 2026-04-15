@@ -17,6 +17,7 @@ class PlayerScore:
         team: Team abbreviation (e.g., 'TOR', 'MTL')
         division: Division name
         conference: Conference name
+
     """
 
     first_name: str

@@ -17,6 +17,7 @@ class PlayoffReporter(BaseReporter):
 
         Returns:
             Formatted playoff report string
+
         """
         output = self._format_header("🎰 WILD CARD PLAYOFF STANDINGS (Scrabble Edition)")
         output += "\nTop 3 from each division + 2 wild cards per conference"
@@ -71,6 +72,7 @@ class PlayoffReporter(BaseReporter):
 
         Returns:
             Dictionary mapping division names to team lists
+
         """
         teams_by_division: dict[str, list[PlayoffTeam]] = defaultdict(list)
         for team in teams:
@@ -91,6 +93,7 @@ class PlayoffReporter(BaseReporter):
 
         Returns:
             Formatted team line string
+
         """
         seed_part = f"{team.seed_type:20}" if show_seed else " " * 20
         return (
