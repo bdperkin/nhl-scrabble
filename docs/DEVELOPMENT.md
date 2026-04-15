@@ -5,14 +5,14 @@ This guide covers development workflows, best practices, and conventions for the
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
-2. [Development Workflow](#development-workflow)
-3. [Testing](#testing)
-4. [Code Quality](#code-quality)
-5. [UV Ecosystem](#uv-ecosystem)
-6. [Documentation](#documentation)
-7. [Release Process](#release-process)
-8. [Troubleshooting](#troubleshooting)
-9. [Best Practices](#best-practices)
+1. [Development Workflow](#development-workflow)
+1. [Testing](#testing)
+1. [Code Quality](#code-quality)
+1. [UV Ecosystem](#uv-ecosystem)
+1. [Documentation](#documentation)
+1. [Release Process](#release-process)
+1. [Troubleshooting](#troubleshooting)
+1. [Best Practices](#best-practices)
 
 ## Getting Started
 
@@ -71,9 +71,10 @@ source .venv/bin/activate
 ```
 
 The initialization commands will:
+
 1. Create a virtual environment in `.venv/`
-2. Install the package with development dependencies
-3. Install pre-commit hooks
+1. Install the package with development dependencies
+1. Install pre-commit hooks
 
 ### Python Version
 
@@ -110,6 +111,7 @@ tox --version  # Should show tox-uv plugin
 ### Daily Development
 
 1. **Start your work session**
+
    ```bash
    # Pull latest changes
    git pull
@@ -123,7 +125,8 @@ tox --version  # Should show tox-uv plugin
    git checkout -b feature/your-feature-name
    ```
 
-2. **During development**
+1. **During development**
+
    ```bash
    # Run tests in watch mode (automatically rerun on changes)
    make test-watch
@@ -135,7 +138,8 @@ tox --version  # Should show tox-uv plugin
    tox -e py310
    ```
 
-3. **Before committing**
+1. **Before committing**
+
    ```bash
    # Run all checks
    make check
@@ -148,7 +152,8 @@ tox --version  # Should show tox-uv plugin
    git commit -m "Your descriptive commit message"
    ```
 
-4. **Before creating a PR**
+1. **Before creating a PR**
+
    ```bash
    # Test across all Python versions in parallel (10x faster!)
    make tox-parallel
@@ -171,15 +176,18 @@ make help
 #### Key Commands
 
 **Setup:**
+
 - `make init` - Traditional setup (~50s)
 - `make uv-init` - Fast setup (~5s)
 
 **Testing:**
+
 - `make test` - Run all tests
 - `make tox-parallel` - Test all Python versions (10x faster!)
 - `make test-cov` - With coverage report
 
 **Code Quality:**
+
 - `make check` - All quality checks
 - `make ruff-format` - Auto-format code
 - `make ruff-check` - Lint code
@@ -187,10 +195,12 @@ make help
 - `make uv-pre-commit` - Pre-commit with UV (9x faster!)
 
 **Cleaning:**
+
 - `make clean` - Remove artifacts
 - `make tox-clean` - Clean tox environments
 
 **CI:**
+
 - `make tox-ci` - Simulate CI pipeline
 - `make ci` - Traditional CI simulation
 
@@ -262,6 +272,7 @@ See [TOX.md](TOX.md) and [TOX-UV.md](TOX-UV.md) for complete documentation.
 ### Writing Tests
 
 Tests are located in `tests/` directory:
+
 - `tests/unit/` - Unit tests for individual modules
 - `tests/integration/` - Integration tests for complete workflows
 - `tests/conftest.py` - Pytest configuration and fixtures
@@ -291,17 +302,20 @@ class TestMyClass:
 ### Test Coverage
 
 Aim for:
+
 - **Overall coverage:** >80%
 - **Core modules:** >90%
 - **New features:** >85%
 
 View coverage report:
+
 ```bash
 make test-cov
 open htmlcov/index.html
 ```
 
 Or via tox:
+
 ```bash
 make tox-coverage
 ```
@@ -333,6 +347,7 @@ make tox-ruff-check
 ```
 
 Ruff checks for:
+
 - PEP 8 compliance
 - Common bugs and anti-patterns
 - Import organization
@@ -412,12 +427,14 @@ make check
 ```
 
 This runs:
+
 1. Format check (ruff format --check)
-2. Linting (ruff check)
-3. Type checking (mypy)
-4. All tests (pytest)
+1. Linting (ruff check)
+1. Type checking (mypy)
+1. All tests (pytest)
 
 Or via tox:
+
 ```bash
 make tox-quality  # Lint + type + format checks
 ```
@@ -429,18 +446,18 @@ The project uses UV throughout for 10-100x performance improvements:
 ### Components
 
 1. **UV Package Manager** - Fast package installation
-2. **Tox-UV** - Fast test environments
-3. **Pre-commit-UV** - Fast hook installation
+1. **Tox-UV** - Fast test environments
+1. **Pre-commit-UV** - Fast hook installation
 
 ### Performance Benefits
 
-| Operation | Standard | With UV | Speedup |
-|-----------|----------|---------|---------|
-| Create venv | 3s | 0.5s | **6x** |
-| Install deps | 45s | 5s | **9x** |
-| Tox env creation | 60s | 8s | **7.5x** |
-| Pre-commit install | 45s | 5s | **9x** |
-| Full CI pipeline | 12min | 3min | **4x** |
+| Operation          | Standard | With UV | Speedup  |
+| ------------------ | -------- | ------- | -------- |
+| Create venv        | 3s       | 0.5s    | **6x**   |
+| Install deps       | 45s      | 5s      | **9x**   |
+| Tox env creation   | 60s      | 8s      | **7.5x** |
+| Pre-commit install | 45s      | 5s      | **9x**   |
+| Full CI pipeline   | 12min    | 3min    | **4x**   |
 
 ### Quick Commands
 
@@ -498,11 +515,13 @@ def calculate_score(name: str) -> int:
 ### Documentation Files
 
 **User Documentation:**
+
 - `README.md` - Project overview, quick start, usage
 - `CONTRIBUTING.md` - Contribution guidelines
 - `CHANGELOG.md` - Version history
 
 **Developer Documentation:**
+
 - `docs/MAKEFILE.md` - Complete Makefile reference (55 targets)
 - `docs/DEVELOPMENT.md` - This file
 - `docs/TOX.md` - Tox testing guide
@@ -528,37 +547,44 @@ make serve-docs
 ### Preparing a Release
 
 1. **Run full verification**
+
    ```bash
    make release
    ```
 
-2. **Update version**
+1. **Update version**
+
    - Edit `src/nhl_scrabble/__init__.py`
    - Update `__version__ = "X.Y.Z"`
 
-3. **Update CHANGELOG**
+1. **Update CHANGELOG**
+
    - Edit `CHANGELOG.md`
    - Move items from `[Unreleased]` to `[X.Y.Z]`
    - Add release date
 
-4. **Commit changes**
+1. **Commit changes**
+
    ```bash
    git add .
    git commit -m "Release vX.Y.Z"
    ```
 
-5. **Create git tag**
+1. **Create git tag**
+
    ```bash
    git tag -a vX.Y.Z -m "Release vX.Y.Z"
    ```
 
-6. **Push changes**
+1. **Push changes**
+
    ```bash
    git push
    git push --tags
    ```
 
-7. **Build and publish**
+1. **Build and publish**
+
    ```bash
    make build
    make publish  # Or publish-test for TestPyPI
@@ -567,6 +593,7 @@ make serve-docs
 ### Versioning
 
 Follow [Semantic Versioning](https://semver.org/):
+
 - `MAJOR.MINOR.PATCH`
 - **MAJOR:** Breaking changes
 - **MINOR:** New features (backward compatible)
@@ -696,43 +723,43 @@ make update
 ### Code Style
 
 1. **Follow PEP 8** - Enforced by ruff
-2. **Use type hints** - Required for all public APIs
-3. **Write docstrings** - For all public modules, classes, functions
-4. **Keep functions small** - Single responsibility principle
-5. **Avoid complexity** - Keep cyclomatic complexity low
+1. **Use type hints** - Required for all public APIs
+1. **Write docstrings** - For all public modules, classes, functions
+1. **Keep functions small** - Single responsibility principle
+1. **Avoid complexity** - Keep cyclomatic complexity low
 
 ### Git Workflow
 
 1. **Create feature branches** - Don't commit directly to main
-2. **Write descriptive commits** - Explain why, not what
-3. **Keep commits atomic** - One logical change per commit
-4. **Run checks before pushing** - Use `make check` or `make tox-ci`
-5. **Keep history clean** - Squash commits if needed
+1. **Write descriptive commits** - Explain why, not what
+1. **Keep commits atomic** - One logical change per commit
+1. **Run checks before pushing** - Use `make check` or `make tox-ci`
+1. **Keep history clean** - Squash commits if needed
 
 ### Testing
 
 1. **Write tests first** - TDD when possible
-2. **Test behavior, not implementation** - Focus on outcomes
-3. **Use descriptive test names** - `test_calculates_score_for_empty_string`
-4. **One assertion per test** - When practical
-5. **Use fixtures** - Keep tests DRY
-6. **Aim for >85% coverage** - On new features
+1. **Test behavior, not implementation** - Focus on outcomes
+1. **Use descriptive test names** - `test_calculates_score_for_empty_string`
+1. **One assertion per test** - When practical
+1. **Use fixtures** - Keep tests DRY
+1. **Aim for >85% coverage** - On new features
 
 ### Documentation
 
 1. **Document public APIs** - Comprehensive docstrings
-2. **Keep README updated** - Reflect current state
-3. **Update CHANGELOG** - Document all changes
-4. **Add examples** - Show usage in docstrings
-5. **Link related docs** - Cross-reference when helpful
+1. **Keep README updated** - Reflect current state
+1. **Update CHANGELOG** - Document all changes
+1. **Add examples** - Show usage in docstrings
+1. **Link related docs** - Cross-reference when helpful
 
 ### Performance
 
 1. **Use UV for all operations** - 10-100x faster
-2. **Use tox-uv for testing** - Already configured
-3. **Use pre-commit-uv** - 9x faster hooks
-4. **Enable parallel testing** - `make tox-parallel`
-5. **Leverage caching** - UV caches globally
+1. **Use tox-uv for testing** - Already configured
+1. **Use pre-commit-uv** - 9x faster hooks
+1. **Enable parallel testing** - `make tox-parallel`
+1. **Leverage caching** - UV caches globally
 
 ## Quick Reference
 
@@ -808,6 +835,7 @@ make clean-all
 ## Summary
 
 This project features:
+
 - ✅ **55 Makefile targets** - Complete automation (16 logical groupings)
 - ✅ **Dynamic tox pattern rule** - Automatic support for any tox environment
 - ✅ **UV ecosystem** - 10-100x faster workflows
@@ -820,12 +848,13 @@ This project features:
 - ✅ **Tool-based naming** - Clear targets using actual tool names (ruff-check, mypy, ruff-format, pip-audit)
 
 **Quick start:**
+
 ```bash
 make uv-init          # Fast setup (5s)
 make tox-parallel     # Fast testing (30s)
 make check            # Pre-commit verification
 ```
 
----
+______________________________________________________________________
 
 Happy coding! 🏒🎯

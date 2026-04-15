@@ -68,6 +68,7 @@ jobs:
           - coverage
           - codespell
           - pymarkdown
+          - mdformat
           - validate-pyproject
           - yamllint
           - flake8

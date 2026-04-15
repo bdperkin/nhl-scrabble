@@ -140,10 +140,10 @@ The analyzer uses standard English Scrabble letter point values:
 ### Workflow
 
 1. **Fetch Teams** - Retrieves all NHL teams with division/conference info from the standings endpoint
-2. **Get Rosters** - Fetches current roster for each team (with retry logic and rate limiting)
-3. **Calculate Scores** - Sums Scrabble letter values for each player's name
-4. **Aggregate Data** - Computes team, division, and conference totals
-5. **Generate Reports** - Creates comprehensive reports with multiple views of the data
+1. **Get Rosters** - Fetches current roster for each team (with retry logic and rate limiting)
+1. **Calculate Scores** - Sums Scrabble letter values for each player's name
+1. **Aggregate Data** - Computes team, division, and conference totals
+1. **Generate Reports** - Creates comprehensive reports with multiple views of the data
 
 ### NHL API Endpoints
 
@@ -328,11 +328,11 @@ make uv-check
 make uv-pip ARGS="list"
 ```
 
-**Note:** Individual uv-* Makefile targets have been removed. UV is now integrated via tox-uv and works automatically with all tox commands. See [docs/TOX-UV.md](docs/TOX-UV.md) for complete tox-uv documentation.
+**Note:** Individual uv-\* Makefile targets have been removed. UV is now integrated via tox-uv and works automatically with all tox commands. See [docs/TOX-UV.md](docs/TOX-UV.md) for complete tox-uv documentation.
 
 ### Pre-commit Hooks
 
-The project uses comprehensive pre-commit hooks (37 total) for automatic code quality checks:
+The project uses comprehensive pre-commit hooks (38 total) for automatic code quality checks:
 
 ```bash
 # Install pre-commit hooks (one-time setup)
@@ -346,13 +346,14 @@ pre-commit autoupdate
 ```
 
 **Hook Categories:**
+
 - **Meta hooks** (3): Configuration validation (check-hooks-apply, check-useless-excludes, sync-pre-commit-deps)
 - **File quality** (18): Formatting, syntax, security (trailing-whitespace, check-yaml, detect-private-key, etc.)
 - **Python quality** (7): Code patterns (blanket-noqa, mock-methods, eval, type-annotations, etc.)
 - **Project validation** (1): pyproject.toml validation against PEP standards (validate-pyproject)
 - **YAML linting** (1): YAML file validation and linting (yamllint)
 - **Spelling** (1): Code and documentation spell checking (codespell)
-- **Markdown** (1): Markdown linting and formatting (pymarkdown)
+- **Markdown** (2): Markdown linting (pymarkdown) and formatting (mdformat)
 - **UV** (1): Dependency lock file validation (uv-lock)
 - **Flake8** (1): Python code linting and style checking (flake8)
 - **Ruff** (2): Comprehensive linting and formatting (ruff-check, ruff-format)
@@ -452,15 +453,15 @@ make run                # Run the NHL Scrabble analyzer
 
 ### Makefile Quick Reference
 
-| Category | Targets | Description |
-|----------|---------|-------------|
-| **Setup** | `init`, `venv`, `install-dev`, `install-hooks` | Environment setup |
-| **Testing** | `test`, `test-cov`, `test-unit`, `test-integration` | Run tests |
-| **Quality** | `ruff-check`, `ruff-format`, `mypy`, `check` | Code quality |
-| **Cleaning** | `clean`, `clean-all` | Remove artifacts |
-| **Building** | `build`, `publish` | Build and publish |
-| **Running** | `run`, `run-verbose`, `run-json` | Run the application |
-| **Utilities** | `info`, `status`, `version`, `count` | Project info |
+| Category      | Targets                                             | Description         |
+| ------------- | --------------------------------------------------- | ------------------- |
+| **Setup**     | `init`, `venv`, `install-dev`, `install-hooks`      | Environment setup   |
+| **Testing**   | `test`, `test-cov`, `test-unit`, `test-integration` | Run tests           |
+| **Quality**   | `ruff-check`, `ruff-format`, `mypy`, `check`        | Code quality        |
+| **Cleaning**  | `clean`, `clean-all`                                | Remove artifacts    |
+| **Building**  | `build`, `publish`                                  | Build and publish   |
+| **Running**   | `run`, `run-verbose`, `run-json`                    | Run the application |
+| **Utilities** | `info`, `status`, `version`, `count`                | Project info        |
 
 See [docs/MAKEFILE.md](docs/MAKEFILE.md) for complete documentation of all 55 targets.
 
@@ -469,12 +470,12 @@ See [docs/MAKEFILE.md](docs/MAKEFILE.md) for complete documentation of all 55 ta
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests and linting
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
+1. Create a feature branch (`git checkout -b feature/amazing-feature`)
+1. Make your changes
+1. Run tests and linting
+1. Commit your changes (`git commit -m 'Add amazing feature'`)
+1. Push to the branch (`git push origin feature/amazing-feature`)
+1. Open a Pull Request
 
 ## License
 
@@ -515,10 +516,10 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
-- **Pre-commit Hooks**: 37 hooks (meta, pre-commit-hooks, pygrep-hooks, validate-pyproject, yamllint, codespell, pymarkdown, uv, flake8, ruff, mypy)
+- **Pre-commit Hooks**: 38 hooks (meta, pre-commit-hooks, pygrep-hooks, validate-pyproject, yamllint, codespell, pymarkdown, mdformat, uv, flake8, ruff, mypy)
 - **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
 - **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13
 
----
+______________________________________________________________________
 
 Made with ❤️ for hockey and word games

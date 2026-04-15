@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- **Mdformat Integration** - Markdown formatting with GitHub Flavored Markdown support
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook with mdformat-gfm and mdformat-tables plugins for GitHub Flavored Markdown support
+  - Tox environment (mdformat) with bash wrapper for shell glob expansion
+  - Added to CI/CD pipeline for continuous markdown formatting validation
+  - Configuration aligned with ruff: wrap=100 (matches line-length), end_of_line="lf", number=true
+  - Automatically reformatted 18 markdown files on first run (normalized formatting across all docs)
+  - Works alongside pymarkdown: mdformat handles formatting, pymarkdown handles linting
 - **Flake8 Integration** - Python code linting and style checking
   - Comprehensive configuration matching ruff's ALL rules philosophy as closely as possible
   - Pre-commit hook for automated Python linting (complementary to ruff)
@@ -51,14 +60,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (37 total):
+- Comprehensive pre-commit hooks (38 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
   - Project validation hooks (1): validate-pyproject for pyproject.toml validation
   - YAML linting hooks (1): yamllint for YAML file validation and linting
   - Spelling hooks (1): codespell for code and documentation spell checking
-  - Markdown hooks (1): pymarkdown for markdown linting and formatting
+  - Markdown hooks (2): pymarkdown for markdown linting, mdformat for markdown formatting
   - UV hook (1): uv-lock for dependency lock file validation
   - Flake8 hooks (1): flake8 for Python code linting and style checking
   - Ruff hooks (2): ruff-check (linting), ruff-format (formatting)
@@ -68,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PEP 561 py.typed marker for typed package compliance
 
 ### Changed
+
 - Updated ruff hook from legacy 'ruff' to 'ruff-check'
 - Enhanced ruff configuration with ALL rules and comprehensive ignores
 - Enhanced mypy configuration with strict mode and additional strict options
@@ -78,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated all documentation to reflect current project state
 
 ### Fixed
+
 - CI failures related to unsupported Python versions (3.14, 3.15)
 - Tox configuration issues with skip_install and extras
 - Coverage threshold adjusted to match actual project coverage (49%)
@@ -85,8 +96,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UV cache errors in pre-commit CI job
 
 ### Changed
+
 - **Dynamic Tox Targets in Makefile** - Replaced explicit tox environment targets with pattern rule
-  - Removed 6 explicit tox-py* targets (tox-py310, tox-py311, tox-py312, tox-py313, tox-py314, tox-py315)
+  - Removed 6 explicit tox-py\* targets (tox-py310, tox-py311, tox-py312, tox-py313, tox-py314, tox-py315)
   - Added 1 dynamic pattern rule `tox-%` that handles ANY tox environment
   - Added 1 `tox-envs` target to list all available tox environments
   - Pattern rule automatically supports: `make tox-py310`, `make tox-mypy`, `make tox-coverage`, etc.
@@ -97,8 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Benefits: Automatic support, reduced maintenance, future-proof design
 - **Streamlined Makefile** - Reduced from 77 to 55 documented targets
   - Organized targets into 16 logical groupings in `make help` output
-  - Removed redundant tox-* targets (tox-py310, tox-py311, tox-ruff-check, tox-mypy, tox-coverage, tox-quality, tox-ci)
-  - Removed redundant uv-* targets (uv-venv, uv-install, uv-install-dev, uv-update, uv-run, uv-init, uv-pre-commit, uv-pre-commit-install)
+  - Removed redundant tox-\* targets (tox-py310, tox-py311, tox-ruff-check, tox-mypy, tox-coverage, tox-quality, tox-ci)
+  - Removed redundant uv-\* targets (uv-venv, uv-install, uv-install-dev, uv-update, uv-run, uv-init, uv-pre-commit, uv-pre-commit-install)
   - Kept essential Makefile targets: tox, tox-parallel, tox-list, tox-clean, tox-recreate
   - Kept essential UV targets: uv-check, uv-pip
   - Users should now call tox directly for specific testenvs (e.g., `tox -e py310` instead of `make tox-py310`)
@@ -113,6 +125,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Installed via `pip install -e ".[publish]"` or automatically in tox publish environments
 
 ### Changed (continued)
+
 - **Renamed ruff linting target/testenv to ruff-check** - More explicit naming
   - Makefile target: `ruff:` → `ruff-check:`
   - Makefile target: `tox-ruff:` → `tox-ruff-check:`
@@ -122,9 +135,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Tool name `ruff` references unchanged (only target/testenv names updated)
 
 ### Added
+
 - **Python 3.13, 3.14, and 3.15 Support** - Expanded Python version compatibility
   - Added Python 3.13, 3.14, and 3.15 classifiers to pyproject.toml
-  - Updated requires-python to ">=3.10,<3.16"
+  - Updated requires-python to ">=3.10,\<3.16"
   - Updated tox.ini envlist to py{310,311,312,313,314,315}
   - Updated GitHub Actions CI matrix to test all six Python versions
   - Updated .python-version to list all supported versions
@@ -132,6 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Project now tests and supports six Python versions (3.10, 3.11, 3.12, 3.13, 3.14, 3.15)
 
 ### Changed
+
 - **Tool-based target naming** - Makefile targets and tox environments use actual tool names
   - Targets use tool names: `ruff`, `mypy`, `ruff-format`, `pip-audit`
   - Tox environments use tool names: `ruff`, `mypy`, `ruff-format`, `pip-audit`
@@ -139,6 +154,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All documentation updated to reflect tool-based naming
 
 ### Removed
+
 - **Deprecated backward compatibility scripts**
   - Removed `nhl-scrabble.py` root script (v1.0.0 single-file implementation)
   - Removed `scripts/nhl-scrabble.py` wrapper script
@@ -151,6 +167,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Documentation updated to show only tool-based targets
 
 ### Added
+
 - **Tox-UV and Pre-commit-UV Integration** - UV acceleration for testing and pre-commit hooks
   - Integrated tox-uv plugin for 10-100x faster tox test environments
   - Pre-commit with UV acceleration for 9x faster hook installation
@@ -177,7 +194,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Test against Python 3.10, 3.11, and 3.12
   - Isolated environments for lint, type-check, format, coverage, security
   - Parallel execution support for faster CI/CD
-  - Integration with Makefile (15 new tox-* targets)
+  - Integration with Makefile (15 new tox-\* targets)
   - Comprehensive docs/TOX.md documentation (8+ KB)
   - CI simulation environment (tox -e ci)
   - Added tox>=4.0.0 and pip-audit>=2.7.0 to dev dependencies
@@ -206,6 +223,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated CONTRIBUTING.md with recommended Makefile workflows
 
 ### Fixed
+
 - ANSI color codes in Makefile now work correctly across all shells
   - Replaced `echo` with `printf` for proper escape sequence handling
   - Color-coded output now displays correctly (blue, green, yellow, red)
@@ -215,12 +233,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Modular package structure** with proper Python packaging
+
   - Src layout with `nhl_scrabble` package
   - Separated modules for API client, scoring, models, processors, and reports
   - Type hints throughout the entire codebase
   - Comprehensive docstrings for all public APIs
 
 - **Professional tooling and infrastructure**
+
   - Modern `pyproject.toml` configuration using PEP 517/621
   - Ruff for fast linting and formatting
   - MyPy for strict type checking
@@ -229,6 +249,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Pytest-based test suite with >80% coverage
 
 - **Enhanced CLI interface using Click**
+
   - `nhl-scrabble analyze` command with multiple options
   - `--format` option to choose output format (text or JSON)
   - `--output` option to save reports to file
@@ -237,43 +258,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Rich progress indicators and colored output
 
 - **Configuration management**
+
   - Environment variable support (`.env` file compatible)
   - Configurable API timeout, retries, and rate limiting
   - Customizable report parameters
 
 - **Structured logging**
+
   - Replaces print statements with proper logging
   - Configurable log levels (INFO, DEBUG)
   - Optional JSON structured logging for log aggregation
 
 - **Comprehensive test suite**
+
   - Unit tests for all core modules
   - Integration tests for full workflow
   - Test fixtures with sample API responses
   - Pytest configuration with coverage reporting
 
 - **Documentation**
+
   - Enhanced README with installation, usage, and examples
   - CONTRIBUTING.md with development guidelines
   - Inline code documentation with docstrings
   - Type hints for better IDE support
 
 - **Data models using dataclasses**
+
   - PlayerScore for individual player data
   - TeamScore for team aggregations
   - DivisionStandings and ConferenceStandings
   - PlayoffTeam with all playoff context
 
 - **JSON output format**
+
   - Export all data as structured JSON
   - Useful for further processing or integration
 
 - **Improved error handling**
+
   - Custom exception classes (NHLApiError, NHLApiConnectionError, NHLApiNotFoundError)
   - Graceful handling of failed API requests
   - Detailed error messages and logging
 
 - **Context manager support**
+
   - NHLApiClient can be used as context manager
   - Automatic resource cleanup
 
@@ -320,7 +349,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rate limiting to avoid API throttling
 - Standard Scrabble letter values (A=1, Z=10, etc.)
 
----
+______________________________________________________________________
 
-[2.0.0]: https://github.com/bdperkin/nhl-scrabble/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v1.0.0
+[2.0.0]: https://github.com/bdperkin/nhl-scrabble/compare/v1.0.0...v2.0.0

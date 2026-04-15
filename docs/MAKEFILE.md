@@ -37,6 +37,7 @@ make check
 ```
 
 The `make help` command displays all 55 targets organized in 16 logical groupings with color-coded output:
+
 - 🔵 **Blue** - Headers and informational messages
 - 🟢 **Green** - Success messages and labels
 - 🟡 **Yellow** - Target names and warnings
@@ -47,21 +48,21 @@ The `make help` command displays all 55 targets organized in 16 logical grouping
 The 55 Makefile targets are organized into 16 logical groupings:
 
 1. **Setup & Installation** (6 targets)
-2. **Cleaning** (6 targets)
-3. **Testing** (7 targets)
-4. **Tox - Multi-environment Testing** (6 targets - includes dynamic pattern rule)
-5. **UV - Fast Python Package Manager** (2 targets)
-6. **Code Quality** (7 targets)
-7. **Security & Dependencies** (1 target)
-8. **Build & Publish** (3 targets)
-9. **Documentation** (2 targets)
-10. **Running** (3 targets)
-11. **Development** (4 targets)
-12. **Release Management** (2 targets)
-13. **All-in-one** (1 target)
-14. **CI/CD Simulation** (1 target)
-15. **Utility** (2 targets)
-16. **Development workflow** (informational section)
+1. **Cleaning** (6 targets)
+1. **Testing** (7 targets)
+1. **Tox - Multi-environment Testing** (6 targets - includes dynamic pattern rule)
+1. **UV - Fast Python Package Manager** (2 targets)
+1. **Code Quality** (7 targets)
+1. **Security & Dependencies** (1 target)
+1. **Build & Publish** (3 targets)
+1. **Documentation** (2 targets)
+1. **Running** (3 targets)
+1. **Development** (4 targets)
+1. **Release Management** (2 targets)
+1. **All-in-one** (1 target)
+1. **CI/CD Simulation** (1 target)
+1. **Utility** (2 targets)
+1. **Development workflow** (informational section)
 
 ## Installation & Setup
 
@@ -182,6 +183,7 @@ make tox-recreate     # Rebuild all environments
 ```
 
 **Dynamic Pattern Rule:** The Makefile uses a `tox-%` pattern rule that automatically handles ANY tox environment. This means:
+
 - No need to add explicit targets for new Python versions
 - Works with any custom tox environment you add to `tox.ini`
 - Future-proof (Python 3.16+ will work automatically)
@@ -381,43 +383,44 @@ make tree
 
 ### Setup & Installation (9 targets)
 
-| Target | Description |
-|--------|-------------|
-| `venv` | Create virtual environment |
-| `install` | Install package in editable mode |
-| `install-dev` | Install package with dev dependencies |
-| `install-hooks` | Install pre-commit hooks |
-| `deps` | Alias for install-dev |
-| `update` | Update all dependencies |
-| `init` | Complete initialization (venv + install + hooks) |
-| `uv-init` | Fast initialization with UV |
-| `uv-check` | Verify UV is installed |
+| Target          | Description                                      |
+| --------------- | ------------------------------------------------ |
+| `venv`          | Create virtual environment                       |
+| `install`       | Install package in editable mode                 |
+| `install-dev`   | Install package with dev dependencies            |
+| `install-hooks` | Install pre-commit hooks                         |
+| `deps`          | Alias for install-dev                            |
+| `update`        | Update all dependencies                          |
+| `init`          | Complete initialization (venv + install + hooks) |
+| `uv-init`       | Fast initialization with UV                      |
+| `uv-check`      | Verify UV is installed                           |
 
 ### Testing (7 targets)
 
-| Target | Description |
-|--------|-------------|
-| `test` | Run all tests |
-| `test-unit` | Run unit tests only |
-| `test-integration` | Run integration tests only |
-| `test-cov` | Run tests with coverage |
-| `test-watch` | Run tests in watch mode |
-| `test-failed` | Run only failed tests |
-| `test-verbose` | Run tests with verbose output |
+| Target             | Description                   |
+| ------------------ | ----------------------------- |
+| `test`             | Run all tests                 |
+| `test-unit`        | Run unit tests only           |
+| `test-integration` | Run integration tests only    |
+| `test-cov`         | Run tests with coverage       |
+| `test-watch`       | Run tests in watch mode       |
+| `test-failed`      | Run only failed tests         |
+| `test-verbose`     | Run tests with verbose output |
 
 ### Tox Multi-Environment (6 targets)
 
-| Target | Description |
-|--------|-------------|
-| `tox` | Run all tox environments |
-| `tox-list` | List all tox environments |
-| `tox-envs` | List all tox environments (alternative) |
-| `tox-parallel` | Run tox in parallel |
-| `tox-clean` | Clean tox environments |
-| `tox-recreate` | Recreate tox environments |
-| `tox-%` | **Pattern rule** - Run any tox environment (e.g., tox-py310, tox-mypy, tox-coverage, etc.) |
+| Target         | Description                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| `tox`          | Run all tox environments                                                                   |
+| `tox-list`     | List all tox environments                                                                  |
+| `tox-envs`     | List all tox environments (alternative)                                                    |
+| `tox-parallel` | Run tox in parallel                                                                        |
+| `tox-clean`    | Clean tox environments                                                                     |
+| `tox-recreate` | Recreate tox environments                                                                  |
+| `tox-%`        | **Pattern rule** - Run any tox environment (e.g., tox-py310, tox-mypy, tox-coverage, etc.) |
 
 **Note:** The `tox-%` pattern rule dynamically handles any tox environment:
+
 - `make tox-py310`, `make tox-py311`, ..., `make tox-py315` (current Python versions)
 - `make tox-py316`, `make tox-py317` (future Python versions - automatic support!)
 - `make tox-ruff-check`, `make tox-mypy`, `make tox-coverage`, `make tox-quality`, `make tox-ci`
@@ -425,101 +428,101 @@ make tree
 
 ### UV Package Manager (10 targets)
 
-| Target | Description |
-|--------|-------------|
-| `uv-check` | Check UV installation |
-| `uv-venv` | Create venv with UV |
-| `uv-install` | Install with UV |
-| `uv-install-dev` | Install dev deps with UV |
-| `uv-update` | Update deps with UV |
-| `uv-run` | Run with UV |
-| `uv-init` | Fast initialization |
-| `uv-pip` | Direct UV pip access |
-| `uv-pre-commit` | Run pre-commit with UV |
-| `uv-pre-commit-install` | Install hooks with UV |
+| Target                  | Description              |
+| ----------------------- | ------------------------ |
+| `uv-check`              | Check UV installation    |
+| `uv-venv`               | Create venv with UV      |
+| `uv-install`            | Install with UV          |
+| `uv-install-dev`        | Install dev deps with UV |
+| `uv-update`             | Update deps with UV      |
+| `uv-run`                | Run with UV              |
+| `uv-init`               | Fast initialization      |
+| `uv-pip`                | Direct UV pip access     |
+| `uv-pre-commit`         | Run pre-commit with UV   |
+| `uv-pre-commit-install` | Install hooks with UV    |
 
 ### Code Quality (8 targets)
 
-| Target | Description |
-|--------|-------------|
-| `ruff-check` | Run ruff linter |
-| `ruff-format` | Format code with ruff |
-| `ruff-format-check` | Check formatting |
-| `mypy` | Run mypy type checker |
-| `quality` | All quality checks |
-| `check` | All checks (format + quality + tests) |
-| `pre-commit` | Run pre-commit hooks |
-| `uv-pre-commit` | Pre-commit with UV |
+| Target              | Description                           |
+| ------------------- | ------------------------------------- |
+| `ruff-check`        | Run ruff linter                       |
+| `ruff-format`       | Format code with ruff                 |
+| `ruff-format-check` | Check formatting                      |
+| `mypy`              | Run mypy type checker                 |
+| `quality`           | All quality checks                    |
+| `check`             | All checks (format + quality + tests) |
+| `pre-commit`        | Run pre-commit hooks                  |
+| `uv-pre-commit`     | Pre-commit with UV                    |
 
 ### Security (1 target)
 
-| Target | Description |
-|--------|-------------|
+| Target      | Description        |
+| ----------- | ------------------ |
 | `pip-audit` | Run security audit |
 
 ### Build & Publish (3 targets)
 
-| Target | Description |
-|--------|-------------|
-| `build` | Build distribution packages |
-| `publish-test` | Publish to TestPyPI |
-| `publish` | Publish to PyPI |
+| Target         | Description                 |
+| -------------- | --------------------------- |
+| `build`        | Build distribution packages |
+| `publish-test` | Publish to TestPyPI         |
+| `publish`      | Publish to PyPI             |
 
 ### Documentation (2 targets)
 
-| Target | Description |
-|--------|-------------|
-| `docs` | Build Sphinx documentation |
-| `serve-docs` | Build and serve docs |
+| Target       | Description                |
+| ------------ | -------------------------- |
+| `docs`       | Build Sphinx documentation |
+| `serve-docs` | Build and serve docs       |
 
 ### Running (3 targets)
 
-| Target | Description |
-|--------|-------------|
-| `run` | Run NHL Scrabble analyzer |
-| `run-verbose` | Run with verbose logging |
-| `run-json` | Run and output JSON |
+| Target        | Description               |
+| ------------- | ------------------------- |
+| `run`         | Run NHL Scrabble analyzer |
+| `run-verbose` | Run with verbose logging  |
+| `run-json`    | Run and output JSON       |
 
 ### Development (4 targets)
 
-| Target | Description |
-|--------|-------------|
-| `shell` | Open Python shell |
-| `watch` | Alias for test-watch |
-| `info` | Show project information |
+| Target   | Description                 |
+| -------- | --------------------------- |
+| `shell`  | Open Python shell           |
+| `watch`  | Alias for test-watch        |
+| `info`   | Show project information    |
 | `status` | Show git and project status |
 
 ### Release (2 targets)
 
-| Target | Description |
-|--------|-------------|
-| `release` | Prepare for release |
+| Target    | Description          |
+| --------- | -------------------- |
+| `release` | Prepare for release  |
 | `version` | Show current version |
 
 ### Cleaning (6 targets)
 
-| Target | Description |
-|--------|-------------|
-| `clean` | Remove all artifacts |
-| `clean-build` | Remove build artifacts |
-| `clean-pyc` | Remove Python artifacts |
-| `clean-test` | Remove test artifacts |
-| `clean-venv` | Remove virtual environment |
-| `clean-all` | Complete clean |
+| Target        | Description                |
+| ------------- | -------------------------- |
+| `clean`       | Remove all artifacts       |
+| `clean-build` | Remove build artifacts     |
+| `clean-pyc`   | Remove Python artifacts    |
+| `clean-test`  | Remove test artifacts      |
+| `clean-venv`  | Remove virtual environment |
+| `clean-all`   | Complete clean             |
 
 ### All-in-One (2 targets)
 
-| Target | Description |
-|--------|-------------|
-| `all` | Complete workflow |
-| `ci` | Simulate CI pipeline |
+| Target | Description          |
+| ------ | -------------------- |
+| `all`  | Complete workflow    |
+| `ci`   | Simulate CI pipeline |
 
 ### Utility (2 targets)
 
-| Target | Description |
-|--------|-------------|
+| Target  | Description         |
+| ------- | ------------------- |
 | `count` | Count lines of code |
-| `tree` | Show directory tree |
+| `tree`  | Show directory tree |
 
 ## Common Workflows
 
@@ -709,6 +712,7 @@ The Makefile provides **55 documented targets** organized in **16 logical groupi
 - ✅ **1** Development workflow (informational section)
 
 **Quick commands:**
+
 ```bash
 make help           # View all 55 targets in 16 logical groupings
 make init           # Setup development environment
@@ -721,6 +725,7 @@ make ci             # CI simulation
 ```
 
 **Dynamic Pattern Rule:** The `tox-%` pattern rule automatically handles any tox environment:
+
 - Supports all current Python versions (3.10-3.15)
 - Future-proof for new Python versions (3.16+)
 - Works with any custom tox environment

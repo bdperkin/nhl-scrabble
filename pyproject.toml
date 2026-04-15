@@ -385,6 +385,16 @@ quiet-level = 0  # Show all issues (comprehensive)
 # - Truthy values: disabled (yes/no are common and clear)
 # - Indentation: 2 spaces (standard for YAML)
 
+# Mdformat configuration
+[tool.mdformat]
+# Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
+# Align with ruff's line-length = 100 for consistency
+wrap = 100
+# Number of spaces for list indentation (align with YAML indentation)
+number = true
+# End files with a single newline (matches end-of-file-fixer)
+end_of_line = "lf"
+
 # PyMarkdown configuration
 [tool.pymarkdown]
 # Comprehensive by default (matches ruff's ALL rules philosophy)

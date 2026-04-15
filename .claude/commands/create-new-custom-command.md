@@ -16,17 +16,17 @@ This task helps you create a new custom command file with proper structure and f
      - Ensure the filename is lowercase, uses hyphens for spaces, and is descriptive
    - Confirm the suggested name or allow the user to specify a different one
 
-2. Determine command structure:
+1. Determine command structure:
 
    - Suggest a structure based on the command's purpose
    - Present common command patterns:
      1. Simple task command (few steps, direct execution)
-     2. Multi-step workflow (sequential steps with decision points)
-     3. Analytical command (analyzes code and provides recommendations)
-     4. Generation command (creates new files or content)
+     1. Multi-step workflow (sequential steps with decision points)
+     1. Analytical command (analyzes code and provides recommendations)
+     1. Generation command (creates new files or content)
    - Ask which pattern is closest to the desired command
 
-3. Create command file:
+1. Create command file:
 
    - Use the standard command file template:
 
@@ -62,7 +62,7 @@ This task helps you create a new custom command file with proper structure and f
 
    - Add appropriate placeholders for the user to complete
 
-4. Save the file:
+1. Save the file:
 
    - Save to `.claude/commands/[filename].md`
    - Display the full path in green text: "Command file created: [path]"

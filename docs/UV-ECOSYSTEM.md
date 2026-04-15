@@ -7,8 +7,8 @@ Complete guide to using UV throughout the NHL Scrabble project for maximum perfo
 This project leverages UV across the entire development workflow:
 
 1. **UV Package Manager** - Fast package installation and environment management
-2. **Tox-UV** - Accelerated testing across multiple Python versions
-3. **Pre-commit with UV** - Faster hook installation and execution
+1. **Tox-UV** - Accelerated testing across multiple Python versions
+1. **Pre-commit with UV** - Faster hook installation and execution
 
 Together, these provide **10-100x speedup** across development workflows.
 
@@ -78,23 +78,23 @@ make uv-update
 
 ## Performance Summary
 
-| Operation | Standard | With UV | Speedup |
-|-----------|----------|---------|---------|
-| **Package Management** |
-| Create venv | 3s | 0.5s | **6x** |
-| Install deps (cold) | 45s | 5s | **9x** |
-| Install deps (cached) | 25s | 1s | **25x** |
-| Resolve dependencies | 10s | 0.3s | **33x** |
-| **Testing (Tox)** |
-| First env creation | 60s | 8s | **7.5x** |
-| Cached env creation | 30s | 2s | **15x** |
-| All envs parallel | 5min | 30s | **10x** |
-| **Pre-commit** |
-| First install | 45s | 5s | **9x** |
-| Hook updates | 30s | 3s | **10x** |
-| Cached install | 15s | 1s | **15x** |
-| **CI/CD** |
-| Full pipeline | 12min | 3min | **4x** |
+| Operation              | Standard | With UV | Speedup  |
+| ---------------------- | -------- | ------- | -------- |
+| **Package Management** |          |         |          |
+| Create venv            | 3s       | 0.5s    | **6x**   |
+| Install deps (cold)    | 45s      | 5s      | **9x**   |
+| Install deps (cached)  | 25s      | 1s      | **25x**  |
+| Resolve dependencies   | 10s      | 0.3s    | **33x**  |
+| **Testing (Tox)**      |          |         |          |
+| First env creation     | 60s      | 8s      | **7.5x** |
+| Cached env creation    | 30s      | 2s      | **15x**  |
+| All envs parallel      | 5min     | 30s     | **10x**  |
+| **Pre-commit**         |          |         |          |
+| First install          | 45s      | 5s      | **9x**   |
+| Hook updates           | 30s      | 3s      | **10x**  |
+| Cached install         | 15s      | 1s      | **15x**  |
+| **CI/CD**              |          |         |          |
+| Full pipeline          | 12min    | 3min    | **4x**   |
 
 ## Components
 
@@ -105,6 +105,7 @@ make uv-update
 **Cache:** Global package cache for efficiency
 
 **Quick Commands:**
+
 ```bash
 make uv-venv          # Create venv
 make uv-install-dev   # Install dependencies
@@ -120,6 +121,7 @@ make uv-run           # Run application
 **Auto:** Works automatically, no config changes
 
 **Quick Commands:**
+
 ```bash
 tox                   # All environments (with UV!)
 tox -e py310          # Specific environment
@@ -136,6 +138,7 @@ make tox-parallel     # Via Makefile
 **Easy:** Makefile targets handle it
 
 **Quick Commands:**
+
 ```bash
 make uv-pre-commit-install   # Install hooks
 make uv-pre-commit           # Run hooks
@@ -148,6 +151,7 @@ make uv-pre-commit           # Run hooks
 All UV features accessible via Makefile:
 
 ### Package Management (8 targets)
+
 ```bash
 make uv-check              # Verify UV installed
 make uv-venv               # Create virtual environment
@@ -160,12 +164,14 @@ make uv-pip                # Direct UV pip access
 ```
 
 ### Pre-commit (2 targets)
+
 ```bash
 make uv-pre-commit-install # Install hooks
 make uv-pre-commit         # Run all hooks
 ```
 
 ### Testing (10 tox targets via tox-uv)
+
 ```bash
 make tox                   # All environments (UV-accelerated)
 make tox-parallel          # Parallel execution
@@ -177,6 +183,7 @@ make tox-coverage          # Coverage report
 ## Configuration Files
 
 ### pyproject.toml
+
 ```toml
 [tool.uv]
 managed = true              # Enable UV dependency management
@@ -192,6 +199,7 @@ dev = [
 ```
 
 ### .python-version
+
 ```
 3.10
 ```
@@ -199,6 +207,7 @@ dev = [
 UV (and pyenv/asdf) will use this file to select the Python version for the project.
 
 ### tox.ini
+
 ```ini
 [tox]
 requires = tox-uv>=1.0.0  # Enable tox-uv plugin
@@ -404,17 +413,20 @@ Moving from pip/virtualenv to UV:
 ## Resources
 
 ### Documentation
+
 - [UV.md](UV.md) - Complete UV guide
 - [TOX-UV.md](TOX-UV.md) - Tox-UV integration
 - [PRECOMMIT-UV.md](PRECOMMIT-UV.md) - Pre-commit with UV
 - [UV-QUICKREF.md](UV-QUICKREF.md) - Quick reference
 
 ### External Links
+
 - [UV GitHub](https://github.com/astral-sh/uv)
 - [Tox-UV GitHub](https://github.com/tox-dev/tox-uv)
 - [Pre-commit Docs](https://pre-commit.com/)
 
 ### Project Files
+
 - [pyproject.toml](../pyproject.toml) - Dependencies and UV config ([tool.uv])
 - [.python-version](../.python-version) - Python version selection
 - [tox.ini](../tox.ini) - Tox configuration
@@ -433,6 +445,7 @@ The UV ecosystem in this project provides:
 ✅ **Production ready** - used in CI
 
 **Quick start:**
+
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 make uv-init
@@ -440,6 +453,7 @@ source .venv/bin/activate
 ```
 
 **Daily use:**
+
 ```bash
 make uv-install-dev    # Install deps
 tox -e py310           # Run tests
