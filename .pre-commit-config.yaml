@@ -110,6 +110,18 @@ repos:
         # Comprehensive validation (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
+  - repo: local
+    hooks:
+      - id: pyroma
+        name: pyroma
+        # Comprehensive Python package metadata quality check (matches ruff's ALL rules philosophy)
+        description: Rate the quality of Python package metadata
+        entry: pyroma
+        args: ['.']
+        language: system
+        pass_filenames: false
+        files: pyproject.toml
+
   - repo: https://github.com/tox-dev/tox-ini-fmt
     rev: 1.5.0
     hooks:

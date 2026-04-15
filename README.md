@@ -520,7 +520,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
-- **Pre-commit Hooks**: 47 hooks (meta, pre-commit-hooks, pygrep-hooks, isort, absolufy-imports, validate-pyproject, yamllint, codespell, pymarkdown, mdformat, doc8, rstcheck, uv, flake8, black, docformatter, autopep8, ruff, mypy)
+- **Pre-commit Hooks**: 48 hooks (meta, pre-commit-hooks, pygrep-hooks, isort, absolufy-imports, validate-pyproject, yamllint, codespell, pymarkdown, mdformat, doc8, rstcheck, uv, flake8, black, docformatter, autopep8, ruff, mypy)
 - **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
 - **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13
 
