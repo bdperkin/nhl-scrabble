@@ -189,6 +189,13 @@ repos:
   # Python Formatting - Code and Docstring Formatting
   # ============================================================================
 
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.10.0
+    hooks:
+      - id: black
+        # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
+        args: []  # Config is in pyproject.toml
+
   - repo: local
     hooks:
       - id: docformatter

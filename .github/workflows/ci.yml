@@ -73,6 +73,7 @@ jobs:
           - yamllint
           - flake8
           - absolufy-imports
+          - black
           - docformatter
           - autopep8
           - doc8

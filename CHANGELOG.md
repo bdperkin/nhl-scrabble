@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Black Integration** - Python code formatting with Black
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook for automatic Black formatting
+  - Tox environment (black) for standalone formatting checks
+  - Added to CI/CD pipeline for continuous code formatting validation
+  - Configuration: line-length=100, target-version=py310-py313 (match ruff)
+  - Works harmoniously with ruff-format: both are Black-compatible
+  - Formatting order: black → docformatter → autopep8 → ruff-check → ruff-format
+  - Note: Black and ruff-format produce identical output (ruff-format is Black-compatible)
+  - 44 total pre-commit hooks for comprehensive code quality
+
 ### Changed
 
 - **Configuration File Reorganization** - Improved structure and consistency
