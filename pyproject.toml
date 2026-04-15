@@ -1,0 +1,217 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nhl-scrabble"
+version = "2.0.0"
+description = "NHL Roster Scrabble Score Analyzer - Calculate Scrabble scores for NHL player names"
+readme = "README.md"
+requires-python = ">=3.10,<3.16"
+license = {text = "MIT"}
+authors = [
+    {name = "Brandon Perkins", email = "bdperkin@gmail.com"}
+]
+keywords = ["nhl", "scrabble", "hockey", "analytics", "sports"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "requests>=2.31.0",
+    "click>=8.1.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+# Testing dependencies
+test = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+]
+
+# Code quality dependencies
+lint = [
+    "ruff>=0.3.0",
+]
+
+type = [
+    "mypy>=1.8.0",
+    "types-requests>=2.31.0",
+]
+
+# Security dependencies
+security = [
+    "pip-audit>=2.7.0",
+]
+
+# Documentation dependencies
+docs = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-click>=5.1.0",
+]
+
+# Watch mode dependencies
+watch = [
+    "pytest-watch",
+]
+
+# Build dependencies
+build = [
+    "build",
+]
+
+# Publish dependencies
+publish = [
+    "twine>=5.0.0",
+]
+
+# Tox dependencies
+tox = [
+    "tox>=4.0.0",
+    "tox-uv>=1.0.0",
+]
+
+# Complete development environment
+dev = [
+    "nhl-scrabble[test,lint,type,security,docs,watch,build,publish,tox]",
+    "pre-commit>=3.6.0",
+]
+
+[project.scripts]
+nhl-scrabble = "nhl_scrabble.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/bdperkin/nhl-scrabble"
+Repository = "https://github.com/bdperkin/nhl-scrabble"
+Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
+
+# Hatchling configuration
+[tool.hatch.build.targets.wheel]
+packages = ["src/nhl_scrabble"]
+
+# Ruff configuration
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports in __init__.py
+"tests/**/*.py" = ["ARG"]  # Unused arguments in tests (fixtures)
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*", "conftest", "nhl_scrabble.cli"]
+disallow_untyped_defs = false
+disallow_untyped_decorators = false
+
+# Pytest configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=nhl_scrabble",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/__main__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# UV configuration
+[tool.uv]
+# Managed by uv for faster dependency resolution
+managed = true
+package = true
+
+# Compile Python bytecode (.pyc files) for faster imports
+compile-bytecode = true
+
+# Link mode for installing packages
+link-mode = "copy"
+
+[tool.uv.sources]
+# Optional: Configure custom package sources here if needed

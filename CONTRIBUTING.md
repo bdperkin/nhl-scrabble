@@ -1,0 +1,421 @@
+# Contributing to NHL Scrabble
+
+Thank you for your interest in contributing to NHL Scrabble! This document provides guidelines and instructions for contributing to the project.
+
+## Code of Conduct
+
+Be respectful, inclusive, and professional in all interactions. We're here to have fun analyzing hockey data with Scrabble scores!
+
+## Getting Started
+
+### Development Environment Setup
+
+1. **Fork and clone the repository**
+
+```bash
+git clone https://github.com/YOUR_USERNAME/nhl-scrabble.git
+cd nhl-scrabble
+```
+
+2. **Quick Setup (Recommended)**
+
+```bash
+# Initialize development environment
+make init
+
+# Activate the environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+**Note:** UV acceleration is automatic when using tox (via tox-uv plugin).
+
+3. **Manual Setup (Alternative)**
+
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+```
+
+## Development Workflow
+
+### Creating a Feature Branch
+
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/your-bug-fix
+```
+
+### Making Changes
+
+1. **Write your code** following the project's style guidelines
+2. **Add tests** for any new functionality
+3. **Update documentation** if needed
+4. **Run tests** to ensure everything works
+
+### Testing
+
+Run the full test suite:
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov --cov-report=html
+
+# Run specific test file
+pytest tests/unit/test_scrabble.py
+
+# Run specific test
+pytest tests/unit/test_scrabble.py::TestScrabbleScorer::test_calculate_score_basic
+```
+
+### Multi-Environment Testing with Tox
+
+For testing across multiple Python versions before submitting a PR:
+
+```bash
+# Test across Python 3.10, 3.11, 3.12, 3.13, 3.14, and 3.15 in parallel
+tox -p auto
+
+# Run quality checks only (fast)
+tox -e quality
+
+# Simulate the full CI pipeline
+tox -e ci
+
+# Test specific Python version
+tox -e py310
+tox -e py315
+
+# Run specific tools
+tox -e ruff-check
+tox -e mypy
+tox -e ruff-format
+```
+
+See [docs/TOX.md](docs/TOX.md) for complete tox documentation and [docs/TOX-UV.md](docs/TOX-UV.md) for tox with UV acceleration.
+
+### Fast Package Management with UV
+
+UV acceleration is automatic when using tox (via tox-uv plugin):
+
+```bash
+# Testing with automatic UV acceleration
+make tox              # Uses UV automatically
+make tox-parallel     # Even faster with parallel execution
+
+# Standard package management
+make install-dev      # Install dependencies
+make update           # Update dependencies
+```
+
+See [docs/TOX-UV.md](docs/TOX-UV.md) for tox with UV acceleration.
+
+### Code Quality
+
+Before committing, ensure your code passes all quality checks:
+
+```bash
+# Format code with ruff
+make ruff-format
+# or directly: ruff format .
+
+# Check for linting issues
+make ruff-check
+# or directly: ruff check .
+
+# Fix auto-fixable issues
+ruff check --fix .
+
+# Type check with mypy
+make mypy
+# or directly: mypy src
+
+# Run pre-commit hooks manually
+pre-commit run --all-files
+```
+
+### Commit Messages
+
+Write clear, descriptive commit messages:
+
+```
+Add feature to export reports as CSV
+
+- Implement CSVReporter class
+- Add --format csv option to CLI
+- Include tests for CSV generation
+- Update documentation
+```
+
+Guidelines:
+- Use present tense ("Add feature" not "Added feature")
+- First line should be 50 characters or less
+- Provide detailed description in the body if needed
+- Reference issues with `#issue-number`
+
+## Code Style Guidelines
+
+### Python Style
+
+- Follow PEP 8
+- Use type hints for all function signatures
+- Maximum line length: 100 characters
+- Use descriptive variable names
+- Add docstrings to all public modules, classes, and functions
+
+### Docstring Format
+
+Use Google-style docstrings:
+
+```python
+def calculate_score(name: str) -> int:
+    """Calculate the Scrabble score for a given name.
+
+    Args:
+        name: The name to score (can include spaces and special characters)
+
+    Returns:
+        The total Scrabble score (non-letter characters are worth 0 points)
+
+    Raises:
+        ValueError: If name is None
+
+    Examples:
+        >>> scorer = ScrabbleScorer()
+        >>> scorer.calculate_score("ALEX")
+        11
+    """
+    pass
+```
+
+### Type Hints
+
+Always use type hints:
+
+```python
+# Good
+def process_teams(teams: dict[str, TeamScore]) -> list[PlayerScore]:
+    pass
+
+# Bad
+def process_teams(teams):
+    pass
+```
+
+## Testing Guidelines
+
+### Test Structure
+
+- Place unit tests in `tests/unit/`
+- Place integration tests in `tests/integration/`
+- Name test files `test_*.py`
+- Name test classes `Test*`
+- Name test functions `test_*`
+
+### Writing Tests
+
+```python
+class TestScrabbleScorer:
+    """Tests for the ScrabbleScorer class."""
+
+    def test_calculate_score_basic(self, scrabble_scorer: ScrabbleScorer) -> None:
+        """Test basic score calculation."""
+        assert scrabble_scorer.calculate_score("A") == 1
+        assert scrabble_scorer.calculate_score("Z") == 10
+```
+
+### Test Coverage
+
+- Aim for >80% overall coverage
+- Critical modules should have >90% coverage
+- All new features must include tests
+- Bug fixes should include regression tests
+
+## Documentation
+
+### Updating Documentation
+
+When adding new features:
+
+1. Update `README.md` with usage examples
+2. Add docstrings to all new code
+3. Update `CHANGELOG.md`
+4. Update `CLAUDE.md` if architecture changes
+
+### Writing Documentation
+
+- Use clear, concise language
+- Include code examples
+- Keep examples up-to-date
+- Add links to related documentation
+
+## Pull Request Process
+
+### Before Submitting
+
+1. ✅ All tests pass
+2. ✅ Code coverage is maintained or improved
+3. ✅ Code is formatted with ruff
+4. ✅ No linting errors
+5. ✅ Type checking passes
+6. ✅ Documentation is updated
+7. ✅ Commit messages are clear
+8. ✅ Branch is up-to-date with main
+
+### Submitting a Pull Request
+
+1. **Push your branch**
+
+```bash
+git push origin feature/your-feature-name
+```
+
+2. **Create pull request** on GitHub
+
+3. **Fill out the PR template** with:
+   - Description of changes
+   - Related issue numbers
+   - Testing performed
+   - Screenshots (if UI changes)
+
+4. **Address review feedback**
+   - Make requested changes
+   - Push updates to your branch
+   - Respond to comments
+
+### PR Review Criteria
+
+Pull requests will be reviewed for:
+
+- **Functionality**: Does it work as intended?
+- **Tests**: Are there adequate tests?
+- **Code Quality**: Is the code clean and maintainable?
+- **Documentation**: Is it properly documented?
+- **Style**: Does it follow project conventions?
+- **Performance**: Are there any performance concerns?
+
+## Common Tasks
+
+### Adding a New Report Type
+
+1. Create new reporter class in `src/nhl_scrabble/reports/`
+2. Inherit from `BaseReporter`
+3. Implement `generate()` method
+4. Add to `__init__.py` exports
+5. Integrate into CLI
+6. Add tests
+7. Update documentation
+
+### Adding a New Configuration Option
+
+1. Add field to `Config` dataclass in `config.py`
+2. Add environment variable parsing in `from_env()`
+3. Add CLI option in `cli.py`
+4. Update documentation
+5. Add tests
+
+### Fixing a Bug
+
+1. Create issue on GitHub (if not exists)
+2. Write a failing test that reproduces the bug
+3. Fix the bug
+4. Verify test now passes
+5. Add regression test
+6. Submit PR referencing the issue
+
+## Release Process
+
+(For maintainers)
+
+1. Update version in `src/nhl_scrabble/__init__.py` and `pyproject.toml`
+2. Update `CHANGELOG.md`
+3. Create git tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
+4. Push tag: `git push origin v2.0.0`
+5. Create GitHub release with notes
+6. (Optional) Publish to PyPI
+
+## Questions?
+
+- Open an issue for bug reports or feature requests
+- Start a discussion for questions or ideas
+- Check existing issues/discussions first
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+---
+
+Thank you for contributing to NHL Scrabble! 🏒🎯
+
+## Using the Makefile
+
+The project includes a comprehensive Makefile that automates common development tasks.
+
+### Quick Reference
+
+```bash
+# Setup
+make init              # Initialize development environment
+make venv              # Create virtual environment only
+make install-dev       # Install with dev dependencies
+make install-hooks     # Install pre-commit hooks
+
+# Development
+make test              # Run all tests
+make test-cov          # Run tests with coverage
+make ruff-check        # Run linter
+make ruff-format       # Format code
+make mypy              # Type check
+make check             # Run all checks before commit
+
+# Cleaning
+make clean             # Clean all artifacts
+make clean-all         # Clean everything including venv
+
+# Building
+make build             # Build distribution packages
+make ci                # Simulate CI pipeline locally
+```
+
+See [docs/MAKEFILE.md](docs/MAKEFILE.md) for complete documentation of all 55 targets.
+
+### Recommended Workflow
+
+1. **First time setup:**
+   ```bash
+   make init
+   source .venv/bin/activate
+   ```
+
+2. **Before starting work:**
+   ```bash
+   make update
+   ```
+
+3. **During development:**
+   ```bash
+   make test-watch  # Keep running in a terminal
+   ```
+
+4. **Before committing:**
+   ```bash
+   make check
+   ```
+
+5. **Before creating a PR:**
+   ```bash
+   make ci
+   ```

@@ -1,0 +1,21 @@
+{
+  "cleanupPeriodDays": 20,
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(git diff:*)",
+      "Read(~/.bashrc)"
+    ],
+    "defaultMode": "acceptEdits",
+    "deny": [
+      "WebFetch",
+      "Bash(curl:*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)"
+    ]
+  }
+}

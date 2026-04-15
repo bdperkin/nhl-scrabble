@@ -1,0 +1,24 @@
+{
+  "forwards": [
+    {
+      "firstName": {"default": "Connor"},
+      "lastName": {"default": "McDavid"}
+    },
+    {
+      "firstName": {"default": "Leon"},
+      "lastName": {"default": "Draisaitl"}
+    }
+  ],
+  "defensemen": [
+    {
+      "firstName": {"default": "Evan"},
+      "lastName": {"default": "Bouchard"}
+    }
+  ],
+  "goalies": [
+    {
+      "firstName": {"default": "Stuart"},
+      "lastName": {"default": "Skinner"}
+    }
+  ]
+}

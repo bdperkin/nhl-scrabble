@@ -1,0 +1,19 @@
+{
+  "standings": [
+    {
+      "teamAbbrev": {"default": "TOR"},
+      "divisionName": "Atlantic",
+      "conferenceName": "Eastern"
+    },
+    {
+      "teamAbbrev": {"default": "MTL"},
+      "divisionName": "Atlantic",
+      "conferenceName": "Eastern"
+    },
+    {
+      "teamAbbrev": {"default": "EDM"},
+      "divisionName": "Pacific",
+      "conferenceName": "Western"
+    }
+  ]
+}
