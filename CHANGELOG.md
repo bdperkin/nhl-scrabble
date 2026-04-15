@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Tox-ini-fmt Integration** - Tox configuration file formatting
+
+  - Formatter for tox.ini files enforcing tox 4 best practices
+  - Pre-commit hook for automatic tox.ini formatting
+  - Tox environment (tox-ini-fmt) for standalone formatting
+  - Added to CI/CD pipeline for consistent tox.ini structure
+  - Auto-formats to standard structure: alphabetized sections, consistent field ordering
+  - Enforces modern tox 4 syntax (env_list vs envlist, package=editable vs usedevelop)
+  - Removes deprecated fields (minversion, isolated_build now defaults)
+  - Updates minimum version requirements (tox>=4.2, tox-uv>=1)
+  - Works harmoniously with tox 4 and tox-uv for consistent configuration
+  - 47 total pre-commit hooks for comprehensive code quality
+
 - **Autoflake Integration** - Unused import and variable removal
 
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
@@ -19,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Aligns with ruff's F401 (unused imports) and F841 (unused variables) rules
   - Ignores __init__.py imports (matches ruff's per-file-ignores for re-exports)
   - Works harmoniously with ruff's unused import/variable detection
-  - 46 total pre-commit hooks for comprehensive code quality
+  - 46 total pre-commit hooks (before tox-ini-fmt addition)
 
 - **Isort Integration** - Python import sorting
 
