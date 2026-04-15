@@ -184,6 +184,33 @@ pre_summary_newline = false  # Don't add newline before summary (PEP 257 default
 # Exclude patterns (align with other tool exclusions)
 exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info"]
 
+# Black configuration
+[tool.black]
+# Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
+# Align with ruff's configuration for consistency
+line-length = 100  # Match ruff's line-length
+target-version = ["py310", "py311", "py312", "py313"]  # Match ruff's target-version
+skip-string-normalization = false  # Use double quotes (matches ruff's quote-style)
+skip-magic-trailing-comma = false  # Respect magic trailing commas
+# Exclude patterns (align with other tool exclusions)
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.tox
+  | \.venv
+  | venv
+  | build
+  | dist
+  | \.egg-info
+  | __pycache__
+  | \.pytest_cache
+  | \.mypy_cache
+  | \.ruff_cache
+)/
+'''
+
 # Ruff configuration
 [tool.ruff]
 target-version = "py310"
