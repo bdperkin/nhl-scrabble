@@ -20,8 +20,8 @@ class BaseReporter(ABC):
 
         Returns:
             Formatted report string
+
         """
-        pass
 
     def _format_header(self, title: str, width: int = 80) -> str:
         """Format a section header.
@@ -32,6 +32,7 @@ class BaseReporter(ABC):
 
         Returns:
             Formatted header string
+
         """
         separator = "=" * width
         return f"\n{separator}\n\n{title}\n{separator}"
@@ -45,6 +46,7 @@ class BaseReporter(ABC):
 
         Returns:
             Formatted subheader string
+
         """
         separator = "-" * width
         return f"\n{title}\n{separator}"

@@ -29,6 +29,7 @@ class TeamProcessor:
         Args:
             api_client: NHL API client for fetching data
             scorer: Scrabble scorer for calculating player scores
+
         """
         self.api_client = api_client
         self.scorer = scorer
@@ -51,6 +52,7 @@ class TeamProcessor:
             >>> teams, players, failed = processor.process_all_teams()
             >>> len(teams) > 0
             True
+
         """
         logger.info("Starting team processing")
 
@@ -108,6 +110,7 @@ class TeamProcessor:
 
         Returns:
             List of PlayerScore objects for all players on the team
+
         """
         team_players: list[PlayerScore] = []
 
@@ -142,8 +145,9 @@ class TeamProcessor:
 
         Examples:
             >>> standings = processor.calculate_division_standings(teams)
-            >>> 'Atlantic' in standings
+            >>> "Atlantic" in standings
             True
+
         """
         division_data: dict[str, dict[str, Any]] = defaultdict(
             lambda: {"total": 0, "teams": [], "player_count": 0}
@@ -183,8 +187,9 @@ class TeamProcessor:
 
         Examples:
             >>> standings = processor.calculate_conference_standings(teams)
-            >>> 'Eastern' in standings
+            >>> "Eastern" in standings
             True
+
         """
         conference_data: dict[str, dict[str, Any]] = defaultdict(
             lambda: {"total": 0, "teams": [], "player_count": 0}

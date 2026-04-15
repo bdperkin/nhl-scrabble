@@ -36,7 +36,6 @@ def cli() -> None:
     Fetch NHL roster data and calculate Scrabble scores for player names.
     Generate comprehensive reports showing team, division, and conference standings.
     """
-    pass
 
 
 @cli.command()
@@ -88,6 +87,7 @@ def analyze(
         nhl-scrabble analyze --verbose
         nhl-scrabble analyze --output report.txt
         nhl-scrabble analyze --format json --output report.json
+
     """
     # Setup logging
     setup_logging(verbose=verbose)
@@ -142,6 +142,7 @@ def run_analysis(config: Config) -> str:
 
     Raises:
         NHLApiError: If there are issues fetching data from NHL API
+
     """
     # Initialize components
     api_client = NHLApiClient(
@@ -194,17 +195,16 @@ def run_analysis(config: Config) -> str:
             conference_standings,
             playoff_standings,
         )
-    else:
-        # Generate text reports
-        reports = [
-            conference_reporter.generate(conference_standings),
-            division_reporter.generate(division_standings),
-            playoff_reporter.generate(playoff_standings),
-            team_reporter.generate(team_scores),
-            stats_reporter.generate(all_players, division_standings, conference_standings),
-        ]
+    # Generate text reports
+    reports = [
+        conference_reporter.generate(conference_standings),
+        division_reporter.generate(division_standings),
+        playoff_reporter.generate(playoff_standings),
+        team_reporter.generate(team_scores),
+        stats_reporter.generate(all_players, division_standings, conference_standings),
+    ]
 
-        return "\n".join(reports) + "\n" + "=" * 80 + "\n"
+    return "\n".join(reports) + "\n" + "=" * 80 + "\n"
 
 
 def generate_json_report(
@@ -225,6 +225,7 @@ def generate_json_report(
 
     Returns:
         JSON string
+
     """
     import json
     from dataclasses import asdict

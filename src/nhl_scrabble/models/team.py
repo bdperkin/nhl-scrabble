@@ -16,6 +16,7 @@ class TeamScore:
         division: Division name
         conference: Conference name
         avg_per_player: Average score per player (computed)
+
     """
 
     abbrev: str
