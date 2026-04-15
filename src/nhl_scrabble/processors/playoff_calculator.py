@@ -40,7 +40,6 @@ class PlayoffCalculator:
             >>> standings = calculator.calculate_playoff_standings(team_scores)
             >>> "Eastern" in standings
             True
-
         """
         logger.info("Calculating playoff standings")
 
@@ -82,7 +81,6 @@ class PlayoffCalculator:
 
         Returns:
             Dictionary mapping division names to lists of PlayoffTeam objects
-
         """
         teams_by_division: dict[str, list[PlayoffTeam]] = defaultdict(list)
 
@@ -109,7 +107,6 @@ class PlayoffCalculator:
 
         Returns:
             Tuple of (playoff_teams dict, all_teams list)
-
         """
         playoff_teams: dict[str, PlayoffTeam] = {}
         all_teams: list[PlayoffTeam] = []
@@ -144,7 +141,6 @@ class PlayoffCalculator:
 
         Returns:
             Dictionary mapping conference names to lists of wild card teams
-
         """
         wild_cards: dict[str, list[PlayoffTeam]] = {}
 
@@ -185,7 +181,6 @@ class PlayoffCalculator:
 
         Returns:
             The team with the highest total points
-
         """
         return max(all_teams, key=lambda x: (x.total, x.avg))
 
@@ -197,7 +192,6 @@ class PlayoffCalculator:
 
         Returns:
             Dictionary mapping conference names to their leader teams
-
         """
         conference_leaders: dict[str, PlayoffTeam] = {}
 
@@ -229,7 +223,6 @@ class PlayoffCalculator:
             playoff_teams: Dictionary of teams in playoffs
             presidents_trophy_team: Presidents' Trophy winner
             conference_leaders: Dictionary of conference leaders
-
         """
         for team in all_teams:
             team.status_indicator = self._get_status_indicator(
@@ -251,7 +244,6 @@ class PlayoffCalculator:
 
         Returns:
             Status indicator character
-
         """
         # Presidents' Trophy (most significant)
         if team.abbrev == presidents_trophy_team.abbrev:
@@ -281,7 +273,6 @@ class PlayoffCalculator:
 
         Returns:
             Dictionary mapping conference names to team lists
-
         """
         result: dict[str, list[PlayoffTeam]] = defaultdict(list)
 

@@ -32,7 +32,6 @@ class NHLApiClient:
         timeout: Request timeout in seconds
         retries: Number of retry attempts for failed requests
         rate_limit_delay: Delay in seconds between requests to avoid rate limiting
-
     """
 
     BASE_URL = "https://api-web.nhle.com/v1"
@@ -49,7 +48,6 @@ class NHLApiClient:
             timeout: Request timeout in seconds (default: 10)
             retries: Number of retry attempts for failed requests (default: 3)
             rate_limit_delay: Delay in seconds between requests (default: 0.3)
-
         """
         self.timeout = timeout
         self.retries = retries
@@ -77,7 +75,6 @@ class NHLApiClient:
             >>> teams = client.get_teams()
             >>> "TOR" in teams
             True
-
         """
         url = f"{self.BASE_URL}/standings/now"
         logger.info("Fetching NHL teams from standings endpoint")
@@ -130,7 +127,6 @@ class NHLApiClient:
             >>> roster = client.get_team_roster("TOR")
             >>> "forwards" in roster
             True
-
         """
         url = f"{self.BASE_URL}/roster/{team_abbrev}/current"
         logger.debug(f"Fetching roster for {team_abbrev}")

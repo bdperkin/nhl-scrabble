@@ -67,7 +67,6 @@ class ScrabbleScorer:
             11
             >>> scorer.calculate_score("Ovechkin")
             22
-
         """
         return sum(self.LETTER_VALUES.get(char.upper(), 0) for char in name)
 
@@ -91,7 +90,6 @@ class ScrabbleScorer:
             >>> result = scorer.score_player(player, "EDM", "Pacific", "Western")
             >>> result.full_score
             32
-
         """
         first_name = player_data["firstName"]["default"]
         last_name = player_data["lastName"]["default"]

@@ -16,7 +16,6 @@ def setup_logging(verbose: bool = False, json_output: bool = False) -> None:
         >>> setup_logging(verbose=True)
         >>> logger = logging.getLogger(__name__)
         >>> logger.debug("This will be shown")
-
     """
     log_level = logging.DEBUG if verbose else logging.INFO
 
@@ -62,7 +61,6 @@ class JSONFormatter(logging.Formatter):
 
         Returns:
             JSON string representation of log record
-
         """
         import json
 

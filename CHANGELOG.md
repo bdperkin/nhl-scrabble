@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Docformatter Integration** - Python docstring formatting
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook (local) for automatic docstring formatting
+  - Tox environment (docformatter) for standalone docstring formatting checks
+  - Added to CI/CD pipeline for continuous docstring formatting validation
+  - Configuration: wrap_length=100, wrap_summaries=100, wrap_descriptions=100 (match ruff)
+  - Style: PEP 257 with pragmatic settings (no forced multi-line for short docstrings)
+  - Ruff integration: disabled ruff's docstring-code-format to avoid conflicts, added D413 to ignore list
+  - Works alongside ruff-format: docformatter handles docstrings, ruff handles code
 - **Rstcheck Integration** - RST syntax checking and validation
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
   - Pre-commit hook with Sphinx integration for code block validation

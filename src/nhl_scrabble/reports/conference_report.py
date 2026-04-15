@@ -15,7 +15,6 @@ class ConferenceReporter(BaseReporter):
 
         Returns:
             Formatted conference report string
-
         """
         output = self._format_header("🌎 CONFERENCE SCRABBLE SCORES")
 

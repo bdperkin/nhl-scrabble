@@ -14,7 +14,6 @@ class DivisionStandings:
         teams: List of team abbreviations in this division
         player_count: Total number of players in the division
         avg_per_team: Average score per team
-
     """
 
     name: str
@@ -38,7 +37,6 @@ class ConferenceStandings:
         teams: List of team abbreviations in this conference
         player_count: Total number of players in the conference
         avg_per_team: Average score per team
-
     """
 
     name: str
@@ -72,7 +70,6 @@ class PlayoffTeam:
         in_playoffs: Whether team has clinched a playoff spot
         division_rank: Rank within the division (1-based)
         status_indicator: Playoff status (p=Presidents', z=Conference, y=Division, x=Playoff, e=Eliminated)
-
     """
 
     abbrev: str

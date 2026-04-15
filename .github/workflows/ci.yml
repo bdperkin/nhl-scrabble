@@ -73,6 +73,7 @@ jobs:
           - yamllint
           - flake8
           - absolufy-imports
+          - docformatter
           - autopep8
           - doc8
           - rstcheck

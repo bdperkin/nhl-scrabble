@@ -150,6 +150,21 @@ select = ""  # Empty = enable all fixes except ignored
 # Number of jobs for parallel processing (0 = auto-detect)
 jobs = 0
 
+# Docformatter configuration
+[tool.docformatter]
+# Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
+# Align with ruff's configuration
+wrap_length = 100  # Match ruff's line-length
+wrap_summaries = 100  # Match ruff's line-length
+wrap_descriptions = 100  # Match ruff's line-length
+black = false  # Don't force Black-style multi-line for short docstrings
+style = "pep257"  # Follow PEP 257 docstring conventions
+make_summary_multi_line = false  # Only make multi-line when necessary
+close_quotes_on_newline = false  # Keep closing quotes on same line for short docstrings
+pre_summary_newline = false  # Don't add newline before summary (PEP 257 default)
+# Exclude patterns (align with other tool exclusions)
+exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info"]
+
 # Ruff configuration
 [tool.ruff]
 target-version = "py310"
@@ -177,6 +192,7 @@ ignore = [
     "D105",    # Missing docstring in magic method
     "D106",    # Missing docstring in public nested class
     "D107",    # Missing docstring in __init__
+    "D413",    # Missing blank line after last section (conflicts with docformatter)
 
     # Stylistic choices that may be too opinionated
     "FBT001",  # Boolean positional arg in function definition
@@ -250,7 +266,7 @@ known-first-party = ["nhl_scrabble"]
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
-docstring-code-format = true
+docstring-code-format = false  # Use docformatter for docstring formatting
 
 # MyPy configuration
 [tool.mypy]
