@@ -104,6 +104,39 @@ Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
 [tool.hatch.build.targets.wheel]
 packages = ["src/nhl_scrabble"]
 
+# Flake8 configuration
+# Note: flake8 doesn't natively support pyproject.toml
+# Using flake8-pyproject plugin to enable configuration here
+[tool.flake8]
+# Comprehensive linting (matches ruff's ALL rules philosophy as closely as possible)
+# Align with ruff's configuration
+max-line-length = 100
+extend-ignore = [
+    # Align with ruff's ignores where applicable
+    "E501",  # Line too long (handled by formatter)
+    "W503",  # Line break before binary operator (conflicts with modern style)
+    "E203",  # Whitespace before ':' (conflicts with black/ruff-format)
+]
+# Match ruff's target version and source paths
+per-file-ignores = [
+    "__init__.py:F401,F403",  # Unused imports in __init__.py (like ruff's per-file-ignores)
+    "tests/*:S101",  # Use of assert (pytest uses assert)
+]
+max-complexity = 10  # Match ruff's mccabe max-complexity
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+]
+
 # Ruff configuration
 [tool.ruff]
 target-version = "py310"
