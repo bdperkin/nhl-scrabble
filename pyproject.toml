@@ -332,6 +332,124 @@ skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,buil
 count = true
 quiet-level = 0  # Show all issues (comprehensive)
 
+# PyMarkdown configuration
+[tool.pymarkdown]
+# Comprehensive by default (matches ruff's ALL rules philosophy)
+# Enable strict mode for maximum rule coverage
+mode.strict-config = true
+
+# Plugins configuration - enable all rules by default (like ruff's ALL)
+plugins.enabled = [
+    "md001",  # MD001 - Heading levels should only increment by one level at a time
+    "md002",  # MD002 - First heading should be a top level heading
+    "md003",  # MD003 - Heading style
+    "md004",  # MD004 - Unordered list style
+    "md005",  # MD005 - Inconsistent indentation for list items at the same level
+    "md006",  # MD006 - Consider starting bulleted lists at the beginning of the line
+    "md007",  # MD007 - Unordered list indentation
+    "md009",  # MD009 - Trailing spaces
+    "md010",  # MD010 - Hard tabs
+    "md011",  # MD011 - Reversed link syntax
+    "md012",  # MD012 - Multiple consecutive blank lines
+    "md013",  # MD013 - Line length
+    "md014",  # MD014 - Dollar signs used before commands without showing output
+    "md018",  # MD018 - No space after hash on atx style heading
+    "md019",  # MD019 - Multiple spaces after hash on atx style heading
+    "md020",  # MD020 - No space inside hashes on closed atx style heading
+    "md021",  # MD021 - Multiple spaces inside hashes on closed atx style heading
+    "md022",  # MD022 - Headings should be surrounded by blank lines
+    "md023",  # MD023 - Headings must start at the beginning of the line
+    "md024",  # MD024 - Multiple headings with the same content
+    "md025",  # MD025 - Multiple top level headings in the same document
+    "md026",  # MD026 - Trailing punctuation in heading
+    "md027",  # MD027 - Multiple spaces after blockquote symbol
+    "md028",  # MD028 - Blank line inside blockquote
+    "md029",  # MD029 - Ordered list item prefix
+    "md030",  # MD030 - Spaces after list markers
+    "md031",  # MD031 - Fenced code blocks should be surrounded by blank lines
+    "md032",  # MD032 - Lists should be surrounded by blank lines
+    "md033",  # MD033 - Inline HTML
+    "md034",  # MD034 - Bare URL used
+    "md035",  # MD035 - Horizontal rule style
+    "md036",  # MD036 - Emphasis used instead of a heading
+    "md037",  # MD037 - Spaces inside emphasis markers
+    "md038",  # MD038 - Spaces inside code span elements
+    "md039",  # MD039 - Spaces inside link text
+    "md040",  # MD040 - Fenced code blocks should have a language specified
+    "md041",  # MD041 - First line in file should be a top level heading
+    "md042",  # MD042 - No empty links
+    "md043",  # MD043 - Required heading structure
+    "md044",  # MD044 - Proper names should have the correct capitalization
+    "md045",  # MD045 - Images should have alternate text (alt text)
+    "md046",  # MD046 - Code block style
+    "md047",  # MD047 - Files should end with a single newline character
+    "md048",  # MD048 - Code fence style
+    "md049",  # MD049 - Emphasis style should be consistent
+    "md050",  # MD050 - Strong style should be consistent
+    "md051",  # MD051 - Link fragments should be valid
+    "md052",  # MD052 - Reference links and images should use a label that is defined
+    "md053",  # MD053 - Link and image reference definitions should be needed
+]
+
+# Selective disables (like ruff's ignore list)
+plugins.disabled = []
+
+# Rule-specific configuration (like ruff's per-file-ignores)
+# MD010 - Hard tabs
+# Disabled as it triggers false positives in code blocks (e.g., Makefile snippets)
+plugins.md010.enabled = false  # False positives in code blocks requiring tabs
+
+# MD012 - Multiple consecutive blank lines
+# Keep enabled to catch actual formatting issues
+plugins.md012.enabled = true
+
+# MD029 - Ordered list item prefix
+# Disabled as the current documentation style uses continuous numbering (1,2,3)
+# which pymarkdown interprets as separate lists that should each start at 1
+plugins.md029.enabled = false  # Documentation uses continuous numbering style
+
+# MD013 - Line length
+# Disabled for markdown as documentation often has long lines (URLs, examples, tables)
+# Ruff's line-length = 100 applies to Python code, not necessarily markdown docs
+plugins.md013.enabled = false  # Too strict for documentation with URLs and examples
+
+# MD022 - Headings should be surrounded by blank lines
+# Disabled as it's a common pattern in structured documentation
+plugins.md022.enabled = false  # Common formatting pattern, would require extensive doc changes
+
+# MD024 - Multiple headings with the same content
+# Disabled as it's unavoidable in CHANGELOGs (repeated "Added", "Changed", "Fixed" sections)
+plugins.md024.enabled = false  # Common in CHANGELOG files with standard section names
+
+# MD031 - Fenced code blocks should be surrounded by blank lines
+# Disabled as it's a very common pattern in existing documentation
+plugins.md031.enabled = false  # Common pattern, would require extensive doc changes
+
+# MD032 - Lists should be surrounded by blank lines
+# Disabled for compatibility with existing documentation style
+plugins.md032.enabled = false  # Common pattern in documentation
+
+# MD033 - Inline HTML (allow for necessary HTML in markdown)
+plugins.md033.enabled = false  # Too strict for practical documentation
+
+# MD034 - Bare URL used
+# Disabled as bare URLs are common in reference sections
+plugins.md034.enabled = false  # Common in documentation reference sections
+
+# MD036 - Emphasis used instead of heading
+# Disabled as it's common pattern in structured docs (CHANGELOG, CONTRIBUTING)
+plugins.md036.enabled = false  # Common formatting pattern in structured documentation
+
+# MD040 - Fenced code blocks should have language
+# Disabled as many code blocks don't need language specification (examples, output, etc.)
+plugins.md040.enabled = false  # Too strict, not all code blocks need language specification
+
+# MD041 - First line in file should be a top level heading
+plugins.md041.enabled = false  # Too strict, not all markdown files need h1 first
+
+# MD043 - Required heading structure
+plugins.md043.enabled = false  # Too strict, overly prescriptive
+
 # UV configuration
 [tool.uv]
 # Managed by uv for faster dependency resolution

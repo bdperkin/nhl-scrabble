@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **PyMarkdown Integration** - Markdown linting and formatting
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook for automated markdown linting
+  - Tox environment (pymarkdown) for standalone markdown checking
+  - Added to CI/CD pipeline for continuous markdown validation
+  - Configured with all rules enabled by default, selective pragmatic disables
+  - Disabled overly strict rules (MD013 line length, MD040 code language, MD036 emphasis, etc.)
+  - Fixed multiple consecutive blank lines in docs/DEVELOPMENT.md (MD012)
 - **Codespell Integration** - Spell checking for code and documentation
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
   - Pre-commit hook for automated spell checking
@@ -15,11 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (33 total):
+- Comprehensive pre-commit hooks (34 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
   - Spelling hooks (1): codespell for code and documentation spell checking
+  - Markdown hooks (1): pymarkdown for markdown linting and formatting
   - UV hook (1): uv-lock for dependency lock file validation
   - Ruff hooks (2): ruff-check (linting), ruff-format (formatting)
   - MyPy hook (1): strict type checking
