@@ -111,6 +111,14 @@ repos:
         args: []  # Config is in pyproject.toml
         files: \.(rst|txt)$
 
+  - repo: https://github.com/rstcheck/rstcheck
+    rev: v6.2.0
+    hooks:
+      - id: rstcheck
+        # Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
+        args: []  # Config is in pyproject.toml
+        additional_dependencies: [sphinx]
+
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.5.18
     hooks:

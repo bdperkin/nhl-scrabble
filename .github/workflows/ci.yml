@@ -75,6 +75,7 @@ jobs:
           - absolufy-imports
           - autopep8
           - doc8
+          - rstcheck
 
     steps:
       - name: Checkout code
