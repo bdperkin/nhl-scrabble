@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Autoflake Integration** - Unused import and variable removal
+
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook for automatic unused code removal
+  - Tox environment (autoflake) for standalone unused code checks
+  - Added to CI/CD pipeline for continuous code cleanliness validation
+  - Configuration: remove-all-unused-imports, remove-unused-variables, remove-duplicate-keys
+  - Aligns with ruff's F401 (unused imports) and F841 (unused variables) rules
+  - Ignores __init__.py imports (matches ruff's per-file-ignores for re-exports)
+  - Works harmoniously with ruff's unused import/variable detection
+  - 46 total pre-commit hooks for comprehensive code quality
+
 - **Isort Integration** - Python import sorting
 
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
@@ -19,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Works harmoniously with ruff's isort rules (I001-I005)
   - Import ordering: FUTURE → STDLIB → THIRDPARTY <!-- codespell:ignore --> → FIRSTPARTY → LOCALFOLDER
   - Code changes: Collapsed multi-line imports to single line where they fit in 100 chars
-  - 45 total pre-commit hooks for comprehensive code quality
+  - 45 total pre-commit hooks (before autoflake addition)
 
 - **Black Integration** - Python code formatting with Black
 
@@ -31,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Works harmoniously with ruff-format: both are Black-compatible
   - Formatting order: black → docformatter → autopep8 → ruff-check → ruff-format
   - Note: Black and ruff-format produce identical output (ruff-format is Black-compatible)
-  - 44 total pre-commit hooks for comprehensive code quality
+  - 44 total pre-commit hooks (before isort and autoflake additions)
 
 ### Changed
 

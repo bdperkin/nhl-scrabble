@@ -196,6 +196,21 @@ repos:
   # Python Formatting - Code and Docstring Formatting
   # ============================================================================
 
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        # Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
+        # Aligns with ruff's F401 (unused imports) and F841 (unused variables) rules
+        args:
+          [
+            --in-place,
+            --remove-all-unused-imports,
+            --remove-unused-variables,
+            --remove-duplicate-keys,
+            --ignore-init-module-imports,
+          ]
+
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.10.0
     hooks:

@@ -156,6 +156,19 @@ exclude = [
     ".ruff_cache",
 ]
 
+# Autoflake configuration
+[tool.autoflake]
+# Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
+# Align with ruff's F401 (unused imports) and F841 (unused variables) rules
+check = true  # Check only mode (no changes) - use --check in pre-commit/tox
+in-place = false  # Don't modify files in place (safer default)
+remove-all-unused-imports = true  # Remove all unused imports (matches ruff F401)
+remove-unused-variables = true  # Remove unused variables (matches ruff F841)
+remove-duplicate-keys = true  # Remove duplicate keys in dictionaries
+ignore-init-module-imports = true  # Don't remove imports from __init__.py (matches ruff's per-file-ignores)
+# Exclude patterns (align with other tool exclusions)
+exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info", "__pycache__"]
+
 # Autopep8 configuration
 [tool.autopep8]
 # Comprehensive PEP 8 formatting (matches ruff's ALL rules philosophy as closely as possible)
