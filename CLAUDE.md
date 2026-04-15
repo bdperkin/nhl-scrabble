@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.13
 **License:** MIT
-**Pre-commit Hooks:** 46 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 47 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (46 Comprehensive Checks)
+## Pre-commit Hooks (47 Comprehensive Checks)
 
-The project uses 46 pre-commit hooks for automatic code quality validation:
+The project uses 47 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -152,9 +152,10 @@ The project uses 46 pre-commit hooks for automatic code quality validation:
 - `isort`: Sort Python imports (Black-compatible, line-length=100, matches ruff's isort configuration)
 - `absolufy-imports`: Convert relative imports to absolute imports (comprehensive by default)
 
-**Project Validation Hooks (1 from validate-pyproject):**
+**Project Validation Hooks (2 from validate-pyproject and tox-ini-fmt):**
 
 - `validate-pyproject`: Validates pyproject.toml against PEP 517, 518, 621, 631 standards
+- `tox-ini-fmt`: Formats tox.ini to standard structure (enforces tox 4 best practices, auto-formats configuration)
 
 **YAML Linting Hooks (1 from yamllint):**
 

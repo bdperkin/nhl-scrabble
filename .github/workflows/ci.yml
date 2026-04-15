@@ -70,6 +70,7 @@ jobs:
           - pymarkdown
           - mdformat
           - validate-pyproject
+          - tox-ini-fmt
           - yamllint
           - flake8
           - isort
