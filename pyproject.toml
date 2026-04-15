@@ -326,7 +326,7 @@ skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,buil
 
 # Project-specific ignore words (like ruff's ignore list)
 # Add false positives here as they are discovered
-ignore-words-list = ''
+# ignore-words-list = 'word1,word2'  # Uncomment and add words when needed
 
 # Consistency settings
 count = true
