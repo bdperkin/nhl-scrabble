@@ -700,7 +700,7 @@ constraint-dependencies = []  # Strict dependency constraints
 override-dependencies = []    # Override specific dependencies if needed
 
 # Index configuration for strict package resolution
-index-strategy = "first-match"  # Use first matching index (deterministic)
+index-strategy = "first-index"  # Use first matching index (deterministic)
 keyring-provider = "disabled"   # Disable keyring for reproducibility
 
 # Cache configuration for reproducibility
