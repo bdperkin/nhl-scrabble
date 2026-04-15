@@ -8,10 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Comprehensive pre-commit hooks (32 total):
+- **Codespell Integration** - Spell checking for code and documentation
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook for automated spell checking
+  - Tox environment (codespell) for standalone spell checking
+  - Added to CI/CD pipeline for continuous spell checking
+  - Configured with check-filenames and check-hidden enabled by default
+  - Selective ignores for generated files and lock files
+- Comprehensive pre-commit hooks (33 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
+  - Spelling hooks (1): codespell for code and documentation spell checking
   - UV hook (1): uv-lock for dependency lock file validation
   - Ruff hooks (2): ruff-check (linting), ruff-format (formatting)
   - MyPy hook (1): strict type checking
