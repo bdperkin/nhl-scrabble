@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.13
 **License:** MIT
-**Pre-commit Hooks:** 35 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 36 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -110,9 +110,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (35 Comprehensive Checks)
+## Pre-commit Hooks (36 Comprehensive Checks)
 
-The project uses 35 pre-commit hooks for automatic code quality validation:
+The project uses 36 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -140,6 +140,9 @@ The project uses 35 pre-commit hooks for automatic code quality validation:
 
 **Project Validation Hooks (1 from validate-pyproject):**
 - `validate-pyproject`: Validates pyproject.toml against PEP 517, 518, 621, 631 standards
+
+**YAML Linting Hooks (1 from yamllint):**
+- `yamllint`: YAML file validation and linting (comprehensive by default)
 
 **Spelling Hooks (1 from codespell):**
 - `codespell`: Spell checking for code and documentation (comprehensive by default)
@@ -716,7 +719,7 @@ The project uses UV automatically via tox-uv:
 - **Modules:** 15 core modules
 - **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Pre-commit Hooks:** 35 hooks (meta, file quality, Python quality, project validation, spelling, markdown, UV, ruff, mypy)
+- **Pre-commit Hooks:** 36 hooks (meta, file quality, Python quality, project validation, YAML linting, spelling, markdown, UV, ruff, mypy)
 - **Dependency Lock:** uv.lock with 1,957 lines
 - **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization

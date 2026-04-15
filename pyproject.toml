@@ -342,6 +342,16 @@ quiet-level = 0  # Show all issues (comprehensive)
 # - PEP 631: Dependency specification
 # All validations are enabled by default, ensuring complete compliance
 
+# Yamllint configuration
+# Note: yamllint doesn't natively support pyproject.toml configuration
+# Configuration is in .yamllint file in the repository root
+# This section documents the configuration approach (matches ruff's ALL rules philosophy):
+# - Extends default configuration (comprehensive by default)
+# - Line length: 100 (aligns with ruff's line-length)
+# - Document start: disabled (not always necessary)
+# - Truthy values: disabled (yes/no are common and clear)
+# - Indentation: 2 spaces (standard for YAML)
+
 # PyMarkdown configuration
 [tool.pymarkdown]
 # Comprehensive by default (matches ruff's ALL rules philosophy)

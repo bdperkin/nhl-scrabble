@@ -332,7 +332,7 @@ make uv-pip ARGS="list"
 
 ### Pre-commit Hooks
 
-The project uses comprehensive pre-commit hooks (35 total) for automatic code quality checks:
+The project uses comprehensive pre-commit hooks (36 total) for automatic code quality checks:
 
 ```bash
 # Install pre-commit hooks (one-time setup)
@@ -350,6 +350,7 @@ pre-commit autoupdate
 - **File quality** (18): Formatting, syntax, security (trailing-whitespace, check-yaml, detect-private-key, etc.)
 - **Python quality** (7): Code patterns (blanket-noqa, mock-methods, eval, type-annotations, etc.)
 - **Project validation** (1): pyproject.toml validation against PEP standards (validate-pyproject)
+- **YAML linting** (1): YAML file validation and linting (yamllint)
 - **Spelling** (1): Code and documentation spell checking (codespell)
 - **Markdown** (1): Markdown linting and formatting (pymarkdown)
 - **UV** (1): Dependency lock file validation (uv-lock)
@@ -513,7 +514,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
-- **Pre-commit Hooks**: 35 hooks (meta, pre-commit-hooks, pygrep-hooks, validate-pyproject, codespell, pymarkdown, uv, ruff, mypy)
+- **Pre-commit Hooks**: 36 hooks (meta, pre-commit-hooks, pygrep-hooks, validate-pyproject, yamllint, codespell, pymarkdown, uv, ruff, mypy)
 - **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
 - **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13
 
