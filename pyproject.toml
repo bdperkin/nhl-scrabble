@@ -315,6 +315,23 @@ skip_covered = false
 [tool.coverage.html]
 directory = "htmlcov"
 
+# Codespell configuration
+[tool.codespell]
+# Comprehensive by default (matches ruff's ALL rules philosophy)
+check-filenames = true
+check-hidden = true
+
+# Skip patterns for non-text files and generated content
+skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*'
+
+# Project-specific ignore words (like ruff's ignore list)
+# Add false positives here as they are discovered
+# ignore-words-list = 'word1,word2'  # Uncomment and add words when needed
+
+# Consistency settings
+count = true
+quiet-level = 0  # Show all issues (comprehensive)
+
 # UV configuration
 [tool.uv]
 # Managed by uv for faster dependency resolution
