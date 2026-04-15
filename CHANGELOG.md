@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Doc8 Integration** - RST documentation linting
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook for RST (.rst, .txt) file validation
+  - Tox environment (doc8) for standalone documentation linting
+  - Added to CI/CD pipeline for continuous documentation quality
+  - Configuration: max-line-length=100 (aligns with ruff), extensions=[".rst", ".txt"]
+  - Created docs/index.rst to make hook applicable
+  - Works alongside pymarkdown/mdformat for complete documentation coverage (RST + Markdown)
 - **Autopep8 Integration** - PEP 8 auto-formatting with aggressive conflict resolution
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
   - Pre-commit hook runs BEFORE ruff-format (autopep8 first pass, ruff-format finalization)
@@ -76,7 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (40 total):
+- Comprehensive pre-commit hooks (41 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
@@ -85,6 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - YAML linting hooks (1): yamllint for YAML file validation and linting
   - Spelling hooks (1): codespell for code and documentation spell checking
   - Markdown hooks (2): pymarkdown for markdown linting, mdformat for markdown formatting
+  - Documentation hooks (1): doc8 for RST documentation linting
   - UV hook (1): uv-lock for dependency lock file validation
   - Flake8 hooks (1): flake8 for Python code linting and style checking
   - Autopep8 hooks (1): autopep8 for PEP 8 auto-formatting (runs before ruff-format)
