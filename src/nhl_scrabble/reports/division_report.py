@@ -15,6 +15,7 @@ class DivisionReporter(BaseReporter):
 
         Returns:
             Formatted division report string
+
         """
         output = self._format_header("🗺️  DIVISION SCRABBLE SCORES")
 

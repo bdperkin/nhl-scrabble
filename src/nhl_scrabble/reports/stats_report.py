@@ -15,6 +15,7 @@ class StatsReporter(BaseReporter):
 
         Args:
             top_players_count: Number of top players to show
+
         """
         self.top_players_count = top_players_count
 
@@ -33,6 +34,7 @@ class StatsReporter(BaseReporter):
 
         Returns:
             Formatted statistics report string
+
         """
         output = ""
 

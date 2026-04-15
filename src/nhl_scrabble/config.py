@@ -19,6 +19,7 @@ class Config:
         top_team_players_count: Number of top players per team to show
         verbose: Enable verbose logging
         output_format: Output format (text, json, html)
+
     """
 
     api_timeout: int = 10
@@ -47,10 +48,11 @@ class Config:
 
         Examples:
             >>> import os
-            >>> os.environ['NHL_SCRABBLE_API_TIMEOUT'] = '15'
+            >>> os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "15"
             >>> config = Config.from_env()
             >>> config.api_timeout
             15
+
         """
         # Load .env file if it exists
         load_dotenv()
@@ -70,6 +72,7 @@ class Config:
 
         Returns:
             Dictionary representation of the configuration
+
         """
         return {
             "api_timeout": self.api_timeout,
