@@ -19,8 +19,8 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.20.1
     hooks:
       - id: mypy
         additional_dependencies: [types-requests, pydantic]
-        args: [--strict, --ignore-missing-imports]
+        args: []  # Config is in pyproject.toml
