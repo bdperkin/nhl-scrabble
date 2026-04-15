@@ -1,17 +1,24 @@
-# Yamllint configuration
+# ============================================================================
+# NHL Scrabble - Yamllint Configuration
+# ============================================================================
 # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
 # Enable all rules by default with selective pragmatic disables
 
+# ============================================================================
+# Base Configuration
+# ============================================================================
+
 extends: default
 
+# ============================================================================
+# Rule Configuration
+# ============================================================================
+
 rules:
-  # Line length - align with ruff's line-length = 100 for consistency
+  # Line length - align with ruff's line-length=100 for consistency
   line-length:
     max: 100
     allow-non-breakable-inline-mappings: true
-
-  # Document start (---) - not always necessary, disable for practical use
-  document-start: disable
 
   # Indentation - standard 2 spaces for YAML
   indentation:
@@ -22,6 +29,9 @@ rules:
   # Comments - allow flexibility in comment formatting
   comments:
     min-spaces-from-content: 1
+
+  # Document start (---) - not always necessary, disable for practical use
+  document-start: disable
 
   # Truthy values - disable overly strict checking (yes/no are common and clear)
   truthy: disable

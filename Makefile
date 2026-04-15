@@ -1,7 +1,10 @@
-.DEFAULT_GOAL := help
+# ============================================================================
+# NHL Scrabble - Makefile
+# ============================================================================
+# Self-documenting makefile for NHL Scrabble Python Package
+# Pattern from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 
-# Makefile for NHL Scrabble Python Package
-# Self-documenting makefile pattern from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+.DEFAULT_GOAL := help
 
 ###################
 # Variables

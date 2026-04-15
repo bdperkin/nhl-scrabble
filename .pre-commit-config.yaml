@@ -1,15 +1,32 @@
+# ============================================================================
+# NHL Scrabble - Pre-commit Hooks Configuration
+# ============================================================================
+# 43 comprehensive hooks for code quality, security, and consistency
+# Organized by category for maintainability
+# Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
+
+# ============================================================================
+# Meta Hooks - Configuration Validation
+# ============================================================================
+
 repos:
-  # Meta hooks - validate pre-commit configuration itself
   - repo: meta
     hooks:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
-  # Sync pre-commit hook versions with dependency specifications
+  # ============================================================================
+  # Dependency Management - Sync Hook Versions
+  # ============================================================================
+
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
     rev: v0.0.1
     hooks:
       - id: sync-pre-commit-deps
+
+  # ============================================================================
+  # File Quality - General File Checks
+  # ============================================================================
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -45,6 +62,10 @@ repos:
       # Executable checks
       - id: check-shebang-scripts-are-executable
 
+  # ============================================================================
+  # Python Quality - Code Pattern Checks
+  # ============================================================================
+
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
@@ -59,6 +80,10 @@ repos:
       # Text content checks
       - id: text-unicode-replacement-char
 
+  # ============================================================================
+  # Python Imports - Import Organization
+  # ============================================================================
+
   - repo: https://github.com/MarcoGorelli/absolufy-imports
     rev: v0.3.1
     hooks:
@@ -67,6 +92,10 @@ repos:
         args: [--application-directories=src]
         files: ^src/
 
+  # ============================================================================
+  # Project Validation - Configuration Validation
+  # ============================================================================
+
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.23
     hooks:
@@ -74,18 +103,30 @@ repos:
         # Comprehensive validation (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
+  # ============================================================================
+  # YAML Linting - YAML File Validation
+  # ============================================================================
+
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.35.1
     hooks:
       - id: yamllint
         # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
-        args: []  # Config is in pyproject.toml
+        args: []  # Config is in .yamllint
+
+  # ============================================================================
+  # Spelling - Code and Documentation Spell Checking
+  # ============================================================================
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.0
     hooks:
       - id: codespell
         args: []  # Config is in pyproject.toml
+
+  # ============================================================================
+  # Markdown - Markdown Linting and Formatting
+  # ============================================================================
 
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.25
@@ -103,6 +144,10 @@ repos:
           - mdformat-tables  # Table formatting
         args: []  # Config is in pyproject.toml
 
+  # ============================================================================
+  # Documentation - RST File Linting and Validation
+  # ============================================================================
+
   - repo: https://github.com/PyCQA/doc8
     rev: v1.1.1
     hooks:
@@ -119,10 +164,18 @@ repos:
         args: []  # Config is in pyproject.toml
         additional_dependencies: [sphinx]
 
+  # ============================================================================
+  # UV - Dependency Lock File Validation
+  # ============================================================================
+
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.5.18
     hooks:
       - id: uv-lock
+
+  # ============================================================================
+  # Python Linting - Code Quality Checks
+  # ============================================================================
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.1.1
@@ -131,6 +184,10 @@ repos:
         # Comprehensive linting (matches ruff's ALL rules philosophy)
         additional_dependencies: [flake8-pyproject]
         args: []  # Config is in pyproject.toml via flake8-pyproject
+
+  # ============================================================================
+  # Python Formatting - Code and Docstring Formatting
+  # ============================================================================
 
   - repo: local
     hooks:
@@ -157,6 +214,10 @@ repos:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
+
+  # ============================================================================
+  # Type Checking - Static Type Analysis
+  # ============================================================================
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.20.1

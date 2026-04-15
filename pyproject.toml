@@ -1,6 +1,20 @@
+# ============================================================================
+# NHL Scrabble - Project Configuration
+# ============================================================================
+# Organized by category for maintainability
+# Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
+
+# ============================================================================
+# Build System
+# ============================================================================
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+# ============================================================================
+# Project Metadata
+# ============================================================================
 
 [project]
 name = "nhl-scrabble"
@@ -91,6 +105,11 @@ dev = [
     "nhl-scrabble[test,lint,type,security,docs,watch,build,publish,tox]",
     "pre-commit>=3.6.0",
 ]
+
+
+# ============================================================================
+# Entry Points
+# ============================================================================
 
 [project.scripts]
 nhl-scrabble = "nhl_scrabble.cli:cli"
