@@ -33,8 +33,8 @@ console = Console()
 def cli() -> None:
     """NHL Roster Scrabble Score Analyzer.
 
-    Fetch NHL roster data and calculate Scrabble scores for player names.
-    Generate comprehensive reports showing team, division, and conference standings.
+    Fetch NHL roster data and calculate Scrabble scores for player names. Generate comprehensive
+    reports showing team, division, and conference standings.
     """
 
 
@@ -87,7 +87,6 @@ def analyze(
         nhl-scrabble analyze --verbose
         nhl-scrabble analyze --output report.txt
         nhl-scrabble analyze --format json --output report.json
-
     """
     # Setup logging
     setup_logging(verbose=verbose)
@@ -142,7 +141,6 @@ def run_analysis(config: Config) -> str:
 
     Raises:
         NHLApiError: If there are issues fetching data from NHL API
-
     """
     # Initialize components
     api_client = NHLApiClient(
@@ -225,7 +223,6 @@ def generate_json_report(
 
     Returns:
         JSON string
-
     """
     import json
     from dataclasses import asdict

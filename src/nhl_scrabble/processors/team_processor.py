@@ -18,9 +18,8 @@ logger = logging.getLogger(__name__)
 class TeamProcessor:
     """Process team roster data and calculate aggregate scores.
 
-    This class orchestrates fetching roster data for all NHL teams,
-    calculating Scrabble scores for all players, and aggregating
-    statistics at team, division, and conference levels.
+    This class orchestrates fetching roster data for all NHL teams, calculating Scrabble scores for
+    all players, and aggregating statistics at team, division, and conference levels.
     """
 
     def __init__(self, api_client: NHLApiClient, scorer: ScrabbleScorer) -> None:
@@ -29,7 +28,6 @@ class TeamProcessor:
         Args:
             api_client: NHL API client for fetching data
             scorer: Scrabble scorer for calculating player scores
-
         """
         self.api_client = api_client
         self.scorer = scorer
@@ -52,7 +50,6 @@ class TeamProcessor:
             >>> teams, players, failed = processor.process_all_teams()
             >>> len(teams) > 0
             True
-
         """
         logger.info("Starting team processing")
 
@@ -110,7 +107,6 @@ class TeamProcessor:
 
         Returns:
             List of PlayerScore objects for all players on the team
-
         """
         team_players: list[PlayerScore] = []
 
@@ -147,7 +143,6 @@ class TeamProcessor:
             >>> standings = processor.calculate_division_standings(teams)
             >>> "Atlantic" in standings
             True
-
         """
         division_data: dict[str, dict[str, Any]] = defaultdict(
             lambda: {"total": 0, "teams": [], "player_count": 0}
@@ -189,7 +184,6 @@ class TeamProcessor:
             >>> standings = processor.calculate_conference_standings(teams)
             >>> "Eastern" in standings
             True
-
         """
         conference_data: dict[str, dict[str, Any]] = defaultdict(
             lambda: {"total": 0, "teams": [], "player_count": 0}

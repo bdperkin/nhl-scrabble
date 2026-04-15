@@ -12,7 +12,6 @@ class TeamReporter(BaseReporter):
 
         Args:
             top_players_per_team: Number of top players to show per team
-
         """
         self.top_players_per_team = top_players_per_team
 
@@ -24,7 +23,6 @@ class TeamReporter(BaseReporter):
 
         Returns:
             Formatted team report string
-
         """
         output = self._format_header("📊 TEAM SCRABBLE SCORES (Sorted by Total Score)")
 

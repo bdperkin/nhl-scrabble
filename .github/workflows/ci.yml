@@ -73,6 +73,7 @@ jobs:
           - yamllint
           - flake8
           - absolufy-imports
+          - docformatter
           - autopep8
           - doc8
           - rstcheck
@@ -116,6 +117,10 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: false
+
+      - name: Install docformatter for pre-commit
+        run: |
+          uv pip install docformatter --system
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.0

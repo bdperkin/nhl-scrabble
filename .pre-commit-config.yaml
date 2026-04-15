@@ -132,6 +132,17 @@ repos:
         additional_dependencies: [flake8-pyproject]
         args: []  # Config is in pyproject.toml via flake8-pyproject
 
+  - repo: local
+    hooks:
+      - id: docformatter
+        name: docformatter
+        # Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
+        description: Format Python docstrings
+        entry: docformatter
+        args: [--in-place, --wrap-summaries, "100", --wrap-descriptions, "100"]
+        language: system
+        types: [python]
+
   - repo: https://github.com/hhatto/autopep8
     rev: v2.0.4
     hooks:

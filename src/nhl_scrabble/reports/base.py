@@ -7,8 +7,8 @@ from typing import Any
 class BaseReporter(ABC):
     """Abstract base class for all reporters.
 
-    All report generators should inherit from this class and implement
-    the generate() method to produce their specific output format.
+    All report generators should inherit from this class and implement the generate() method to
+    produce their specific output format.
     """
 
     @abstractmethod
@@ -20,7 +20,6 @@ class BaseReporter(ABC):
 
         Returns:
             Formatted report string
-
         """
 
     def _format_header(self, title: str, width: int = 80) -> str:
@@ -32,7 +31,6 @@ class BaseReporter(ABC):
 
         Returns:
             Formatted header string
-
         """
         separator = "=" * width
         return f"\n{separator}\n\n{title}\n{separator}"
@@ -46,7 +44,6 @@ class BaseReporter(ABC):
 
         Returns:
             Formatted subheader string
-
         """
         separator = "-" * width
         return f"\n{title}\n{separator}"
