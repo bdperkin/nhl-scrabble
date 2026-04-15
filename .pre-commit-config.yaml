@@ -59,6 +59,13 @@ repos:
       # Text content checks
       - id: text-unicode-replacement-char
 
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.23
+    hooks:
+      - id: validate-pyproject
+        # Comprehensive validation (matches ruff's ALL rules philosophy)
+        args: []  # Config is in pyproject.toml
+
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.0
     hooks:
