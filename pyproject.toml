@@ -327,5 +327,25 @@ compile-bytecode = true
 # Link mode for installing packages
 link-mode = "copy"
 
+# Strict dependency resolution (like ruff's ALL rules philosophy)
+resolution = "highest"  # Use highest compatible versions
+
+# Dependency verification and constraints
+constraint-dependencies = []  # Strict dependency constraints
+override-dependencies = []    # Override specific dependencies if needed
+
+# Index configuration for strict package resolution
+index-strategy = "first-match"  # Use first matching index (deterministic)
+keyring-provider = "disabled"   # Disable keyring for reproducibility
+
+# Cache configuration for reproducibility
+cache-keys = []  # Custom cache keys for strict caching
+
+# Python preference (prefer system or managed Python)
+python-preference = "managed"  # Use managed Python installations
+
+# Enable preview features for latest capabilities
+preview = false  # Disable preview features for stability
+
 [tool.uv.sources]
 # Optional: Configure custom package sources here if needed

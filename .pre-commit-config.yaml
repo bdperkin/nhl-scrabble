@@ -59,6 +59,11 @@ repos:
       # Text content checks
       - id: text-unicode-replacement-char
 
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.5.18
+    hooks:
+      - id: uv-lock
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:
