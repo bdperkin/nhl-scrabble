@@ -309,6 +309,36 @@ max-statements = 50
 # Import sorting configuration
 known-first-party = ["nhl_scrabble"]
 
+# Isort configuration
+[tool.isort]
+# Comprehensive import sorting (matches ruff's ALL rules philosophy)
+# Align with ruff's isort configuration for consistency
+profile = "black"  # Use Black-compatible profile (matches ruff-format and black)
+line_length = 100  # Match ruff's line-length
+known_first_party = ["nhl_scrabble"]  # Match ruff's known-first-party
+src_paths = ["src", "tests"]  # Match ruff's src
+skip_gitignore = true  # Respect .gitignore
+# Import section ordering (standard Python convention)
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]  # codespell:ignore
+# Formatting preferences
+multi_line_output = 3  # Vertical hanging indent (Black-compatible)
+include_trailing_comma = true  # Match Black/ruff-format
+force_grid_wrap = 0  # Match Black behavior
+use_parentheses = true  # Use parentheses for line continuation
+ensure_newline_before_comments = true  # Consistent comment spacing
+# Skip patterns (align with other tool exclusions)
+skip_glob = [
+    ".eggs/*",
+    ".git/*",
+    ".tox/*",
+    ".venv/*",
+    "venv/*",
+    "build/*",
+    "dist/*",
+    "*.egg-info/*",
+    "__pycache__/*",
+]
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
@@ -434,7 +464,7 @@ skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,buil
 
 # Project-specific ignore words (like ruff's ignore list)
 # Add false positives here as they are discovered
-# ignore-words-list = 'word1,word2'  # Uncomment and add words when needed
+# ignore-words-list = ''  # Add words as needed
 
 # Consistency settings
 count = true

@@ -1,11 +1,7 @@
 """Unit tests for data models."""
 
 from nhl_scrabble.models.player import PlayerScore
-from nhl_scrabble.models.standings import (
-    ConferenceStandings,
-    DivisionStandings,
-    PlayoffTeam,
-)
+from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings, PlayoffTeam
 from nhl_scrabble.models.team import TeamScore
 
 
