@@ -417,7 +417,6 @@ This runs:
 3. Type checking (mypy)
 4. All tests (pytest)
 
-
 Or via tox:
 ```bash
 make tox-quality  # Lint + type + format checks
