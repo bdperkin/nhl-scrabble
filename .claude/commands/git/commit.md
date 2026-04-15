@@ -15,7 +15,7 @@ Analyze staged changes and record them to the repository with an appropriate com
    - Identify the type of changes (new features, bug fixes, refactoring, documentation, etc.)
    - Check for any sensitive information that shouldn't be committed
 
-2. Craft commit message recommendations:
+1. Craft commit message recommendations:
 
    - Analyze the nature of the changes (e.g., "add", "fix", "update", "refactor", "docs")
    - Suggest a concise subject line (50 characters or less) that summarizes the changes
@@ -24,7 +24,7 @@ Analyze staged changes and record them to the repository with an appropriate com
    - Ensure the message focuses on "why" rather than "what"
    - Do NOT add Claude co-authorship footers to commit messages
 
-3. Execute commit:
+1. Execute commit:
 
    - Use `git commit -m "message"` for simple commits
    - Use `git commit` to open editor for multi-line messages

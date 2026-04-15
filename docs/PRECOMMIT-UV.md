@@ -25,20 +25,20 @@ Pre-commit with UV acceleration uses UV's fast package installation for installi
 
 ### Speed Improvements
 
-| Operation | Standard Pre-commit | With UV | Speedup |
-|-----------|---------------------|---------|---------|
-| First hook install | ~45s | ~5s | **9x faster** |
-| Hook update | ~30s | ~3s | **10x faster** |
-| Cached install | ~15s | ~1s | **15x faster** |
-| Running hooks | ~8s | ~7s | **14% faster** |
+| Operation          | Standard Pre-commit | With UV | Speedup        |
+| ------------------ | ------------------- | ------- | -------------- |
+| First hook install | ~45s                | ~5s     | **9x faster**  |
+| Hook update        | ~30s                | ~3s     | **10x faster** |
+| Cached install     | ~15s                | ~1s     | **15x faster** |
+| Running hooks      | ~8s                 | ~7s     | **14% faster** |
 
 ### Benefits
 
 1. **Faster onboarding** - New developers get hooks installed instantly
-2. **Faster updates** - `pre-commit autoupdate` completes in seconds
-3. **Better CI** - Pre-commit checks in CI run faster
-4. **Less waiting** - More time coding, less time waiting for hooks
-5. **Same reliability** - UV is pip-compatible, same results
+1. **Faster updates** - `pre-commit autoupdate` completes in seconds
+1. **Better CI** - Pre-commit checks in CI run faster
+1. **Less waiting** - More time coding, less time waiting for hooks
+1. **Same reliability** - UV is pip-compatible, same results
 
 ## Setup
 
@@ -414,16 +414,16 @@ Add to documentation:
 
 ## Comparison
 
-| Feature | Standard Pre-commit | UV-Accelerated |
-|---------|---------------------|----------------|
-| Hook installation | pip | UV (10x faster) |
-| Dependency resolution | pip | UV (faster) |
-| Cache | pip cache | UV global cache |
-| First install | ~45s | ~5s |
-| Updates | ~35s | ~3s |
-| CI execution | ~90s | ~15s |
-| Configuration | .pre-commit-config.yaml | Same file |
-| Commands | All work | All work |
+| Feature               | Standard Pre-commit     | UV-Accelerated  |
+| --------------------- | ----------------------- | --------------- |
+| Hook installation     | pip                     | UV (10x faster) |
+| Dependency resolution | pip                     | UV (faster)     |
+| Cache                 | pip cache               | UV global cache |
+| First install         | ~45s                    | ~5s             |
+| Updates               | ~35s                    | ~3s             |
+| CI execution          | ~90s                    | ~15s            |
+| Configuration         | .pre-commit-config.yaml | Same file       |
+| Commands              | All work                | All work        |
 
 ## Examples
 
@@ -492,6 +492,7 @@ Key points about pre-commit with UV:
 ✅ **Easy setup** - `make uv-pre-commit-install`
 
 **Quick commands:**
+
 ```bash
 make uv-check                # Verify UV installed
 make uv-pre-commit-install   # Install hooks with UV
@@ -499,6 +500,7 @@ make uv-pre-commit           # Run hooks with UV
 ```
 
 **Environment variables:**
+
 ```bash
 export UV_PYTHON=$(which python)      # Use UV
 export UV_SYSTEM_PYTHON=1             # System Python

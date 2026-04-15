@@ -59,19 +59,19 @@ tox -e py310
 
 These run when you execute `tox` without arguments:
 
-| Environment | Python Version | Description |
-|-------------|---------------|-------------|
-| `py310` | 3.10 | Run tests with Python 3.10 |
-| `py311` | 3.11 | Run tests with Python 3.11 |
-| `py312` | 3.12 | Run tests with Python 3.12 |
-| `py313` | 3.13 | Run tests with Python 3.13 |
-| `py314` | 3.14 | Run tests with Python 3.14 |
-| `py315` | 3.15 | Run tests with Python 3.15 |
-| `ruff-check` | (any) | Run ruff linter |
-| `mypy` | (any) | Run mypy type checker |
-| `ruff-format` | (any) | Check code formatting with ruff |
-| `coverage` | (current) | Run tests with coverage reporting |
-| `pip-audit` | (any) | Run security audit with pip-audit |
+| Environment   | Python Version | Description                       |
+| ------------- | -------------- | --------------------------------- |
+| `py310`       | 3.10           | Run tests with Python 3.10        |
+| `py311`       | 3.11           | Run tests with Python 3.11        |
+| `py312`       | 3.12           | Run tests with Python 3.12        |
+| `py313`       | 3.13           | Run tests with Python 3.13        |
+| `py314`       | 3.14           | Run tests with Python 3.14        |
+| `py315`       | 3.15           | Run tests with Python 3.15        |
+| `ruff-check`  | (any)          | Run ruff linter                   |
+| `mypy`        | (any)          | Run mypy type checker             |
+| `ruff-format` | (any)          | Check code formatting with ruff   |
+| `coverage`    | (current)      | Run tests with coverage reporting |
+| `pip-audit`   | (any)          | Run security audit with pip-audit |
 
 **Total: 11 default testenvs**
 
@@ -79,23 +79,23 @@ These run when you execute `tox` without arguments:
 
 These are available but don't run by default:
 
-| Environment | Description | Command |
-|-------------|-------------|---------|
-| `unit` | Run unit tests only | `tox -e unit` |
-| `integration` | Run integration tests only | `tox -e integration` |
-| `ruff-format-fix` | Auto-format code with ruff | `tox -e ruff-format-fix` |
-| `check` | Run all checks before commit | `tox -e check` |
-| `docs` | Build Sphinx documentation | `tox -e docs` |
-| `serve-docs` | Build and serve docs locally | `tox -e serve-docs` |
-| `clean` | Remove build artifacts | `tox -e clean` |
-| `build` | Build distribution packages | `tox -e build` |
-| `run` | Run the NHL Scrabble analyzer | `tox -e run` |
-| `ci` | Simulate full CI pipeline | `tox -e ci` |
-| `fast` | Quick test run (no coverage) | `tox -e fast` |
-| `watch` | Run tests in watch mode | `tox -e watch` |
-| `publish-test` | Publish to TestPyPI | `tox -e publish-test` |
-| `publish` | Publish to PyPI (caution!) | `tox -e publish` |
-| `version` | Display package version | `tox -e version` |
+| Environment       | Description                   | Command                  |
+| ----------------- | ----------------------------- | ------------------------ |
+| `unit`            | Run unit tests only           | `tox -e unit`            |
+| `integration`     | Run integration tests only    | `tox -e integration`     |
+| `ruff-format-fix` | Auto-format code with ruff    | `tox -e ruff-format-fix` |
+| `check`           | Run all checks before commit  | `tox -e check`           |
+| `docs`            | Build Sphinx documentation    | `tox -e docs`            |
+| `serve-docs`      | Build and serve docs locally  | `tox -e serve-docs`      |
+| `clean`           | Remove build artifacts        | `tox -e clean`           |
+| `build`           | Build distribution packages   | `tox -e build`           |
+| `run`             | Run the NHL Scrabble analyzer | `tox -e run`             |
+| `ci`              | Simulate full CI pipeline     | `tox -e ci`              |
+| `fast`            | Quick test run (no coverage)  | `tox -e fast`            |
+| `watch`           | Run tests in watch mode       | `tox -e watch`           |
+| `publish-test`    | Publish to TestPyPI           | `tox -e publish-test`    |
+| `publish`         | Publish to PyPI (caution!)    | `tox -e publish`         |
+| `version`         | Display package version       | `tox -e version`         |
 
 **Total: 15 additional testenvs**
 
@@ -260,6 +260,7 @@ make tox-recreate     # Recreate all environments
 ### Dynamic Pattern Rule Benefits
 
 The `tox-%` pattern rule provides:
+
 - **Automatic support** for any tox environment
 - **Future-proof** - new Python versions work automatically
 - **No maintenance** - add environments to `tox.ini`, Makefile works automatically

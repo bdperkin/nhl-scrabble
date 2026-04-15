@@ -29,20 +29,20 @@ This guide covers using `tox-uv`, a tox plugin that makes tox use UV for package
 
 With tox-uv enabled in this project:
 
-| Operation | tox (pip) | tox-uv | Speedup |
-|-----------|-----------|--------|---------|
-| First env creation | ~60s | ~8s | **7.5x faster** |
-| Cached env creation | ~30s | ~2s | **15x faster** |
-| Recreate all envs | ~5min | ~30s | **10x faster** |
-| Install test deps | ~20s | ~1s | **20x faster** |
+| Operation           | tox (pip) | tox-uv | Speedup         |
+| ------------------- | --------- | ------ | --------------- |
+| First env creation  | ~60s      | ~8s    | **7.5x faster** |
+| Cached env creation | ~30s      | ~2s    | **15x faster**  |
+| Recreate all envs   | ~5min     | ~30s   | **10x faster**  |
+| Install test deps   | ~20s      | ~1s    | **20x faster**  |
 
 ### Benefits
 
 1. **Faster CI/CD** - Tests complete in minutes instead of 10+ minutes
-2. **Better DX** - Near-instant environment setup during development
-3. **Lower costs** - Less CI/CD time = lower cloud costs
-4. **No changes needed** - Works with existing tox.ini
-5. **Easy opt-out** - Can disable per-environment if needed
+1. **Better DX** - Near-instant environment setup during development
+1. **Lower costs** - Less CI/CD time = lower cloud costs
+1. **No changes needed** - Works with existing tox.ini
+1. **Easy opt-out** - Can disable per-environment if needed
 
 ## Installation
 
@@ -83,10 +83,11 @@ requires = tox-uv>=1.0.0
 ```
 
 That's it! With `requires = tox-uv`, tox will automatically:
+
 1. Install tox-uv if not present
-2. Use UV for all package installations
-3. Leverage UV's global cache
-4. Apply UV's parallel downloads
+1. Use UV for all package installations
+1. Leverage UV's global cache
+1. Apply UV's parallel downloads
 
 ### Environment-Specific Configuration
 
@@ -164,7 +165,7 @@ make tox-parallel       # Even faster!
 make ci                 # Significantly faster! (runs tox -e ci)
 ```
 
-**Note:** Many individual tox-* Makefile targets have been removed in favor of using tox directly. The remaining Makefile targets (tox, tox-parallel, tox-list, tox-clean, tox-recreate) provide the most commonly used tox operations. For specific testenvs, use tox directly (e.g., `tox -e py310`, `tox -e ruff-check`).
+**Note:** Many individual tox-\* Makefile targets have been removed in favor of using tox directly. The remaining Makefile targets (tox, tox-parallel, tox-list, tox-clean, tox-recreate) provide the most commonly used tox operations. For specific testenvs, use tox directly (e.g., `tox -e py310`, `tox -e ruff-check`).
 
 ## Performance Comparison
 
@@ -213,10 +214,10 @@ Duration: ~3 minutes  ← 4x faster!
 ### What Makes It Fast?
 
 1. **Parallel Downloads** - UV downloads packages concurrently
-2. **Global Cache** - Packages downloaded once, used everywhere
-3. **Rust Performance** - UV's Rust implementation is highly optimized
-4. **Smart Resolution** - UV's dependency resolver is faster
-5. **Efficient Installs** - UV uses hardlinks/symlinks when possible
+1. **Global Cache** - Packages downloaded once, used everywhere
+1. **Rust Performance** - UV's Rust implementation is highly optimized
+1. **Smart Resolution** - UV's dependency resolver is faster
+1. **Efficient Installs** - UV uses hardlinks/symlinks when possible
 
 ## CI/CD Integration
 
@@ -456,17 +457,20 @@ deps = pytest
 This project is already set up! But if you're migrating another project:
 
 1. **Install tox-uv**
+
    ```bash
    pip install tox-uv
    ```
 
-2. **Update tox.ini**
+1. **Update tox.ini**
+
    ```ini
    [tox]
    requires = tox-uv>=1.0.0
    ```
 
-3. **Test it**
+1. **Test it**
+
    ```bash
    tox -e py310
    ```
@@ -488,16 +492,16 @@ pip uninstall tox-uv
 
 ## Comparison with Standard Tox
 
-| Feature | Standard Tox | Tox-UV |
-|---------|--------------|--------|
-| Package installer | pip | uv (via tox-uv) |
-| Environment creation | virtualenv | uv venv |
-| Speed | Baseline | 10-100x faster |
-| Cache | pip cache | UV global cache |
-| Parallel installs | No | Yes |
-| Compatibility | 100% | 99%+ |
-| Configuration | tox.ini | tox.ini (same) |
-| Commands | All work | All work |
+| Feature              | Standard Tox | Tox-UV          |
+| -------------------- | ------------ | --------------- |
+| Package installer    | pip          | uv (via tox-uv) |
+| Environment creation | virtualenv   | uv venv         |
+| Speed                | Baseline     | 10-100x faster  |
+| Cache                | pip cache    | UV global cache |
+| Parallel installs    | No           | Yes             |
+| Compatibility        | 100%         | 99%+            |
+| Configuration        | tox.ini      | tox.ini (same)  |
+| Commands             | All work     | All work        |
 
 ## Resources
 
@@ -519,6 +523,7 @@ Key points about tox-uv in this project:
 ✅ **Easy opt-out** - Can disable per-environment if needed
 
 **Quick commands:**
+
 ```bash
 tox              # Run all tests (with UV speed!)
 tox -e py310     # Single environment (fast)

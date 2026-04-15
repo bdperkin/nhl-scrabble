@@ -31,19 +31,19 @@ UV is an extremely fast Python package installer and resolver, written in Rust b
 
 Based on typical NHL Scrabble project operations:
 
-| Operation | pip | uv | Speedup |
-|-----------|-----|----|----|
-| Create venv | ~3s | ~0.5s | **6x faster** |
-| Install deps (cold) | ~45s | ~5s | **9x faster** |
-| Install deps (cached) | ~25s | ~1s | **25x faster** |
-| Resolve dependencies | ~10s | ~0.3s | **33x faster** |
+| Operation             | pip  | uv    | Speedup        |
+| --------------------- | ---- | ----- | -------------- |
+| Create venv           | ~3s  | ~0.5s | **6x faster**  |
+| Install deps (cold)   | ~45s | ~5s   | **9x faster**  |
+| Install deps (cached) | ~25s | ~1s   | **25x faster** |
+| Resolve dependencies  | ~10s | ~0.3s | **33x faster** |
 
 ### Benefits for This Project
 
 1. **Faster CI/CD**: GitHub Actions complete in ~2 minutes instead of ~5 minutes
-2. **Better DX**: Near-instant dependency installation during development
-3. **Disk Efficiency**: Global cache means dependencies downloaded once
-4. **Reliability**: Deterministic resolution prevents "works on my machine" issues
+1. **Better DX**: Near-instant dependency installation during development
+1. **Disk Efficiency**: Global cache means dependencies downloaded once
+1. **Reliability**: Deterministic resolution prevents "works on my machine" issues
 
 ## Installation
 
@@ -233,29 +233,30 @@ make uv-pip ARGS="install httpx"     # Install package
 
 ### Feature Comparison
 
-| Feature | pip | uv | Winner |
-|---------|-----|----|----|
-| Speed | Baseline | 10-100x faster | **uv** |
-| Dependency resolution | Good | Excellent | **uv** |
-| Compatibility | 100% | 95%+ | pip |
-| Disk usage | Higher | Lower (global cache) | **uv** |
-| Maturity | Very mature | Young but stable | pip |
-| Learning curve | Familiar | Same as pip | Tie |
+| Feature               | pip         | uv                   | Winner |
+| --------------------- | ----------- | -------------------- | ------ |
+| Speed                 | Baseline    | 10-100x faster       | **uv** |
+| Dependency resolution | Good        | Excellent            | **uv** |
+| Compatibility         | 100%        | 95%+                 | pip    |
+| Disk usage            | Higher      | Lower (global cache) | **uv** |
+| Maturity              | Very mature | Young but stable     | pip    |
+| Learning curve        | Familiar    | Same as pip          | Tie    |
 
 ### Command Equivalents
 
-| pip | uv | Make target |
-|-----|----|----|
-| `pip install -e .` | `uv pip install -e .` | `make uv-install` |
-| `pip install -e ".[dev]"` | `uv pip install -e ".[dev]"` | `make uv-install-dev` |
-| `pip install requests` | `uv pip install requests` | - |
-| `pip list` | `uv pip list` | `make uv-pip ARGS="list"` |
-| `pip freeze` | `uv pip freeze` | - |
-| `python -m venv .venv` | `uv venv .venv` | `make uv-venv` |
+| pip                       | uv                           | Make target               |
+| ------------------------- | ---------------------------- | ------------------------- |
+| `pip install -e .`        | `uv pip install -e .`        | `make uv-install`         |
+| `pip install -e ".[dev]"` | `uv pip install -e ".[dev]"` | `make uv-install-dev`     |
+| `pip install requests`    | `uv pip install requests`    | -                         |
+| `pip list`                | `uv pip list`                | `make uv-pip ARGS="list"` |
+| `pip freeze`              | `uv pip freeze`              | -                         |
+| `python -m venv .venv`    | `uv venv .venv`              | `make uv-venv`            |
 
 ### When to Use Each
 
 **Use uv when:**
+
 - Starting fresh development setup
 - Running CI/CD pipelines
 - Installing many packages
@@ -263,6 +264,7 @@ make uv-pip ARGS="install httpx"     # Install package
 - Want faster iteration cycles
 
 **Use pip when:**
+
 - Working with legacy systems
 - Need 100% compatibility
 - In restricted environments without uv
@@ -287,6 +289,7 @@ steps:
 ```
 
 **Results:**
+
 - Install time reduced from ~45s to ~5s
 - Total CI time reduced by ~60%
 
@@ -443,27 +446,32 @@ uv cache clean requests
 If you're currently using pip, here's how to migrate:
 
 1. **Install uv**
+
    ```bash
    make uv-check  # Verify or show install instructions
    ```
 
-2. **Create new environment**
+1. **Create new environment**
+
    ```bash
    make uv-venv
    source .venv/bin/activate
    ```
 
-3. **Install dependencies**
+1. **Install dependencies**
+
    ```bash
    make uv-install-dev
    ```
 
-4. **Verify everything works**
+1. **Verify everything works**
+
    ```bash
    pytest
    ```
 
-5. **Update your workflow**
+1. **Update your workflow**
+
    - Replace `make init` with `make uv-init` in documentation
    - Update CI/CD to use uv
 

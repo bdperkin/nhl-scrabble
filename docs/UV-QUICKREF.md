@@ -17,34 +17,34 @@ make uv-check
 
 ## Common Commands
 
-| Task | Make Command | Direct UV Command |
-|------|--------------|-------------------|
-| **Setup** |
-| Check uv installed | `make uv-check` | `uv --version` |
-| Create venv | `make uv-venv` | `uv venv .venv --python python3.10` |
-| Full init | `make uv-init` | (multiple steps) |
-| **Install** |
-| Install package | `make uv-install` | `uv pip install -e .` |
-| Install dev deps | `make uv-install-dev` | `uv pip install -e ".[dev,docs]"` |
-| **Update** |
-| Update all | `make uv-update` | `uv pip install --upgrade -e ".[dev,docs]"` |
-| Update specific | - | `uv pip install --upgrade <package>` |
-| **Run** |
-| Run app | `make uv-run` | `uv run nhl-scrabble analyze` |
-| Run script | - | `uv run python script.py` |
-| **Info** |
-| List packages | `make uv-pip ARGS="list"` | `uv pip list` |
-| Show package | `make uv-pip ARGS="show requests"` | `uv pip show requests` |
-| Freeze deps | - | `uv pip freeze` |
+| Task               | Make Command                       | Direct UV Command                           |
+| ------------------ | ---------------------------------- | ------------------------------------------- |
+| **Setup**          |                                    |                                             |
+| Check uv installed | `make uv-check`                    | `uv --version`                              |
+| Create venv        | `make uv-venv`                     | `uv venv .venv --python python3.10`         |
+| Full init          | `make uv-init`                     | (multiple steps)                            |
+| **Install**        |                                    |                                             |
+| Install package    | `make uv-install`                  | `uv pip install -e .`                       |
+| Install dev deps   | `make uv-install-dev`              | `uv pip install -e ".[dev,docs]"`           |
+| **Update**         |                                    |                                             |
+| Update all         | `make uv-update`                   | `uv pip install --upgrade -e ".[dev,docs]"` |
+| Update specific    | -                                  | `uv pip install --upgrade <package>`        |
+| **Run**            |                                    |                                             |
+| Run app            | `make uv-run`                      | `uv run nhl-scrabble analyze`               |
+| Run script         | -                                  | `uv run python script.py`                   |
+| **Info**           |                                    |                                             |
+| List packages      | `make uv-pip ARGS="list"`          | `uv pip list`                               |
+| Show package       | `make uv-pip ARGS="show requests"` | `uv pip show requests`                      |
+| Freeze deps        | -                                  | `uv pip freeze`                             |
 
 ## Speed Comparison
 
-| Operation | pip | uv | Speedup |
-|-----------|-----|----|----|
-| Create venv | ~3s | ~0.5s | **6x** |
-| Install (cold) | ~45s | ~5s | **9x** |
-| Install (cached) | ~25s | ~1s | **25x** |
-| Resolve deps | ~10s | ~0.3s | **33x** |
+| Operation        | pip  | uv    | Speedup |
+| ---------------- | ---- | ----- | ------- |
+| Create venv      | ~3s  | ~0.5s | **6x**  |
+| Install (cold)   | ~45s | ~5s   | **9x**  |
+| Install (cached) | ~25s | ~1s   | **25x** |
+| Resolve deps     | ~10s | ~0.3s | **33x** |
 
 ## Workflow Examples
 
@@ -182,12 +182,13 @@ make uv-install-dev
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `pyproject.toml` | UV config in `[tool.uv]` section, dependencies, project metadata |
-| `.python-version` | Python version (3.10) - read by UV, pyenv, and asdf |
+| File              | Purpose                                                          |
+| ----------------- | ---------------------------------------------------------------- |
+| `pyproject.toml`  | UV config in `[tool.uv]` section, dependencies, project metadata |
+| `.python-version` | Python version (3.10) - read by UV, pyenv, and asdf              |
 
 **Example [tool.uv] configuration:**
+
 ```toml
 [tool.uv]
 managed = true              # Enable UV dependency management
@@ -223,6 +224,6 @@ Having issues?
 └─ Fall back → make install-dev (use pip)
 ```
 
----
+______________________________________________________________________
 
 **Remember**: UV is a drop-in replacement for pip. Most pip commands work with `uv pip` prefix!

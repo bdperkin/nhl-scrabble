@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.13
 **License:** MIT
-**Pre-commit Hooks:** 37 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 38 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -76,6 +76,7 @@ nhl-scrabble/
 ### Key Components
 
 **API Client (`api/nhl_client.py`):**
+
 - Context manager for session handling
 - Retry logic with exponential backoff
 - Rate limiting (0.3s delays)
@@ -83,45 +84,52 @@ nhl-scrabble/
 - Type hints throughout
 
 **Models (`models/`):**
+
 - Pydantic models for type safety
 - PlayerScore, TeamScore, DivisionStandings, ConferenceStandings
 - Validation and serialization
 - JSON export support
 
 **Scoring (`scoring/scrabble.py`):**
+
 - ScrabbleScorer class with SCRABBLE_VALUES constant
 - calculate_score() method for any text
 - score_player() for Player models
 
 **Processors (`processors/`):**
+
 - TeamProcessor: Aggregates team scores
 - PlayoffCalculator: NHL playoff bracket logic
 - Separation of concerns
 
 **Reports (`reports/`):**
+
 - Base class for all reports
 - Specialized report generators
 - Text and JSON output formats
 - Rich library for beautiful terminal output
 
 **CLI (`cli.py`):**
+
 - Click-based command-line interface
 - analyze command with options
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (37 Comprehensive Checks)
+## Pre-commit Hooks (38 Comprehensive Checks)
 
-The project uses 37 pre-commit hooks for automatic code quality validation:
+The project uses 38 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
 **Meta Hooks (3):**
+
 - `check-hooks-apply`: Validates all hooks apply to repository files
 - `check-useless-excludes`: Detects useless exclude patterns
 - `sync-pre-commit-deps`: Syncs hook versions with pyproject.toml
 
 **File Quality Hooks (18 from pre-commit-hooks):**
+
 - Whitespace: `trailing-whitespace`, `end-of-file-fixer`, `mixed-line-ending`, `fix-byte-order-marker`
 - Syntax: `check-yaml`, `check-toml`, `check-json`, `check-ast`
 - Python: `check-builtin-literals`, `check-docstring-first`, `debug-statements`, `name-tests-test`
@@ -130,6 +138,7 @@ The project uses 37 pre-commit hooks for automatic code quality validation:
 - Executable: `check-shebang-scripts-are-executable`
 
 **Python Quality Hooks (7 from pygrep-hooks):**
+
 - `python-check-blanket-noqa`: Enforce specific noqa codes (# noqa: F401)
 - `python-check-blanket-type-ignore`: Enforce specific type: ignore codes
 - `python-check-mock-methods`: Prevent mock testing mistakes
@@ -139,28 +148,37 @@ The project uses 37 pre-commit hooks for automatic code quality validation:
 - `text-unicode-replacement-char`: Detect Unicode replacement character (U+FFFD)
 
 **Project Validation Hooks (1 from validate-pyproject):**
+
 - `validate-pyproject`: Validates pyproject.toml against PEP 517, 518, 621, 631 standards
 
 **YAML Linting Hooks (1 from yamllint):**
+
 - `yamllint`: YAML file validation and linting (comprehensive by default)
 
 **Spelling Hooks (1 from codespell):**
+
 - `codespell`: Spell checking for code and documentation (comprehensive by default)
 
-**Markdown Hooks (1 from pymarkdown):**
-- `pymarkdown`: Markdown linting and formatting (comprehensive by default)
+**Markdown Hooks (2 from pymarkdown and mdformat):**
+
+- `pymarkdown`: Markdown linting (comprehensive by default)
+- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-tables)
 
 **UV Hook (1 from uv-pre-commit):**
+
 - `uv-lock`: Maintains uv.lock file consistency with pyproject.toml
 
 **Flake8 Hooks (1 from pycqa/flake8):**
+
 - `flake8`: Python code linting and style checking (comprehensive configuration via flake8-pyproject)
 
 **Ruff Hooks (2 from ruff-pre-commit):**
+
 - `ruff-check`: Comprehensive linting with ALL rules (--fix, --exit-non-zero-on-fix)
 - `ruff-format`: Code formatting (quote-style: double, indent-style: space)
 
 **MyPy Hook (1 from mirrors-mypy):**
+
 - `mypy`: Strict type checking (strict mode with comprehensive options)
 
 ### Pre-commit Usage
@@ -193,6 +211,7 @@ The project uses comprehensive UV configuration aligned with ruff's "ALL rules" 
 #### UV Configuration (pyproject.toml)
 
 **Strict Dependency Resolution (like ruff's ALL rules):**
+
 ```toml
 [tool.uv]
 managed = true
@@ -222,16 +241,18 @@ cache-keys = []  # Strict cache control
 ```
 
 **Philosophy Alignment:**
-| UV Setting | Ruff Equivalent | Purpose |
-|------------|-----------------|---------|
-| `resolution = "highest"` | `select = ["ALL"]` | Comprehensive by default |
-| `override-dependencies` | `ignore = [...]` | Selective practical exceptions |
-| `index-strategy = "first-match"` | Consistent rules | Deterministic behavior |
-| `keyring-provider = "disabled"` | Reproducible | Same behavior everywhere |
+
+| UV Setting                       | Ruff Equivalent    | Purpose                        |
+| -------------------------------- | ------------------ | ------------------------------ |
+| `resolution = "highest"`         | `select = ["ALL"]` | Comprehensive by default       |
+| `override-dependencies`          | `ignore = [...]`   | Selective practical exceptions |
+| `index-strategy = "first-match"` | Consistent rules   | Deterministic behavior         |
+| `keyring-provider = "disabled"`  | Reproducible       | Same behavior everywhere       |
 
 #### Lock File (uv.lock)
 
 **1,957-line deterministic dependency lock:**
+
 - All direct and transitive dependencies with exact versions
 - Hash verification for all packages
 - Platform-specific resolutions
@@ -302,6 +323,7 @@ tox -e coverage          # Via tox
 ```
 
 **Test Structure:**
+
 - `tests/unit/` - Unit tests for individual components
 - `tests/integration/` - Integration tests for full workflows
 - `tests/conftest.py` - Shared fixtures
@@ -310,16 +332,19 @@ tox -e coverage          # Via tox
 ### Code Quality Tools
 
 **Ruff** (linting and formatting):
+
 - Fast Rust-based linter/formatter
 - Replaces black, isort, flake8
 - Configuration in pyproject.toml
 
 **MyPy** (type checking):
+
 - Strict type checking enabled
 - Configuration in pyproject.toml
 - Type hints throughout codebase
 
 **Pre-commit** (hooks):
+
 - Automated quality checks
 - Runs on every commit
 - UV-accelerated (9x faster)
@@ -385,15 +410,19 @@ These settings optimize for speed and reliability. Note: `prefer-binary` is a UV
 ### Endpoints
 
 **Standings:**
+
 ```
 GET https://api-web.nhle.com/v1/standings/now
 ```
+
 Returns team metadata (division, conference, current standings)
 
 **Team Rosters:**
+
 ```
 GET https://api-web.nhle.com/v1/roster/{team_abbrev}/current
 ```
+
 Returns current roster for a specific team
 
 ### Rate Limiting
@@ -434,6 +463,7 @@ score = scorer.calculate_score("Ovechkin")  # Returns total points
 ### Player Scoring
 
 Full name scored as first + last:
+
 ```python
 from nhl_scrabble.models import Player
 
@@ -448,28 +478,34 @@ score = scorer.score_player(player)  # PlayerScore object
 The playoff calculator replicates NHL playoff bracket:
 
 1. **Division Leaders** (Top 3 per division)
+
    - Automatic playoff spots
    - Marked with 'y' indicator
 
-2. **Wild Cards** (2 per conference)
+1. **Wild Cards** (2 per conference)
+
    - Next best teams by total score
    - Marked with 'x' indicator
 
-3. **Conference Leaders**
+1. **Conference Leaders**
+
    - Marked with 'z' indicator
 
-4. **Presidents' Trophy**
+1. **Presidents' Trophy**
+
    - Best overall record
    - Marked with 'p' indicator
 
-5. **Eliminated Teams**
+1. **Eliminated Teams**
+
    - Marked with 'e' indicator
 
 ### Tiebreakers
 
 When teams have equal total scores:
+
 1. Average points per player
-2. Alphabetical by team abbreviation
+1. Alphabetical by team abbreviation
 
 ## CLI Usage
 
@@ -565,6 +601,7 @@ jobs:
 ```
 
 **Optimization:**
+
 - UV for 60% faster pipeline
 - Tox-UV for 10x faster testing
 - Pre-commit-UV for 9x faster hooks
@@ -625,10 +662,10 @@ pytest --cov tests/unit/test_new_feature.py
 ### Adding a New Report Type
 
 1. Create new file in `src/nhl_scrabble/reports/`
-2. Inherit from `BaseReport`
-3. Implement `generate()` method
-4. Add to report orchestration in CLI
-5. Add tests in `tests/unit/`
+1. Inherit from `BaseReport`
+1. Implement `generate()` method
+1. Add to report orchestration in CLI
+1. Add tests in `tests/unit/`
 
 ### Updating Documentation
 
@@ -698,19 +735,19 @@ python -c "import nhl_scrabble"
 
 The project uses UV automatically via tox-uv:
 
-| Component | Standard | With tox-uv | Speedup |
-|-----------|----------|-------------|---------|
-| Tox environments | 60s | 8s | **7.5x** |
-| Tox parallel | 5min | 30s | **10x** |
-| CI/CD pipeline | 12min | 3min | **4x** |
+| Component        | Standard | With tox-uv | Speedup  |
+| ---------------- | -------- | ----------- | -------- |
+| Tox environments | 60s      | 8s          | **7.5x** |
+| Tox parallel     | 5min     | 30s         | **10x**  |
+| CI/CD pipeline   | 12min    | 3min        | **4x**   |
 
 ### Recommendations
 
 1. **Use tox** for all testing: UV acceleration is automatic via tox-uv
-2. **Parallel testing**: `make tox-parallel` for 10x speedup
-3. **Enable caching** in CI: UV caching configured in GitHub Actions
-4. **Use tox for running**: `make run`, `make docs`, etc. use tox internally
-5. **Direct tox usage**: For specific testenvs, use `tox -e <env>` directly
+1. **Parallel testing**: `make tox-parallel` for 10x speedup
+1. **Enable caching** in CI: UV caching configured in GitHub Actions
+1. **Use tox for running**: `make run`, `make docs`, etc. use tox internally
+1. **Direct tox usage**: For specific testenvs, use `tox -e <env>` directly
 
 ## Project Statistics
 
@@ -722,7 +759,7 @@ The project uses UV automatically via tox-uv:
 - **Modules:** 15 core modules
 - **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Pre-commit Hooks:** 37 hooks (meta, file quality, Python quality, project validation, YAML linting, spelling, markdown, UV, flake8, ruff, mypy)
+- **Pre-commit Hooks:** 38 hooks (meta, file quality, Python quality, project validation, YAML linting, spelling, markdown linting, markdown formatting, UV, flake8, ruff, mypy)
 - **Dependency Lock:** uv.lock with 1,957 lines
 - **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization
@@ -741,16 +778,17 @@ The project uses UV automatically via tox-uv:
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
 
 Quick summary:
+
 1. Fork repository
-2. Create feature branch
-3. Make changes with tests
-4. Run `make check` (quality + tests)
-5. Submit pull request
+1. Create feature branch
+1. Make changes with tests
+1. Run `make check` (quality + tests)
+1. Submit pull request
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
----
+______________________________________________________________________
 
 **Note for Claude Code:** This project is well-structured with modern Python practices, comprehensive testing, and extensive automation. The UV ecosystem provides 10-100x speedups across all workflows. All common tasks are automated via the Makefile with 55 documented targets organized in 16 logical groupings. Use `make help` to see all available commands. The Makefile uses a dynamic pattern rule (`tox-%`) that automatically handles any tox environment, making it future-proof and maintainable.

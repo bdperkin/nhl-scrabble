@@ -58,9 +58,9 @@ git checkout -b fix/your-bug-fix
 ### Making Changes
 
 1. **Write your code** following the project's style guidelines
-2. **Add tests** for any new functionality
-3. **Update documentation** if needed
-4. **Run tests** to ensure everything works
+1. **Add tests** for any new functionality
+1. **Update documentation** if needed
+1. **Run tests** to ensure everything works
 
 ### Testing
 
@@ -160,6 +160,7 @@ Add feature to export reports as CSV
 ```
 
 Guidelines:
+
 - Use present tense ("Add feature" not "Added feature")
 - First line should be 50 characters or less
 - Provide detailed description in the body if needed
@@ -250,9 +251,9 @@ class TestScrabbleScorer:
 When adding new features:
 
 1. Update `README.md` with usage examples
-2. Add docstrings to all new code
-3. Update `CHANGELOG.md`
-4. Update `CLAUDE.md` if architecture changes
+1. Add docstrings to all new code
+1. Update `CHANGELOG.md`
+1. Update `CLAUDE.md` if architecture changes
 
 ### Writing Documentation
 
@@ -266,13 +267,13 @@ When adding new features:
 ### Before Submitting
 
 1. ✅ All tests pass
-2. ✅ Code coverage is maintained or improved
-3. ✅ Code is formatted with ruff
-4. ✅ No linting errors
-5. ✅ Type checking passes
-6. ✅ Documentation is updated
-7. ✅ Commit messages are clear
-8. ✅ Branch is up-to-date with main
+1. ✅ Code coverage is maintained or improved
+1. ✅ Code is formatted with ruff
+1. ✅ No linting errors
+1. ✅ Type checking passes
+1. ✅ Documentation is updated
+1. ✅ Commit messages are clear
+1. ✅ Branch is up-to-date with main
 
 ### Submitting a Pull Request
 
@@ -284,13 +285,15 @@ git push origin feature/your-feature-name
 
 2. **Create pull request** on GitHub
 
-3. **Fill out the PR template** with:
+1. **Fill out the PR template** with:
+
    - Description of changes
    - Related issue numbers
    - Testing performed
    - Screenshots (if UI changes)
 
-4. **Address review feedback**
+1. **Address review feedback**
+
    - Make requested changes
    - Push updates to your branch
    - Respond to comments
@@ -311,40 +314,40 @@ Pull requests will be reviewed for:
 ### Adding a New Report Type
 
 1. Create new reporter class in `src/nhl_scrabble/reports/`
-2. Inherit from `BaseReporter`
-3. Implement `generate()` method
-4. Add to `__init__.py` exports
-5. Integrate into CLI
-6. Add tests
-7. Update documentation
+1. Inherit from `BaseReporter`
+1. Implement `generate()` method
+1. Add to `__init__.py` exports
+1. Integrate into CLI
+1. Add tests
+1. Update documentation
 
 ### Adding a New Configuration Option
 
 1. Add field to `Config` dataclass in `config.py`
-2. Add environment variable parsing in `from_env()`
-3. Add CLI option in `cli.py`
-4. Update documentation
-5. Add tests
+1. Add environment variable parsing in `from_env()`
+1. Add CLI option in `cli.py`
+1. Update documentation
+1. Add tests
 
 ### Fixing a Bug
 
 1. Create issue on GitHub (if not exists)
-2. Write a failing test that reproduces the bug
-3. Fix the bug
-4. Verify test now passes
-5. Add regression test
-6. Submit PR referencing the issue
+1. Write a failing test that reproduces the bug
+1. Fix the bug
+1. Verify test now passes
+1. Add regression test
+1. Submit PR referencing the issue
 
 ## Release Process
 
 (For maintainers)
 
 1. Update version in `src/nhl_scrabble/__init__.py` and `pyproject.toml`
-2. Update `CHANGELOG.md`
-3. Create git tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
-4. Push tag: `git push origin v2.0.0`
-5. Create GitHub release with notes
-6. (Optional) Publish to PyPI
+1. Update `CHANGELOG.md`
+1. Create git tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
+1. Push tag: `git push origin v2.0.0`
+1. Create GitHub release with notes
+1. (Optional) Publish to PyPI
 
 ## Questions?
 
@@ -356,7 +359,7 @@ Pull requests will be reviewed for:
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
 
----
+______________________________________________________________________
 
 Thank you for contributing to NHL Scrabble! 🏒🎯
 
@@ -395,27 +398,32 @@ See [docs/MAKEFILE.md](docs/MAKEFILE.md) for complete documentation of all 55 ta
 ### Recommended Workflow
 
 1. **First time setup:**
+
    ```bash
    make init
    source .venv/bin/activate
    ```
 
-2. **Before starting work:**
+1. **Before starting work:**
+
    ```bash
    make update
    ```
 
-3. **During development:**
+1. **During development:**
+
    ```bash
    make test-watch  # Keep running in a terminal
    ```
 
-4. **Before committing:**
+1. **Before committing:**
+
    ```bash
    make check
    ```
 
-5. **Before creating a PR:**
+1. **Before creating a PR:**
+
    ```bash
    make ci
    ```
