@@ -385,6 +385,14 @@ quiet-level = 0  # Show all issues (comprehensive)
 # - Truthy values: disabled (yes/no are common and clear)
 # - Indentation: 2 spaces (standard for YAML)
 
+# Absolufy-imports configuration
+# Note: absolufy-imports doesn't natively support pyproject.toml configuration
+# Configuration is via command-line arguments in pre-commit and tox
+# This section documents the configuration approach (matches ruff's ALL rules philosophy):
+# - Convert all relative imports to absolute imports (comprehensive by default)
+# - Application directories: src (matches project src layout)
+# - Aligns with ruff's import handling and isort configuration
+
 # Mdformat configuration
 [tool.mdformat]
 # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)

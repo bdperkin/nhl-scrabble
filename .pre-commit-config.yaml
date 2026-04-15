@@ -59,6 +59,14 @@ repos:
       # Text content checks
       - id: text-unicode-replacement-char
 
+  - repo: https://github.com/MarcoGorelli/absolufy-imports
+    rev: v0.3.1
+    hooks:
+      - id: absolufy-imports
+        # Convert relative imports to absolute (matches ruff's ALL rules philosophy)
+        args: [--application-directories=src]
+        files: ^src/
+
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.23
     hooks:

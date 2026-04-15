@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Absolufy-imports Integration** - Convert relative imports to absolute imports
+  - Comprehensive configuration matching ruff's ALL rules philosophy
+  - Pre-commit hook configured to process only src/ directory files
+  - Tox environment (absolufy-imports) with bash wrapper for glob expansion
+  - Added to CI/CD pipeline for continuous import normalization
+  - Configuration via command-line args: --application-directories=src (matches project src layout)
+  - Aligns with ruff's import handling and isort configuration
+  - Ensures consistent absolute imports throughout the codebase
 - **Mdformat Integration** - Markdown formatting with GitHub Flavored Markdown support
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
   - Pre-commit hook with mdformat-gfm and mdformat-tables plugins for GitHub Flavored Markdown support
@@ -60,10 +68,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (38 total):
+- Comprehensive pre-commit hooks (39 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
+  - Python import hooks (1): absolufy-imports for converting relative to absolute imports
   - Project validation hooks (1): validate-pyproject for pyproject.toml validation
   - YAML linting hooks (1): yamllint for YAML file validation and linting
   - Spelling hooks (1): codespell for code and documentation spell checking
