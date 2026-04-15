@@ -72,6 +72,7 @@ jobs:
           - validate-pyproject
           - yamllint
           - flake8
+          - isort
           - absolufy-imports
           - black
           - docformatter

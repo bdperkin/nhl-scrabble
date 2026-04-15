@@ -84,6 +84,13 @@ repos:
   # Python Imports - Import Organization
   # ============================================================================
 
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        # Comprehensive import sorting (matches ruff's ALL rules philosophy)
+        args: []  # Config is in pyproject.toml
+
   - repo: https://github.com/MarcoGorelli/absolufy-imports
     rev: v0.3.1
     hooks:

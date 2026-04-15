@@ -5,10 +5,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from nhl_scrabble.api.nhl_client import (
-    NHLApiClient,
-    NHLApiConnectionError,
-)
+from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError
 
 
 class TestNHLApiClient:
