@@ -406,6 +406,18 @@ quiet-level = 0  # Show all issues (comprehensive)
 # - Application directories: src (matches project src layout)
 # - Aligns with ruff's import handling and isort configuration
 
+# Rstcheck configuration
+[tool.rstcheck]
+# Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
+# Report levels: 1=info, 2=warning, 3=error, 4=severe
+report_level = "INFO"  # Most comprehensive (report everything)
+# Ignore paths (align with other tool exclusions)
+ignore_directives = []  # Empty for comprehensive checking
+ignore_roles = []  # Empty for comprehensive checking
+ignore_substitutions = []  # Empty for comprehensive checking
+ignore_languages = []  # Empty for comprehensive checking
+ignore_messages = ""  # Empty for comprehensive checking
+
 # Doc8 configuration
 [tool.doc8]
 # Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Rstcheck Integration** - RST syntax checking and validation
+  - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
+  - Pre-commit hook with Sphinx integration for code block validation
+  - Tox environment (rstcheck) for standalone RST syntax checking
+  - Added to CI/CD pipeline for continuous documentation syntax validation
+  - Configuration: report_level="INFO" (most comprehensive), no ignores for complete validation
+  - Works alongside doc8: rstcheck handles syntax/validation, doc8 handles style/formatting
+  - Complete RST coverage: syntax (rstcheck) + style (doc8)
 - **Doc8 Integration** - RST documentation linting
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
   - Pre-commit hook for RST (.rst, .txt) file validation
@@ -84,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added to CI/CD pipeline for continuous spell checking
   - Configured with check-filenames and check-hidden enabled by default
   - Selective ignores for generated files and lock files
-- Comprehensive pre-commit hooks (41 total):
+- Comprehensive pre-commit hooks (42 total):
   - Meta hooks (3): check-hooks-apply, check-useless-excludes, sync-pre-commit-deps
   - File quality hooks (18): whitespace, syntax, security, git checks
   - Python quality hooks (7): noqa, type-ignore, mock, eval, annotations checks
@@ -93,7 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - YAML linting hooks (1): yamllint for YAML file validation and linting
   - Spelling hooks (1): codespell for code and documentation spell checking
   - Markdown hooks (2): pymarkdown for markdown linting, mdformat for markdown formatting
-  - Documentation hooks (1): doc8 for RST documentation linting
+  - Documentation hooks (2): doc8 for RST style linting, rstcheck for RST syntax checking
   - UV hook (1): uv-lock for dependency lock file validation
   - Flake8 hooks (1): flake8 for Python code linting and style checking
   - Autopep8 hooks (1): autopep8 for PEP 8 auto-formatting (runs before ruff-format)
