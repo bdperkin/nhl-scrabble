@@ -41,22 +41,23 @@ Each task is assigned a priority:
 
 **Total Effort**: 8.5-14 hours
 
-### Security (10+ tasks, 3 documented)
+### Security (10+ tasks, 4 documented)
 
-| ID  | Title                       | Priority | Effort | Issue |
-| --- | --------------------------- | -------- | ------ | ----- |
-| 001 | Add GitHub Dependabot       | CRITICAL | 30min  | #39   |
-| 002 | Create SECURITY.md Policy   | HIGH     | 1h     |       |
-| 003 | Implement Log Sanitization  | MEDIUM   | 2-3h   | #45   |
-| ... | Input Validation            | MEDIUM   | TBD    |       |
-| ... | SSRF Protection             | MEDIUM   | TBD    |       |
-| ... | Rate Limit Enforcement      | MEDIUM   | TBD    |       |
-| ... | DoS Prevention              | LOW      | TBD    |       |
-| ... | SSL Verification            | LOW      | TBD    |       |
-| ... | PII Logging Prevention      | LOW      | TBD    |       |
-| ... | Config Injection Protection | LOW      | TBD    |       |
+| ID  | Title                              | Priority | Effort | Issue |
+| --- | ---------------------------------- | -------- | ------ | ----- |
+| 001 | Add GitHub Dependabot              | CRITICAL | 30min  | #39   |
+| 004 | GitHub Settings Security Hardening | CRITICAL | 2-3h   | #62   |
+| 002 | Create SECURITY.md Policy          | HIGH     | 1h     |       |
+| 003 | Implement Log Sanitization         | MEDIUM   | 2-3h   | #45   |
+| ... | Input Validation                   | MEDIUM   | TBD    |       |
+| ... | SSRF Protection                    | MEDIUM   | TBD    |       |
+| ... | Rate Limit Enforcement             | MEDIUM   | TBD    |       |
+| ... | DoS Prevention                     | LOW      | TBD    |       |
+| ... | SSL Verification                   | LOW      | TBD    |       |
+| ... | PII Logging Prevention             | LOW      | TBD    |       |
+| ... | Config Injection Protection        | LOW      | TBD    |       |
 
-**Documented Effort**: 3.5-4.5 hours
+**Documented Effort**: 5.5-7.5 hours
 
 ### Optimization (6 tasks, 1 documented)
 
@@ -128,8 +129,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 14 tasks
-**Total Documented Effort**: 45.5-67.5 hours
+**Documented Tasks**: 15 tasks
+**Total Documented Effort**: 47.5-70.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 3 tasks (4.25h actual effort)
 
