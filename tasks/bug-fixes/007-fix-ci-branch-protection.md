@@ -17,6 +17,7 @@ The branch protection pre-commit hook (`.git-hooks/check-branch-protection.sh`) 
 **Issue**: The hook prompts for user input when committing to protected branches (main/master), but CI environments cannot provide interactive input, causing the hook to fail with exit code 1.
 
 **Impact**:
+
 - CI fails on all commits to main branch
 - Blocks PR merges (even though the PR itself passed all checks)
 - Forces use of `--no-verify` to bypass hooks
@@ -41,10 +42,10 @@ if [[ "$BRANCH" =~ $PROTECTED_BRANCHES ]]; then
     echo "⚠️  WARNING: You are committing directly to the '$BRANCH' branch!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     # ... warning message ...
-    
+
     read -p "⚠️  Continue committing to '$BRANCH'? [y/N] " -n 1 -r  # FAILS IN CI
     echo ""
-    
+
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         echo "❌ Commit aborted."
         exit 1
@@ -97,7 +98,7 @@ is_ci() {
     [[ -n "${JENKINS_URL}" ]] && return 0
     # Generic CI indicator
     [[ -n "${CI}" ]] && return 0
-    
+
     return 1
 }
 
@@ -107,7 +108,7 @@ if [[ "$BRANCH" =~ $PROTECTED_BRANCHES ]]; then
         echo "ℹ️  CI environment detected: Allowing commit to '$BRANCH' branch"
         exit 0
     fi
-    
+
     # Local: Warn and prompt for confirmation
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -158,6 +159,7 @@ exit 0
 ### Key Changes
 
 1. **Added `is_ci()` function** that detects common CI environments:
+
    - GitHub Actions (`GITHUB_ACTIONS`)
    - GitLab CI (`GITLAB_CI`)
    - Travis CI (`TRAVIS`)
@@ -165,32 +167,37 @@ exit 0
    - Jenkins (`JENKINS_URL`)
    - Generic (`CI`)
 
-2. **CI-specific behavior**: Skip interactive prompt and allow commits
+1. **CI-specific behavior**: Skip interactive prompt and allow commits
+
    - Commits on main in CI are expected (result of PR merges)
    - Log informational message for transparency
 
-3. **Preserve local behavior**: Interactive prompt still works for developers
+1. **Preserve local behavior**: Interactive prompt still works for developers
 
 ## Implementation Steps
 
 1. **Update hook script**
+
    - Add `is_ci()` function to `.git-hooks/check-branch-protection.sh`
    - Add CI detection before interactive prompt
    - Exit early with success if in CI environment
 
-2. **Test locally**
+1. **Test locally**
+
    - Test that local commits to main still prompt for confirmation
    - Test that choosing "No" still aborts the commit
    - Test that choosing "Yes" allows the commit
    - Verify hook still works on feature branches (should pass silently)
 
-3. **Test in CI**
+1. **Test in CI**
+
    - Create test branch with the hook changes
    - Create PR and merge to main
    - Verify CI passes on main branch after merge
    - Check that pre-commit hook shows "CI environment detected" message
 
-4. **Update documentation**
+1. **Update documentation**
+
    - Update `docs/BRANCH_PROTECTION.md` to explain CI behavior
    - Add troubleshooting section for CI failures
    - Document the environment variables checked
@@ -200,6 +207,7 @@ exit 0
 ### Unit Testing (Manual)
 
 1. **Test local main branch commit** (should prompt):
+
    ```bash
    git checkout main
    echo "test" >> test.txt
@@ -208,7 +216,8 @@ exit 0
    # Expected: Prompt appears, can choose Y/N
    ```
 
-2. **Test CI environment simulation** (should skip prompt):
+1. **Test CI environment simulation** (should skip prompt):
+
    ```bash
    export GITHUB_ACTIONS=true
    git checkout main
@@ -219,7 +228,8 @@ exit 0
    unset GITHUB_ACTIONS
    ```
 
-3. **Test feature branch** (should pass silently):
+1. **Test feature branch** (should pass silently):
+
    ```bash
    git checkout -b test/feature
    echo "test" >> test.txt
@@ -231,17 +241,20 @@ exit 0
 ### Integration Testing (CI)
 
 1. **Create PR with fix**
+
    - Branch: `bug-fixes/007-fix-ci-branch-protection`
    - Changes: Updated `.git-hooks/check-branch-protection.sh`
    - Verify all PR checks pass
 
-2. **Merge PR**
+1. **Merge PR**
+
    - Merge via GitHub (squash merge)
    - Watch CI run on main branch
    - Verify pre-commit checks pass
    - Check logs show "CI environment detected" message
 
-3. **Subsequent commits**
+1. **Subsequent commits**
+
    - Make another simple change via PR
    - Merge to main
    - Verify CI continues to pass
@@ -277,23 +290,25 @@ None - This is a standalone fix to the hook script
 The branch protection hook was designed for local development to prevent accidental commits to main. However, in CI:
 
 1. PRs are merged via GitHub UI (not local git)
-2. GitHub creates merge commits on main branch
-3. CI runs pre-commit hooks on the merge commit
-4. Hook detects main branch and prompts for input
-5. CI has no interactive terminal, so prompt fails
-6. CI fails with exit code 1
+1. GitHub creates merge commits on main branch
+1. CI runs pre-commit hooks on the merge commit
+1. Hook detects main branch and prompts for input
+1. CI has no interactive terminal, so prompt fails
+1. CI fails with exit code 1
 
 ### Design Decision: Allow vs Reject in CI
 
 **Decision**: Allow commits to main in CI (chosen approach)
 
 **Rationale**:
+
 - Commits on main in CI are legitimate (result of PR merges)
 - PRs already passed all checks before merging
 - Rejecting would prevent all CI runs on main
 - Local protection is sufficient to prevent accidental direct commits
 
 **Alternative considered**: Reject in CI and require `--no-verify`
+
 - **Rejected because**: Defeats purpose of CI validation
 - Would require modifying GitHub merge process
 - Adds complexity without benefit
@@ -302,14 +317,14 @@ The branch protection hook was designed for local development to prevent acciden
 
 The hook checks multiple environment variables to ensure broad compatibility:
 
-| Variable         | CI System       | Priority |
-|------------------|-----------------|----------|
-| `GITHUB_ACTIONS` | GitHub Actions  | Primary  |
-| `GITLAB_CI`      | GitLab CI       | Common   |
-| `TRAVIS`         | Travis CI       | Common   |
-| `CIRCLECI`       | CircleCI        | Common   |
-| `JENKINS_URL`    | Jenkins         | Common   |
-| `CI`             | Generic         | Fallback |
+| Variable         | CI System      | Priority |
+| ---------------- | -------------- | -------- |
+| `GITHUB_ACTIONS` | GitHub Actions | Primary  |
+| `GITLAB_CI`      | GitLab CI      | Common   |
+| `TRAVIS`         | Travis CI      | Common   |
+| `CIRCLECI`       | CircleCI       | Common   |
+| `JENKINS_URL`    | Jenkins        | Common   |
+| `CI`             | Generic        | Fallback |
 
 This ensures the fix works across different CI platforms if the project moves in the future.
 
@@ -318,6 +333,7 @@ This ensures the fix works across different CI platforms if the project moves in
 **Question**: Does this weaken branch protection?
 
 **Answer**: No, because:
+
 - GitHub branch protection rules still apply
 - PRs still require reviews and passing checks
 - Local commits to main still prompt for confirmation
@@ -329,9 +345,9 @@ This ensures the fix works across different CI platforms if the project moves in
 After fixing this issue, consider:
 
 1. **GitHub branch protection rules**: Require PRs for main branch
-2. **CODEOWNERS file**: Require specific reviewers
-3. **Status checks**: Require all checks pass before merge
-4. **Squash merge only**: Enforce in GitHub settings
+1. **CODEOWNERS file**: Require specific reviewers
+1. **Status checks**: Require all checks pass before merge
+1. **Squash merge only**: Enforce in GitHub settings
 
 ## Implementation Notes
 
