@@ -78,6 +78,7 @@ jobs:
           - interrogate
           - deptry
           - unimport
+          - pydocstyle
           - absolufy-imports
           - autoflake
           - black
@@ -126,9 +127,9 @@ jobs:
         with:
           enable-cache: false
 
-      - name: Install docformatter, pyroma, and deptry for pre-commit
+      - name: Install docformatter, pyroma, deptry, and pydocstyle for pre-commit
         run: |
-          uv pip install docformatter pyroma deptry --system
+          uv pip install docformatter pyroma deptry pydocstyle --system
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.0

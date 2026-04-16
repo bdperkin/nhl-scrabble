@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 51 comprehensive hooks for code quality, security, and consistency
+# 52 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -198,6 +198,15 @@ repos:
         # Requires 100% docstring coverage for all Python code
         args: []  # Config is in pyproject.toml
         pass_filenames: false  # Check entire project for coverage percentage
+
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        # Comprehensive docstring style checking (matches ruff's ALL rules philosophy)
+        # Checks docstring format and style per PEP 257
+        args: []  # Config is in pyproject.toml
+        additional_dependencies: [tomli]  # Required to read pyproject.toml
 
   - repo: https://github.com/fpgmaas/deptry
     rev: 0.25.1

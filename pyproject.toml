@@ -825,3 +825,30 @@ include_star_import = false  # Star imports are already flagged by ruff (F403/F4
 
 # Use gitignore patterns
 gitignore = true  # Respect .gitignore patterns
+
+# ============================================================================
+# Pydocstyle - Docstring Style Checker
+# ============================================================================
+
+[tool.pydocstyle]
+# Comprehensive docstring style checking (matches ruff's ALL rules philosophy)
+convention = "pep257"  # PEP 257 convention (comprehensive)
+
+# Match patterns for files to check
+match = ".*\\.py"  # Check all .py files
+match_dir = "[^\\.].*"  # Check all non-hidden directories
+
+# Additional error codes to ignore on top of convention (align with ruff's D ignores)
+add-ignore = [
+    "D100",  # Missing docstring in public module (checked by interrogate)
+    "D101",  # Missing docstring in public class (checked by interrogate)
+    "D102",  # Missing docstring in public method (checked by interrogate)
+    "D103",  # Missing docstring in public function (checked by interrogate)
+    "D104",  # Missing docstring in public package (checked by interrogate)
+    "D105",  # Missing docstring in magic method (checked by interrogate)
+    "D106",  # Missing docstring in public nested class (checked by interrogate)
+    "D107",  # Missing docstring in __init__ (checked by interrogate)
+    "D203",  # 1 blank line required before class docstring (conflicts with D211)
+    "D213",  # Multi-line docstring summary should start at second line (conflicts with D212)
+    "D413",  # Missing blank line after last section (conflicts with docformatter)
+]
