@@ -806,3 +806,22 @@ ignore = []  # Empty list means check everything
 [tool.deptry.package_module_name_map]
 # Package name -> module name mapping for packages where they differ
 python-dotenv = "dotenv"  # python-dotenv package provides 'dotenv' module
+
+# ============================================================================
+# Unimport - Unused Import Checker
+# ============================================================================
+
+[tool.unimport]
+# Comprehensive unused import checking (matches ruff's ALL rules philosophy)
+
+# File patterns to exclude from scanning (regex pattern)
+exclude = "\\.git|\\.tox|\\.venv|venv|build|dist|.*\\.egg-info|__pycache__"
+
+# Ignore __init__.py files (they often have intentional re-exports)
+ignore_init = true  # Match ruff's per-file-ignores for __init__.py F401
+
+# Include star imports in scanning (comprehensive checking)
+include_star_import = false  # Star imports are already flagged by ruff (F403/F405)
+
+# Use gitignore patterns
+gitignore = true  # Respect .gitignore patterns
