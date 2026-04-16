@@ -28,16 +28,15 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (4 tasks)
+### Bug Fixes (3 tasks)
 
-| ID  | Title                          | Priority | Effort | Issue |
-| --- | ------------------------------ | -------- | ------ | ----- |
-| 003 | Add Session Cleanup Safety Net | MEDIUM   | 1-2h   | #44   |
-| 004 | Fix Rate Limiting Logic        | LOW      | 1h     | #47   |
-| 005 | Implement Exponential Backoff  | LOW      | 2-3h   | #48   |
-| 006 | Validate CLI Output Paths      | LOW      | 1-2h   | #49   |
+| ID  | Title                         | Priority | Effort | Issue |
+| --- | ----------------------------- | -------- | ------ | ----- |
+| 004 | Fix Rate Limiting Logic       | LOW      | 1h     | #47   |
+| 005 | Implement Exponential Backoff | LOW      | 2-3h   | #48   |
+| 006 | Validate CLI Output Paths     | LOW      | 1-2h   | #49   |
 
-**Total Effort**: 5.5-8 hours
+**Total Effort**: 4-6 hours
 
 ### Security (10+ tasks, 1 documented)
 
@@ -121,12 +120,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 14 tasks
-**Total Documented Effort**: 58-84 hours
+**Documented Tasks**: 13 tasks
+**Total Documented Effort**: 56.5-82.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 10 tasks (18.67h actual effort)
+**Completed Tasks**: 11 tasks (20.17h actual effort)
 
-**Grand Total**: ~158-204 hours for complete roadmap
+**Grand Total**: ~156.5-202.5 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -575,3 +574,4 @@ ______________________________________________________________________
 | 002 | Implement NHLApiNotFoundError      | Bug Fix      | 2026-04-16 | 1.5h          | #73 |
 | 001 | Implement API Response Caching     | Optimization | 2026-04-16 | 3.5h          | #74 |
 | 001 | Increase Test Coverage to 90.93%   | Testing      | 2026-04-16 | 4h            | #75 |
+| 003 | Add Session Cleanup Safety Net     | Bug Fix      | 2026-04-16 | 1.5h          | #76 |
