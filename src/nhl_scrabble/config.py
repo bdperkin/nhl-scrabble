@@ -31,19 +31,22 @@ class Config:
 
     @classmethod
     def from_env(cls) -> "Config":
-        """Load configuration from environment variables.
+        """Load configuration from environment variables with validation.
 
         Environment variables:
-            NHL_SCRABBLE_API_TIMEOUT: API request timeout in seconds
-            NHL_SCRABBLE_API_RETRIES: Number of API retry attempts
-            NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between API requests
-            NHL_SCRABBLE_TOP_PLAYERS: Number of top players to show
-            NHL_SCRABBLE_TOP_TEAM_PLAYERS: Number of top players per team
+            NHL_SCRABBLE_API_TIMEOUT: API request timeout in seconds (must be >= 1)
+            NHL_SCRABBLE_API_RETRIES: Number of API retry attempts (must be >= 0)
+            NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between API requests (must be >= 0.0)
+            NHL_SCRABBLE_TOP_PLAYERS: Number of top players to show (must be >= 1)
+            NHL_SCRABBLE_TOP_TEAM_PLAYERS: Number of top players per team (must be >= 1)
             NHL_SCRABBLE_VERBOSE: Enable verbose logging (true/false)
             NHL_SCRABBLE_OUTPUT_FORMAT: Output format (text/json/html)
 
         Returns:
             Config instance with values from environment
+
+        Raises:
+            ValueError: If any environment variable has an invalid value
 
         Examples:
             >>> import os
@@ -55,12 +58,62 @@ class Config:
         # Load .env file if it exists
         load_dotenv()
 
+        def get_int(key: str, default: str, min_value: int = 0) -> int:
+            """Get integer from environment variable with validation.
+
+            Args:
+                key: Environment variable name
+                default: Default value if variable not set
+                min_value: Minimum allowed value
+
+            Returns:
+                Validated integer value
+
+            Raises:
+                ValueError: If value is not a valid integer or is below minimum
+            """
+            value_str = os.getenv(key, default)
+            try:
+                value = int(value_str)
+            except ValueError as e:
+                raise ValueError(f"{key} must be a valid integer, got '{value_str}'") from e
+
+            if value < min_value:
+                msg = f"{key} must be >= {min_value}, got {value}"
+                raise ValueError(msg)
+            return value
+
+        def get_float(key: str, default: str, min_value: float = 0.0) -> float:
+            """Get float from environment variable with validation.
+
+            Args:
+                key: Environment variable name
+                default: Default value if variable not set
+                min_value: Minimum allowed value
+
+            Returns:
+                Validated float value
+
+            Raises:
+                ValueError: If value is not a valid number or is below minimum
+            """
+            value_str = os.getenv(key, default)
+            try:
+                value = float(value_str)
+            except ValueError as e:
+                raise ValueError(f"{key} must be a valid number, got '{value_str}'") from e
+
+            if value < min_value:
+                msg = f"{key} must be >= {min_value}, got {value}"
+                raise ValueError(msg)
+            return value
+
         return cls(
-            api_timeout=int(os.getenv("NHL_SCRABBLE_API_TIMEOUT", "10")),
-            api_retries=int(os.getenv("NHL_SCRABBLE_API_RETRIES", "3")),
-            rate_limit_delay=float(os.getenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3")),
-            top_players_count=int(os.getenv("NHL_SCRABBLE_TOP_PLAYERS", "20")),
-            top_team_players_count=int(os.getenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5")),
+            api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1),
+            api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0),
+            rate_limit_delay=get_float("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0),
+            top_players_count=get_int("NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1),
+            top_team_players_count=get_int("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1),
             verbose=os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true",
             output_format=os.getenv("NHL_SCRABBLE_OUTPUT_FORMAT", "text"),
         )
