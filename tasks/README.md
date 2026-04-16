@@ -72,23 +72,24 @@ Each task is assigned a priority:
 
 **Documented Effort**: 3-4 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 3 documented)
 
-| ID  | Title                               | Priority | Effort  | Issue |
-| --- | ----------------------------------- | -------- | ------- | ----- |
-| 001 | Implement HTML Output               | MEDIUM   | 4-6h    | #46   |
-| 002 | Implement Procida Documentation     | MEDIUM   | 8-12h   | #63   |
-| ... | Progress Bars                       | MEDIUM   | TBD     |       |
-| ... | Interactive Mode                    | MEDIUM   | TBD     |       |
-| ... | Historical Data                     | LOW      | TBD     |       |
-| ... | CSV/Excel Export                    | LOW      | TBD     |       |
-| ... | Filtering Options                   | LOW      | TBD     |       |
-| ... | Custom Scoring Rules                | LOW      | TBD     |       |
-| ... | Statistics Dashboard                | LOW      | TBD     |       |
-| ... | Watch Mode                          | LOW      | TBD     |       |
-| ... | Player Search                       | LOW      | TBD     |       |
+| ID  | Title                                    | Priority | Effort  | Issue |
+| --- | ---------------------------------------- | -------- | ------- | ----- |
+| 001 | Implement HTML Output                    | MEDIUM   | 4-6h    | #46   |
+| 002 | Implement Procida Documentation          | MEDIUM   | 8-12h   | #63   |
+| 003 | Build Sphinx Docs + GitHub Pages         | MEDIUM   | 12-16h  | #64   |
+| ... | Progress Bars                            | MEDIUM   | TBD     |       |
+| ... | Interactive Mode                         | MEDIUM   | TBD     |       |
+| ... | Historical Data                          | LOW      | TBD     |       |
+| ... | CSV/Excel Export                         | LOW      | TBD     |       |
+| ... | Filtering Options                        | LOW      | TBD     |       |
+| ... | Custom Scoring Rules                     | LOW      | TBD     |       |
+| ... | Statistics Dashboard                     | LOW      | TBD     |       |
+| ... | Watch Mode                               | LOW      | TBD     |       |
+| ... | Player Search                            | LOW      | TBD     |       |
 
-**Documented Effort**: 12-18 hours
+**Documented Effort**: 24-34 hours
 
 ### Testing (1 task)
 
@@ -130,12 +131,12 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 16 tasks
-**Total Documented Effort**: 55.5-82.5 hours
+**Documented Tasks**: 17 tasks
+**Total Documented Effort**: 67.5-98.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 3 tasks (4.25h actual effort)
 
-**Grand Total**: ~160-210 hours for complete roadmap
+**Grand Total**: ~170-220 hours for complete roadmap
 
 ## How to Use These Tasks
 
