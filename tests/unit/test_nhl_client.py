@@ -202,7 +202,7 @@ class TestNHLApiClient:
     def test_cache_expiry_configured(self) -> None:
         """Test that cache expiry is configurable."""
         client = NHLApiClient(cache_expiry=7200)
-        assert client.session.settings.expire_after.total_seconds() == 7200
+        assert client.session.settings.expire_after.total_seconds() == 7200  # type: ignore[union-attr]
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests_cache.CachedSession.get")
@@ -220,13 +220,13 @@ class TestNHLApiClient:
         client.get_teams()
 
         # Check cache has entries
-        assert client.session.cache.responses.count() > 0
+        assert client.session.cache.responses.count() > 0  # type: ignore[union-attr]
 
         # Clear cache
         client.clear_cache()
 
         # Cache should be empty
-        assert client.session.cache.responses.count() == 0
+        assert client.session.cache.responses.count() == 0  # type: ignore[union-attr]
 
         client.close()
 
