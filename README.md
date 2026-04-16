@@ -497,16 +497,54 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Documentation
 
-- [README.md](README.md) - This file, project overview
+Documentation is organized by purpose following the [Diátaxis framework](https://diataxis.fr/):
+
+### 📚 [Tutorials](docs/tutorials/) - Learning-oriented lessons
+
+Step-by-step guides for beginners:
+
+- [Getting Started](docs/tutorials/01-getting-started.md) - Your first NHL Scrabble analysis
+- [Understanding Output](docs/tutorials/02-understanding-output.md) - Deep dive into reports
+- [First Contribution](docs/tutorials/03-first-contribution.md) - Make your first code contribution
+
+### 🛠️ [How-to Guides](docs/how-to/) - Problem-oriented recipes
+
+Practical solutions to specific tasks:
+
+- [Installation Variations](docs/how-to/installation.md) - Different ways to install
+- [Run Tests](docs/how-to/run-tests.md) - Execute different test configurations
+- [Add Report Type](docs/how-to/add-report-type.md) - Create custom reports
+- [Use UV Package Manager](docs/how-to/use-uv.md) - 10-100x faster installation
+- [And more...](docs/how-to/)
+
+### 📖 [Reference](docs/reference/) - Technical specifications
+
+Complete API and configuration documentation:
+
+- [CLI Reference](docs/reference/cli.md) - All commands and options
+- [Configuration](docs/reference/configuration.md) - All settings explained
+- [Makefile Reference](docs/reference/makefile.md) - All 55 Makefile targets
+- [Code API](docs/reference/code-api.md) - Use NHL Scrabble as a library
+- [Scrabble Values](docs/reference/scrabble-values.md) - Letter values and scoring
+- [And more...](docs/reference/)
+
+### 💡 [Explanation](docs/explanation/) - Conceptual understanding
+
+Background and design philosophy:
+
+- [Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md) - The concept explained
+- [Architecture Overview](docs/explanation/architecture.md) - System design
+- [NHL API Strategy](docs/explanation/nhl-api-strategy.md) - API integration approach
+- [And more...](docs/explanation/)
+
+### Community Documentation
+
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community standards
+- [SECURITY.md](SECURITY.md) - Security policy
+- [SUPPORT.md](SUPPORT.md) - Getting help
 - [CHANGELOG.md](CHANGELOG.md) - Version history
-- [docs/MAKEFILE.md](docs/MAKEFILE.md) - Complete Makefile reference
-- [docs/TOX.md](docs/TOX.md) - Tox testing guide
-- [docs/TOX-UV.md](docs/TOX-UV.md) - Tox with UV acceleration guide
-- [docs/UV.md](docs/UV.md) - UV fast package manager guide
-- [docs/UV-ECOSYSTEM.md](docs/UV-ECOSYSTEM.md) - Complete UV ecosystem integration
-- [docs/PRECOMMIT-UV.md](docs/PRECOMMIT-UV.md) - Pre-commit with UV acceleration
-- [CLAUDE.md](CLAUDE.md) - Architecture documentation
+- [CLAUDE.md](CLAUDE.md) - Project overview for Claude Code
 
 ## Security
 
