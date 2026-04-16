@@ -202,8 +202,10 @@ repos:
     hooks:
       - id: blacken-docs
         # Format code blocks in documentation (RST, Markdown)
+        # Exclude files with pseudo-code examples (ellipsis, placeholders)
         args: [--line-length=100]
         additional_dependencies: [black==24.10.0]
+        exclude: ^(tasks/|\.claude/commands/|docs/(how-to/run-tests\.md|explanation/))
 
   - repo: https://github.com/econchick/interrogate
     rev: 1.7.0
