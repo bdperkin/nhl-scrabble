@@ -19,6 +19,7 @@ Extend the existing Diátaxis documentation framework by implementing automated 
 The project has excellent foundation for automated documentation:
 
 **Strengths:**
+
 - ✅ 100% docstring coverage (enforced by interrogate pre-commit hook)
 - ✅ Type hints throughout (strict mypy compliance)
 - ✅ Well-structured Click CLI with comprehensive help text
@@ -82,6 +83,7 @@ pdoc nhl_scrabble --output-dir docs/reference/api --format markdown
 ```
 
 **Benefits:**
+
 - Lightweight (no Sphinx needed)
 - Generates clean markdown
 - Integrates with existing docs/reference/ structure
@@ -92,7 +94,7 @@ pdoc nhl_scrabble --output-dir docs/reference/api --format markdown
 **Option B: pydoc-markdown**
 
 ```bash
-# Install  
+# Install
 uv pip install pydoc-markdown
 
 # Configure
@@ -100,6 +102,7 @@ pydoc-markdown --render-toc > docs/reference/api/README.md
 ```
 
 **Benefits:**
+
 - More customizable
 - Supports custom templates
 - Can generate single-file or multi-file output
@@ -119,7 +122,7 @@ from pathlib import Path
 def generate_cli_docs():
     """Generate markdown CLI documentation."""
     output_file = Path("docs/reference/cli-generated.md")
-    
+
     # Get CLI help text
     result = subprocess.run(
         ["nhl-scrabble", "--help"],
@@ -127,7 +130,7 @@ def generate_cli_docs():
         text=True,
         check=True
     )
-    
+
     # Format as markdown
     content = f"""# CLI Reference (Auto-Generated)
 
@@ -136,13 +139,15 @@ def generate_cli_docs():
 ## Main Command
 
 ```
+
 {result.stdout}
-```
+
+````
 
 ## Analyze Command
 
 """
-    
+
     # Get analyze command help
     result = subprocess.run(
         ["nhl-scrabble", "analyze", "--help"],
@@ -150,10 +155,10 @@ def generate_cli_docs():
         text=True,
         check=True
     )
-    
+
     content += f"""```
 {result.stdout}
-```
+````
 
 ## Environment Variables
 
@@ -163,13 +168,16 @@ See [Environment Variables](environment-variables.md) for configuration options.
 
 See [Tutorials](../tutorials/) for usage examples.
 """
-    
-    output_file.write_text(content)
-    print(f"✓ Generated {output_file}")
+
+```
+output_file.write_text(content)
+print(f"✓ Generated {output_file}")
+```
 
 if __name__ == "__main__":
-    generate_cli_docs()
-```
+generate_cli_docs()
+
+````
 
 **Option B: cog + Click (Inline Generation)**
 
@@ -185,7 +193,7 @@ cog.out(result.stdout)
 cog.out("```\\n")
 ]]] -->
 <!-- [[[end]]] -->
-```
+````
 
 Then run: `cog -r docs/reference/cli.md`
 
@@ -195,7 +203,7 @@ Add Makefile targets for documentation generation:
 
 ```makefile
 # ============================================================================
-# Documentation Generation Targets  
+# Documentation Generation Targets
 # ============================================================================
 
 .PHONY: docs-api
@@ -263,7 +271,7 @@ jobs:
    docs-gen = [
        "pdoc>=14.0.0",
    ]
-   
+
    # Install
    uv pip install -e ".[docs-gen]"
    ```
@@ -341,7 +349,7 @@ jobs:
    # Modify a docstring
    make docs-check
    # Should fail (docs out of date)
-   
+
    make docs-gen
    make docs-check
    # Should pass
@@ -432,18 +440,18 @@ jobs:
 
 ### Comparison with Sphinx (enhancement/003)
 
-| Feature | This Task (Lightweight) | Sphinx (Full Build) |
-|---------|-------------------------|---------------------|
-| **Effort** | 4-6h | 12-16h |
-| **Complexity** | Low | High |
-| **API Docs** | Yes (pdoc) | Yes (autodoc) |
-| **CLI Docs** | Yes (custom script) | Yes (programoutput) |
-| **Search** | No | Yes |
-| **Themes** | No | Yes (RTD theme) |
-| **Extensions** | Minimal | 9+ extensions |
-| **GitHub Pages** | Manual | Automated |
-| **Build Time** | \<5s | 10-20s |
-| **Dependencies** | 1-2 packages | 9+ packages |
+| Feature          | This Task (Lightweight) | Sphinx (Full Build) |
+| ---------------- | ----------------------- | ------------------- |
+| **Effort**       | 4-6h                    | 12-16h              |
+| **Complexity**   | Low                     | High                |
+| **API Docs**     | Yes (pdoc)              | Yes (autodoc)       |
+| **CLI Docs**     | Yes (custom script)     | Yes (programoutput) |
+| **Search**       | No                      | Yes                 |
+| **Themes**       | No                      | Yes (RTD theme)     |
+| **Extensions**   | Minimal                 | 9+ extensions       |
+| **GitHub Pages** | Manual                  | Automated           |
+| **Build Time**   | \<5s                    | 10-20s              |
+| **Dependencies** | 1-2 packages            | 9+ packages         |
 
 **When to use lightweight approach:**
 
@@ -462,8 +470,8 @@ jobs:
 **Can implement both:**
 
 1. Implement this task first (quick win)
-2. Later migrate to Sphinx if needed
-3. Or keep both (markdown for simple, Sphinx for web)
+1. Later migrate to Sphinx if needed
+1. Or keep both (markdown for simple, Sphinx for web)
 
 ### Integration with Diátaxis Framework
 
@@ -557,9 +565,9 @@ git commit -m "docs: Regenerate API and CLI documentation"
 **If implementing Sphinx later:**
 
 1. Keep generated markdown as intermediate format
-2. Include markdown in Sphinx build with myst-parser
-3. Or switch to Sphinx autodoc (direct docstring parsing)
-4. Migration path exists either way
+1. Include markdown in Sphinx build with myst-parser
+1. Or switch to Sphinx autodoc (direct docstring parsing)
+1. Migration path exists either way
 
 **Versioning:**
 
@@ -587,16 +595,18 @@ git commit -m "docs: Regenerate API and CLI documentation"
 ### `nhl-scrabble analyze`
 
 ```
+
 Usage: nhl-scrabble analyze [OPTIONS]
 
-  Run the NHL Scrabble score analyzer.
+Run the NHL Scrabble score analyzer.
 
 Options:
-  --format [text|json]    Output format (default: text)
-  -o, --output PATH       Output file path
-  -v, --verbose          Enable verbose logging
-  --top-players INTEGER   Number of top players (default: 20)
-  --help                  Show this message and exit.
+--format [text|json] Output format (default: text)
+-o, --output PATH Output file path
+-v, --verbose Enable verbose logging
+--top-players INTEGER Number of top players (default: 20)
+--help Show this message and exit.
+
 ```
 
 **Advantage of auto-generated:** Always accurate, always up-to-date.
@@ -612,3 +622,4 @@ Options:
 - Actual effort vs estimated
 - User feedback on generated docs
 - Integration challenges
+```

@@ -65,21 +65,21 @@ Each task is assigned a priority:
 
 ### Enhancements (10 tasks, 4 documented)
 
-| ID  | Title                              | Priority | Effort | Issue |
-| --- | ---------------------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output              | MEDIUM   | 4-6h   | #46   |
-| 003 | Build Sphinx Docs + GitHub Pages   | MEDIUM   | 12-16h | #64   |
-| 004 | Automated API/CLI Documentation    | MEDIUM   | 4-6h   | #81   |
-| 005 | Sphinx Quality Plugins             | LOW      | 2-4h   | #82   |
-| ... | Progress Bars                      | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                   | MEDIUM   | TBD    |       |
-| ... | Historical Data                    | LOW      | TBD    |       |
-| ... | CSV/Excel Export                   | LOW      | TBD    |       |
-| ... | Filtering Options                  | LOW      | TBD    |       |
-| ... | Custom Scoring Rules               | LOW      | TBD    |       |
-| ... | Statistics Dashboard               | LOW      | TBD    |       |
-| ... | Watch Mode                         | LOW      | TBD    |       |
-| ... | Player Search                      | LOW      | TBD    |       |
+| ID  | Title                            | Priority | Effort | Issue |
+| --- | -------------------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output            | MEDIUM   | 4-6h   | #46   |
+| 003 | Build Sphinx Docs + GitHub Pages | MEDIUM   | 12-16h | #64   |
+| 004 | Automated API/CLI Documentation  | MEDIUM   | 4-6h   | #81   |
+| 005 | Sphinx Quality Plugins           | LOW      | 2-4h   | #82   |
+| ... | Progress Bars                    | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                 | MEDIUM   | TBD    |       |
+| ... | Historical Data                  | LOW      | TBD    |       |
+| ... | CSV/Excel Export                 | LOW      | TBD    |       |
+| ... | Filtering Options                | LOW      | TBD    |       |
+| ... | Custom Scoring Rules             | LOW      | TBD    |       |
+| ... | Statistics Dashboard             | LOW      | TBD    |       |
+| ... | Watch Mode                       | LOW      | TBD    |       |
+| ... | Player Search                    | LOW      | TBD    |       |
 
 **Documented Effort**: 22-32 hours
 
@@ -306,17 +306,19 @@ This section organizes all documented tasks into a recommended implementation se
 1. **enhancement/004-automated-api-cli-docs.md** (4-6h) - #81 OR enhancement/003-sphinx-documentation.md (12-16h) - #64
 
    - **Option A (Lightweight)**: Implement #81 (automated API/CLI docs)
+
      - MEDIUM priority, quick automated documentation
      - Uses pdoc + custom scripts (minimal dependencies)
      - Fast builds (\<5s), simple integration
      - Can be done independently or as stepping stone to Sphinx
-   
+
    - **Option B (Full Featured)**: Implement #64 (Sphinx documentation)
+
      - MEDIUM priority, professional documentation site
      - Sphinx with 9 extensions + GitHub Pages
      - Includes automated API/CLI docs plus search, themes, etc.
      - Larger effort but comprehensive solution
-   
+
    - **Or Both**: Implement #81 first (quick win), then #64 later (full solution)
 
 1. **enhancement/005-sphinx-quality-plugins.md** (2-4h) - #82 (OPTIONAL)

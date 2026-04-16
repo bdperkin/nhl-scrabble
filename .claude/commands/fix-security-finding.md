@@ -1,8 +1,6 @@
----
-title: 'Fix Security or Quality Finding'
-read_only: false
-type: 'command'
----
+______________________________________________________________________
+
+## title: 'Fix Security or Quality Finding' read_only: false type: 'command'
 
 # Fix Security or Quality Finding
 
@@ -24,7 +22,7 @@ This command automates the complete security finding remediation workflow:
      - Recommended fix (if provided)
    - Validate finding is actionable
 
-2. **Create GitHub Issue**
+1. **Create GitHub Issue**
 
    - Generate descriptive issue title
    - Include finding details in issue body:
@@ -40,7 +38,7 @@ This command automates the complete security finding remediation workflow:
    - Create issue using `gh issue create`
    - Extract issue number for tracking
 
-3. **Create Feature Branch**
+1. **Create Feature Branch**
 
    - Generate branch name based on finding type:
      - Dependabot: `security/dependabot-{package}-{version}`
@@ -51,35 +49,39 @@ This command automates the complete security finding remediation workflow:
    - Create and checkout branch: `git checkout -b {branch-name}`
    - Verify branch creation: `git branch --show-current`
 
-4. **Generate Fix**
+1. **Generate Fix**
 
    - **For Dependabot alerts**:
+
      - Update dependency version in `pyproject.toml`
      - Run `uv lock` to update lock file
      - Check for breaking changes in changelog
      - Update code if API changes required
-   
+
    - **For CodeQL alerts**:
+
      - Analyze vulnerable code pattern
      - Implement recommended fix
      - Follow OWASP best practices
      - Add input validation/sanitization
      - Implement proper error handling
-   
+
    - **For Secret Scanning**:
+
      - Remove hardcoded secrets
      - Move to environment variables
      - Update documentation
      - Add to `.gitignore` patterns
      - Rotate compromised secrets
-   
+
    - **For Code Quality issues**:
+
      - Fix identified code smell
      - Improve code structure
      - Add missing type hints
      - Improve error handling
 
-5. **Run All Tests**
+1. **Run All Tests**
 
    - Run full test suite: `pytest`
    - Run with coverage: `pytest --cov`
@@ -93,16 +95,16 @@ This command automates the complete security finding remediation workflow:
      - Re-run tests
      - Repeat until all pass
 
-6. **Commit Changes**
+1. **Commit Changes**
 
    - Stage all changes: `git add -A`
    - Review changes: `git diff --cached`
    - Create commit with conventional commit format:
      ```
      {type}({scope}): {description}
-     
+
      {body}
-     
+
      Fixes #{issue-number}
      Security: {finding-type} - {severity}
      ```
@@ -113,13 +115,13 @@ This command automates the complete security finding remediation workflow:
    - Run pre-commit hooks (automatically)
    - Verify commit created: `git log -1`
 
-7. **Push to Remote Branch**
+1. **Push to Remote Branch**
 
    - Push branch: `git push -u origin {branch-name}`
    - Verify push succeeded
    - Get remote branch URL
 
-8. **Wait for CI to Complete**
+1. **Wait for CI to Complete**
 
    - Poll CI status: `gh pr checks` (after PR creation)
    - Wait for all checks to pass:
@@ -136,38 +138,38 @@ This command automates the complete security finding remediation workflow:
      - Wait for re-run
    - If timeout: Report status and pause for manual intervention
 
-9. **Create Pull Request**
+1. **Create Pull Request**
 
    - Generate PR title from issue
    - Create PR body:
      ```markdown
      ## Security Finding
-     
+
      **Issue**: Closes #{issue-number}
      **Type**: {finding-type}
      **Severity**: {severity}
-     
+
      ## Summary
-     
+
      {description-of-fix}
-     
+
      ## Changes
-     
+
      - {change-1}
      - {change-2}
-     
+
      ## Security Impact
-     
+
      {impact-description}
-     
+
      ## Testing
-     
+
      - ✅ All tests pass
      - ✅ Security check passes
      - ✅ No new vulnerabilities introduced
-     
+
      ## Verification
-     
+
      - [ ] Vulnerability resolved
      - [ ] No regression issues
      - [ ] Documentation updated (if needed)
@@ -176,91 +178,91 @@ This command automates the complete security finding remediation workflow:
    - Auto-link issue: Include "Closes #{issue-number}" in body
    - Extract PR number
 
-10. **Verify CI Checks Pass**
+1. **Verify CI Checks Pass**
 
-    - Monitor PR checks: `gh pr checks {pr-number}`
-    - Ensure all required checks pass:
-      - ✅ All Python version tests
-      - ✅ Pre-commit hooks
-      - ✅ Security scans (CodeQL, etc.)
-      - ✅ Quality checks (ruff, mypy)
-      - ✅ Coverage requirements
-    - Wait for completion (polling every 30s)
-    - If any check fails:
-      - Review logs
-      - Fix issues
-      - Push updates
-      - Re-verify
+   - Monitor PR checks: `gh pr checks {pr-number}`
+   - Ensure all required checks pass:
+     - ✅ All Python version tests
+     - ✅ Pre-commit hooks
+     - ✅ Security scans (CodeQL, etc.)
+     - ✅ Quality checks (ruff, mypy)
+     - ✅ Coverage requirements
+   - Wait for completion (polling every 30s)
+   - If any check fails:
+     - Review logs
+     - Fix issues
+     - Push updates
+     - Re-verify
 
-11. **Merge Pull Request**
+1. **Merge Pull Request**
 
-    - Verify all checks passed: `gh pr checks {pr-number}`
-    - Verify PR is approved (if required)
-    - Check for merge conflicts: `gh pr view {pr-number} --json mergeable`
-    - If conflicts:
-      - Update branch: `git pull origin main`
-      - Resolve conflicts
-      - Run tests again
-      - Push resolution
-      - Wait for CI
-    - Merge PR: `gh pr merge {pr-number} --squash --delete-branch`
-    - Use squash merge for clean history
-    - Auto-delete remote branch
-    - Verify merge succeeded
+   - Verify all checks passed: `gh pr checks {pr-number}`
+   - Verify PR is approved (if required)
+   - Check for merge conflicts: `gh pr view {pr-number} --json mergeable`
+   - If conflicts:
+     - Update branch: `git pull origin main`
+     - Resolve conflicts
+     - Run tests again
+     - Push resolution
+     - Wait for CI
+   - Merge PR: `gh pr merge {pr-number} --squash --delete-branch`
+   - Use squash merge for clean history
+   - Auto-delete remote branch
+   - Verify merge succeeded
 
-12. **Delete Local Branch**
+1. **Delete Local Branch**
 
-    - Checkout main: `git checkout main`
-    - Pull latest: `git pull origin main`
-    - Delete local branch: `git branch -d {branch-name}`
-    - Verify deletion: `git branch`
+   - Checkout main: `git checkout main`
+   - Pull latest: `git pull origin main`
+   - Delete local branch: `git branch -d {branch-name}`
+   - Verify deletion: `git branch`
 
-13. **Wait for CI on Main Branch**
+1. **Wait for CI on Main Branch**
 
-    - Get latest workflow run: `gh run list --branch main --limit 1`
-    - Wait for workflow to complete
-    - Ensure all checks pass on main
-    - Maximum wait: 30 minutes
-    - If checks fail on main:
-      - Create hotfix immediately
-      - Follow same process
-      - Priority: CRITICAL
+   - Get latest workflow run: `gh run list --branch main --limit 1`
+   - Wait for workflow to complete
+   - Ensure all checks pass on main
+   - Maximum wait: 30 minutes
+   - If checks fail on main:
+     - Create hotfix immediately
+     - Follow same process
+     - Priority: CRITICAL
 
-14. **Close GitHub Issue**
+1. **Close GitHub Issue**
 
-    - Verify issue is linked to merged PR
-    - Check if auto-closed by PR merge
-    - If not auto-closed:
-      - Add comment with resolution details:
-        ```
-        Resolved in PR #{pr-number}
-        
-        Fix: {brief-description}
-        Verified: All tests passing
-        Security: Vulnerability remediated
-        ```
-      - Close issue: `gh issue close {issue-number}`
-    - Verify issue is closed: `gh issue view {issue-number}`
+   - Verify issue is linked to merged PR
+   - Check if auto-closed by PR merge
+   - If not auto-closed:
+     - Add comment with resolution details:
+       ```
+       Resolved in PR #{pr-number}
 
-15. **Report Completion**
+       Fix: {brief-description}
+       Verified: All tests passing
+       Security: Vulnerability remediated
+       ```
+     - Close issue: `gh issue close {issue-number}`
+   - Verify issue is closed: `gh issue view {issue-number}`
 
-    - Display summary:
-      ```
-      ✅ Security Finding Remediated!
-      
-      Finding: {type} - {severity}
-      Issue: #{issue-number}
-      Branch: {branch-name} (deleted)
-      PR: #{pr-number} (merged)
-      
-      Fix: {summary}
-      
-      Security Impact: {impact}
-      
-      Tests: All passing ✅
-      CI: All checks passing ✅
-      Main: Clean ✅
-      ```
+1. **Report Completion**
+
+   - Display summary:
+     ```
+     ✅ Security Finding Remediated!
+
+     Finding: {type} - {severity}
+     Issue: #{issue-number}
+     Branch: {branch-name} (deleted)
+     PR: #{pr-number} (merged)
+
+     Fix: {summary}
+
+     Security Impact: {impact}
+
+     Tests: All passing ✅
+     CI: All checks passing ✅
+     Main: Clean ✅
+     ```
 
 ## Branch Naming Convention
 
@@ -269,6 +271,7 @@ Follow security-focused branch naming:
 **Pattern**: `{category}/{type}-{identifier}`
 
 **Categories**:
+
 - `security/` - Security vulnerabilities
 - `quality/` - Code quality issues
 
@@ -305,6 +308,7 @@ CVE: {cve-id} (if applicable)
 ```
 
 **Types**:
+
 - `security`: Security vulnerability fixes
 - `fix`: Bug fixes from quality findings
 - `build`: Dependency updates (Dependabot)
@@ -403,26 +407,29 @@ Standard PR body for security fixes:
 ### Dependabot Alerts
 
 **Identification**:
+
 - Navigate to GitHub Security → Dependabot alerts
 - Review open alerts
 - Prioritize by severity (Critical → High → Medium → Low)
 
 **Fix Process**:
+
 1. Update dependency in `pyproject.toml`
-2. Run `uv lock` to update lock file
-3. Review changelog for breaking changes
-4. Update code if API changes required
-5. Run full test suite
-6. Verify no new issues introduced
+1. Run `uv lock` to update lock file
+1. Review changelog for breaking changes
+1. Update code if API changes required
+1. Run full test suite
+1. Verify no new issues introduced
 
 **Example**:
+
 ```bash
 # Before: pyproject.toml
 dependencies = [
     "requests>=2.28.0",
 ]
 
-# After: pyproject.toml  
+# After: pyproject.toml
 dependencies = [
     "requests>=2.31.0",
 ]
@@ -437,17 +444,19 @@ pytest
 ### CodeQL Alerts
 
 **Identification**:
+
 - Navigate to GitHub Security → Code scanning
 - Review CodeQL findings
 - Analyze affected code and data flow
 
 **Fix Process**:
+
 1. Understand vulnerability pattern
-2. Review CodeQL recommendation
-3. Implement fix following OWASP guidelines
-4. Add input validation/sanitization
-5. Add security tests
-6. Verify fix with CodeQL re-scan
+1. Review CodeQL recommendation
+1. Implement fix following OWASP guidelines
+1. Add input validation/sanitization
+1. Add security tests
+1. Verify fix with CodeQL re-scan
 
 **Common Patterns**:
 
@@ -460,19 +469,22 @@ pytest
 ### Secret Scanning Alerts
 
 **Identification**:
+
 - Navigate to GitHub Security → Secret scanning
 - Review detected secrets
 - Verify if secret is real or false positive
 
 **Fix Process**:
+
 1. Remove hardcoded secret from code
-2. Add secret to environment variables
-3. Update documentation
-4. Add pattern to `.gitignore`
-5. **CRITICAL**: Rotate the exposed secret immediately
-6. Verify secret is not in git history
+1. Add secret to environment variables
+1. Update documentation
+1. Add pattern to `.gitignore`
+1. **CRITICAL**: Rotate the exposed secret immediately
+1. Verify secret is not in git history
 
 **Example**:
+
 ```python
 # Before (INSECURE):
 API_KEY = "sk_live_1234567890abcdef"
@@ -487,16 +499,18 @@ if not API_KEY:
 ### Code Quality Issues
 
 **Identification**:
+
 - Review code scanning results
 - Check for code smells
 - Identify maintainability issues
 
 **Fix Process**:
+
 1. Fix identified issue
-2. Improve code quality
-3. Add type hints if missing
-4. Improve error handling
-5. Add tests if coverage gaps
+1. Improve code quality
+1. Add type hints if missing
+1. Improve error handling
+1. Add tests if coverage gaps
 
 ## Safety Considerations
 
@@ -734,15 +748,18 @@ Result: Exposed secret removed and rotated!
 ## Integration with Existing Tools
 
 **GitHub CLI (`gh`)**:
+
 - View alerts: `gh api /repos/:owner/:repo/dependabot/alerts`
 - View code scanning: `gh api /repos/:owner/:repo/code-scanning/alerts`
 - View secret scanning: `gh api /repos/:owner/:repo/secret-scanning/alerts`
 
 **Pre-commit Hooks**:
+
 - Security checks run automatically on commit
 - Includes: bandit, safety, secrets detection
 
 **CI/CD**:
+
 - CodeQL runs on all PRs
 - Dependabot checks run daily
 - Secret scanning is continuous
@@ -752,20 +769,24 @@ Result: Exposed secret removed and rotated!
 **Prioritization**:
 
 1. **CRITICAL** - Fix immediately (within hours)
+
    - Active exploits
    - Data exposure
    - Authentication bypass
 
-2. **HIGH** - Fix within 1 week
+1. **HIGH** - Fix within 1 week
+
    - Remote code execution
    - SQL injection
    - XSS vulnerabilities
 
-3. **MEDIUM** - Fix within 1 month
+1. **MEDIUM** - Fix within 1 month
+
    - Moderate impact vulnerabilities
    - Dependencies with known CVEs
 
-4. **LOW** - Fix when convenient
+1. **LOW** - Fix when convenient
+
    - Code quality issues
    - Minor dependency updates
 
@@ -802,12 +823,13 @@ As security findings are resolved, track:
 - **.github/workflows/** - CI/CD security checks
 - **GitHub Security** - Security advisories and alerts
 
----
+______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Version**: 1.0.0
 
 **Notes**:
+
 - This command requires GitHub CLI (`gh`) to be installed and authenticated
 - All security fixes follow responsible disclosure practices
 - Critical vulnerabilities are handled with elevated priority

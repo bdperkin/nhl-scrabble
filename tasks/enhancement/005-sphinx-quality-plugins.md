@@ -21,6 +21,7 @@ Enhance the Sphinx documentation build (enhancement/003) by implementing additio
 The base Sphinx documentation (enhancement/003) includes 9 core extensions:
 
 **Already Included**:
+
 - ✅ sphinx - Core documentation engine
 - ✅ sphinx-autobuild - Auto-rebuild during development
 - ✅ sphinx-autodoc-typehints - Type hint integration
@@ -32,6 +33,7 @@ The base Sphinx documentation (enhancement/003) includes 9 core extensions:
 - ✅ sphinxext-opengraph - Social sharing metadata
 
 **Missing Quality Tools**:
+
 - ❌ Documentation coverage enforcement
 - ❌ Link validation tools
 - ❌ Accessibility checking
@@ -48,6 +50,7 @@ Add targeted quality plugins across different categories:
 ### 1. Documentation Coverage & Testing
 
 **sphinx-coverage** (Built-in Extension)
+
 ```python
 # conf.py
 extensions = [
@@ -63,6 +66,7 @@ coverage_ignore_classes = ['_.*']  # Private classes
 ```
 
 **pytest-sphinx** (Testing Framework)
+
 ```bash
 # Install
 uv pip install pytest-sphinx
@@ -72,6 +76,7 @@ pytest --sphinx docs/
 ```
 
 **doctest** (Built-in Extension)
+
 ```python
 # conf.py
 extensions = [
@@ -86,6 +91,7 @@ cd docs && make doctest
 ### 2. Link Validation & Quality
 
 **linkcheck** (Built-in Builder)
+
 ```bash
 # Check all links in documentation
 cd docs && make linkcheck
@@ -102,6 +108,7 @@ linkcheck_workers = 5
 ```
 
 **sphinx-linkcheck-plus** (Enhanced Link Checking)
+
 ```bash
 uv pip install sphinx-linkcheck-plus
 
@@ -111,6 +118,7 @@ uv pip install sphinx-linkcheck-plus
 ### 3. Accessibility & Standards
 
 **sphinx-a11y** (Accessibility Checker)
+
 ```bash
 uv pip install sphinx-a11y
 
@@ -121,8 +129,9 @@ extensions = [..., 'sphinx_a11y']
 ```
 
 **sphinxcontrib-htmlhelp** (HTML Help Format)
+
 ```python
-# conf.py  
+# conf.py
 extensions = [..., 'sphinx.ext.htmlhelp']
 
 # Improves HTML accessibility
@@ -131,6 +140,7 @@ extensions = [..., 'sphinx.ext.htmlhelp']
 ### 4. Performance & Optimization
 
 **sphinx-needs** (Requirements Tracing)
+
 ```bash
 uv pip install sphinx-needs
 
@@ -139,6 +149,7 @@ uv pip install sphinx-needs
 ```
 
 **sphinx-sitemap** (SEO Optimization)
+
 ```bash
 uv pip install sphinx-sitemap
 
@@ -152,18 +163,21 @@ sitemap_url_scheme = "{link}"
 ### 5. Security & Validation
 
 **doc8** (RST Linting - Already in pre-commit)
+
 ```bash
 # Already configured in pre-commit
 # Validates RST syntax and style
 ```
 
 **rstcheck** (RST Syntax Checker - Already in pre-commit)
+
 ```bash
-# Already configured in pre-commit  
+# Already configured in pre-commit
 # Validates RST code blocks
 ```
 
 **bandit** (Security Linting for Code Examples)
+
 ```bash
 uv pip install bandit
 
@@ -174,6 +188,7 @@ bandit -r docs/ -f custom
 ### 6. Multi-Version Support
 
 **sphinx-multiversion** (Version Documentation)
+
 ```bash
 uv pip install sphinx-multiversion
 
@@ -186,6 +201,7 @@ sphinx-multiversion docs docs/_build/html
 ### 7. Advanced Formatting
 
 **blacken-docs** (Format Code in Docs)
+
 ```bash
 uv pip install blacken-docs
 
@@ -194,6 +210,7 @@ blacken-docs docs/**/*.rst docs/**/*.md
 ```
 
 **doc-formatter** (General Doc Formatting)
+
 ```bash
 # Already using mdformat in pre-commit
 # Can extend to RST with rst-formatter
@@ -202,6 +219,7 @@ blacken-docs docs/**/*.rst docs/**/*.md
 ### 8. CI/CD Integration
 
 **sphinx-github-changelog** (Auto Changelog)
+
 ```bash
 uv pip install sphinx-github-changelog
 
@@ -211,6 +229,7 @@ extensions = [..., 'sphinx_github_changelog']
 ```
 
 **sphinx-versioning** (Automated Versioning)
+
 ```bash
 # Integrates with git tags for version management
 ```
@@ -218,6 +237,7 @@ extensions = [..., 'sphinx_github_changelog']
 ### 9. Enhanced Publishing
 
 **sphinx-epub3** (EPUB Generation)
+
 ```python
 # conf.py
 extensions = [..., 'sphinx.ext.epub']
@@ -227,6 +247,7 @@ extensions = [..., 'sphinx.ext.epub']
 ```
 
 **sphinxcontrib-pdf** (PDF Generation)
+
 ```bash
 uv pip install rst2pdf sphinxcontrib-pdf
 
@@ -239,27 +260,28 @@ uv pip install rst2pdf sphinxcontrib-pdf
 ### High Priority (Implement First)
 
 1. **sphinx.ext.coverage** - Built-in, essential for quality
-2. **sphinx.ext.doctest** - Built-in, validates examples
-3. **linkcheck** - Built-in, prevents broken links
-4. **sphinx-sitemap** - SEO, discoverability
+1. **sphinx.ext.doctest** - Built-in, validates examples
+1. **linkcheck** - Built-in, prevents broken links
+1. **sphinx-sitemap** - SEO, discoverability
 
 ### Medium Priority (Implement Second)
 
 5. **pytest-sphinx** - Automated testing
-6. **blacken-docs** - Code formatting consistency
-7. **sphinx-a11y** - Accessibility compliance
+1. **blacken-docs** - Code formatting consistency
+1. **sphinx-a11y** - Accessibility compliance
 
 ### Low Priority (Nice to Have)
 
 8. **sphinx-multiversion** - Multi-version support (when needed)
-9. **sphinx-github-changelog** - Auto changelog (convenience)
-10. **sphinx-needs** - Requirements tracing (advanced)
+1. **sphinx-github-changelog** - Auto changelog (convenience)
+1. **sphinx-needs** - Requirements tracing (advanced)
 
 ## Implementation Steps
 
 ### Phase 1: Built-in Extensions (1h)
 
 1. **Add coverage extension**
+
    ```python
    # conf.py
    extensions = [
@@ -267,18 +289,20 @@ uv pip install rst2pdf sphinxcontrib-pdf
        'sphinx.ext.coverage',
        'sphinx.ext.doctest',
    ]
-   
+
    coverage_show_missing_items = True
    ```
 
-2. **Configure linkcheck**
+1. **Configure linkcheck**
+
    ```python
    # conf.py
    linkcheck_ignore = [r'http://localhost.*']
    linkcheck_timeout = 10
    ```
 
-3. **Test coverage and links**
+1. **Test coverage and links**
+
    ```bash
    cd docs
    make coverage
@@ -289,18 +313,21 @@ uv pip install rst2pdf sphinxcontrib-pdf
 ### Phase 2: SEO & Publishing (30min)
 
 1. **Add sphinx-sitemap**
+
    ```bash
    uv pip install sphinx-sitemap
    ```
 
-2. **Configure sitemap**
+1. **Configure sitemap**
+
    ```python
    # conf.py
    extensions = [..., 'sphinx_sitemap']
    html_baseurl = 'https://bdperkin.github.io/nhl-scrabble/'
    ```
 
-3. **Test sitemap generation**
+1. **Test sitemap generation**
+
    ```bash
    cd docs && make html
    ls _build/html/sitemap.xml
@@ -309,11 +336,13 @@ uv pip install rst2pdf sphinxcontrib-pdf
 ### Phase 3: Testing & Quality (1h)
 
 1. **Add pytest-sphinx**
+
    ```bash
    uv pip install pytest-sphinx
    ```
 
-2. **Create test suite**
+1. **Create test suite**
+
    ```python
    # tests/test_docs.py
    def test_sphinx_build(sphinx_test_tempdir):
@@ -322,7 +351,8 @@ uv pip install rst2pdf sphinxcontrib-pdf
        pass
    ```
 
-3. **Add blacken-docs to pre-commit**
+1. **Add blacken-docs to pre-commit**
+
    ```yaml
    # .pre-commit-config.yaml
    - repo: https://github.com/asottile/blacken-docs
@@ -335,17 +365,20 @@ uv pip install rst2pdf sphinxcontrib-pdf
 ### Phase 4: Accessibility (30min)
 
 1. **Add sphinx-a11y**
+
    ```bash
    uv pip install sphinx-a11y
    ```
 
-2. **Configure accessibility checks**
+1. **Configure accessibility checks**
+
    ```python
    # conf.py
    extensions = [..., 'sphinx_a11y']
    ```
 
-3. **Run accessibility audit**
+1. **Run accessibility audit**
+
    ```bash
    cd docs && make html
    # Review a11y warnings
@@ -356,24 +389,28 @@ uv pip install rst2pdf sphinxcontrib-pdf
 ### Automated Tests
 
 1. **Coverage check**
+
    ```bash
    make docs-coverage
    # Should report 100% coverage of documented items
    ```
 
-2. **Link validation**
+1. **Link validation**
+
    ```bash
    make docs-linkcheck
    # Should have 0 broken links
    ```
 
-3. **Doctest**
+1. **Doctest**
+
    ```bash
    make doctest
    # All code examples should execute successfully
    ```
 
-4. **Build test**
+1. **Build test**
+
    ```bash
    pytest tests/test_docs.py
    # Documentation build should succeed
@@ -382,9 +419,9 @@ uv pip install rst2pdf sphinxcontrib-pdf
 ### Manual Verification
 
 1. **Sitemap**: Visit `/sitemap.xml`, verify all pages listed
-2. **Accessibility**: Check WCAG compliance with browser tools
-3. **Code formatting**: Verify all code blocks are formatted
-4. **Multi-version**: Test version selector (if implemented)
+1. **Accessibility**: Check WCAG compliance with browser tools
+1. **Code formatting**: Verify all code blocks are formatted
+1. **Multi-version**: Test version selector (if implemented)
 
 ### CI Integration
 
@@ -397,11 +434,11 @@ Add to `.github/workflows/docs.yml`:
     make coverage
     make linkcheck
     make doctest
-    
+
 - name: Test documentation build
   run: |
     pytest tests/test_docs.py
-    
+
 - name: Check sitemap
   run: |
     test -f docs/_build/html/sitemap.xml
@@ -490,12 +527,14 @@ Add to `.github/workflows/docs.yml`:
 ### Plugin Selection Philosophy
 
 **Prefer built-in Sphinx extensions:**
+
 - Already maintained by Sphinx team
 - No extra dependencies
 - Well-documented
 - Stable
 
 **Add third-party only when:**
+
 - Clear value proposition
 - Active maintenance
 - Wide adoption
@@ -504,12 +543,14 @@ Add to `.github/workflows/docs.yml`:
 ### Integration with Existing Tools
 
 **Already in pre-commit:**
+
 - ✅ doc8 (RST linting)
 - ✅ rstcheck (RST validation)
 - ✅ codespell (spell checking)
 - ✅ mdformat (markdown formatting)
 
 **This task adds:**
+
 - sphinx.ext.coverage (doc coverage)
 - linkcheck (link validation)
 - doctest (example testing)
@@ -517,20 +558,21 @@ Add to `.github/workflows/docs.yml`:
 
 ### Cost-Benefit Analysis
 
-| Plugin | Effort | Value | ROI |
-|--------|--------|-------|-----|
-| sphinx.ext.coverage | 15min | High | ⭐⭐⭐⭐⭐ |
-| linkcheck | 10min | High | ⭐⭐⭐⭐⭐ |
-| sphinx.ext.doctest | 20min | High | ⭐⭐⭐⭐⭐ |
-| sphinx-sitemap | 15min | Medium | ⭐⭐⭐⭐ |
-| pytest-sphinx | 30min | Medium | ⭐⭐⭐ |
-| blacken-docs | 15min | Medium | ⭐⭐⭐ |
-| sphinx-a11y | 20min | Low | ⭐⭐ |
-| sphinx-multiversion | 1h+ | Low* | ⭐ |
+| Plugin              | Effort | Value  | ROI        |
+| ------------------- | ------ | ------ | ---------- |
+| sphinx.ext.coverage | 15min  | High   | ⭐⭐⭐⭐⭐ |
+| linkcheck           | 10min  | High   | ⭐⭐⭐⭐⭐ |
+| sphinx.ext.doctest  | 20min  | High   | ⭐⭐⭐⭐⭐ |
+| sphinx-sitemap      | 15min  | Medium | ⭐⭐⭐⭐   |
+| pytest-sphinx       | 30min  | Medium | ⭐⭐⭐     |
+| blacken-docs        | 15min  | Medium | ⭐⭐⭐     |
+| sphinx-a11y         | 20min  | Low    | ⭐⭐       |
+| sphinx-multiversion | 1h+    | Low\*  | ⭐         |
 
-*Low value initially, becomes important with multiple versions
+\*Low value initially, becomes important with multiple versions
 
 **Recommended minimum:**
+
 - sphinx.ext.coverage (15min)
 - linkcheck (10min)
 - sphinx.ext.doctest (20min)
@@ -543,16 +585,19 @@ Add to `.github/workflows/docs.yml`:
 Rather than creating a separate task, these plugins could be integrated directly into enhancement/003-sphinx-documentation.md implementation.
 
 **Pros:**
+
 - ✅ Single comprehensive Sphinx implementation
 - ✅ Avoid duplication
 - ✅ Ensures quality from start
 
 **Cons:**
+
 - ❌ Increases complexity of enhancement/003
 - ❌ Longer implementation time
 - ❌ Harder to implement incrementally
 
 **Recommendation:**
+
 - If enhancement/003 not yet started: **Integrate into enhancement/003**
 - If enhancement/003 already implemented: **Implement as separate task**
 - If enhancement/003 in progress: **Pause and integrate high-priority plugins**
@@ -560,17 +605,21 @@ Rather than creating a separate task, these plugins could be integrated directly
 ### Maintenance Strategy
 
 **Weekly:**
+
 - Run `make linkcheck` (automated in CI)
 
 **Per release:**
+
 - Run `make coverage` and review
 - Run `make doctest` to verify examples
 
 **Monthly:**
+
 - Review accessibility report
 - Update sphinx-sitemap configuration
 
 **Annually:**
+
 - Evaluate new Sphinx extensions
 - Update extension versions
 - Review and update configuration
