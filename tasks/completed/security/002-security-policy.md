@@ -289,6 +289,7 @@ SECURITY.md was created as part of a larger GitHub security settings implementat
 - **Contact Information**: Links to GitHub Security Advisories
 
 Additionally implemented:
+
 - GitHub Security features enabled (Dependabot, Secret Scanning, Push Protection)
 - README.md updated with link to SECURITY.md
 - Security tab available at repository
@@ -302,6 +303,7 @@ None - implementation was straightforward. SECURITY.md was created alongside com
 **Minor enhancement**: Instead of implementing SECURITY.md in isolation, it was combined with broader GitHub security settings (Dependabot, Secret Scanning, CodeQL, Branch Protection) in PR #71 for a more comprehensive security implementation. This was more efficient and ensured consistency across security documentation and settings.
 
 **Email addresses**: The proposed template included TODO placeholders for email addresses (security@example.com). The actual implementation uses GitHub Security Advisories as the primary reporting channel, which doesn't require a dedicated email address. This is a better approach as:
+
 - GitHub Security Advisories provide structured reporting
 - Private until disclosed
 - Integrated with repository
@@ -321,9 +323,9 @@ None - implementation was straightforward. SECURITY.md was created alongside com
 ### Lessons Learned
 
 1. **Combine related tasks**: SECURITY.md and GitHub security settings are naturally related and benefit from being implemented together
-2. **GitHub Security Advisories**: Using GitHub's built-in private vulnerability reporting is superior to custom email-based reporting
-3. **Template adaptation**: Don't blindly follow templates - adapt to project needs (GitHub Advisories vs email)
-4. **Security as foundation**: Implementing comprehensive security early (Sprint 1) sets good precedent for the project
+1. **GitHub Security Advisories**: Using GitHub's built-in private vulnerability reporting is superior to custom email-based reporting
+1. **Template adaptation**: Don't blindly follow templates - adapt to project needs (GitHub Advisories vs email)
+1. **Security as foundation**: Implementing comprehensive security early (Sprint 1) sets good precedent for the project
 
 ### Security Features Enabled
 
