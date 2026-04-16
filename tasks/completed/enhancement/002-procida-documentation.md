@@ -804,7 +804,7 @@ Successfully implemented complete Diátaxis framework reorganization with all fo
 
 ### Related PRs
 
-- #80 - Main implementation (merged)
+- PR #80 - Main implementation (merged)
 
 ### Acknowledgments
 
