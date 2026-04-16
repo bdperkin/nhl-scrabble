@@ -21,6 +21,7 @@ class Config:
         top_team_players_count: Number of top players per team to show
         verbose: Enable verbose logging
         output_format: Output format (text, json, html)
+        sanitize_logs: Sanitize sensitive data from logs (disable only for debugging)
     """
 
     api_timeout: int = 10
@@ -32,6 +33,7 @@ class Config:
     top_team_players_count: int = 5
     verbose: bool = False
     output_format: str = "text"
+    sanitize_logs: bool = True
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -47,6 +49,7 @@ class Config:
             NHL_SCRABBLE_TOP_TEAM_PLAYERS: Number of top players per team (must be >= 1)
             NHL_SCRABBLE_VERBOSE: Enable verbose logging (true/false)
             NHL_SCRABBLE_OUTPUT_FORMAT: Output format (text/json/html)
+            NHL_SCRABBLE_SANITIZE_LOGS: Sanitize sensitive data from logs (true/false)
 
         Returns:
             Config instance with values from environment
@@ -124,6 +127,7 @@ class Config:
             top_team_players_count=get_int("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1),
             verbose=os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true",
             output_format=os.getenv("NHL_SCRABBLE_OUTPUT_FORMAT", "text"),
+            sanitize_logs=os.getenv("NHL_SCRABBLE_SANITIZE_LOGS", "true").lower() == "true",
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -142,6 +146,7 @@ class Config:
             "top_team_players_count": self.top_team_players_count,
             "verbose": self.verbose,
             "output_format": self.output_format,
+            "sanitize_logs": self.sanitize_logs,
         }
 
     def __repr__(self) -> str:
