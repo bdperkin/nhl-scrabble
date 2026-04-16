@@ -268,13 +268,13 @@ def test_integration_with_logger(caplog):
 
 ## Acceptance Criteria
 
-- [ ] `SensitiveDataFilter` class sanitizes common secret patterns
-- [ ] Filter is applied to all log handlers by default
-- [ ] Unit tests verify all sanitization patterns
-- [ ] Integration tests verify filter works with real logging
-- [ ] Configuration allows disabling for debugging
-- [ ] Documentation warns about sensitive data in logs
-- [ ] Performance impact is minimal (regex compilation is one-time)
+- [x] `SensitiveDataFilter` class sanitizes common secret patterns
+- [x] Filter is applied to all log handlers by default
+- [x] Unit tests verify all sanitization patterns
+- [x] Integration tests verify filter works with real logging
+- [x] Configuration allows disabling for debugging
+- [x] Documentation warns about sensitive data in logs
+- [x] Performance impact is minimal (regex compilation is one-time)
 
 ## Related Files
 
@@ -336,3 +336,124 @@ custom_patterns = [
 - ❌ Team names (not sensitive)
 - ❌ Scrabble scores (not sensitive)
 - ❌ URLs without credentials (not sensitive)
+
+## Implementation Notes
+
+**Implemented**: 2026-04-16
+**Branch**: security/003-secrets-sanitization
+**PR**: #78 - https://github.com/bdperkin/nhl-scrabble/pull/78
+**Commits**: 1 commit (5893f81)
+
+### Actual Implementation
+
+Followed the proposed solution closely with several refinements for production quality:
+
+- Used `ClassVar` annotation for PATTERNS constant (strict typing requirement)
+- Added comprehensive type narrowing for mypy strict mode compliance
+- Improved password URL regex to handle @ characters in passwords correctly
+- Used `list[object]` for sanitized_args to handle mixed argument types
+- Added 24 comprehensive test cases (vs. 8 in original plan)
+- Integrated with existing config system via `sanitize_logs` field
+- Modified logging_config.py to accept `sanitize_logs` parameter
+
+### Challenges Encountered
+
+**MyPy Type Checking**:
+
+- Required explicit type narrowing with `isinstance(record.args, tuple)` before indexing
+- Required additional `isinstance(record.args[0], str)` for element access
+- Needed `list[object]` annotation for sanitized_args to handle mixed types
+
+**Password URL Regex**:
+
+- Initial pattern `(https?://[^:]+:)([^@]+)(@)` failed for passwords containing @
+- Example: `user:MyP@ssw0rd@host` matched first @ (inside password)
+- Fixed with `(https?://[^:/\s]+:)(.+)(@[a-z0-9.-])` using greedy `.+` to consume everything including @ in password
+
+**Loop Variable Reassignment**:
+
+- Ruff PLW2901 flagged `arg = pattern.sub(...)` in loop
+- Fixed by introducing `sanitized_arg` variable
+- Improved code clarity and satisfied linter
+
+**Pre-commit Hook Iterations**:
+
+- Multiple rounds of fixes for type ignore comments
+- Learned proper syntax: `# type: ignore[code1, code2]` with space after comma
+- Eventually removed type ignore entirely (no longer needed)
+
+### Deviations from Plan
+
+**Additions**:
+
+- `ClassVar` import from typing (not in original plan)
+- More comprehensive test suite (24 tests vs. 8 planned)
+- Type narrowing assertions in tests for mypy compliance
+- Separate `sanitized_arg` variable in filter logic
+
+**Modifications**:
+
+- Password URL regex pattern enhanced for edge cases
+- `sanitize_logs` configuration integrated into existing Config class (vs. new configure function)
+- Filter applied via existing `setup_logging()` function (vs. new function)
+
+**All changes were improvements maintaining the core design**
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 2-3h
+- **Actual**: ~2.5h
+- **Variance**: Within estimate (middle of range)
+- **Breakdown**:
+  - Implementation: 45 minutes
+  - Testing: 45 minutes
+  - Type checking fixes: 45 minutes
+  - Pre-commit hook iterations: 15 minutes
+
+### Test Coverage
+
+**New Tests**: 24 test methods in `tests/unit/test_security.py`
+
+- API key patterns: 4 tests (case-insensitive, with/without underscore, generic)
+- Authorization headers: 3 tests (Bearer with/without header, Basic auth)
+- Password URLs: 1 test (handles @ in passwords)
+- Generic secrets/tokens: 2 tests
+- Environment variables: 4 tests (API_KEY, TOKEN, SECRET, PASSWORD)
+- Args sanitization: 3 tests (single, multiple, mixed types)
+- Non-string handling: 2 tests (messages and args)
+- Multiple patterns: 1 test
+- Integration: 1 test (actual logger)
+- Edge cases: 3 tests (ampersand separators, preserving non-sensitive data)
+
+**Coverage**: 100% on new security.py module, 90.13% overall project
+
+### Lessons Learned
+
+**Type Safety**:
+
+- Strict mypy mode catches subtle bugs but requires explicit type narrowing
+- Union types with `None` require defensive isinstance checks
+- Type narrowing must be repeated for indexed access (`record.args[0]`)
+
+**Regex Patterns**:
+
+- URL parsing is complex - special characters need careful handling
+- Greedy vs non-greedy quantifiers matter for ambiguous delimiters
+- Test edge cases like special characters in passwords
+
+**Pre-commit Hooks**:
+
+- 55 hooks catch issues early and enforce consistency
+- Type ignore comments must specify exact error codes
+- Blanket `# type: ignore` is prohibited by project standards
+- Hooks save debugging time by catching issues before commit
+
+**Code Quality**:
+
+- Loop variable reassignment is a code smell (PLW2901)
+- Using descriptive variable names improves clarity
+- Small overhead for type safety is worth it for maintainability
+
+### Related PRs
+
+- PR #78: Log sanitization implementation (merged)
