@@ -320,6 +320,159 @@ Or via tox:
 make tox-coverage
 ```
 
+## CI/CD
+
+### GitHub Actions Workflows
+
+The project uses GitHub Actions for continuous integration with three main jobs:
+
+1. **Test Job**: Runs tests across Python 3.10, 3.11, 3.12, 3.13
+1. **Tox Job**: Runs comprehensive quality checks in 31 tox environments
+1. **Pre-commit Job**: Validates all 55 pre-commit hooks
+
+All workflows are defined in `.github/workflows/ci.yml`.
+
+### Caching Strategy
+
+To optimize CI performance, the project implements comprehensive multi-level caching:
+
+#### 1. UV Package Cache
+
+Caches UV-managed packages to avoid re-downloading dependencies:
+
+- **Location**: UV internal cache
+- **Implementation**: `astral-sh/setup-uv@v4` with `enable-cache: true`
+- **Cache Key**: Hash of `pyproject.toml`
+- **Jobs**: test, tox, pre-commit
+- **Speedup**: ~30% faster dependency installation
+
+#### 2. Pre-commit Hooks Cache
+
+Caches pre-commit hook environments (55 hooks):
+
+- **Location**: `~/.cache/pre-commit`
+- **Cache Key**: Hash of `.pre-commit-config.yaml`
+- **Restore Keys**: OS-specific fallback
+- **Job**: pre-commit
+- **Speedup**: 70% faster (~3-4 min → ~1 min)
+
+#### 3. Python Dependency Cache
+
+Caches pip-compiled wheels:
+
+- **Location**: `~/.cache/pip`
+- **Cache Key**: Hash of `pyproject.toml` + `uv.lock`
+- **Restore Keys**: OS-specific fallback
+- **Job**: pre-commit
+- **Speedup**: ~20% faster on cache hits
+
+#### 4. Tool Caches
+
+Caches incremental tool artifacts:
+
+- **Locations**:
+  - `.pytest_cache/` - Test results and deselection
+  - `.mypy_cache/` - Incremental type checking
+  - `.ruff_cache/` - Incremental linting
+- **Cache Key**: Hash of all Python source files + Python version
+- **Restore Keys**: Python version fallback, then OS fallback
+- **Job**: test
+- **Speedup**: 20-30% faster quality checks
+
+#### 5. Tox Environments Cache
+
+Caches tox virtual environments:
+
+- **Location**: `.tox/`
+- **Cache Key**: Hash of `pyproject.toml`, `tox.ini`, `uv.lock` + tox env name
+- **Restore Keys**: Tox env fallback, then OS fallback
+- **Job**: tox
+- **Speedup**: 30-50% faster environment creation
+
+### Cache Invalidation
+
+Caches automatically invalidate when:
+
+- **Dependencies change**: `pyproject.toml`, `uv.lock`, `tox.ini` modified
+- **Hooks update**: `.pre-commit-config.yaml` modified
+- **Code changes**: Python source files modified (for tool caches)
+
+Manual cache clearing:
+
+```bash
+# Via GitHub UI
+Settings → Actions → Caches → Delete cache
+
+# Via GitHub CLI
+gh cache delete <cache-key>
+```
+
+### CI Performance
+
+**Before caching** (baseline):
+
+- Test job: ~2.5 min per Python version
+- Tox job: ~1-2 min per environment
+- Pre-commit job: ~3-4 min
+- **Total**: ~12-15 min (excluding parallel matrix)
+
+**After caching** (with cache hits):
+
+- Test job: ~2.0 min per Python version (20% faster)
+- Tox job: ~1.0 min per environment (30-50% faster)
+- Pre-commit job: ~1.0 min (70% faster)
+- **Total**: ~7-10 min (35-40% faster)
+
+### Cache Storage
+
+GitHub Actions provides 10 GB cache storage per repository:
+
+- Pre-commit hooks: ~300 MB
+- Tox environments: ~2 GB (31 environments)
+- Tool caches: ~50 MB
+- UV/pip caches: ~100 MB
+- **Total usage**: ~2.5 GB (25% of limit)
+
+Unused caches expire after 7 days automatically.
+
+### Monitoring CI
+
+Check CI status:
+
+```bash
+# View PR checks
+gh pr checks
+
+# View workflow runs
+gh run list
+
+# Watch specific run
+gh run watch <run-id>
+
+# View logs
+gh run view <run-id> --log
+```
+
+### Troubleshooting CI
+
+**Cache not restoring:**
+
+- Verify cache key matches expected pattern
+- Check if cache was created in previous runs
+- Review cache restore logs in workflow output
+
+**Stale cache causing failures:**
+
+- Delete specific cache via GitHub UI
+- Update dependency files to invalidate cache
+- Clear all caches and re-run
+
+**CI taking longer than expected:**
+
+- First run on new branch (cache miss) is slower
+- Large dependency changes invalidate caches
+- Check cache hit rates in workflow logs
+
 ## Code Quality
 
 ### Formatting

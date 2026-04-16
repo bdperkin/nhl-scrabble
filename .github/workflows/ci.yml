@@ -23,6 +23,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Cache tool directories
+        uses: actions/cache@v4
+        with:
+          path: |
+            .pytest_cache
+            .mypy_cache
+            .ruff_cache
+          key: >-
+            tools-${{ runner.os }}-py${{ matrix.python-version }}-
+            ${{ hashFiles('src/**/*.py', 'tests/**/*.py') }}
+          restore-keys: |
+            tools-${{ runner.os }}-py${{ matrix.python-version }}-
+            tools-${{ runner.os }}-
+
       - name: Install uv
         uses: astral-sh/setup-uv@v4
         with:
@@ -94,6 +108,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache tox environments
+        uses: actions/cache@v4
+        with:
+          path: .tox
+          key: >-
+            tox-${{ runner.os }}-${{ matrix.tox-env }}-
+            ${{ hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
+          restore-keys: |
+            tox-${{ runner.os }}-${{ matrix.tox-env }}-
+            tox-${{ runner.os }}-
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -120,6 +145,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ runner.os }}-
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -128,7 +169,8 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v4
         with:
-          enable-cache: false
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
 
       - name: Install docformatter, pyroma, deptry, and pydocstyle for pre-commit
         run: |
