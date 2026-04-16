@@ -72,22 +72,23 @@ Each task is assigned a priority:
 
 **Documented Effort**: 3-4 hours
 
-### Enhancements (10 tasks, 1 documented)
+### Enhancements (10 tasks, 2 documented)
 
-| ID  | Title                 | Priority | Effort | Issue |
-| --- | --------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output | MEDIUM   | 4-6h   | #46   |
-| ... | Progress Bars         | MEDIUM   | TBD    |       |
-| ... | Interactive Mode      | MEDIUM   | TBD    |       |
-| ... | Historical Data       | LOW      | TBD    |       |
-| ... | CSV/Excel Export      | LOW      | TBD    |       |
-| ... | Filtering Options     | LOW      | TBD    |       |
-| ... | Custom Scoring Rules  | LOW      | TBD    |       |
-| ... | Statistics Dashboard  | LOW      | TBD    |       |
-| ... | Watch Mode            | LOW      | TBD    |       |
-| ... | Player Search         | LOW      | TBD    |       |
+| ID  | Title                               | Priority | Effort  | Issue |
+| --- | ----------------------------------- | -------- | ------- | ----- |
+| 001 | Implement HTML Output               | MEDIUM   | 4-6h    | #46   |
+| 002 | Implement Procida Documentation     | MEDIUM   | 8-12h   | #63   |
+| ... | Progress Bars                       | MEDIUM   | TBD     |       |
+| ... | Interactive Mode                    | MEDIUM   | TBD     |       |
+| ... | Historical Data                     | LOW      | TBD     |       |
+| ... | CSV/Excel Export                    | LOW      | TBD     |       |
+| ... | Filtering Options                   | LOW      | TBD     |       |
+| ... | Custom Scoring Rules                | LOW      | TBD     |       |
+| ... | Statistics Dashboard                | LOW      | TBD     |       |
+| ... | Watch Mode                          | LOW      | TBD     |       |
+| ... | Player Search                       | LOW      | TBD     |       |
 
-**Documented Effort**: 4-6 hours
+**Documented Effort**: 12-18 hours
 
 ### Testing (1 task)
 
@@ -129,12 +130,12 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 15 tasks
-**Total Documented Effort**: 47.5-70.5 hours
+**Documented Tasks**: 16 tasks
+**Total Documented Effort**: 55.5-82.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 3 tasks (4.25h actual effort)
 
-**Grand Total**: ~150-200 hours for complete roadmap
+**Grand Total**: ~160-210 hours for complete roadmap
 
 ## How to Use These Tasks
 
