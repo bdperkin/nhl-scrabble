@@ -8,9 +8,18 @@ set -e  # Exit on error
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}Checking generated documentation...${NC}"
+
+# Check if nhl_scrabble package is importable
+if ! python -c "import nhl_scrabble" 2>/dev/null; then
+    echo -e "${YELLOW}⚠️  Skipping documentation check: nhl_scrabble package not installed${NC}"
+    echo -e "${YELLOW}This is expected in pre-commit isolated environments.${NC}"
+    echo -e "${YELLOW}Documentation checks will run in CI via tox.${NC}"
+    exit 0
+fi
 
 # Generate API docs
 echo -e "${BLUE}Generating API reference documentation...${NC}"
