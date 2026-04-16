@@ -28,15 +28,14 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (3 tasks)
+### Bug Fixes (2 tasks)
 
 | ID  | Title                         | Priority | Effort | Issue |
 | --- | ----------------------------- | -------- | ------ | ----- |
 | 004 | Fix Rate Limiting Logic       | LOW      | 1h     | #47   |
 | 005 | Implement Exponential Backoff | LOW      | 2-3h   | #48   |
-| 006 | Validate CLI Output Paths     | LOW      | 1-2h   | #49   |
 
-**Total Effort**: 4-6 hours
+**Total Effort**: 3-4 hours
 
 ### Security (10+ tasks, 0 documented)
 
@@ -119,12 +118,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 12 tasks
-**Total Documented Effort**: 54.5-79.5 hours
+**Documented Tasks**: 11 tasks
+**Total Documented Effort**: 53-78 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 12 tasks (22.67h actual effort)
+**Completed Tasks**: 13 tasks (24.17h actual effort)
 
-**Grand Total**: ~154.5-199.5 hours for complete roadmap
+**Grand Total**: ~153-198 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -268,7 +267,7 @@ This section organizes all documented tasks into a recommended implementation se
 ### Phase 3: Medium Priority - Quality & Security (Week 4-5)
 
 **Focus**: Security hardening and code quality
-**Total Effort**: ~2-4 hours (1 task complete)
+**Total Effort**: ~1-2 hours (2 tasks complete)
 
 1. **security/003-secrets-sanitization.md** (2-3h) - #45 - Complete ✅
 
@@ -276,17 +275,17 @@ This section organizes all documented tasks into a recommended implementation se
    - Important for production security
    - Completed 2026-04-16
 
+1. **bug-fixes/006-output-validation.md** (1-2h) - #49 - Complete ✅
+
+   - LOW priority but related to security
+   - Validates CLI output paths before API calls
+   - Completed 2026-04-16
+
 1. **bug-fixes/003-session-cleanup.md** (1-2h) - #44
 
    - MEDIUM priority, safety net for session management
    - Prevents resource leaks
    - No dependencies
-
-1. **bug-fixes/006-output-validation.md** (1-2h) - #49
-
-   - LOW priority but related to security
-   - Validates CLI output paths
-   - Quick security improvement
 
 ### Phase 4: Documentation Excellence (Week 6-8)
 
@@ -559,8 +558,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 17 of 50+
-**Completion Status**: 12 of 17 completed (71%)
-**Documented Effort Remaining**: 39.33-66.33 hours (excluding completed tasks)
+**Completion Status**: 13 of 17 completed (76%)
+**Documented Effort Remaining**: 37.83-64.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -578,3 +577,4 @@ ______________________________________________________________________
 | 001 | Increase Test Coverage to 90.93%   | Testing      | 2026-04-16 | 4h            | #75 |
 | 003 | Add Session Cleanup Safety Net     | Bug Fix      | 2026-04-16 | 1.5h          | #76 |
 | 003 | Implement Log Sanitization         | Security     | 2026-04-16 | 2.5h          | #78 |
+| 006 | Validate CLI Output Paths          | Bug Fix      | 2026-04-16 | 1.5h          | #79 |
