@@ -33,7 +33,9 @@ repos:
     hooks:
       # Whitespace and file formatting
       - id: trailing-whitespace
+        exclude: ^docs/reference/api/  # Exclude generated API docs
       - id: end-of-file-fixer
+        exclude: ^docs/reference/api/  # Exclude generated API docs
       - id: mixed-line-ending
       - id: fix-byte-order-marker
 
@@ -149,6 +151,7 @@ repos:
     hooks:
       - id: codespell
         args: []  # Config is in pyproject.toml
+        exclude: ^docs/reference/api/  # Exclude generated API docs
 
   # ============================================================================
   # Markdown - Markdown Linting and Formatting
@@ -355,3 +358,19 @@ repos:
         # Enforces consistent commit message style and documentation
         # Config is in .gitlint file
         stages: [commit-msg]
+
+  # ============================================================================
+  # Documentation Generation - Auto-Generated Documentation Check
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-generated-docs
+        name: Check generated documentation is up-to-date
+        # Ensures API and CLI reference docs are regenerated after code changes
+        description: Verify auto-generated documentation matches current code
+        entry: make docs-check
+        language: system
+        pass_filenames: false
+        # Only run if docstrings or CLI code changed
+        files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$

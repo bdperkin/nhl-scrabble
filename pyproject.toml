@@ -79,6 +79,11 @@ docs = [
     "sphinx-click>=5.1.0",
 ]
 
+# Lightweight documentation generation
+docs-gen = [
+    "pdoc>=14.0.0",
+]
+
 # Watch mode dependencies
 watch = [
     "pytest-watch",
@@ -473,7 +478,7 @@ check-filenames = true
 check-hidden = true
 
 # Skip patterns for non-text files and generated content
-skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*'
+skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api/*'
 
 # Project-specific ignore words (like ruff's ignore list)
 # Add false positives here as they are discovered
@@ -788,6 +793,7 @@ optional_dependencies_dev_groups = [
     "type",
     "security",
     "docs",
+    "docs-gen",
     "watch",
     "build",
     "publish",

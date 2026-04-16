@@ -10,12 +10,19 @@ Reference documentation is **information-oriented** material that describes the 
 
 ### Command-Line Interface
 
-- **[CLI Reference](cli.md)** - Complete command-line interface documentation
-  - All commands and subcommands
-  - All options and flags
+- **[CLI Reference (Auto-Generated)](cli-generated.md)** - Complete CLI documentation
+
+  - ⚡ Auto-generated from Click decorators
+  - Always up-to-date with code
+  - All commands and options
+  - Usage examples
   - Exit codes
-  - Environment variables
-  - Examples
+
+- **[CLI Reference (Manual)](cli.md)** - Curated command-line guide
+
+  - Usage patterns
+  - Best practices
+  - Advanced examples
 
 ### Configuration
 
@@ -53,12 +60,20 @@ Reference documentation is **information-oriented** material that describes the 
 
 ### APIs & Data Formats
 
-- **[Python API Reference](code-api.md)** - Use NHL Scrabble as a library
+- **[Python API Reference (Auto-Generated)](api/index.md)** - Complete API documentation
 
-  - Public classes and functions
-  - Type signatures
-  - Return values
-  - Examples
+  - ⚡ Auto-generated from docstrings
+  - 100% coverage (interrogate enforced)
+  - All modules, classes, and functions
+  - Type hints and signatures
+  - Interactive HTML documentation
+
+- **[Python API Reference (Manual)](code-api.md)** - Using NHL Scrabble as a library
+
+  - Getting started with the API
+  - Common usage patterns
+  - Integration examples
+  - Best practices
 
 - **[NHL API Reference](nhl-api.md)** - NHL API endpoints used
 
