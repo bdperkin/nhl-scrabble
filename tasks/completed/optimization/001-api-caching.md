@@ -420,7 +420,7 @@ None. Implementation followed the task specification exactly.
 
 ### Related PRs
 
-- #74 - Main implementation (merged)
+- PR #74 - Main implementation (merged)
 
 ### Lessons Learned
 
