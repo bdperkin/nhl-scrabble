@@ -61,6 +61,8 @@ class NHLApiClient:
         self.cache_enabled = cache_enabled
         self.cache_expiry = cache_expiry
 
+        # Session can be either CachedSession or regular Session
+        self.session: requests_cache.CachedSession | requests.Session
         if cache_enabled:
             # Create cached session
             self.session = requests_cache.CachedSession(
