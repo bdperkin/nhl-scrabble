@@ -370,7 +370,9 @@ repos:
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
         entry: bash tools/check_docs.sh
-        language: system
+        language: python
         pass_filenames: false
         # Only run if docstrings or CLI code changed
         files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
+        additional_dependencies:
+          - pdoc>=14.0.0
