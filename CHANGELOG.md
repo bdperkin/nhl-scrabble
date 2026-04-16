@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Pydocstyle Integration** - Python docstring style checker
+
+  - Comprehensive docstring style checker matching ruff's ALL rules philosophy
+  - Pre-commit hook (PyCQA/pydocstyle) for automatic docstring style validation
+  - Tox environment (pydocstyle) for standalone docstring style checks
+  - Added to CI/CD pipeline for continuous docstring style validation
+  - Configuration in pyproject.toml following PEP 257 convention
+  - Checks docstring format and style for all Python code
+  - Aligned ignore list (add-ignore) with ruff's D-rule ignores for consistency
+  - Ignores: D100-D107 (handled by interrogate), D203/D213 (conflicting formatting), D413 (conflicts with docformatter)
+  - Works harmoniously with interrogate (coverage) and docformatter (formatting)
+  - Current project status: no docstring style violations (clean docstrings)
+  - 52 total pre-commit hooks for comprehensive code quality
+
 - **Unimport Integration** - Unused import checker
 
   - Comprehensive unused import checker matching ruff's ALL rules philosophy
