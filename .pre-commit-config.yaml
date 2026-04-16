@@ -376,3 +376,4 @@ repos:
         files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
         additional_dependencies:
           - pdoc>=14.0.0
+          - "."
