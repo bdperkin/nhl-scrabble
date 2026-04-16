@@ -15,9 +15,9 @@
 Reorganize and enhance project documentation following Daniele Procida's documentation framework (Diátaxis), which divides documentation into four distinct quadrants based on user needs and learning modes:
 
 1. **Tutorials** - Learning-oriented lessons for beginners
-2. **How-to Guides** - Action-oriented guides solving specific problems
-3. **Reference** - Technical descriptions of machinery (APIs, code)
-4. **Explanation** - Background information and high-level architectural understanding
+1. **How-to Guides** - Action-oriented guides solving specific problems
+1. **Reference** - Technical descriptions of machinery (APIs, code)
+1. **Explanation** - Background information and high-level architectural understanding
 
 This systematic approach improves documentation discoverability, usability, and completeness by organizing content according to what users need to accomplish.
 
@@ -26,6 +26,7 @@ This systematic approach improves documentation discoverability, usability, and 
 The project has comprehensive documentation, but it's not systematically organized:
 
 **Existing Documentation:**
+
 ```
 nhl-scrabble/
 ├── README.md              # Mix of tutorial, reference, and explanation
@@ -47,6 +48,7 @@ nhl-scrabble/
 ```
 
 **Issues:**
+
 - Content mixes different documentation types in single files
 - No clear entry point for beginners (no dedicated tutorial)
 - How-to guides scattered across multiple files
@@ -73,7 +75,8 @@ docs/tutorials/
 ```
 
 **Example: `docs/tutorials/01-getting-started.md`**
-```markdown
+
+````markdown
 # Getting Started with NHL Scrabble
 
 In this tutorial, you'll learn how to:
@@ -94,13 +97,14 @@ Clone the repository:
 ```bash
 git clone https://github.com/bdperkin/nhl-scrabble.git
 cd nhl-scrabble
-```
+````
 
 [... detailed step-by-step walkthrough ...]
 
 ## What You've Learned
 
 By completing this tutorial, you've:
+
 - ✅ Installed NHL Scrabble
 - ✅ Run your first analysis
 - ✅ Understood the Scrabble scoring system
@@ -111,7 +115,8 @@ By completing this tutorial, you've:
 - Try the [Understanding Output Tutorial](02-understanding-output.md)
 - Explore [How-to Guides](../how-to/) for specific tasks
 - Read [Architecture Explanation](../explanation/architecture.md) to understand how it works
-```
+
+````
 
 ### 2. How-to Guides (Problem-Oriented)
 
@@ -132,10 +137,11 @@ docs/how-to/
 ├── customize-output-format.md       # Customize report formatting
 ├── export-to-json.md                # Export data to JSON
 └── contribute-code.md               # Contribute code changes
-```
+````
 
 **Example: `docs/how-to/add-report-type.md`**
-```markdown
+
+````markdown
 # How to Add a New Report Type
 
 This guide shows you how to create a custom report generator for NHL Scrabble.
@@ -157,11 +163,11 @@ from nhl_scrabble.reports.base import BaseReport
 
 class YourReport(BaseReport):
     """Your custom report generator."""
-    
+
     def generate(self) -> str:
         # Implementation
         pass
-```
+````
 
 ### 2. Add Tests
 
@@ -174,6 +180,7 @@ class YourReport(BaseReport):
 ## Verification
 
 Test your new report:
+
 ```bash
 pytest tests/unit/test_your_report.py -vv
 ```
@@ -182,7 +189,8 @@ pytest tests/unit/test_your_report.py -vv
 
 - [Reference: Report API](../reference/code-api.md#reports)
 - [Explanation: Report Architecture](../explanation/report-system.md)
-```
+
+````
 
 ### 3. Reference (Information-Oriented)
 
@@ -200,10 +208,11 @@ docs/reference/
 ├── makefile.md              # Makefile targets (move from docs/MAKEFILE.md)
 ├── environment-variables.md # All environment variables
 └── scrabble-values.md       # Letter values and scoring rules
-```
+````
 
 **Example: `docs/reference/cli.md`**
-```markdown
+
+````markdown
 # CLI Reference
 
 Complete reference for the `nhl-scrabble` command-line interface.
@@ -217,17 +226,17 @@ Run the NHL Scrabble score analyzer.
 **Usage:**
 ```bash
 nhl-scrabble analyze [OPTIONS]
-```
+````
 
 **Options:**
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `--format` | choice | `text` | Output format: `text` or `json` |
-| `-o, --output` | path | stdout | Output file path |
-| `-v, --verbose` | flag | false | Enable verbose logging |
-| `--top-players` | int | 20 | Number of top players to show |
-| `--top-team-players` | int | 5 | Top players per team |
+| Option               | Type   | Default | Description                     |
+| -------------------- | ------ | ------- | ------------------------------- |
+| `--format`           | choice | `text`  | Output format: `text` or `json` |
+| `-o, --output`       | path   | stdout  | Output file path                |
+| `-v, --verbose`      | flag   | false   | Enable verbose logging          |
+| `--top-players`      | int    | 20      | Number of top players to show   |
+| `--top-team-players` | int    | 5       | Top players per team            |
 
 **Examples:**
 
@@ -244,17 +253,18 @@ nhl-scrabble analyze --verbose --top-players 50
 
 **Exit Codes:**
 
-| Code | Meaning |
-|------|---------|
-| 0 | Success |
-| 1 | General error |
-| 2 | API error |
-| 3 | Configuration error |
+| Code | Meaning             |
+| ---- | ------------------- |
+| 0    | Success             |
+| 1    | General error       |
+| 2    | API error           |
+| 3    | Configuration error |
 
 ## Environment Variables
 
 See [Environment Variables Reference](environment-variables.md).
-```
+
+````
 
 ### 4. Explanation (Understanding-Oriented)
 
@@ -272,9 +282,10 @@ docs/explanation/
 ├── uv-ecosystem.md            # UV benefits and integration (move from docs/UV-ECOSYSTEM.md)
 ├── report-system.md           # How the report system works
 └── development-workflow.md    # Development process and decisions
-```
+````
 
 **Example: `docs/explanation/architecture.md`**
+
 ```markdown
 # Architecture Overview
 
@@ -285,29 +296,31 @@ Understanding the NHL Scrabble Score Analyzer's architecture.
 NHL Scrabble is designed as a modular Python package with clear separation of concerns:
 
 ```
+
 ┌─────────────────────────────────────────────────────┐
-│                    CLI Layer                         │
-│           (click-based command interface)            │
+│ CLI Layer │
+│ (click-based command interface) │
 └────────────────────┬────────────────────────────────┘
-                     │
+│
 ┌────────────────────▼────────────────────────────────┐
-│              Business Logic Layer                    │
-│  ┌──────────────┐  ┌──────────────┐                │
-│  │  Processors  │  │   Scoring    │                │
-│  └──────┬───────┘  └──────┬───────┘                │
+│ Business Logic Layer │
+│ ┌──────────────┐ ┌──────────────┐ │
+│ │ Processors │ │ Scoring │ │
+│ └──────┬───────┘ └──────┬───────┘ │
 └─────────┼──────────────────┼──────────────────────┘
-          │                  │
+│ │
 ┌─────────▼──────────────────▼──────────────────────┐
-│               Data Layer                           │
-│  ┌──────────────┐  ┌──────────────┐               │
-│  │   Models     │  │  API Client  │               │
-│  └──────────────┘  └──────┬───────┘               │
+│ Data Layer │
+│ ┌──────────────┐ ┌──────────────┐ │
+│ │ Models │ │ API Client │ │
+│ └──────────────┘ └──────┬───────┘ │
 └────────────────────────────┼───────────────────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │   NHL API        │
-                    │  (External)      │
-                    └──────────────────┘
+│
+┌────────▼─────────┐
+│ NHL API │
+│ (External) │
+└──────────────────┘
+
 ```
 
 ## Why This Architecture?
@@ -350,11 +363,13 @@ We chose Pydantic for data modeling because:
 **Move and reorganize existing content:**
 
 1. **Create new directories**:
+
    ```bash
    mkdir -p docs/{tutorials,how-to,reference,explanation}
    ```
 
-2. **Migrate existing docs**:
+1. **Migrate existing docs**:
+
    ```
    docs/MAKEFILE.md → docs/reference/makefile.md
    docs/UV-ECOSYSTEM.md → docs/explanation/uv-ecosystem.md
@@ -364,9 +379,9 @@ We chose Pydantic for data modeling because:
    docs/DEVELOPMENT.md → Split into tutorials, how-to, and explanation
    ```
 
-3. **Update cross-references**: Update all internal links to new locations
+1. **Update cross-references**: Update all internal links to new locations
 
-4. **Create index files**: Each directory gets a README.md index
+1. **Create index files**: Each directory gets a README.md index
 
 ### Update README.md
 
@@ -380,17 +395,17 @@ Documentation is organized by purpose:
 - **[Tutorials](docs/tutorials/)** - Step-by-step lessons for beginners
   - [Getting Started](docs/tutorials/01-getting-started.md)
   - [Understanding Output](docs/tutorials/02-understanding-output.md)
-  
+
 - **[How-to Guides](docs/how-to/)** - Solutions to specific problems
   - [Add a Report Type](docs/how-to/add-report-type.md)
   - [Configure API Settings](docs/how-to/configure-api-settings.md)
   - [Run Tests](docs/how-to/run-tests.md)
-  
+
 - **[Reference](docs/reference/)** - Technical specifications
   - [CLI Reference](docs/reference/cli.md)
   - [Configuration](docs/reference/configuration.md)
   - [Code API](docs/reference/code-api.md)
-  
+
 - **[Explanation](docs/explanation/)** - Background and concepts
   - [Architecture](docs/explanation/architecture.md)
   - [Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md)
@@ -407,41 +422,48 @@ Documentation is organized by purpose:
 ## Implementation Steps
 
 1. **Create directory structure**
+
    ```bash
    mkdir -p docs/{tutorials,how-to,reference,explanation}
    ```
 
-2. **Create tutorial content** (3-4h)
+1. **Create tutorial content** (3-4h)
+
    - Write `docs/tutorials/01-getting-started.md`
    - Write `docs/tutorials/02-understanding-output.md`
    - Write `docs/tutorials/03-first-contribution.md`
    - Create `docs/tutorials/README.md` index
 
-3. **Create how-to guides** (2-3h)
+1. **Create how-to guides** (2-3h)
+
    - Write 8-10 problem-focused guides
    - Create `docs/how-to/README.md` index
    - Migrate relevant content from CONTRIBUTING.md
 
-4. **Create reference documentation** (2-3h)
+1. **Create reference documentation** (2-3h)
+
    - Write `docs/reference/cli.md`
    - Write `docs/reference/configuration.md`
    - Write `docs/reference/code-api.md`
    - Migrate `docs/MAKEFILE.md` → `docs/reference/makefile.md`
    - Create `docs/reference/README.md` index
 
-5. **Create explanations** (1-2h)
+1. **Create explanations** (1-2h)
+
    - Write `docs/explanation/architecture.md`
    - Write `docs/explanation/why-scrabble-scoring.md`
    - Migrate `docs/UV-ECOSYSTEM.md` → `docs/explanation/uv-ecosystem.md`
    - Create `docs/explanation/README.md` index
 
-6. **Update navigation** (1h)
+1. **Update navigation** (1h)
+
    - Update README.md with new structure
    - Update CONTRIBUTING.md with new doc references
    - Update CLAUDE.md with new doc references
    - Create cross-references between docs
 
-7. **Clean up** (30min)
+1. **Clean up** (30min)
+
    - Remove old doc files (keep for reference initially)
    - Update all internal links
    - Verify all links work
@@ -452,19 +474,22 @@ Documentation is organized by purpose:
 ### Manual Verification
 
 1. **Navigation test**: Verify all links work
+
    ```bash
    # Use markdown link checker
    npm install -g markdown-link-check
    find docs -name "*.md" -exec markdown-link-check {} \;
    ```
 
-2. **Completeness test**: Ensure all documentation types covered
+1. **Completeness test**: Ensure all documentation types covered
+
    - ✅ At least 2 tutorials
    - ✅ At least 8 how-to guides
    - ✅ Complete reference for CLI, config, API
    - ✅ At least 3 explanations
 
-3. **Readability test**: Have someone unfamiliar with the project:
+1. **Readability test**: Have someone unfamiliar with the project:
+
    - Follow a tutorial from scratch
    - Find and use a how-to guide
    - Look up something in reference
@@ -473,9 +498,9 @@ Documentation is organized by purpose:
 ### Automated Checks
 
 1. **Link checking**: All internal links must work
-2. **Markdown linting**: `pymarkdown` must pass
-3. **Spelling**: `codespell` must pass
-4. **Formatting**: `mdformat` must pass
+1. **Markdown linting**: `pymarkdown` must pass
+1. **Spelling**: `codespell` must pass
+1. **Formatting**: `mdformat` must pass
 
 ## Acceptance Criteria
 
@@ -506,9 +531,11 @@ Documentation is organized by purpose:
 None - can be implemented independently.
 
 **Recommended to complete first**:
+
 - None
 
 **Recommended to complete after**:
+
 - This improves discoverability for all future documentation
 
 ## Additional Notes
@@ -516,21 +543,25 @@ None - can be implemented independently.
 ### Benefits
 
 1. **For New Users**:
+
    - Clear entry point with tutorials
    - Easy to find solutions to specific problems
    - Less overwhelming than current mixed documentation
 
-2. **For Experienced Users**:
+1. **For Experienced Users**:
+
    - Quick reference lookup
    - Deep dives into architecture and design decisions
    - Better understanding of system rationale
 
-3. **For Contributors**:
+1. **For Contributors**:
+
    - Clear how-to guides for common tasks
    - Explanations of design decisions
    - Better onboarding experience
 
-4. **For Maintainers**:
+1. **For Maintainers**:
+
    - Systematic organization makes maintenance easier
    - Clear where to add new documentation
    - Reduces duplication
@@ -571,18 +602,22 @@ Theoretical   │ EXPLANATION │ REFERENCE   │
 **Phased approach**:
 
 1. **Phase 1** (3h): Create structure + tutorials
+
    - Immediate value for new users
    - Sets the pattern for other content
 
-2. **Phase 2** (3h): Create how-to guides
+1. **Phase 2** (3h): Create how-to guides
+
    - High-impact for existing users
    - Extracts practical content from existing docs
 
-3. **Phase 3** (2h): Create reference docs
+1. **Phase 3** (2h): Create reference docs
+
    - Consolidates existing reference material
    - Makes lookup easy
 
-4. **Phase 4** (2h): Create explanations
+1. **Phase 4** (2h): Create explanations
+
    - Deepens understanding
    - Documents design decisions
 
@@ -613,6 +648,7 @@ Once established, the structure makes documentation **easier to maintain**:
 ## Implementation Notes
 
 *To be filled during implementation:*
+
 - Actual structure created
 - Content migration decisions
 - User feedback on new organization

@@ -74,20 +74,20 @@ Each task is assigned a priority:
 
 ### Enhancements (10 tasks, 3 documented)
 
-| ID  | Title                                    | Priority | Effort  | Issue |
-| --- | ---------------------------------------- | -------- | ------- | ----- |
-| 001 | Implement HTML Output                    | MEDIUM   | 4-6h    | #46   |
-| 002 | Implement Procida Documentation          | MEDIUM   | 8-12h   | #63   |
-| 003 | Build Sphinx Docs + GitHub Pages         | MEDIUM   | 12-16h  | #64   |
-| ... | Progress Bars                            | MEDIUM   | TBD     |       |
-| ... | Interactive Mode                         | MEDIUM   | TBD     |       |
-| ... | Historical Data                          | LOW      | TBD     |       |
-| ... | CSV/Excel Export                         | LOW      | TBD     |       |
-| ... | Filtering Options                        | LOW      | TBD     |       |
-| ... | Custom Scoring Rules                     | LOW      | TBD     |       |
-| ... | Statistics Dashboard                     | LOW      | TBD     |       |
-| ... | Watch Mode                               | LOW      | TBD     |       |
-| ... | Player Search                            | LOW      | TBD     |       |
+| ID  | Title                            | Priority | Effort | Issue |
+| --- | -------------------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output            | MEDIUM   | 4-6h   | #46   |
+| 002 | Implement Procida Documentation  | MEDIUM   | 8-12h  | #63   |
+| 003 | Build Sphinx Docs + GitHub Pages | MEDIUM   | 12-16h | #64   |
+| ... | Progress Bars                    | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                 | MEDIUM   | TBD    |       |
+| ... | Historical Data                  | LOW      | TBD    |       |
+| ... | CSV/Excel Export                 | LOW      | TBD    |       |
+| ... | Filtering Options                | LOW      | TBD    |       |
+| ... | Custom Scoring Rules             | LOW      | TBD    |       |
+| ... | Statistics Dashboard             | LOW      | TBD    |       |
+| ... | Watch Mode                       | LOW      | TBD    |       |
+| ... | Player Search                    | LOW      | TBD    |       |
 
 **Documented Effort**: 24-34 hours
 
@@ -232,21 +232,25 @@ This section organizes all documented tasks into a recommended implementation se
 **Total Effort**: ~6-8.5 hours
 
 1. **security/001-dependabot.md** (30min) - #39
+
    - CRITICAL priority, quick win
    - Enables automated dependency updates
    - No dependencies
 
-2. **security/004-github-settings-security.md** (2-3h) - #62
+1. **security/004-github-settings-security.md** (2-3h) - #62
+
    - CRITICAL priority, major security improvements
    - Branch protection, Dependabot alerts, CodeQL scanning
    - Should be done early to protect main branch
 
-3. **bug-fixes/001-config-validation.md** (2-4h) - #38
+1. **bug-fixes/001-config-validation.md** (2-4h) - #38
+
    - CRITICAL priority, prevents runtime errors
    - Validates configuration before execution
    - No dependencies
 
-4. **security/002-security-policy.md** (1h) - Complete ✅
+1. **security/002-security-policy.md** (1h) - Complete ✅
+
    - Already completed (SECURITY.md created)
 
 ### Phase 2: High-Impact Improvements (Week 2-3)
@@ -255,16 +259,19 @@ This section organizes all documented tasks into a recommended implementation se
 **Total Effort**: ~13-18 hours
 
 1. **bug-fixes/002-unused-exception.md** (1-2h) - #40
+
    - HIGH priority, clean up exception handling
    - Quick fix with good impact
    - No dependencies
 
-2. **optimization/001-api-caching.md** (3-4h) - #42
+1. **optimization/001-api-caching.md** (3-4h) - #42
+
    - HIGH priority, major performance improvement
    - Reduces API calls and improves response time
    - No dependencies
 
-3. **testing/001-increase-coverage.md** (8-12h) - #43
+1. **testing/001-increase-coverage.md** (8-12h) - #43
+
    - HIGH priority, foundation for quality
    - Increases coverage from 49% to 80%+
    - Provides confidence for future changes
@@ -276,16 +283,19 @@ This section organizes all documented tasks into a recommended implementation se
 **Total Effort**: ~5-8 hours
 
 1. **bug-fixes/003-session-cleanup.md** (1-2h) - #44
+
    - MEDIUM priority, safety net for session management
    - Prevents resource leaks
    - No dependencies
 
-2. **security/003-secrets-sanitization.md** (2-3h) - #45
+1. **security/003-secrets-sanitization.md** (2-3h) - #45
+
    - MEDIUM priority, prevents credential leaks
    - Important for production security
    - No dependencies
 
-3. **bug-fixes/006-output-validation.md** (1-2h) - #49
+1. **bug-fixes/006-output-validation.md** (1-2h) - #49
+
    - LOW priority but related to security
    - Validates CLI output paths
    - Quick security improvement
@@ -298,18 +308,21 @@ This section organizes all documented tasks into a recommended implementation se
 **Recommended order** (sequential for best results):
 
 1. **enhancement/002-procida-documentation.md** (8-12h) - #63
+
    - MEDIUM priority, organize documentation structure
    - Implement Diátaxis framework (tutorials/how-to/reference/explanation)
    - Do this FIRST to organize content
    - No dependencies
 
-2. **enhancement/003-sphinx-documentation.md** (12-16h) - #64
+1. **enhancement/003-sphinx-documentation.md** (12-16h) - #64
+
    - MEDIUM priority, professional documentation rendering
    - Sphinx with 9 extensions + GitHub Pages deployment
    - Do this SECOND to beautifully render organized content
    - Depends on: enhancement/002 (recommended but not required)
 
-3. **enhancement/001-html-output.md** (4-6h) - #46
+1. **enhancement/001-html-output.md** (4-6h) - #46
+
    - MEDIUM priority, HTML report generation
    - Can be done independently
    - Can be documented in new Sphinx docs
@@ -320,16 +333,19 @@ This section organizes all documented tasks into a recommended implementation se
 **Total Effort**: ~4-7 hours
 
 1. **bug-fixes/004-rate-limiting.md** (1h) - #47
+
    - LOW priority, minor fix
    - Improves API rate limiting logic
    - No dependencies
 
-2. **bug-fixes/005-exponential-backoff.md** (2-3h) - #48
+1. **bug-fixes/005-exponential-backoff.md** (2-3h) - #48
+
    - LOW priority, retry improvement
    - Better backoff strategy for API calls
    - No dependencies
 
-3. **refactoring/001-extract-retry-logic.md** (2-3h) - #51
+1. **refactoring/001-extract-retry-logic.md** (2-3h) - #51
+
    - LOW priority, code organization
    - Extracts retry logic to reusable module
    - Makes bug-fixes/005 easier to implement
@@ -351,6 +367,7 @@ This section organizes all documented tasks into a recommended implementation se
 **Undocumented tasks** - Create task files as needed:
 
 **Enhancements** (MEDIUM-LOW):
+
 - Progress Bars - Visual feedback during API fetching
 - Interactive Mode - REPL-style interface
 - Historical Data - Track scores over time
@@ -362,6 +379,7 @@ This section organizes all documented tasks into a recommended implementation se
 - Player Search - Search/filter functionality
 
 **Optimizations** (MEDIUM-LOW):
+
 - Parallel API Requests - Concurrent fetching
 - Lazy Report Generation - Generate on demand
 - Memoized Scoring - Cache score calculations
@@ -369,6 +387,7 @@ This section organizes all documented tasks into a recommended implementation se
 - Log Level Optimization - Conditional logging
 
 **Security** (MEDIUM-LOW):
+
 - Input Validation - Comprehensive input checking
 - SSRF Protection - Prevent server-side request forgery
 - Rate Limit Enforcement - Enforce API rate limits
@@ -378,6 +397,7 @@ This section organizes all documented tasks into a recommended implementation se
 - Config Injection Protection - Prevent config injection
 
 **Refactoring** (LOW):
+
 - Consolidate Reports - DRY up report generators
 - Improve Type Safety - More precise type hints
 - Unified Config Management - Centralized config
@@ -385,6 +405,7 @@ This section organizes all documented tasks into a recommended implementation se
 - Dependency Injection - Improve testability
 
 **New Features** (LOW):
+
 - REST API - HTTP API for programmatic access
 - Database Backend - Persistent data storage
 - Notification System - Alert on score changes
@@ -398,57 +419,78 @@ This section organizes all documented tasks into a recommended implementation se
 ## Implementation Strategy
 
 ### Quick Wins (Do First)
+
 Tasks with high impact and low effort:
+
 1. security/001-dependabot.md (30min)
-2. bug-fixes/002-unused-exception.md (1-2h)
-3. bug-fixes/004-rate-limiting.md (1h)
-4. security/002-security-policy.md (already complete!)
+1. bug-fixes/002-unused-exception.md (1-2h)
+1. bug-fixes/004-rate-limiting.md (1h)
+1. security/002-security-policy.md (already complete!)
 
 ### Foundation (Do Early)
+
 Critical for future work:
+
 1. security/004-github-settings-security.md (2-3h)
-2. bug-fixes/001-config-validation.md (2-4h)
-3. testing/001-increase-coverage.md (8-12h)
+1. bug-fixes/001-config-validation.md (2-4h)
+1. testing/001-increase-coverage.md (8-12h)
 
 ### High Impact (Prioritize)
+
 Major improvements with significant value:
+
 1. optimization/001-api-caching.md (3-4h)
-2. enhancement/002-procida-documentation.md (8-12h)
-3. enhancement/003-sphinx-documentation.md (12-16h)
+1. enhancement/002-procida-documentation.md (8-12h)
+1. enhancement/003-sphinx-documentation.md (12-16h)
 
 ### Nice to Have (Do Later)
+
 Valuable but not critical:
+
 1. Most LOW priority tasks
-2. Large features (web interface, REST API)
-3. Advanced optimizations
+1. Large features (web interface, REST API)
+1. Advanced optimizations
 
 ## Sprint Planning Guide
 
 ### Sprint 1 (2 weeks): Critical Foundation
+
 **Effort**: 6-8.5 hours
+
 - security/001, security/004, bug-fixes/001
 
 ### Sprint 2 (2 weeks): High Impact
+
 **Effort**: 13-18 hours
+
 - bug-fixes/002, optimization/001, testing/001
 
 ### Sprint 3 (2 weeks): Security & Quality
+
 **Effort**: 5-8 hours
+
 - bug-fixes/003, security/003, bug-fixes/006
 
 ### Sprint 4 (2 weeks): Documentation Part 1
+
 **Effort**: 8-12 hours
+
 - enhancement/002 (Procida documentation)
 
 ### Sprint 5 (2 weeks): Documentation Part 2
+
 **Effort**: 12-16 hours
+
 - enhancement/003 (Sphinx + GitHub Pages)
 
 ### Sprint 6 (2 weeks): Enhancement & Polish
+
 **Effort**: 4-10 hours
+
 - enhancement/001, bug-fixes/004, bug-fixes/005
 
 ### Sprint 7+ (Ongoing): Features & Refactoring
+
 - refactoring/001, new-features/001
 - Document and implement backlog tasks as needed
 

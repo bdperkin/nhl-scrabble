@@ -19,6 +19,7 @@ Build comprehensive, professional documentation using Sphinx with modern extensi
 The project has excellent documentation foundation:
 
 **Strengths:**
+
 - ✅ 100% docstring coverage (enforced by interrogate)
 - ✅ Type hints throughout (strict mypy)
 - ✅ Comprehensive markdown docs (README, CONTRIBUTING, CLAUDE.md, etc.)
@@ -26,6 +27,7 @@ The project has excellent documentation foundation:
 - ✅ Well-structured codebase (15 modules)
 
 **Gaps:**
+
 - ❌ No rendered HTML documentation
 - ❌ No automatic API reference generation
 - ❌ No searchable documentation
@@ -33,6 +35,7 @@ The project has excellent documentation foundation:
 - ❌ Documentation not discoverable via web
 
 **Current Documentation:**
+
 ```
 nhl-scrabble/
 ├── README.md
@@ -60,17 +63,17 @@ Implement Sphinx documentation with comprehensive extensions and GitHub Pages de
 
 All proposed extensions are valuable for this project:
 
-| Extension | Value | Justification |
-|-----------|-------|---------------|
-| **sphinx** | ✅ Required | Core documentation engine |
-| **sphinx-autobuild** | ✅ High | Auto-rebuild during development (huge productivity boost) |
-| **sphinx-autodoc-typehints** | ✅ Critical | Leverages existing type hints (perfect fit for mypy-strict codebase) |
-| **sphinx-copybutton** | ✅ High | Copy code examples with one click (excellent UX) |
-| **sphinx-design** | ✅ High | Modern UI components (cards, tabs, grids) for beautiful docs |
-| **sphinx-rtd-theme** | ✅ High | Popular Read the Docs theme (clean, professional) |
-| **sphinxcontrib-programoutput** | ✅ High | Show CLI output in docs (perfect for CLI tool) |
-| **sphinxcontrib-spelling** | ✅ Medium | Spell checking (complements codespell) |
-| **sphinxext-opengraph** | ✅ Medium | Social sharing metadata (discoverability) |
+| Extension                       | Value       | Justification                                                        |
+| ------------------------------- | ----------- | -------------------------------------------------------------------- |
+| **sphinx**                      | ✅ Required | Core documentation engine                                            |
+| **sphinx-autobuild**            | ✅ High     | Auto-rebuild during development (huge productivity boost)            |
+| **sphinx-autodoc-typehints**    | ✅ Critical | Leverages existing type hints (perfect fit for mypy-strict codebase) |
+| **sphinx-copybutton**           | ✅ High     | Copy code examples with one click (excellent UX)                     |
+| **sphinx-design**               | ✅ High     | Modern UI components (cards, tabs, grids) for beautiful docs         |
+| **sphinx-rtd-theme**            | ✅ High     | Popular Read the Docs theme (clean, professional)                    |
+| **sphinxcontrib-programoutput** | ✅ High     | Show CLI output in docs (perfect for CLI tool)                       |
+| **sphinxcontrib-spelling**      | ✅ Medium   | Spell checking (complements codespell)                               |
+| **sphinxext-opengraph**         | ✅ Medium   | Social sharing metadata (discoverability)                            |
 
 **Recommendation: Implement ALL extensions** - Each provides clear value for comprehensive documentation.
 
@@ -155,7 +158,7 @@ extensions = [
     "sphinx.ext.todo",              # Support TODO directives
     "sphinx.ext.coverage",          # Check documentation coverage
     "sphinx.ext.githubpages",       # Create .nojekyll for GitHub Pages
-    
+
     # Third-party extensions
     "sphinx_autodoc_typehints",     # Use type hints in signatures
     "sphinx_copybutton",            # Copy button for code blocks
@@ -163,7 +166,7 @@ extensions = [
     "sphinxcontrib.programoutput",  # Run programs and show output
     "sphinxcontrib.spelling",       # Spell checker
     "sphinxext.opengraph",          # OpenGraph metadata
-    
+
     # Markdown support (optional, for including .md files)
     "myst_parser",                  # MyST markdown parser
 ]
@@ -286,7 +289,7 @@ NHL Scrabble Score Analyzer Documentation
    :target: https://www.python.org/downloads/
    :alt: Python 3.10-3.13
 
-A Python application that fetches current NHL roster data and calculates 
+A Python application that fetches current NHL roster data and calculates
 "Scrabble scores" for player names based on standard Scrabble letter values.
 
 .. grid:: 2
@@ -454,11 +457,13 @@ See Also
 ### GitHub Pages Configuration
 
 **1. Repository Settings:**
+
 - Navigate to Settings → Pages
 - Source: Deploy from a branch
 - Branch: `gh-pages`, folder: `/ (root)`
 
 **2. Create `.nojekyll` file:**
+
 ```bash
 # Sphinx creates this automatically via sphinx.ext.githubpages
 # But we'll ensure it exists
@@ -513,7 +518,7 @@ jobs:
         run: |
           cd docs
           make html
-          
+
       - name: Check documentation
         run: |
           cd docs
@@ -641,29 +646,34 @@ OpenGraph
 ### Phase 1: Sphinx Setup (3-4h)
 
 1. **Install Sphinx and extensions**
+
    ```bash
    uv pip install -e ".[docs]"
    ```
 
-2. **Initialize Sphinx**
+1. **Initialize Sphinx**
+
    ```bash
    mkdir -p docs
    cd docs
    sphinx-quickstart
    ```
 
-3. **Configure extensions** in `conf.py`
+1. **Configure extensions** in `conf.py`
+
    - Add all 9 extensions
    - Configure autodoc for type hints
    - Set up theme and styling
    - Configure intersphinx
 
-4. **Create directory structure**
+1. **Create directory structure**
+
    ```bash
    mkdir -p docs/{getting-started,user-guide,api,development,reference,_static}
    ```
 
-5. **Test basic build**
+1. **Test basic build**
+
    ```bash
    cd docs
    make html
@@ -673,26 +683,31 @@ OpenGraph
 ### Phase 2: Content Creation (4-6h)
 
 1. **Create main index** (index.rst)
+
    - Overview with sphinx-design cards
    - Quick example with programoutput
    - Navigation structure
 
-2. **Getting Started section** (1-2h)
+1. **Getting Started section** (1-2h)
+
    - installation.rst
    - quickstart.rst
    - configuration.rst
 
-3. **User Guide section** (1-2h)
+1. **User Guide section** (1-2h)
+
    - understanding-output.rst
    - customization.rst
    - troubleshooting.rst
 
-4. **Reference section** (1h)
+1. **Reference section** (1h)
+
    - cli-reference.rst (complete CLI docs)
    - configuration.rst (all env vars)
    - nhl-api.rst (API integration)
 
-5. **Development section** (1h)
+1. **Development section** (1h)
+
    - setup.rst
    - testing.rst
    - contributing.rst
@@ -701,6 +716,7 @@ OpenGraph
 ### Phase 3: API Documentation (2-3h)
 
 1. **Create API reference structure**
+
    ```rst
    api/
    ├── index.rst
@@ -712,7 +728,8 @@ OpenGraph
    └── reports.rst
    ```
 
-2. **Generate API docs** with autodoc
+1. **Generate API docs** with autodoc
+
    ```rst
    .. automodule:: nhl_scrabble.cli
       :members:
@@ -720,50 +737,58 @@ OpenGraph
       :show-inheritance:
    ```
 
-3. **Add examples and usage** for each module
+1. **Add examples and usage** for each module
 
-4. **Cross-reference** between modules and guides
+1. **Cross-reference** between modules and guides
 
 ### Phase 4: GitHub Pages Setup (1-2h)
 
 1. **Create GitHub Actions workflow**
+
    - `.github/workflows/docs.yml`
    - Build on push to main
    - Deploy to gh-pages branch
 
-2. **Enable GitHub Pages** in repository settings
+1. **Enable GitHub Pages** in repository settings
+
    - Source: gh-pages branch
    - Verify deployment
 
-3. **Add documentation badge** to README.md
+1. **Add documentation badge** to README.md
+
    ```markdown
    [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://bdperkin.github.io/nhl-scrabble/)
    ```
 
-4. **Test deployment**
+1. **Test deployment**
+
    - Push to main
    - Verify workflow runs
    - Check deployed site
 
 ### Phase 5: Polish and Integration (2-3h)
 
-1. **Add custom styling** (_static/custom.css)
+1. **Add custom styling** (\_static/custom.css)
+
    - Brand colors
    - Improved code block styling
    - Responsive design tweaks
 
-2. **Create documentation** Makefile targets
+1. **Create documentation** Makefile targets
+
    - `make docs` - Build docs
    - `make docs-serve` - Auto-rebuild server
    - `make docs-linkcheck` - Check links
    - `make docs-coverage` - Doc coverage
 
-3. **Update existing docs** to link to Sphinx
+1. **Update existing docs** to link to Sphinx
+
    - README.md
    - CONTRIBUTING.md
    - CLAUDE.md
 
-4. **Add to CI checks**
+1. **Add to CI checks**
+
    - Build docs in CI
    - Check links
    - Check spelling
@@ -773,30 +798,35 @@ OpenGraph
 ### Local Testing
 
 1. **Build documentation**
+
    ```bash
    cd docs
    make html
    ```
 
-2. **Serve locally**
+1. **Serve locally**
+
    ```bash
    make docs-serve
    # Opens browser with auto-reload
    ```
 
-3. **Check links**
+1. **Check links**
+
    ```bash
    make linkcheck
    # Verifies all internal and external links
    ```
 
-4. **Check coverage**
+1. **Check coverage**
+
    ```bash
    make coverage
    # Shows documentation coverage stats
    ```
 
-5. **Check spelling**
+1. **Check spelling**
+
    ```bash
    make spelling
    # Spell checks all documentation
@@ -805,6 +835,7 @@ OpenGraph
 ### CI Testing
 
 **GitHub Actions workflow tests:**
+
 - ✅ Documentation builds without errors
 - ✅ All links are valid
 - ✅ Doctests pass
@@ -814,12 +845,12 @@ OpenGraph
 ### Manual Verification
 
 1. **Navigation**: Verify all sections accessible
-2. **Search**: Test documentation search
-3. **Mobile**: Check responsive design
-4. **API docs**: Verify autodoc generated correctly
-5. **Code examples**: Verify syntax highlighting and copy buttons work
-6. **Cross-references**: Check intersphinx links work
-7. **Social sharing**: Verify OpenGraph metadata appears
+1. **Search**: Test documentation search
+1. **Mobile**: Check responsive design
+1. **API docs**: Verify autodoc generated correctly
+1. **Code examples**: Verify syntax highlighting and copy buttons work
+1. **Cross-references**: Check intersphinx links work
+1. **Social sharing**: Verify OpenGraph metadata appears
 
 ## Acceptance Criteria
 
@@ -869,9 +900,11 @@ OpenGraph
 ## Dependencies
 
 **Recommended to complete first:**
+
 - enhancement/002-procida-documentation.md - Organize content first, then render with Sphinx
 
 **Recommended to complete after:**
+
 - This becomes the foundation for all future documentation
 
 ## Additional Notes
@@ -879,6 +912,7 @@ OpenGraph
 ### Benefits
 
 **For Users:**
+
 - 🔍 **Searchable**: Full-text search across all documentation
 - 📱 **Responsive**: Works on mobile, tablet, desktop
 - 🎨 **Beautiful**: Modern, professional appearance
@@ -886,6 +920,7 @@ OpenGraph
 - 🔗 **Discoverable**: SEO optimized with OpenGraph
 
 **For Developers:**
+
 - 🤖 **Automated**: API docs auto-generated from docstrings
 - ⚡ **Fast**: Auto-rebuild during development
 - ✅ **Validated**: Link checking, spell checking, coverage
@@ -893,6 +928,7 @@ OpenGraph
 - 📊 **Coverage**: Track documentation completeness
 
 **For Project:**
+
 - 🌟 **Professional**: High-quality documentation reflects well
 - 📈 **Adoption**: Good docs increase user adoption
 - 💡 **Contribution**: Easier for contributors to understand
@@ -901,6 +937,7 @@ OpenGraph
 ### Extension Details
 
 **sphinx-autobuild**:
+
 ```bash
 # Auto-rebuilds on file changes, opens browser
 sphinx-autobuild docs docs/_build/html --open-browser
@@ -908,14 +945,15 @@ sphinx-autobuild docs docs/_build/html --open-browser
 ```
 
 **sphinx-autodoc-typehints**:
+
 ```python
 # Leverages existing type hints
 def calculate_score(self, text: str) -> int:
     """Calculate Scrabble score.
-    
+
     Args:
         text: Input text to score.
-        
+
     Returns:
         Total score.
     """
@@ -923,29 +961,32 @@ def calculate_score(self, text: str) -> int:
 ```
 
 **sphinx-copybutton**:
+
 ```rst
 .. code-block:: python
 
     from nhl_scrabble import ScrabbleScorer
     scorer = ScrabbleScorer()
-    
+
 # Adds copy button to code block - excellent UX
 ```
 
 **sphinx-design**:
+
 ```rst
 .. grid:: 2
 
     .. grid-item-card:: Getting Started
         :link: getting-started
-        
+
     .. grid-item-card:: API Reference
         :link: api
-        
+
 # Beautiful modern UI components
 ```
 
 **sphinxcontrib-programoutput**:
+
 ```rst
 .. programoutput:: nhl-scrabble --help
 
@@ -953,12 +994,14 @@ def calculate_score(self, text: str) -> int:
 ```
 
 **sphinxcontrib-spelling**:
+
 ```python
 # Spell checks all documentation
 # Complements codespell with Sphinx-specific checking
 ```
 
 **sphinxext-opengraph**:
+
 ```html
 <!-- Auto-generated OpenGraph metadata -->
 <meta property="og:title" content="NHL Scrabble Documentation">
@@ -989,17 +1032,19 @@ gh-pages/
 ```
 
 Implement when needed with tools like:
+
 - **sphinx-multiversion**: Multiple versions in one site
 - **mike**: Version manager for MkDocs (alternative to Sphinx)
 
 ### Maintenance
 
 **Documentation stays up-to-date:**
+
 1. **Autodoc**: API docs regenerate from code automatically
-2. **CI/CD**: Deploys on every merge to main
-3. **Link checking**: Catches broken links in CI
-4. **Spell checking**: Maintains quality
-5. **Coverage**: Ensures completeness
+1. **CI/CD**: Deploys on every merge to main
+1. **Link checking**: Catches broken links in CI
+1. **Spell checking**: Maintains quality
+1. **Coverage**: Ensures completeness
 
 **Estimated ongoing effort:** 1-2h per release for updates
 
@@ -1018,13 +1063,15 @@ docs/
 ```
 
 **Recommended order:**
+
 1. Implement Procida structure (organize content)
-2. Implement Sphinx (render content beautifully)
-3. Best of both worlds!
+1. Implement Sphinx (render content beautifully)
+1. Best of both worlds!
 
 ### Alternative: MkDocs vs Sphinx
 
 **Sphinx Advantages** (why we chose it):
+
 - ✅ Better Python integration (autodoc)
 - ✅ More powerful extensions
 - ✅ Intersphinx (link to other Python docs)
@@ -1032,6 +1079,7 @@ docs/
 - ✅ Industry standard for Python
 
 **MkDocs Advantages**:
+
 - Simpler configuration
 - Markdown-native (vs RST)
 - Material theme is beautiful
@@ -1041,6 +1089,7 @@ docs/
 ### Documentation Examples
 
 **Well-documented projects using Sphinx:**
+
 - Python: https://docs.python.org/
 - Django: https://docs.djangoproject.com/
 - Requests: https://requests.readthedocs.io/
@@ -1052,6 +1101,7 @@ All use Sphinx with similar extension sets!
 ### Build Performance
 
 **Expected build times:**
+
 - Initial build: 10-20 seconds
 - Incremental rebuild: 1-3 seconds
 - Full rebuild with linkcheck: 30-60 seconds
@@ -1061,6 +1111,7 @@ All use Sphinx with similar extension sets!
 ### Accessibility
 
 Sphinx + RTD theme provide:
+
 - ✅ Keyboard navigation
 - ✅ Screen reader support
 - ✅ Semantic HTML
@@ -1071,6 +1122,7 @@ Sphinx + RTD theme provide:
 ## Implementation Notes
 
 *To be filled during implementation:*
+
 - Actual Sphinx configuration decisions
 - Extension configuration details
 - GitHub Pages setup steps
