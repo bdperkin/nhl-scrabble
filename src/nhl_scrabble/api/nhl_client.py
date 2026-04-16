@@ -1,9 +1,11 @@
 """NHL API client for fetching team and roster data."""
 
+import atexit
 import logging
 import time
+import weakref
 from datetime import timedelta
-from typing import Any
+from typing import Any, ClassVar
 
 import requests
 import requests_cache
@@ -37,6 +39,7 @@ class NHLApiClient:
     """
 
     BASE_URL = "https://api-web.nhle.com/v1"
+    _instances: ClassVar[set[weakref.ref[Any]]] = set()  # Track all instances for cleanup
 
     def __init__(
         self,
@@ -60,6 +63,7 @@ class NHLApiClient:
         self.rate_limit_delay = rate_limit_delay
         self.cache_enabled = cache_enabled
         self.cache_expiry = cache_expiry
+        self._closed = False  # Track session state
 
         # Session can be either CachedSession or regular Session
         self.session: requests_cache.CachedSession | requests.Session
@@ -79,6 +83,10 @@ class NHLApiClient:
             logger.debug("HTTP caching disabled")
 
         self.session.headers.update({"User-Agent": "NHL-Scrabble/2.0"})
+
+        # Register instance for cleanup at exit (safety net)
+        self._instances.add(weakref.ref(self, self._cleanup_callback))
+        atexit.register(self._cleanup_all)
 
     def get_teams(self) -> dict[str, dict[str, str]]:
         """Fetch all NHL teams with division and conference information.
@@ -215,8 +223,10 @@ class NHLApiClient:
 
     def close(self) -> None:
         """Close the session and release resources."""
-        self.session.close()
-        logger.debug("NHL API client session closed")
+        if not self._closed:
+            self.session.close()
+            self._closed = True
+            logger.debug("NHL API client session closed")
 
     def __enter__(self) -> "NHLApiClient":
         """Support context manager protocol."""
@@ -225,3 +235,32 @@ class NHLApiClient:
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Close session when exiting context manager."""
         self.close()
+
+    def __del__(self) -> None:
+        """Destructor - close session if not already closed (safety net)."""
+        if not self._closed:
+            logger.warning(
+                "NHLApiClient session was not explicitly closed - cleaning up in destructor"
+            )
+            self.close()
+
+    @classmethod
+    def _cleanup_callback(cls, ref: weakref.ref[Any]) -> None:
+        """Remove dead instance from tracking set.
+
+        Args:
+            ref: Weak reference to the instance being garbage collected.
+        """
+        cls._instances.discard(ref)
+
+    @classmethod
+    def _cleanup_all(cls) -> None:
+        """Close all remaining open sessions at program exit (safety net)."""
+        alive_instances = [ref() for ref in cls._instances if ref() is not None]
+        if alive_instances:
+            logger.warning(
+                f"Cleaning up {len(alive_instances)} unclosed NHLApiClient session(s) at exit"
+            )
+            for instance in alive_instances:
+                if instance and not instance._closed:  # noqa: SLF001
+                    instance.close()
