@@ -38,11 +38,6 @@ updates:
     # Priority for security updates
     allow:
       - dependency-type: "all"
-    # Ignore specific dependencies if needed
-    ignore:
-      # Example: ignore major version bumps for specific packages
-      # - dependency-name: "requests"
-      #   update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
