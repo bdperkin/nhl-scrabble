@@ -40,11 +40,10 @@ Each task is assigned a priority:
 
 **Total Effort**: 6.5-10 hours
 
-### Security (10+ tasks, 2 documented)
+### Security (10+ tasks, 1 documented)
 
 | ID  | Title                       | Priority | Effort | Issue |
 | --- | --------------------------- | -------- | ------ | ----- |
-| 002 | Create SECURITY.md Policy   | HIGH     | 1h     |       |
 | 003 | Implement Log Sanitization  | MEDIUM   | 2-3h   | #45   |
 | ... | Input Validation            | MEDIUM   | TBD    |       |
 | ... | SSRF Protection             | MEDIUM   | TBD    |       |
@@ -54,7 +53,7 @@ Each task is assigned a priority:
 | ... | PII Logging Prevention      | LOW      | TBD    |       |
 | ... | Config Injection Protection | LOW      | TBD    |       |
 
-**Documented Effort**: 3-4 hours
+**Documented Effort**: 2-3 hours
 
 ### Optimization (6 tasks, 1 documented)
 
@@ -129,11 +128,11 @@ Each task is assigned a priority:
 ## Total Project Roadmap
 
 **Documented Tasks**: 15 tasks
-**Total Documented Effort**: 63-91 hours
+**Total Documented Effort**: 62-90 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 6 tasks (9.17h actual effort)
+**Completed Tasks**: 7 tasks (9.67h actual effort)
 
-**Grand Total**: ~163-211 hours for complete roadmap
+**Grand Total**: ~162-210 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -562,8 +561,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 17 of 50+
-**Completion Status**: 4 of 17 completed (24%)
-**Documented Effort Remaining**: 53.83-82.83 hours (excluding completed tasks)
+**Completion Status**: 5 of 17 completed (29%)
+**Documented Effort Remaining**: 52.83-81.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -573,5 +572,6 @@ ______________________________________________________________________
 | 007 | Fix Branch Protection Hook in CI   | Bug Fix      | 2026-04-16 | 1h            | #59 |
 | 002 | Implement CI Caching               | Optimization | 2026-04-16 | 2.5h          | #61 |
 | 001 | Add GitHub Dependabot              | Security     | 2026-04-16 | 0.42h         | #65 |
+| 002 | Create SECURITY.md Policy          | Security     | 2026-04-16 | 0.5h          | #71 |
 | 004 | GitHub Settings Security Hardening | Security     | 2026-04-16 | 1.5h          | #71 |
 | 001 | Fix Config Validation              | Bug Fix      | 2026-04-16 | 3h            | #72 |
