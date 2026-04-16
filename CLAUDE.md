@@ -650,6 +650,38 @@ jobs:
 - **Without UV:** ~12 minutes
 - **With UV:** ~3 minutes (4x faster!)
 
+### Security
+
+The project has comprehensive security measures:
+
+**Branch Protection:**
+
+- ✅ Main branch is protected
+- ✅ Direct commits blocked (PR workflow required)
+- ✅ All CI checks must pass before merge
+- ✅ Force pushes blocked
+- ✅ Branch deletion blocked
+- ✅ Conversations must be resolved
+- ⚠️ Admin bypass allowed (for emergencies)
+
+**Automated Security Scanning:**
+
+- ✅ **CodeQL** - Weekly security scans + PR checks
+- ✅ **Dependabot** - Automated dependency vulnerability alerts
+- ✅ **Secret Scanning** - Detects committed secrets/API keys
+- ✅ **pip-audit** - CI-based dependency vulnerability scanning
+
+**Dependency Management:**
+
+- Dependabot creates update PRs weekly (Mondays 9 AM ET)
+- Security vulnerabilities get immediate individual PRs
+- Regular updates grouped by type (dev/prod)
+
+**Merge Strategy:**
+
+- ✅ Squash merge only (consistent git history)
+- ✅ Auto-delete branches on merge
+
 ## Documentation
 
 ### User Documentation

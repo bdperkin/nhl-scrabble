@@ -79,7 +79,10 @@ We take the security of NHL Scrabble seriously. If you believe you have found a 
 
 ### Dependencies
 
-- Regular dependency updates via Dependabot (when enabled)
+- **Automated Vulnerability Scanning**: Dependabot alerts enabled
+- **Automated Security Updates**: Dependabot creates PRs for security fixes
+- **Weekly Dependency Updates**: Automated checks every Monday at 9 AM ET
+- **CI Security Checks**: pip-audit runs on every PR and main branch push
 - Pre-commit hooks include security checks:
   - `detect-private-key` - Prevents committing private keys
   - `check-added-large-files` - Prevents large file commits
@@ -95,11 +98,39 @@ We take the security of NHL Scrabble seriously. If you believe you have found a 
 
 ## Security Tools in Use
 
+### Automated Security Scanning
+
+- **CodeQL**: GitHub Advanced Security code scanning
+  - Runs on every PR and push to main
+  - Weekly scheduled scans (Mondays 6 AM UTC)
+  - Detects 100+ security vulnerability patterns
+  - Results in Security → Code scanning alerts
+- **Dependabot Alerts**: Automated dependency vulnerability detection
+  - Real-time alerts for known vulnerabilities
+  - Automatic security update PRs
+  - Email notifications enabled
+- **Secret Scanning**: Detects accidentally committed secrets
+  - Scans for 200+ secret patterns (API keys, tokens, passwords)
+  - Partner alerts to notify service providers
+  - Results in Security → Secret scanning alerts
+- **pip-audit**: Python dependency vulnerability scanner
+  - Runs in CI on every PR and main branch push
+  - Checks against PyPI advisory database
+
+### Code Quality and Security
+
 - **MyPy**: Static type checking in strict mode
-- **Ruff**: Linting with comprehensive rule set
+- **Ruff**: Linting with comprehensive rule set including security rules
 - **Pre-commit**: 55 hooks including security checks
 - **GitHub Actions**: Automated testing on all PRs
-- **Dependabot**: Automated dependency updates (when enabled)
+- **Branch Protection**: Main branch requires all CI checks to pass
+
+### Repository Security
+
+- **Protected Main Branch**: Direct commits blocked, PR workflow required
+- **Required Status Checks**: All CI tests must pass before merge
+- **Squash Merge Only**: Consistent git history, easier reverts
+- **Auto-delete Branches**: Reduces clutter and stale branches
 
 ## Disclosure Policy
 
