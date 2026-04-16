@@ -125,9 +125,9 @@ repos:
   - repo: https://github.com/tox-dev/tox-ini-fmt
     rev: 1.5.0
     hooks:
+      # Comprehensive tox.ini formatting (matches ruff's ALL rules philosophy)
+      # Formats tox.ini to a standard, consistent structure
       - id: tox-ini-fmt
-        # Comprehensive tox.ini formatting (matches ruff's ALL rules philosophy)
-        # Formats tox.ini to a standard, consistent structure
 
   # ============================================================================
   # YAML Linting - YAML File Validation
@@ -159,6 +159,8 @@ repos:
     hooks:
       - id: pymarkdown
         args: [scan]  # Config is in pyproject.toml
+        # Exclude GitHub issue templates (YAML frontmatter incompatible)
+        exclude: ^\.github/ISSUE_TEMPLATE/
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.21
@@ -169,6 +171,8 @@ repos:
           - mdformat-gfm  # GitHub Flavored Markdown support
           - mdformat-tables  # Table formatting
         args: []  # Config is in pyproject.toml
+        # Exclude GitHub issue templates (YAML frontmatter incompatible)
+        exclude: ^\.github/ISSUE_TEMPLATE/
 
   # ============================================================================
   # Documentation - RST File Linting and Validation
