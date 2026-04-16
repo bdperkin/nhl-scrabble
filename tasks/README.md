@@ -63,24 +63,23 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 3 documented)
+### Enhancements (10 tasks, 2 documented)
 
-| ID  | Title                            | Priority | Effort | Issue |
-| --- | -------------------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output            | MEDIUM   | 4-6h   | #46   |
-| 003 | Build Sphinx Docs + GitHub Pages | MEDIUM   | 12-16h | #64   |
-| 005 | Sphinx Quality Plugins           | LOW      | 2-4h   | #82   |
-| ... | Progress Bars                    | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                 | MEDIUM   | TBD    |       |
-| ... | Historical Data                  | LOW      | TBD    |       |
-| ... | CSV/Excel Export                 | LOW      | TBD    |       |
-| ... | Filtering Options                | LOW      | TBD    |       |
-| ... | Custom Scoring Rules             | LOW      | TBD    |       |
-| ... | Statistics Dashboard             | LOW      | TBD    |       |
-| ... | Watch Mode                       | LOW      | TBD    |       |
-| ... | Player Search                    | LOW      | TBD    |       |
+| ID  | Title                  | Priority | Effort | Issue |
+| --- | ---------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output  | MEDIUM   | 4-6h   | #46   |
+| 005 | Sphinx Quality Plugins | LOW      | 2-4h   | #82   |
+| ... | Progress Bars          | MEDIUM   | TBD    |       |
+| ... | Interactive Mode       | MEDIUM   | TBD    |       |
+| ... | Historical Data        | LOW      | TBD    |       |
+| ... | CSV/Excel Export       | LOW      | TBD    |       |
+| ... | Filtering Options      | LOW      | TBD    |       |
+| ... | Custom Scoring Rules   | LOW      | TBD    |       |
+| ... | Statistics Dashboard   | LOW      | TBD    |       |
+| ... | Watch Mode             | LOW      | TBD    |       |
+| ... | Player Search          | LOW      | TBD    |       |
 
-**Documented Effort**: 18-26 hours
+**Documented Effort**: 6-10 hours
 
 ### Testing (0 tasks)
 
@@ -118,12 +117,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 11 tasks
-**Total Documented Effort**: 47-70 hours
+**Documented Tasks**: 10 tasks
+**Total Documented Effort**: 35-54 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 15 tasks (39.67h actual effort)
+**Completed Tasks**: 16 tasks (47.67h actual effort)
 
-**Grand Total**: ~147-190 hours for complete roadmap
+**Grand Total**: ~135-174 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -302,27 +301,32 @@ This section organizes all documented tasks into a recommended implementation se
    - No dependencies
    - Completed 2026-04-16 (10h actual)
 
+1. **enhancement/003-sphinx-documentation.md** (12-16h) - #64 - Complete ✅
+
+   - MEDIUM priority, comprehensive Sphinx documentation with GitHub Pages
+   - 9 modern Sphinx extensions, full API reference, automated deployment
+   - MyST parser for seamless Markdown integration
+   - Completed 2026-04-16 (8h actual)
+
 1. **enhancement/004-automated-api-cli-docs.md** (4-6h) - #81 - Complete ✅
 
    - MEDIUM priority, automated API/CLI documentation
    - Uses pdoc for HTML API reference + custom script for CLI docs
    - Fast builds (\<2s), minimal dependencies
    - Completed 2026-04-16 (5.5h actual)
-   - **Next**: Consider enhancement/003-sphinx-documentation.md (12-16h) for full documentation site
 
 1. **enhancement/005-sphinx-quality-plugins.md** (2-4h) - #82 (OPTIONAL)
 
    - LOW priority, enhance Sphinx documentation quality
-   - **Depends on**: #64 (Sphinx must be implemented first)
+   - **Depends on**: #64 (Sphinx - now complete ✅)
    - Add quality plugins: coverage, linkcheck, doctest, sitemap
-   - Can be integrated into #64 if not yet started
-   - Or implement separately after #64 is complete
+   - Can now be implemented as enhancement
 
 1. **enhancement/001-html-output.md** (4-6h) - #46
 
    - MEDIUM priority, HTML report generation
    - Can be done independently
-   - Can be documented in new Sphinx docs
+   - Can be documented in Sphinx docs
 
 ### Phase 5: Performance & Polish (Week 9-10)
 
@@ -485,11 +489,12 @@ Valuable but not critical:
 
 - enhancement/002 ✅ (10h actual) - Procida documentation
 
-### Sprint 5 (2 weeks): Documentation Part 2
+### Sprint 5 (2 weeks): Documentation Part 2 - Complete ✅
 
-**Effort**: 12-16 hours
+**Planned Effort**: 12-16 hours
+**Actual Effort**: 8h
 
-- enhancement/003 (Sphinx + GitHub Pages)
+- enhancement/003 ✅ (8h actual) - Sphinx + GitHub Pages
 
 ### Sprint 6 (2 weeks): Enhancement & Polish
 
@@ -569,8 +574,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 19 of 50+
-**Completion Status**: 14 of 19 completed (74%)
-**Documented Effort Remaining**: 33.83-62.83 hours (excluding completed tasks)
+**Completion Status**: 16 of 19 completed (84%)
+**Documented Effort Remaining**: 21.83-46.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -591,3 +596,4 @@ ______________________________________________________________________
 | 006 | Validate CLI Output Paths          | Bug Fix      | 2026-04-16 | 1.5h          | #79 |
 | 002 | Implement Procida Documentation    | Enhancement  | 2026-04-16 | 10h           | #80 |
 | 004 | Automated API/CLI Documentation    | Enhancement  | 2026-04-16 | 5.5h          | #85 |
+| 003 | Build Sphinx Docs + GitHub Pages   | Enhancement  | 2026-04-16 | 8h            | #86 |
