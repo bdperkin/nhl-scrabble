@@ -28,17 +28,16 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (5 tasks)
+### Bug Fixes (4 tasks)
 
-| ID  | Title                                  | Priority | Effort | Issue |
-| --- | -------------------------------------- | -------- | ------ | ----- |
-| 002 | Implement NHLApiNotFoundError Properly | HIGH     | 1-2h   | #40   |
-| 003 | Add Session Cleanup Safety Net         | MEDIUM   | 1-2h   | #44   |
-| 004 | Fix Rate Limiting Logic                | LOW      | 1h     | #47   |
-| 005 | Implement Exponential Backoff          | LOW      | 2-3h   | #48   |
-| 006 | Validate CLI Output Paths              | LOW      | 1-2h   | #49   |
+| ID  | Title                          | Priority | Effort | Issue |
+| --- | ------------------------------ | -------- | ------ | ----- |
+| 003 | Add Session Cleanup Safety Net | MEDIUM   | 1-2h   | #44   |
+| 004 | Fix Rate Limiting Logic        | LOW      | 1h     | #47   |
+| 005 | Implement Exponential Backoff  | LOW      | 2-3h   | #48   |
+| 006 | Validate CLI Output Paths      | LOW      | 1-2h   | #49   |
 
-**Total Effort**: 6.5-10 hours
+**Total Effort**: 5.5-8 hours
 
 ### Security (10+ tasks, 1 documented)
 
@@ -128,11 +127,11 @@ Each task is assigned a priority:
 ## Total Project Roadmap
 
 **Documented Tasks**: 15 tasks
-**Total Documented Effort**: 62-90 hours
+**Total Documented Effort**: 61-88 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 7 tasks (9.67h actual effort)
+**Completed Tasks**: 8 tasks (11.17h actual effort)
 
-**Grand Total**: ~162-210 hours for complete roadmap
+**Grand Total**: ~161-208 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -252,13 +251,13 @@ This section organizes all documented tasks into a recommended implementation se
 ### Phase 2: High-Impact Improvements (Week 2-3)
 
 **Focus**: Testing, performance, and important bug fixes
-**Total Effort**: ~13-18 hours
+**Total Effort**: ~11-16 hours (1 of 3 tasks complete)
 
-1. **bug-fixes/002-unused-exception.md** (1-2h) - #40
+1. **bug-fixes/002-unused-exception.md** (1-2h) - #40 - Complete ✅
 
    - HIGH priority, clean up exception handling
    - Quick fix with good impact
-   - No dependencies
+   - Completed 2026-04-16
 
 1. **optimization/001-api-caching.md** (3-4h) - #42
 
@@ -561,17 +560,18 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 17 of 50+
-**Completion Status**: 5 of 17 completed (29%)
-**Documented Effort Remaining**: 52.83-81.83 hours (excluding completed tasks)
+**Completion Status**: 6 of 17 completed (35%)
+**Documented Effort Remaining**: 49.83-76.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
 | ID  | Title                              | Category     | Completed  | Actual Effort | PR  |
 | --- | ---------------------------------- | ------------ | ---------- | ------------- | --- |
-| 002 | Link GitHub Issues to Tasks        | Enhancement  | 2026-04-16 | 0.75h         | #57 |
-| 007 | Fix Branch Protection Hook in CI   | Bug Fix      | 2026-04-16 | 1h            | #59 |
-| 002 | Implement CI Caching               | Optimization | 2026-04-16 | 2.5h          | #61 |
-| 001 | Add GitHub Dependabot              | Security     | 2026-04-16 | 0.42h         | #65 |
-| 002 | Create SECURITY.md Policy          | Security     | 2026-04-16 | 0.5h          | #71 |
-| 004 | GitHub Settings Security Hardening | Security     | 2026-04-16 | 1.5h          | #71 |
-| 001 | Fix Config Validation              | Bug Fix      | 2026-04-16 | 3h            | #72 |
+| 002 | Link GitHub Issues to Tasks          | Enhancement  | 2026-04-16 | 0.75h         | #57 |
+| 007 | Fix Branch Protection Hook in CI     | Bug Fix      | 2026-04-16 | 1h            | #59 |
+| 002 | Implement CI Caching                 | Optimization | 2026-04-16 | 2.5h          | #61 |
+| 001 | Add GitHub Dependabot                | Security     | 2026-04-16 | 0.42h         | #65 |
+| 002 | Create SECURITY.md Policy            | Security     | 2026-04-16 | 0.5h          | #71 |
+| 004 | GitHub Settings Security Hardening   | Security     | 2026-04-16 | 1.5h          | #71 |
+| 001 | Fix Config Validation                | Bug Fix      | 2026-04-16 | 3h            | #72 |
+| 002 | Implement NHLApiNotFoundError        | Bug Fix      | 2026-04-16 | 1.5h          | #73 |
