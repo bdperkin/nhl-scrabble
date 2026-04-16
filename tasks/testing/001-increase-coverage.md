@@ -1,5 +1,7 @@
 # Increase Test Coverage from 49% to 80%+
 
+**GitHub Issue**: #43 - https://github.com/bdperkin/nhl-scrabble/issues/43
+
 ## Priority
 
 **HIGH** - Must Do (Next Sprint)

@@ -30,44 +30,44 @@ Each task is assigned a priority:
 
 ### Bug Fixes (6 tasks)
 
-| ID  | Title                                  | Priority | Effort |
-| --- | -------------------------------------- | -------- | ------ |
-| 001 | Fix Config Validation                  | CRITICAL | 2-4h   |
-| 002 | Implement NHLApiNotFoundError Properly | HIGH     | 1-2h   |
-| 003 | Add Session Cleanup Safety Net         | MEDIUM   | 1-2h   |
-| 004 | Fix Rate Limiting Logic                | LOW      | 1h     |
-| 005 | Implement Exponential Backoff          | LOW      | 2-3h   |
-| 006 | Validate CLI Output Paths              | LOW      | 1-2h   |
+| ID  | Title                                  | Priority | Effort | Issue |
+| --- | -------------------------------------- | -------- | ------ | ----- |
+| 001 | Fix Config Validation                  | CRITICAL | 2-4h   | #38   |
+| 002 | Implement NHLApiNotFoundError Properly | HIGH     | 1-2h   | #40   |
+| 003 | Add Session Cleanup Safety Net         | MEDIUM   | 1-2h   | #44   |
+| 004 | Fix Rate Limiting Logic                | LOW      | 1h     | #47   |
+| 005 | Implement Exponential Backoff          | LOW      | 2-3h   | #48   |
+| 006 | Validate CLI Output Paths              | LOW      | 1-2h   | #49   |
 
 **Total Effort**: 8.5-14 hours
 
 ### Security (10+ tasks, 3 documented)
 
-| ID  | Title                       | Priority | Effort |
-| --- | --------------------------- | -------- | ------ |
-| 001 | Add GitHub Dependabot       | CRITICAL | 30min  |
-| 002 | Create SECURITY.md Policy   | HIGH     | 1h     |
-| 003 | Implement Log Sanitization  | MEDIUM   | 2-3h   |
-| ... | Input Validation            | MEDIUM   | TBD    |
-| ... | SSRF Protection             | MEDIUM   | TBD    |
-| ... | Rate Limit Enforcement      | MEDIUM   | TBD    |
-| ... | DoS Prevention              | LOW      | TBD    |
-| ... | SSL Verification            | LOW      | TBD    |
-| ... | PII Logging Prevention      | LOW      | TBD    |
-| ... | Config Injection Protection | LOW      | TBD    |
+| ID  | Title                       | Priority | Effort | Issue |
+| --- | --------------------------- | -------- | ------ | ----- |
+| 001 | Add GitHub Dependabot       | CRITICAL | 30min  | #39   |
+| 002 | Create SECURITY.md Policy   | HIGH     | 1h     |       |
+| 003 | Implement Log Sanitization  | MEDIUM   | 2-3h   | #45   |
+| ... | Input Validation            | MEDIUM   | TBD    |       |
+| ... | SSRF Protection             | MEDIUM   | TBD    |       |
+| ... | Rate Limit Enforcement      | MEDIUM   | TBD    |       |
+| ... | DoS Prevention              | LOW      | TBD    |       |
+| ... | SSL Verification            | LOW      | TBD    |       |
+| ... | PII Logging Prevention      | LOW      | TBD    |       |
+| ... | Config Injection Protection | LOW      | TBD    |       |
 
 **Documented Effort**: 3.5-4.5 hours
 
 ### Optimization (6 tasks, 1 documented)
 
-| ID  | Title                        | Priority | Effort |
-| --- | ---------------------------- | -------- | ------ |
-| 001 | Implement API Response Cache | HIGH     | 3-4h   |
-| ... | Parallel API Requests        | MEDIUM   | TBD    |
-| ... | Lazy Report Generation       | LOW      | TBD    |
-| ... | Memoized Scoring             | LOW      | TBD    |
-| ... | Memory Optimization          | LOW      | TBD    |
-| ... | Log Level Optimization       | LOW      | TBD    |
+| ID  | Title                        | Priority | Effort | Issue |
+| --- | ---------------------------- | -------- | ------ | ----- |
+| 001 | Implement API Response Cache | HIGH     | 3-4h   | #42   |
+| ... | Parallel API Requests        | MEDIUM   | TBD    |       |
+| ... | Lazy Report Generation       | LOW      | TBD    |       |
+| ... | Memoized Scoring             | LOW      | TBD    |       |
+| ... | Memory Optimization          | LOW      | TBD    |       |
+| ... | Log Level Optimization       | LOW      | TBD    |       |
 
 **Documented Effort**: 3-4 hours
 
@@ -91,39 +91,39 @@ Each task is assigned a priority:
 
 ### Testing (1 task)
 
-| ID  | Title                     | Priority | Effort |
-| --- | ------------------------- | -------- | ------ |
-| 001 | Increase Coverage to 80%+ | HIGH     | 8-12h  |
+| ID  | Title                     | Priority | Effort | Issue |
+| --- | ------------------------- | -------- | ------ | ----- |
+| 001 | Increase Coverage to 80%+ | HIGH     | 8-12h  | #43   |
 
 **Total Effort**: 8-12 hours
 
 ### New Features (10+ tasks, 1 documented)
 
-| ID  | Title                  | Priority | Effort |
-| --- | ---------------------- | -------- | ------ |
-| 001 | Build Web Interface    | LOW      | 16-24h |
-| ... | REST API               | LOW      | TBD    |
-| ... | Database Backend       | LOW      | TBD    |
-| ... | Notification System    | LOW      | TBD    |
-| ... | Player Comparison Tool | LOW      | TBD    |
-| ... | Offline Mode           | LOW      | TBD    |
-| ... | Config Profiles        | LOW      | TBD    |
-| ... | Plugin System          | LOW      | TBD    |
-| ... | Docker Support         | LOW      | TBD    |
-| ... | Data Export/Import     | LOW      | TBD    |
+| ID  | Title                  | Priority | Effort | Issue |
+| --- | ---------------------- | -------- | ------ | ----- |
+| 001 | Build Web Interface    | LOW      | 16-24h | #50   |
+| ... | REST API               | LOW      | TBD    |       |
+| ... | Database Backend       | LOW      | TBD    |       |
+| ... | Notification System    | LOW      | TBD    |       |
+| ... | Player Comparison Tool | LOW      | TBD    |       |
+| ... | Offline Mode           | LOW      | TBD    |       |
+| ... | Config Profiles        | LOW      | TBD    |       |
+| ... | Plugin System          | LOW      | TBD    |       |
+| ... | Docker Support         | LOW      | TBD    |       |
+| ... | Data Export/Import     | LOW      | TBD    |       |
 
 **Documented Effort**: 16-24 hours
 
 ### Refactoring (6 tasks, 1 documented)
 
-| ID  | Title                     | Priority | Effort |
-| --- | ------------------------- | -------- | ------ |
-| 001 | Extract Retry Logic       | LOW      | 2-3h   |
-| ... | Consolidate Reports       | LOW      | TBD    |
-| ... | Improve Type Safety       | LOW      | TBD    |
-| ... | Unified Config Management | LOW      | TBD    |
-| ... | Error Handling Strategy   | LOW      | TBD    |
-| ... | Dependency Injection      | LOW      | TBD    |
+| ID  | Title                     | Priority | Effort | Issue |
+| --- | ------------------------- | -------- | ------ | ----- |
+| 001 | Extract Retry Logic       | LOW      | 2-3h   | #51   |
+| ... | Consolidate Reports       | LOW      | TBD    |       |
+| ... | Improve Type Safety       | LOW      | TBD    |       |
+| ... | Unified Config Management | LOW      | TBD    |       |
+| ... | Error Handling Strategy   | LOW      | TBD    |       |
+| ... | Dependency Injection      | LOW      | TBD    |       |
 
 **Documented Effort**: 2-3 hours
 

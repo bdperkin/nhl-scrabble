@@ -1,5 +1,7 @@
 # Fix Config Validation in Config.from_env()
 
+**GitHub Issue**: #38 - https://github.com/bdperkin/nhl-scrabble/issues/38
+
 ## Priority
 
 **CRITICAL** - Must Do (Next Sprint)

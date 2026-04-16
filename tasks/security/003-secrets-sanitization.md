@@ -1,5 +1,7 @@
 # Implement Log Sanitization for Secrets
 
+**GitHub Issue**: #45 - https://github.com/bdperkin/nhl-scrabble/issues/45
+
 ## Priority
 
 **MEDIUM** - Should Do (Next Month)

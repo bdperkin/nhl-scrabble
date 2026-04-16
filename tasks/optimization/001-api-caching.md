@@ -1,5 +1,7 @@
 # Implement API Response Caching
 
+**GitHub Issue**: #42 - https://github.com/bdperkin/nhl-scrabble/issues/42
+
 ## Priority
 
 **HIGH** - Must Do (Next Sprint)

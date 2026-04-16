@@ -1,5 +1,7 @@
 # Implement Exponential Backoff for Retries
 
+**GitHub Issue**: #48 - https://github.com/bdperkin/nhl-scrabble/issues/48
+
 ## Priority
 
 **LOW** - Should Do (Next Month)

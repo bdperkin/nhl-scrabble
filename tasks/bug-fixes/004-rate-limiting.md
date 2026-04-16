@@ -1,5 +1,7 @@
 # Fix Rate Limiting to Only Apply After Successful Requests
 
+**GitHub Issue**: #47 - https://github.com/bdperkin/nhl-scrabble/issues/47
+
 ## Priority
 
 **LOW** - Should Do (Next Month)

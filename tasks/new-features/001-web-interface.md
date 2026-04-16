@@ -1,5 +1,7 @@
 # Build Web Interface with FastAPI
 
+**GitHub Issue**: #50 - https://github.com/bdperkin/nhl-scrabble/issues/50
+
 ## Priority
 
 **NICE TO HAVE** - Next Quarter

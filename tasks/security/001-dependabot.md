@@ -1,5 +1,7 @@
 # Add GitHub Dependabot Configuration
 
+**GitHub Issue**: #39 - https://github.com/bdperkin/nhl-scrabble/issues/39
+
 ## Priority
 
 **CRITICAL** - Must Do (Next Sprint)
