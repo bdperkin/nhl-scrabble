@@ -63,13 +63,14 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 3 documented)
+### Enhancements (10 tasks, 4 documented)
 
 | ID  | Title                              | Priority | Effort | Issue |
 | --- | ---------------------------------- | -------- | ------ | ----- |
 | 001 | Implement HTML Output              | MEDIUM   | 4-6h   | #46   |
 | 003 | Build Sphinx Docs + GitHub Pages   | MEDIUM   | 12-16h | #64   |
 | 004 | Automated API/CLI Documentation    | MEDIUM   | 4-6h   | #81   |
+| 005 | Sphinx Quality Plugins             | LOW      | 2-4h   | #82   |
 | ... | Progress Bars                      | MEDIUM   | TBD    |       |
 | ... | Interactive Mode                   | MEDIUM   | TBD    |       |
 | ... | Historical Data                    | LOW      | TBD    |       |
@@ -80,7 +81,7 @@ Each task is assigned a priority:
 | ... | Watch Mode                         | LOW      | TBD    |       |
 | ... | Player Search                      | LOW      | TBD    |       |
 
-**Documented Effort**: 20-28 hours
+**Documented Effort**: 22-32 hours
 
 ### Testing (0 tasks)
 
@@ -118,12 +119,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 11 tasks
-**Total Documented Effort**: 49-72 hours
+**Documented Tasks**: 12 tasks
+**Total Documented Effort**: 51-76 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 14 tasks (34.17h actual effort)
 
-**Grand Total**: ~149-192 hours for complete roadmap
+**Grand Total**: ~151-196 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -317,6 +318,14 @@ This section organizes all documented tasks into a recommended implementation se
      - Larger effort but comprehensive solution
    
    - **Or Both**: Implement #81 first (quick win), then #64 later (full solution)
+
+1. **enhancement/005-sphinx-quality-plugins.md** (2-4h) - #82 (OPTIONAL)
+
+   - LOW priority, enhance Sphinx documentation quality
+   - **Depends on**: #64 (Sphinx must be implemented first)
+   - Add quality plugins: coverage, linkcheck, doctest, sitemap
+   - Can be integrated into #64 if not yet started
+   - Or implement separately after #64 is complete
 
 1. **enhancement/001-html-output.md** (4-6h) - #46
 
@@ -568,9 +577,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
-**Tasks Documented**: 18 of 50+
-**Completion Status**: 14 of 18 completed (78%)
-**Documented Effort Remaining**: 31.83-58.83 hours (excluding completed tasks)
+**Tasks Documented**: 19 of 50+
+**Completion Status**: 14 of 19 completed (74%)
+**Documented Effort Remaining**: 33.83-62.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
