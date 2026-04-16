@@ -58,18 +58,19 @@ Each task is assigned a priority:
 
 **Documented Effort**: 3.5-4.5 hours
 
-### Optimization (6 tasks, 1 documented)
+### Optimization (6 tasks, 2 documented)
 
 | ID  | Title                        | Priority | Effort | Issue |
 | --- | ---------------------------- | -------- | ------ | ----- |
 | 001 | Implement API Response Cache | HIGH     | 3-4h   | #42   |
+| 002 | Implement CI Caching         | MEDIUM   | 3-5h   | #60   |
 | ... | Parallel API Requests        | MEDIUM   | TBD    |       |
 | ... | Lazy Report Generation       | LOW      | TBD    |       |
 | ... | Memoized Scoring             | LOW      | TBD    |       |
 | ... | Memory Optimization          | LOW      | TBD    |       |
 | ... | Log Level Optimization       | LOW      | TBD    |       |
 
-**Documented Effort**: 3-4 hours
+**Documented Effort**: 6-9 hours
 
 ### Enhancements (10 tasks, 1 documented)
 
@@ -128,8 +129,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 14 tasks
-**Total Documented Effort**: 45.5-67.5 hours
+**Documented Tasks**: 15 tasks
+**Total Documented Effort**: 48.5-72.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 2 tasks (1.75h actual effort)
 
