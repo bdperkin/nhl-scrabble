@@ -326,6 +326,26 @@ serve-docs: check-venv ## Build and serve documentation locally
 	@printf "$(BLUE)Serving documentation at http://localhost:8000$(NC)\n"
 	@$(BIN)/tox -e serve-docs
 
+docs-api: check-venv ## Generate API reference documentation (auto-generated from docstrings)
+	@printf "$(BLUE)Generating API reference documentation...$(NC)\n"
+	@mkdir -p docs/reference/api
+	@pdoc nhl_scrabble -o docs/reference/api -d markdown
+	@printf "$(GREEN)✓ API docs generated: docs/reference/api/$(NC)\n"
+
+docs-cli: check-venv ## Generate CLI reference documentation (auto-generated from Click)
+	@printf "$(BLUE)Generating CLI reference documentation...$(NC)\n"
+	@$(PYTHON_VENV) tools/generate_cli_docs.py
+	@printf "$(GREEN)✓ CLI docs generated: docs/reference/cli-generated.md$(NC)\n"
+
+docs-gen: docs-api docs-cli ## Generate all automated documentation (API + CLI)
+	@printf "$(GREEN)✓ All automated documentation generated$(NC)\n"
+
+docs-check: docs-gen ## Check if generated docs are up-to-date (fails if out of date)
+	@printf "$(BLUE)Checking if generated docs are up-to-date...$(NC)\n"
+	@git diff --exit-code docs/reference/api/ docs/reference/cli-generated.md > /dev/null 2>&1 || \
+		(printf "$(RED)✗ Generated docs are out of date! Run 'make docs-gen'$(NC)\n" && exit 1)
+	@printf "$(GREEN)✓ Generated docs are up-to-date$(NC)\n"
+
 ###################
 # Running
 ###################

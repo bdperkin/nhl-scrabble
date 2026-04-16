@@ -315,6 +315,7 @@ We follow the [Diátaxis framework](https://diataxis.fr/) with four documentatio
 When adding new features:
 
 1. **Add docstrings** to all new code (100% coverage required)
+1. **Regenerate API/CLI docs** after docstring or CLI changes (see below)
 1. **Create how-to guide** if it solves a specific problem
 1. **Update reference** docs if adding new CLI options or configuration
 1. **Write explanation** if introducing new concepts or design decisions
@@ -322,11 +323,52 @@ When adding new features:
 1. **Update `CLAUDE.md`** if architecture changes
 1. **Update `README.md`** if changing core functionality
 
+### Regenerating Auto-Generated Documentation
+
+The project automatically generates API and CLI reference documentation:
+
+**After updating docstrings:**
+
+```bash
+make docs-api  # Regenerate API reference
+```
+
+**After changing CLI commands or options:**
+
+```bash
+make docs-cli  # Regenerate CLI reference
+```
+
+**Regenerate everything:**
+
+```bash
+make docs-gen  # Regenerate both API and CLI docs
+```
+
+**Check if docs are up-to-date:**
+
+```bash
+make docs-check  # Fails if you forgot to regenerate
+```
+
+**Important:**
+
+- ✅ Always regenerate docs after changing docstrings or CLI
+- ✅ Commit the generated documentation files
+- ✅ CI will fail if generated docs are out of date
+- ⚠️ Never manually edit `docs/reference/cli-generated.md` or files in `docs/reference/api/`
+
 ### Where to Add Documentation
 
 **New feature**: Create a how-to guide in `docs/how-to/`
 
-**New CLI option**: Update `docs/reference/cli.md`
+**New CLI option**: Auto-generated in `docs/reference/cli-generated.md` (run `make docs-cli`)
+
+- Optionally update `docs/reference/cli.md` for usage patterns and examples
+
+**New Python API**: Auto-generated in `docs/reference/api/` (run `make docs-api`)
+
+- Ensure docstrings are complete (100% coverage enforced by interrogate)
 
 **New configuration**: Update `docs/reference/configuration.md`
 
