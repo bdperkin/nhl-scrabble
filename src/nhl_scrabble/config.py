@@ -15,6 +15,8 @@ class Config:
         api_timeout: Request timeout in seconds for NHL API calls
         api_retries: Number of retry attempts for failed API requests
         rate_limit_delay: Delay in seconds between API requests
+        cache_enabled: Enable HTTP caching for API responses
+        cache_expiry: Cache expiration time in seconds
         top_players_count: Number of top players to show in reports
         top_team_players_count: Number of top players per team to show
         verbose: Enable verbose logging
@@ -24,6 +26,8 @@ class Config:
     api_timeout: int = 10
     api_retries: int = 3
     rate_limit_delay: float = 0.3
+    cache_enabled: bool = True
+    cache_expiry: int = 3600
     top_players_count: int = 20
     top_team_players_count: int = 5
     verbose: bool = False
@@ -37,6 +41,8 @@ class Config:
             NHL_SCRABBLE_API_TIMEOUT: API request timeout in seconds (must be >= 1)
             NHL_SCRABBLE_API_RETRIES: Number of API retry attempts (must be >= 0)
             NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between API requests (must be >= 0.0)
+            NHL_SCRABBLE_CACHE_ENABLED: Enable HTTP caching (true/false)
+            NHL_SCRABBLE_CACHE_EXPIRY: Cache expiration in seconds (must be >= 1)
             NHL_SCRABBLE_TOP_PLAYERS: Number of top players to show (must be >= 1)
             NHL_SCRABBLE_TOP_TEAM_PLAYERS: Number of top players per team (must be >= 1)
             NHL_SCRABBLE_VERBOSE: Enable verbose logging (true/false)
@@ -112,6 +118,8 @@ class Config:
             api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1),
             api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0),
             rate_limit_delay=get_float("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0),
+            cache_enabled=os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true",
+            cache_expiry=get_int("NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1),
             top_players_count=get_int("NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1),
             top_team_players_count=get_int("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1),
             verbose=os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true",
@@ -128,6 +136,8 @@ class Config:
             "api_timeout": self.api_timeout,
             "api_retries": self.api_retries,
             "rate_limit_delay": self.rate_limit_delay,
+            "cache_enabled": self.cache_enabled,
+            "cache_expiry": self.cache_expiry,
             "top_players_count": self.top_players_count,
             "top_team_players_count": self.top_team_players_count,
             "verbose": self.verbose,

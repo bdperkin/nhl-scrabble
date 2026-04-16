@@ -206,6 +206,11 @@ __marimo__/
 # Local configuration
 local_settings.py
 
+# API cache files
+.nhl_cache.sqlite
+.nhl_cache.sqlite-shm
+.nhl_cache.sqlite-wal
+
 # Database files
 *.sqlite3
 *.sqlite3-journal

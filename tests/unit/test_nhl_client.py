@@ -1,9 +1,11 @@
 """Unit tests for NHL API client."""
 
+from pathlib import Path
 from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
+import requests_cache
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError, NHLApiNotFoundError
 
@@ -54,7 +56,7 @@ class TestNHLApiClient:
 
         mock_get.side_effect = requests.exceptions.Timeout()
 
-        client = NHLApiClient()
+        client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiConnectionError, match="timed out"):
             client.get_teams()
 
@@ -65,7 +67,7 @@ class TestNHLApiClient:
 
         mock_get.side_effect = requests.exceptions.ConnectionError()
 
-        client = NHLApiClient()
+        client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiConnectionError, match="Unable to connect"):
             client.get_teams()
 
@@ -79,7 +81,7 @@ class TestNHLApiClient:
         mock_response.json.return_value = sample_roster_data
         mock_get.return_value = mock_response
 
-        client = NHLApiClient(rate_limit_delay=0.0)  # Disable delay for testing
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.0)
         roster = client.get_team_roster("EDM")
 
         assert roster is not None
@@ -95,7 +97,7 @@ class TestNHLApiClient:
         mock_response.status_code = 404
         mock_get.return_value = mock_response
 
-        client = NHLApiClient()
+        client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiNotFoundError, match=r"Roster not found for team: XXX"):
             client.get_team_roster("XXX")
 
@@ -117,7 +119,7 @@ class TestNHLApiClient:
             mock_response,
         ]
 
-        client = NHLApiClient(retries=3, rate_limit_delay=0.0)
+        client = NHLApiClient(cache_enabled=False, retries=3, rate_limit_delay=0.0)
         roster = client.get_team_roster("EDM")
 
         assert roster is not None
@@ -145,7 +147,7 @@ class TestNHLApiClient:
         mock_response.status_code = 404
         mock_get.return_value = mock_response
 
-        client = NHLApiClient()
+        client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiNotFoundError) as exc_info:
             client.get_team_roster("TOR")
 
@@ -160,7 +162,7 @@ class TestNHLApiClient:
         mock_response.status_code = 404
         mock_get.return_value = mock_response
 
-        client = NHLApiClient()
+        client = NHLApiClient(cache_enabled=False)
         # Should be catchable as NHLApiError
         with pytest.raises(NHLApiError):
             client.get_team_roster("TOR")
@@ -174,8 +176,93 @@ class TestNHLApiClient:
         mock_response.status_code = 404
         mock_get.return_value = mock_response
 
-        client = NHLApiClient()
+        client = NHLApiClient(cache_enabled=False)
         with caplog.at_level(logging.WARNING), pytest.raises(NHLApiNotFoundError):
             client.get_team_roster("TOR")
 
         assert "No roster data available for TOR" in caplog.text
+
+    def test_caching_enabled_by_default(self) -> None:
+        """Test that caching is enabled by default."""
+        client = NHLApiClient()
+        assert client.cache_enabled
+        assert isinstance(client.session, requests_cache.CachedSession)
+        client.close()
+
+    def test_caching_can_be_disabled(self) -> None:
+        """Test that caching can be disabled."""
+        import requests
+
+        client = NHLApiClient(cache_enabled=False)
+        assert not client.cache_enabled
+        assert isinstance(client.session, requests.Session)
+        assert not isinstance(client.session, requests_cache.CachedSession)
+        client.close()
+
+    def test_cache_expiry_configured(self) -> None:
+        """Test that cache expiry is configurable."""
+        client = NHLApiClient(cache_expiry=7200)
+        assert client.session.settings.expire_after.total_seconds() == 7200
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests_cache.CachedSession.get")
+    def test_clear_cache(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
+        """Test that clear_cache() works."""
+        # Mock successful API response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_standings_data
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient()
+
+        # Make request to populate cache
+        client.get_teams()
+
+        # Check cache has entries
+        assert client.session.cache.responses.count() > 0
+
+        # Clear cache
+        client.clear_cache()
+
+        # Cache should be empty
+        assert client.session.cache.responses.count() == 0
+
+        client.close()
+
+    def test_clear_cache_when_disabled(self, caplog: Any) -> None:
+        """Test that clear_cache() handles disabled caching gracefully."""
+        import logging
+
+        client = NHLApiClient(cache_enabled=False)
+
+        with caplog.at_level(logging.DEBUG):
+            client.clear_cache()
+
+        assert "Cache not available or caching disabled" in caplog.text
+        client.close()
+
+    def test_cache_file_created(self, tmp_path: Path) -> None:
+        """Test that cache file is created."""
+        import os
+
+        # Change to temp directory
+        original_dir = Path.cwd()
+        os.chdir(tmp_path)
+
+        try:
+            cache_file = tmp_path / ".nhl_cache.sqlite"
+
+            # Remove cache file if exists
+            if cache_file.exists():
+                cache_file.unlink()
+
+            # Create client which should create cache
+            client = NHLApiClient()
+
+            # Cache file should be created
+            assert cache_file.exists()
+
+            client.close()
+        finally:
+            os.chdir(original_dir)

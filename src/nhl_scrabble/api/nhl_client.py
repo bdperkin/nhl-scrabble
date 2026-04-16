@@ -2,9 +2,11 @@
 
 import logging
 import time
+from datetime import timedelta
 from typing import Any
 
 import requests
+import requests_cache
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +43,8 @@ class NHLApiClient:
         timeout: int = 10,
         retries: int = 3,
         rate_limit_delay: float = 0.3,
+        cache_enabled: bool = True,
+        cache_expiry: int = 3600,
     ) -> None:
         """Initialize the NHL API client.
 
@@ -48,11 +52,30 @@ class NHLApiClient:
             timeout: Request timeout in seconds (default: 10)
             retries: Number of retry attempts for failed requests (default: 3)
             rate_limit_delay: Delay in seconds between requests (default: 0.3)
+            cache_enabled: Enable HTTP caching (default: True)
+            cache_expiry: Cache expiration in seconds (default: 3600 = 1 hour)
         """
         self.timeout = timeout
         self.retries = retries
         self.rate_limit_delay = rate_limit_delay
-        self.session = requests.Session()
+        self.cache_enabled = cache_enabled
+        self.cache_expiry = cache_expiry
+
+        if cache_enabled:
+            # Create cached session
+            self.session = requests_cache.CachedSession(
+                cache_name=".nhl_cache",
+                backend="sqlite",
+                expire_after=timedelta(seconds=cache_expiry),
+                allowable_codes=[200],  # Only cache successful responses
+                allowable_methods=["GET"],
+                cache_control=True,  # Respect Cache-Control headers
+            )
+            logger.debug(f"HTTP caching enabled (expiry: {cache_expiry}s)")
+        else:
+            self.session = requests.Session()
+            logger.debug("HTTP caching disabled")
+
         self.session.headers.update({"User-Agent": "NHL-Scrabble/2.0"})
 
     def get_teams(self) -> dict[str, dict[str, str]]:
@@ -179,6 +202,14 @@ class NHLApiClient:
 
         # This should never be reached as all paths above either return or raise
         raise NHLApiError("Unexpected error: retry loop completed without returning data")
+
+    def clear_cache(self) -> None:
+        """Clear the HTTP cache."""
+        if self.cache_enabled and hasattr(self.session, "cache"):
+            self.session.cache.clear()
+            logger.info("API cache cleared")
+        else:
+            logger.debug("Cache not available or caching disabled")
 
     def close(self) -> None:
         """Close the session and release resources."""
