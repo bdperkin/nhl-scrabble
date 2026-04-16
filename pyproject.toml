@@ -44,7 +44,6 @@ classifiers = [
 dependencies = [
     "requests>=2.31.0",
     "click>=8.1.0",
-    "pydantic>=2.0.0",
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
 ]
@@ -759,3 +758,51 @@ style = "sphinx"  # Sphinx-style docstrings (default)
 
 # Output options
 omit-covered-files = false  # Show all files even if 100% covered
+
+# ============================================================================
+# Deptry - Dependency Checker
+# ============================================================================
+
+[tool.deptry]
+# Comprehensive dependency checking (matches ruff's ALL rules philosophy)
+
+# Directories/files to exclude from scanning (regex patterns)
+exclude = [
+    "\\.git",
+    "\\.tox",
+    "\\.venv",
+    "venv",
+    "build",
+    "dist",
+    ".*\\.egg-info",
+    "__pycache__",
+    "tests",  # Test files often have test-specific imports
+]
+
+# Development dependency groups (PEP 621 optional-dependencies)
+# All optional-dependencies groups are for development, not production
+optional_dependencies_dev_groups = [
+    "test",
+    "lint",
+    "type",
+    "security",
+    "docs",
+    "watch",
+    "build",
+    "publish",
+    "tox",
+    "dev",
+]
+
+# Ignore specific errors if needed (comprehensive by default - no ignores)
+ignore = []  # Empty list means check everything
+
+# Per-rule ignores for specific packages/modules (comprehensive by default)
+[tool.deptry.per_rule_ignores]
+# No per-rule ignores - comprehensive checking
+
+# Package to module name mapping
+# Deptry auto-detects most, but we can specify exceptions if needed
+[tool.deptry.package_module_name_map]
+# Package name -> module name mapping for packages where they differ
+python-dotenv = "dotenv"  # python-dotenv package provides 'dotenv' module

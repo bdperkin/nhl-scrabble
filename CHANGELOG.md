@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Deptry Integration** - Python dependency checker
+
+  - Comprehensive dependency checker matching ruff's ALL rules philosophy
+  - Pre-commit hook (fpgmaas/deptry) for automatic dependency validation
+  - Tox environment (deptry) for standalone dependency checks
+  - Added to CI/CD pipeline for continuous dependency validation
+  - Configuration in pyproject.toml with comprehensive checking
+  - Detects: obsolete dependencies, missing dependencies, transitive dependencies, misplaced dev dependencies
+  - All optional-dependencies groups configured as development dependencies
+  - Package-to-module name mapping for python-dotenv -> dotenv
+  - Comprehensive by default: no ignores, checks all dependency issues
+  - Validation identified and removed unused pydantic dependency from main dependencies
+  - Works harmoniously with pip-audit for comprehensive dependency management
+  - 50 total pre-commit hooks for comprehensive code quality
+
 - **Interrogate Integration** - Python docstring coverage checking
 
   - Comprehensive docstring coverage checker matching ruff's ALL rules philosophy
@@ -22,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Verbose output (level 2) showing detailed coverage breakdown per module
   - Sphinx-style docstrings enforced (default style)
   - Works harmoniously with ruff's pydocstyle rules (D) for docstring format validation
-  - 49 total pre-commit hooks for comprehensive code quality
+  - 49 total pre-commit hooks (before deptry addition)
 
 - **Pyroma Integration** - Python package metadata quality rating
 
