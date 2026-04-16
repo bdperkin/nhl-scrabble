@@ -28,19 +28,18 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (7 tasks)
+### Bug Fixes (6 tasks)
 
 | ID  | Title                                  | Priority | Effort | Issue |
 | --- | -------------------------------------- | -------- | ------ | ----- |
 | 001 | Fix Config Validation                  | CRITICAL | 2-4h   | #38   |
 | 002 | Implement NHLApiNotFoundError Properly | HIGH     | 1-2h   | #40   |
-| 007 | Fix Branch Protection Hook in CI       | HIGH     | 1-2h   | #58   |
 | 003 | Add Session Cleanup Safety Net         | MEDIUM   | 1-2h   | #44   |
 | 004 | Fix Rate Limiting Logic                | LOW      | 1h     | #47   |
 | 005 | Implement Exponential Backoff          | LOW      | 2-3h   | #48   |
 | 006 | Validate CLI Output Paths              | LOW      | 1-2h   | #49   |
 
-**Total Effort**: 9.5-16 hours
+**Total Effort**: 8.5-14 hours
 
 ### Security (10+ tasks, 3 documented)
 
@@ -129,10 +128,10 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 15 tasks
-**Total Documented Effort**: 46.5-69.5 hours
+**Documented Tasks**: 14 tasks
+**Total Documented Effort**: 45.5-67.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 1 task (0.75h actual effort)
+**Completed Tasks**: 2 tasks (1.75h actual effort)
 
 **Grand Total**: ~150-200 hours for complete roadmap
 
@@ -293,11 +292,12 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
-**Tasks Documented**: 15 of 50+
-**Completion Status**: 1 of 15 completed (7%)
+**Tasks Documented**: 14 of 50+
+**Completion Status**: 2 of 14 completed (14%)
 
 ## Completed Tasks
 
-| ID  | Title                       | Category    | Completed  | Actual Effort | PR  |
-| --- | --------------------------- | ----------- | ---------- | ------------- | --- |
-| 002 | Link GitHub Issues to Tasks | Enhancement | 2026-04-16 | 0.75h         | #57 |
+| ID  | Title                           | Category    | Completed  | Actual Effort | PR  |
+| --- | ------------------------------- | ----------- | ---------- | ------------- | --- |
+| 002 | Link GitHub Issues to Tasks     | Enhancement | 2026-04-16 | 0.75h         | #57 |
+| 007 | Fix Branch Protection Hook in CI | Bug Fix     | 2026-04-16 | 1h            | #59 |
