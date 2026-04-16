@@ -125,9 +125,9 @@ jobs:
         with:
           enable-cache: false
 
-      - name: Install docformatter and pyroma for pre-commit
+      - name: Install docformatter, pyroma, and deptry for pre-commit
         run: |
-          uv pip install docformatter pyroma --system
+          uv pip install docformatter pyroma deptry --system
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.0
