@@ -79,6 +79,7 @@ jobs:
           - deptry
           - unimport
           - pydocstyle
+          - vulture
           - absolufy-imports
           - autoflake
           - black

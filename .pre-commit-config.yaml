@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 52 comprehensive hooks for code quality, security, and consistency
+# 53 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -223,6 +223,14 @@ repos:
         # Comprehensive unused import checker (matches ruff's ALL rules philosophy)
         # Finds and reports unused import statements
         args: [--check, --diff]  # Additional config in pyproject.toml
+
+  - repo: https://github.com/jendrikseipp/vulture
+    rev: v2.16
+    hooks:
+      - id: vulture
+        # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
+        # Finds unused functions, classes, variables, imports, and properties
+        args: [src]  # Config is in pyproject.toml
 
   # ============================================================================
   # UV - Dependency Lock File Validation
