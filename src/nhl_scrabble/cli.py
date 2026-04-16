@@ -59,6 +59,16 @@ def cli() -> None:
     help="Enable verbose logging",
 )
 @click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable API response caching (always fetch fresh data)",
+)
+@click.option(
+    "--clear-cache",
+    is_flag=True,
+    help="Clear API cache before running",
+)
+@click.option(
     "--top-players",
     type=int,
     default=20,
@@ -74,6 +84,8 @@ def analyze(
     output_format: str,
     output: str | None,
     verbose: bool,
+    no_cache: bool,
+    clear_cache: bool,
     top_players: int,
     top_team_players: int,
 ) -> None:
@@ -87,6 +99,8 @@ def analyze(
         nhl-scrabble analyze --verbose
         nhl-scrabble analyze --output report.txt
         nhl-scrabble analyze --format json --output report.json
+        nhl-scrabble analyze --no-cache
+        nhl-scrabble analyze --clear-cache
     """
     # Setup logging
     setup_logging(verbose=verbose)
@@ -98,6 +112,10 @@ def analyze(
     config.top_players_count = top_players
     config.top_team_players_count = top_team_players
 
+    # Override cache setting from CLI
+    if no_cache:
+        config.cache_enabled = False
+
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
     logger.debug(f"Configuration: {config}")
 
@@ -107,7 +125,7 @@ def analyze(
 
     try:
         # Run the analysis
-        result = run_analysis(config)
+        result = run_analysis(config, clear_cache=clear_cache)
 
         # Output results
         if output:
@@ -130,11 +148,12 @@ def analyze(
         sys.exit(1)
 
 
-def run_analysis(config: Config) -> str:
+def run_analysis(config: Config, clear_cache: bool = False) -> str:
     """Run the complete NHL Scrabble analysis.
 
     Args:
         config: Configuration object
+        clear_cache: Whether to clear the API cache before running
 
     Returns:
         Complete report string
@@ -147,7 +166,14 @@ def run_analysis(config: Config) -> str:
         timeout=config.api_timeout,
         retries=config.api_retries,
         rate_limit_delay=config.rate_limit_delay,
+        cache_enabled=config.cache_enabled,
+        cache_expiry=config.cache_expiry,
     )
+
+    # Clear cache if requested
+    if clear_cache:
+        api_client.clear_cache()
+        logger.info("API cache cleared")
     scorer = ScrabbleScorer()
     team_processor = TeamProcessor(api_client, scorer)
     playoff_calculator = PlayoffCalculator()
