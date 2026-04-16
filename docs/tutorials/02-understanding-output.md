@@ -176,8 +176,8 @@ TOP 20 PLAYERS BY SCRABBLE SCORE
 **What makes a high score?**
 
 1. **High-value letters**: Z (10), Q (10), X (8), J (8), K (5)
-2. **Long names**: More letters = more points
-3. **Multiple high-value letters**: Names with both Z and K are jackpots!
+1. **Long names**: More letters = more points
+1. **Multiple high-value letters**: Names with both Z and K are jackpots!
 
 **Examples**:
 
@@ -291,19 +291,19 @@ Congratulations! You now understand:
 Now that you understand the output:
 
 1. **Make your first contribution**: [First Contribution Tutorial](03-first-contribution.md)
-2. **Customize output**: [How to Configure Output](../how-to/customize-output-format.md)
-3. **Export data**: [How to Export to JSON](../how-to/export-to-json.md)
-4. **Understand scoring**: [Scrabble Values Reference](../reference/scrabble-values.md)
+1. **Customize output**: [How to Configure Output](../how-to/customize-output-format.md)
+1. **Export data**: [How to Export to JSON](../how-to/export-to-json.md)
+1. **Understand scoring**: [Scrabble Values Reference](../reference/scrabble-values.md)
 
 ## Fun challenges
 
 Try these to deepen your understanding:
 
 1. **Find the highest-scoring player**: Who has the most points?
-2. **Identify rare letters**: How many players have Q in their name?
-3. **Compare divisions**: Which division has the highest average?
-4. **Track over time**: Run analyses weekly to see roster changes
-5. **Predict new players**: What would a new player's score be?
+1. **Identify rare letters**: How many players have Q in their name?
+1. **Compare divisions**: Which division has the highest average?
+1. **Track over time**: Run analyses weekly to see roster changes
+1. **Predict new players**: What would a new player's score be?
 
 ## Common questions
 

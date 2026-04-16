@@ -77,10 +77,10 @@ cat report.json | jq '.teams | to_entries | sort_by(.value.total) | reverse | .[
 ### Import to Excel/Google Sheets
 
 1. Export JSON: `nhl-scrabble analyze --format json --output data.json`
-2. Open Excel/Sheets
-3. Use "Import from JSON" feature
-4. Select fields to import
-5. Create pivot tables and charts
+1. Open Excel/Sheets
+1. Use "Import from JSON" feature
+1. Select fields to import
+1. Create pivot tables and charts
 
 ## Related
 

@@ -11,12 +11,14 @@ Explanations are **understanding-oriented** discussions that clarify and illumin
 ### Core Concepts
 
 - **[Why Scrabble Scoring?](why-scrabble-scoring.md)** - The rationale behind the project
+
   - Origin of the idea
   - Why it's interesting
   - What it demonstrates
   - Real-world applications
 
 - **[Architecture Overview](architecture.md)** - System design and structure
+
   - High-level architecture
   - Component responsibilities
   - Design decisions
@@ -25,18 +27,21 @@ Explanations are **understanding-oriented** discussions that clarify and illumin
 ### Technical Decisions
 
 - **[NHL API Strategy](nhl-api-strategy.md)** - How we integrate with NHL's API
+
   - Why this API over alternatives
   - Rate limiting approach
   - Caching strategy
   - Error handling philosophy
 
 - **[Testing Philosophy](testing-philosophy.md)** - Our approach to testing
+
   - Why we test what we test
   - Unit vs integration vs end-to-end
   - Coverage targets
   - Mocking strategies
 
 - **[UV Ecosystem](uv-ecosystem.md)** - Why and how we use UV
+
   - Benefits of UV
   - Integration with tox
   - Performance improvements
@@ -45,18 +50,21 @@ Explanations are **understanding-oriented** discussions that clarify and illumin
 ### Development Practices
 
 - **[Development Workflow](development-workflow.md)** - How we work on the project
+
   - Branch workflow
   - PR process
   - Review standards
   - Release process
 
 - **[Report System Architecture](report-system.md)** - How reports work
+
   - Report generator design
   - Plugin architecture
   - Extensibility
   - Future plans
 
 - **[Type Safety Approach](type-safety.md)** - Why we use type hints
+
   - Benefits of type safety
   - MyPy strict mode
   - Pydantic for data

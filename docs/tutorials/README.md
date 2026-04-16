@@ -9,13 +9,15 @@ Tutorials are **learning-oriented** lessons that take you by the hand through a 
 ## Available Tutorials
 
 1. **[Getting Started](01-getting-started.md)** - Your first NHL Scrabble analysis
+
    - Install the tool
    - Run your first analysis
    - Understand the basic output
    - Customize basic settings
    - *Time: ~15 minutes*
 
-2. **[Understanding Output](02-understanding-output.md)** - Deep dive into reports
+1. **[Understanding Output](02-understanding-output.md)** - Deep dive into reports
+
    - Conference standings
    - Division standings
    - Playoff brackets
@@ -23,7 +25,8 @@ Tutorials are **learning-oriented** lessons that take you by the hand through a 
    - Player scores
    - *Time: ~20 minutes*
 
-3. **[First Contribution](03-first-contribution.md)** - Make your first code contribution
+1. **[First Contribution](03-first-contribution.md)** - Make your first code contribution
+
    - Set up development environment
    - Run tests
    - Make a small change

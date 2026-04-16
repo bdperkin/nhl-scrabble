@@ -121,7 +121,7 @@ pytest tests/unit/test_scrabble.py::test_calculate_score -vv
 # Run only unit tests
 pytest -m unit
 
-# Run only integration tests  
+# Run only integration tests
 pytest -m integration
 
 # Skip slow tests
@@ -324,10 +324,10 @@ def test_<function>_<scenario>_<expected>():
     """Test that function does expected thing in scenario."""
     # Arrange
     scorer = ScrabbleScorer()
-    
+
     # Act
     result = scorer.calculate_score("test")
-    
+
     # Assert
     assert result == 4
 ```
@@ -408,10 +408,10 @@ which python  # Should point to .venv/bin/python
 ## Performance Tips
 
 1. **Run specific tests** during development instead of full suite
-2. **Use pytest-xdist** for parallel execution (`pytest -n auto`)
-3. **Skip slow tests** during iteration (`pytest -m "not slow"`)
-4. **Use tox-uv** for 10x faster tox runs (automatic in this project)
-5. **Watch mode** for continuous testing (`ptw`)
+1. **Use pytest-xdist** for parallel execution (`pytest -n auto`)
+1. **Skip slow tests** during iteration (`pytest -m "not slow"`)
+1. **Use tox-uv** for 10x faster tox runs (automatic in this project)
+1. **Watch mode** for continuous testing (`ptw`)
 
 ## Related
 

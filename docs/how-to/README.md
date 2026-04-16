@@ -21,12 +21,14 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
 ### Development
 
 - **[Add a Report Type](add-report-type.md)** - Create custom report generators
+
   - Inherit from BaseReport
   - Implement generation logic
   - Register with CLI
   - Write tests
 
 - **[Run Tests](run-tests.md)** - Execute different test configurations
+
   - Run all tests
   - Run specific tests
   - Run with coverage
@@ -34,6 +36,7 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Parallel testing
 
 - **[Setup Pre-commit Hooks](setup-pre-commit-hooks.md)** - Configure automated quality checks
+
   - Install hooks
   - Run manually
   - Customize hook configuration
@@ -41,12 +44,14 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Update hook versions
 
 - **[Use UV Package Manager](use-uv.md)** - Leverage UV for 10-100x speedup
+
   - Install UV
   - Use UV with tox
   - Manage dependencies
   - Lock file management
 
 - **[Contribute Code](contribute-code.md)** - Submit code contributions
+
   - Fork and clone
   - Create feature branch
   - Make changes
@@ -56,6 +61,7 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
 ### Configuration & Usage
 
 - **[Configure API Settings](configure-api-settings.md)** - Customize NHL API behavior
+
   - Set timeout values
   - Configure retries
   - Adjust rate limits
@@ -63,6 +69,7 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Environment variables
 
 - **[Customize Output Format](customize-output-format.md)** - Control report formatting
+
   - Change output format (text/JSON)
   - Customize player counts
   - Filter teams/divisions
@@ -70,6 +77,7 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Redirect output
 
 - **[Export to JSON](export-to-json.md)** - Export data in JSON format
+
   - Generate JSON reports
   - Understand JSON structure
   - Import into Excel/Sheets

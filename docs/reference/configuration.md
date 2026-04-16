@@ -7,8 +7,8 @@ Complete reference for all NHL Scrabble configuration options.
 NHL Scrabble can be configured via:
 
 1. **Environment variables** (recommended for deployment)
-2. **Command-line options** (for ad-hoc usage)
-3. **.env file** (for development)
+1. **Command-line options** (for ad-hoc usage)
+1. **.env file** (for development)
 
 **Priority**: Command-line > Environment variables > Defaults
 
@@ -16,11 +16,11 @@ NHL Scrabble can be configured via:
 
 ### API Configuration
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `NHL_SCRABBLE_API_TIMEOUT` | int | 10 | API request timeout in seconds |
-| `NHL_SCRABBLE_API_RETRIES` | int | 3 | Number of retry attempts on failure |
-| `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float | 0.3 | Delay between requests in seconds |
+| Variable                        | Type  | Default | Description                         |
+| ------------------------------- | ----- | ------- | ----------------------------------- |
+| `NHL_SCRABBLE_API_TIMEOUT`      | int   | 10      | API request timeout in seconds      |
+| `NHL_SCRABBLE_API_RETRIES`      | int   | 3       | Number of retry attempts on failure |
+| `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float | 0.3     | Delay between requests in seconds   |
 
 **Example**:
 
@@ -32,10 +32,10 @@ export NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
 
 ### Caching Configuration
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `NHL_SCRABBLE_CACHE_ENABLED` | bool | true | Enable API response caching |
-| `NHL_SCRABBLE_CACHE_EXPIRY` | int | 3600 | Cache expiry time in seconds |
+| Variable                     | Type | Default | Description                  |
+| ---------------------------- | ---- | ------- | ---------------------------- |
+| `NHL_SCRABBLE_CACHE_ENABLED` | bool | true    | Enable API response caching  |
+| `NHL_SCRABBLE_CACHE_EXPIRY`  | int  | 3600    | Cache expiry time in seconds |
 
 **Example**:
 
@@ -46,11 +46,11 @@ export NHL_SCRABBLE_CACHE_EXPIRY=7200  # 2 hours
 
 ### Output Configuration
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `NHL_SCRABBLE_OUTPUT_FORMAT` | string | text | Output format: `text` or `json` |
-| `NHL_SCRABBLE_TOP_PLAYERS` | int | 20 | Number of top players to show |
-| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int | 5 | Top players per team to show |
+| Variable                        | Type   | Default | Description                     |
+| ------------------------------- | ------ | ------- | ------------------------------- |
+| `NHL_SCRABBLE_OUTPUT_FORMAT`    | string | text    | Output format: `text` or `json` |
+| `NHL_SCRABBLE_TOP_PLAYERS`      | int    | 20      | Number of top players to show   |
+| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int    | 5       | Top players per team to show    |
 
 **Example**:
 
@@ -62,10 +62,10 @@ export NHL_SCRABBLE_TOP_TEAM_PLAYERS=10
 
 ### Logging Configuration
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `NHL_SCRABBLE_VERBOSE` | bool | false | Enable verbose (DEBUG) logging |
-| `NHL_SCRABBLE_SANITIZE_LOGS` | bool | true | Sanitize secrets from logs |
+| Variable                     | Type | Default | Description                    |
+| ---------------------------- | ---- | ------- | ------------------------------ |
+| `NHL_SCRABBLE_VERBOSE`       | bool | false   | Enable verbose (DEBUG) logging |
+| `NHL_SCRABBLE_SANITIZE_LOGS` | bool | true    | Sanitize secrets from logs     |
 
 **Example**:
 

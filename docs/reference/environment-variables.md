@@ -4,25 +4,25 @@ Complete list of all environment variables supported by NHL Scrabble.
 
 ## Quick Reference
 
-| Variable | Type | Default | Description |
-|---|---|---|---|
-| `NHL_SCRABBLE_API_TIMEOUT` | int | 10 | API timeout (seconds) |
-| `NHL_SCRABBLE_API_RETRIES` | int | 3 | Retry attempts |
-| `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float | 0.3 | Request delay (seconds) |
-| `NHL_SCRABBLE_CACHE_ENABLED` | bool | true | Enable caching |
-| `NHL_SCRABBLE_CACHE_EXPIRY` | int | 3600 | Cache duration (seconds) |
-| `NHL_SCRABBLE_OUTPUT_FORMAT` | string | text | Output format |
-| `NHL_SCRABBLE_TOP_PLAYERS` | int | 20 | Top players count |
-| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int | 5 | Per-team players |
-| `NHL_SCRABBLE_VERBOSE` | bool | false | Verbose logging |
-| `NHL_SCRABBLE_SANITIZE_LOGS` | bool | true | Sanitize secrets |
+| Variable                        | Type   | Default | Description              |
+| ------------------------------- | ------ | ------- | ------------------------ |
+| `NHL_SCRABBLE_API_TIMEOUT`      | int    | 10      | API timeout (seconds)    |
+| `NHL_SCRABBLE_API_RETRIES`      | int    | 3       | Retry attempts           |
+| `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float  | 0.3     | Request delay (seconds)  |
+| `NHL_SCRABBLE_CACHE_ENABLED`    | bool   | true    | Enable caching           |
+| `NHL_SCRABBLE_CACHE_EXPIRY`     | int    | 3600    | Cache duration (seconds) |
+| `NHL_SCRABBLE_OUTPUT_FORMAT`    | string | text    | Output format            |
+| `NHL_SCRABBLE_TOP_PLAYERS`      | int    | 20      | Top players count        |
+| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int    | 5       | Per-team players         |
+| `NHL_SCRABBLE_VERBOSE`          | bool   | false   | Verbose logging          |
+| `NHL_SCRABBLE_SANITIZE_LOGS`    | bool   | true    | Sanitize secrets         |
 
 ## API Configuration
 
 ### NHL_SCRABBLE_API_TIMEOUT
 
-**Type**: Integer  
-**Default**: 10  
+**Type**: Integer
+**Default**: 10
 **Description**: Maximum time in seconds to wait for API response.
 
 **Example**:
@@ -33,8 +33,8 @@ export NHL_SCRABBLE_API_TIMEOUT=30
 
 ### NHL_SCRABBLE_API_RETRIES
 
-**Type**: Integer  
-**Default**: 3  
+**Type**: Integer
+**Default**: 3
 **Description**: Number of retry attempts on API failure.
 
 **Example**:
@@ -45,8 +45,8 @@ export NHL_SCRABBLE_API_RETRIES=5
 
 ### NHL_SCRABBLE_RATE_LIMIT_DELAY
 
-**Type**: Float  
-**Default**: 0.3  
+**Type**: Float
+**Default**: 0.3
 **Description**: Delay in seconds between API requests to respect rate limits.
 
 **Example**:
@@ -59,8 +59,8 @@ export NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
 
 ### NHL_SCRABBLE_CACHE_ENABLED
 
-**Type**: Boolean  
-**Default**: true  
+**Type**: Boolean
+**Default**: true
 **Description**: Enable/disable API response caching.
 
 **Example**:
@@ -71,8 +71,8 @@ export NHL_SCRABBLE_CACHE_ENABLED=false
 
 ### NHL_SCRABBLE_CACHE_EXPIRY
 
-**Type**: Integer  
-**Default**: 3600  
+**Type**: Integer
+**Default**: 3600
 **Description**: Cache expiration time in seconds.
 
 **Example**:
@@ -85,8 +85,8 @@ export NHL_SCRABBLE_CACHE_EXPIRY=7200  # 2 hours
 
 ### NHL_SCRABBLE_OUTPUT_FORMAT
 
-**Type**: String (text|json)  
-**Default**: text  
+**Type**: String (text|json)
+**Default**: text
 **Description**: Default output format.
 
 **Example**:
@@ -97,8 +97,8 @@ export NHL_SCRABBLE_OUTPUT_FORMAT=json
 
 ### NHL_SCRABBLE_TOP_PLAYERS
 
-**Type**: Integer  
-**Default**: 20  
+**Type**: Integer
+**Default**: 20
 **Description**: Number of top players to show in league rankings.
 
 **Example**:
@@ -109,8 +109,8 @@ export NHL_SCRABBLE_TOP_PLAYERS=50
 
 ### NHL_SCRABBLE_TOP_TEAM_PLAYERS
 
-**Type**: Integer  
-**Default**: 5  
+**Type**: Integer
+**Default**: 5
 **Description**: Number of top players to show per team.
 
 **Example**:
@@ -123,8 +123,8 @@ export NHL_SCRABBLE_TOP_TEAM_PLAYERS=10
 
 ### NHL_SCRABBLE_VERBOSE
 
-**Type**: Boolean  
-**Default**: false  
+**Type**: Boolean
+**Default**: false
 **Description**: Enable verbose (DEBUG level) logging.
 
 **Example**:
@@ -135,8 +135,8 @@ export NHL_SCRABBLE_VERBOSE=true
 
 ### NHL_SCRABBLE_SANITIZE_LOGS
 
-**Type**: Boolean  
-**Default**: true  
+**Type**: Boolean
+**Default**: true
 **Description**: Sanitize sensitive data (API keys, tokens) from logs.
 
 **Example**:

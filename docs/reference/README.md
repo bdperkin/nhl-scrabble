@@ -20,6 +20,7 @@ Reference documentation is **information-oriented** material that describes the 
 ### Configuration
 
 - **[Configuration Reference](configuration.md)** - All configuration options
+
   - Environment variables
   - Configuration file format
   - Default values
@@ -27,6 +28,7 @@ Reference documentation is **information-oriented** material that describes the 
   - Examples
 
 - **[Environment Variables](environment-variables.md)** - Complete environment variable reference
+
   - API configuration
   - Logging configuration
   - Output configuration
@@ -35,6 +37,7 @@ Reference documentation is **information-oriented** material that describes the 
 ### Build & Development Tools
 
 - **[Makefile Reference](makefile.md)** - All Makefile targets
+
   - Setup targets
   - Testing targets
   - Quality check targets
@@ -42,6 +45,7 @@ Reference documentation is **information-oriented** material that describes the 
   - 55 documented targets
 
 - **[Tox Reference](tox.md)** - Tox environment reference
+
   - Python version environments
   - Quality check environments
   - Coverage environments
@@ -50,18 +54,21 @@ Reference documentation is **information-oriented** material that describes the 
 ### APIs & Data Formats
 
 - **[Python API Reference](code-api.md)** - Use NHL Scrabble as a library
+
   - Public classes and functions
   - Type signatures
   - Return values
   - Examples
 
 - **[NHL API Reference](nhl-api.md)** - NHL API endpoints used
+
   - Standings endpoint
   - Roster endpoint
   - Response formats
   - Rate limits
 
 - **[Scrabble Values](scrabble-values.md)** - Letter values and scoring rules
+
   - Letter point values
   - Scoring algorithm
   - Edge cases
@@ -70,12 +77,14 @@ Reference documentation is **information-oriented** material that describes the 
 ### Output Formats
 
 - **[JSON Schema Reference](json-schema.md)** - JSON output structure
+
   - Complete schema
   - Field descriptions
   - Examples
   - Validation
 
 - **[Text Report Format](text-report-format.md)** - Text output structure
+
   - Report sections
   - Formatting rules
   - Indicators and symbols

@@ -65,9 +65,9 @@ nhl-scrabble analyze
 The analyzer will:
 
 1. Fetch current NHL standings from the official API
-2. Download roster data for all teams
-3. Calculate Scrabble scores for every player's name
-4. Generate comprehensive reports
+1. Download roster data for all teams
+1. Calculate Scrabble scores for every player's name
+1. Generate comprehensive reports
 
 The output starts with a progress indicator:
 
@@ -228,9 +228,9 @@ Congratulations! You've successfully:
 Now that you know the basics, you can:
 
 1. **Dive deeper into output**: [Understanding Output Tutorial](02-understanding-output.md)
-2. **Solve specific problems**: [How-to Guides](../how-to/)
-3. **Look up commands**: [CLI Reference](../reference/cli.md)
-4. **Understand the system**: [Architecture Explanation](../explanation/architecture.md)
+1. **Solve specific problems**: [How-to Guides](../how-to/)
+1. **Look up commands**: [CLI Reference](../reference/cli.md)
+1. **Understand the system**: [Architecture Explanation](../explanation/architecture.md)
 
 ## Troubleshooting
 

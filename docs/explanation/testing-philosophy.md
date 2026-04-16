@@ -7,9 +7,9 @@ Understanding our approach to testing NHL Scrabble.
 Our tests aim to:
 
 1. **Verify correctness** - Does the code work as intended?
-2. **Prevent regressions** - Does old code still work?
-3. **Document behavior** - What is the expected behavior?
-4. **Enable refactoring** - Can we change code safely?
+1. **Prevent regressions** - Does old code still work?
+1. **Document behavior** - What is the expected behavior?
+1. **Enable refactoring** - Can we change code safely?
 
 ## Test Pyramid
 
@@ -19,7 +19,7 @@ Our tests aim to:
          /____\           - Full workflows
         /      \          - Component interactions
        /  Unit  \         - Mocked external APIs
-      /__________\     
+      /__________\
      Unit (80%)
      - Individual functions
      - Isolated components
@@ -29,18 +29,21 @@ Our tests aim to:
 ### Why this distribution?
 
 **Unit tests (80%)**:
-- Fast to run (<1s for all)
+
+- Fast to run (\<1s for all)
 - Easy to write
 - Pinpoint failures
 - Test one thing at a time
 
 **Integration tests (20%)**:
+
 - Verify components work together
 - Test real user workflows
 - Catch integration bugs
 - Slower but comprehensive
 
 **No E2E tests**:
+
 - CLI tool, not web app
 - Integration tests cover full workflow
 - Would be slow and fragile
@@ -86,11 +89,13 @@ Our tests aim to:
 ### External APIs
 
 **Don't test**:
+
 - NHL API responses
 - Network behavior
 - Third-party libraries
 
 **Why?**:
+
 - Out of our control
 - Would be slow and flaky
 - Mock instead
@@ -98,11 +103,13 @@ Our tests aim to:
 ### Framework Code
 
 **Don't test**:
+
 - Click argument parsing
 - Pydantic validation
 - Python standard library
 
 **Why?**:
+
 - Already tested by authors
 - Trust mature libraries
 - Focus on our code
@@ -112,12 +119,14 @@ Our tests aim to:
 ### When to Mock
 
 **Mock external dependencies**:
+
 - NHL API calls
 - Network requests
 - File system operations
 - Time/dates
 
 **Don't mock**:
+
 - Our own code
 - Data structures
 - Pure functions
@@ -131,11 +140,11 @@ def test_fetch_roster(mocker):
     # Mock external API
     mock_get = mocker.patch('requests.get')
     mock_get.return_value.json.return_value = {...}
-    
+
     # Test our code
     client = NHLApiClient()
     roster = client.fetch_roster('TOR')
-    
+
     # Verify
     assert len(roster) == 25
     mock_get.assert_called_once()
@@ -170,7 +179,7 @@ def test_<function>_<scenario>_<expected>():
 ```python
 def test_calculate_score_simple_name_returns_correct_value():
     """Test that calculate_score returns correct value for simple name."""
-    
+
 def test_fetch_roster_api_failure_raises_exception():
     """Test that fetch_roster raises exception on API failure."""
 ```
@@ -252,6 +261,7 @@ Tests run automatically on:
 ### High Coverage vs Speed
 
 **Chose high coverage**:
+
 - ✅ Catch more bugs
 - ✅ Safe refactoring
 - ❌ Slower test suite
@@ -261,6 +271,7 @@ Tests run automatically on:
 ### Mocking vs Real APIs
 
 **Chose mocking**:
+
 - ✅ Fast and reliable
 - ✅ Test edge cases
 - ❌ May miss real API changes
@@ -270,6 +281,7 @@ Tests run automatically on:
 ### Unit vs Integration
 
 **Chose more unit tests**:
+
 - ✅ Faster feedback
 - ✅ Easier debugging
 - ❌ May miss integration bugs

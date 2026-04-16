@@ -26,8 +26,8 @@ By the end of this tutorial, you'll have:
 First, create your own copy of NHL Scrabble:
 
 1. Go to https://github.com/bdperkin/nhl-scrabble
-2. Click the **Fork** button in the top right
-3. Wait for GitHub to create your fork
+1. Click the **Fork** button in the top right
+1. Wait for GitHub to create your fork
 
 You now have your own copy at `https://github.com/YOUR-USERNAME/nhl-scrabble`
 
@@ -129,7 +129,7 @@ git checkout -b add-my-feature
 Branch naming conventions:
 
 - `fix/description` - Bug fixes
-- `feat/description` - New features  
+- `feat/description` - New features
 - `docs/description` - Documentation
 - `refactor/description` - Code improvements
 
@@ -151,13 +151,13 @@ Add this new method to the `ScrabbleScorer` class (around line 40):
 ```python
 def get_letter_value(self, letter: str) -> int:
     """Get the Scrabble value for a single letter.
-    
+
     Args:
         letter: Single character to score (case-insensitive).
-        
+
     Returns:
         Scrabble point value for the letter (0 if not a letter).
-        
+
     Example:
         scorer = ScrabbleScorer()
         value = scorer.get_letter_value('Z')  # Returns 10
@@ -177,21 +177,21 @@ Good code comes with tests. Open `tests/unit/test_scrabble.py` and add:
 def test_get_letter_value():
     """Test getting individual letter values."""
     scorer = ScrabbleScorer()
-    
+
     # Test high-value letters
     assert scorer.get_letter_value('Z') == 10
     assert scorer.get_letter_value('Q') == 10
     assert scorer.get_letter_value('X') == 8
     assert scorer.get_letter_value('K') == 5
-    
+
     # Test low-value letters
     assert scorer.get_letter_value('A') == 1
     assert scorer.get_letter_value('E') == 1
-    
+
     # Test case insensitivity
     assert scorer.get_letter_value('z') == 10
     assert scorer.get_letter_value('Z') == 10
-    
+
     # Test invalid input
     assert scorer.get_letter_value('') == 0
     assert scorer.get_letter_value('1') == 0
@@ -296,8 +296,8 @@ git push -u origin add-my-feature
 ## Step 12: Create a pull request
 
 1. Go to your fork on GitHub: `https://github.com/YOUR-USERNAME/nhl-scrabble`
-2. Click the **Compare & pull request** button
-3. Fill in the PR template:
+1. Click the **Compare & pull request** button
+1. Fill in the PR template:
 
 ```markdown
 ## Summary
@@ -385,9 +385,9 @@ You've successfully:
 Ready for more?
 
 1. **Find an issue**: Look for ["good first issue"](https://github.com/bdperkin/nhl-scrabble/labels/good%20first%20issue) labels
-2. **Learn the codebase**: Read [Architecture Explanation](../explanation/architecture.md)
-3. **Add a feature**: See [How to Add a Report Type](../how-to/add-report-type.md)
-4. **Improve docs**: Documentation contributions are always welcome!
+1. **Learn the codebase**: Read [Architecture Explanation](../explanation/architecture.md)
+1. **Add a feature**: See [How to Add a Report Type](../how-to/add-report-type.md)
+1. **Improve docs**: Documentation contributions are always welcome!
 
 ## Tips for success
 

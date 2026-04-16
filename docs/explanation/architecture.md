@@ -83,14 +83,14 @@ NHL Scrabble follows a layered architecture with clear separation of concerns:
 def analyze(output_format: str, output: str | None) -> None:
     # 1. Validate (early, before expensive operations)
     validate_output_path(output)
-    
+
     # 2. Configure
     config = Config.from_env()
     config.output_format = output_format
-    
+
     # 3. Delegate to business logic
     result = run_analysis(config)
-    
+
     # 4. Present output
     if output:
         Path(output).write_text(result)
@@ -131,13 +131,13 @@ class TeamProcessor:
     def process_all_teams(self) -> tuple[dict, list, list]:
         # 1. Fetch standings
         standings = self.api_client.fetch_standings()
-        
+
         # 2. Process each team
         for team in standings:
             roster = self.api_client.fetch_roster(team.abbrev)
             team_score = self._score_roster(roster)
             team_scores[team.abbrev] = team_score
-        
+
         # 3. Return aggregated data
         return team_scores, all_players, failed_teams
 ```
@@ -171,7 +171,7 @@ class ScrabbleScorer:
         'A': 1, 'E': 1, ...,  # Low-value
         'Q': 10, 'Z': 10,     # High-value
     }
-    
+
     def calculate_score(self, text: str) -> int:
         return sum(
             self.SCRABBLE_VALUES.get(char.upper(), 0)
@@ -249,7 +249,7 @@ class Player(BaseModel):
     lastName: str = Field(..., min_length=1)
     sweaterNumber: int | None = None
     positionCode: str
-    
+
     class Config:
         frozen = True  # Immutable
 ```
@@ -426,7 +426,7 @@ Typical analysis workflow:
          /____\           - Full workflow
         /      \          - Real CLI invocation
        /  Unit  \         - Mocked API
-      /__________\     
+      /__________\
      Unit Tests
      - Individual functions
      - Mocked dependencies
@@ -437,7 +437,7 @@ Typical analysis workflow:
 
 - Test each component in isolation
 - Mock all dependencies
-- Fast (<1s total)
+- Fast (\<1s total)
 
 **Integration tests** (20%):
 
@@ -477,7 +477,7 @@ Implement API client interface:
 class NBAApiClient:
     def fetch_standings(self) -> list[Team]:
         ...
-    
+
     def fetch_roster(self, team_abbrev: str) -> list[Player]:
         ...
 ```
@@ -516,14 +516,14 @@ Fetching 32 team rosters takes ~10-15 seconds due to:
 
 **Mitigation**:
 
-- Caching (reduces subsequent runs to <2s)
+- Caching (reduces subsequent runs to \<2s)
 - Could parallelize (but respect rate limits)
 
 ### Memory: Minimal
 
 - ~750 player objects
 - ~32 team objects
-- Total: <5MB in memory
+- Total: \<5MB in memory
 
 **No optimization needed** for current scale.
 
@@ -533,7 +533,7 @@ Scoring calculations:
 
 - Simple dictionary lookups
 - String iteration
-- Total: <100ms for all players
+- Total: \<100ms for all players
 
 **Not a bottleneck.**
 

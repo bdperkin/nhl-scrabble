@@ -17,24 +17,28 @@ NHL provides a public JSON API at `api-web.nhle.com` with endpoints for:
 ### Alternatives Considered
 
 **Official NHL Stats API (stats.nhl.com)**:
+
 - More comprehensive data
 - Better documented
 - ❌ More complex
 - ❌ Requires API key (authentication)
 
 **Third-party APIs (ESPN, The Sports DB)**:
+
 - Easier to use
 - ❌ Less reliable
 - ❌ May have usage limits
 - ❌ Not official source
 
 **Web Scraping**:
+
 - Could get any data
 - ❌ Fragile (breaks when HTML changes)
 - ❌ Violates terms of service
 - ❌ Unethical
 
 **Chose api-web.nhle.com**:
+
 - ✅ Official NHL source
 - ✅ No authentication required
 - ✅ Simple JSON responses
@@ -60,6 +64,7 @@ def _fetch_with_retry(self, url: str) -> dict:
 ```
 
 **Why?**:
+
 - Temporary network blips
 - Server momentary overload
 - Connection resets
@@ -77,6 +82,7 @@ def fetch_roster(self, team_abbrev: str) -> list[Player]:
 ```
 
 **Why?**:
+
 - Respect API provider
 - Avoid being blocked
 - Distribute load over time
@@ -94,6 +100,7 @@ def fetch_standings(self) -> list[Team]:
 ```
 
 **Why?**:
+
 - Reduce redundant requests
 - Faster subsequent runs
 - Less load on NHL servers
@@ -114,6 +121,7 @@ except NHLApiError as e:
 ```
 
 **Why?**:
+
 - One team failure shouldn't break entire analysis
 - User gets partial results
 - Failures are logged for debugging
@@ -131,6 +139,7 @@ class Player(BaseModel):
 ```
 
 **Why?**:
+
 - Catch API changes early
 - Type-safe data
 - Self-documenting code
@@ -141,6 +150,7 @@ class Player(BaseModel):
 ### Synchronous vs Async
 
 **Chose synchronous**:
+
 - ✅ Simpler code
 - ✅ Easier to understand
 - ✅ Sufficient performance
@@ -151,6 +161,7 @@ class Player(BaseModel):
 ### Caching Strategy
 
 **Chose in-memory LRU cache**:
+
 - ✅ Simple implementation
 - ✅ Works for CLI use
 - ❌ Cache lost between runs
@@ -161,6 +172,7 @@ class Player(BaseModel):
 ### Error Handling Philosophy
 
 **Chose graceful degradation**:
+
 - ✅ Partial results better than none
 - ✅ User can see what succeeded
 - ❌ May be unexpected for users

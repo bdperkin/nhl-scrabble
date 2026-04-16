@@ -10,10 +10,10 @@ nhl-scrabble [OPTIONS] COMMAND [ARGS]...
 
 ## Global Options
 
-| Option      | Description                     |
-| ----------- | ------------------------------- |
-| `--version` | Show version and exit           |
-| `--help`    | Show help message and exit      |
+| Option      | Description                |
+| ----------- | -------------------------- |
+| `--version` | Show version and exit      |
+| `--help`    | Show help message and exit |
 
 ## Commands
 
@@ -33,16 +33,16 @@ Fetches current NHL roster data from the official NHL API and calculates Scrabbl
 
 **Options**:
 
-| Option                       | Type   | Default | Description                                       |
-| ---------------------------- | ------ | ------- | ------------------------------------------------- |
-| `--format FORMAT`            | choice | `text`  | Output format: `text` or `json`                   |
-| `-o, --output PATH`          | path   | stdout  | Output file path (writes to stdout if not given)  |
-| `-v, --verbose`              | flag   | false   | Enable verbose logging (DEBUG level)              |
-| `--no-cache`                 | flag   | false   | Disable API response caching                      |
-| `--clear-cache`              | flag   | false   | Clear API cache before running                    |
-| `--top-players INT`          | int    | 20      | Number of top players to show in rankings         |
-| `--top-team-players INT`     | int    | 5       | Number of top players per team to show            |
-| `--help`                     | flag   | false   | Show command help and exit                        |
+| Option                   | Type   | Default | Description                                      |
+| ------------------------ | ------ | ------- | ------------------------------------------------ |
+| `--format FORMAT`        | choice | `text`  | Output format: `text` or `json`                  |
+| `-o, --output PATH`      | path   | stdout  | Output file path (writes to stdout if not given) |
+| `-v, --verbose`          | flag   | false   | Enable verbose logging (DEBUG level)             |
+| `--no-cache`             | flag   | false   | Disable API response caching                     |
+| `--clear-cache`          | flag   | false   | Clear API cache before running                   |
+| `--top-players INT`      | int    | 20      | Number of top players to show in rankings        |
+| `--top-team-players INT` | int    | 5       | Number of top players per team to show           |
+| `--help`                 | flag   | false   | Show command help and exit                       |
 
 **Examples**:
 
@@ -77,33 +77,33 @@ nhl-scrabble analyze --format json --output report.json --verbose --top-players 
 The command generates a comprehensive report with the following sections:
 
 1. **Header** - Tool name and version
-2. **Conference Standings** - Eastern and Western conference rankings
-3. **Division Standings** - All 4 divisions with team rankings
-4. **Mock Playoff Bracket** - Simulated playoff seeding
-5. **Team Details** - Individual team breakdowns with top players
-6. **Top Players** - League-wide player rankings
-7. **Statistical Summary** - League statistics and distributions
+1. **Conference Standings** - Eastern and Western conference rankings
+1. **Division Standings** - All 4 divisions with team rankings
+1. **Mock Playoff Bracket** - Simulated playoff seeding
+1. **Team Details** - Individual team breakdowns with top players
+1. **Top Players** - League-wide player rankings
+1. **Statistical Summary** - League statistics and distributions
 
 See [Understanding Output Tutorial](../tutorials/02-understanding-output.md) for details.
 
 **Performance**:
 
 - **Fetch time**: ~5-15 seconds (depends on network and NHL API)
-- **Processing time**: <1 second
+- **Processing time**: \<1 second
 - **Total runtime**: ~6-16 seconds typically
 
-With caching enabled (default), subsequent runs complete in <2 seconds.
+With caching enabled (default), subsequent runs complete in \<2 seconds.
 
 **Error Handling**:
 
 The command validates output paths before fetching data. Common errors:
 
-| Error                                 | Cause                                      | Solution                     |
-| ------------------------------------- | ------------------------------------------ | ---------------------------- |
-| "Output directory does not exist"     | Parent directory of --output doesn't exist | Create directory first       |
-| "Output directory is not writable"    | No write permission to directory           | Check permissions            |
-| "Output file exists but is not writable" | Existing file is read-only              | Change file permissions      |
-| "NHL API Error"                       | Network or API issue                       | Check connection, retry      |
+| Error                                    | Cause                                      | Solution                |
+| ---------------------------------------- | ------------------------------------------ | ----------------------- |
+| "Output directory does not exist"        | Parent directory of --output doesn't exist | Create directory first  |
+| "Output directory is not writable"       | No write permission to directory           | Check permissions       |
+| "Output file exists but is not writable" | Existing file is read-only                 | Change file permissions |
+| "NHL API Error"                          | Network or API issue                       | Check connection, retry |
 
 ### Future Commands (Planned)
 
@@ -136,23 +136,23 @@ nhl-scrabble export --format html        # HTML report
 
 ## Exit Codes
 
-| Code | Meaning                                         |
-| ---- | ----------------------------------------------- |
-| 0    | Success                                         |
-| 1    | General error (unspecified)                     |
-| 2    | Invalid command-line arguments                  |
+| Code | Meaning                        |
+| ---- | ------------------------------ |
+| 0    | Success                        |
+| 1    | General error (unspecified)    |
+| 2    | Invalid command-line arguments |
 
 ## Environment Variables
 
 The CLI respects these environment variables (in addition to those in [Environment Variables Reference](environment-variables.md)):
 
-| Variable                        | Description                  | Default |
-| ------------------------------- | ---------------------------- | ------- |
-| `NHL_SCRABBLE_OUTPUT_FORMAT`    | Default output format        | `text`  |
-| `NHL_SCRABBLE_VERBOSE`          | Enable verbose logging       | `false` |
-| `NHL_SCRABBLE_TOP_PLAYERS`      | Default top players count    | `20`    |
-| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | Default top team players     | `5`     |
-| `NHL_SCRABBLE_CACHE_ENABLED`    | Enable API caching           | `true`  |
+| Variable                        | Description               | Default |
+| ------------------------------- | ------------------------- | ------- |
+| `NHL_SCRABBLE_OUTPUT_FORMAT`    | Default output format     | `text`  |
+| `NHL_SCRABBLE_VERBOSE`          | Enable verbose logging    | `false` |
+| `NHL_SCRABBLE_TOP_PLAYERS`      | Default top players count | `20`    |
+| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | Default top team players  | `5`     |
+| `NHL_SCRABBLE_CACHE_ENABLED`    | Enable API caching        | `true`  |
 
 **Priority**: Command-line options override environment variables.
 
