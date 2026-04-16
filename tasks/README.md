@@ -63,13 +63,12 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 4 documented)
+### Enhancements (10 tasks, 3 documented)
 
 | ID  | Title                            | Priority | Effort | Issue |
 | --- | -------------------------------- | -------- | ------ | ----- |
 | 001 | Implement HTML Output            | MEDIUM   | 4-6h   | #46   |
 | 003 | Build Sphinx Docs + GitHub Pages | MEDIUM   | 12-16h | #64   |
-| 004 | Automated API/CLI Documentation  | MEDIUM   | 4-6h   | #81   |
 | 005 | Sphinx Quality Plugins           | LOW      | 2-4h   | #82   |
 | ... | Progress Bars                    | MEDIUM   | TBD    |       |
 | ... | Interactive Mode                 | MEDIUM   | TBD    |       |
@@ -81,7 +80,7 @@ Each task is assigned a priority:
 | ... | Watch Mode                       | LOW      | TBD    |       |
 | ... | Player Search                    | LOW      | TBD    |       |
 
-**Documented Effort**: 22-32 hours
+**Documented Effort**: 18-26 hours
 
 ### Testing (0 tasks)
 
@@ -119,12 +118,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 12 tasks
-**Total Documented Effort**: 51-76 hours
+**Documented Tasks**: 11 tasks
+**Total Documented Effort**: 47-70 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 14 tasks (34.17h actual effort)
+**Completed Tasks**: 15 tasks (39.67h actual effort)
 
-**Grand Total**: ~151-196 hours for complete roadmap
+**Grand Total**: ~147-190 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -291,7 +290,7 @@ This section organizes all documented tasks into a recommended implementation se
 ### Phase 4: Documentation Excellence (Week 6-8)
 
 **Focus**: Comprehensive documentation system
-**Total Effort**: ~20-28 hours (1 task complete)
+**Total Effort**: All tasks complete! ✅
 
 **Recommended order** (flexible based on needs):
 
@@ -303,23 +302,13 @@ This section organizes all documented tasks into a recommended implementation se
    - No dependencies
    - Completed 2026-04-16 (10h actual)
 
-1. **enhancement/004-automated-api-cli-docs.md** (4-6h) - #81 OR enhancement/003-sphinx-documentation.md (12-16h) - #64
+1. **enhancement/004-automated-api-cli-docs.md** (4-6h) - #81 - Complete ✅
 
-   - **Option A (Lightweight)**: Implement #81 (automated API/CLI docs)
-
-     - MEDIUM priority, quick automated documentation
-     - Uses pdoc + custom scripts (minimal dependencies)
-     - Fast builds (\<5s), simple integration
-     - Can be done independently or as stepping stone to Sphinx
-
-   - **Option B (Full Featured)**: Implement #64 (Sphinx documentation)
-
-     - MEDIUM priority, professional documentation site
-     - Sphinx with 9 extensions + GitHub Pages
-     - Includes automated API/CLI docs plus search, themes, etc.
-     - Larger effort but comprehensive solution
-
-   - **Or Both**: Implement #81 first (quick win), then #64 later (full solution)
+   - MEDIUM priority, automated API/CLI documentation
+   - Uses pdoc for HTML API reference + custom script for CLI docs
+   - Fast builds (\<2s), minimal dependencies
+   - Completed 2026-04-16 (5.5h actual)
+   - **Next**: Consider enhancement/003-sphinx-documentation.md (12-16h) for full documentation site
 
 1. **enhancement/005-sphinx-quality-plugins.md** (2-4h) - #82 (OPTIONAL)
 
@@ -601,3 +590,4 @@ ______________________________________________________________________
 | 003 | Implement Log Sanitization         | Security     | 2026-04-16 | 2.5h          | #78 |
 | 006 | Validate CLI Output Paths          | Bug Fix      | 2026-04-16 | 1.5h          | #79 |
 | 002 | Implement Procida Documentation    | Enhancement  | 2026-04-16 | 10h           | #80 |
+| 004 | Automated API/CLI Documentation    | Enhancement  | 2026-04-16 | 5.5h          | #85 |
