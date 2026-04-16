@@ -81,6 +81,7 @@ jobs:
           - pydocstyle
           - vulture
           - blocklint
+          - gitlint
           - absolufy-imports
           - autoflake
           - black

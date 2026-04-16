@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 54 comprehensive hooks for code quality, security, and consistency
+# 55 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -328,3 +328,16 @@ repos:
       - id: mypy
         additional_dependencies: [types-requests, pydantic]
         args: []  # Config is in pyproject.toml
+
+  # ============================================================================
+  # Git Commit Messages - Commit Message Linting
+  # ============================================================================
+
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+        # Comprehensive commit message linting (matches ruff's ALL rules philosophy)
+        # Enforces consistent commit message style and documentation
+        # Config is in .gitlint file
+        stages: [commit-msg]
