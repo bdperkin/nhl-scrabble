@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Gitlint Integration** - Commit message linter
+
+  - Comprehensive commit message linting matching ruff's ALL rules philosophy
+  - Pre-commit hook (jorisroovers/gitlint) for automatic commit message validation
+  - Tox environment (gitlint) for standalone commit message checks
+  - Added to CI/CD pipeline for continuous commit message quality validation
+  - Configuration in .gitlint file (gitlint has issues with complex pyproject.toml files)
+  - Title max length: 100 characters (matches ruff's line-length)
+  - Title min length: 5 characters (meaningful commits)
+  - Body max line length: 100 characters (matches ruff's line-length)
+  - Body min length: 10 characters (when body is present)
+  - Ignores: merge, revert, fixup, fixup-amend, squash commits (auto-generated)
+  - Enforces consistent commit message style and documentation
+  - Aligns with conventional commits best practices
+  - Promotes clear git history for team collaboration
+  - Works harmoniously with conventional commit standards
+  - 55 total pre-commit hooks for comprehensive code quality
+
 - **Blocklint Integration** - Inclusive language checker
 
   - Comprehensive inclusive language checker matching ruff's ALL rules philosophy
