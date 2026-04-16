@@ -6,7 +6,7 @@ import logging
 from collections import defaultdict
 from typing import Any
 
-from nhl_scrabble.api.nhl_client import NHLApiClient
+from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiNotFoundError
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings
 from nhl_scrabble.models.team import TeamScore
@@ -66,9 +66,9 @@ class TeamProcessor:
         for i, (team_abbrev, team_meta) in enumerate(teams_info.items(), 1):
             logger.info(f"Processing {team_abbrev} ({i}/{total_teams})")
 
-            roster = self.api_client.get_team_roster(team_abbrev)
-
-            if not roster:
+            try:
+                roster = self.api_client.get_team_roster(team_abbrev)
+            except NHLApiNotFoundError:
                 logger.warning(f"No roster data for {team_abbrev}")
                 failed_teams.append(team_abbrev)
                 continue

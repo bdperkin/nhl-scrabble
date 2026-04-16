@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError
+from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError, NHLApiNotFoundError
 
 
 class TestNHLApiClient:
@@ -90,15 +90,14 @@ class TestNHLApiClient:
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_team_roster_not_found(self, mock_get: Mock) -> None:
-        """Test handling of 404 response."""
+        """Test handling of 404 response raises NHLApiNotFoundError."""
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
 
         client = NHLApiClient()
-        roster = client.get_team_roster("XXX")
-
-        assert roster is None
+        with pytest.raises(NHLApiNotFoundError, match=r"Roster not found for team: XXX"):
+            client.get_team_roster("XXX")
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_team_roster_retry(
@@ -138,3 +137,45 @@ class TestNHLApiClient:
         client = NHLApiClient()
         client.close()
         # Verify no exceptions are raised
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_not_found_error_has_team_name(self, mock_get: Mock) -> None:
+        """Test that NHLApiNotFoundError includes the team name in message."""
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient()
+        with pytest.raises(NHLApiNotFoundError) as exc_info:
+            client.get_team_roster("TOR")
+
+        assert "TOR" in str(exc_info.value)
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_not_found_error_is_nhl_api_error(self, mock_get: Mock) -> None:
+        """Test that NHLApiNotFoundError is a subclass of NHLApiError."""
+        from nhl_scrabble.api.nhl_client import NHLApiError
+
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient()
+        # Should be catchable as NHLApiError
+        with pytest.raises(NHLApiError):
+            client.get_team_roster("TOR")
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_not_found_error_logs_warning(self, mock_get: Mock, caplog: Any) -> None:
+        """Test that 404 response logs a warning before raising."""
+        import logging
+
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient()
+        with caplog.at_level(logging.WARNING), pytest.raises(NHLApiNotFoundError):
+            client.get_team_roster("TOR")
+
+        assert "No roster data available for TOR" in caplog.text
