@@ -102,10 +102,7 @@ def analyze(
         nhl-scrabble analyze --no-cache
         nhl-scrabble analyze --clear-cache
     """
-    # Setup logging
-    setup_logging(verbose=verbose)
-
-    # Load configuration
+    # Load configuration first to get sanitize_logs setting
     config = Config.from_env()
     config.verbose = verbose
     config.output_format = output_format
@@ -115,6 +112,9 @@ def analyze(
     # Override cache setting from CLI
     if no_cache:
         config.cache_enabled = False
+
+    # Setup logging with sanitization setting from config
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
 
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
     logger.debug(f"Configuration: {config}")
