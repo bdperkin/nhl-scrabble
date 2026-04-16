@@ -6,7 +6,32 @@ set -e
 BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || echo "")
 PROTECTED_BRANCHES="^(main|master)$"
 
+# Check if running in CI environment
+is_ci() {
+    # GitHub Actions
+    [[ -n "${GITHUB_ACTIONS}" ]] && return 0
+    # GitLab CI
+    [[ -n "${GITLAB_CI}" ]] && return 0
+    # Travis CI
+    [[ -n "${TRAVIS}" ]] && return 0
+    # CircleCI
+    [[ -n "${CIRCLECI}" ]] && return 0
+    # Jenkins
+    [[ -n "${JENKINS_URL}" ]] && return 0
+    # Generic CI indicator
+    [[ -n "${CI}" ]] && return 0
+
+    return 1
+}
+
 if [[ "$BRANCH" =~ $PROTECTED_BRANCHES ]]; then
+    # In CI: Allow the commit (it's already on main after PR merge)
+    if is_ci; then
+        echo "ℹ️  CI environment detected: Allowing commit to '$BRANCH' branch"
+        exit 0
+    fi
+
+    # Local: Warn and prompt for confirmation
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "⚠️  WARNING: You are committing directly to the '$BRANCH' branch!"

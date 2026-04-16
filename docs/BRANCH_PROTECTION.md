@@ -10,12 +10,41 @@ A pre-commit hook warns when committing directly to `main` or `master`:
 
 **Location:** `.git-hooks/check-branch-protection.sh`
 **Integration:** Added to `.pre-commit-config.yaml` as local hook
+
 **Behavior:**
+
+**In Local Development:**
 
 - Warns when committing to protected branches
 - Prompts for confirmation (Y/N)
 - Provides instructions for proper workflow
 - Can be bypassed with explicit confirmation
+
+**In CI Environments:**
+
+- Automatically detects CI environment
+- Allows commits to main without prompting
+- Logs informational message
+- Enables CI to run on main branch after PR merges
+
+**CI Detection:**
+
+The hook automatically detects the following CI environments:
+
+- GitHub Actions (`GITHUB_ACTIONS`)
+- GitLab CI (`GITLAB_CI`)
+- Travis CI (`TRAVIS`)
+- CircleCI (`CIRCLECI`)
+- Jenkins (`JENKINS_URL`)
+- Generic CI (`CI`)
+
+**Why CI Behavior Differs:**
+
+In CI, commits to main are legitimate (result of PR merges via GitHub UI). The hook allows these commits to proceed without prompting since:
+
+- PRs already passed all checks before merging
+- CI has no interactive terminal for prompts
+- Rejecting would break CI pipeline on main branch
 
 **Test it:**
 
@@ -208,6 +237,24 @@ gh pr create --fill
 # Expected: PR created successfully, CI runs
 ```
 
+### Test 4: CI Environment Simulation
+
+```bash
+# Simulate GitHub Actions CI
+export GITHUB_ACTIONS=true
+git checkout main
+echo "test" >> test.txt
+git add test.txt
+git commit -m "test: CI simulation"
+
+# Expected: No prompt, commit succeeds with CI message
+# Output: "ℹ️  CI environment detected: Allowing commit to 'main' branch"
+
+# Clean up
+unset GITHUB_ACTIONS
+git reset HEAD~1
+```
+
 ## Troubleshooting
 
 ### Pre-commit Hook Not Running
@@ -248,6 +295,28 @@ git commit --no-verify -m "emergency fix"
 1. Make emergency push
 1. Re-enable branch protection immediately
 1. Create follow-up PR to document the emergency change
+
+### CI Failing on Main Branch
+
+**Problem:** Pre-commit hook fails in CI with exit code 1
+
+**Solution:** This was fixed in PR #[TBD]. The hook now detects CI environments and skips the interactive prompt.
+
+**Verify the fix:**
+
+```bash
+# Check hook has CI detection
+grep -A 10 "is_ci()" .git-hooks/check-branch-protection.sh
+
+# Should show function checking GITHUB_ACTIONS, CI, etc.
+```
+
+**If still failing:**
+
+1. Verify the hook file is updated
+1. Check CI environment variables are set
+1. Review CI logs for the actual error
+1. Ensure hook is executable: `chmod +x .git-hooks/check-branch-protection.sh`
 
 ## Best Practices
 
