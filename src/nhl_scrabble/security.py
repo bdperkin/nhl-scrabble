@@ -1,8 +1,8 @@
 """Security utilities for sanitizing sensitive data from logs."""
 
 import logging
-import re
-from re import Pattern
+from re import IGNORECASE, Pattern
+from re import compile as re_compile
 from typing import ClassVar
 
 
@@ -30,25 +30,25 @@ class SensitiveDataFilter(logging.Filter):
     # Patterns for sensitive data (compiled at class definition time)
     PATTERNS: ClassVar[list[tuple[Pattern[str], str]]] = [
         # API keys: key=xxx, api_key=xxx, apikey=xxx
-        (re.compile(r"([&?]api[-_]?key=)[^&\s]+", re.IGNORECASE), r"\1***"),
-        (re.compile(r"([&?]key=)[^&\s]+", re.IGNORECASE), r"\1***"),
+        (re_compile(r"([&?]api[-_]?key=)[^&\s]+", IGNORECASE), r"\1***"),
+        (re_compile(r"([&?]key=)[^&\s]+", IGNORECASE), r"\1***"),
         # Bearer tokens: Authorization: Bearer xxx
-        (re.compile(r"(Authorization:\s*Bearer\s+)\S+", re.IGNORECASE), r"\1***"),
-        (re.compile(r"(Bearer\s+)\S+", re.IGNORECASE), r"\1***"),
+        (re_compile(r"(Authorization:\s*Bearer\s+)\S+", IGNORECASE), r"\1***"),
+        (re_compile(r"(Bearer\s+)\S+", IGNORECASE), r"\1***"),
         # Basic auth: Authorization: Basic xxx
-        (re.compile(r"(Authorization:\s*Basic\s+)\S+", re.IGNORECASE), r"\1***"),
+        (re_compile(r"(Authorization:\s*Basic\s+)\S+", IGNORECASE), r"\1***"),
         # Passwords in URLs: https://user:pass@host
         # Match from : after username to @ before hostname (hostname starts with alnum/hyphen/dot)
         # Use greedy .+ to consume everything including @ in password, stopping at @ before host
-        (re.compile(r"(https?://[^:/\s]+:)(.+)(@[a-z0-9.-])", re.IGNORECASE), r"\1***\3"),
+        (re_compile(r"(https?://[^:/\s]+:)(.+)(@[a-z0-9.-])", IGNORECASE), r"\1***\3"),
         # Generic secrets: secret=xxx, token=xxx
-        (re.compile(r"([&?]secret=)[^&\s]+", re.IGNORECASE), r"\1***"),
-        (re.compile(r"([&?]token=)[^&\s]+", re.IGNORECASE), r"\1***"),
+        (re_compile(r"([&?]secret=)[^&\s]+", IGNORECASE), r"\1***"),
+        (re_compile(r"([&?]token=)[^&\s]+", IGNORECASE), r"\1***"),
         # Environment variables in error messages
         (
-            re.compile(
+            re_compile(
                 r"(NHL_SCRABBLE_\w*(?:KEY|TOKEN|SECRET|PASSWORD)\s*=\s*)[^\s]+",
-                re.IGNORECASE,
+                IGNORECASE,
             ),
             r"\1***",
         ),

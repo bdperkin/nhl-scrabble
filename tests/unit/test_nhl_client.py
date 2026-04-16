@@ -340,5 +340,3 @@ class TestNHLApiClient:
         # Clean up
         client1.close()
         client2.close()
-        del client1
-        del client2

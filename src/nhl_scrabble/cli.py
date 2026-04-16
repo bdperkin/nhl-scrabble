@@ -282,7 +282,7 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
         division_reporter.generate(division_standings),
         playoff_reporter.generate(playoff_standings),
         team_reporter.generate(team_scores),
-        stats_reporter.generate(all_players, division_standings, conference_standings),
+        stats_reporter.generate((all_players, division_standings, conference_standings)),
     ]
 
     return "\n".join(reports) + "\n" + "=" * 80 + "\n"

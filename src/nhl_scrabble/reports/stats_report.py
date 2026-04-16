@@ -18,22 +18,21 @@ class StatsReporter(BaseReporter):
         """
         self.top_players_count = top_players_count
 
-    def generate(  # type: ignore[override]
+    def generate(
         self,
-        all_players: list[PlayerScore],
-        division_standings: dict[str, DivisionStandings],
-        conference_standings: dict[str, ConferenceStandings],
+        data: tuple[
+            list[PlayerScore], dict[str, DivisionStandings], dict[str, ConferenceStandings]
+        ],
     ) -> str:
         """Generate statistics report.
 
         Args:
-            all_players: List of all PlayerScore objects
-            division_standings: Division standings data
-            conference_standings: Conference standings data
+            data: Tuple containing (all_players, division_standings, conference_standings)
 
         Returns:
             Formatted statistics report string
         """
+        all_players, division_standings, conference_standings = data
         output = ""
 
         # Top players overall
