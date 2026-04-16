@@ -361,12 +361,14 @@ After fixing this issue, consider:
 Followed the proposed solution exactly as specified:
 
 1. **Modified `.git-hooks/check-branch-protection.sh`**:
+
    - Added `is_ci()` function checking 6 CI environment variables
    - Skip interactive prompt when CI detected
    - Log informational message in CI mode
    - Preserve interactive prompt behavior for local development
 
-2. **Updated `docs/BRANCH_PROTECTION.md`**:
+1. **Updated `docs/BRANCH_PROTECTION.md`**:
+
    - Added CI environment behavior documentation
    - Documented CI detection environment variables
    - Added CI simulation test instructions
@@ -383,6 +385,7 @@ Followed the proposed solution exactly as specified:
 ### Challenges Encountered
 
 **Minor**: Pre-commit formatting in CI
+
 - First CI run failed on trailing whitespace and mdformat
 - Solution: Applied pre-commit fixes locally and pushed
 - Required second commit (8185f65) to fix formatting
@@ -394,6 +397,7 @@ Followed the proposed solution exactly as specified:
 **None** - Implemented exactly as specified in the task file.
 
 The solution correctly:
+
 - Detects all specified CI environments
 - Skips prompt in CI with informational message
 - Maintains local interactive behavior
@@ -409,12 +413,14 @@ The solution correctly:
 ### CI Test Results
 
 **PR Branch (before merge)**:
+
 - All 35 CI checks passed
 - Pre-commit checks: PASSED (after formatting fix)
 - Test on Python 3.10-3.13: PASSED
 - 31 Tox environments: PASSED
 
 **Main Branch (after merge)**:
+
 - The fix will be tested automatically on next commit to main
 - Expected: Branch protection hook will allow CI commits without prompting
 
@@ -432,6 +438,7 @@ The solution correctly:
 ### Edge Cases Discovered
 
 None - The solution handles all expected scenarios:
+
 - ✅ Local commit to main: Prompts for confirmation
 - ✅ CI commit to main: Allows without prompt
 - ✅ Feature branch commit: Passes silently
@@ -440,9 +447,10 @@ None - The solution handles all expected scenarios:
 ### Verification
 
 The fix will be verified on the next commit to main branch when:
+
 1. GitHub Actions CI runs pre-commit hooks
-2. Hook detects GITHUB_ACTIONS environment variable
-3. Hook allows commit without prompting
-4. CI completes successfully
+1. Hook detects GITHUB_ACTIONS environment variable
+1. Hook allows commit without prompting
+1. CI completes successfully
 
 **Success Criteria Met**: Issue #58 closed, PR #59 merged, all CI checks passing.
