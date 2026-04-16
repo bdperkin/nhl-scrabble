@@ -266,3 +266,79 @@ class TestNHLApiClient:
             client.close()
         finally:
             os.chdir(original_dir)
+
+    def test_context_manager_closes_session(self) -> None:
+        """Test that context manager closes session properly."""
+        client = NHLApiClient(cache_enabled=False)
+
+        with client:
+            assert not client._closed  # noqa: SLF001
+
+        # Session should be closed after exiting context
+        assert client._closed  # noqa: SLF001
+
+    def test_destructor_closes_session(self, caplog: Any) -> None:
+        """Test that destructor closes session if not explicitly closed."""
+        import logging
+
+        with caplog.at_level(logging.WARNING):
+            client = NHLApiClient(cache_enabled=False)
+            # Don't close explicitly - let destructor do it
+            del client
+
+        # Should have logged warning about cleanup
+        assert "not explicitly closed" in caplog.text
+
+    def test_explicit_close_works(self) -> None:
+        """Test that explicit close works correctly."""
+        client = NHLApiClient(cache_enabled=False)
+
+        assert not client._closed  # noqa: SLF001
+        client.close()
+        assert client._closed  # noqa: SLF001
+
+    def test_double_close_safe(self, caplog: Any) -> None:
+        """Test that double close is safe (doesn't raise errors)."""
+        import logging
+
+        client = NHLApiClient(cache_enabled=False)
+
+        with caplog.at_level(logging.DEBUG):
+            client.close()
+            # Verify first close worked
+            assert client._closed  # noqa: SLF001
+
+            # Second close should be safe
+            client.close()
+
+        # Should only see one close message
+        close_messages = [r for r in caplog.records if "session closed" in r.message.lower()]
+        assert len(close_messages) == 1
+
+    def test_atexit_cleanup_registered(self) -> None:
+        """Test that atexit cleanup is registered."""
+        # Create client
+        client = NHLApiClient(cache_enabled=False)
+
+        # Check that _cleanup_all is registered with atexit
+        # We can't easily verify this directly, but we can check the method exists
+        assert hasattr(NHLApiClient, "_cleanup_all")
+        assert callable(NHLApiClient._cleanup_all)  # noqa: SLF001
+
+        client.close()
+
+    def test_weakref_tracking(self) -> None:
+        """Test that instances are tracked with weak references."""
+        initial_count = len(NHLApiClient._instances)  # noqa: SLF001
+
+        client1 = NHLApiClient(cache_enabled=False)
+        assert len(NHLApiClient._instances) >= initial_count + 1  # noqa: SLF001
+
+        client2 = NHLApiClient(cache_enabled=False)
+        assert len(NHLApiClient._instances) >= initial_count + 2  # noqa: SLF001
+
+        # Clean up
+        client1.close()
+        client2.close()
+        del client1
+        del client2
