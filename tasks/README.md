@@ -567,11 +567,11 @@ ______________________________________________________________________
 
 | ID  | Title                              | Category     | Completed  | Actual Effort | PR  |
 | --- | ---------------------------------- | ------------ | ---------- | ------------- | --- |
-| 002 | Link GitHub Issues to Tasks          | Enhancement  | 2026-04-16 | 0.75h         | #57 |
-| 007 | Fix Branch Protection Hook in CI     | Bug Fix      | 2026-04-16 | 1h            | #59 |
-| 002 | Implement CI Caching                 | Optimization | 2026-04-16 | 2.5h          | #61 |
-| 001 | Add GitHub Dependabot                | Security     | 2026-04-16 | 0.42h         | #65 |
-| 002 | Create SECURITY.md Policy            | Security     | 2026-04-16 | 0.5h          | #71 |
-| 004 | GitHub Settings Security Hardening   | Security     | 2026-04-16 | 1.5h          | #71 |
-| 001 | Fix Config Validation                | Bug Fix      | 2026-04-16 | 3h            | #72 |
-| 002 | Implement NHLApiNotFoundError        | Bug Fix      | 2026-04-16 | 1.5h          | #73 |
+| 002 | Link GitHub Issues to Tasks        | Enhancement  | 2026-04-16 | 0.75h         | #57 |
+| 007 | Fix Branch Protection Hook in CI   | Bug Fix      | 2026-04-16 | 1h            | #59 |
+| 002 | Implement CI Caching               | Optimization | 2026-04-16 | 2.5h          | #61 |
+| 001 | Add GitHub Dependabot              | Security     | 2026-04-16 | 0.42h         | #65 |
+| 002 | Create SECURITY.md Policy          | Security     | 2026-04-16 | 0.5h          | #71 |
+| 004 | GitHub Settings Security Hardening | Security     | 2026-04-16 | 1.5h          | #71 |
+| 001 | Fix Config Validation              | Bug Fix      | 2026-04-16 | 3h            | #72 |
+| 002 | Implement NHLApiNotFoundError      | Bug Fix      | 2026-04-16 | 1.5h          | #73 |

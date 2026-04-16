@@ -179,12 +179,14 @@ Followed the proposed solution closely with successful implementation:
 ### Challenges Encountered
 
 1. **Ruff linting issues**: Initial code had minor formatting issues
+
    - F541: f-string without placeholders in error message (fixed)
    - I001: Import sorting (auto-fixed by isort)
    - RUF022: `__all__` not sorted (auto-fixed by ruff)
    - SIM117: Nested with statements (auto-fixed)
 
-2. **Integration test failure**: `test_full_workflow.py` failed because `team_processor.py` wasn't updated to handle the new exception
+1. **Integration test failure**: `test_full_workflow.py` failed because `team_processor.py` wasn't updated to handle the new exception
+
    - Fixed by adding try/except block to catch `NHLApiNotFoundError`
 
 ### Deviations from Plan
@@ -210,10 +212,10 @@ Minor improvement:
 ### Lessons Learned
 
 1. **Exception-based error handling is superior**: Provides better error context, stack traces, and follows Python idioms
-2. **Update all callers**: When changing return type from `Optional[T]` to `T`, must update all callers to handle exceptions instead of `None` checks
-3. **Vulture integration**: Properly using defined exceptions eliminates dead code warnings
-4. **Type safety**: Removing `| None` from return types simplifies type checking and eliminates potential `NoneType` errors
-5. **Pre-commit hooks**: Automated formatters (isort, ruff) help maintain code quality without manual intervention
+1. **Update all callers**: When changing return type from `Optional[T]` to `T`, must update all callers to handle exceptions instead of `None` checks
+1. **Vulture integration**: Properly using defined exceptions eliminates dead code warnings
+1. **Type safety**: Removing `| None` from return types simplifies type checking and eliminates potential `NoneType` errors
+1. **Pre-commit hooks**: Automated formatters (isort, ruff) help maintain code quality without manual intervention
 
 ### Test Coverage
 
