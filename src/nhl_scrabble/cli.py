@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,59 @@ from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
 logger = logging.getLogger(__name__)
 console = Console()
+
+
+def validate_output_path(output: str | None) -> None:
+    """Validate that output path is writable before processing.
+
+    Checks that the output path's parent directory exists and is writable,
+    and that any existing file at the path is also writable. This validation
+    happens before any API calls to provide immediate feedback on path issues.
+
+    Args:
+        output: Output file path, or None for stdout.
+
+    Raises:
+        click.ClickException: If output path is not writable, with helpful
+            error message explaining the issue and how to fix it.
+
+    Example:
+        >>> validate_output_path("/tmp/output.txt")  # OK
+        >>> validate_output_path(None)  # OK (stdout)
+        >>> validate_output_path("/nonexistent/dir/file.txt")  # Raises
+        ClickException: Output directory does not exist: /nonexistent/dir
+        Create it first: mkdir -p /nonexistent/dir
+    """
+    if output is None:
+        return  # stdout is always writable
+
+    # Resolve to absolute path
+    output_path = Path(output).resolve()
+    output_dir = output_path.parent
+
+    # Check if directory exists
+    if not output_dir.exists():
+        raise click.ClickException(
+            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}"
+        )
+
+    # Check if directory is writable
+    if not os.access(output_dir, os.W_OK):
+        raise click.ClickException(
+            f"Output directory is not writable: {output_dir}\n"
+            f"Check permissions with: ls -ld {output_dir}"
+        )
+
+    # Check if file exists and is writable
+    if output_path.exists():
+        if not os.access(output_path, os.W_OK):
+            raise click.ClickException(
+                f"Output file exists but is not writable: {output_path}\n"
+                f"Check permissions with: ls -l {output_path}"
+            )
+
+        # Warn if file will be overwritten
+        logger.warning(f"Output file exists and will be overwritten: {output_path}")
 
 
 @click.group()
@@ -118,6 +172,9 @@ def analyze(
 
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
     logger.debug(f"Configuration: {config}")
+
+    # Validate output path BEFORE making API calls
+    validate_output_path(output)
 
     # Display header
     console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
