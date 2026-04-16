@@ -1266,7 +1266,7 @@ Successfully implemented comprehensive Sphinx documentation with all 9 modern ex
 
 ### Related PRs
 
-- #86 - Comprehensive Sphinx documentation implementation (merged to main)
+- PR #86 - Comprehensive Sphinx documentation implementation (merged to main)
 
 ### Lessons Learned
 
