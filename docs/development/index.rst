@@ -5,47 +5,70 @@ Contributing to NHL Scrabble Score Analyzer.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Development Guides
+   :caption: Development Documentation
 
-   setup
-   testing
-   code-style
-   contributing
+   ../how-to/contribute-code
+   ../how-to/run-tests
+   ../how-to/setup-pre-commit-hooks
+   ../explanation/architecture
+   ../explanation/testing-philosophy
+
+Quick Links for Contributors
+-----------------------------
+
+**Getting Started**
+   :doc:`../how-to/contribute-code`
+      Complete workflow for submitting code contributions
+
+   :doc:`../how-to/setup-pre-commit-hooks`
+      Configure 55 automated quality checks
+
+**Testing**
+   :doc:`../how-to/run-tests`
+      Run tests with pytest, tox, and coverage
+
+   :doc:`../explanation/testing-philosophy`
+      Understand the testing strategy and quality goals
+
+**Architecture**
+   :doc:`../explanation/architecture`
+      System design and component organization
+
+   :doc:`../explanation/nhl-api-strategy`
+      NHL API integration approach
+
+**Additional Resources**
+   :doc:`../reference/makefile`
+      55 Makefile targets for automation
+
+   :doc:`../tutorials/03-first-contribution`
+      Step-by-step first contribution tutorial
 
 Development Setup
 -----------------
 
-First Time Setup
-~~~~~~~~~~~~~~~~
-
-Clone the repository and set up development environment:
+Quick Start
+~~~~~~~~~~~
 
 .. code-block:: bash
 
+    # Clone repository
     git clone https://github.com/bdperkin/nhl-scrabble.git
     cd nhl-scrabble
-    make init
-    source .venv/bin/activate
 
-Or using UV for faster setup:
-
-.. code-block:: bash
-
+    # Setup with UV (10-100x faster)
     make uv-init
     source .venv/bin/activate
 
-Verify setup:
+    # Or standard setup
+    make init
+    source .venv/bin/activate
 
-.. code-block:: bash
-
+    # Verify setup
     make check
-    pytest
 
 Testing
 -------
-
-Run Tests
-~~~~~~~~~
 
 .. code-block:: bash
 
@@ -53,19 +76,16 @@ Run Tests
     pytest
 
     # With coverage
-    pytest --cov
+    make test-cov
 
-    # Specific test file
-    pytest tests/unit/test_scrabble.py
+    # All Python versions (uses tox-uv automatically)
+    make tox
 
-    # Via tox (all Python versions)
-    tox
-
-    # Parallel testing (10x faster with tox-uv)
-    tox -p auto
+    # Parallel testing (10x faster)
+    make tox-parallel
 
 Code Quality
-~~~~~~~~~~~~
+------------
 
 .. code-block:: bash
 
@@ -77,20 +97,17 @@ Code Quality
     make ruff-format
     make mypy
 
-    # Pre-commit hooks
+    # Pre-commit hooks (55 checks)
     make pre-commit
 
-Code Style
-----------
+Code Style Standards
+--------------------
 
-The project follows strict code quality standards:
-
-* **PEP 8** - Python style guide
-* **Type hints** - All functions annotated (mypy strict)
-* **Docstrings** - 100% coverage (Google style)
-* **Line length** - 100 characters
-* **Ruff** - Linting and formatting
-* **Pre-commit hooks** - 55 automated checks
+* **PEP 8** - Python style guide (line length: 100)
+* **Type hints** - All functions annotated (mypy strict mode)
+* **Docstrings** - 100% coverage required (Google style)
+* **Ruff** - ALL rules enabled (comprehensive linting)
+* **Pre-commit hooks** - 55 automated checks before commit
 
 Example Code
 ~~~~~~~~~~~~
@@ -107,8 +124,7 @@ Example Code
             Total score as sum of letter values.
 
         Example:
-            >>> score = calculate_score("HELLO")
-            >>> print(score)
+            >>> calculate_score("HELLO")
             8
 
         Raises:
@@ -119,102 +135,111 @@ Example Code
 
         return sum(SCRABBLE_VALUES.get(char.upper(), 0) for char in text)
 
-Testing Philosophy
-------------------
+Contributing Workflow
+---------------------
 
-Write tests for:
-
-* All public APIs
-* Edge cases and error conditions
-* Integration with external APIs
-* Business logic (scoring, playoff calculation)
-
-Test Structure
-~~~~~~~~~~~~~~
-
-.. code-block:: text
-
-    tests/
-    ├── unit/              # Unit tests for individual components
-    │   ├── test_scrabble.py
-    │   ├── test_models.py
-    │   └── ...
-    ├── integration/       # Integration tests for full workflows
-    │   ├── test_api.py
-    │   └── ...
-    └── conftest.py        # Shared fixtures
-
-Contributing
-------------
-
-Workflow
-~~~~~~~~
-
-1. Fork the repository
-2. Create a feature branch: ``git checkout -b feature/my-feature``
+1. Fork repository on GitHub
+2. Create feature branch: ``git checkout -b feature/my-feature``
 3. Make changes with tests
 4. Run quality checks: ``make check``
-5. Commit with conventional commits
+5. Commit with conventional commits (see below)
 6. Push and create pull request
+7. Respond to review feedback
 
-Commit Messages
-~~~~~~~~~~~~~~~
+Commit Message Format
+~~~~~~~~~~~~~~~~~~~~~
 
-Follow conventional commits format:
+Follow conventional commits:
 
 .. code-block:: text
 
-    feat: Add new report type
-    fix: Resolve API timeout issue
-    docs: Update installation guide
-    test: Add playoff calculation tests
+    <type>(<scope>): <subject>
 
-Pull Requests
-~~~~~~~~~~~~~
+    <body>
 
-* Write descriptive PR title and description
-* Link related issues
-* Ensure all CI checks pass
-* Request review from maintainers
+    <footer>
 
-See `CONTRIBUTING.md <https://github.com/bdperkin/nhl-scrabble/blob/main/CONTRIBUTING.md>`_ for full guidelines.
+**Types:** feat, fix, docs, test, refactor, perf, chore, ci, build
+
+**Examples:**
+
+.. code-block:: text
+
+    feat(api): Add retry logic for NHL API requests
+    fix(scoring): Handle special characters in player names
+    docs(tutorials): Update installation guide
+    test(processors): Add playoff calculator edge cases
 
 Building Documentation
 ----------------------
 
-Build HTML documentation:
-
 .. code-block:: bash
 
-    cd docs
-    make html
+    # Build HTML docs
+    make docs
 
-Auto-rebuild on changes:
-
-.. code-block:: bash
-
+    # Auto-rebuild on changes
     sphinx-autobuild docs docs/_build/html
 
-View documentation:
-
-.. code-block:: bash
-
-    open docs/_build/html/index.html
-
-Or via Makefile:
-
-.. code-block:: bash
-
-    make docs
+    # Serve locally
     make serve-docs
+    # Visit http://localhost:8000
+
+    # Check spelling
+    tox -e docs -- -b spelling
+
+    # Check links
+    sphinx-build -b linkcheck docs docs/_build/linkcheck
 
 Release Process
 ---------------
 
 1. Update version in ``pyproject.toml``
-2. Update ``CHANGELOG.md``
+2. Update ``CHANGELOG.md`` with release notes
 3. Run full test suite: ``make tox-parallel``
-4. Create release commit: ``git commit -m "chore: Release v2.1.0"``
-5. Tag release: ``git tag v2.1.0``
-6. Push: ``git push && git push --tags``
-7. GitHub Actions will build and publish to PyPI
+4. Run CI simulation: ``make ci``
+5. Create release commit: ``git commit -m "chore: Release v2.1.0"``
+6. Tag release: ``git tag -a v2.1.0 -m "Release v2.1.0"``
+7. Push: ``git push && git push --tags``
+8. GitHub Actions builds and publishes to PyPI automatically
+
+Project Resources
+-----------------
+
+**Repository**
+   https://github.com/bdperkin/nhl-scrabble
+
+**Issues**
+   https://github.com/bdperkin/nhl-scrabble/issues
+
+**Pull Requests**
+   https://github.com/bdperkin/nhl-scrabble/pulls
+
+**Discussions**
+   https://github.com/bdperkin/nhl-scrabble/discussions
+
+**CI/CD**
+   https://github.com/bdperkin/nhl-scrabble/actions
+
+Development Tools
+-----------------
+
+**UV Package Manager** (10-100x faster)
+   See :doc:`../how-to/use-uv` for details
+
+**Tox-UV Integration** (10x faster testing)
+   Automatic when using tox, see :doc:`../reference/makefile`
+
+**Pre-commit-UV** (9x faster hooks)
+   Automatic with pre-commit, see :doc:`../how-to/setup-pre-commit-hooks`
+
+**Makefile** (55 documented targets)
+   Complete automation, see :doc:`../reference/makefile`
+
+Community
+---------
+
+* **Code of Conduct**: Be respectful and inclusive
+* **Security Policy**: See ``SECURITY.md`` for vulnerability reporting
+* **Support**: GitHub Discussions for questions
+* **Contributing**: See ``CONTRIBUTING.md`` for detailed guidelines

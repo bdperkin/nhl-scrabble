@@ -1,133 +1,76 @@
 User Guide
 ==========
 
-Comprehensive guides for using NHL Scrabble Score Analyzer.
+This section has been reorganized following the Diátaxis framework.
+Please use the new structure:
 
-.. toctree::
-   :maxdepth: 2
-   :caption: User Guides
+.. grid:: 2
+    :gutter: 2
 
-   basic-usage
-   output-formats
-   configuration
-   troubleshooting
+    .. grid-item-card:: 📚 Tutorials
+        :link: ../tutorials/index
+        :link-type: doc
 
-Basic Usage
+        **Learning-oriented lessons** - Start here if you're new
+
+    .. grid-item-card:: 📖 How-To Guides
+        :link: ../how-to/index
+        :link-type: doc
+
+        **Problem-oriented guides** - Solve specific tasks
+
+    .. grid-item-card:: 💡 Explanation
+        :link: ../explanation/index
+        :link-type: doc
+
+        **Understanding-oriented** - Learn design rationale
+
+    .. grid-item-card:: 📋 Reference
+        :link: ../reference/index
+        :link-type: doc
+
+        **Technical specifications** - Look up details
+
+Quick Links
 -----------
 
-The ``nhl-scrabble`` command provides the main interface:
+**For complete usage documentation**, see:
 
-.. code-block:: text
+* :doc:`../tutorials/01-getting-started` - Installation and first analysis
+* :doc:`../tutorials/02-understanding-output` - Interpret results
+* :doc:`../how-to/configure-api-settings` - Customize API behavior
+* :doc:`../how-to/export-to-json` - Export data programmatically
+* :doc:`../reference/cli` - Complete CLI reference
+* :doc:`../reference/environment-variables` - All configuration options
 
-    # Run nhl-scrabble --help to see all options
-    $ nhl-scrabble --help
+About the Documentation Structure
+----------------------------------
 
-Analyze Command
-~~~~~~~~~~~~~~~
+This documentation follows the **Diátaxis framework**, which organizes content by
+purpose rather than topic:
 
-Run the NHL roster analysis:
+**Tutorials** (Learning)
+   Step-by-step lessons that teach you how to use NHL Scrabble.
+   Start here if you're completely new.
 
-.. code-block:: bash
+**How-To Guides** (Problem-Solving)
+   Practical recipes for accomplishing specific tasks.
+   Use these when you have a specific goal.
 
-    nhl-scrabble analyze
+**Explanation** (Understanding)
+   Background context and design rationale.
+   Read these to understand *why* things work the way they do.
 
-Options:
+**Reference** (Information)
+   Complete technical specifications.
+   Look things up here when you need exact details.
 
-* ``--format [text|json]`` - Output format (default: text)
-* ``-o, --output PATH`` - Output file (default: stdout)
-* ``-v, --verbose`` - Enable verbose logging
-* ``--top-players INTEGER`` - Number of top players to display (default: 20)
-* ``--top-team-players INTEGER`` - Number of players per team (default: 5)
+Why This Structure?
+~~~~~~~~~~~~~~~~~~~
 
-Output Formats
---------------
+Traditional documentation often mixes tutorials, guides, explanations, and reference
+material, making it hard to find what you need. The Diátaxis framework separates these
+concerns, so you can quickly navigate to the right type of information for your current
+need.
 
-Text Output
-~~~~~~~~~~~
-
-Human-readable text format with color and formatting:
-
-.. code-block:: bash
-
-    nhl-scrabble analyze
-
-JSON Output
-~~~~~~~~~~~
-
-Machine-readable JSON for integration with other tools:
-
-.. code-block:: bash
-
-    nhl-scrabble analyze --format json --output report.json
-
-JSON structure:
-
-.. code-block:: json
-
-    {
-        "top_players": [...],
-        "conference_standings": {...},
-        "division_standings": {...},
-        "playoff_bracket": {...},
-        "statistics": {...}
-    }
-
-Configuration
--------------
-
-Environment Variables
-~~~~~~~~~~~~~~~~~~~~~
-
-Configure NHL Scrabble via environment variables:
-
-.. code-block:: bash
-
-    export NHL_SCRABBLE_API_TIMEOUT=15
-    export NHL_SCRABBLE_API_RETRIES=5
-    export NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
-    export NHL_SCRABBLE_TOP_PLAYERS=30
-    export NHL_SCRABBLE_VERBOSE=true
-
-See :doc:`../reference/configuration` for complete list.
-
-.env File
-~~~~~~~~~
-
-Create a ``.env`` file in your project directory:
-
-.. code-block:: ini
-
-    NHL_SCRABBLE_API_TIMEOUT=15
-    NHL_SCRABBLE_VERBOSE=true
-
-Troubleshooting
----------------
-
-Common Issues
-~~~~~~~~~~~~~
-
-**API Timeout Errors**
-
-If you see timeout errors, increase the timeout:
-
-.. code-block:: bash
-
-    export NHL_SCRABBLE_API_TIMEOUT=30
-
-**Rate Limiting**
-
-If requests are rate-limited, increase the delay:
-
-.. code-block:: bash
-
-    export NHL_SCRABBLE_RATE_LIMIT_DELAY=1.0
-
-**Network Errors**
-
-Check your internet connection and NHL API availability:
-
-.. code-block:: bash
-
-    curl -I https://api-web.nhle.com/v1/standings/now
-
-See :doc:`troubleshooting` for more solutions.
+Learn more: https://diataxis.fr/

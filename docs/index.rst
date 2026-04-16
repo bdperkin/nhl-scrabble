@@ -19,29 +19,47 @@ A Python application that fetches current NHL roster data and calculates
 .. grid:: 2
     :gutter: 3
 
-    .. grid-item-card:: 🚀 Getting Started
-        :link: getting-started/index
+    .. grid-item-card:: 📚 Tutorials
+        :link: tutorials/index
         :link-type: doc
 
-        New to NHL Scrabble? Start here to install and run your first analysis.
+        **Learning-oriented lessons** that take you from zero to productive.
+        Start here if you're new to NHL Scrabble.
 
-    .. grid-item-card:: 📖 User Guide
-        :link: user-guide/index
+    .. grid-item-card:: 📖 How-To Guides
+        :link: how-to/index
         :link-type: doc
 
-        Detailed guides for using NHL Scrabble, customization, and troubleshooting.
+        **Problem-oriented guides** for accomplishing specific tasks.
+        Practical solutions to common problems.
 
-    .. grid-item-card:: 🔧 API Reference
+    .. grid-item-card:: 💡 Explanation
+        :link: explanation/index
+        :link-type: doc
+
+        **Understanding-oriented** background and design rationale.
+        Learn why things work the way they do.
+
+    .. grid-item-card:: 📋 Reference
+        :link: reference/index
+        :link-type: doc
+
+        **Information-oriented** technical specifications.
+        Complete CLI, configuration, and API reference.
+
+    .. grid-item-card:: 🔧 API Documentation
         :link: api/index
         :link-type: doc
 
-        Complete API documentation auto-generated from docstrings.
+        Auto-generated Python API reference from docstrings.
+        For developers extending the package.
 
     .. grid-item-card:: 💻 Development
         :link: development/index
         :link-type: doc
 
-        Contributing, testing, and development environment setup.
+        Contributing guidelines, testing, and development setup.
+        For project contributors.
 
 Features
 --------
@@ -88,11 +106,23 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: User Documentation
+   :caption: Getting Started
 
    getting-started/index
-   user-guide/index
+   tutorials/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Documentation
+
+   how-to/index
    reference/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Understanding
+
+   explanation/index
 
 .. toctree::
    :maxdepth: 2

@@ -1,15 +1,14 @@
 Getting Started
 ===============
 
-Welcome to NHL Scrabble! This guide helps you install and run your first analysis.
+New to NHL Scrabble? Start here for installation and first steps.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Guides
+   :caption: Quick Start Guides
 
-   installation
-   quickstart
-   first-analysis
+   ../how-to/installation
+   ../tutorials/01-getting-started
 
 Installation
 ------------
