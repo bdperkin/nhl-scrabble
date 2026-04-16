@@ -234,11 +234,39 @@ pre-commit run ruff-check --all-files
 # Update hook versions
 pre-commit autoupdate
 
-# Skip hooks (not recommended)
+# Skip specific hooks (use sparingly)
 SKIP=mypy git commit -m "message"
 ```
 
 All hooks run automatically on `git commit`, ensuring code quality before changes enter the repository.
+
+### Admin Commits to Main Branch
+
+**IMPORTANT PROJECT RULE**: When admin bypass is necessary to commit directly to `main`:
+
+```bash
+# ✅ CORRECT: Skip only branch protection, run all other hooks
+SKIP=check-branch-protection git commit -m "message"
+
+# ❌ NEVER USE: This bypasses ALL quality checks
+git commit --no-verify -m "message"
+```
+
+**Rationale**:
+
+- The `check-branch-protection` hook is a workflow reminder, not a quality check
+- All other hooks (ruff, mypy, formatting, linting, etc.) MUST always run
+- Quality checks prevent bugs, security issues, and maintain code standards
+- Even admin commits must meet quality standards
+
+**When to use**:
+
+- Post-merge cleanup commits
+- Documentation updates after PR merge
+- Task tracking updates
+- Emergency hotfixes (still run quality checks!)
+
+**Never skip quality checks** - The 54 other hooks exist to protect code quality and security.
 
 ## Development Tools
 

@@ -83,6 +83,33 @@ git checkout -b fix/your-bug-fix
 
 **The pre-commit hook will warn you if attempting to commit directly to main**, but GitHub branch protection provides an additional safeguard.
 
+#### Admin Commits to Main (Maintainers Only)
+
+**IMPORTANT**: If you have admin permissions and need to bypass branch protection to commit directly to `main`:
+
+```bash
+# ✅ CORRECT: Skip only the branch protection check
+SKIP=check-branch-protection git commit -m "docs: Update task tracking"
+
+# ❌ NEVER: This bypasses ALL quality checks
+git commit --no-verify -m "message"
+```
+
+**Why this matters**:
+
+- The `check-branch-protection` hook is a workflow reminder, not a quality check
+- All 54 other hooks (ruff, mypy, black, security checks, etc.) **MUST always run**
+- Quality checks prevent bugs, security issues, and maintain code standards
+- Even admin commits must meet the same quality standards as PR commits
+
+**Use cases for admin bypass**:
+
+- Post-merge documentation updates
+- Task tracking file updates
+- Emergency hotfixes (quality checks still required!)
+
+**Rule**: NEVER use `--no-verify` - Always run pre-commit hooks.
+
 ### Making Changes
 
 1. **Write your code** following the project's style guidelines
