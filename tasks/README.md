@@ -224,38 +224,261 @@ Any extra context, trade-offs, or considerations
 
 ## Recommended Implementation Order
 
-### Sprint 1 (Next 2 weeks) - Critical Fixes & Security
+This section organizes all documented tasks into a recommended implementation sequence based on priority, effort, dependencies, and impact.
 
-**Effort**: ~20 hours
+### Phase 1: Critical Foundation (Week 1-2)
 
-1. **security/001-dependabot.md** (30min) - Quick win
-1. **bug-fixes/001-config-validation.md** (2-4h) - Critical
-1. **security/002-security-policy.md** (1h) - Important
-1. **testing/001-increase-coverage.md** (8-12h) - Foundation
-1. **optimization/001-api-caching.md** (3-4h) - Big impact
+**Focus**: Critical security and bug fixes
+**Total Effort**: ~6-8.5 hours
 
-### Sprint 2 (Weeks 3-4) - Features & Polish
+1. **security/001-dependabot.md** (30min) - #39
+   - CRITICAL priority, quick win
+   - Enables automated dependency updates
+   - No dependencies
 
-**Effort**: ~15 hours
+2. **security/004-github-settings-security.md** (2-3h) - #62
+   - CRITICAL priority, major security improvements
+   - Branch protection, Dependabot alerts, CodeQL scanning
+   - Should be done early to protect main branch
 
-1. **bug-fixes/002-unused-exception.md** (1-2h)
-1. **enhancement/001-html-output.md** (4-6h)
-1. **security/003-secrets-sanitization.md** (2-3h)
-1. **bug-fixes/003-session-cleanup.md** (1-2h)
-1. **bug-fixes/004-rate-limiting.md** (1h)
+3. **bug-fixes/001-config-validation.md** (2-4h) - #38
+   - CRITICAL priority, prevents runtime errors
+   - Validates configuration before execution
+   - No dependencies
 
-### Sprint 3 (Weeks 5-6) - Advanced Features
+4. **security/002-security-policy.md** (1h) - Complete ✅
+   - Already completed (SECURITY.md created)
 
-**Effort**: ~20 hours
+### Phase 2: High-Impact Improvements (Week 2-3)
 
-1. **bug-fixes/005-exponential-backoff.md** (2-3h)
-1. **new-features/001-web-interface.md** (16-24h)
+**Focus**: Testing, performance, and important bug fixes
+**Total Effort**: ~13-18 hours
 
-### Sprint 4+ (Month 2+) - Long-term Improvements
+1. **bug-fixes/002-unused-exception.md** (1-2h) - #40
+   - HIGH priority, clean up exception handling
+   - Quick fix with good impact
+   - No dependencies
 
-1. Remaining enhancements
-1. Remaining refactoring
-1. Additional new features
+2. **optimization/001-api-caching.md** (3-4h) - #42
+   - HIGH priority, major performance improvement
+   - Reduces API calls and improves response time
+   - No dependencies
+
+3. **testing/001-increase-coverage.md** (8-12h) - #43
+   - HIGH priority, foundation for quality
+   - Increases coverage from 49% to 80%+
+   - Provides confidence for future changes
+   - Should be done before major refactoring
+
+### Phase 3: Medium Priority - Quality & Security (Week 4-5)
+
+**Focus**: Security hardening and code quality
+**Total Effort**: ~5-8 hours
+
+1. **bug-fixes/003-session-cleanup.md** (1-2h) - #44
+   - MEDIUM priority, safety net for session management
+   - Prevents resource leaks
+   - No dependencies
+
+2. **security/003-secrets-sanitization.md** (2-3h) - #45
+   - MEDIUM priority, prevents credential leaks
+   - Important for production security
+   - No dependencies
+
+3. **bug-fixes/006-output-validation.md** (1-2h) - #49
+   - LOW priority but related to security
+   - Validates CLI output paths
+   - Quick security improvement
+
+### Phase 4: Documentation Excellence (Week 6-8)
+
+**Focus**: Comprehensive documentation system
+**Total Effort**: ~24-34 hours
+
+**Recommended order** (sequential for best results):
+
+1. **enhancement/002-procida-documentation.md** (8-12h) - #63
+   - MEDIUM priority, organize documentation structure
+   - Implement Diátaxis framework (tutorials/how-to/reference/explanation)
+   - Do this FIRST to organize content
+   - No dependencies
+
+2. **enhancement/003-sphinx-documentation.md** (12-16h) - #64
+   - MEDIUM priority, professional documentation rendering
+   - Sphinx with 9 extensions + GitHub Pages deployment
+   - Do this SECOND to beautifully render organized content
+   - Depends on: enhancement/002 (recommended but not required)
+
+3. **enhancement/001-html-output.md** (4-6h) - #46
+   - MEDIUM priority, HTML report generation
+   - Can be done independently
+   - Can be documented in new Sphinx docs
+
+### Phase 5: Performance & Polish (Week 9-10)
+
+**Focus**: Performance optimizations and low-priority fixes
+**Total Effort**: ~4-7 hours
+
+1. **bug-fixes/004-rate-limiting.md** (1h) - #47
+   - LOW priority, minor fix
+   - Improves API rate limiting logic
+   - No dependencies
+
+2. **bug-fixes/005-exponential-backoff.md** (2-3h) - #48
+   - LOW priority, retry improvement
+   - Better backoff strategy for API calls
+   - No dependencies
+
+3. **refactoring/001-extract-retry-logic.md** (2-3h) - #51
+   - LOW priority, code organization
+   - Extracts retry logic to reusable module
+   - Makes bug-fixes/005 easier to implement
+   - Consider doing before bug-fixes/005
+
+### Phase 6: Major Features (Month 3+)
+
+**Focus**: Large new features and enhancements
+**Total Effort**: ~16-24 hours
+
+1. **new-features/001-web-interface.md** (16-24h) - #50
+   - LOW priority, major new feature
+   - Web UI for NHL Scrabble analyzer
+   - Large effort, do after core improvements
+   - Depends on: Good test coverage (testing/001)
+
+### Phase 7: Future Enhancements (Backlog)
+
+**Undocumented tasks** - Create task files as needed:
+
+**Enhancements** (MEDIUM-LOW):
+- Progress Bars - Visual feedback during API fetching
+- Interactive Mode - REPL-style interface
+- Historical Data - Track scores over time
+- CSV/Excel Export - Additional export formats
+- Filtering Options - Filter teams/players
+- Custom Scoring Rules - Configurable letter values
+- Statistics Dashboard - Advanced analytics
+- Watch Mode - Auto-refresh on data changes
+- Player Search - Search/filter functionality
+
+**Optimizations** (MEDIUM-LOW):
+- Parallel API Requests - Concurrent fetching
+- Lazy Report Generation - Generate on demand
+- Memoized Scoring - Cache score calculations
+- Memory Optimization - Reduce memory footprint
+- Log Level Optimization - Conditional logging
+
+**Security** (MEDIUM-LOW):
+- Input Validation - Comprehensive input checking
+- SSRF Protection - Prevent server-side request forgery
+- Rate Limit Enforcement - Enforce API rate limits
+- DoS Prevention - Prevent denial of service
+- SSL Verification - Strict SSL/TLS verification
+- PII Logging Prevention - Prevent logging sensitive data
+- Config Injection Protection - Prevent config injection
+
+**Refactoring** (LOW):
+- Consolidate Reports - DRY up report generators
+- Improve Type Safety - More precise type hints
+- Unified Config Management - Centralized config
+- Error Handling Strategy - Consistent error handling
+- Dependency Injection - Improve testability
+
+**New Features** (LOW):
+- REST API - HTTP API for programmatic access
+- Database Backend - Persistent data storage
+- Notification System - Alert on score changes
+- Player Comparison Tool - Compare player stats
+- Offline Mode - Work without internet
+- Config Profiles - Multiple configuration sets
+- Plugin System - Extensibility framework
+- Docker Support - Containerization
+- Data Export/Import - Backup/restore functionality
+
+## Implementation Strategy
+
+### Quick Wins (Do First)
+Tasks with high impact and low effort:
+1. security/001-dependabot.md (30min)
+2. bug-fixes/002-unused-exception.md (1-2h)
+3. bug-fixes/004-rate-limiting.md (1h)
+4. security/002-security-policy.md (already complete!)
+
+### Foundation (Do Early)
+Critical for future work:
+1. security/004-github-settings-security.md (2-3h)
+2. bug-fixes/001-config-validation.md (2-4h)
+3. testing/001-increase-coverage.md (8-12h)
+
+### High Impact (Prioritize)
+Major improvements with significant value:
+1. optimization/001-api-caching.md (3-4h)
+2. enhancement/002-procida-documentation.md (8-12h)
+3. enhancement/003-sphinx-documentation.md (12-16h)
+
+### Nice to Have (Do Later)
+Valuable but not critical:
+1. Most LOW priority tasks
+2. Large features (web interface, REST API)
+3. Advanced optimizations
+
+## Sprint Planning Guide
+
+### Sprint 1 (2 weeks): Critical Foundation
+**Effort**: 6-8.5 hours
+- security/001, security/004, bug-fixes/001
+
+### Sprint 2 (2 weeks): High Impact
+**Effort**: 13-18 hours
+- bug-fixes/002, optimization/001, testing/001
+
+### Sprint 3 (2 weeks): Security & Quality
+**Effort**: 5-8 hours
+- bug-fixes/003, security/003, bug-fixes/006
+
+### Sprint 4 (2 weeks): Documentation Part 1
+**Effort**: 8-12 hours
+- enhancement/002 (Procida documentation)
+
+### Sprint 5 (2 weeks): Documentation Part 2
+**Effort**: 12-16 hours
+- enhancement/003 (Sphinx + GitHub Pages)
+
+### Sprint 6 (2 weeks): Enhancement & Polish
+**Effort**: 4-10 hours
+- enhancement/001, bug-fixes/004, bug-fixes/005
+
+### Sprint 7+ (Ongoing): Features & Refactoring
+- refactoring/001, new-features/001
+- Document and implement backlog tasks as needed
+
+## Dependencies Graph
+
+```
+No Dependencies (Can do anytime):
+├── security/001-dependabot
+├── security/004-github-settings-security
+├── bug-fixes/001-config-validation
+├── bug-fixes/002-unused-exception
+├── bug-fixes/003-session-cleanup
+├── bug-fixes/004-rate-limiting
+├── security/003-secrets-sanitization
+├── bug-fixes/006-output-validation
+└── optimization/001-api-caching
+
+Foundation for Future Work:
+├── testing/001-increase-coverage
+│   └── Provides confidence for: new-features/001, refactoring/*
+
+Documentation Chain (Sequential recommended):
+├── enhancement/002-procida-documentation
+│   └── enhancement/003-sphinx-documentation
+│       └── All future documentation benefits from this
+
+Refactoring Chain:
+└── refactoring/001-extract-retry-logic
+    └── Makes bug-fixes/005-exponential-backoff easier
+```
 
 ## Contributing
 
@@ -295,8 +518,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
-**Tasks Documented**: 14 of 50+
-**Completion Status**: 3 of 14 completed (21%)
+**Tasks Documented**: 17 of 50+
+**Completion Status**: 3 of 17 completed (18%)
+**Documented Effort Remaining**: 63.25-94.25 hours (excluding completed tasks)
 
 ## Completed Tasks
 
