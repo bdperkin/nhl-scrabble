@@ -684,22 +684,54 @@ The project has comprehensive security measures:
 
 ## Documentation
 
-### User Documentation
+Documentation follows the [Diátaxis framework](https://diataxis.fr/) organized into four quadrants:
 
-- **README.md** - Project overview, installation, usage
-- **CONTRIBUTING.md** - Development guide, workflow
+### Tutorials (Learning-Oriented)
+
+Step-by-step lessons for beginners:
+
+- **[Getting Started](docs/tutorials/01-getting-started.md)** - First NHL Scrabble analysis
+- **[Understanding Output](docs/tutorials/02-understanding-output.md)** - Deep dive into reports
+- **[First Contribution](docs/tutorials/03-first-contribution.md)** - Make your first code contribution
+
+### How-to Guides (Problem-Oriented)
+
+Practical solutions to specific tasks:
+
+- **[Installation Variations](docs/how-to/installation.md)** - Different ways to install
+- **[Run Tests](docs/how-to/run-tests.md)** - Execute different test configurations
+- **[Add Report Type](docs/how-to/add-report-type.md)** - Create custom reports
+- **[Use UV](docs/how-to/use-uv.md)** - 10-100x faster package management
+- **[And more...](docs/how-to/)** - 10 how-to guides total
+
+### Reference (Information-Oriented)
+
+Technical specifications:
+
+- **[CLI Reference](docs/reference/cli.md)** - All commands and options
+- **[Configuration](docs/reference/configuration.md)** - All settings explained
+- **[Makefile Reference](docs/reference/makefile.md)** - All 55 Makefile targets
+- **[Environment Variables](docs/reference/environment-variables.md)** - Complete list
+- **[And more...](docs/reference/)** - Complete technical reference
+
+### Explanation (Understanding-Oriented)
+
+Background and design philosophy:
+
+- **[Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md)** - The concept explained
+- **[Architecture Overview](docs/explanation/architecture.md)** - System design
+- **[NHL API Strategy](docs/explanation/nhl-api-strategy.md)** - API integration approach
+- **[Testing Philosophy](docs/explanation/testing-philosophy.md)** - Testing approach
+- **[And more...](docs/explanation/)** - Design decisions and rationale
+
+### Community Documentation
+
+- **README.md** - Project overview
+- **CONTRIBUTING.md** - Development guide
+- **CODE_OF_CONDUCT.md** - Community standards
+- **SECURITY.md** - Security policy
+- **SUPPORT.md** - Getting help
 - **CHANGELOG.md** - Version history
-
-### Developer Documentation
-
-- **docs/MAKEFILE.md** - Complete Makefile reference (55 targets)
-- **docs/DEVELOPMENT.md** - Development environment guide
-- **docs/TOX.md** - Tox testing guide
-- **docs/TOX-UV.md** - Tox with UV acceleration
-- **docs/UV.md** - UV package manager guide
-- **docs/UV-QUICKREF.md** - UV quick reference
-- **docs/UV-ECOSYSTEM.md** - Complete UV ecosystem guide
-- **docs/PRECOMMIT-UV.md** - Pre-commit with UV
 - **CLAUDE.md** - This file
 
 ## Common Tasks

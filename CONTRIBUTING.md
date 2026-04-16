@@ -274,21 +274,47 @@ class TestScrabbleScorer:
 
 ## Documentation
 
+### Documentation Structure
+
+We follow the [Diátaxis framework](https://diataxis.fr/) with four documentation types:
+
+- **[Tutorials](docs/tutorials/)** - Learning-oriented lessons for beginners
+- **[How-to Guides](docs/how-to/)** - Problem-oriented solutions to specific tasks
+- **[Reference](docs/reference/)** - Technical specifications and API documentation
+- **[Explanation](docs/explanation/)** - Conceptual understanding and background
+
 ### Updating Documentation
 
 When adding new features:
 
-1. Update `README.md` with usage examples
-1. Add docstrings to all new code
-1. Update `CHANGELOG.md`
-1. Update `CLAUDE.md` if architecture changes
+1. **Add docstrings** to all new code (100% coverage required)
+1. **Create how-to guide** if it solves a specific problem
+1. **Update reference** docs if adding new CLI options or configuration
+1. **Write explanation** if introducing new concepts or design decisions
+1. **Update `CHANGELOG.md`** with user-facing changes
+1. **Update `CLAUDE.md`** if architecture changes
+1. **Update `README.md`** if changing core functionality
+
+### Where to Add Documentation
+
+**New feature**: Create a how-to guide in `docs/how-to/`
+
+**New CLI option**: Update `docs/reference/cli.md`
+
+**New configuration**: Update `docs/reference/configuration.md`
+
+**Architecture change**: Update `docs/explanation/architecture.md`
+
+**Beginner content**: Add to tutorials in `docs/tutorials/`
 
 ### Writing Documentation
 
 - Use clear, concise language
-- Include code examples
+- Include code examples that work
 - Keep examples up-to-date
 - Add links to related documentation
+- Follow the Diátaxis framework (don't mix documentation types)
+- Use consistent formatting and tone
 
 ## Pull Request Process
 
