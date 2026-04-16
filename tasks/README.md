@@ -28,18 +28,17 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (6 tasks)
+### Bug Fixes (5 tasks)
 
 | ID  | Title                                  | Priority | Effort | Issue |
 | --- | -------------------------------------- | -------- | ------ | ----- |
-| 001 | Fix Config Validation                  | CRITICAL | 2-4h   | #38   |
 | 002 | Implement NHLApiNotFoundError Properly | HIGH     | 1-2h   | #40   |
 | 003 | Add Session Cleanup Safety Net         | MEDIUM   | 1-2h   | #44   |
 | 004 | Fix Rate Limiting Logic                | LOW      | 1h     | #47   |
 | 005 | Implement Exponential Backoff          | LOW      | 2-3h   | #48   |
 | 006 | Validate CLI Output Paths              | LOW      | 1-2h   | #49   |
 
-**Total Effort**: 8.5-14 hours
+**Total Effort**: 6.5-10 hours
 
 ### Security (10+ tasks, 2 documented)
 
@@ -130,11 +129,11 @@ Each task is assigned a priority:
 ## Total Project Roadmap
 
 **Documented Tasks**: 15 tasks
-**Total Documented Effort**: 65-95 hours
+**Total Documented Effort**: 63-91 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 5 tasks (6.17h actual effort)
+**Completed Tasks**: 6 tasks (9.17h actual effort)
 
-**Grand Total**: ~165-215 hours for complete roadmap
+**Grand Total**: ~163-211 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -227,25 +226,25 @@ This section organizes all documented tasks into a recommended implementation se
 ### Phase 1: Critical Foundation (Week 1-2)
 
 **Focus**: Critical security and bug fixes
-**Total Effort**: ~6-8.5 hours
+**Total Effort**: All critical tasks completed! ✅
 
-1. **security/001-dependabot.md** (30min) - #39
+1. **security/001-dependabot.md** (30min) - #39 - Complete ✅
 
    - CRITICAL priority, quick win
    - Enables automated dependency updates
-   - No dependencies
+   - Completed 2026-04-16
 
-1. **security/004-github-settings-security.md** (2-3h) - #62
+1. **security/004-github-settings-security.md** (2-3h) - #62 - Complete ✅
 
    - CRITICAL priority, major security improvements
    - Branch protection, Dependabot alerts, CodeQL scanning
-   - Should be done early to protect main branch
+   - Completed 2026-04-16
 
-1. **bug-fixes/001-config-validation.md** (2-4h) - #38
+1. **bug-fixes/001-config-validation.md** (2-4h) - #38 - Complete ✅
 
    - CRITICAL priority, prevents runtime errors
    - Validates configuration before execution
-   - No dependencies
+   - Completed 2026-04-16
 
 1. **security/002-security-policy.md** (1h) - Complete ✅
 
@@ -429,8 +428,8 @@ Tasks with high impact and low effort:
 
 Critical for future work:
 
-1. security/004-github-settings-security.md (2-3h)
-1. bug-fixes/001-config-validation.md (2-4h)
+1. security/004-github-settings-security.md (2-3h) - Complete ✅
+1. bug-fixes/001-config-validation.md (2-4h) - Complete ✅
 1. testing/001-increase-coverage.md (8-12h)
 
 ### High Impact (Prioritize)
@@ -451,11 +450,15 @@ Valuable but not critical:
 
 ## Sprint Planning Guide
 
-### Sprint 1 (2 weeks): Critical Foundation
+### Sprint 1 (2 weeks): Critical Foundation - Complete ✅
 
-**Effort**: 6-8.5 hours
+**Planned Effort**: 6-8.5 hours
+**Actual Effort**: 5.42 hours
 
-- security/001, security/004, bug-fixes/001
+- security/001 ✅ (0.42h actual)
+- security/004 ✅ (1.5h actual)
+- bug-fixes/001 ✅ (3h actual)
+- security/002 ✅ (already complete)
 
 ### Sprint 2 (2 weeks): High Impact
 
@@ -559,8 +562,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 17 of 50+
-**Completion Status**: 3 of 17 completed (18%)
-**Documented Effort Remaining**: 58.83-88.83 hours (excluding completed tasks)
+**Completion Status**: 4 of 17 completed (24%)
+**Documented Effort Remaining**: 53.83-82.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -571,3 +574,4 @@ ______________________________________________________________________
 | 002 | Implement CI Caching               | Optimization | 2026-04-16 | 2.5h          | #61 |
 | 001 | Add GitHub Dependabot              | Security     | 2026-04-16 | 0.42h         | #65 |
 | 004 | GitHub Settings Security Hardening | Security     | 2026-04-16 | 1.5h          | #71 |
+| 001 | Fix Config Validation              | Bug Fix      | 2026-04-16 | 3h            | #72 |
