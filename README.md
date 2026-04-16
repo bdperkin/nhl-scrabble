@@ -508,6 +508,33 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 - [docs/PRECOMMIT-UV.md](docs/PRECOMMIT-UV.md) - Pre-commit with UV acceleration
 - [CLAUDE.md](CLAUDE.md) - Architecture documentation
 
+## Security
+
+This project takes security seriously and uses multiple tools to ensure dependencies are safe and up-to-date:
+
+- **Dependabot**: Automated dependency updates and security alerts
+  - Runs weekly (Mondays 9:00 AM ET)
+  - Monitors Python dependencies and GitHub Actions
+  - Creates PRs for security vulnerabilities immediately
+  - Groups non-security updates to reduce noise
+- **pip-audit**: Scans dependencies for known vulnerabilities in CI
+- **Pre-commit hooks**: 55 comprehensive quality and security checks
+
+### Reporting Security Vulnerabilities
+
+If you discover a security vulnerability, please review our [Security Policy](SECURITY.md) for responsible disclosure guidelines. Do **not** report security vulnerabilities through public GitHub issues.
+
+### Dependency Updates
+
+Dependabot automatically creates pull requests for:
+
+- **Security updates**: Immediate PRs for any vulnerable dependencies
+- **Development dependencies**: Weekly grouped PRs for minor/patch updates
+- **Production dependencies**: Weekly grouped PRs for patch updates only
+- **GitHub Actions**: Weekly updates for workflow dependencies
+
+All Dependabot PRs are automatically labeled, assigned, and follow conventional commit format (`deps(scope): description`).
+
 ## Support
 
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/bdperkin/nhl-scrabble/issues)
