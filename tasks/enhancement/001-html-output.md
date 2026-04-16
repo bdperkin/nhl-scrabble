@@ -1,5 +1,7 @@
 # Implement HTML Output Format
 
+**GitHub Issue**: #46 - https://github.com/bdperkin/nhl-scrabble/issues/46
+
 ## Priority
 
 **MEDIUM** - Should Do (Next Month)

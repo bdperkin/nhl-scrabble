@@ -1,5 +1,7 @@
 # Validate CLI Output Paths
 
+**GitHub Issue**: #49 - https://github.com/bdperkin/nhl-scrabble/issues/49
+
 ## Priority
 
 **LOW** - Nice to Have (Next Quarter)

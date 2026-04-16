@@ -1,5 +1,7 @@
 # Extract Retry Logic to Reusable Decorator
 
+**GitHub Issue**: #51 - https://github.com/bdperkin/nhl-scrabble/issues/51
+
 ## Priority
 
 **LOW** - Nice to Have (Next Quarter)

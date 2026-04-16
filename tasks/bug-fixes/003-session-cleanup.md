@@ -1,5 +1,7 @@
 # Add Session Cleanup Safety Net
 
+**GitHub Issue**: #44 - https://github.com/bdperkin/nhl-scrabble/issues/44
+
 ## Priority
 
 **MEDIUM** - Must Do (Next Sprint)

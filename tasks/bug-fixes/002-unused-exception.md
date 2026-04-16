@@ -1,5 +1,7 @@
 # Implement NHLApiNotFoundError Properly
 
+**GitHub Issue**: #40 - https://github.com/bdperkin/nhl-scrabble/issues/40
+
 ## Priority
 
 **HIGH** - Must Do (Next Sprint)
