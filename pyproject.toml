@@ -72,11 +72,18 @@ security = [
     "pip-audit>=2.7.0",
 ]
 
-# Documentation dependencies
+# Comprehensive Sphinx documentation dependencies (9 extensions + markdown support)
 docs = [
-    "sphinx>=7.2.0",
-    "sphinx-rtd-theme>=2.0.0",
-    "sphinx-click>=5.1.0",
+    "sphinx>=7.2.6",  # Core documentation engine
+    "sphinx-autobuild>=2024.2.4",  # Auto-rebuild during development
+    "sphinx-autodoc-typehints>=2.0.0",  # Type hint integration
+    "sphinx-copybutton>=0.5.2",  # Copy button for code blocks
+    "sphinx-design>=0.5.0",  # Modern UI components
+    "sphinx-rtd-theme>=2.0.0",  # Read the Docs theme
+    "sphinxcontrib-programoutput>=0.17",  # CLI output in docs
+    "sphinxcontrib-spelling>=8.0.0",  # Spell checking
+    "sphinxext-opengraph>=0.9.1",  # Social sharing metadata
+    "myst-parser>=2.0.0",  # Markdown support
 ]
 
 # Lightweight documentation generation

@@ -101,6 +101,7 @@ dmypy.json
 
 # Sphinx
 docs/_build/
+_build/
 
 # MkDocs
 /site
