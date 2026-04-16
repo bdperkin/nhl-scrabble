@@ -80,6 +80,7 @@ jobs:
           - unimport
           - pydocstyle
           - vulture
+          - blocklint
           - absolufy-imports
           - autoflake
           - black

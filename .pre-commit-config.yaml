@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 53 comprehensive hooks for code quality, security, and consistency
+# 54 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -231,6 +231,19 @@ repos:
         # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
         # Finds unused functions, classes, variables, imports, and properties
         args: [src]  # Config is in pyproject.toml
+
+  - repo: https://github.com/PrincetonUniversity/blocklint
+    rev: v0.3.0
+    hooks:
+      - id: blocklint
+        # Comprehensive inclusive language checker (matches ruff's ALL rules philosophy)
+        # Detects non-inclusive terminology related to hierarchical and access control terms
+        # Promotes respectful and inclusive code and documentation
+        args:
+          [
+            --skip-files,
+            ".git,.tox,.venv,venv,build,dist,*.egg-info,__pycache__,coverage.xml,htmlcov,.coverage,.pytest_cache,.mypy_cache,.ruff_cache,*.log,*.tmp",
+          ]
 
   # ============================================================================
   # UV - Dependency Lock File Validation

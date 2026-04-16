@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Blocklint Integration** - Inclusive language checker
+
+  - Comprehensive inclusive language checker matching ruff's ALL rules philosophy
+  - Pre-commit hook (PrincetonUniversity/blocklint) for automatic terminology detection
+  - Tox environment (blocklint) for standalone inclusive language checks
+  - Added to CI/CD pipeline for continuous language inclusivity validation
+  - Documentation in pyproject.toml (blocklint does not support pyproject.toml config)
+  - Detects non-inclusive terminology related to hierarchical and access control
+  - Default blocklist includes problematic terms commonly found in technical writing
+  - Excludes build/test artifacts (.git, .tox, .venv, build, dist, coverage.xml, etc.)
+  - Promotes respectful and inclusive code and documentation
+  - Aligns with modern best practices for inclusive technical communication
+  - Works harmoniously with detect-private-key for comprehensive code quality
+  - Current project status: no non-inclusive terminology found (clean codebase)
+  - 54 total pre-commit hooks for comprehensive code quality
+
 - **Vulture Integration** - Dead code detection
 
   - Comprehensive dead code detection matching ruff's ALL rules philosophy
