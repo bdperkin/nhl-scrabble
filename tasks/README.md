@@ -71,22 +71,23 @@ Each task is assigned a priority:
 
 **Documented Effort**: 3-4 hours
 
-### Enhancements (10 tasks, 1 documented)
+### Enhancements (10 tasks, 2 documented)
 
-| ID  | Title                    | Priority | Effort |
-| --- | ------------------------ | -------- | ------ |
-| 001 | Implement HTML Output    | MEDIUM   | 4-6h   |
-| ... | Progress Bars            | MEDIUM   | TBD    |
-| ... | Interactive Mode         | MEDIUM   | TBD    |
-| ... | Historical Data Tracking | LOW      | TBD    |
-| ... | CSV/Excel Export         | LOW      | TBD    |
-| ... | Filtering Options        | LOW      | TBD    |
-| ... | Custom Scoring Rules     | LOW      | TBD    |
-| ... | Statistics Dashboard     | LOW      | TBD    |
-| ... | Watch Mode               | LOW      | TBD    |
-| ... | Player Search            | LOW      | TBD    |
+| ID  | Title                       | Priority | Effort | Issue |
+| --- | --------------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output       | MEDIUM   | 4-6h   | #46   |
+| 002 | Link GitHub Issues to Tasks | MEDIUM   | 2-3h   | #55   |
+| ... | Progress Bars               | MEDIUM   | TBD    |       |
+| ... | Interactive Mode            | MEDIUM   | TBD    |       |
+| ... | Historical Data Tracking    | LOW      | TBD    |       |
+| ... | CSV/Excel Export            | LOW      | TBD    |       |
+| ... | Filtering Options           | LOW      | TBD    |       |
+| ... | Custom Scoring Rules        | LOW      | TBD    |       |
+| ... | Statistics Dashboard        | LOW      | TBD    |       |
+| ... | Watch Mode                  | LOW      | TBD    |       |
+| ... | Player Search               | LOW      | TBD    |       |
 
-**Documented Effort**: 4-6 hours
+**Documented Effort**: 6-9 hours
 
 ### Testing (1 task)
 
@@ -128,8 +129,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 14 tasks
-**Total Documented Effort**: 45-67.5 hours
+**Documented Tasks**: 15 tasks
+**Total Documented Effort**: 47-70.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 
 **Grand Total**: ~150-200 hours for complete roadmap
