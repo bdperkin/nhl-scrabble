@@ -3,8 +3,17 @@
 This module tests that the Sphinx documentation builds successfully and meets quality standards.
 """
 
+import shutil
 import subprocess
 from pathlib import Path
+
+import pytest
+
+# Skip all tests in this module if sphinx-build is not available
+pytestmark = pytest.mark.skipif(
+    shutil.which("sphinx-build") is None,
+    reason="sphinx-build not found (docs dependencies not installed)",
+)
 
 
 def test_sphinx_build_succeeds() -> None:
