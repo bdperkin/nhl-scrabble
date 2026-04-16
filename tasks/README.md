@@ -54,18 +54,17 @@ Each task is assigned a priority:
 
 **Documented Effort**: 2-3 hours
 
-### Optimization (6 tasks, 1 documented)
+### Optimization (5 tasks, 0 documented)
 
-| ID  | Title                        | Priority | Effort | Issue |
-| --- | ---------------------------- | -------- | ------ | ----- |
-| 001 | Implement API Response Cache | HIGH     | 3-4h   | #42   |
-| ... | Parallel API Requests        | MEDIUM   | TBD    |       |
-| ... | Lazy Report Generation       | LOW      | TBD    |       |
-| ... | Memoized Scoring             | LOW      | TBD    |       |
-| ... | Memory Optimization          | LOW      | TBD    |       |
-| ... | Log Level Optimization       | LOW      | TBD    |       |
+| ID  | Title                  | Priority | Effort | Issue |
+| --- | ---------------------- | -------- | ------ | ----- |
+| ... | Parallel API Requests  | MEDIUM   | TBD    |       |
+| ... | Lazy Report Generation | LOW      | TBD    |       |
+| ... | Memoized Scoring       | LOW      | TBD    |       |
+| ... | Memory Optimization    | LOW      | TBD    |       |
+| ... | Log Level Optimization | LOW      | TBD    |       |
 
-**Documented Effort**: 3-4 hours
+**Documented Effort**: 0 hours
 
 ### Enhancements (10 tasks, 3 documented)
 
@@ -126,12 +125,12 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 15 tasks
-**Total Documented Effort**: 61-88 hours
+**Documented Tasks**: 14 tasks
+**Total Documented Effort**: 58-84 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 8 tasks (11.17h actual effort)
+**Completed Tasks**: 9 tasks (14.67h actual effort)
 
-**Grand Total**: ~161-208 hours for complete roadmap
+**Grand Total**: ~158-204 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -251,7 +250,7 @@ This section organizes all documented tasks into a recommended implementation se
 ### Phase 2: High-Impact Improvements (Week 2-3)
 
 **Focus**: Testing, performance, and important bug fixes
-**Total Effort**: ~11-16 hours (1 of 3 tasks complete)
+**Total Effort**: ~11-16 hours (2 of 3 tasks complete)
 
 1. **bug-fixes/002-unused-exception.md** (1-2h) - #40 - Complete ✅
 
@@ -259,11 +258,11 @@ This section organizes all documented tasks into a recommended implementation se
    - Quick fix with good impact
    - Completed 2026-04-16
 
-1. **optimization/001-api-caching.md** (3-4h) - #42
+1. **optimization/001-api-caching.md** (3-4h) - #42 - Complete ✅
 
    - HIGH priority, major performance improvement
-   - Reduces API calls and improves response time
-   - No dependencies
+   - 30x speedup for cached runs (30s → \<1s)
+   - Completed 2026-04-16
 
 1. **testing/001-increase-coverage.md** (8-12h) - #43
 
@@ -575,3 +574,4 @@ ______________________________________________________________________
 | 004 | GitHub Settings Security Hardening | Security     | 2026-04-16 | 1.5h          | #71 |
 | 001 | Fix Config Validation              | Bug Fix      | 2026-04-16 | 3h            | #72 |
 | 002 | Implement NHLApiNotFoundError      | Bug Fix      | 2026-04-16 | 1.5h          | #73 |
+| 001 | Implement API Response Caching     | Optimization | 2026-04-16 | 3.5h          | #74 |
