@@ -177,6 +177,6 @@ jobs:
           uv pip install docformatter pyroma deptry pydocstyle --system
 
       - name: Run pre-commit with UV
-        uses: pre-commit/action@v3.0.0
+        uses: pre-commit/action@v3.0.1
         env:
           UV_SYSTEM_PYTHON: "1"
