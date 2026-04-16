@@ -55,6 +55,34 @@ git checkout -b feature/your-feature-name
 git checkout -b fix/your-bug-fix
 ```
 
+### Branch Protection and PR Requirements
+
+**⚠️ IMPORTANT: The main branch is protected**
+
+- ❌ Direct commits to main are **blocked**
+- ✅ All changes must go through Pull Requests
+- ✅ All CI checks must pass before merge
+- ✅ All conversations must be resolved
+- ✅ Only squash merging is allowed
+
+**Required CI Checks:**
+
+- Pre-commit hooks (55 hooks)
+- Python 3.10 tests
+- Python 3.11 tests
+- Python 3.12 tests
+- Python 3.13 tests
+- All tox environments (31 environments)
+
+**Before creating a PR:**
+
+1. Ensure all tests pass locally: `pytest`
+1. Run pre-commit hooks: `pre-commit run --all-files`
+1. Check type hints: `mypy src`
+1. Verify code quality: `make check`
+
+**The pre-commit hook will warn you if attempting to commit directly to main**, but GitHub branch protection provides an additional safeguard.
+
 ### Making Changes
 
 1. **Write your code** following the project's style guidelines
