@@ -76,6 +76,7 @@ jobs:
           - flake8
           - isort
           - interrogate
+          - deptry
           - absolufy-imports
           - autoflake
           - black

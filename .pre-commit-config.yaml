@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 49 comprehensive hooks for code quality, security, and consistency
+# 50 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -198,6 +198,14 @@ repos:
         # Requires 100% docstring coverage for all Python code
         args: []  # Config is in pyproject.toml
         pass_filenames: false  # Check entire project for coverage percentage
+
+  - repo: https://github.com/fpgmaas/deptry
+    rev: 0.25.1
+    hooks:
+      - id: deptry
+        # Comprehensive dependency checker (matches ruff's ALL rules philosophy)
+        # Detects: obsolete, missing, transitive, and misplaced dev dependencies
+        args: [src]  # Additional config in pyproject.toml
 
   # ============================================================================
   # UV - Dependency Lock File Validation
