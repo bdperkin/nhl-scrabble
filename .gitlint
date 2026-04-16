@@ -8,6 +8,7 @@ ignore-revert-commits = true
 ignore-fixup-commits = true
 ignore-fixup-amend-commits = true
 ignore-squash-commits = true
+ignore = B6
 
 [title-max-length]
 line-length = 100

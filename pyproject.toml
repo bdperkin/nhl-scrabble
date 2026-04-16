@@ -955,7 +955,8 @@ min_confidence = 60
 # - Body max line length: 100 characters (matches ruff's line-length)
 # - Body min length: 10 characters (when body is present)
 # - Verbosity: 2 (detailed output for better understanding)
-# - Ignore: merge, revert, fixup, fixup-amend, squash commits (auto-generated)
+# - Ignore commits: merge, revert, fixup, fixup-amend, squash (auto-generated)
+# - Ignore rules: B6 (body-is-missing - allows commits without body)
 #
 # Comprehensive by default:
 # - Enforces consistent commit message style
