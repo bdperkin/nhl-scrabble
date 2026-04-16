@@ -174,8 +174,8 @@ repos:
           - mdformat-gfm  # GitHub Flavored Markdown support
           - mdformat-tables  # Table formatting
         args: []  # Config is in pyproject.toml
-        # Exclude GitHub issue templates (YAML frontmatter incompatible)
-        exclude: ^\.github/ISSUE_TEMPLATE/
+        # Exclude GitHub issue templates (YAML frontmatter incompatible) and generated docs
+        exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md)
 
   # ============================================================================
   # Documentation - RST File Linting and Validation
@@ -369,7 +369,7 @@ repos:
         name: Check generated documentation is up-to-date
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
-        entry: make docs-check
+        entry: bash tools/check_docs.sh
         language: system
         pass_filenames: false
         # Only run if docstrings or CLI code changed
