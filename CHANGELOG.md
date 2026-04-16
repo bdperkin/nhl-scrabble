@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Unimport Integration** - Unused import checker
+
+  - Comprehensive unused import checker matching ruff's ALL rules philosophy
+  - Pre-commit hook (hakancelikdev/unimport) for automatic unused import detection
+  - Tox environment (unimport) for standalone unused import checks
+  - Added to CI/CD pipeline for continuous import hygiene validation
+  - Configuration in pyproject.toml with comprehensive checking
+  - Detects and reports unused import statements across the codebase
+  - Ignores __init__.py files (matches ruff's per-file-ignores for __init__.py F401)
+  - Excludes build/test artifacts using gitignore patterns
+  - Works harmoniously with autoflake and ruff's unused import detection (F401)
+  - Current project status: no unused imports found (clean codebase)
+  - 51 total pre-commit hooks for comprehensive code quality
+
 - **Deptry Integration** - Python dependency checker
 
   - Comprehensive dependency checker matching ruff's ALL rules philosophy
@@ -22,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Comprehensive by default: no ignores, checks all dependency issues
   - Validation identified and removed unused pydantic dependency from main dependencies
   - Works harmoniously with pip-audit for comprehensive dependency management
-  - 50 total pre-commit hooks for comprehensive code quality
+  - 50 total pre-commit hooks (before unimport addition)
 
 - **Interrogate Integration** - Python docstring coverage checking
 
