@@ -291,12 +291,7 @@ Usage Patterns
 
 .. code-block:: python
 
-    from nhl_scrabble.reports import (
-        ConferenceReport,
-        DivisionReport,
-        PlayoffReport,
-        StatsReport
-    )
+    from nhl_scrabble.reports import ConferenceReport, DivisionReport, PlayoffReport, StatsReport
 
     # Conference standings
     for conf_name, standings in conference_standings.items():
@@ -343,25 +338,24 @@ data structures as JSON:
     import json
     from nhl_scrabble.models import TeamScore
 
+
     # Convert to dict for JSON serialization
     def team_score_to_dict(ts: TeamScore) -> dict:
         return {
-            'team': ts.team.name,
-            'total': ts.total,
-            'avg_per_player': ts.avg_per_player,
-            'player_count': ts.player_count,
-            'players': [
-                {
-                    'name': f"{ps.player.firstName} {ps.player.lastName}",
-                    'score': ps.total
-                }
+            "team": ts.team.name,
+            "total": ts.total,
+            "avg_per_player": ts.avg_per_player,
+            "player_count": ts.player_count,
+            "players": [
+                {"name": f"{ps.player.firstName} {ps.player.lastName}", "score": ps.total}
                 for ps in ts.player_scores
-            ]
+            ],
         }
+
 
     # Export team scores
     data = [team_score_to_dict(ts) for ts in team_scores]
-    with open('team_scores.json', 'w') as f:
+    with open("team_scores.json", "w") as f:
         json.dump(data, f, indent=2)
 
 Rich Console Features
@@ -389,11 +383,7 @@ All reports use Rich for enhanced terminal output:
     table.add_column("Score", justify="right")
 
     for i, ps in enumerate(top_players[:10], 1):
-        table.add_row(
-            str(i),
-            f"{ps.player.firstName} {ps.player.lastName}",
-            str(ps.total)
-        )
+        table.add_row(str(i), f"{ps.player.firstName} {ps.player.lastName}", str(ps.total))
 
     console.print(table)
 

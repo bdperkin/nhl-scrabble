@@ -62,6 +62,7 @@ import pytest
 from click.testing import CliRunner
 from nhl_scrabble.cli import cli
 
+
 def test_analyze_text_output(mock_nhl_api):
     """Test analyze command with text output."""
     runner = CliRunner()
@@ -69,6 +70,7 @@ def test_analyze_text_output(mock_nhl_api):
 
     assert result.exit_code == 0
     assert "NHL Scrabble Score Analysis" in result.output
+
 
 def test_analyze_json_output(mock_nhl_api, tmp_path):
     """Test analyze command with JSON output."""
@@ -81,8 +83,10 @@ def test_analyze_json_output(mock_nhl_api, tmp_path):
     assert output_file.exists()
 
     import json
+
     data = json.loads(output_file.read_text())
     assert "teams" in data
+
 
 def test_analyze_verbose_logging(mock_nhl_api, caplog):
     """Test analyze command with verbose logging."""
@@ -93,6 +97,7 @@ def test_analyze_verbose_logging(mock_nhl_api, caplog):
     assert result.exit_code == 0
     assert "DEBUG" in caplog.text
 
+
 def test_analyze_custom_top_players(mock_nhl_api):
     """Test analyze command with custom top players count."""
     runner = CliRunner()
@@ -101,8 +106,10 @@ def test_analyze_custom_top_players(mock_nhl_api):
 
     assert result.exit_code == 0
 
+
 def test_analyze_api_error_handling(monkeypatch):
     """Test analyze command handles API errors."""
+
     def mock_get_standings():
         raise Exception("API Error")
 
@@ -126,23 +133,21 @@ Add tests in `tests/unit/test_main.py`:
 import subprocess
 import pytest
 
+
 def test_main_module_executable():
     """Test that python -m nhl_scrabble works."""
     result = subprocess.run(
-        ["python", "-m", "nhl_scrabble", "--help"],
-        capture_output=True,
-        text=True
+        ["python", "-m", "nhl_scrabble", "--help"], capture_output=True, text=True
     )
 
     assert result.returncode == 0
     assert "analyze" in result.stdout
 
+
 def test_main_module_analyze():
     """Test that python -m nhl_scrabble analyze works."""
     result = subprocess.run(
-        ["python", "-m", "nhl_scrabble", "analyze", "--help"],
-        capture_output=True,
-        text=True
+        ["python", "-m", "nhl_scrabble", "analyze", "--help"], capture_output=True, text=True
     )
 
     assert result.returncode == 0
@@ -161,6 +166,7 @@ import pytest
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.models.team import TeamScore
 
+
 def test_calculate_playoff_bracket():
     """Test playoff bracket calculation."""
     calculator = PlayoffCalculator()
@@ -173,6 +179,7 @@ def test_calculate_playoff_bracket():
     assert "eastern" in bracket
     assert "western" in bracket
 
+
 def test_identify_division_leaders():
     """Test division leader identification."""
     calculator = PlayoffCalculator()
@@ -182,6 +189,7 @@ def test_identify_division_leaders():
 
     assert len(leaders["Atlantic"]) == 3
     assert all(team.playoff_indicator == "y" for team in leaders["Atlantic"])
+
 
 def test_wild_card_selection():
     """Test wild card team selection."""
@@ -193,6 +201,7 @@ def test_wild_card_selection():
     assert len(wild_cards) == 2
     assert all(team.playoff_indicator == "x" for team in wild_cards)
 
+
 def test_tiebreaker_by_average():
     """Test tiebreaker uses average score."""
     calculator = PlayoffCalculator()
@@ -203,6 +212,7 @@ def test_tiebreaker_by_average():
     sorted_teams = calculator.break_tie([team1, team2])
 
     assert sorted_teams[0].name == "Team2"  # Higher average
+
 
 def test_tiebreaker_alphabetical():
     """Test tiebreaker falls back to alphabetical."""
@@ -227,12 +237,12 @@ Add tests in `tests/unit/test_nhl_client.py`:
 def test_retry_on_network_error():
     """Test that requests are retried on network errors."""
     with NHLClient(retries=3) as client:
-        with patch('requests.Session.get') as mock_get:
+        with patch("requests.Session.get") as mock_get:
             # First 2 attempts fail, 3rd succeeds
             mock_get.side_effect = [
                 requests.RequestException("Error 1"),
                 requests.RequestException("Error 2"),
-                Mock(status_code=200, json=lambda: {"data": "success"})
+                Mock(status_code=200, json=lambda: {"data": "success"}),
             ]
 
             result = client._make_request("endpoint")
@@ -240,17 +250,19 @@ def test_retry_on_network_error():
             assert result == {"data": "success"}
             assert mock_get.call_count == 3
 
+
 def test_timeout_error():
     """Test timeout error handling."""
     with NHLClient(timeout=1) as client:
-        with patch('requests.Session.get', side_effect=requests.Timeout("Timeout")):
+        with patch("requests.Session.get", side_effect=requests.Timeout("Timeout")):
             with pytest.raises(NHLApiError, match="failed after"):
                 client._make_request("endpoint")
+
 
 def test_500_server_error():
     """Test 500 server error handling."""
     with NHLClient() as client:
-        with patch('requests.Session.get') as mock_get:
+        with patch("requests.Session.get") as mock_get:
             mock_response = Mock()
             mock_response.status_code = 500
             mock_response.text = "Internal Server Error"
@@ -272,6 +284,7 @@ def test_report_handles_empty_data():
     output = report.generate(team_scores=[])
 
     assert "No teams found" in output or output == ""
+
 
 def test_report_handles_missing_fields():
     """Test report handles data with missing fields."""

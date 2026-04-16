@@ -197,6 +197,14 @@ repos:
         args: []  # Config is in pyproject.toml
         additional_dependencies: [sphinx]
 
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.18.0
+    hooks:
+      - id: blacken-docs
+        # Format code blocks in documentation (RST, Markdown)
+        args: [--line-length=100]
+        additional_dependencies: [black==24.10.0]
+
   - repo: https://github.com/econchick/interrogate
     rev: 1.7.0
     hooks:

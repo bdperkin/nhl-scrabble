@@ -65,14 +65,32 @@ Standard Scrabble letter point values:
 .. code-block:: python
 
     SCRABBLE_VALUES = {
-        'A': 1, 'E': 1, 'I': 1, 'O': 1, 'U': 1,
-        'L': 1, 'N': 1, 'S': 1, 'T': 1, 'R': 1,
-        'D': 2, 'G': 2,
-        'B': 3, 'C': 3, 'M': 3, 'P': 3,
-        'F': 4, 'H': 4, 'V': 4, 'W': 4, 'Y': 4,
-        'K': 5,
-        'J': 8, 'X': 8,
-        'Q': 10, 'Z': 10
+        "A": 1,
+        "E": 1,
+        "I": 1,
+        "O": 1,
+        "U": 1,
+        "L": 1,
+        "N": 1,
+        "S": 1,
+        "T": 1,
+        "R": 1,
+        "D": 2,
+        "G": 2,
+        "B": 3,
+        "C": 3,
+        "M": 3,
+        "P": 3,
+        "F": 4,
+        "H": 4,
+        "V": 4,
+        "W": 4,
+        "Y": 4,
+        "K": 5,
+        "J": 8,
+        "X": 8,
+        "Q": 10,
+        "Z": 10,
     }
 
 Methods
@@ -134,19 +152,14 @@ Calculate Scrabble score for a Player object.
     from nhl_scrabble.models import Player
     from nhl_scrabble.scoring import ScrabbleScorer
 
-    player = Player(
-        id=8478402,
-        firstName="Alexander",
-        lastName="Ovechkin",
-        positionCode="LW"
-    )
+    player = Player(id=8478402, firstName="Alexander", lastName="Ovechkin", positionCode="LW")
 
     scorer = ScrabbleScorer()
     player_score = scorer.score_player(player)
 
     print(f"First name: {player_score.first_score}")  # 22
-    print(f"Last name: {player_score.last_score}")    # 23
-    print(f"Total: {player_score.total}")             # 45
+    print(f"Last name: {player_score.last_score}")  # 23
+    print(f"Total: {player_score.total}")  # 45
 
 Usage Patterns
 --------------

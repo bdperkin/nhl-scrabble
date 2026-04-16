@@ -88,6 +88,7 @@ Update `src/nhl_scrabble/cli.py` to include your report:
 ```python
 from nhl_scrabble.reports.your_report import YourReport
 
+
 def run_analysis(config: Config) -> str:
     # ... existing code ...
 

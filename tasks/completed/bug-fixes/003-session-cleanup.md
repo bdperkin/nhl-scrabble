@@ -49,6 +49,7 @@ Add `__del__()` method and use `atexit` for guaranteed cleanup:
 import atexit
 import weakref
 
+
 class NHLClient:
     """Client for interacting with NHL API."""
 
@@ -108,6 +109,7 @@ import gc
 import pytest
 from nhl_scrabble.api import NHLClient
 
+
 def test_context_manager_closes_session():
     """Test that context manager properly closes session."""
     with NHLClient() as client:
@@ -118,6 +120,7 @@ def test_context_manager_closes_session():
     # Verify session is actually closed
     with pytest.raises(Exception):
         session.get("https://httpbin.org/get")
+
 
 def test_destructor_closes_session(caplog):
     """Test that __del__ closes session if context manager not used."""
@@ -131,6 +134,7 @@ def test_destructor_closes_session(caplog):
     # Should see warning in logs
     assert "not explicitly closed" in caplog.text
 
+
 def test_explicit_close_works():
     """Test that calling close() directly works."""
     client = NHLClient()
@@ -142,6 +146,7 @@ def test_explicit_close_works():
     # Calling close() again should be safe
     client.close()
     assert client._closed
+
 
 def test_atexit_cleanup(monkeypatch):
     """Test that atexit handler cleans up unclosed instances."""

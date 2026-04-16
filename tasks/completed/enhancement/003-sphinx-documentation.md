@@ -145,30 +145,29 @@ author = "Brandon Perkins"
 
 # Get version from package
 from nhl_scrabble import __version__
+
 version = __version__
 release = __version__
 
 # -- General configuration ---------------------------------------------------
 extensions = [
     # Core Sphinx extensions
-    "sphinx.ext.autodoc",           # Auto-generate API docs from docstrings
-    "sphinx.ext.napoleon",          # Support Google/NumPy docstring styles
-    "sphinx.ext.viewcode",          # Add links to source code
-    "sphinx.ext.intersphinx",       # Link to other project docs
-    "sphinx.ext.todo",              # Support TODO directives
-    "sphinx.ext.coverage",          # Check documentation coverage
-    "sphinx.ext.githubpages",       # Create .nojekyll for GitHub Pages
-
+    "sphinx.ext.autodoc",  # Auto-generate API docs from docstrings
+    "sphinx.ext.napoleon",  # Support Google/NumPy docstring styles
+    "sphinx.ext.viewcode",  # Add links to source code
+    "sphinx.ext.intersphinx",  # Link to other project docs
+    "sphinx.ext.todo",  # Support TODO directives
+    "sphinx.ext.coverage",  # Check documentation coverage
+    "sphinx.ext.githubpages",  # Create .nojekyll for GitHub Pages
     # Third-party extensions
-    "sphinx_autodoc_typehints",     # Use type hints in signatures
-    "sphinx_copybutton",            # Copy button for code blocks
-    "sphinx_design",                # Modern UI components
+    "sphinx_autodoc_typehints",  # Use type hints in signatures
+    "sphinx_copybutton",  # Copy button for code blocks
+    "sphinx_design",  # Modern UI components
     "sphinxcontrib.programoutput",  # Run programs and show output
-    "sphinxcontrib.spelling",       # Spell checker
-    "sphinxext.opengraph",          # OpenGraph metadata
-
+    "sphinxcontrib.spelling",  # Spell checker
+    "sphinxext.opengraph",  # OpenGraph metadata
     # Markdown support (optional, for including .md files)
-    "myst_parser",                  # MyST markdown parser
+    "myst_parser",  # MyST markdown parser
 ]
 
 # Add any paths that contain templates here
@@ -957,6 +956,8 @@ def calculate_score(self, text: str) -> int:
     Returns:
         Total score.
     """
+
+
 # Type hints appear automatically in docs!
 ```
 
@@ -966,6 +967,7 @@ def calculate_score(self, text: str) -> int:
 .. code-block:: python
 
     from nhl_scrabble import ScrabbleScorer
+
     scorer = ScrabbleScorer()
 
 # Adds copy button to code block - excellent UX

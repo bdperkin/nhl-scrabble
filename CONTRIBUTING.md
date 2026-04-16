@@ -265,6 +265,7 @@ Always use type hints:
 def process_teams(teams: dict[str, TeamScore]) -> list[PlayerScore]:
     pass
 
+
 # Bad
 def process_teams(teams):
     pass

@@ -40,6 +40,7 @@ Add validation with helpful error messages:
 @classmethod
 def from_env(cls) -> "Config":
     """Create config from environment variables."""
+
     def get_int(key: str, default: str, min_value: int = 0) -> int:
         """Get integer from env with validation."""
         value_str = os.getenv(key, default)
@@ -85,11 +86,13 @@ import pytest
 import os
 from nhl_scrabble.config import Config
 
+
 def test_from_env_invalid_timeout(monkeypatch):
     """Test Config.from_env() with invalid timeout."""
     monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "invalid")
     with pytest.raises(ValueError, match="must be a valid integer"):
         Config.from_env()
+
 
 def test_from_env_negative_timeout(monkeypatch):
     """Test Config.from_env() with negative timeout."""
@@ -97,11 +100,13 @@ def test_from_env_negative_timeout(monkeypatch):
     with pytest.raises(ValueError, match="must be >= 1"):
         Config.from_env()
 
+
 def test_from_env_invalid_rate_limit(monkeypatch):
     """Test Config.from_env() with invalid rate limit."""
     monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "not_a_number")
     with pytest.raises(ValueError, match="must be a valid number"):
         Config.from_env()
+
 
 def test_from_env_valid_values(monkeypatch):
     """Test Config.from_env() with valid values."""

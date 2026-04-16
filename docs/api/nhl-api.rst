@@ -54,6 +54,7 @@ Environment variables for customization:
     from nhl_scrabble.api import NHLClient
     import asyncio
 
+
     async def fetch_data():
         async with NHLClient() as client:
             # Fetch all teams
@@ -66,6 +67,7 @@ Environment variables for customization:
             all_rosters = await client.fetch_all_rosters()
 
         return teams, all_rosters
+
 
     # Run async code
     teams, rosters = asyncio.run(fetch_data())
@@ -177,6 +179,7 @@ The client handles various error conditions:
     import aiohttp
     import asyncio
 
+
     async def safe_fetch():
         try:
             async with NHLClient() as client:
@@ -205,7 +208,8 @@ The client implements rate limiting to be respectful to the NHL API:
 .. code-block:: python
 
     import os
-    os.environ['NHL_SCRABBLE_RATE_LIMIT_DELAY'] = '0.5'  # 500ms delay
+
+    os.environ["NHL_SCRABBLE_RATE_LIMIT_DELAY"] = "0.5"  # 500ms delay
 
     async with NHLClient() as client:
         rosters = await client.fetch_all_rosters()  # Uses 500ms delay
@@ -225,7 +229,8 @@ Automatic retry with exponential backoff:
 .. code-block:: python
 
     import os
-    os.environ['NHL_SCRABBLE_API_RETRIES'] = '5'  # 5 retry attempts
+
+    os.environ["NHL_SCRABBLE_API_RETRIES"] = "5"  # 5 retry attempts
 
     async with NHLClient() as client:
         teams = await client.fetch_all_teams()  # Up to 5 retries

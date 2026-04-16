@@ -201,11 +201,7 @@ Instead of CLI, use NHL Scrabble as a Python library:
 from nhl_scrabble.cli import run_analysis
 from nhl_scrabble.config import Config
 
-config = Config(
-    output_format="json",
-    verbose=True,
-    top_players_count=50
-)
+config = Config(output_format="json", verbose=True, top_players_count=50)
 
 result = run_analysis(config)
 print(result)

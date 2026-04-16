@@ -32,31 +32,32 @@ import re
 import logging
 from typing import Pattern
 
+
 class SensitiveDataFilter(logging.Filter):
     """Filter to sanitize sensitive data from log messages."""
 
     # Patterns for sensitive data
     PATTERNS: list[tuple[Pattern[str], str]] = [
         # API keys: key=xxx, api_key=xxx, apikey=xxx
-        (re.compile(r'([&?]api[-_]?key=)[^&\s]+', re.IGNORECASE), r'\1***'),
-        (re.compile(r'([&?]key=)[^&\s]+', re.IGNORECASE), r'\1***'),
-
+        (re.compile(r"([&?]api[-_]?key=)[^&\s]+", re.IGNORECASE), r"\1***"),
+        (re.compile(r"([&?]key=)[^&\s]+", re.IGNORECASE), r"\1***"),
         # Bearer tokens: Authorization: Bearer xxx
-        (re.compile(r'(Authorization:\s*Bearer\s+)\S+', re.IGNORECASE), r'\1***'),
-        (re.compile(r'(Bearer\s+)\S+', re.IGNORECASE), r'\1***'),
-
+        (re.compile(r"(Authorization:\s*Bearer\s+)\S+", re.IGNORECASE), r"\1***"),
+        (re.compile(r"(Bearer\s+)\S+", re.IGNORECASE), r"\1***"),
         # Basic auth: Authorization: Basic xxx
-        (re.compile(r'(Authorization:\s*Basic\s+)\S+', re.IGNORECASE), r'\1***'),
-
+        (re.compile(r"(Authorization:\s*Basic\s+)\S+", re.IGNORECASE), r"\1***"),
         # Passwords in URLs: https://user:pass@host
-        (re.compile(r'(https?://[^:]+:)([^@]+)(@)', re.IGNORECASE), r'\1***\3'),
-
+        (re.compile(r"(https?://[^:]+:)([^@]+)(@)", re.IGNORECASE), r"\1***\3"),
         # Generic secrets: secret=xxx, token=xxx
-        (re.compile(r'([&?]secret=)[^&\s]+', re.IGNORECASE), r'\1***'),
-        (re.compile(r'([&?]token=)[^&\s]+', re.IGNORECASE), r'\1***'),
-
+        (re.compile(r"([&?]secret=)[^&\s]+", re.IGNORECASE), r"\1***"),
+        (re.compile(r"([&?]token=)[^&\s]+", re.IGNORECASE), r"\1***"),
         # Environment variables in error messages
-        (re.compile(r'(NHL_SCRABBLE_\w*(?:KEY|TOKEN|SECRET|PASSWORD)\s*=\s*)[^\s]+', re.IGNORECASE), r'\1***'),
+        (
+            re.compile(
+                r"(NHL_SCRABBLE_\w*(?:KEY|TOKEN|SECRET|PASSWORD)\s*=\s*)[^\s]+", re.IGNORECASE
+            ),
+            r"\1***",
+        ),
     ]
 
     def filter(self, record: logging.LogRecord) -> bool:
@@ -78,6 +79,7 @@ class SensitiveDataFilter(logging.Filter):
 
         return True
 
+
 # Apply filter to all loggers
 def configure_logging_with_sanitization(verbose: bool = False) -> None:
     """Configure logging with sensitive data sanitization."""
@@ -91,9 +93,7 @@ def configure_logging_with_sanitization(verbose: bool = False) -> None:
     handler.addFilter(SensitiveDataFilter())
 
     # Configure formatter
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
 
     # Configure root logger
@@ -105,6 +105,7 @@ Update `src/nhl_scrabble/logging_config.py`:
 
 ```python
 from nhl_scrabble.security import SensitiveDataFilter
+
 
 def configure_logging(verbose: bool = False) -> None:
     """Configure logging for the application."""
@@ -123,6 +124,7 @@ Add configuration to control sanitization:
 @dataclass
 class Config:
     """Application configuration."""
+
     # ... existing fields ...
     sanitize_logs: bool = True  # Disable for debugging only
 ```
@@ -140,6 +142,7 @@ import logging
 import pytest
 from nhl_scrabble.security import SensitiveDataFilter
 
+
 def test_sanitize_api_key_in_url():
     """Test that API keys in URLs are sanitized."""
     filter = SensitiveDataFilter()
@@ -151,13 +154,14 @@ def test_sanitize_api_key_in_url():
         lineno=0,
         msg="Making request to https://api.example.com?api_key=secret123",
         args=(),
-        exc_info=None
+        exc_info=None,
     )
 
     filter.filter(record)
 
     assert "secret123" not in record.msg
     assert "api_key=***" in record.msg
+
 
 def test_sanitize_bearer_token():
     """Test that Bearer tokens are sanitized."""
@@ -170,13 +174,14 @@ def test_sanitize_bearer_token():
         lineno=0,
         msg="Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         args=(),
-        exc_info=None
+        exc_info=None,
     )
 
     filter.filter(record)
 
     assert "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" not in record.msg
     assert "Bearer ***" in record.msg
+
 
 def test_sanitize_password_in_url():
     """Test that passwords in URLs are sanitized."""
@@ -189,13 +194,14 @@ def test_sanitize_password_in_url():
         lineno=0,
         msg="Connecting to https://user:MyP@ssw0rd@api.example.com",
         args=(),
-        exc_info=None
+        exc_info=None,
     )
 
     filter.filter(record)
 
     assert "MyP@ssw0rd" not in record.msg
     assert "user:***@api.example.com" in record.msg
+
 
 def test_sanitize_environment_variables():
     """Test that environment variables with secrets are sanitized."""
@@ -208,13 +214,14 @@ def test_sanitize_environment_variables():
         lineno=0,
         msg="Config error: NHL_SCRABBLE_API_KEY=sk-1234567890abcdef",
         args=(),
-        exc_info=None
+        exc_info=None,
     )
 
     filter.filter(record)
 
     assert "sk-1234567890abcdef" not in record.msg
     assert "NHL_SCRABBLE_API_KEY=***" in record.msg
+
 
 def test_sanitize_with_args():
     """Test that args in format strings are sanitized."""
@@ -227,13 +234,14 @@ def test_sanitize_with_args():
         lineno=0,
         msg="Request to %s failed",
         args=("https://api.example.com?token=secret123",),
-        exc_info=None
+        exc_info=None,
     )
 
     filter.filter(record)
 
     assert "secret123" not in record.args[0]
     assert "token=***" in record.args[0]
+
 
 def test_non_string_args_not_affected():
     """Test that non-string args are not modified."""
@@ -246,12 +254,13 @@ def test_non_string_args_not_affected():
         lineno=0,
         msg="Processed %d items in %f seconds",
         args=(42, 1.5),
-        exc_info=None
+        exc_info=None,
     )
 
     filter.filter(record)
 
     assert record.args == (42, 1.5)
+
 
 def test_integration_with_logger(caplog):
     """Test that filter works with actual logger."""
@@ -316,7 +325,7 @@ nhl-scrabble analyze --verbose
 ```python
 # Custom patterns for organization-specific secrets
 custom_patterns = [
-    (re.compile(r'(X-Custom-Token:\s*)\S+'), r'\1***'),
+    (re.compile(r"(X-Custom-Token:\s*)\S+"), r"\1***"),
 ]
 ```
 

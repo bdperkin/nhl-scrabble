@@ -27,9 +27,7 @@ def _make_request(self, endpoint: str) -> dict[str, Any]:
             # ... handle response ...
         except requests.RequestException as e:
             if attempt < self.retries:
-                logger.warning(
-                    f"Request failed (attempt {attempt + 1}/{self.retries + 1}): {e}"
-                )
+                logger.warning(f"Request failed (attempt {attempt + 1}/{self.retries + 1}): {e}")
                 time.sleep(1)  # <-- Fixed 1 second delay
                 continue
             raise
@@ -49,6 +47,7 @@ Implement exponential backoff with jitter:
 ```python
 import random
 
+
 class NHLClient:
     def __init__(
         self,
@@ -56,7 +55,7 @@ class NHLClient:
         retries: int = 3,
         rate_limit_delay: float = 0.3,
         backoff_factor: float = 2.0,
-        max_backoff: float = 30.0
+        max_backoff: float = 30.0,
     ) -> None:
         """Initialize NHL API client.
 
@@ -90,7 +89,7 @@ class NHLClient:
 
         # Exponential backoff: base_delay * (backoff_factor ** attempt)
         base_delay = 1.0
-        delay = min(base_delay * (self.backoff_factor ** attempt), self.max_backoff)
+        delay = min(base_delay * (self.backoff_factor**attempt), self.max_backoff)
 
         # Add jitter: randomize ±25% to prevent thundering herd
         jitter = delay * 0.25
@@ -144,6 +143,7 @@ Add to `Config` dataclass and environment variables:
 @dataclass
 class Config:
     """Application configuration."""
+
     # ... existing fields ...
     backoff_factor: float = 2.0
     max_backoff: float = 30.0
@@ -163,6 +163,7 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.api import NHLClient
 
+
 def test_calculate_backoff_delay_exponential():
     """Test exponential backoff calculation."""
     client = NHLClient(backoff_factor=2.0)
@@ -179,6 +180,7 @@ def test_calculate_backoff_delay_exponential():
     delay2 = client._calculate_backoff_delay(2)
     assert 3.0 <= delay2 <= 5.0  # 4.0 ± 25%
 
+
 def test_calculate_backoff_delay_respects_max():
     """Test that backoff delay respects max_backoff."""
     client = NHLClient(backoff_factor=2.0, max_backoff=5.0)
@@ -186,6 +188,7 @@ def test_calculate_backoff_delay_respects_max():
     # Large attempt number should be capped at max_backoff
     delay = client._calculate_backoff_delay(10)
     assert delay <= 5.0
+
 
 def test_calculate_backoff_delay_respects_retry_after():
     """Test that Retry-After header is respected."""
@@ -195,18 +198,18 @@ def test_calculate_backoff_delay_respects_retry_after():
     delay = client._calculate_backoff_delay(0, retry_after=10)
     assert delay == 10.0
 
+
 def test_retry_with_exponential_backoff():
     """Test that retries use exponential backoff."""
     with NHLClient(retries=3) as client:
-        with patch('requests.Session.get') as mock_get, \
-             patch('time.sleep') as mock_sleep:
+        with patch("requests.Session.get") as mock_get, patch("time.sleep") as mock_sleep:
 
             # First 3 attempts fail, 4th succeeds
             mock_get.side_effect = [
                 requests.RequestException("Error 1"),
                 requests.RequestException("Error 2"),
                 requests.RequestException("Error 3"),
-                Mock(status_code=200, json=lambda: {"data": "success"})
+                Mock(status_code=200, json=lambda: {"data": "success"}),
             ]
 
             result = client._make_request("endpoint")
@@ -219,11 +222,11 @@ def test_retry_with_exponential_backoff():
             assert delays[1] > delays[0]
             assert delays[2] > delays[1]
 
+
 def test_429_rate_limit_with_retry_after():
     """Test that 429 responses with Retry-After are handled."""
     with NHLClient(retries=2) as client:
-        with patch('requests.Session.get') as mock_get, \
-             patch('time.sleep') as mock_sleep:
+        with patch("requests.Session.get") as mock_get, patch("time.sleep") as mock_sleep:
 
             # First attempt: 429 with Retry-After, second: success
             rate_limit_response = Mock()

@@ -173,8 +173,8 @@ Follows NHL playoff structure:
     bracket = calculator.calculate_playoff_bracket(team_scores)
 
     print("Eastern Conference Playoffs:")
-    for team in bracket['Eastern'][:8]:
-        indicator = team.get('playoff_indicator', '')
+    for team in bracket["Eastern"][:8]:
+        indicator = team.get("playoff_indicator", "")
         print(f"  {indicator} {team.team.name}: {team.total}")
 
 calculate_playoff_bracket
@@ -203,8 +203,8 @@ Generate playoff bracket with seeding and indicators.
     bracket = calculator.calculate_playoff_bracket(team_scores)
 
     # Access playoff teams
-    eastern_playoffs = bracket['Eastern'][:8]
-    western_playoffs = bracket['Western'][:8]
+    eastern_playoffs = bracket["Eastern"][:8]
+    western_playoffs = bracket["Western"][:8]
 
     # Find Presidents' Trophy winner
     all_teams = eastern_playoffs + western_playoffs
@@ -238,11 +238,11 @@ Teams receive playoff indicators based on standing:
 
     for team_score in team_scores:
         indicator = team_score.playoff_indicator
-        if indicator == 'p':
+        if indicator == "p":
             print(f"{team_score.team.name} - Presidents' Trophy!")
-        elif indicator == 'y':
+        elif indicator == "y":
             print(f"{team_score.team.name} - Division Leader")
-        elif indicator == 'x':
+        elif indicator == "x":
             print(f"{team_score.team.name} - Wild Card")
 
 Tiebreakers
@@ -275,6 +275,7 @@ Usage Patterns
     from nhl_scrabble.processors import TeamProcessor, PlayoffCalculator
     import asyncio
 
+
     async def analyze():
         # Fetch data
         async with NHLClient() as client:
@@ -297,6 +298,7 @@ Usage Patterns
 
         return team_scores, bracket
 
+
     team_scores, bracket = asyncio.run(analyze())
 
 **Division Analysis:**
@@ -307,10 +309,7 @@ Usage Patterns
     divisions = processor.get_division_standings(team_scores)
 
     # Find strongest division
-    strongest = max(
-        divisions.items(),
-        key=lambda x: x[1].total
-    )
+    strongest = max(divisions.items(), key=lambda x: x[1].total)
     print(f"Strongest division: {strongest[0]} ({strongest[1].total} points)")
 
 **Playoff Matchups:**
@@ -321,7 +320,7 @@ Usage Patterns
     bracket = calculator.calculate_playoff_bracket(team_scores)
 
     # First round matchups (simplified)
-    eastern = bracket['Eastern'][:8]
+    eastern = bracket["Eastern"][:8]
     print("Eastern Conference First Round:")
     print(f"  {eastern[0].team.name} vs {eastern[7].team.name}")
     print(f"  {eastern[1].team.name} vs {eastern[6].team.name}")
