@@ -310,6 +310,27 @@ We follow the [Diátaxis framework](https://diataxis.fr/) with four documentatio
 - **[Reference](docs/reference/)** - Technical specifications and API documentation
 - **[Explanation](docs/explanation/)** - Conceptual understanding and background
 
+**Online Documentation:** https://bdperkin.github.io/nhl-scrabble/
+
+### Building Documentation
+
+Build and view Sphinx documentation locally:
+
+```bash
+# Build HTML documentation
+make docs
+
+# Serve with auto-rebuild (recommended for development)
+make serve-docs
+# Visit http://localhost:8000
+
+# Check documentation spelling
+tox -e docs -- -b spelling
+
+# Check all links
+sphinx-build -b linkcheck docs docs/_build/linkcheck
+```
+
 ### Updating Documentation
 
 When adding new features:

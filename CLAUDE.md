@@ -712,7 +712,9 @@ The project has comprehensive security measures:
 
 ## Documentation
 
-Documentation follows the [Diátaxis framework](https://diataxis.fr/) organized into four quadrants:
+**Online Documentation:** https://bdperkin.github.io/nhl-scrabble/
+
+Documentation follows the [Diátaxis framework](https://diataxis.fr/) organized into four quadrants, built with Sphinx and auto-deployed to GitHub Pages:
 
 ### Tutorials (Learning-Oriented)
 
@@ -800,11 +802,23 @@ pytest --cov tests/unit/test_new_feature.py
 ### Updating Documentation
 
 ```bash
-# Edit relevant .md files
-# Check links and formatting
+# Edit Markdown files in docs/
+# Update docstrings in Python code
 
-# Verify in preview if possible
-# Commit documentation updates separately
+# Build Sphinx documentation
+make docs
+
+# Serve with auto-rebuild for development
+make serve-docs  # http://localhost:8000
+
+# Check spelling
+tox -e docs -- -b spelling
+
+# Regenerate API/CLI docs if changed
+make docs-api    # After docstring updates
+make docs-cli    # After CLI option changes
+
+# Commit documentation updates
 git commit -m "docs: Update documentation for feature X"
 ```
 
