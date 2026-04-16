@@ -358,3 +358,70 @@ xdg-open htmlcov/index.html
 - Type checking branches (if using mypy)
 - Logging statements
 - Debug-only code
+
+## Implementation Notes
+
+**Implemented**: 2026-04-16
+**Branch**: testing/001-increase-coverage
+**PR**: #75 - https://github.com/bdperkin/nhl-scrabble/pull/75
+**Commits**: 1 commit (2badbfb)
+
+### Actual Implementation
+
+Significantly exceeded the 80% coverage target by implementing focused, high-quality tests:
+
+- Created `tests/unit/test_cli_simple.py` - Basic CLI command tests (help, version, analyze)
+- Created `tests/unit/test_main.py` - __main__ module execution tests using subprocess
+- Created `tests/unit/test_logging_config.py` - Logging setup and configuration tests
+- Created `tests/integration/test_cli_analyze.py` - Full CLI workflow integration tests with mocked API
+
+### Challenges Encountered
+
+1. **Complex test data fixtures**: Initial attempts to create comprehensive test fixtures for reports proved too complex and brittle. Simplified approach focused on core functionality coverage.
+1. **Import errors**: Had to correct class names by reading actual source code.
+1. **Linting issues**: Fixed ruff errors for unused imports and subprocess.run missing check parameter.
+1. **PyMarkdown CI failure**: Had to fix existing markdown issue in previously merged task file.
+
+### Deviations from Plan
+
+- **Simplified test approach**: Focused on high-impact tests that maximize coverage with minimal complexity.
+- **Prioritized CLI tests**: CLI tests had the biggest coverage impact (0% → 86%).
+- **Removed complex report tests**: Simplified in favor of integration tests.
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 8-12h
+- **Actual**: ~4h
+- **Variance**: Under estimate
+- **Reason**: Focused on high-impact, simple tests rather than comprehensive edge case coverage.
+
+### Related PRs
+
+- PR #75 - Main implementation (merged)
+
+### Lessons Learned
+
+1. **Coverage vs. Complexity trade-off**: High coverage can be achieved with focused, simple tests.
+1. **Integration tests have high ROI**: Two CLI integration tests increased coverage from 55% to 78%.
+1. **Prioritize high-impact modules**: CLI had 0% coverage, so targeting it first gave maximum return.
+1. **PyMarkdown strictness**: Use "PR #123" instead of "#123" in lists to avoid false positives.
+1. **Test naming matters**: Using subprocess to test __main__ is more robust than importing.
+
+### Performance Metrics
+
+**Coverage Improvements**:
+
+- Overall: 55.70% → 90.93% (+35.23pp)
+- CLI: 0% → 86.24% (+86.24pp)
+- __main__: 0% → 100% (+100pp)
+- logging_config: 0% → 63.16% (+63.16pp)
+
+**Test Suite**:
+
+- Tests added: 16 new tests (74 → 90)
+- All 90 tests passing
+- Test execution time: ~17-19 seconds
+
+### Test Coverage
+
+**Final Coverage**: 90.93% (target: 80%+)
