@@ -297,7 +297,7 @@ ______________________________________________________________________
 
 ## Completed Tasks
 
-| ID  | Title                           | Category    | Completed  | Actual Effort | PR  |
-| --- | ------------------------------- | ----------- | ---------- | ------------- | --- |
-| 002 | Link GitHub Issues to Tasks     | Enhancement | 2026-04-16 | 0.75h         | #57 |
+| ID  | Title                            | Category    | Completed  | Actual Effort | PR  |
+| --- | -------------------------------- | ----------- | ---------- | ------------- | --- |
+| 002 | Link GitHub Issues to Tasks      | Enhancement | 2026-04-16 | 0.75h         | #57 |
 | 007 | Fix Branch Protection Hook in CI | Bug Fix     | 2026-04-16 | 1h            | #59 |
