@@ -108,17 +108,17 @@ class NHLApiClient:
             logger.error(f"Error parsing teams response: {e}")
             raise NHLApiError(f"Invalid API response format: {e}") from e
 
-    def get_team_roster(self, team_abbrev: str) -> dict[str, Any] | None:
+    def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
         """Fetch the current roster for a specific team.
 
         Args:
             team_abbrev: Team abbreviation (e.g., 'TOR', 'MTL')
 
         Returns:
-            Dictionary containing roster data with 'forwards', 'defensemen', and 'goalies' keys,
-            or None if the roster is not available
+            Dictionary containing roster data with 'forwards', 'defensemen', and 'goalies' keys
 
         Raises:
+            NHLApiNotFoundError: If the roster is not found (404 response)
             NHLApiConnectionError: If unable to connect to the API after all retries
             NHLApiError: For other API errors
 
@@ -137,7 +137,7 @@ class NHLApiClient:
 
                 if response.status_code == 404:
                     logger.warning(f"No roster data available for {team_abbrev}")
-                    return None
+                    raise NHLApiNotFoundError(f"Roster not found for team: {team_abbrev}")
 
                 response.raise_for_status()
                 data = response.json()
@@ -177,7 +177,8 @@ class NHLApiClient:
                 logger.error(f"HTTP error fetching {team_abbrev}: {e}")
                 raise NHLApiError(f"HTTP error: {e}") from e
 
-        return None
+        # This should never be reached as all paths above either return or raise
+        raise NHLApiError("Unexpected error: retry loop completed without returning data")
 
     def close(self) -> None:
         """Close the session and release resources."""
