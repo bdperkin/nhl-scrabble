@@ -63,23 +63,24 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 3 documented)
 
-| ID  | Title                            | Priority | Effort | Issue |
-| --- | -------------------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output            | MEDIUM   | 4-6h   | #46   |
-| 003 | Build Sphinx Docs + GitHub Pages | MEDIUM   | 12-16h | #64   |
-| ... | Progress Bars                    | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                 | MEDIUM   | TBD    |       |
-| ... | Historical Data                  | LOW      | TBD    |       |
-| ... | CSV/Excel Export                 | LOW      | TBD    |       |
-| ... | Filtering Options                | LOW      | TBD    |       |
-| ... | Custom Scoring Rules             | LOW      | TBD    |       |
-| ... | Statistics Dashboard             | LOW      | TBD    |       |
-| ... | Watch Mode                       | LOW      | TBD    |       |
-| ... | Player Search                    | LOW      | TBD    |       |
+| ID  | Title                              | Priority | Effort | Issue |
+| --- | ---------------------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output              | MEDIUM   | 4-6h   | #46   |
+| 003 | Build Sphinx Docs + GitHub Pages   | MEDIUM   | 12-16h | #64   |
+| 004 | Automated API/CLI Documentation    | MEDIUM   | 4-6h   | #81   |
+| ... | Progress Bars                      | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                   | MEDIUM   | TBD    |       |
+| ... | Historical Data                    | LOW      | TBD    |       |
+| ... | CSV/Excel Export                   | LOW      | TBD    |       |
+| ... | Filtering Options                  | LOW      | TBD    |       |
+| ... | Custom Scoring Rules               | LOW      | TBD    |       |
+| ... | Statistics Dashboard               | LOW      | TBD    |       |
+| ... | Watch Mode                         | LOW      | TBD    |       |
+| ... | Player Search                      | LOW      | TBD    |       |
 
-**Documented Effort**: 16-22 hours
+**Documented Effort**: 20-28 hours
 
 ### Testing (0 tasks)
 
@@ -117,12 +118,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 10 tasks
-**Total Documented Effort**: 45-66 hours
+**Documented Tasks**: 11 tasks
+**Total Documented Effort**: 49-72 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 14 tasks (34.17h actual effort)
 
-**Grand Total**: ~145-186 hours for complete roadmap
+**Grand Total**: ~149-192 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -289,9 +290,9 @@ This section organizes all documented tasks into a recommended implementation se
 ### Phase 4: Documentation Excellence (Week 6-8)
 
 **Focus**: Comprehensive documentation system
-**Total Effort**: ~16-22 hours (1 task complete)
+**Total Effort**: ~20-28 hours (1 task complete)
 
-**Recommended order** (sequential for best results):
+**Recommended order** (flexible based on needs):
 
 1. **enhancement/002-procida-documentation.md** (8-12h) - #63 - Complete ✅
 
@@ -301,12 +302,21 @@ This section organizes all documented tasks into a recommended implementation se
    - No dependencies
    - Completed 2026-04-16 (10h actual)
 
-1. **enhancement/003-sphinx-documentation.md** (12-16h) - #64
+1. **enhancement/004-automated-api-cli-docs.md** (4-6h) - #81 OR enhancement/003-sphinx-documentation.md (12-16h) - #64
 
-   - MEDIUM priority, professional documentation rendering
-   - Sphinx with 9 extensions + GitHub Pages deployment
-   - Do this SECOND to beautifully render organized content
-   - Depends on: enhancement/002 (recommended but not required)
+   - **Option A (Lightweight)**: Implement #81 (automated API/CLI docs)
+     - MEDIUM priority, quick automated documentation
+     - Uses pdoc + custom scripts (minimal dependencies)
+     - Fast builds (\<5s), simple integration
+     - Can be done independently or as stepping stone to Sphinx
+   
+   - **Option B (Full Featured)**: Implement #64 (Sphinx documentation)
+     - MEDIUM priority, professional documentation site
+     - Sphinx with 9 extensions + GitHub Pages
+     - Includes automated API/CLI docs plus search, themes, etc.
+     - Larger effort but comprehensive solution
+   
+   - **Or Both**: Implement #81 first (quick win), then #64 later (full solution)
 
 1. **enhancement/001-html-output.md** (4-6h) - #46
 
@@ -558,9 +568,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
-**Tasks Documented**: 17 of 50+
-**Completion Status**: 14 of 17 completed (82%)
-**Documented Effort Remaining**: 27.83-54.83 hours (excluding completed tasks)
+**Tasks Documented**: 18 of 50+
+**Completion Status**: 14 of 18 completed (78%)
+**Documented Effort Remaining**: 31.83-58.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
