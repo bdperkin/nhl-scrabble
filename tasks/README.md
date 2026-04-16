@@ -41,22 +41,21 @@ Each task is assigned a priority:
 
 **Total Effort**: 8.5-14 hours
 
-### Security (10+ tasks, 3 documented)
+### Security (10+ tasks, 2 documented)
 
-| ID  | Title                              | Priority | Effort | Issue |
-| --- | ---------------------------------- | -------- | ------ | ----- |
-| 004 | GitHub Settings Security Hardening | CRITICAL | 2-3h   | #62   |
-| 002 | Create SECURITY.md Policy          | HIGH     | 1h     |       |
-| 003 | Implement Log Sanitization         | MEDIUM   | 2-3h   | #45   |
-| ... | Input Validation                   | MEDIUM   | TBD    |       |
-| ... | SSRF Protection                    | MEDIUM   | TBD    |       |
-| ... | Rate Limit Enforcement             | MEDIUM   | TBD    |       |
-| ... | DoS Prevention                     | LOW      | TBD    |       |
-| ... | SSL Verification                   | LOW      | TBD    |       |
-| ... | PII Logging Prevention             | LOW      | TBD    |       |
-| ... | Config Injection Protection        | LOW      | TBD    |       |
+| ID  | Title                       | Priority | Effort | Issue |
+| --- | --------------------------- | -------- | ------ | ----- |
+| 002 | Create SECURITY.md Policy   | HIGH     | 1h     |       |
+| 003 | Implement Log Sanitization  | MEDIUM   | 2-3h   | #45   |
+| ... | Input Validation            | MEDIUM   | TBD    |       |
+| ... | SSRF Protection             | MEDIUM   | TBD    |       |
+| ... | Rate Limit Enforcement      | MEDIUM   | TBD    |       |
+| ... | DoS Prevention              | LOW      | TBD    |       |
+| ... | SSL Verification            | LOW      | TBD    |       |
+| ... | PII Logging Prevention      | LOW      | TBD    |       |
+| ... | Config Injection Protection | LOW      | TBD    |       |
 
-**Documented Effort**: 5-7 hours
+**Documented Effort**: 3-4 hours
 
 ### Optimization (6 tasks, 1 documented)
 
@@ -130,12 +129,12 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 16 tasks
-**Total Documented Effort**: 67-98 hours
+**Documented Tasks**: 15 tasks
+**Total Documented Effort**: 65-95 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 4 tasks (4.67h actual effort)
+**Completed Tasks**: 5 tasks (6.17h actual effort)
 
-**Grand Total**: ~170-220 hours for complete roadmap
+**Grand Total**: ~165-215 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -561,13 +560,14 @@ ______________________________________________________________________
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 17 of 50+
 **Completion Status**: 3 of 17 completed (18%)
-**Documented Effort Remaining**: 62.75-93.75 hours (excluding completed tasks)
+**Documented Effort Remaining**: 58.83-88.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
-| ID  | Title                            | Category     | Completed  | Actual Effort | PR  |
-| --- | -------------------------------- | ------------ | ---------- | ------------- | --- |
-| 002 | Link GitHub Issues to Tasks      | Enhancement  | 2026-04-16 | 0.75h         | #57 |
-| 007 | Fix Branch Protection Hook in CI | Bug Fix      | 2026-04-16 | 1h            | #59 |
-| 002 | Implement CI Caching             | Optimization | 2026-04-16 | 2.5h          | #61 |
-| 001 | Add GitHub Dependabot            | Security     | 2026-04-16 | 0.42h         | #65 |
+| ID  | Title                              | Category     | Completed  | Actual Effort | PR  |
+| --- | ---------------------------------- | ------------ | ---------- | ------------- | --- |
+| 002 | Link GitHub Issues to Tasks        | Enhancement  | 2026-04-16 | 0.75h         | #57 |
+| 007 | Fix Branch Protection Hook in CI   | Bug Fix      | 2026-04-16 | 1h            | #59 |
+| 002 | Implement CI Caching               | Optimization | 2026-04-16 | 2.5h          | #61 |
+| 001 | Add GitHub Dependabot              | Security     | 2026-04-16 | 0.42h         | #65 |
+| 004 | GitHub Settings Security Hardening | Security     | 2026-04-16 | 1.5h          | #71 |
