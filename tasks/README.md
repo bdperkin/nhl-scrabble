@@ -71,23 +71,22 @@ Each task is assigned a priority:
 
 **Documented Effort**: 3-4 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 1 documented)
 
-| ID  | Title                       | Priority | Effort | Issue |
-| --- | --------------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output       | MEDIUM   | 4-6h   | #46   |
-| 002 | Link GitHub Issues to Tasks | MEDIUM   | 2-3h   | #55   |
-| ... | Progress Bars               | MEDIUM   | TBD    |       |
-| ... | Interactive Mode            | MEDIUM   | TBD    |       |
-| ... | Historical Data Tracking    | LOW      | TBD    |       |
-| ... | CSV/Excel Export            | LOW      | TBD    |       |
-| ... | Filtering Options           | LOW      | TBD    |       |
-| ... | Custom Scoring Rules        | LOW      | TBD    |       |
-| ... | Statistics Dashboard        | LOW      | TBD    |       |
-| ... | Watch Mode                  | LOW      | TBD    |       |
-| ... | Player Search               | LOW      | TBD    |       |
+| ID  | Title                 | Priority | Effort | Issue |
+| --- | --------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output | MEDIUM   | 4-6h   | #46   |
+| ... | Progress Bars         | MEDIUM   | TBD    |       |
+| ... | Interactive Mode      | MEDIUM   | TBD    |       |
+| ... | Historical Data       | LOW      | TBD    |       |
+| ... | CSV/Excel Export      | LOW      | TBD    |       |
+| ... | Filtering Options     | LOW      | TBD    |       |
+| ... | Custom Scoring Rules  | LOW      | TBD    |       |
+| ... | Statistics Dashboard  | LOW      | TBD    |       |
+| ... | Watch Mode            | LOW      | TBD    |       |
+| ... | Player Search         | LOW      | TBD    |       |
 
-**Documented Effort**: 6-9 hours
+**Documented Effort**: 4-6 hours
 
 ### Testing (1 task)
 
@@ -129,9 +128,10 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 15 tasks
-**Total Documented Effort**: 47-70.5 hours
+**Documented Tasks**: 14 tasks
+**Total Documented Effort**: 45-67.5 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
+**Completed Tasks**: 1 task (0.75h actual effort)
 
 **Grand Total**: ~150-200 hours for complete roadmap
 
@@ -291,6 +291,12 @@ As tasks are completed, track:
 
 ______________________________________________________________________
 
-**Last Updated**: 2026-04-15
+**Last Updated**: 2026-04-16
 **Tasks Documented**: 14 of 50+
-**Completion Status**: 0% (all tasks pending)
+**Completion Status**: 1 of 14 completed (7%)
+
+## Completed Tasks
+
+| ID  | Title                       | Category    | Completed  | Actual Effort | PR  |
+| --- | --------------------------- | ----------- | ---------- | ------------- | --- |
+| 002 | Link GitHub Issues to Tasks | Enhancement | 2026-04-16 | 0.75h         | #57 |
