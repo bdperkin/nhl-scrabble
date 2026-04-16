@@ -914,3 +914,29 @@ ignore_names = [
 # Set to 60 for comprehensive dead code detection while being practical
 # Values: 0 (all) to 100 (only certain)
 min_confidence = 60
+
+# ============================================================================
+# Blocklint - Inclusive Language Checker
+# ============================================================================
+
+# Note: Blocklint does not support pyproject.toml configuration
+# Configuration is provided via command-line arguments in pre-commit and tox
+#
+# Command-line arguments used:
+#   --skip-files: Exclude generated and build artifacts
+#
+# Default blocklist: Non-inclusive terms related to hierarchical and access control
+# These terms are checked case-insensitively with special characters between
+#
+# Comprehensive by default (matches ruff's ALL rules philosophy):
+# - Detects non-inclusive terminology in code, comments, and documentation
+# - Promotes inclusive language in technical writing
+# - Aligns with modern best practices for respectful code
+#
+# Skip patterns (aligned with ruff's extend-exclude):
+# - .git, .tox, .venv, venv (version control and virtual environments)
+# - build, dist, *.egg-info (build artifacts)
+# - __pycache__, *.pyc (Python cache)
+# - coverage.xml, htmlcov, .coverage (coverage reports)
+# - .pytest_cache, .mypy_cache, .ruff_cache (tool caches)
+# - *.log, *.tmp (temporary files)
