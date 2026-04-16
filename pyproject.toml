@@ -852,3 +852,65 @@ add-ignore = [
     "D213",  # Multi-line docstring summary should start at second line (conflicts with D212)
     "D413",  # Missing blank line after last section (conflicts with docformatter)
 ]
+
+# ============================================================================
+# Vulture - Dead Code Detection
+# ============================================================================
+
+[tool.vulture]
+# Comprehensive dead code detection (matches ruff's ALL rules philosophy)
+
+# Exclude patterns (align with ruff's extend-exclude and other tool exclusions)
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
+]
+
+# Ignore decorators that mark functions/classes as used
+ignore_decorators = [
+    "@*.command",          # Click commands (e.g., @cli.command)
+    "@*.group",            # Click groups
+    "@*.option",           # Click options
+    "@*.argument",         # Click arguments
+    "@pytest.fixture",     # Pytest fixtures
+    "@pytest.mark.*",      # Pytest markers
+    "@app.route",          # Flask/FastAPI routes
+    "@*.register",         # Registration decorators
+    "@property",           # Property decorators
+    "@*.setter",           # Property setters
+    "@*.getter",           # Property getters
+    "@staticmethod",       # Static methods
+    "@classmethod",        # Class methods
+    "@abstractmethod",     # Abstract methods
+]
+
+# Ignore names that match these patterns
+ignore_names = [
+    # Magic methods and protocol implementations
+    "exc_*",              # Exception info variables (exc_type, exc_val, exc_tb)
+    "format",             # Logging formatter method (called by framework)
+
+    # Public API exceptions (part of public API even if not currently used)
+    "NHLApiNotFoundError",  # Exception class reserved for future use
+
+    # Test-related patterns
+    "test_*",             # Test functions
+    "fixture_*",          # Test fixtures
+    "*_fixture",          # Test fixtures (alternative naming)
+
+    # Common unused but required parameters
+    "args",               # Variadic args
+    "kwargs",             # Keyword args
+    "_*",                 # Private/unused variables (convention)
+]
+
+# Minimum confidence for reporting (60 = comprehensive detection)
+# Set to 60 for comprehensive dead code detection while being practical
+# Values: 0 (all) to 100 (only certain)
+min_confidence = 60

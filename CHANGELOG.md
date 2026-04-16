@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Vulture Integration** - Dead code detection
+
+  - Comprehensive dead code detection matching ruff's ALL rules philosophy
+  - Pre-commit hook (jendrikseipp/vulture) for automatic dead code detection
+  - Tox environment (vulture) for standalone dead code checks
+  - Added to CI/CD pipeline for continuous code cleanliness validation
+  - Configuration in pyproject.toml with comprehensive checking
+  - Detects unused: functions, classes, variables, imports, properties, and attributes
+  - Min confidence set to 60 for comprehensive but practical detection
+  - Excludes build/test artifacts (.git, .tox, .venv, build, dist, etc.)
+  - Ignores framework decorators (Click commands, pytest fixtures, Flask routes, etc.)
+  - Ignores common patterns (magic method parameters, private variables, test fixtures)
+  - Special handling for public API exceptions (NHLApiNotFoundError reserved for future use)
+  - Works harmoniously with unimport (unused imports) and autoflake (unused variables)
+  - Current project status: no dead code found (clean codebase)
+  - 53 total pre-commit hooks for comprehensive code quality
+
 - **Pydocstyle Integration** - Python docstring style checker
 
   - Comprehensive docstring style checker matching ruff's ALL rules philosophy
