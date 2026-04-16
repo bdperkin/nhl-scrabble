@@ -311,33 +311,38 @@ Followed the proposed solution closely with some refinements for modern Python p
 - All error messages include helpful hints with exact commands
 
 **Validation flow:**
+
 1. Early return if output is None (stdout)
-2. Resolve path to absolute Path object
-3. Check parent directory exists → error with `mkdir -p` hint
-4. Check parent directory writable → error with `ls -ld` hint
-5. If file exists, check writable → error with `ls -l` hint
-6. If file exists, log overwrite warning
+1. Resolve path to absolute Path object
+1. Check parent directory exists → error with `mkdir -p` hint
+1. Check parent directory writable → error with `ls -ld` hint
+1. If file exists, check writable → error with `ls -l` hint
+1. If file exists, log overwrite warning
 
 ### Challenges Encountered
 
 **Pre-commit Hooks:**
+
 - Initial implementation used `os.path` methods
 - Ruff PTH100/PTH110/PTH120 rules flagged to use Path API instead
 - Refactored to use modern Path methods for better code quality
 - Had to keep `os.access()` as Path has no equivalent
 
 **Test Mocking:**
+
 - Initial test for overwrite warning used `caplog` fixture
 - Click runner doesn't propagate logs to caplog
 - Fixed by mocking `logger.warning` directly and asserting on call
 
 **Path Usage:**
+
 - Needed to use `Path.cwd()` instead of `os.getcwd()` per ruff PTH109
 - Balanced between Path API and os module appropriately
 
 ### Deviations from Plan
 
 **Enhancements:**
+
 - Used modern Path API instead of os.path (better practices)
 - Created dedicated test file `test_cli_output_validation.py` instead of adding to `test_cli.py`
 - Added extra test for relative path handling
@@ -361,6 +366,7 @@ Followed the proposed solution closely with some refinements for modern Python p
 ### Test Coverage
 
 **New Tests**: 11 integration tests in `test_cli_output_validation.py`
+
 - `test_output_to_stdout` - Verify no validation for stdout
 - `test_output_to_nonexistent_directory` - Directory doesn't exist
 - `test_output_to_readonly_directory` - Directory not writable
@@ -374,12 +380,14 @@ Followed the proposed solution closely with some refinements for modern Python p
 - `test_output_to_directory_instead_of_file` - Edge case handled
 
 **Coverage**: 92.64% overall (+2.51pp from 90.13%)
+
 - cli.py: 92.54% coverage (validation paths fully tested)
 - All 131 tests passing (120 existing + 11 new)
 
 ### Lessons Learned
 
 **Path API:**
+
 - Modern Python prefers Path API over os.path methods
 - Path.resolve() replaces os.path.abspath()
 - Path.parent replaces os.path.dirname()
@@ -387,18 +395,21 @@ Followed the proposed solution closely with some refinements for modern Python p
 - Still need os.access() for permission checks (no Path equivalent)
 
 **Early Validation:**
+
 - Validating paths before expensive operations is good UX
 - Users appreciate immediate feedback with actionable errors
 - Error messages should always include fix commands
 - Warning users about overwrite is polite but not blocking
 
 **Testing:**
+
 - Click runner testing requires careful fixture mocking
 - Permission tests need cleanup (chmod back to writable)
 - Test isolation important for file permission tests
 - Mock validation keeps tests fast (no actual API calls)
 
 **Code Quality:**
+
 - 55 pre-commit hooks catch issues early
 - Ruff's path rules enforce modern Python practices
 - Automated formatting saves time (black, ruff-format)
@@ -412,9 +423,10 @@ Followed the proposed solution closely with some refinements for modern Python p
 
 **Before**: Users would wait 30+ seconds for API calls only to discover output path was invalid.
 
-**After**: Immediate feedback (<1ms) with clear error messages and fix commands.
+**After**: Immediate feedback (\<1ms) with clear error messages and fix commands.
 
 Example error messages:
+
 ```
 Error: Output directory does not exist: /nonexistent/dir
 Create it first: mkdir -p /nonexistent/dir
