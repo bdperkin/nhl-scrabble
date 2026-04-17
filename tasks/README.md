@@ -101,27 +101,26 @@ No active testing tasks.
 
 **Documented Effort**: 16-24 hours
 
-### Refactoring (8 tasks, 1 documented)
+### Refactoring (8 tasks, 0 documented)
 
-| ID  | Title                                              | Priority | Effort | Issue |
-| --- | -------------------------------------------------- | -------- | ------ | ----- |
-| 003 | Port check-branch-protection.sh Git Hook to Python | LOW      | 1-2h   | #101  |
-| ... | Consolidate Reports                                | LOW      | TBD    |       |
-| ... | Improve Type Safety                                | LOW      | TBD    |       |
-| ... | Unified Config Management                          | LOW      | TBD    |       |
-| ... | Error Handling Strategy                            | LOW      | TBD    |       |
-| ... | Dependency Injection                               | LOW      | TBD    |       |
+| ID  | Title                     | Priority | Effort | Issue |
+| --- | ------------------------- | -------- | ------ | ----- |
+| ... | Consolidate Reports       | LOW      | TBD    |       |
+| ... | Improve Type Safety       | LOW      | TBD    |       |
+| ... | Unified Config Management | LOW      | TBD    |       |
+| ... | Error Handling Strategy   | LOW      | TBD    |       |
+| ... | Dependency Injection      | LOW      | TBD    |       |
 
-**Documented Effort**: 1-2 hours
+**Documented Effort**: 0 hours
 
 ## Total Project Roadmap
 
-**Active Tasks**: 7 tasks (1 refactoring, 6 new-features)
-**Total Active Effort**: 22-38 hours
+**Active Tasks**: 6 tasks (0 refactoring, 6 new-features)
+**Total Active Effort**: 20-36 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 28 tasks (~72.75h actual effort)
+**Completed Tasks**: 29 tasks (~74.25h actual effort)
 
-**Grand Total**: ~122-160 hours for complete roadmap
+**Grand Total**: ~120-158 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -591,8 +590,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
 **Tasks Documented**: 25 of 52+
-**Completion Status**: 20 of 25 completed (80.0%)
-**Documented Effort Remaining**: 22.58-54.83 hours (excluding completed tasks)
+**Completion Status**: 21 of 25 completed (84.0%)
+**Documented Effort Remaining**: 21.58-52.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -625,3 +624,4 @@ ______________________________________________________________________
 | 004 | Add Python 3.14 Support and Testing        | Enhancement  | 2026-04-17 | 0.75h         | #99  |
 | 005 | Add Python 3.15-dev Support (Non-Blocking) | Enhancement  | 2026-04-17 | 1.5h          | #102 |
 | 002 | Port check_docs.sh to Python               | Refactoring  | 2026-04-17 | 2h            | #109 |
+| 003 | Port branch protection hook to Python      | Refactoring  | 2026-04-17 | 1.5h          | #110 |
