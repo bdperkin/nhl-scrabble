@@ -85,15 +85,14 @@ Each task is assigned a priority:
 
 **Documented Effort**: 35-49 hours
 
-### Testing (3 tasks, 3 documented)
+### Testing (2 tasks, 2 documented)
 
 | ID  | Title                                  | Priority | Effort   | Issue |
 | --- | -------------------------------------- | -------- | -------- | ----- |
-| 006 | Add diff-cover PR Coverage             | MEDIUM   | 30-60min | #124  |
 | 007 | Add pytest-benchmark Performance Tests | MEDIUM   | 1-2h     | #125  |
 | 008 | Add check-jsonschema Validation        | LOW      | 30-60min | #128  |
 
-**Documented Effort**: 1.75-4.0 hours
+**Documented Effort**: 1.5-3.0 hours
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
@@ -135,22 +134,22 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 56 tasks across 6 categories
-**Total Estimated Effort**: 199.5-280 hours
+**Total Tasks**: 52 tasks across 6 categories
+**Total Estimated Effort**: 197.5-276.5 hours
 
 ### By Category
 
 - **Security**: 8 tasks, 18-23.5h
 - **Optimization**: 11 tasks, 16-24.5h (5-10x performance improvement)
 - **Enhancement**: 9 tasks, 35-49h
-- **Testing**: 6 tasks, 3.0-6.5h
+- **Testing**: 2 tasks, 1.5-3.0h
 - **New Features**: 15 tasks, 92-131h (web interface: 38-55h, standalone features: 54-76h)
 - **Refactoring**: 7 tasks, 35-45.5h
 
 ### By Priority
 
-- **MEDIUM**: 7 tasks, 45.25-68h (web interface 6 tasks, testing 1 task)
-- **LOW**: 49 tasks, 154.25-212h (long-term improvements and new capabilities)
+- **MEDIUM**: 6 tasks, 44.75-67h (web interface 6 tasks)
+- **LOW**: 46 tasks, 152.75-209.5h (long-term improvements and new capabilities)
 
 ## How to Use These Tasks
 
@@ -830,10 +829,10 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
 **Tasks Documented**: 58 tasks across 6 categories
-**Completion Status**: 32 completed, 26 planned
+**Completion Status**: 33 completed, 25 planned
 **Total Documented Effort**: 199.75-280 hours
-**Completed Effort**: ~76.08 hours
-**Remaining Effort**: ~123.67-203.92 hours
+**Completed Effort**: ~76.83 hours
+**Remaining Effort**: ~122.92-203.17 hours
 
 ## Completed Tasks
 
@@ -873,3 +872,4 @@ ______________________________________________________________________
 | 005 | Add pytest-clarity Improved Diffs          | Testing      | 2026-04-17 | 0.33h         | #167 |
 | 001 | Add pytest-timeout Plugin                  | Testing      | 2026-04-17 | 0.75h         | #168 |
 | 002 | Add pytest-xdist Parallel Testing          | Testing      | 2026-04-17 | 0.75h         | #169 |
+| 006 | Add diff-cover PR Coverage                 | Testing      | 2026-04-17 | 0.75h         | #170 |
