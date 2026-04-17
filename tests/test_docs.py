@@ -10,10 +10,14 @@ from pathlib import Path
 import pytest
 
 # Skip all tests in this module if sphinx-build is not available
-pytestmark = pytest.mark.skipif(
-    shutil.which("sphinx-build") is None,
-    reason="sphinx-build not found (docs dependencies not installed)",
-)
+# Documentation builds can take 30-60 seconds, so use longer timeout
+pytestmark = [
+    pytest.mark.skipif(
+        shutil.which("sphinx-build") is None,
+        reason="sphinx-build not found (docs dependencies not installed)",
+    ),
+    pytest.mark.timeout(60),  # Sphinx builds can take time
+]
 
 
 def test_sphinx_build_succeeds() -> None:
