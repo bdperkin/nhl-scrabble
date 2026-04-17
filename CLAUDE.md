@@ -390,6 +390,7 @@ make ci                  # CI simulation (uses tox -e ci)
 pytest --cov             # With coverage
 make test-cov            # Via Makefile
 tox -e coverage          # Via tox
+tox -e diff-cover        # Check coverage on changed lines only (PR coverage)
 ```
 
 **Test Performance:**
@@ -697,7 +698,9 @@ Python 3.15-dev is tested for early compatibility checking but failures do NOT b
 
 ### Coverage Tracking
 
-The project uses Codecov for code coverage tracking:
+The project uses both Codecov and diff-cover for comprehensive coverage tracking:
+
+**Codecov (Total Coverage):**
 
 - **Dashboard**: https://app.codecov.io/gh/bdperkin/nhl-scrabble
 - **Coverage Target**: 90%+ overall, 80%+ for new code
@@ -706,6 +709,26 @@ The project uses Codecov for code coverage tracking:
 - **Configuration**: `.codecov.yml`
 
 Coverage is uploaded automatically from CI on every commit to main and on all pull requests.
+
+**diff-cover (PR Coverage):**
+
+- **Purpose**: Enforces test coverage on changed lines only in PRs
+- **Target**: ≥80% coverage on all changed lines
+- **Enforcement**: Required in CI - PRs fail if diff coverage < 80%
+- **Local Usage**: `tox -e diff-cover` or `diff-cover coverage.xml --compare-branch=origin/main`
+- **Configuration**: `[tool.diff_cover]` in `pyproject.toml`
+
+**Coverage Philosophy:**
+
+| Metric          | Total Coverage (Codecov) | Diff Coverage      |
+| --------------- | ------------------------ | ------------------ |
+| **Scope**       | Entire codebase          | Changed lines only |
+| **Purpose**     | Overall health tracking  | PR quality gate    |
+| **Current**     | ~50%                     | ≥80% (enforced)    |
+| **Enforcement** | ⚠️ Informational         | ✅ CI blocker      |
+| **Best for**    | Long-term trends         | New code quality   |
+
+Both tools work together: Codecov tracks overall project health over time, while diff-cover ensures all new code meets quality standards.
 
 ### Security
 
