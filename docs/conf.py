@@ -67,6 +67,10 @@ html_theme_options = {
     "titles_only": False,
 }
 
+# Logo and favicon
+html_logo = "_static/logo.svg"
+html_favicon = "_static/favicon.ico"
+
 html_context = {
     "display_github": True,
     "github_user": "bdperkin",

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>NHL Scrabble Logo Placeholder</title>
+
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#003087" stroke="#C60C30" stroke-width="8"/>
+
+  <!-- Scrabble tile shape -->
+  <rect x="156" y="156" width="200" height="200" rx="10" fill="#F4E4C1" stroke="#2B2B2B" stroke-width="4"/>
+
+  <!-- Letter (placeholder) -->
+  <text x="256" y="310" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#2B2B2B" text-anchor="middle">N</text>
+
+  <!-- Point value -->
+  <text x="320" y="210" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#2B2B2B">1</text>
+
+  <!-- Hockey stick element (simple) -->
+  <path d="M 100 400 L 140 360 L 150 370 L 110 410 Z" fill="#C60C30"/>
+  <rect x="135" y="355" width="120" height="10" rx="5" fill="#C60C30" transform="rotate(-45 195 360)"/>
+
+  <!-- Note: This is a PLACEHOLDER -->
+  <text x="256" y="490" font-family="Arial, sans-serif" font-size="24" fill="#FFFFFF" text-anchor="middle" opacity="0.7">PLACEHOLDER</text>
+</svg>

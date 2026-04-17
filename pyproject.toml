@@ -74,6 +74,12 @@ security = [
     "pip-audit>=2.7.0",
 ]
 
+# Branding asset generation dependencies
+branding = [
+    "Pillow>=10.0.0",      # Image processing for PNG generation
+    "cairosvg>=2.7.0",     # SVG to PNG conversion
+]
+
 # Comprehensive Sphinx documentation dependencies (9 extensions + markdown support + quality plugins)
 docs = [
     "sphinx>=7.2.6",  # Core documentation engine
@@ -310,6 +316,10 @@ ignore = [
 ]
 "src/nhl_scrabble/__main__.py" = [
     "T201",    # print statements are fine in __main__
+]
+"scripts/generate_branding.py" = [
+    "T201",    # print statements are fine in CLI script
+    "PLR0915", # Too many statements in main() (straightforward CLI script)
 ]
 
 [tool.ruff.lint.mccabe]

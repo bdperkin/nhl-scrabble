@@ -1,4 +1,10 @@
-# NHL Scrabble Score Analyzer
+<p align="center">
+  <img src=".github/logo.png" alt="NHL Scrabble Logo" width="256">
+</p>
+
+<h1 align="center">NHL Scrabble Score Analyzer</h1>
+
+<p align="center">
 
 [![CI](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://bdperkin.github.io/nhl-scrabble/)
@@ -12,6 +18,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/bdperkin/nhl-scrabble?style=social)](https://github.com/bdperkin/nhl-scrabble/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/bdperkin/nhl-scrabble)](https://github.com/bdperkin/nhl-scrabble/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/bdperkin/nhl-scrabble)](https://github.com/bdperkin/nhl-scrabble/commits/main)
+
+</p>
 
 A Python application that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. Generate comprehensive reports showing team, division, and conference standings complete with playoff brackets!
 
