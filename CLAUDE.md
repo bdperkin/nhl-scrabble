@@ -678,6 +678,18 @@ jobs:
 - **Without UV:** ~12 minutes
 - **With UV:** ~3 minutes (4x faster!)
 
+### Coverage Tracking
+
+The project uses Codecov for code coverage tracking:
+
+- **Dashboard**: https://app.codecov.io/gh/bdperkin/nhl-scrabble
+- **Coverage Target**: 90%+ overall, 80%+ for new code
+- **Badge**: Shows current coverage percentage in README
+- **PR Comments**: Codecov bot comments on all PRs with coverage changes
+- **Configuration**: `.codecov.yml`
+
+Coverage is uploaded automatically from CI on every commit to main and on all pull requests.
+
 ### Security
 
 The project has comprehensive security measures:
