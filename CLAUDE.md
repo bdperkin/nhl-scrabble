@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 NHL Scrabble Score Analyzer is a professional Python package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
 
 **Current Version:** 2.0.0
-**Python:** 3.10-3.14
+**Python:** 3.10-3.14 (supported), 3.15-dev (experimental)
 **License:** MIT
 **Pre-commit Hooks:** 54 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
@@ -661,10 +661,17 @@ The project has comprehensive CI:
 
 ```yaml
 jobs:
-  test:        # Test on py3.10, 3.11, 3.12, 3.13, 3.14, 3.15
+  test:        # Test on py3.10-3.14 (required), py3.15-dev (experimental)
   tox:         # Tox with UV (matrix: py310, py311, py312, py313, py314, py315, ruff-check, mypy, coverage)
   pre-commit:  # Pre-commit with UV
 ```
+
+**Python Version Testing:**
+
+- **Required**: Python 3.10, 3.11, 3.12, 3.13, 3.14 (must all pass)
+- **Experimental**: Python 3.15-dev (`continue-on-error: true`, informational only)
+
+Python 3.15-dev is tested for early compatibility checking but failures do NOT block CI or prevent merging.
 
 **Optimization:**
 
@@ -908,7 +915,7 @@ The project uses UV automatically via tox-uv:
 ## Project Statistics
 
 - **Package:** nhl-scrabble 2.0.0
-- **Python:** 3.10, 3.11, 3.12, 3.13, 3.14
+- **Python:** 3.10, 3.11, 3.12, 3.13, 3.14 (supported), 3.15-dev (experimental)
 - **Lines of Code:** ~1,866 (src)
 - **Lines of Tests:** ~680 (tests)
 - **Test Coverage:** 49.93% overall, >90% on core modules

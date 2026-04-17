@@ -20,6 +20,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - No breaking changes - existing Python 3.10-3.13 users unaffected
   - Ensures access to latest Python features and performance improvements
 
+- **Python 3.15-dev Experimental Support** - Early compatibility testing for Python 3.15-dev
+
+  - Added Python 3.15-dev to CI/CD test matrix with `continue-on-error: true`
+  - Failures on 3.15-dev do NOT block CI or prevent merging (informational only)
+  - Added py315 to tox environments for local testing (optional)
+  - Documented experimental status in README.md and CLAUDE.md
+  - Intentionally NOT updated in pyproject.toml (3.15 not officially released)
+  - Enables proactive compatibility testing before Python 3.15 release
+  - Allows early detection of breaking changes and migration issues
+  - Will be upgraded to official support when Python 3.15 is released
+
 - **HTML Output Format** - Professional HTML reports with responsive design
 
   - Generate beautiful HTML reports with `--format html`
