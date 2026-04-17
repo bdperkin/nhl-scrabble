@@ -62,11 +62,12 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 1 documented)
+### Enhancements (10 tasks, 2 documented)
 
 | ID  | Title                                  | Priority | Effort | Issue |
 | --- | -------------------------------------- | -------- | ------ | ----- |
 | 003 | Add Comprehensive Documentation Badges | LOW      | 1-2h   | #91   |
+| 004 | Add Python 3.14 Support and Testing    | MEDIUM   | 2-3h   | #97   |
 | ... | Progress Bars                          | MEDIUM   | TBD    |       |
 | ... | Interactive Mode                       | MEDIUM   | TBD    |       |
 | ... | Historical Data                        | LOW      | TBD    |       |
@@ -77,7 +78,7 @@ Each task is assigned a priority:
 | ... | Watch Mode                             | LOW      | TBD    |       |
 | ... | Player Search                          | LOW      | TBD    |       |
 
-**Documented Effort**: 1-2 hours
+**Documented Effort**: 3-5 hours
 
 ### Testing (0 tasks, 0 documented)
 
@@ -116,12 +117,12 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 6 tasks
-**Total Documented Effort**: 23-38 hours
+**Documented Tasks**: 7 tasks
+**Total Documented Effort**: 25-41 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 25 tasks (68.5h actual effort)
 
-**Grand Total**: ~123-160 hours for complete roadmap
+**Grand Total**: ~125-163 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -590,9 +591,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
-**Tasks Documented**: 22 of 50+
-**Completion Status**: 18 of 22 completed (82%)
-**Documented Effort Remaining**: 21.33-49.83 hours (excluding completed tasks)
+**Tasks Documented**: 23 of 50+
+**Completion Status**: 18 of 23 completed (78%)
+**Documented Effort Remaining**: 23.33-52.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
