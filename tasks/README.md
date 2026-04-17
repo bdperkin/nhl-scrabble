@@ -62,23 +62,24 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 3 documented)
 
-| ID  | Title                                  | Priority | Effort | Issue |
-| --- | -------------------------------------- | -------- | ------ | ----- |
-| 003 | Add Comprehensive Documentation Badges | LOW      | 1-2h   | #91   |
-| 004 | Add Python 3.14 Support and Testing    | MEDIUM   | 2-3h   | #97   |
-| ... | Progress Bars                          | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                       | MEDIUM   | TBD    |       |
-| ... | Historical Data                        | LOW      | TBD    |       |
-| ... | CSV/Excel Export                       | LOW      | TBD    |       |
-| ... | Filtering Options                      | LOW      | TBD    |       |
-| ... | Custom Scoring Rules                   | LOW      | TBD    |       |
-| ... | Statistics Dashboard                   | LOW      | TBD    |       |
-| ... | Watch Mode                             | LOW      | TBD    |       |
-| ... | Player Search                          | LOW      | TBD    |       |
+| ID  | Title                                      | Priority | Effort | Issue |
+| --- | ------------------------------------------ | -------- | ------ | ----- |
+| 003 | Add Comprehensive Documentation Badges     | LOW      | 1-2h   | #91   |
+| 004 | Add Python 3.14 Support and Testing        | MEDIUM   | 2-3h   | #97   |
+| 005 | Add Python 3.15-dev Support (Non-Blocking) | LOW      | 1-2h   | #98   |
+| ... | Progress Bars                              | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                           | MEDIUM   | TBD    |       |
+| ... | Historical Data                            | LOW      | TBD    |       |
+| ... | CSV/Excel Export                           | LOW      | TBD    |       |
+| ... | Filtering Options                          | LOW      | TBD    |       |
+| ... | Custom Scoring Rules                       | LOW      | TBD    |       |
+| ... | Statistics Dashboard                       | LOW      | TBD    |       |
+| ... | Watch Mode                                 | LOW      | TBD    |       |
+| ... | Player Search                              | LOW      | TBD    |       |
 
-**Documented Effort**: 3-5 hours
+**Documented Effort**: 4-7 hours
 
 ### Testing (0 tasks, 0 documented)
 
@@ -117,12 +118,12 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 7 tasks
-**Total Documented Effort**: 25-41 hours
+**Documented Tasks**: 8 tasks
+**Total Documented Effort**: 26-43 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 25 tasks (68.5h actual effort)
 
-**Grand Total**: ~125-163 hours for complete roadmap
+**Grand Total**: ~126-165 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -591,9 +592,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
-**Tasks Documented**: 23 of 50+
-**Completion Status**: 18 of 23 completed (78%)
-**Documented Effort Remaining**: 23.33-52.83 hours (excluding completed tasks)
+**Tasks Documented**: 24 of 50+
+**Completion Status**: 18 of 24 completed (75%)
+**Documented Effort Remaining**: 24.33-54.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
