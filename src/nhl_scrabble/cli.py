@@ -436,5 +436,56 @@ def generate_html_report(
     return html
 
 
+@cli.command()
+@click.option(
+    "--no-fetch",
+    is_flag=True,
+    help="Skip fetching data (requires previous session data)",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
+def interactive(no_fetch: bool, verbose: bool) -> None:
+    """Start interactive mode for exploring NHL Scrabble data.
+
+    Interactive mode provides a REPL (Read-Eval-Print Loop) for exploring
+    NHL Scrabble scores through commands like show, top, compare, and more.
+
+    Examples:
+        nhl-scrabble interactive
+        nhl-scrabble interactive --no-fetch
+        nhl-scrabble interactive --verbose
+    """
+    from nhl_scrabble.interactive import InteractiveShell
+
+    # Load configuration
+    config = Config.from_env()
+    config.verbose = verbose
+
+    # Setup logging
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
+
+    logger.info(f"Starting NHL Scrabble interactive mode v{__version__}")
+
+    try:
+        shell = InteractiveShell()
+
+        if not no_fetch:
+            shell.fetch_data()
+
+        shell.run()
+
+    except KeyboardInterrupt:
+        console.print("\n[cyan]Goodbye![/cyan]")
+        sys.exit(0)
+    except Exception as e:
+        logger.exception("Unexpected error in interactive mode")
+        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     cli()

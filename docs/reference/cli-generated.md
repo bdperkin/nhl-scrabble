@@ -37,7 +37,8 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  analyze  Run the NHL Scrabble analysis.
+  analyze      Run the NHL Scrabble analysis.
+  interactive  Start interactive mode for exploring NHL Scrabble data.
 ```
 
 ______________________________________________________________________
