@@ -38,6 +38,7 @@ Options:
 
 Commands:
   analyze  Run the NHL Scrabble analysis.
+  serve    Start web interface server.
 ```
 
 ______________________________________________________________________
