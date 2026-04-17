@@ -360,6 +360,291 @@ Options:
 3. Cancel run: gh run cancel <run-id>
 ```
 
+## Determine Outcome
+
+After monitoring completes (success, failure, or timeout), determine the appropriate outcome:
+
+### Success Case
+
+If all checks passed:
+
+1. Report success to user
+1. Return control to calling process
+1. Proceed with merge/deployment workflow
+
+### Failure Case
+
+If any checks failed:
+
+1. Report which checks failed
+1. Provide link to failed run logs
+1. Run enhanced failure diagnostics (see below)
+1. Suggest next steps based on diagnostics
+1. Halt workflow until issues resolved
+
+### Timeout Case
+
+If monitoring timeout exceeded:
+
+1. Report timeout occurred
+1. Show current check status
+1. Provide options:
+   - Continue waiting
+   - Cancel workflow
+   - Investigate manually
+
+## Enhanced Failure Diagnostics
+
+When CI checks fail, automatically analyze failure logs to identify common patterns and provide actionable fixes:
+
+### Pattern 1: Missing External Tools
+
+**Symptoms:**
+
+- Test failures with "FileNotFoundError" or "command not found"
+- Tests for optional features failing in CI but passing locally
+- Error: `sphinx-build: command not found`
+
+**Diagnosis:**
+
+```bash
+# Check logs for pattern
+grep -E "(command not found|FileNotFoundError|which.*returned None)" ci-logs.txt
+```
+
+**Automatic Fix Suggestion:**
+
+```python
+# Add to test file that requires optional tool:
+import shutil
+import pytest
+
+pytestmark = pytest.mark.skipif(
+    shutil.which("tool-name") is None,
+    reason="tool-name not found (optional dependencies not installed)",
+)
+```
+
+**Prevention:**
+
+- Test optional dependencies locally: `tox -e py310 -- -k test_optional_feature`
+- Document optional dependencies in README
+- Use Pre-Flight Validation before pushing
+
+### Pattern 2: Pre-commit Parse Errors
+
+**Symptoms:**
+
+- Blacken-docs or similar formatter failing to parse files
+- Error: `code block parse error Cannot parse`
+- Multiple files failing with syntax errors
+
+**Diagnosis:**
+
+```bash
+# Check which files are causing parse errors
+grep -E "(parse error|SyntaxError|Cannot parse)" ci-logs.txt
+```
+
+**Automatic Fix Suggestion:**
+
+```yaml
+# Add to .pre-commit-config.yaml for the failing hook:
+- id: blacken-docs
+  exclude: ^(tasks/|\.claude/commands/|docs/examples/)
+```
+
+**Prevention:**
+
+- Test hook on all files: `pre-commit run blacken-docs --all-files`
+- Exclude files with pseudo-code, placeholders, or ellipsis
+- Use Pre-commit Hook Testing workflow
+
+### Pattern 3: Hook Modified Files
+
+**Symptoms:**
+
+- Pre-commit hook passes but CI reports "files were modified"
+- Formatting hooks (ruff-format, black, isort) making changes
+- Error: `Files were modified by this hook`
+
+**Diagnosis:**
+
+```bash
+# Check for modified files
+grep -E "(Files were modified|would reformat)" ci-logs.txt
+```
+
+**Automatic Fix Suggestion:**
+
+```bash
+# Run hook locally to apply changes:
+pre-commit run ruff-format --all-files
+
+# Commit the formatted files:
+git add -u
+git commit --amend --no-edit
+git push --force-with-lease
+```
+
+**Prevention:**
+
+- Always run `pre-commit run --all-files` before pushing
+- Let hooks auto-fix locally before committing
+- Use `make pre-commit` in Pre-Flight Validation
+
+### Pattern 4: Security False Positives
+
+**Symptoms:**
+
+- Ruff/Bandit flagging safe subprocess calls
+- Error: `S603 subprocess call - check for execution of untrusted input`
+- Error: `S607 Starting a process with a partial executable path`
+
+**Diagnosis:**
+
+```bash
+# Check for security warnings
+grep -E "(S603|S607|subprocess.*untrusted)" ci-logs.txt
+```
+
+**Automatic Fix Suggestion:**
+
+```python
+# Add targeted noqa comments for safe subprocess calls:
+result = subprocess.run(  # noqa: S603
+    [  # noqa: S607
+        "sphinx-build",
+        "-b", "html",
+        str(docs_dir),
+        str(build_dir),
+    ],
+    capture_output=True,
+    check=False,
+)
+```
+
+**Prevention:**
+
+- Review security warnings in context (are inputs trusted?)
+- Add noqa only when you've verified safety
+- Document why the call is safe in comments
+
+### Pattern 5: Import/Dependency Issues
+
+**Symptoms:**
+
+- ModuleNotFoundError in CI but not locally
+- Import errors for recently added dependencies
+- Error: `No module named 'new_package'`
+
+**Diagnosis:**
+
+```bash
+# Check for import errors
+grep -E "(ModuleNotFoundError|ImportError|No module named)" ci-logs.txt
+```
+
+**Automatic Fix Suggestion:**
+
+```toml
+# Update pyproject.toml [project.dependencies]:
+dependencies = [
+    "existing-package>=1.0",
+    "new-package>=2.0",  # Add missing dependency
+]
+
+# Or for optional dependencies:
+[project.optional-dependencies]
+docs = [
+    "sphinx>=7.0",
+    "missing-sphinx-plugin>=1.0",  # Add missing doc dependency
+]
+```
+
+**Prevention:**
+
+- Run `uv lock` after adding dependencies
+- Test in clean environment: `tox -e py310`
+- Check pyproject.toml includes all imports
+
+### Pattern 6: Test Failures
+
+**Symptoms:**
+
+- Assertion failures in tests
+- Tests passing locally but failing in CI
+- Flaky tests with timing issues
+
+**Diagnosis:**
+
+```bash
+# Find failing tests
+grep -E "(FAILED|AssertionError|test_.*FAILED)" ci-logs.txt
+```
+
+**Automatic Fix Suggestion:**
+
+```bash
+# Reproduce locally:
+pytest tests/path/to/test_file.py::test_name -vv
+
+# If timing-related:
+pytest tests/path/to/test_file.py -vv --timeout=30
+
+# If environment-related:
+tox -e py310 -- tests/path/to/test_file.py -vv
+```
+
+**Prevention:**
+
+- Run full test suite before pushing: `pytest`
+- Test in tox environments: `make tox`
+- Avoid tests with external dependencies or timing assumptions
+
+### Automatic Pattern Detection
+
+When CI fails, the wait-for-ci workflow automatically:
+
+1. **Fetch failure logs**: `gh run view $RUN_ID --log-failed`
+1. **Scan for patterns**: Check against all 6 failure patterns above
+1. **Match error signatures**: Identify most likely failure type
+1. **Display targeted fix**: Show specific fix for matched pattern
+1. **Provide prevention tips**: Help avoid same failure in future
+
+Example automated output:
+
+```
+🔴 CI Check Failed: test (py310)
+
+Pattern Detected: Missing External Tools (Pattern 1)
+
+Diagnosis:
+- sphinx-build command not found in CI environment
+- Tests requiring sphinx-build are failing
+- Tool is available locally but not in CI
+
+Recommended Fix:
+Add pytest.mark.skipif to tests/test_docs.py:
+
+  import shutil
+  import pytest
+
+  pytestmark = pytest.mark.skipif(
+      shutil.which("sphinx-build") is None,
+      reason="sphinx-build not found (docs dependencies not installed)",
+  )
+
+Prevention:
+- Test optional features locally: tox -e py310
+- Use Pre-Flight Validation before pushing
+- Document optional dependencies in README
+
+View full logs: gh run view 123456789 --log-failed
+```
+
+This automated diagnostics system reduces debugging time from 10-15 minutes down to 1-2 minutes by immediately identifying the issue and providing copy-paste fixes.
+
 ## Best Practices
 
 1. **Set reasonable timeouts**

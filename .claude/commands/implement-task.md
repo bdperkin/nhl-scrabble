@@ -99,6 +99,101 @@ This command automates the complete task implementation workflow from start to f
    - Document any deviations from plan
    - Note challenges encountered
 
+1. **Pre-Flight Validation**
+
+   Before creating pull request, validate changes won't break CI:
+
+   - **Test Dependency Validation**:
+
+     ```python
+     # For tests requiring external tools (sphinx-build, npm, etc.)
+     import shutil
+     import pytest
+
+     # Module-level skip for all tests in file
+     pytestmark = pytest.mark.skipif(
+         shutil.which("tool-name") is None,
+         reason="tool-name not found (optional dependencies not installed)",
+     )
+
+     # Or per-test skip
+     @pytest.mark.skipif(
+         shutil.which("tool-name") is None,
+         reason="tool-name not found",
+     )
+     def test_requiring_external_tool():
+         ...
+     ```
+
+     - Use `shutil.which()` to check tool availability
+     - Add `@pytest.mark.skipif` for optional tool dependencies
+     - Use module-level `pytestmark` to skip all tests in file
+     - Document required tools in test docstring
+
+   - **Pre-commit Hook Testing** (CRITICAL for new hooks):
+
+     ```bash
+     # Test new hook on ALL existing files BEFORE staging
+     pre-commit run <new-hook-id> --all-files
+
+     # If hook modifies or fails:
+     # 1. Review changes/failures carefully
+     # 2. Add exclude patterns if needed
+     # 3. Re-test until clean
+     # 4. THEN stage .pre-commit-config.yaml
+     ```
+
+     - **NEVER** commit new hooks without testing on all files
+     - Add exclusions for files that shouldn't be formatted/checked
+     - Document why files are excluded (pseudo-code, examples, etc.)
+     - Common exclusion patterns:
+       - `^tasks/` - Task files with pseudo-code
+       - `^\.claude/commands/` - Command docs with examples
+       - `^docs/explanation/` - Architectural docs with illustrative code
+       - `^examples/` - Example code that may not be valid
+
+   - **Local Quality Checks**:
+
+     ```bash
+     # Run FULL quality suite locally
+     make quality                    # All linters
+     pytest                          # All tests
+     pre-commit run --all-files      # All hooks
+
+     # CI-specific checks (if available locally)
+     tox -e py310,py311,py312,py313  # Multi-version testing
+     make docs                       # Documentation build
+     ```
+
+   - **Dependency Installation Validation** (if added new dependencies):
+
+     ```bash
+     # Verify new dependencies install correctly
+     uv pip install -e ".[group-name]"  # For new optional deps
+     uv lock                             # Update lock file
+     git diff uv.lock                    # Review lock changes
+
+     # Test in clean environment
+     uv venv --python 3.10 test-env
+     source test-env/bin/activate
+     uv pip install -e ".[group-name]"
+     # Verify imports work
+     python -c "import package_name"
+     which tool-name  # For CLI tools
+     deactivate && rm -rf test-env
+     ```
+
+   **Why This Matters**:
+
+   - Catches CI failures locally before pushing
+   - Pre-commit hooks can have parse errors on pseudo-code
+   - Tests may require tools not available in all environments
+   - Dependencies may have installation issues
+   - Saves 10-15 minutes per PR by avoiding CI iterations
+
+   **Time Investment**: 5-10 minutes upfront
+   **Time Saved**: 10-15 minutes per CI iteration avoided
+
 1. **Update Documentation**
 
    - Update files mentioned in task "Related Files"
@@ -275,22 +370,175 @@ This command automates the complete task implementation workflow from start to f
 1. **Wait for CI/CD**
 
    - Monitor PR status: `gh pr status`
+
+   - Use background job for long waits:
+
+     ```bash
+     # Background monitoring (recommended for >1 minute waits)
+     # Background job will notify when complete
+     ```
+
    - Wait for all checks to pass:
+
      - GitHub Actions workflows
      - Pre-commit hooks (if run in CI)
      - Test suite (all Python versions)
      - Code quality checks (ruff, mypy)
      - Coverage requirements
      - Documentation builds
+
    - Poll every 30 seconds: `gh pr checks`
-   - If checks fail:
-     - Review failure logs: `gh run view`
-     - Fix issues
-     - Commit fixes
-     - Push updates
-     - Wait for re-run
-   - Maximum wait time: 30 minutes
-   - If timeout, report status and pause for manual intervention
+
+   - **Common CI Failure Patterns** (with fixes):
+
+     **Pattern 1: Missing External Tools**
+
+     ```
+     Error: FileNotFoundError: [Errno 2] No such file or directory: 'tool-name'
+     Location: tests/test_file.py::test_function
+     ```
+
+     **Diagnosis**: Test requires external tool not available in CI environment
+     **Fix**: Add `@pytest.mark.skipif` to skip when tool unavailable
+
+     ```python
+     import shutil
+     import pytest
+
+     # Module-level skip for all tests
+     pytestmark = pytest.mark.skipif(
+         shutil.which("tool-name") is None,
+         reason="tool-name not found (optional dependencies not installed)",
+     )
+     ```
+
+     **Prevention**: Always check tool availability in Pre-Flight Validation
+
+     **Pattern 2: Pre-commit Hook Parse/Formatting Errors**
+
+     ```
+     hook-name......................Failed
+     - exit code: 2
+     file.md:10: code block parse error Cannot parse: ...
+     ```
+
+     **Diagnosis**: Hook trying to format pseudo-code or illustrative examples
+     **Fix**: Add exclusion pattern to `.pre-commit-config.yaml`
+
+     ```yaml
+     - id: hook-name
+       exclude: ^(tasks/|\.claude/commands/|docs/explanation/|examples/)
+       args: [...]
+     ```
+
+     **Prevention**: Always test new hooks with `pre-commit run hook-name --all-files`
+
+     **Pattern 3: Pre-commit Hook Modified Files**
+
+     ```
+     hook-name......................Failed
+     - files were modified by this hook
+     ```
+
+     **Diagnosis**: Hook auto-formatted files that weren't committed
+     **Fix**: Run hook locally, review changes, commit formatted files
+
+     ```bash
+     pre-commit run hook-name --all-files
+     git add -A
+     git commit --amend --no-edit
+     git push --force-with-lease
+     ```
+
+     **Prevention**: Always run `pre-commit run --all-files` in Pre-Flight Validation
+
+     **Pattern 4: Security/Linter False Positives**
+
+     ```
+     S603 `subprocess` call: check for execution of untrusted input
+     S607 Starting a process with a partial executable path
+     Location: file.py:42
+     ```
+
+     **Diagnosis**: Subprocess call flagged but is actually safe
+     **Fix**: Add targeted noqa comment with justification
+
+     ```python
+     # Safe: sphinx-build is trusted tool from project dependencies
+     result = subprocess.run(  # noqa: S603, S607
+         ["sphinx-build", "-b", "html", str(docs_dir), str(build_dir)],
+         capture_output=True,
+         check=True,
+     )
+     ```
+
+     **When to use noqa**: Only when command is hardcoded, trusted, and arguments are validated
+     **When NOT to use noqa**: User input in command, shell=True, unvalidated paths
+
+     **Pattern 5: Import/Dependency Issues**
+
+     ```
+     ModuleNotFoundError: No module named 'package_name'
+     ImportError: cannot import name 'symbol' from 'package'
+     ```
+
+     **Diagnosis**: Missing dependency or dependency not in correct group
+     **Fix**: Add to appropriate group in `pyproject.toml`
+
+     ```toml
+     [project.optional-dependencies]
+     docs = [
+         "sphinx>=7.2.6",
+         "package-name>=1.0.0",  # NEW
+     ]
+     ```
+
+     Then update lock file:
+
+     ```bash
+     uv lock
+     git add pyproject.toml uv.lock
+     git commit -m "fix(deps): Add missing package-name dependency"
+     git push
+     ```
+
+     **Prevention**: Test dependency installation in Pre-Flight Validation
+
+     **Pattern 6: Test Failures**
+
+     ```
+     FAILED tests/test_file.py::test_name - AssertionError: ...
+     ```
+
+     **Diagnosis**: Test logic error or environment difference
+     **Fix**: Run test locally to reproduce
+
+     ```bash
+     pytest tests/test_file.py::test_name -vv
+     # Debug and fix issue
+     # Commit fix
+     ```
+
+   - **CI Failure Response Workflow**:
+
+     1. `gh run view <run-id> --log-failed` - Get failure details
+     1. Match failure to pattern above (or diagnose new pattern)
+     1. Apply fix locally
+     1. Test fix locally:
+        ```bash
+        pytest                           # Verify tests pass
+        pre-commit run --all-files      # Verify hooks pass
+        make quality                    # Verify quality checks
+        ```
+     1. Commit fix with descriptive message
+     1. Push: `git push`
+     1. CI re-runs automatically
+
+   - **When to Wait vs. Fix Immediately**:
+
+     - **Wait**: External service issues, transient network failures, rate limiting
+     - **Fix Immediately**: Test failures, linting errors, missing deps, parse errors
+     - **Maximum wait**: 30 minutes before manual intervention
 
 1. **Merge Pull Request**
 

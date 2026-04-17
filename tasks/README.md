@@ -63,22 +63,23 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 1 documented)
+### Enhancements (10 tasks, 2 documented)
 
-| ID  | Title                 | Priority | Effort | Issue |
-| --- | --------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output | MEDIUM   | 4-6h   | #46   |
-| ... | Progress Bars         | MEDIUM   | TBD    |       |
-| ... | Interactive Mode      | MEDIUM   | TBD    |       |
-| ... | Historical Data       | LOW      | TBD    |       |
-| ... | CSV/Excel Export      | LOW      | TBD    |       |
-| ... | Filtering Options     | LOW      | TBD    |       |
-| ... | Custom Scoring Rules  | LOW      | TBD    |       |
-| ... | Statistics Dashboard  | LOW      | TBD    |       |
-| ... | Watch Mode            | LOW      | TBD    |       |
-| ... | Player Search         | LOW      | TBD    |       |
+| ID  | Title                                                | Priority | Effort | Issue |
+| --- | ---------------------------------------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output                                | MEDIUM   | 4-6h   | #46   |
+| 006 | Skill Optimizations: Pre-Flight Validation & CI Diag | HIGH     | 0.5-1h | #88   |
+| ... | Progress Bars                                        | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                                     | MEDIUM   | TBD    |       |
+| ... | Historical Data                                      | LOW      | TBD    |       |
+| ... | CSV/Excel Export                                     | LOW      | TBD    |       |
+| ... | Filtering Options                                    | LOW      | TBD    |       |
+| ... | Custom Scoring Rules                                 | LOW      | TBD    |       |
+| ... | Statistics Dashboard                                 | LOW      | TBD    |       |
+| ... | Watch Mode                                           | LOW      | TBD    |       |
+| ... | Player Search                                        | LOW      | TBD    |       |
 
-**Documented Effort**: 4-6 hours
+**Documented Effort**: 4.5-7 hours
 
 ### Testing (0 tasks)
 
@@ -116,12 +117,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 9 tasks
-**Total Documented Effort**: 33-50 hours
+**Documented Tasks**: 10 tasks
+**Total Documented Effort**: 33.5-51 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 17 tasks (51.17h actual effort)
 
-**Grand Total**: ~133-172 hours for complete roadmap
+**Grand Total**: ~133.5-173 hours for complete roadmap
 
 ## How to Use These Tasks
 
