@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Refactored
+
+- **Cross-Platform Documentation Check** - Ported bash script to Python
+  - Converted `tools/check_docs.sh` to `tools/check_docs.py` for Windows compatibility
+  - Removed bash dependency for pre-commit documentation validation
+  - Improved error handling with proper exceptions and return codes
+  - Added type hints and comprehensive docstrings
+  - Enhanced colored terminal output with ANSI codes class
+  - Maintained identical functionality and exit code behavior
+  - Updated `.pre-commit-config.yaml` to use Python script
+  - Benefits: Works on Windows without bash/WSL, easier maintenance for Python developers
+
 ### Added
 
 - **Python 3.14 Support** - Official support and testing for Python 3.14
