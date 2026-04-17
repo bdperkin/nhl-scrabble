@@ -28,14 +28,13 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (2 tasks)
+### Bug Fixes (1 task)
 
 | ID  | Title                         | Priority | Effort | Issue |
 | --- | ----------------------------- | -------- | ------ | ----- |
-| 004 | Fix Rate Limiting Logic       | LOW      | 1h     | #47   |
 | 005 | Implement Exponential Backoff | LOW      | 2-3h   | #48   |
 
-**Total Effort**: 3-4 hours
+**Total Effort**: 2-3 hours
 
 ### Security (10+ tasks, 0 documented)
 
@@ -118,12 +117,12 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 9 tasks
-**Total Documented Effort**: 29-45 hours
+**Documented Tasks**: 8 tasks
+**Total Documented Effort**: 28-44 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 22 tasks (62.75h actual effort)
+**Completed Tasks**: 23 tasks (63.5h actual effort)
 
-**Grand Total**: ~129-167 hours for complete roadmap
+**Grand Total**: ~128-166 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -445,7 +444,6 @@ Tasks with high impact and low effort:
 
 1. security/001-dependabot.md (30min)
 1. bug-fixes/002-unused-exception.md (1-2h)
-1. bug-fixes/004-rate-limiting.md (1h)
 1. security/002-security-policy.md (already complete!)
 
 ### Foundation (Do Early)
@@ -622,3 +620,4 @@ ______________________________________________________________________
 | 006 | Skill Optimizations                | Enhancement  | 2026-04-16 | 0.5h          | N/A |
 | 002 | Create Project Logo and Branding   | Enhancement  | 2026-04-17 | 3h            | #89 |
 | 001 | Enable Codecov Integration         | Testing      | 2026-04-17 | 0.58h         | #93 |
+| 004 | Fix Rate Limiting Logic            | Bug Fix      | 2026-04-17 | 0.75h         | #94 |
