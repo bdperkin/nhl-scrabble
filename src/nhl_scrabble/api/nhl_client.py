@@ -64,6 +64,9 @@ class NHLApiClient:
         self.cache_enabled = cache_enabled
         self.cache_expiry = cache_expiry
         self._closed = False  # Track session state
+        self._last_request_time: float | None = (
+            None  # Track last successful request for rate limiting
+        )
 
         # Session can be either CachedSession or regular Session
         self.session: requests_cache.CachedSession | requests.Session
@@ -113,6 +116,14 @@ class NHLApiClient:
         logger.info("Fetching NHL teams from standings endpoint")
 
         try:
+            # Rate limit: Ensure minimum delay between requests
+            if self._last_request_time is not None and self.rate_limit_delay > 0:
+                elapsed = time.time() - self._last_request_time
+                if elapsed < self.rate_limit_delay:
+                    sleep_time = self.rate_limit_delay - elapsed
+                    logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
+                    time.sleep(sleep_time)
+
             response = self.session.get(url, timeout=self.timeout)
             response.raise_for_status()
             data = response.json()
@@ -126,6 +137,10 @@ class NHLApiClient:
                 }
 
             logger.info(f"Successfully fetched {len(teams_info)} teams")
+
+            # Record successful request time for rate limiting
+            self._last_request_time = time.time()
+
             return teams_info
 
         except requests.exceptions.Timeout as e:
@@ -166,6 +181,15 @@ class NHLApiClient:
 
         for attempt in range(self.retries):
             try:
+                # Rate limit: Ensure minimum delay between requests
+                # Only applies to subsequent requests, not the first one
+                if self._last_request_time is not None and self.rate_limit_delay > 0:
+                    elapsed = time.time() - self._last_request_time
+                    if elapsed < self.rate_limit_delay:
+                        sleep_time = self.rate_limit_delay - elapsed
+                        logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
+                        time.sleep(sleep_time)
+
                 response = self.session.get(url, timeout=self.timeout)
 
                 if response.status_code == 404:
@@ -176,9 +200,8 @@ class NHLApiClient:
                 data = response.json()
                 logger.debug(f"Successfully fetched roster for {team_abbrev}")
 
-                # Apply rate limiting
-                if self.rate_limit_delay > 0:
-                    time.sleep(self.rate_limit_delay)
+                # Record successful request time for rate limiting
+                self._last_request_time = time.time()
 
                 return data  # type: ignore[no-any-return]
 

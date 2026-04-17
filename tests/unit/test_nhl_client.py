@@ -340,3 +340,93 @@ class TestNHLApiClient:
         # Clean up
         client1.close()
         client2.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_rate_limiting_between_successful_requests(
+        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+    ) -> None:
+        """Test that rate limiting applies between successful requests."""
+        import time
+
+        # Mock successful responses
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_roster_data
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.1)
+
+        # First request
+        start = time.time()
+        client.get_team_roster("EDM")
+
+        # Second request should be delayed by rate_limit_delay
+        client.get_team_roster("TOR")
+        elapsed = time.time() - start
+
+        # Should take at least rate_limit_delay (0.1s)
+        # Add small tolerance for timing variations
+        assert elapsed >= 0.09
+
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_no_rate_limiting_on_first_request(
+        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+    ) -> None:
+        """Test that first request has no delay."""
+        import time
+
+        # Mock successful response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_roster_data
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=1.0)
+
+        start = time.time()
+        client.get_team_roster("EDM")
+        elapsed = time.time() - start
+
+        # First request should be fast (< 0.5s), not delayed by rate_limit_delay
+        assert elapsed < 0.5
+
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_failed_request_doesnt_affect_rate_limiting(
+        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+    ) -> None:
+        """Test that failed requests don't affect rate limiting."""
+        import time
+
+        import requests
+
+        # First request succeeds
+        success_response = Mock()
+        success_response.status_code = 200
+        success_response.json.return_value = sample_roster_data
+
+        # Second request fails
+        mock_get.side_effect = [
+            success_response,
+            requests.exceptions.ConnectionError("Network error"),
+        ]
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.1, retries=1)
+
+        start = time.time()
+        client.get_team_roster("EDM")
+
+        # Failed request should not sleep for rate limiting
+        with pytest.raises(NHLApiConnectionError):
+            client.get_team_roster("TOR")
+
+        elapsed = time.time() - start
+
+        # Should not have slept for failed request
+        # Total time should be less than 0.3s (one rate limit delay + tolerance)
+        assert elapsed < 0.3
+
+        client.close()
