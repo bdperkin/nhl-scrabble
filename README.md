@@ -519,6 +519,16 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+### Dependency Licenses
+
+All runtime dependencies use permissive licenses compatible with MIT (Apache, BSD, ISC, etc.). See [LICENSES.md](LICENSES.md) for the complete list of all dependency licenses.
+
+To verify license compliance:
+
+```bash
+tox -e licenses
+```
+
 ## Acknowledgments
 
 - NHL API for providing roster data
