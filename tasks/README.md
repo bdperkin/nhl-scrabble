@@ -117,10 +117,10 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 7 tasks
-**Total Documented Effort**: 24-41 hours
+**Active Tasks**: 8 tasks (2 refactoring, 6 new-features)
+**Total Active Effort**: 24-41 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 28 tasks (71.5h actual effort)
+**Completed Tasks**: 27 tasks (~70.75h actual effort)
 
 **Grand Total**: ~124-163 hours for complete roadmap
 
