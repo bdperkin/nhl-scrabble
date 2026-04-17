@@ -62,22 +62,21 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 1 documented)
+### Enhancements (10 tasks, 0 documented)
 
-| ID  | Title                                  | Priority | Effort | Issue |
-| --- | -------------------------------------- | -------- | ------ | ----- |
-| 003 | Add Comprehensive Documentation Badges | LOW      | 1-2h   | #91   |
-| ... | Progress Bars                          | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                       | MEDIUM   | TBD    |       |
-| ... | Historical Data                        | LOW      | TBD    |       |
-| ... | CSV/Excel Export                       | LOW      | TBD    |       |
-| ... | Filtering Options                      | LOW      | TBD    |       |
-| ... | Custom Scoring Rules                   | LOW      | TBD    |       |
-| ... | Statistics Dashboard                   | LOW      | TBD    |       |
-| ... | Watch Mode                             | LOW      | TBD    |       |
-| ... | Player Search                          | LOW      | TBD    |       |
+| ID  | Title                | Priority | Effort | Issue |
+| --- | -------------------- | -------- | ------ | ----- |
+| ... | Progress Bars        | MEDIUM   | TBD    |       |
+| ... | Interactive Mode     | MEDIUM   | TBD    |       |
+| ... | Historical Data      | LOW      | TBD    |       |
+| ... | CSV/Excel Export     | LOW      | TBD    |       |
+| ... | Filtering Options    | LOW      | TBD    |       |
+| ... | Custom Scoring Rules | LOW      | TBD    |       |
+| ... | Statistics Dashboard | LOW      | TBD    |       |
+| ... | Watch Mode           | LOW      | TBD    |       |
+| ... | Player Search        | LOW      | TBD    |       |
 
-**Documented Effort**: 1-2 hours
+**Documented Effort**: 0 hours
 
 ### Testing (0 tasks, 0 documented)
 
@@ -118,12 +117,12 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 8 tasks
-**Total Documented Effort**: 26-43 hours
+**Documented Tasks**: 7 tasks
+**Total Documented Effort**: 24-41 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 27 tasks (70.75h actual effort)
+**Completed Tasks**: 28 tasks (71.5h actual effort)
 
-**Grand Total**: ~126-165 hours for complete roadmap
+**Grand Total**: ~124-163 hours for complete roadmap
 
 ## How to Use These Tasks
 
