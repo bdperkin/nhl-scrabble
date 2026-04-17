@@ -58,7 +58,7 @@ class TestNHLApiClient:
         mock_get.side_effect = requests.exceptions.Timeout()
 
         client = NHLApiClient(cache_enabled=False)
-        with pytest.raises(NHLApiConnectionError, match="timed out"):
+        with pytest.raises(NHLApiConnectionError, match="after retries"):
             client.get_teams()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")

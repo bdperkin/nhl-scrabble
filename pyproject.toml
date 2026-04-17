@@ -772,6 +772,7 @@ exclude = [
     "dist",
     "*.egg-info",
     "__pycache__",
+    "tests",  # Exclude tests from docstring coverage checks
 ]
 
 # Python file extensions

@@ -11,6 +11,8 @@ from typing import Any, ClassVar
 import requests
 import requests_cache
 
+from nhl_scrabble.utils.retry import retry
+
 logger = logging.getLogger(__name__)
 
 
@@ -133,6 +135,8 @@ class NHLApiClient:
     def get_teams(self) -> dict[str, dict[str, str]]:
         """Fetch all NHL teams with division and conference information.
 
+        This method uses the retry decorator to automatically retry on network errors.
+
         Returns:
             Dictionary mapping team abbreviations to their metadata:
             {
@@ -154,7 +158,17 @@ class NHLApiClient:
         url = f"{self.BASE_URL}/standings/now"
         logger.info("Fetching NHL teams from standings endpoint")
 
-        try:
+        @retry(
+            max_attempts=self.retries,
+            backoff_factor=self.backoff_factor,
+            max_backoff=self.max_backoff,
+            exceptions=(
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+            ),
+        )
+        def _fetch_teams() -> dict[str, dict[str, str]]:
+            """Fetch teams with retry logic."""
             # Rate limit: Ensure minimum delay between requests
             if self._last_request_time is not None and self.rate_limit_delay > 0:
                 elapsed = time.time() - self._last_request_time
@@ -163,37 +177,39 @@ class NHLApiClient:
                     logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
                     time.sleep(sleep_time)
 
-            response = self.session.get(url, timeout=self.timeout)
-            response.raise_for_status()
-            data = response.json()
+            try:
+                response = self.session.get(url, timeout=self.timeout)
+                response.raise_for_status()
+                data = response.json()
 
-            teams_info: dict[str, dict[str, str]] = {}
-            for team in data["standings"]:
-                team_abbrev = team["teamAbbrev"]["default"]
-                teams_info[team_abbrev] = {
-                    "division": team.get("divisionName", "Unknown"),
-                    "conference": team.get("conferenceName", "Unknown"),
-                }
+                teams_info: dict[str, dict[str, str]] = {}
+                for team in data["standings"]:
+                    team_abbrev = team["teamAbbrev"]["default"]
+                    teams_info[team_abbrev] = {
+                        "division": team.get("divisionName", "Unknown"),
+                        "conference": team.get("conferenceName", "Unknown"),
+                    }
 
-            logger.info(f"Successfully fetched {len(teams_info)} teams")
+                logger.info(f"Successfully fetched {len(teams_info)} teams")
 
-            # Record successful request time for rate limiting
-            self._last_request_time = time.time()
+                # Record successful request time for rate limiting
+                self._last_request_time = time.time()
 
-            return teams_info
+                return teams_info
 
-        except requests.exceptions.Timeout as e:
-            logger.error(f"Timeout while fetching teams: {e}")
-            raise NHLApiConnectionError(f"Request timed out after {self.timeout}s") from e
-        except requests.exceptions.ConnectionError as e:
-            logger.error(f"Connection error while fetching teams: {e}")
-            raise NHLApiConnectionError("Unable to connect to NHL API") from e
-        except requests.exceptions.HTTPError as e:
-            logger.error(f"HTTP error while fetching teams: {e}")
-            raise NHLApiError(f"HTTP error: {e}") from e
-        except (KeyError, ValueError) as e:
-            logger.error(f"Error parsing teams response: {e}")
-            raise NHLApiError(f"Invalid API response format: {e}") from e
+            except requests.exceptions.HTTPError as e:
+                logger.error(f"HTTP error while fetching teams: {e}")
+                raise NHLApiError(f"HTTP error: {e}") from e
+            except (KeyError, ValueError) as e:
+                logger.error(f"Error parsing teams response: {e}")
+                raise NHLApiError(f"Invalid API response format: {e}") from e
+
+        try:
+            return _fetch_teams()
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            # Convert to NHLApiConnectionError after retries exhausted
+            logger.error(f"Connection error after retries: {e}")
+            raise NHLApiConnectionError("Unable to connect to NHL API after retries") from e
 
     def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
         """Fetch the current roster for a specific team.
