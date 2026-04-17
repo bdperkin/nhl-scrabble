@@ -96,14 +96,14 @@ Each task is assigned a priority:
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
-### New Features (14 tasks active, 15 documented, 1 completed)
+### New Features (13 tasks active, 15 documented, 2 completed)
 
 | ID  | Title                        | Priority | Effort | Issue | Status      |
 | --- | ---------------------------- | -------- | ------ | ----- | ----------- |
 | 001 | Build Web Interface (Parent) | MEDIUM   | 16-24h | #50   | In Progress |
 | 002 | FastAPI Infrastructure       | MEDIUM   | 3.5h   | #103  | ✅ Complete |
 | 003 | Web API Endpoints            | MEDIUM   | 4-6h   | #104  |             |
-| 004 | Web Frontend Templates       | MEDIUM   | 4-6h   | #105  |             |
+| 004 | Web Frontend Templates       | MEDIUM   | 3.5h   | #105  | ✅ Complete |
 | 005 | JavaScript Interactivity     | MEDIUM   | 8-12h  | #106  |             |
 | 006 | Web Testing and Polish       | MEDIUM   | 2-3h   | #111  |             |
 | 007 | Standalone REST API Server   | LOW      | 8-12h  | #150  |             |
@@ -116,8 +116,8 @@ Each task is assigned a priority:
 | 014 | Docker Support               | LOW      | 4-6h   | #157  |             |
 | 015 | Data Export/Import           | LOW      | 4-5h   | #158  |             |
 
-**Documented Effort**: 88.5-127 hours (web interface subtasks: 18.5-27h remaining, standalone features: 70-100h)
-**Completed**: 3.5 hours (Task 002: FastAPI Infrastructure - PR #174)
+**Documented Effort**: 87.5-126 hours (web interface subtasks: 14.5-21h remaining, standalone features: 70-100h)
+**Completed**: 7 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 004: Web Frontend Templates 3.5h - PR #176)
 
 ### Refactoring (7 tasks, 7 documented)
 
@@ -135,8 +135,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 52 tasks (51 active, 1 completed)
-**Remaining Effort**: 194-272.5 hours (3.5 hours completed)
+**Total Tasks**: 52 tasks (50 active, 2 completed)
+**Remaining Effort**: 190.5-269 hours (7 hours completed)
 
 ### By Category
 
@@ -144,8 +144,8 @@ Each task is assigned a priority:
 - **Optimization**: 11 tasks, 16-24.5h (5-10x performance improvement)
 - **Enhancement**: 9 tasks, 35-49h
 - **Testing**: 2 tasks, 1.5-3.0h
-- **New Features**: 14 tasks active (1 completed), 88.5-127h remaining (completed: 3.5h)
-  - Web interface: 18.5-27h remaining (1 of 6 subtasks completed)
+- **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
+  - Web interface: 14.5-21h remaining (2 of 6 subtasks completed)
   - Standalone features: 70-100h
 - **Refactoring**: 7 tasks, 35-45.5h
 

@@ -10,7 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -54,15 +55,20 @@ async def health() -> dict[str, Any]:
     }
 
 
-@app.get("/")
-async def root() -> dict[str, str]:
-    """Root endpoint placeholder.
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request) -> HTMLResponse:
+    """Serve home page.
+
+    Args:
+        request: FastAPI request object
 
     Returns:
-        Simple message directing to docs
+        Rendered index.html template
     """
-    return {
-        "message": "NHL Scrabble Analyzer API",
-        "docs": "/docs",
-        "health": "/health",
-    }
+    if templates is None:
+        # Fallback if templates not available
+        return HTMLResponse(
+            content="<h1>NHL Scrabble Analyzer</h1><p>Templates not configured. Visit <a href='/docs'>/docs</a> for API documentation.</p>",
+            status_code=200,
+        )
+    return templates.TemplateResponse(request=request, name="index.html")
