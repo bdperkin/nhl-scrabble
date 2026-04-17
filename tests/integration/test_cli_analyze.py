@@ -9,8 +9,13 @@ from click.testing import CliRunner
 
 from nhl_scrabble.cli import cli
 
+# All integration tests get 5 minute timeout
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.timeout(300),  # 5 minutes for integration tests
+]
 
-@pytest.mark.integration
+
 class TestCLIAnalyze:
     """Integration tests for the analyze command."""
 
