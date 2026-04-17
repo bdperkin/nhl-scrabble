@@ -437,6 +437,88 @@ tox -e ruff-format
 
 See [docs/TOX.md](docs/TOX.md) for complete tox documentation and [docs/TOX-UV.md](docs/TOX-UV.md) for tox with UV acceleration.
 
+### Performance Benchmarking
+
+The project uses pytest-benchmark to track performance and prevent performance regressions in critical code paths:
+
+```bash
+# Run all benchmarks
+pytest tests/benchmarks/ --benchmark-only -n 0
+
+# Save baseline for future comparisons
+pytest tests/benchmarks/ --benchmark-only -n 0 --benchmark-save=baseline
+
+# Compare against baseline (detect regressions)
+pytest tests/benchmarks/ --benchmark-only -n 0 --benchmark-compare=baseline
+
+# Generate performance histogram
+pytest tests/benchmarks/ --benchmark-only -n 0 --benchmark-histogram
+
+# Via tox
+tox -e benchmark              # Run benchmarks and save latest
+tox -e benchmark-compare      # Compare against baseline
+```
+
+**Why -n 0?** Benchmarks require sequential execution (no parallel workers) for reliable timing measurements.
+
+**Performance Targets:**
+
+| Operation                          | Target (mean) | Threshold |
+| ---------------------------------- | ------------- | --------- |
+| **Scrabble score short name**      | \<100 ns      | +20%      |
+| **Scrabble score long name**       | \<200 ns      | +20%      |
+| **Score full roster (23 players)** | \<5 μs        | +20%      |
+| **Score all teams (~700 players)** | \<100 μs      | +20%      |
+| **Sort players by score**          | \<1 ms        | +20%      |
+| **Aggregate by division**          | \<500 μs      | +20%      |
+
+**Benchmark Configuration:**
+
+- **Storage**: `.benchmarks/` directory (committed to git)
+- **Regression threshold**: 20% (configurable in `pyproject.toml`)
+- **Warmup**: 5 iterations before measurement
+- **Statistical analysis**: min, max, mean, stddev, median, IQR, outliers
+
+**When to Run Benchmarks:**
+
+1. **Before optimizing**: Establish baseline to measure improvement
+1. **After optimizing**: Verify optimization actually helped
+1. **Before committing**: Ensure no performance regressions
+1. **During code review**: Compare branch performance vs main
+
+**Example Output:**
+
+```
+---------------------------------------------------------------------------------------------------------------- benchmark: 14 tests -----------------------------------------------------------------------------------------------------------------
+Name (time in ns)                                   Min                       Max                      Mean                 StdDev                    Median                    IQR            Outliers             OPS            Rounds  Iterations
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+test_benchmark_short_name                      735.3956 (1.0)          2,146.3493 (1.0)            768.5196 (1.0)          57.2188 (1.0)            759.1443 (1.0)           3.9116 (1.0)    1685;13894  1,301,203.0086 (1.0)       64871          20
+test_benchmark_full_league               1,910,574.2685 (>1000.0)  3,079,814.8364 (>1000.0)  1,984,307.0172 (>1000.0)  80,544.2540 (>1000.0)  1,967,393.5603 (>1000.0)  50,543.5746 (>1000.0)     24;19        503.9543 (0.00)        524           1
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
+**Regression Detection:**
+
+If your changes cause performance to degrade beyond the threshold (20%), the benchmark comparison will fail:
+
+```bash
+$ pytest tests/benchmarks/ --benchmark-compare=baseline
+
+❌ FAILED: test_benchmark_full_league regression threshold exceeded
+   Baseline: 1,910,574 ns
+   Current:  2,342,129 ns
+   Change:   +22.6% (threshold: 20%)
+```
+
+**Best Practices:**
+
+- ✅ Run benchmarks sequentially (`-n 0`)
+- ✅ Commit baselines with code
+- ✅ Compare before/after optimizations
+- ✅ Focus on critical paths (scoring, sorting, aggregation)
+- ❌ Don't benchmark I/O operations (network, disk)
+- ❌ Don't run benchmarks in parallel (`pytest -n auto` will auto-disable)
+
 ### Fast Package Management with UV
 
 UV acceleration is automatic when using tox (via tox-uv plugin):
