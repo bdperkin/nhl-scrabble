@@ -41,7 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Catches hidden test dependencies (global state, shared fixtures, order-dependent bugs)
   - Seed can be specified for debugging: `pytest --randomly-seed=<seed>`
   - Randomization can be disabled: `pytest -p no:randomly`
-  - All 170 existing tests pass with randomization (no order dependencies found)
+  - **First bug found!** pytest-randomly immediately exposed a hidden test dependency in `test_clear_cache`
+  - Fixed `test_clear_cache` to patch correct layer (HTTP transport vs cache layer) for proper isolation
+  - All 170 tests now pass reliably in any execution order
   - Updated CONTRIBUTING.md with usage documentation and best practices
   - Benefits: Better test isolation, earlier bug detection, improved test quality
 
