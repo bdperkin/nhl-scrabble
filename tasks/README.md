@@ -28,13 +28,13 @@ Each task is assigned a priority:
 
 ## Task Index
 
-### Bug Fixes (1 task)
+### Bug Fixes (0 tasks)
 
-| ID  | Title                         | Priority | Effort | Issue |
-| --- | ----------------------------- | -------- | ------ | ----- |
-| 005 | Implement Exponential Backoff | LOW      | 2-3h   | #48   |
+| ID  | Title | Priority | Effort | Issue |
+| --- | ----- | -------- | ------ | ----- |
+|     |       |          |        |       |
 
-**Total Effort**: 2-3 hours
+**Total Effort**: 0 hours
 
 ### Security (10+ tasks, 0 documented)
 
@@ -117,12 +117,12 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 8 tasks
-**Total Documented Effort**: 28-44 hours
+**Documented Tasks**: 7 tasks
+**Total Documented Effort**: 26-41 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 23 tasks (63.5h actual effort)
+**Completed Tasks**: 24 tasks (66.0h actual effort)
 
-**Grand Total**: ~128-166 hours for complete roadmap
+**Grand Total**: ~126-163 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -350,18 +350,11 @@ This section organizes all documented tasks into a recommended implementation se
    - Improves API rate limiting logic
    - No dependencies
 
-1. **bug-fixes/005-exponential-backoff.md** (2-3h) - #48
-
-   - LOW priority, retry improvement
-   - Better backoff strategy for API calls
-   - No dependencies
-
 1. **refactoring/001-extract-retry-logic.md** (2-3h) - #51
 
    - LOW priority, code organization
    - Extracts retry logic to reusable module
-   - Makes bug-fixes/005 easier to implement
-   - Consider doing before bug-fixes/005
+   - Build on the exponential backoff implementation
 
 ### Phase 6: Major Features (Month 3+)
 
@@ -516,9 +509,9 @@ Valuable but not critical:
 
 ### Sprint 6 (2 weeks): Enhancement & Polish
 
-**Effort**: 4-10 hours
+**Effort**: 1-7 hours
 
-- enhancement/001, bug-fixes/004, bug-fixes/005
+- enhancement/001
 
 ### Sprint 7+ (Ongoing): Features & Refactoring
 
@@ -550,7 +543,7 @@ Documentation Chain (Sequential recommended):
 
 Refactoring Chain:
 └── refactoring/001-extract-retry-logic
-    └── Makes bug-fixes/005-exponential-backoff easier
+    └── Can build on completed exponential backoff (bug-fixes/005)
 ```
 
 ## Contributing
@@ -621,3 +614,4 @@ ______________________________________________________________________
 | 002 | Create Project Logo and Branding   | Enhancement  | 2026-04-17 | 3h            | #89 |
 | 001 | Enable Codecov Integration         | Testing      | 2026-04-17 | 0.58h         | #93 |
 | 004 | Fix Rate Limiting Logic            | Bug Fix      | 2026-04-17 | 0.75h         | #94 |
+| 005 | Implement Exponential Backoff      | Bug Fix      | 2026-04-17 | 2.5h          | #95 |
