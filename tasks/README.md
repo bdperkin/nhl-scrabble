@@ -103,26 +103,27 @@ No active testing tasks.
 
 **Documented Effort**: 16-24 hours
 
-### Refactoring (6 tasks, 0 documented)
+### Refactoring (7 tasks, 1 documented)
 
-| ID  | Title                     | Priority | Effort | Issue |
-| --- | ------------------------- | -------- | ------ | ----- |
-| ... | Consolidate Reports       | LOW      | TBD    |       |
-| ... | Improve Type Safety       | LOW      | TBD    |       |
-| ... | Unified Config Management | LOW      | TBD    |       |
-| ... | Error Handling Strategy   | LOW      | TBD    |       |
-| ... | Dependency Injection      | LOW      | TBD    |       |
+| ID  | Title                                     | Priority | Effort | Issue |
+| --- | ----------------------------------------- | -------- | ------ | ----- |
+| 002 | Port check_docs.sh Shell Script to Python | LOW      | 2-3h   | #100  |
+| ... | Consolidate Reports                       | LOW      | TBD    |       |
+| ... | Improve Type Safety                       | LOW      | TBD    |       |
+| ... | Unified Config Management                 | LOW      | TBD    |       |
+| ... | Error Handling Strategy                   | LOW      | TBD    |       |
+| ... | Dependency Injection                      | LOW      | TBD    |       |
 
-**Documented Effort**: 0 hours
+**Documented Effort**: 2-3 hours
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 7 tasks
-**Total Documented Effort**: 24-40 hours
+**Documented Tasks**: 8 tasks
+**Total Documented Effort**: 26-43 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 26 tasks (69.25h actual effort)
 
-**Grand Total**: ~124-162 hours for complete roadmap
+**Grand Total**: ~126-165 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -591,9 +592,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
-**Tasks Documented**: 23 of 50+
-**Completion Status**: 19 of 23 completed (82.6%)
-**Documented Effort Remaining**: 21.58-51.83 hours (excluding completed tasks)
+**Tasks Documented**: 24 of 51+
+**Completion Status**: 19 of 24 completed (79.2%)
+**Documented Effort Remaining**: 23.58-54.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
