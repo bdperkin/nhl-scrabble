@@ -7,8 +7,13 @@ import pytest
 
 from nhl_scrabble.api import NHLApiClient
 
+# All integration tests get 5 minute timeout
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.timeout(300),  # 5 minutes for integration tests
+]
 
-@pytest.mark.integration
+
 def test_caching_performance(tmp_path: Path) -> None:
     """Test that caching is functional."""
     import os

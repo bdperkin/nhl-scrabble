@@ -188,6 +188,79 @@ pytest -p no:clarity
 
 pytest-clarity works in CI environments (with or without colors) and is compatible with all other pytest plugins.
 
+### Test Timeout Protection
+
+The project uses pytest-timeout to prevent tests from hanging indefinitely and wasting CI resources:
+
+```bash
+# pytest-timeout works automatically (no configuration needed)
+pytest
+# Output: timeout: 10.0s, timeout method: thread
+
+# Default timeout: 10 seconds for unit tests
+# Tests exceeding timeout are automatically failed
+
+# Override timeout for specific run (e.g., debugging)
+pytest --timeout=60
+
+# Disable timeout for debugging hung tests
+pytest --timeout=0
+```
+
+**Timeout Configuration:**
+
+- **Unit tests**: 10 seconds (default, configured in `pyproject.toml`)
+- **Integration tests**: 300 seconds (5 minutes, marked with `@pytest.mark.timeout(300)`)
+- **Slow tests**: 60 seconds (marked with `@pytest.mark.slow` and `@pytest.mark.timeout(60)`)
+
+**Setting Custom Timeouts:**
+
+```python
+import pytest
+
+
+# Override timeout for specific test
+@pytest.mark.timeout(60)  # 1 minute timeout
+def test_slow_operation():
+    # Test that takes longer than default 10s
+    pass
+
+
+# Disable timeout for specific test (use sparingly)
+@pytest.mark.timeout(0)
+def test_that_must_complete():
+    # Test with no timeout limit
+    pass
+
+
+# Module-level timeout for all tests in file
+pytestmark = pytest.mark.timeout(300)  # 5 minutes for all tests
+```
+
+**Why timeout protection matters:**
+
+- **Prevents wasted time**: No more waiting for hung tests
+- **Saves CI minutes**: GitHub Actions charges for execution time
+- **Better debugging**: Immediately identifies problematic tests
+- **Professional workflow**: Production-grade testing infrastructure
+
+**Common timeout scenarios:**
+
+- Infinite loops in code under test
+- Deadlocks in concurrent code
+- API calls without timeouts
+- External services that hang
+
+**If a test times out:**
+
+1. Check if the test legitimately needs more time (integration test, slow operation)
+1. If so, add `@pytest.mark.timeout(N)` with appropriate timeout
+1. If not, investigate why the test is hanging:
+   - Add debugging output to see where it hangs
+   - Run with increased timeout to see if it completes: `pytest --timeout=300`
+   - Check for infinite loops, missing timeouts, or deadlocks
+1. Fix the underlying issue rather than just increasing timeout
+
 ### Test Randomization
 
 The project uses pytest-randomly to randomize test execution order and catch hidden test dependencies:

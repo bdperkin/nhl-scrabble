@@ -4,9 +4,13 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 from click.testing import CliRunner
 
 from nhl_scrabble.cli import cli
+
+# Integration tests that may make real API calls get longer timeout
+pytestmark = pytest.mark.timeout(300)  # 5 minutes for tests that may call API
 
 
 class TestOutputPathValidation:

@@ -71,6 +71,8 @@ class TestRetryDecorator:
         assert 0.7 < delay1 < 1.3  # ~1s ±jitter
         assert 1.4 < delay2 < 2.6  # ~2s ±jitter
 
+    @pytest.mark.slow
+    @pytest.mark.timeout(60)  # Test can take ~45 seconds due to retry delays
     def test_retry_respects_max_backoff(self) -> None:
         """Test that backoff is capped at max_backoff."""
 

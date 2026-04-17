@@ -10,8 +10,13 @@ from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
+# All integration tests get 5 minute timeout
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.timeout(300),  # 5 minutes for integration tests
+]
 
-@pytest.mark.integration
+
 class TestFullWorkflow:
     """Integration tests for the complete analysis workflow."""
 
