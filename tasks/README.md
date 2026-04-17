@@ -62,23 +62,22 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 1 documented)
 
-| ID  | Title                                      | Priority | Effort | Issue |
-| --- | ------------------------------------------ | -------- | ------ | ----- |
-| 003 | Add Comprehensive Documentation Badges     | LOW      | 1-2h   | #91   |
-| 005 | Add Python 3.15-dev Support (Non-Blocking) | LOW      | 1-2h   | #98   |
-| ... | Progress Bars                              | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                           | MEDIUM   | TBD    |       |
-| ... | Historical Data                            | LOW      | TBD    |       |
-| ... | CSV/Excel Export                           | LOW      | TBD    |       |
-| ... | Filtering Options                          | LOW      | TBD    |       |
-| ... | Custom Scoring Rules                       | LOW      | TBD    |       |
-| ... | Statistics Dashboard                       | LOW      | TBD    |       |
-| ... | Watch Mode                                 | LOW      | TBD    |       |
-| ... | Player Search                              | LOW      | TBD    |       |
+| ID  | Title                                  | Priority | Effort | Issue |
+| --- | -------------------------------------- | -------- | ------ | ----- |
+| 003 | Add Comprehensive Documentation Badges | LOW      | 1-2h   | #91   |
+| ... | Progress Bars                          | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                       | MEDIUM   | TBD    |       |
+| ... | Historical Data                        | LOW      | TBD    |       |
+| ... | CSV/Excel Export                       | LOW      | TBD    |       |
+| ... | Filtering Options                      | LOW      | TBD    |       |
+| ... | Custom Scoring Rules                   | LOW      | TBD    |       |
+| ... | Statistics Dashboard                   | LOW      | TBD    |       |
+| ... | Watch Mode                             | LOW      | TBD    |       |
+| ... | Player Search                          | LOW      | TBD    |       |
 
-**Documented Effort**: 2-4 hours
+**Documented Effort**: 1-2 hours
 
 ### Testing (0 tasks, 0 documented)
 
@@ -119,12 +118,12 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 9 tasks
-**Total Documented Effort**: 27-45 hours
+**Documented Tasks**: 8 tasks
+**Total Documented Effort**: 26-43 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 26 tasks (69.25h actual effort)
+**Completed Tasks**: 27 tasks (70.75h actual effort)
 
-**Grand Total**: ~127-167 hours for complete roadmap
+**Grand Total**: ~126-165 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -599,30 +598,31 @@ ______________________________________________________________________
 
 ## Completed Tasks
 
-| ID  | Title                               | Category     | Completed  | Actual Effort | PR  |
-| --- | ----------------------------------- | ------------ | ---------- | ------------- | --- |
-| 002 | Link GitHub Issues to Tasks         | Enhancement  | 2026-04-16 | 0.75h         | #57 |
-| 007 | Fix Branch Protection Hook in CI    | Bug Fix      | 2026-04-16 | 1h            | #59 |
-| 002 | Implement CI Caching                | Optimization | 2026-04-16 | 2.5h          | #61 |
-| 001 | Add GitHub Dependabot               | Security     | 2026-04-16 | 0.42h         | #65 |
-| 002 | Create SECURITY.md Policy           | Security     | 2026-04-16 | 0.5h          | #71 |
-| 004 | GitHub Settings Security Hardening  | Security     | 2026-04-16 | 1.5h          | #71 |
-| 001 | Fix Config Validation               | Bug Fix      | 2026-04-16 | 3h            | #72 |
-| 002 | Implement NHLApiNotFoundError       | Bug Fix      | 2026-04-16 | 1.5h          | #73 |
-| 001 | Implement API Response Caching      | Optimization | 2026-04-16 | 3.5h          | #74 |
-| 001 | Increase Test Coverage to 90.93%    | Testing      | 2026-04-16 | 4h            | #75 |
-| 003 | Add Session Cleanup Safety Net      | Bug Fix      | 2026-04-16 | 1.5h          | #76 |
-| 003 | Implement Log Sanitization          | Security     | 2026-04-16 | 2.5h          | #78 |
-| 006 | Validate CLI Output Paths           | Bug Fix      | 2026-04-16 | 1.5h          | #79 |
-| 002 | Implement Procida Documentation     | Enhancement  | 2026-04-16 | 10h           | #80 |
-| 004 | Automated API/CLI Documentation     | Enhancement  | 2026-04-16 | 5.5h          | #85 |
-| 003 | Build Sphinx Docs + GitHub Pages    | Enhancement  | 2026-04-16 | 8h            | #86 |
-| 001 | Implement HTML Output Format        | Enhancement  | 2026-04-16 | 4h            | #92 |
-| 005 | Add Sphinx Quality Plugins          | Enhancement  | 2026-04-16 | 3.5h          | #87 |
-| 006 | Skill Optimizations                 | Enhancement  | 2026-04-16 | 0.5h          | N/A |
-| 002 | Create Project Logo and Branding    | Enhancement  | 2026-04-17 | 3h            | #89 |
-| 001 | Enable Codecov Integration          | Testing      | 2026-04-17 | 0.58h         | #93 |
-| 004 | Fix Rate Limiting Logic             | Bug Fix      | 2026-04-17 | 0.75h         | #94 |
-| 005 | Implement Exponential Backoff       | Bug Fix      | 2026-04-17 | 2.5h          | #95 |
-| 001 | Extract Retry Logic                 | Refactoring  | 2026-04-17 | 2.5h          | #96 |
-| 004 | Add Python 3.14 Support and Testing | Enhancement  | 2026-04-17 | 0.75h         | #99 |
+| ID  | Title                                      | Category     | Completed  | Actual Effort | PR   |
+| --- | ------------------------------------------ | ------------ | ---------- | ------------- | ---- |
+| 002 | Link GitHub Issues to Tasks                | Enhancement  | 2026-04-16 | 0.75h         | #57  |
+| 007 | Fix Branch Protection Hook in CI           | Bug Fix      | 2026-04-16 | 1h            | #59  |
+| 002 | Implement CI Caching                       | Optimization | 2026-04-16 | 2.5h          | #61  |
+| 001 | Add GitHub Dependabot                      | Security     | 2026-04-16 | 0.42h         | #65  |
+| 002 | Create SECURITY.md Policy                  | Security     | 2026-04-16 | 0.5h          | #71  |
+| 004 | GitHub Settings Security Hardening         | Security     | 2026-04-16 | 1.5h          | #71  |
+| 001 | Fix Config Validation                      | Bug Fix      | 2026-04-16 | 3h            | #72  |
+| 002 | Implement NHLApiNotFoundError              | Bug Fix      | 2026-04-16 | 1.5h          | #73  |
+| 001 | Implement API Response Caching             | Optimization | 2026-04-16 | 3.5h          | #74  |
+| 001 | Increase Test Coverage to 90.93%           | Testing      | 2026-04-16 | 4h            | #75  |
+| 003 | Add Session Cleanup Safety Net             | Bug Fix      | 2026-04-16 | 1.5h          | #76  |
+| 003 | Implement Log Sanitization                 | Security     | 2026-04-16 | 2.5h          | #78  |
+| 006 | Validate CLI Output Paths                  | Bug Fix      | 2026-04-16 | 1.5h          | #79  |
+| 002 | Implement Procida Documentation            | Enhancement  | 2026-04-16 | 10h           | #80  |
+| 004 | Automated API/CLI Documentation            | Enhancement  | 2026-04-16 | 5.5h          | #85  |
+| 003 | Build Sphinx Docs + GitHub Pages           | Enhancement  | 2026-04-16 | 8h            | #86  |
+| 001 | Implement HTML Output Format               | Enhancement  | 2026-04-16 | 4h            | #92  |
+| 005 | Add Sphinx Quality Plugins                 | Enhancement  | 2026-04-16 | 3.5h          | #87  |
+| 006 | Skill Optimizations                        | Enhancement  | 2026-04-16 | 0.5h          | N/A  |
+| 002 | Create Project Logo and Branding           | Enhancement  | 2026-04-17 | 3h            | #89  |
+| 001 | Enable Codecov Integration                 | Testing      | 2026-04-17 | 0.58h         | #93  |
+| 004 | Fix Rate Limiting Logic                    | Bug Fix      | 2026-04-17 | 0.75h         | #94  |
+| 005 | Implement Exponential Backoff              | Bug Fix      | 2026-04-17 | 2.5h          | #95  |
+| 001 | Extract Retry Logic                        | Refactoring  | 2026-04-17 | 2.5h          | #96  |
+| 004 | Add Python 3.14 Support and Testing        | Enhancement  | 2026-04-17 | 0.75h         | #99  |
+| 005 | Add Python 3.15-dev Support (Non-Blocking) | Enhancement  | 2026-04-17 | 1.5h          | #102 |
