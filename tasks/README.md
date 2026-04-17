@@ -84,22 +84,27 @@ No active testing tasks.
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
-### New Features (10+ tasks, 1 documented)
+### New Features (10+ tasks, 6 documented)
 
-| ID  | Title                  | Priority | Effort | Issue |
-| --- | ---------------------- | -------- | ------ | ----- |
-| 001 | Build Web Interface    | LOW      | 16-24h | #50   |
-| ... | REST API               | LOW      | TBD    |       |
-| ... | Database Backend       | LOW      | TBD    |       |
-| ... | Notification System    | LOW      | TBD    |       |
-| ... | Player Comparison Tool | LOW      | TBD    |       |
-| ... | Offline Mode           | LOW      | TBD    |       |
-| ... | Config Profiles        | LOW      | TBD    |       |
-| ... | Plugin System          | LOW      | TBD    |       |
-| ... | Docker Support         | LOW      | TBD    |       |
-| ... | Data Export/Import     | LOW      | TBD    |       |
+| ID  | Title                        | Priority | Effort | Issue |
+| --- | ---------------------------- | -------- | ------ | ----- |
+| 001 | Build Web Interface (Parent) | MEDIUM   | 16-24h | #50   |
+| 002 | FastAPI Infrastructure       | MEDIUM   | 3-4h   | #103  |
+| 003 | Web API Endpoints            | MEDIUM   | 4-6h   | #104  |
+| 004 | Web Frontend Templates       | MEDIUM   | 4-6h   | #105  |
+| 005 | JavaScript Interactivity     | MEDIUM   | 8-12h  | #106  |
+| 006 | Web Testing and Polish       | MEDIUM   | 2-3h   | #111  |
+| ... | REST API                     | LOW      | TBD    |       |
+| ... | Database Backend             | LOW      | TBD    |       |
+| ... | Notification System          | LOW      | TBD    |       |
+| ... | Player Comparison Tool       | LOW      | TBD    |       |
+| ... | Offline Mode                 | LOW      | TBD    |       |
+| ... | Config Profiles              | LOW      | TBD    |       |
+| ... | Plugin System                | LOW      | TBD    |       |
+| ... | Docker Support               | LOW      | TBD    |       |
+| ... | Data Export/Import           | LOW      | TBD    |       |
 
-**Documented Effort**: 16-24 hours
+**Documented Effort**: 38-55 hours (web interface subtasks: 22-31h)
 
 ### Refactoring (8 tasks, 0 documented)
 
@@ -116,11 +121,11 @@ No active testing tasks.
 ## Total Project Roadmap
 
 **Active Tasks**: 6 tasks (0 refactoring, 6 new-features)
-**Total Active Effort**: 20-36 hours
+**Total Active Effort**: 38-55 hours (web interface: 22-31h)
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 29 tasks (~74.25h actual effort)
 
-**Grand Total**: ~120-158 hours for complete roadmap
+**Grand Total**: ~138-180 hours for complete roadmap
 
 ## How to Use These Tasks
 

@@ -1,6 +1,6 @@
 # Web Interface Testing and Polish
 
-**GitHub Issue**: TBD
+**GitHub Issue**: #111 - https://github.com/bdperkin/nhl-scrabble/issues/111
 
 ## Priority
 
