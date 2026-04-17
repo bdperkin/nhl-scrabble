@@ -61,6 +61,7 @@ test = [
     "pytest-sugar>=1.0.0",
     "pytest-clarity>=1.0.1",
     "pytest-timeout>=2.2.0",
+    "pytest-xdist>=3.5.0",
     "beautifulsoup4>=4.12.0",
 ]
 
@@ -465,6 +466,7 @@ timeout_method = "thread"  # Use threading for better compatibility
 addopts = [
     "--strict-markers",
     "--strict-config",
+    "-n", "auto",  # Parallel execution: auto-detect CPU cores
     "--cov=nhl_scrabble",
     "--cov-report=term-missing:skip-covered",
     "--cov-report=html",
@@ -476,6 +478,7 @@ markers = [
     "integration: Integration tests",
     "slow: Slow running tests",
     "timeout: Custom timeout for specific tests (e.g., @pytest.mark.timeout(300))",
+    "no_parallel: Tests that must run sequentially (e.g., @pytest.mark.no_parallel)",
 ]
 
 # Coverage configuration

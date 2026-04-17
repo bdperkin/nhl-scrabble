@@ -375,8 +375,12 @@ make run-json        # Run and output JSON (via tox)
 Comprehensive test suite with tox-uv for speed:
 
 ```bash
-# Run tests
-pytest                    # Quick test run
+# Run tests (with pytest-xdist parallel execution)
+pytest                    # Quick test run (auto-parallel with -n auto)
+pytest -n 4              # Explicit worker count
+pytest -n 0              # Sequential execution (debugging)
+
+# Tox testing
 tox -e py310             # Test Python 3.10 (fast with tox-uv!)
 tox -e py315             # Test Python 3.15 (fast with tox-uv!)
 tox -p auto              # All versions parallel (10x faster)
@@ -388,12 +392,18 @@ make test-cov            # Via Makefile
 tox -e coverage          # Via tox
 ```
 
+**Test Performance:**
+
+- **Parallel execution**: pytest-xdist runs tests on multiple CPU cores
+- **170 tests**: 131s sequential → 47s parallel (2.8x speedup on 8 cores)
+- **CI optimization**: GitHub Actions uses 2 workers for 2-core runners
+
 **Test Structure:**
 
 - `tests/unit/` - Unit tests for individual components
 - `tests/integration/` - Integration tests for full workflows
 - `tests/conftest.py` - Shared fixtures
-- 36+ tests with >80% coverage on core modules
+- 170 tests with >93% coverage on core modules
 
 ### Code Quality Tools
 

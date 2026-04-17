@@ -85,16 +85,15 @@ Each task is assigned a priority:
 
 **Documented Effort**: 35-49 hours
 
-### Testing (4 tasks, 4 documented)
+### Testing (3 tasks, 3 documented)
 
 | ID  | Title                                  | Priority | Effort   | Issue |
 | --- | -------------------------------------- | -------- | -------- | ----- |
-| 002 | Add pytest-xdist Parallel Testing      | MEDIUM   | 30-60min | #120  |
 | 006 | Add diff-cover PR Coverage             | MEDIUM   | 30-60min | #124  |
 | 007 | Add pytest-benchmark Performance Tests | MEDIUM   | 1-2h     | #125  |
 | 008 | Add check-jsonschema Validation        | LOW      | 30-60min | #128  |
 
-**Documented Effort**: 2.25-5.0 hours
+**Documented Effort**: 1.75-4.0 hours
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
@@ -873,3 +872,4 @@ ______________________________________________________________________
 | 004 | Add pytest-sugar Enhanced Output           | Testing      | 2026-04-17 | 0.33h         | #166 |
 | 005 | Add pytest-clarity Improved Diffs          | Testing      | 2026-04-17 | 0.33h         | #167 |
 | 001 | Add pytest-timeout Plugin                  | Testing      | 2026-04-17 | 0.75h         | #168 |
+| 002 | Add pytest-xdist Parallel Testing          | Testing      | 2026-04-17 | 0.75h         | #169 |

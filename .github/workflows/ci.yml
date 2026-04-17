@@ -64,7 +64,7 @@ jobs:
         continue-on-error: ${{ matrix.python-version >= '3.12' }}
 
       - name: Run tests with coverage
-        run: pytest --cov --cov-report=xml --cov-report=term
+        run: pytest -n 2 --cov --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
