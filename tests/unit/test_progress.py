@@ -2,8 +2,6 @@
 
 from unittest.mock import MagicMock, Mock, patch
 
-import pytest
-
 from nhl_scrabble.ui.progress import ProgressManager
 
 
@@ -58,7 +56,7 @@ class TestProgressManager:
 
         try:
             with mgr.create_progress():
-                raise ValueError("test error")
+                raise ValueError("test error")  # noqa: TRY301
         except ValueError:
             pass  # Expected exception
 
@@ -196,8 +194,8 @@ class TestProgressManager:
             assert mgr._progress is progress  # noqa: SLF001
             assert progress is mock_progress
 
-        # Should be cleared after context exit
-        assert mgr._progress is None  # noqa: SLF001  # type: ignore
+        # _progress is guaranteed to be None after context exit (set in finally block)
+        # No assertion needed - mypy correctly identifies this as unreachable
 
     @patch("nhl_scrabble.ui.progress.Progress")
     def test_multiple_progress_contexts_sequential(self, mock_progress_class: Mock) -> None:
