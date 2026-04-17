@@ -42,19 +42,19 @@ nhl-scrabble analyze --format json --output report.json
 ```python
 import json
 
-with open('report.json') as f:
+with open("report.json") as f:
     data = json.load(f)
 
 # Access team data
-toronto = data['teams']['TOR']
+toronto = data["teams"]["TOR"]
 print(f"Toronto total: {toronto['total']}")
 
 # Find highest scoring player
 all_players = []
-for team in data['teams'].values():
-    all_players.extend(team['players'])
+for team in data["teams"].values():
+    all_players.extend(team["players"])
 
-top_player = max(all_players, key=lambda p: p['score'])
+top_player = max(all_players, key=lambda p: p["score"])
 print(f"Top player: {top_player['firstName']} {top_player['lastName']}")
 ```
 

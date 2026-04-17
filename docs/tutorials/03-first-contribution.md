@@ -179,23 +179,23 @@ def test_get_letter_value():
     scorer = ScrabbleScorer()
 
     # Test high-value letters
-    assert scorer.get_letter_value('Z') == 10
-    assert scorer.get_letter_value('Q') == 10
-    assert scorer.get_letter_value('X') == 8
-    assert scorer.get_letter_value('K') == 5
+    assert scorer.get_letter_value("Z") == 10
+    assert scorer.get_letter_value("Q") == 10
+    assert scorer.get_letter_value("X") == 8
+    assert scorer.get_letter_value("K") == 5
 
     # Test low-value letters
-    assert scorer.get_letter_value('A') == 1
-    assert scorer.get_letter_value('E') == 1
+    assert scorer.get_letter_value("A") == 1
+    assert scorer.get_letter_value("E") == 1
 
     # Test case insensitivity
-    assert scorer.get_letter_value('z') == 10
-    assert scorer.get_letter_value('Z') == 10
+    assert scorer.get_letter_value("z") == 10
+    assert scorer.get_letter_value("Z") == 10
 
     # Test invalid input
-    assert scorer.get_letter_value('') == 0
-    assert scorer.get_letter_value('1') == 0
-    assert scorer.get_letter_value(' ') == 0
+    assert scorer.get_letter_value("") == 0
+    assert scorer.get_letter_value("1") == 0
+    assert scorer.get_letter_value(" ") == 0
 ```
 
 Save the file.

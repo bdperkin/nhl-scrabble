@@ -72,7 +72,7 @@ security = [
     "pip-audit>=2.7.0",
 ]
 
-# Comprehensive Sphinx documentation dependencies (9 extensions + markdown support)
+# Comprehensive Sphinx documentation dependencies (9 extensions + markdown support + quality plugins)
 docs = [
     "sphinx>=7.2.6",  # Core documentation engine
     "sphinx-autobuild>=2024.2.4",  # Auto-rebuild during development
@@ -84,6 +84,10 @@ docs = [
     "sphinxcontrib-spelling>=8.0.0",  # Spell checking
     "sphinxext-opengraph>=0.9.1",  # Social sharing metadata
     "myst-parser>=2.0.0",  # Markdown support
+    # Quality plugins (enhancement/005)
+    "sphinx-sitemap>=2.5.1",  # SEO sitemap generation
+    "pytest-sphinx>=0.6.0",  # Documentation build testing
+    "blacken-docs>=1.16.0",  # Code formatting in docs
 ]
 
 # Lightweight documentation generation

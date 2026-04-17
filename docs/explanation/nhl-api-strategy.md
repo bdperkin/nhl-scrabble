@@ -55,7 +55,7 @@ Network requests can fail. We retry automatically:
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
-    retry=retry_if_exception_type((RequestException, Timeout))
+    retry=retry_if_exception_type((RequestException, Timeout)),
 )
 def _fetch_with_retry(self, url: str) -> dict:
     response = self.session.get(url, timeout=self.timeout)
@@ -198,9 +198,9 @@ import redis
 
 cache = redis.Redis()
 
+
 @cache_with_redis(expiry=3600)
-def fetch_standings():
-    ...
+def fetch_standings(): ...
 ```
 
 Share cache across runs and users.

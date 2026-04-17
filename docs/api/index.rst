@@ -115,12 +115,9 @@ Complete workflow using all modules:
     from nhl_scrabble.api import NHLClient
     from nhl_scrabble.scoring import ScrabbleScorer
     from nhl_scrabble.processors import TeamProcessor, PlayoffCalculator
-    from nhl_scrabble.reports import (
-        ConferenceReport,
-        PlayoffReport,
-        StatsReport
-    )
+    from nhl_scrabble.reports import ConferenceReport, PlayoffReport, StatsReport
     import asyncio
+
 
     async def analyze():
         # 1. Fetch NHL data
@@ -147,6 +144,7 @@ Complete workflow using all modules:
         ConferenceReport(conference_standings).generate()
         PlayoffReport(playoff_bracket).generate()
         StatsReport(all_players, team_scores).generate()
+
 
     # Run the analysis
     asyncio.run(analyze())
@@ -179,6 +177,7 @@ The NHL API client uses async/await for efficient I/O:
     import asyncio
     from nhl_scrabble.api import NHLClient
 
+
     async def fetch_parallel():
         """Fetch multiple teams in parallel."""
         async with NHLClient() as client:
@@ -196,6 +195,7 @@ The NHL API client uses async/await for efficient I/O:
 
         return results
 
+
     rosters = asyncio.run(fetch_parallel())
 
 Pydantic Data Validation
@@ -210,12 +210,7 @@ All data models use Pydantic for automatic validation:
 
     try:
         # Valid player
-        player = Player(
-            id=1,
-            firstName="Alex",
-            lastName="Ovechkin",
-            positionCode="LW"
-        )
+        player = Player(id=1, firstName="Alex", lastName="Ovechkin", positionCode="LW")
 
         # Invalid - missing required fields
         bad_player = Player(firstName="Alex")  # Raises ValidationError

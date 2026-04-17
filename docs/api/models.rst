@@ -66,11 +66,7 @@ Player with calculated Scrabble score.
     from nhl_scrabble.scoring import ScrabbleScorer
 
     player = Player(
-        id=8478402,
-        firstName="Alexander",
-        lastName="Ovechkin",
-        sweaterNumber=8,
-        positionCode="LW"
+        id=8478402, firstName="Alexander", lastName="Ovechkin", sweaterNumber=8, positionCode="LW"
     )
 
     scorer = ScrabbleScorer()

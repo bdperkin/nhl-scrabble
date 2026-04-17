@@ -284,6 +284,7 @@ Tests are located in `tests/` directory:
 import pytest
 from nhl_scrabble.mymodule import MyClass
 
+
 class TestMyClass:
     """Tests for MyClass."""
 

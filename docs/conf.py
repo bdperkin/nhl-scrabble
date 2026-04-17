@@ -29,6 +29,7 @@ extensions = [
     "sphinx.ext.intersphinx",  # Link to other project docs
     "sphinx.ext.todo",  # Support TODO directives
     "sphinx.ext.coverage",  # Check documentation coverage
+    "sphinx.ext.doctest",  # Test code examples in docstrings
     "sphinx.ext.githubpages",  # Create .nojekyll for GitHub Pages
     # Third-party extensions
     "sphinx_autodoc_typehints",  # Use type hints in signatures
@@ -37,6 +38,8 @@ extensions = [
     "sphinxcontrib.programoutput",  # Run programs and show output
     "sphinxcontrib.spelling",  # Spell checker
     "sphinxext.opengraph",  # OpenGraph metadata
+    # Quality plugins (enhancement/005)
+    "sphinx_sitemap",  # SEO sitemap generation
     # Markdown support (optional, for including .md files)
     "myst_parser",  # MyST markdown parser
 ]
@@ -123,6 +126,10 @@ ogp_description_length = 200
 ogp_type = "website"
 ogp_site_name = "NHL Scrabble Score Analyzer Documentation"
 
+# Sitemap configuration (SEO)
+html_baseurl = "https://bdperkin.github.io/nhl-scrabble/"
+sitemap_url_scheme = "{link}"
+
 # Spelling configuration
 spelling_lang = "en_US"
 spelling_word_list_filename = ["spelling_wordlist.txt"]
@@ -139,3 +146,26 @@ myst_enable_extensions = [
 
 # TODO: extension configuration
 todo_include_todos = True
+
+# Coverage configuration
+coverage_show_missing_items = True
+coverage_write_headline = True
+coverage_ignore_modules = ["tests"]
+coverage_ignore_classes = ["_.*"]  # Private classes
+
+# Link checking configuration
+linkcheck_ignore = [
+    r"http://localhost.*",  # Ignore local URLs
+    r"https://example.com.*",  # Ignore example URLs
+]
+linkcheck_timeout = 10
+linkcheck_retries = 3
+linkcheck_workers = 5
+
+# Doctest configuration
+doctest_global_setup = """
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path('..').resolve() / 'src'))
+"""
+doctest_test_doctest_blocks = "default"

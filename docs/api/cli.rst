@@ -67,11 +67,7 @@ Usage Patterns
 
 .. code-block:: python
 
-    result = runner.invoke(analyze, [
-        '--format', 'json',
-        '--output', 'report.json',
-        '--verbose'
-    ])
+    result = runner.invoke(analyze, ["--format", "json", "--output", "report.json", "--verbose"])
 
 Related Documentation
 ---------------------

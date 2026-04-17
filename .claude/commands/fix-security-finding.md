@@ -491,6 +491,7 @@ API_KEY = "sk_live_1234567890abcdef"
 
 # After (SECURE):
 import os
+
 API_KEY = os.getenv("NHL_API_KEY")
 if not API_KEY:
     raise ValueError("NHL_API_KEY environment variable not set")

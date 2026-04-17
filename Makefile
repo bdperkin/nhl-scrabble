@@ -346,6 +346,24 @@ docs-check: docs-gen ## Check if generated docs are up-to-date (fails if out of 
 		(printf "$(RED)✗ Generated docs are out of date! Run 'make docs-gen'$(NC)\n" && exit 1)
 	@printf "$(GREEN)✓ Generated docs are up-to-date$(NC)\n"
 
+docs-linkcheck: check-venv ## Check all links in documentation
+	@printf "$(BLUE)Checking documentation links...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b linkcheck . _build/linkcheck
+	@printf "$(GREEN)✓ Link check complete$(NC)\n"
+
+docs-coverage: check-venv ## Check documentation coverage
+	@printf "$(BLUE)Checking documentation coverage...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b coverage . _build/coverage
+	@printf "$(GREEN)✓ Coverage report: docs/_build/coverage/python.txt$(NC)\n"
+
+docs-doctest: check-venv ## Test code examples in documentation
+	@printf "$(BLUE)Testing code examples in documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b doctest . _build/doctest
+	@printf "$(GREEN)✓ All doctests passed$(NC)\n"
+
+docs-quality: docs-linkcheck docs-coverage docs-doctest ## Run all documentation quality checks
+	@printf "$(GREEN)✓ All documentation quality checks passed$(NC)\n"
+
 ###################
 # Running
 ###################

@@ -52,6 +52,21 @@ jobs:
           cd docs
           sphinx-build -b html . _build/html --keep-going
 
+      - name: Check documentation quality
+        run: |
+          cd docs
+          echo "Checking documentation coverage..."
+          sphinx-build -b coverage . _build/coverage
+          echo "Checking links..."
+          sphinx-build -b linkcheck . _build/linkcheck || true
+          echo "Testing code examples..."
+          sphinx-build -b doctest . _build/doctest || true
+
+      - name: Verify sitemap generated
+        run: |
+          test -f docs/_build/html/sitemap.xml || (echo "Sitemap not generated!" && exit 1)
+          echo "✓ Sitemap.xml generated successfully"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

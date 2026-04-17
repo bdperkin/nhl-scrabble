@@ -508,10 +508,11 @@ gh pr create --title "{title}" --body "{body}" --base main
 ```python
 import re
 
+
 def extract_issue_number(task_content: str) -> int | None:
     """Extract GitHub issue number from task file header."""
     # Pattern: **GitHub Issue**: #123 - https://...
-    pattern = r'\*\*GitHub Issue\*\*:\s*#?(\d+)'
+    pattern = r"\*\*GitHub Issue\*\*:\s*#?(\d+)"
     match = re.search(pattern, task_content)
     return int(match.group(1)) if match else None
 ```
@@ -522,7 +523,7 @@ def extract_issue_number(task_content: str) -> int | None:
 def extract_pr_number(task_content: str) -> int | None:
     """Extract PR number from implementation notes."""
     # Pattern: **PR**: #123 - https://...
-    pattern = r'\*\*PR\*\*:\s*#?(\d+)'
+    pattern = r"\*\*PR\*\*:\s*#?(\d+)"
     match = re.search(pattern, task_content)
     return int(match.group(1)) if match else None
 ```
@@ -532,7 +533,7 @@ def extract_pr_number(task_content: str) -> int | None:
 ```python
 def is_task_completed(task_content: str) -> bool:
     """Check if task has implementation notes section."""
-    return '## Implementation Notes' in task_content
+    return "## Implementation Notes" in task_content
 ```
 
 ### Parse Priority
@@ -541,7 +542,7 @@ def is_task_completed(task_content: str) -> bool:
 def extract_priority(task_content: str) -> str | None:
     """Extract priority from task file."""
     # Pattern: **CRITICAL** - Must Do (Immediately)
-    pattern = r'\*\*(CRITICAL|HIGH|MEDIUM|LOW)\*\*'
+    pattern = r"\*\*(CRITICAL|HIGH|MEDIUM|LOW)\*\*"
     match = re.search(pattern, task_content)
     return match.group(1) if match else None
 ```
@@ -682,12 +683,9 @@ elif task_timestamp > github_timestamp + threshold:
     sync_task_to_github(task, issue)
 else:
     # Timestamps too close, manual review needed
-    conflicts.append({
-        'task': task,
-        'issue': issue,
-        'github_time': github_timestamp,
-        'task_time': task_timestamp
-    })
+    conflicts.append(
+        {"task": task, "issue": issue, "github_time": github_timestamp, "task_time": task_timestamp}
+    )
     # Report to user
 ```
 

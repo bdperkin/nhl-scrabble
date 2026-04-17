@@ -73,6 +73,7 @@ def get_standings(self) -> dict[str, Any]:
         logger.error("Standings endpoint not found - NHL API may have changed")
         raise
 
+
 def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
     """Fetch current roster for a team."""
     try:
@@ -91,10 +92,11 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.api import NHLClient, NHLApiNotFoundError
 
+
 def test_make_request_404_raises_not_found_error():
     """Test that 404 response raises NHLApiNotFoundError."""
     with NHLClient() as client:
-        with patch('requests.Session.get') as mock_get:
+        with patch("requests.Session.get") as mock_get:
             mock_response = Mock()
             mock_response.status_code = 404
             mock_get.return_value = mock_response
@@ -102,17 +104,19 @@ def test_make_request_404_raises_not_found_error():
             with pytest.raises(NHLApiNotFoundError, match="Endpoint not found"):
                 client._make_request("invalid/endpoint")
 
+
 def test_get_standings_propagates_not_found_error():
     """Test that get_standings() propagates NHLApiNotFoundError."""
     with NHLClient() as client:
-        with patch.object(client, '_make_request', side_effect=NHLApiNotFoundError("Not found")):
+        with patch.object(client, "_make_request", side_effect=NHLApiNotFoundError("Not found")):
             with pytest.raises(NHLApiNotFoundError):
                 client.get_standings()
+
 
 def test_get_team_roster_propagates_not_found_error():
     """Test that get_team_roster() propagates NHLApiNotFoundError."""
     with NHLClient() as client:
-        with patch.object(client, '_make_request', side_effect=NHLApiNotFoundError("Not found")):
+        with patch.object(client, "_make_request", side_effect=NHLApiNotFoundError("Not found")):
             with pytest.raises(NHLApiNotFoundError):
                 client.get_team_roster("TOR")
 ```
@@ -122,8 +126,9 @@ Add integration test to verify error handling in CLI:
 ```python
 def test_cli_handles_not_found_error(monkeypatch):
     """Test that CLI handles NHLApiNotFoundError gracefully."""
-    with patch('nhl_scrabble.api.NHLClient.get_standings',
-               side_effect=NHLApiNotFoundError("Not found")):
+    with patch(
+        "nhl_scrabble.api.NHLClient.get_standings", side_effect=NHLApiNotFoundError("Not found")
+    ):
         result = runner.invoke(cli, ["analyze"])
         assert result.exit_code != 0
         assert "not found" in result.output.lower()

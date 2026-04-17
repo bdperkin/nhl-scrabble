@@ -100,10 +100,11 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.api import NHLClient
 
+
 def test_rate_limiting_between_successful_requests():
     """Test that rate limiting applies between successful requests."""
     with NHLClient(rate_limit_delay=0.1) as client:
-        with patch('requests.Session.get') as mock_get:
+        with patch("requests.Session.get") as mock_get:
             # Mock successful responses
             mock_response = Mock()
             mock_response.status_code = 200
@@ -121,10 +122,11 @@ def test_rate_limiting_between_successful_requests():
             # Should take at least rate_limit_delay
             assert elapsed >= 0.1
 
+
 def test_no_rate_limiting_on_first_request():
     """Test that first request has no delay."""
     with NHLClient(rate_limit_delay=1.0) as client:
-        with patch('requests.Session.get') as mock_get:
+        with patch("requests.Session.get") as mock_get:
             mock_response = Mock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"data": "test"}
@@ -137,20 +139,18 @@ def test_no_rate_limiting_on_first_request():
             # First request should be fast (< 0.5s)
             assert elapsed < 0.5
 
+
 def test_failed_request_doesnt_affect_rate_limiting():
     """Test that failed requests don't affect rate limiting."""
     with NHLClient(rate_limit_delay=0.1) as client:
-        with patch('requests.Session.get') as mock_get:
+        with patch("requests.Session.get") as mock_get:
             # First request succeeds
             success_response = Mock()
             success_response.status_code = 200
             success_response.json.return_value = {"data": "test"}
 
             # Second request fails
-            mock_get.side_effect = [
-                success_response,
-                requests.RequestException("Network error")
-            ]
+            mock_get.side_effect = [success_response, requests.RequestException("Network error")]
 
             start = time.time()
             client._make_request("endpoint1")
