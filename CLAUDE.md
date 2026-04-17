@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.14 (supported), 3.15-dev (experimental)
 **License:** MIT
-**Pre-commit Hooks:** 54 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 57 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (55 Comprehensive Checks)
+## Pre-commit Hooks (57 Comprehensive Checks)
 
-The project uses 55 pre-commit hooks for automatic code quality validation:
+The project uses 57 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -161,6 +161,11 @@ The project uses 55 pre-commit hooks for automatic code quality validation:
 **YAML Linting Hooks (1 from yamllint):**
 
 - `yamllint`: YAML file validation and linting (comprehensive by default)
+
+**JSON/YAML Schema Validation Hooks (2 from check-jsonschema):**
+
+- `check-github-workflows`: Validates GitHub workflow files against official schema
+- `check-dependabot`: Validates Dependabot config against official schema
 
 **Spelling Hooks (1 from codespell):**
 
@@ -266,7 +271,7 @@ git commit --no-verify -m "message"
 - Task tracking updates
 - Emergency hotfixes (still run quality checks!)
 
-**Never skip quality checks** - The 54 other hooks exist to protect code quality and security.
+**Never skip quality checks** - The 56 other hooks exist to protect code quality and security.
 
 ## Development Tools
 
@@ -992,7 +997,7 @@ The project uses UV automatically via tox-uv:
 - **Modules:** 15 core modules
 - **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Pre-commit Hooks:** 54 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint)
+- **Pre-commit Hooks:** 57 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint)
 - **Dependency Lock:** uv.lock with 1,957 lines
 - **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization

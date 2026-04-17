@@ -141,6 +141,7 @@ tox = [
 dev = [
     "nhl-scrabble[test,lint,type,security,docs,watch,build,publish,tox]",
     "pre-commit>=3.6.0",
+    "check-jsonschema>=0.28.0",  # JSON/YAML schema validation
 ]
 
 
