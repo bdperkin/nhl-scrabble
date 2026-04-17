@@ -397,31 +397,115 @@ This section organizes all documented tasks into a recommended implementation se
    - Extracts retry logic to reusable module
    - Completed 2026-04-17 (2.5h actual)
 
-### Phase 6: Major Features (Month 3+)
+### Phase 6: Testing Infrastructure (Month 3)
 
-**Focus**: Large new features and enhancements
-**Total Effort**: ~16-24 hours
+**Focus**: Pytest plugins and testing improvements
+**Total Effort**: 3.75-7.5 hours
+
+1. **testing/001-add-pytest-timeout.md** (30-60min) - #119
+
+   - MEDIUM priority, prevent hanging tests
+   - Add pytest-timeout plugin
+   - Essential for CI reliability
+
+1. **testing/002-add-pytest-xdist.md** (30-60min) - #120
+
+   - MEDIUM priority, parallel test execution
+   - 10x faster test runs
+   - Better developer experience
+
+1. **testing/003-add-pytest-randomly.md** (15-30min) - #121
+
+   - MEDIUM priority, randomize test order
+   - Catch hidden test dependencies
+   - Improve test isolation
+
+1. **testing/004-add-pytest-sugar.md** (15-30min) - #122
+
+   - MEDIUM priority, enhanced test output
+   - Better visual feedback
+   - Instant failure display
+
+1. **testing/005-add-pytest-clarity.md** (15-30min) - #123
+
+   - MEDIUM priority, improved diffs
+   - Better assertion failure messages
+   - Faster debugging
+
+1. **testing/006-add-diff-cover.md** (30-60min) - #124
+
+   - MEDIUM priority, PR coverage tracking
+   - Enforce coverage on new code
+   - Prevent coverage regression
+
+1. **testing/007-add-pytest-benchmark.md** (1-2h) - #125
+
+   - MEDIUM priority, performance testing
+   - Track optimization impact
+   - Regression detection
+
+1. **testing/008-add-check-jsonschema.md** (30-60min) - #128
+
+   - LOW priority, JSON validation
+   - Schema validation for configs
+   - Better error messages
+
+### Phase 7: Web Interface (Month 4-5)
+
+**Focus**: Build comprehensive web UI
+**Total Effort**: 38-55 hours (parent + subtasks)
 
 1. **new-features/001-web-interface.md** (16-24h) - #50
-   - LOW priority, major new feature
-   - Web UI for NHL Scrabble analyzer
-   - Large effort, do after core improvements
-   - Depends on: Good test coverage (testing/001)
 
-### Phase 7: Future Enhancements (Backlog)
+   - MEDIUM priority, parent tracking task
+   - Coordinate all web interface work
+   - Depends on: Good test coverage
 
-**Total Effort**: ~195-276 hours across 49 LOW priority tasks
+1. **new-features/002-fastapi-infrastructure.md** (3-4h) - #103
+
+   - MEDIUM priority, FastAPI setup
+   - Project structure, routing, templates
+   - Foundation for all web features
+
+1. **new-features/003-web-api-endpoints.md** (4-6h) - #104
+
+   - MEDIUM priority, REST API endpoints
+   - JSON API for frontend consumption
+   - OpenAPI documentation
+
+1. **new-features/004-web-frontend-templates.md** (4-6h) - #105
+
+   - MEDIUM priority, HTML templates
+   - Jinja2 templates with Tailwind CSS
+   - Responsive design
+
+1. **new-features/005-javascript-interactivity.md** (8-12h) - #106
+
+   - MEDIUM priority, Alpine.js interactivity
+   - Dynamic filtering, sorting
+   - Real-time updates
+
+1. **new-features/006-web-testing-polish.md** (2-3h) - #111
+
+   - MEDIUM priority, testing and polish
+   - Selenium tests, accessibility
+   - Production-ready quality
+
+### Phase 8: Future Enhancements (Backlog)
+
+**Total Effort**: ~140-200 hours across 43 LOW priority tasks
 
 All tasks now fully documented with implementation plans, acceptance criteria, and GitHub issues!
 
 **Quick Wins** (under 4h each):
 
+- security/001-add-pip-licenses-compliance.md (30-60min) - #126
 - enhancement/003-comprehensive-documentation-badges.md (1-2h) - #91
 - optimization/008-memoized-scoring.md (1-2h) - #139
 - optimization/010-rate-limiting-cache-hits.md (1-2h) - #141
 - optimization/011-log-level-optimization.md (1-2h) - #142
-- enhancement/008-watch-mode.md (2-3h) - #148
 - security/006-ssl-verification.md (1-2h) - #135
+- enhancement/008-watch-mode.md (2-3h) - #148
 - security/007-pii-logging-prevention.md (2-3h) - #136
 - security/008-config-injection-protection.md (2-3h) - #137
 - security/005-dos-prevention.md (2-3h) - #134
@@ -468,9 +552,15 @@ For detailed implementation plans, see individual task files in:
 
 Tasks with high impact and low effort:
 
-1. security/001-dependabot.md (30min)
-1. bug-fixes/002-unused-exception.md (1-2h)
-1. security/002-security-policy.md (already complete!)
+1. security/001-add-pip-licenses-compliance.md (30-60min) - #126
+1. Testing plugins (15-60min each):
+   - testing/003-add-pytest-randomly.md (15-30min) - #121
+   - testing/004-add-pytest-sugar.md (15-30min) - #122
+   - testing/005-add-pytest-clarity.md (15-30min) - #123
+   - testing/001-add-pytest-timeout.md (30-60min) - #119
+   - testing/002-add-pytest-xdist.md (30-60min) - #120
+   - testing/006-add-diff-cover.md (30-60min) - #124
+1. All completed ✅
 
 ### Foundation (Do Early)
 
@@ -479,22 +569,38 @@ Critical for future work:
 1. security/004-github-settings-security.md (2-3h) - Complete ✅
 1. bug-fixes/001-config-validation.md (2-4h) - Complete ✅
 1. testing/001-increase-coverage.md (8-12h) - Complete ✅
+1. testing/007-add-pytest-benchmark.md (1-2h) - #125
 
 ### High Impact (Prioritize)
 
 Major improvements with significant value:
 
-1. optimization/001-api-caching.md (3-4h)
-1. enhancement/002-procida-documentation.md (8-12h)
-1. enhancement/003-sphinx-documentation.md (12-16h)
+1. optimization/001-api-caching.md (3-4h) - Complete ✅
+1. enhancement/002-procida-documentation.md (8-12h) - Complete ✅
+1. enhancement/003-sphinx-documentation.md (12-16h) - Complete ✅
+1. enhancement/001-progress-bars.md (2-3h) - #132
+1. enhancement/002-interactive-mode.md (4-6h) - #133
+
+### Web Interface (Large Feature)
+
+Complete web UI implementation:
+
+1. new-features/001-web-interface.md (16-24h parent) - #50
+1. new-features/002-fastapi-infrastructure.md (3-4h) - #103
+1. new-features/003-web-api-endpoints.md (4-6h) - #104
+1. new-features/004-web-frontend-templates.md (4-6h) - #105
+1. new-features/005-javascript-interactivity.md (8-12h) - #106
+1. new-features/006-web-testing-polish.md (2-3h) - #111
+
+**Total**: 38-55 hours for complete web interface
 
 ### Nice to Have (Do Later)
 
 Valuable but not critical:
 
-1. Most LOW priority tasks
-1. Large features (web interface, REST API)
-1. Advanced optimizations
+1. Most LOW priority tasks (security hardening, optimization, refactoring)
+1. Large features (REST API, database backend, plugin system)
+1. Advanced enhancements (historical data, notifications)
 
 ## Sprint Planning Guide
 
@@ -540,27 +646,62 @@ Valuable but not critical:
 
 - enhancement/003 ✅ (8h actual) - Sphinx + GitHub Pages
 
-### Sprint 6 (2 weeks): Enhancement & Polish
+### Sprint 6 (2 weeks): Testing Infrastructure
 
-**Effort**: 1-7 hours
+**Planned Effort**: 3.75-7.5 hours
 
-- enhancement/001
+- testing/001-add-pytest-timeout (30-60min) - #119
+- testing/002-add-pytest-xdist (30-60min) - #120
+- testing/003-add-pytest-randomly (15-30min) - #121
+- testing/004-add-pytest-sugar (15-30min) - #122
+- testing/005-add-pytest-clarity (15-30min) - #123
+- testing/006-add-diff-cover (30-60min) - #124
+- testing/007-add-pytest-benchmark (1-2h) - #125
+- testing/008-add-check-jsonschema (30-60min) - #128
 
-### Sprint 7+ (Ongoing): Features & Refactoring
+### Sprint 7-9 (6 weeks): Web Interface
 
-- refactoring/001, new-features/001
-- Document and implement backlog tasks as needed
+**Planned Effort**: 38-55 hours (spread across 3 sprints)
+
+**Sprint 7** (2 weeks): Foundation (7-10h)
+
+- new-features/001-web-interface (tracking) - #50
+- new-features/002-fastapi-infrastructure (3-4h) - #103
+- new-features/003-web-api-endpoints (4-6h) - #104
+
+**Sprint 8** (2 weeks): Frontend (12-18h)
+
+- new-features/004-web-frontend-templates (4-6h) - #105
+- new-features/005-javascript-interactivity (8-12h) - #106
+
+**Sprint 9** (2 weeks): Polish & Launch (2-3h)
+
+- new-features/006-web-testing-polish (2-3h) - #111
+- Bug fixes and refinement from user feedback
+
+### Sprint 10+ (Ongoing): Features & Refactoring
+
+**Backlog** (~140-200 hours of documented LOW priority tasks):
+
+- Security hardening (002-008): 17-22.5h
+- Optimization improvements (007-011): 7-10h
+- Enhancement features (001-002, 003-009): 29-40h
+- New features (007-015): 54-76h
+- Refactoring (001-003, 006-007): 33-42h
+
+Pick tasks based on priority and available capacity
 
 ## Dependencies Graph
 
 ### No Dependencies (Can start anytime)
 
-**Quick Wins** (most LOW priority tasks):
+**Quick Wins** (independent tasks):
 
-- All security tasks (001-008)
-- Most optimization tasks (001-011)
-- Most enhancement tasks (001-009)
-- Most refactoring tasks (001-007)
+- All security tasks (001-008) - No dependencies
+- All testing plugin tasks (001-008) - No dependencies
+- Most optimization tasks (001-011) - Independent
+- Most enhancement tasks (001-002, 003-009) - Independent
+- Most refactoring tasks (001-007) - Can start anytime
 
 **Exception**: Tasks requiring API changes or database backend should wait for their dependencies.
 
@@ -580,6 +721,22 @@ security/002-input-validation (#129)
 optimization/001-api-caching (#42) ✅
 └── optimization/010-rate-limiting-cache-hits (#141)
     └── Builds on caching implementation
+```
+
+**Testing Chain**:
+
+```
+All testing plugins (001-008) can be implemented independently in any order:
+- testing/001-add-pytest-timeout (#119) - 30-60min
+- testing/002-add-pytest-xdist (#120) - 30-60min
+- testing/003-add-pytest-randomly (#121) - 15-30min
+- testing/004-add-pytest-sugar (#122) - 15-30min
+- testing/005-add-pytest-clarity (#123) - 15-30min
+- testing/006-add-diff-cover (#124) - 30-60min
+- testing/007-add-pytest-benchmark (#125) - 1-2h
+- testing/008-add-check-jsonschema (#128) - 30-60min
+
+Recommended order: 003, 004, 005 (quick UX wins), then 001, 002 (infrastructure), then 006, 007, 008
 ```
 
 **Enhancement Chain**:
