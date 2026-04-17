@@ -1,5 +1,6 @@
 """Unit tests for NHL API client."""
 
+import time
 from pathlib import Path
 from typing import Any
 from unittest.mock import Mock, patch
@@ -272,10 +273,10 @@ class TestNHLApiClient:
         client = NHLApiClient(cache_enabled=False)
 
         with client:
-            assert not client._closed  # noqa: SLF001
+            assert not client._closed
 
         # Session should be closed after exiting context
-        assert client._closed  # noqa: SLF001
+        assert client._closed
 
     def test_destructor_closes_session(self, caplog: Any) -> None:
         """Test that destructor closes session if not explicitly closed."""
@@ -293,9 +294,9 @@ class TestNHLApiClient:
         """Test that explicit close works correctly."""
         client = NHLApiClient(cache_enabled=False)
 
-        assert not client._closed  # noqa: SLF001
+        assert not client._closed
         client.close()
-        assert client._closed  # noqa: SLF001
+        assert client._closed
 
     def test_double_close_safe(self, caplog: Any) -> None:
         """Test that double close is safe (doesn't raise errors)."""
@@ -306,7 +307,7 @@ class TestNHLApiClient:
         with caplog.at_level(logging.DEBUG):
             client.close()
             # Verify first close worked
-            assert client._closed  # noqa: SLF001
+            assert client._closed
 
             # Second close should be safe
             client.close()
@@ -323,19 +324,19 @@ class TestNHLApiClient:
         # Check that _cleanup_all is registered with atexit
         # We can't easily verify this directly, but we can check the method exists
         assert hasattr(NHLApiClient, "_cleanup_all")
-        assert callable(NHLApiClient._cleanup_all)  # noqa: SLF001
+        assert callable(NHLApiClient._cleanup_all)
 
         client.close()
 
     def test_weakref_tracking(self) -> None:
         """Test that instances are tracked with weak references."""
-        initial_count = len(NHLApiClient._instances)  # noqa: SLF001
+        initial_count = len(NHLApiClient._instances)
 
         client1 = NHLApiClient(cache_enabled=False)
-        assert len(NHLApiClient._instances) >= initial_count + 1  # noqa: SLF001
+        assert len(NHLApiClient._instances) >= initial_count + 1
 
         client2 = NHLApiClient(cache_enabled=False)
-        assert len(NHLApiClient._instances) >= initial_count + 2  # noqa: SLF001
+        assert len(NHLApiClient._instances) >= initial_count + 2
 
         # Clean up
         client1.close()
@@ -428,5 +429,136 @@ class TestNHLApiClient:
         # Should not have slept for failed request
         # Total time should be less than 0.3s (one rate limit delay + tolerance)
         assert elapsed < 0.3
+
+        client.close()
+
+    def test_calculate_backoff_delay_exponential(self):
+        """Test that backoff delay increases exponentially."""
+        client = NHLApiClient(
+            cache_enabled=False, backoff_factor=2.0, max_backoff=30.0, rate_limit_delay=0.0
+        )
+
+        # Test exponential growth (with jitter tolerance)
+        delay_0 = client._calculate_backoff_delay(0)
+        delay_1 = client._calculate_backoff_delay(1)
+        delay_2 = client._calculate_backoff_delay(2)
+        delay_3 = client._calculate_backoff_delay(3)
+
+        # Attempt 0: 1.0 * (2.0 ** 0) = 1.0 ± 25%
+        assert 0.75 <= delay_0 <= 1.25
+
+        # Attempt 1: 1.0 * (2.0 ** 1) = 2.0 ± 25%
+        assert 1.5 <= delay_1 <= 2.5
+
+        # Attempt 2: 1.0 * (2.0 ** 2) = 4.0 ± 25%
+        assert 3.0 <= delay_2 <= 5.0
+
+        # Attempt 3: 1.0 * (2.0 ** 3) = 8.0 ± 25%
+        assert 6.0 <= delay_3 <= 10.0
+
+        # Verify exponential growth
+        assert delay_0 < delay_1 < delay_2 < delay_3
+
+        client.close()
+
+    def test_calculate_backoff_delay_respects_max(self):
+        """Test that backoff delay respects max_backoff limit."""
+        client = NHLApiClient(
+            cache_enabled=False, backoff_factor=2.0, max_backoff=5.0, rate_limit_delay=0.0
+        )
+
+        # High attempt number would normally give huge delay
+        # 1.0 * (2.0 ** 10) = 1024.0, but max_backoff = 5.0
+        delay = client._calculate_backoff_delay(10)
+
+        # Should be capped at max_backoff ± jitter (25% of 5.0 = 1.25)
+        assert 0.0 <= delay <= 6.25  # max_backoff + jitter
+
+        client.close()
+
+    def test_calculate_backoff_delay_respects_retry_after(self):
+        """Test that backoff delay respects Retry-After header."""
+        client = NHLApiClient(
+            cache_enabled=False, backoff_factor=2.0, max_backoff=30.0, rate_limit_delay=0.0
+        )
+
+        # Retry-After value should override exponential backoff
+        delay = client._calculate_backoff_delay(0, retry_after=10)
+        assert delay == 10.0
+
+        # Retry-After should still respect max_backoff
+        delay_capped = client._calculate_backoff_delay(0, retry_after=50)
+        assert delay_capped == 30.0  # Capped at max_backoff
+
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_retry_with_exponential_backoff(self, mock_get, sample_roster_data):
+        """Test that retries use exponential backoff instead of fixed delay."""
+        import requests
+
+        client = NHLApiClient(
+            cache_enabled=False,
+            backoff_factor=2.0,
+            max_backoff=30.0,
+            retries=3,
+            rate_limit_delay=0.0,
+        )
+
+        # First two attempts timeout, third succeeds
+        timeout_error = requests.exceptions.Timeout("Connection timeout")
+        success_response = Mock()
+        success_response.status_code = 200
+        success_response.json.return_value = sample_roster_data
+
+        mock_get.side_effect = [timeout_error, timeout_error, success_response]
+
+        start = time.time()
+        client.get_team_roster("TOR")
+        elapsed = time.time() - start
+
+        # Expected delays:
+        # Attempt 0 fails: backoff ~1.0s ± 25% = 0.75-1.25s
+        # Attempt 1 fails: backoff ~2.0s ± 25% = 1.5-2.5s
+        # Attempt 2 succeeds: no backoff
+        # Total: ~3.0s ± tolerance
+        assert 2.0 <= elapsed <= 4.5  # 3.0s ± 50% for jitter variation
+
+        # Verify 3 calls were made
+        assert mock_get.call_count == 3
+
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_429_rate_limit_with_retry_after(self, mock_get, sample_roster_data):
+        """Test that 429 responses respect Retry-After header."""
+        client = NHLApiClient(
+            cache_enabled=False,
+            backoff_factor=2.0,
+            max_backoff=30.0,
+            retries=3,
+            rate_limit_delay=0.0,
+        )
+
+        # First attempt returns 429 with Retry-After, second succeeds
+        rate_limit_response = Mock()
+        rate_limit_response.status_code = 429
+        rate_limit_response.headers = {"Retry-After": "2"}
+
+        success_response = Mock()
+        success_response.status_code = 200
+        success_response.json.return_value = sample_roster_data
+
+        mock_get.side_effect = [rate_limit_response, success_response]
+
+        start = time.time()
+        client.get_team_roster("TOR")
+        elapsed = time.time() - start
+
+        # Should have slept for Retry-After value (2 seconds)
+        assert 1.9 <= elapsed <= 2.5
+
+        # Verify 2 calls were made
+        assert mock_get.call_count == 2
 
         client.close()

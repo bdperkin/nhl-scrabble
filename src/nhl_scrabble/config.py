@@ -27,6 +27,8 @@ class Config:
     api_timeout: int = 10
     api_retries: int = 3
     rate_limit_delay: float = 0.3
+    backoff_factor: float = 2.0
+    max_backoff: float = 30.0
     cache_enabled: bool = True
     cache_expiry: int = 3600
     top_players_count: int = 20
@@ -43,6 +45,8 @@ class Config:
             NHL_SCRABBLE_API_TIMEOUT: API request timeout in seconds (must be >= 1)
             NHL_SCRABBLE_API_RETRIES: Number of API retry attempts (must be >= 0)
             NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between API requests (must be >= 0.0)
+            NHL_SCRABBLE_BACKOFF_FACTOR: Exponential backoff multiplier (must be >= 1.0)
+            NHL_SCRABBLE_MAX_BACKOFF: Maximum backoff delay in seconds (must be >= 1.0)
             NHL_SCRABBLE_CACHE_ENABLED: Enable HTTP caching (true/false)
             NHL_SCRABBLE_CACHE_EXPIRY: Cache expiration in seconds (must be >= 1)
             NHL_SCRABBLE_TOP_PLAYERS: Number of top players to show (must be >= 1)
@@ -121,6 +125,8 @@ class Config:
             api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1),
             api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0),
             rate_limit_delay=get_float("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0),
+            backoff_factor=get_float("NHL_SCRABBLE_BACKOFF_FACTOR", "2.0", min_value=1.0),
+            max_backoff=get_float("NHL_SCRABBLE_MAX_BACKOFF", "30.0", min_value=1.0),
             cache_enabled=os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true",
             cache_expiry=get_int("NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1),
             top_players_count=get_int("NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1),
@@ -140,6 +146,8 @@ class Config:
             "api_timeout": self.api_timeout,
             "api_retries": self.api_retries,
             "rate_limit_delay": self.rate_limit_delay,
+            "backoff_factor": self.backoff_factor,
+            "max_backoff": self.max_backoff,
             "cache_enabled": self.cache_enabled,
             "cache_expiry": self.cache_expiry,
             "top_players_count": self.top_players_count,
