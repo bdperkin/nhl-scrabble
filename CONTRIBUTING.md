@@ -637,12 +637,14 @@ tox -e diff-cover
 
 **CI Enforcement:**
 
-Pull requests must meet the 80% diff coverage threshold to pass CI. If your PR fails diff coverage:
+⚠️ **Note**: diff-cover is currently a local development tool only. It is not yet enforced in CI due to git history limitations in GitHub Actions shallow clones. However, you should still run it locally to ensure your changes are well-tested.
 
-1. Review which lines are missing coverage (check CI logs or run locally)
+To check diff coverage locally:
+
+1. Run `tox -e diff-cover` or manually generate coverage and run diff-cover
+1. Review which lines are missing coverage
 1. Add tests for the uncovered lines
-1. Re-run `diff-cover` locally to verify
-1. Push updated tests
+1. Re-run to verify ≥80% diff coverage before pushing
 
 **Example Scenario:**
 
@@ -662,7 +664,7 @@ CI passes because diff coverage ≥ 80%
 - ✅ Run `diff-cover` locally before pushing
 - ✅ Use HTML reports to see exactly which lines need tests
 - ✅ Add tests for all new functionality
-- ❌ Don't lower the 80% threshold to make CI pass
+- ✅ Aim for ≥80% diff coverage on all changes
 - ❌ Don't skip coverage on new code without good reason
 
 **Configuration:**

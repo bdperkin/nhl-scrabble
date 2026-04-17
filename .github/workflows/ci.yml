@@ -91,7 +91,6 @@ jobs:
           - ruff-check
           - mypy
           - coverage
-          - diff-cover
           - licenses
           - codespell
           - pymarkdown
