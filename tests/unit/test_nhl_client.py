@@ -206,10 +206,10 @@ class TestNHLApiClient:
         assert client.session.settings.expire_after.total_seconds() == 7200  # type: ignore[union-attr]
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests_cache.CachedSession.get")
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_clear_cache(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
         """Test that clear_cache() works."""
-        # Mock successful API response
+        # Mock successful API response at the HTTP layer (allows cache to function)
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = sample_standings_data
@@ -220,7 +220,7 @@ class TestNHLApiClient:
         # Make request to populate cache
         client.get_teams()
 
-        # Check cache has entries
+        # Check cache has entries (cache layer should have intercepted the request)
         assert client.session.cache.responses.count() > 0  # type: ignore[union-attr]
 
         # Clear cache
