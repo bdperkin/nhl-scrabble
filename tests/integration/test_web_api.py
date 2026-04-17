@@ -2,10 +2,20 @@
 
 from __future__ import annotations
 
+import sys
+
 import pytest
 from fastapi.testclient import TestClient
 
 from nhl_scrabble.web.app import app
+
+
+@pytest.fixture(autouse=True)
+def clear_cache() -> None:
+    """Clear analysis cache before each test."""
+    # Get the module object
+    web_app_module = sys.modules["nhl_scrabble.web.app"]
+    web_app_module._analysis_cache.clear()  # noqa: SLF001  # Test fixture needs cache access
 
 
 @pytest.fixture
