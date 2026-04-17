@@ -103,27 +103,28 @@ No active testing tasks.
 
 **Documented Effort**: 16-24 hours
 
-### Refactoring (7 tasks, 1 documented)
+### Refactoring (8 tasks, 2 documented)
 
-| ID  | Title                                     | Priority | Effort | Issue |
-| --- | ----------------------------------------- | -------- | ------ | ----- |
-| 002 | Port check_docs.sh Shell Script to Python | LOW      | 2-3h   | #100  |
-| ... | Consolidate Reports                       | LOW      | TBD    |       |
-| ... | Improve Type Safety                       | LOW      | TBD    |       |
-| ... | Unified Config Management                 | LOW      | TBD    |       |
-| ... | Error Handling Strategy                   | LOW      | TBD    |       |
-| ... | Dependency Injection                      | LOW      | TBD    |       |
+| ID  | Title                                              | Priority | Effort | Issue |
+| --- | -------------------------------------------------- | -------- | ------ | ----- |
+| 002 | Port check_docs.sh Shell Script to Python          | LOW      | 2-3h   | #100  |
+| 003 | Port check-branch-protection.sh Git Hook to Python | LOW      | 1-2h   | #101  |
+| ... | Consolidate Reports                                | LOW      | TBD    |       |
+| ... | Improve Type Safety                                | LOW      | TBD    |       |
+| ... | Unified Config Management                          | LOW      | TBD    |       |
+| ... | Error Handling Strategy                            | LOW      | TBD    |       |
+| ... | Dependency Injection                               | LOW      | TBD    |       |
 
-**Documented Effort**: 2-3 hours
+**Documented Effort**: 3-5 hours
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 8 tasks
-**Total Documented Effort**: 26-43 hours
+**Documented Tasks**: 9 tasks
+**Total Documented Effort**: 27-45 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 26 tasks (69.25h actual effort)
 
-**Grand Total**: ~126-165 hours for complete roadmap
+**Grand Total**: ~127-167 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -592,9 +593,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
-**Tasks Documented**: 24 of 51+
-**Completion Status**: 19 of 24 completed (79.2%)
-**Documented Effort Remaining**: 23.58-54.83 hours (excluding completed tasks)
+**Tasks Documented**: 25 of 52+
+**Completion Status**: 19 of 25 completed (76.0%)
+**Documented Effort Remaining**: 24.58-56.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
