@@ -223,6 +223,8 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
         timeout=config.api_timeout,
         retries=config.api_retries,
         rate_limit_delay=config.rate_limit_delay,
+        backoff_factor=config.backoff_factor,
+        max_backoff=config.max_backoff,
         cache_enabled=config.cache_enabled,
         cache_expiry=config.cache_expiry,
     )

@@ -322,6 +322,13 @@ ignore = [
     "T201",    # print statements are fine in CLI script
     "PLR0915", # Too many statements in main() (straightforward CLI script)
 ]
+"src/nhl_scrabble/api/nhl_client.py" = [
+    "C901",    # get_team_roster complexity from retry + 429 handling
+    "PLR0912", # Too many branches from retry + 429 handling
+]
+"tests/unit/test_nhl_client.py" = [
+    "SLF001",  # Private member access for testing internal methods
+]
 
 [tool.ruff.lint.mccabe]
 # Set maximum cyclomatic complexity

@@ -2,6 +2,7 @@
 
 import atexit
 import logging
+import random
 import time
 import weakref
 from datetime import timedelta
@@ -46,6 +47,8 @@ class NHLApiClient:
         timeout: int = 10,
         retries: int = 3,
         rate_limit_delay: float = 0.3,
+        backoff_factor: float = 2.0,
+        max_backoff: float = 30.0,
         cache_enabled: bool = True,
         cache_expiry: int = 3600,
     ) -> None:
@@ -55,12 +58,16 @@ class NHLApiClient:
             timeout: Request timeout in seconds (default: 10)
             retries: Number of retry attempts for failed requests (default: 3)
             rate_limit_delay: Delay in seconds between requests (default: 0.3)
+            backoff_factor: Exponential backoff multiplier (default: 2.0)
+            max_backoff: Maximum backoff delay in seconds (default: 30.0)
             cache_enabled: Enable HTTP caching (default: True)
             cache_expiry: Cache expiration in seconds (default: 3600 = 1 hour)
         """
         self.timeout = timeout
         self.retries = retries
         self.rate_limit_delay = rate_limit_delay
+        self.backoff_factor = backoff_factor
+        self.max_backoff = max_backoff
         self.cache_enabled = cache_enabled
         self.cache_expiry = cache_expiry
         self._closed = False  # Track session state
@@ -90,6 +97,38 @@ class NHLApiClient:
         # Register instance for cleanup at exit (safety net)
         self._instances.add(weakref.ref(self, self._cleanup_callback))
         atexit.register(self._cleanup_all)
+
+    def _calculate_backoff_delay(self, attempt: int, retry_after: int | None = None) -> float:
+        """Calculate backoff delay with exponential backoff and jitter.
+
+        Args:
+            attempt: Current attempt number (0-indexed)
+            retry_after: Optional Retry-After header value from 429 response
+
+        Returns:
+            Delay in seconds with jitter applied
+
+        Examples:
+            >>> client = NHLApiClient()
+            >>> client._calculate_backoff_delay(0)  # First retry
+            0.75  # ~1.0 * (2.0 ** 0) with ±25% jitter
+            >>> client._calculate_backoff_delay(3)  # Fourth retry
+            6.5   # ~8.0 * (2.0 ** 3) with ±25% jitter, capped at max_backoff
+        """
+        if retry_after is not None:
+            # Respect Retry-After header from API (429 responses)
+            return min(float(retry_after), self.max_backoff)
+
+        # Exponential backoff: base_delay * (backoff_factor ** attempt)
+        base_delay = 1.0
+        delay = min(base_delay * (self.backoff_factor**attempt), self.max_backoff)
+
+        # Add jitter: randomize ±25% to prevent thundering herd
+        # Safe: Using random for jitter, not cryptography
+        jitter = delay * 0.25
+        delay = delay + random.uniform(-jitter, jitter)  # noqa: S311
+
+        return max(0, delay)
 
     def get_teams(self) -> dict[str, dict[str, str]]:
         """Fetch all NHL teams with division and conference information.
@@ -196,6 +235,27 @@ class NHLApiClient:
                     logger.warning(f"No roster data available for {team_abbrev}")
                     raise NHLApiNotFoundError(f"Roster not found for team: {team_abbrev}")
 
+                # Handle 429 rate limiting with exponential backoff
+                if response.status_code == 429:
+                    if attempt < self.retries - 1:
+                        # Extract Retry-After header (seconds)
+                        retry_after = response.headers.get("Retry-After")
+                        retry_after_int = int(retry_after) if retry_after else None
+                        backoff_delay = self._calculate_backoff_delay(attempt, retry_after_int)
+                        logger.warning(
+                            f"Rate limited (429) for {team_abbrev} "
+                            f"(attempt {attempt + 1}/{self.retries}), "
+                            f"retrying in {backoff_delay:.2f}s..."
+                        )
+                        time.sleep(backoff_delay)
+                        continue
+                    logger.error(
+                        f"Rate limited (429) for {team_abbrev} after {self.retries} attempts"
+                    )
+                    raise NHLApiConnectionError(
+                        f"Rate limited after {self.retries} attempts"
+                    ) from None
+
                 response.raise_for_status()
                 data = response.json()
                 logger.debug(f"Successfully fetched roster for {team_abbrev}")
@@ -207,10 +267,13 @@ class NHLApiClient:
 
             except requests.exceptions.Timeout:
                 if attempt < self.retries - 1:
+                    backoff_delay = self._calculate_backoff_delay(attempt)
                     logger.warning(
-                        f"Timeout fetching {team_abbrev} (attempt {attempt + 1}/{self.retries}), retrying..."
+                        f"Timeout fetching {team_abbrev} "
+                        f"(attempt {attempt + 1}/{self.retries}), "
+                        f"retrying in {backoff_delay:.2f}s..."
                     )
-                    time.sleep(1)
+                    time.sleep(backoff_delay)
                 else:
                     logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
                     raise NHLApiConnectionError(
@@ -219,10 +282,13 @@ class NHLApiClient:
 
             except requests.exceptions.ConnectionError:
                 if attempt < self.retries - 1:
+                    backoff_delay = self._calculate_backoff_delay(attempt)
                     logger.warning(
-                        f"Connection error for {team_abbrev} (attempt {attempt + 1}/{self.retries}), retrying..."
+                        f"Connection error for {team_abbrev} "
+                        f"(attempt {attempt + 1}/{self.retries}), "
+                        f"retrying in {backoff_delay:.2f}s..."
                     )
-                    time.sleep(1)
+                    time.sleep(backoff_delay)
                 else:
                     logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
                     raise NHLApiConnectionError(
