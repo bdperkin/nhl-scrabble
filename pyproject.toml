@@ -50,6 +50,7 @@ dependencies = [
     "rich>=13.0.0",
     "jinja2>=3.1.0",
     "fastapi>=0.110.0",
+    "starlette>=0.36.0",
     "uvicorn[standard]>=0.27.0",
 ]
 
@@ -327,9 +328,6 @@ ignore = [
 "src/nhl_scrabble/logging_config.py" = [
     "PLC0415", # Conditional imports for logging configuration
     "PERF403", # Dict comprehension optimization (acceptable for clarity)
-]
-"src/nhl_scrabble/web/app.py" = [
-    "TC002",   # Starlette is transitive dependency but needed for middleware
 ]
 "src/nhl_scrabble/__main__.py" = [
     "T201",    # print statements are fine in __main__
@@ -903,8 +901,7 @@ ignore = []  # Empty list means check everything
 
 # Per-rule ignores for specific packages/modules (comprehensive by default)
 [tool.deptry.per_rule_ignores]
-# Starlette is a transitive dependency via FastAPI, but we need it for BaseHTTPMiddleware
-DEP003 = ["starlette"]
+# No per-rule ignores - comprehensive checking
 
 # Package to module name mapping
 # Deptry auto-detects most, but we can specify exceptions if needed
