@@ -53,6 +53,7 @@ dependencies = [
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.27.0",
     "prompt-toolkit>=3.0.0",
+    "pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -990,6 +991,11 @@ ignore_decorators = [
     "@pytest.fixture",     # Pytest fixtures
     "@pytest.mark.*",      # Pytest markers
     "@app.route",          # Flask/FastAPI routes
+    "@app.get",            # FastAPI GET endpoints
+    "@app.post",           # FastAPI POST endpoints
+    "@app.put",            # FastAPI PUT endpoints
+    "@app.patch",          # FastAPI PATCH endpoints
+    "@app.delete",         # FastAPI DELETE endpoints
     "@*.register",         # Registration decorators
     "@property",           # Property decorators
     "@*.setter",           # Property setters

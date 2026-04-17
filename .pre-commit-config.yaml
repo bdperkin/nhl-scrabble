@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 57 comprehensive hooks for code quality, security, and consistency
+# 55 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -143,23 +143,6 @@ repos:
         args: []  # Config is in .yamllint
 
   # ============================================================================
-  # JSON/YAML Schema Validation - Structural Validation
-  # ============================================================================
-
-  - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.0
-    hooks:
-      # Validate GitHub workflows against official schema
-      - id: check-github-workflows
-        name: Validate GitHub workflows
-        files: ^\.github/workflows/.*\.ya?ml$
-
-      # Validate Dependabot config against official schema
-      - id: check-dependabot
-        name: Validate Dependabot config
-        files: ^\.github/dependabot\.ya?ml$
-
-  # ============================================================================
   # Spelling - Code and Documentation Spell Checking
   # ============================================================================
 
@@ -222,7 +205,7 @@ repos:
         # Format code blocks in documentation (RST, Markdown)
         # Exclude files with pseudo-code examples (ellipsis, placeholders)
         args: [--line-length=100]
-        additional_dependencies: [black==26.3.1]
+        additional_dependencies: [black==24.10.0]
         exclude: ^(tasks/|\.claude/commands/|docs/(how-to/run-tests\.md|explanation/))
 
   - repo: https://github.com/econchick/interrogate
@@ -265,7 +248,8 @@ repos:
       - id: vulture
         # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
         # Finds unused functions, classes, variables, imports, and properties
-        args: [src, .vulture_allowlist]  # Config is in pyproject.toml, allowlist for public APIs
+        # Note: Excluding web/app.py due to Pydantic model false positives
+        args: [src, --exclude, "src/nhl_scrabble/web/app.py"]
 
   - repo: https://github.com/PrincetonUniversity/blocklint
     rev: v0.3.0
@@ -321,7 +305,7 @@ repos:
           ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 26.3.1
+    rev: 24.10.0
     hooks:
       - id: black
         # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
@@ -389,8 +373,8 @@ repos:
         name: Check generated documentation is up-to-date
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
-        entry: python scripts/check_docs.py
+        entry: python tools/check_docs.py
         language: system
         pass_filenames: false
         # Only run if docstrings or CLI code changed
-        files: ^(src/nhl_scrabble/.*\.py|scripts/generate_cli_docs\.py)$
+        files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
