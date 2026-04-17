@@ -36,22 +36,22 @@ Each task is assigned a priority:
 
 **Total Effort**: 0 hours
 
-### Security (10+ tasks, 1 documented)
+### Security (8 tasks, 8 documented)
 
-| ID  | Title                       | Priority | Effort   | Issue |
-| --- | --------------------------- | -------- | -------- | ----- |
-| 001 | Add pip-licenses Compliance | MEDIUM   | 30-60min | #126  |
-| ... | Input Validation            | MEDIUM   | TBD      |       |
-| ... | SSRF Protection             | MEDIUM   | TBD      |       |
-| ... | Rate Limit Enforcement      | MEDIUM   | TBD      |       |
-| ... | DoS Prevention              | LOW      | TBD      |       |
-| ... | SSL Verification            | LOW      | TBD      |       |
-| ... | PII Logging Prevention      | LOW      | TBD      |       |
-| ... | Config Injection Protection | LOW      | TBD      |       |
+| ID  | Title                            | Priority | Effort   | Issue |
+| --- | -------------------------------- | -------- | -------- | ----- |
+| 001 | Add pip-licenses Compliance      | MEDIUM   | 30-60min | #126  |
+| 002 | Comprehensive Input Validation   | MEDIUM   | 3-4h     | #129  |
+| 003 | SSRF Protection                  | MEDIUM   | 2-3h     | #130  |
+| 004 | Rate Limit Enforcement           | MEDIUM   | 3-4h     | #131  |
+| 005 | DoS Prevention                   | LOW      | 2-3h     | #134  |
+| 006 | SSL/TLS Certificate Verification | LOW      | 1-2h     | #135  |
+| 007 | PII Logging Prevention           | LOW      | 2-3h     | #136  |
+| 008 | Config Injection Protection      | LOW      | 2-3h     | #137  |
 
-**Documented Effort**: 0.5-1 hour
+**Documented Effort**: 18-23.5 hours
 
-### Optimization (11 tasks, 6 documented)
+### Optimization (11 tasks, 11 documented)
 
 | ID  | Title                                    | Priority | Effort   | Issue |
 | --- | ---------------------------------------- | -------- | -------- | ----- |
@@ -61,30 +61,30 @@ Each task is assigned a priority:
 | 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |
 | 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |
 | 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |
-| ... | Lazy Report Generation                   | LOW      | TBD      |       |
-| ... | Memoized Scoring                         | LOW      | TBD      |       |
-| ... | Memory Optimization (__slots__)          | LOW      | TBD      |       |
-| ... | Rate Limiting on Cache Hits              | LOW      | TBD      |       |
-| ... | Log Level Optimization                   | LOW      | TBD      |       |
+| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |
+| 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  |
+| 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  |
+| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |
+| 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |
 
-**Documented Effort**: 9-15.5 hours
+**Documented Effort**: 16-24.5 hours
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
-### Enhancements (10 tasks, 0 documented)
+### Enhancements (9 tasks, 9 documented)
 
-| ID  | Title                | Priority | Effort | Issue |
-| --- | -------------------- | -------- | ------ | ----- |
-| ... | Progress Bars        | MEDIUM   | TBD    |       |
-| ... | Interactive Mode     | MEDIUM   | TBD    |       |
-| ... | Historical Data      | LOW      | TBD    |       |
-| ... | CSV/Excel Export     | LOW      | TBD    |       |
-| ... | Filtering Options    | LOW      | TBD    |       |
-| ... | Custom Scoring Rules | LOW      | TBD    |       |
-| ... | Statistics Dashboard | LOW      | TBD    |       |
-| ... | Watch Mode           | LOW      | TBD    |       |
-| ... | Player Search        | LOW      | TBD    |       |
+| ID  | Title                            | Priority | Effort | Issue |
+| --- | -------------------------------- | -------- | ------ | ----- |
+| 001 | Progress Bars                    | MEDIUM   | 2-3h   | #132  |
+| 002 | Interactive Mode                 | MEDIUM   | 4-6h   | #133  |
+| 003 | Historical Data                  | LOW      | 8-12h  | #143  |
+| 004 | CSV/Excel Export                 | LOW      | 3-4h   | #144  |
+| 005 | Advanced Filtering Options       | LOW      | 4-5h   | #145  |
+| 006 | Custom Scoring Rules             | LOW      | 3-4h   | #146  |
+| 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  |
+| 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  |
+| 009 | Player Search                    | LOW      | 3-4h   | #149  |
 
-**Documented Effort**: 0 hours
+**Documented Effort**: 35-49 hours
 
 ### Testing (8 tasks, 8 documented)
 
@@ -103,7 +103,7 @@ Each task is assigned a priority:
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
-### New Features (10+ tasks, 6 documented)
+### New Features (15 tasks, 15 documented)
 
 | ID  | Title                        | Priority | Effort | Issue |
 | --- | ---------------------------- | -------- | ------ | ----- |
@@ -113,45 +113,50 @@ Each task is assigned a priority:
 | 004 | Web Frontend Templates       | MEDIUM   | 4-6h   | #105  |
 | 005 | JavaScript Interactivity     | MEDIUM   | 8-12h  | #106  |
 | 006 | Web Testing and Polish       | MEDIUM   | 2-3h   | #111  |
-| ... | REST API                     | LOW      | TBD    |       |
-| ... | Database Backend             | LOW      | TBD    |       |
-| ... | Notification System          | LOW      | TBD    |       |
-| ... | Player Comparison Tool       | LOW      | TBD    |       |
-| ... | Offline Mode                 | LOW      | TBD    |       |
-| ... | Config Profiles              | LOW      | TBD    |       |
-| ... | Plugin System                | LOW      | TBD    |       |
-| ... | Docker Support               | LOW      | TBD    |       |
-| ... | Data Export/Import           | LOW      | TBD    |       |
+| 007 | Standalone REST API Server   | LOW      | 8-12h  | #150  |
+| 008 | Database Backend             | LOW      | 12-16h | #151  |
+| 009 | Notification System          | LOW      | 6-8h   | #152  |
+| 010 | Player Comparison Tool       | LOW      | 4-6h   | #153  |
+| 011 | Offline Mode                 | LOW      | 4-5h   | #154  |
+| 012 | Config Profiles              | LOW      | 3-4h   | #155  |
+| 013 | Plugin System                | LOW      | 10-14h | #156  |
+| 014 | Docker Support               | LOW      | 4-6h   | #157  |
+| 015 | Data Export/Import           | LOW      | 4-5h   | #158  |
 
-**Documented Effort**: 38-55 hours (web interface subtasks: 22-31h)
+**Documented Effort**: 92-131 hours (web interface subtasks: 22-31h, standalone features: 70-100h)
 
-### Refactoring (8 tasks, 2 documented)
+### Refactoring (7 tasks, 7 documented)
 
 | ID  | Title                              | Priority | Effort   | Issue |
 | --- | ---------------------------------- | -------- | -------- | ----- |
+| 001 | Consolidate Report Classes         | LOW      | 6-8h     | #159  |
+| 002 | Improve Type Safety                | LOW      | 8-10h    | #160  |
+| 003 | Unified Config Management          | LOW      | 5-6h     | #161  |
 | 004 | Add pyupgrade Syntax Modernization | MEDIUM   | 1-2h     | #118  |
 | 005 | Add djlint HTML Template Linting   | LOW      | 30-60min | #127  |
-| ... | Consolidate Reports                | LOW      | TBD      |       |
-| ... | Improve Type Safety                | LOW      | TBD      |       |
-| ... | Unified Config Management          | LOW      | TBD      |       |
-| ... | Error Handling Strategy            | LOW      | TBD      |       |
-| ... | Dependency Injection               | LOW      | TBD      |       |
+| 006 | Error Handling Strategy            | LOW      | 6-8h     | #162  |
+| 007 | Dependency Injection               | LOW      | 8-10h    | #163  |
 
-**Documented Effort**: 1.5-3 hours
+**Documented Effort**: 35-45.5 hours
 
 ## Total Project Roadmap
 
-**Active Tasks**: 15 tasks (6 optimization, 6 new-features, 1 refactoring, 2 testing)
-**Total Active Effort**: 49-75 hours
+**Total Tasks**: 58 tasks across 6 categories
+**Total Estimated Effort**: 200.75-281 hours
 
-- Optimization: 9-15.5h (5-10x performance improvement)
-- Web interface: 38-55h (22-31h subtasks)
-- Refactoring: 1-2h (syntax modernization)
-- Testing: 1-2h (timeout enforcement + parallel execution)
-  **Undocumented Tasks**: 30+ tasks (estimated 90+ hours)
-  **Completed Tasks**: 29 tasks (~74.25h actual effort)
+### By Category
 
-**Grand Total**: ~137-165 hours for complete roadmap
+- **Security**: 8 tasks, 18-23.5h
+- **Optimization**: 11 tasks, 16-24.5h (5-10x performance improvement)
+- **Enhancement**: 9 tasks, 35-49h
+- **Testing**: 8 tasks, 3.75-7.5h
+- **New Features**: 15 tasks, 92-131h (web interface: 38-55h, standalone features: 54-76h)
+- **Refactoring**: 7 tasks, 35-45.5h
+
+### By Priority
+
+- **MEDIUM**: 9 tasks, 46.25-69h (web interface 6 tasks, testing 3 tasks)
+- **LOW**: 49 tasks, 154.5-212h (long-term improvements and new capabilities)
 
 ## How to Use These Tasks
 
@@ -405,65 +410,57 @@ This section organizes all documented tasks into a recommended implementation se
 
 ### Phase 7: Future Enhancements (Backlog)
 
-**Documented tasks:**
+**Total Effort**: ~195-276 hours across 49 LOW priority tasks
 
-1. **enhancement/003-comprehensive-documentation-badges.md** (1-2h) - #91
-   - LOW priority, documentation enhancement
-   - Add useful badges to README (CodeQL, contributors, activity, etc.)
-   - Improves project visibility and professionalism
-   - No dependencies, quick win
+All tasks now fully documented with implementation plans, acceptance criteria, and GitHub issues!
 
-**Undocumented tasks** - Create task files as needed:
+**Quick Wins** (under 4h each):
 
-**Enhancements** (MEDIUM-LOW):
+- enhancement/003-comprehensive-documentation-badges.md (1-2h) - #91
+- optimization/008-memoized-scoring.md (1-2h) - #139
+- optimization/010-rate-limiting-cache-hits.md (1-2h) - #141
+- optimization/011-log-level-optimization.md (1-2h) - #142
+- enhancement/008-watch-mode.md (2-3h) - #148
+- security/006-ssl-verification.md (1-2h) - #135
+- security/007-pii-logging-prevention.md (2-3h) - #136
+- security/008-config-injection-protection.md (2-3h) - #137
+- security/005-dos-prevention.md (2-3h) - #134
+- optimization/009-memory-optimization-slots.md (2-3h) - #140
+- optimization/007-lazy-report-generation.md (2-3h) - #138
+- enhancement/006-custom-scoring-rules.md (3-4h) - #146
+- enhancement/009-player-search.md (3-4h) - #149
+- enhancement/004-csv-excel-export.md (3-4h) - #144
+- new-features/012-config-profiles.md (3-4h) - #155
 
-- Progress Bars - Visual feedback during API fetching
-- Interactive Mode - REPL-style interface
-- Historical Data - Track scores over time
-- CSV/Excel Export - Additional export formats
-- Filtering Options - Filter teams/players
-- Custom Scoring Rules - Configurable letter values
-- Statistics Dashboard - Advanced analytics
-- Watch Mode - Auto-refresh on data changes
-- Player Search - Search/filter functionality
+**Medium Efforts** (4-8h):
 
-**Optimizations** (MEDIUM-LOW):
+- enhancement/005-filtering-options.md (4-5h) - #145
+- new-features/011-offline-mode.md (4-5h) - #154
+- new-features/015-data-export-import.md (4-5h) - #158
+- new-features/010-player-comparison-tool.md (4-6h) - #153
+- new-features/014-docker-support.md (4-6h) - #157
+- refactoring/003-unified-config-management.md (5-6h) - #161
+- refactoring/001-consolidate-reports.md (6-8h) - #159
+- refactoring/006-error-handling-strategy.md (6-8h) - #162
+- new-features/009-notification-system.md (6-8h) - #152
+- enhancement/007-statistics-dashboard.md (6-8h) - #147
 
-- Parallel API Requests - Concurrent fetching
-- Lazy Report Generation - Generate on demand
-- Memoized Scoring - Cache score calculations
-- Memory Optimization - Reduce memory footprint
-- Log Level Optimization - Conditional logging
+**Major Features** (8+ hours):
 
-**Security** (MEDIUM-LOW):
+- refactoring/002-improve-type-safety.md (8-10h) - #160
+- refactoring/007-dependency-injection.md (8-10h) - #163
+- enhancement/003-historical-data.md (8-12h) - #143
+- new-features/007-rest-api-server.md (8-12h) - #150
+- new-features/013-plugin-system.md (10-14h) - #156
+- new-features/008-database-backend.md (12-16h) - #151
 
-- Input Validation - Comprehensive input checking
-- SSRF Protection - Prevent server-side request forgery
-- Rate Limit Enforcement - Enforce API rate limits
-- DoS Prevention - Prevent denial of service
-- SSL Verification - Strict SSL/TLS verification
-- PII Logging Prevention - Prevent logging sensitive data
-- Config Injection Protection - Prevent config injection
+For detailed implementation plans, see individual task files in:
 
-**Refactoring** (LOW):
-
-- Consolidate Reports - DRY up report generators
-- Improve Type Safety - More precise type hints
-- Unified Config Management - Centralized config
-- Error Handling Strategy - Consistent error handling
-- Dependency Injection - Improve testability
-
-**New Features** (LOW):
-
-- REST API - HTTP API for programmatic access
-- Database Backend - Persistent data storage
-- Notification System - Alert on score changes
-- Player Comparison Tool - Compare player stats
-- Offline Mode - Work without internet
-- Config Profiles - Multiple configuration sets
-- Plugin System - Extensibility framework
-- Docker Support - Containerization
-- Data Export/Import - Backup/restore functionality
+- `tasks/security/` (8 tasks, 18-23.5h)
+- `tasks/optimization/` (11 tasks, 16-24.5h)
+- `tasks/enhancement/` (9 tasks, 35-49h)
+- `tasks/new-features/` (15 tasks, 92-131h)
+- `tasks/refactoring/` (7 tasks, 35-45.5h)
 
 ## Implementation Strategy
 
@@ -556,31 +553,100 @@ Valuable but not critical:
 
 ## Dependencies Graph
 
+### No Dependencies (Can start anytime)
+
+**Quick Wins** (most LOW priority tasks):
+
+- All security tasks (001-008)
+- Most optimization tasks (001-011)
+- Most enhancement tasks (001-009)
+- Most refactoring tasks (001-007)
+
+**Exception**: Tasks requiring API changes or database backend should wait for their dependencies.
+
+### Sequential Dependencies
+
+**Security Chain**:
+
 ```
-No Dependencies (Can do anytime):
-├── security/001-dependabot ✅
-├── security/004-github-settings-security ✅
-├── security/003-secrets-sanitization ✅
-├── bug-fixes/001-config-validation ✅
-├── bug-fixes/002-unused-exception ✅
-├── bug-fixes/003-session-cleanup
-├── bug-fixes/004-rate-limiting
-├── bug-fixes/006-output-validation
-└── optimization/001-api-caching ✅
-
-Foundation for Future Work:
-├── testing/001-increase-coverage
-│   └── Provides confidence for: new-features/001, refactoring/*
-
-Documentation Chain (Sequential recommended):
-├── enhancement/002-procida-documentation
-│   └── enhancement/003-sphinx-documentation
-│       └── All future documentation benefits from this
-
-Refactoring Chain:
-└── refactoring/001-extract-retry-logic
-    └── Can build on completed exponential backoff (bug-fixes/005)
+security/002-input-validation (#129)
+└── security/003-ssrf-protection (#130)
+    └── Can benefit from validated inputs
 ```
+
+**Optimization Chain**:
+
+```
+optimization/001-api-caching (#42) ✅
+└── optimization/010-rate-limiting-cache-hits (#141)
+    └── Builds on caching implementation
+```
+
+**Enhancement Chain**:
+
+```
+enhancement/002-procida-documentation (#63) ✅
+└── enhancement/003-sphinx-documentation (#64) ✅
+    └── enhancement/004-automated-api-cli-docs (#81) ✅
+        └── enhancement/005-sphinx-quality-plugins (#82) ✅
+
+enhancement/001-progress-bars (#132)
+└── Can enhance enhancement/002-interactive-mode (#133)
+```
+
+**New Features Chain**:
+
+```
+new-features/007-rest-api-server (#150)
+└── new-features/008-database-backend (#151)
+    └── new-features/009-notification-system (#152)
+        └── Notifications benefit from database
+
+new-features/001-web-interface (#50)
+├── new-features/002-fastapi-infrastructure (#103)
+├── new-features/003-web-api-endpoints (#104)
+├── new-features/004-web-frontend-templates (#105)
+├── new-features/005-javascript-interactivity (#106)
+└── new-features/006-web-testing-polish (#111)
+```
+
+**Refactoring Chain**:
+
+```
+refactoring/001-consolidate-reports (#159)
+└── Enables better type safety work
+
+refactoring/002-improve-type-safety (#160)
+└── refactoring/007-dependency-injection (#163)
+    └── Type safety helps DI implementation
+```
+
+### Recommended Order for Maximum Value
+
+**Phase 1: Foundation** (Completed ✅)
+
+- Testing, security hardening, documentation
+
+**Phase 2: Performance** (Next recommended)
+
+1. optimization/001-011 (16-24.5h) - Quick wins with major impact
+1. enhancement/001-002 (6-9h) - Progress bars + Interactive mode
+
+**Phase 3: Security Hardening**
+
+1. security/002-008 (17-22.5h) - Complete security posture
+
+**Phase 4: User Features**
+
+1. enhancement/003-009 (29-40h) - Historical data, export, filtering, etc.
+
+**Phase 5: Major Features**
+
+1. new-features/007-015 (54-76h) - REST API, database, plugins, etc.
+
+**Phase 6: Code Quality**
+
+1. refactoring/001-007 (35-45.5h) - Long-term maintainability
 
 ## Contributing
 
@@ -620,9 +686,11 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
-**Tasks Documented**: 25 of 52+
-**Completion Status**: 21 of 25 completed (84.0%)
-**Documented Effort Remaining**: 21.58-52.83 hours (excluding completed tasks)
+**Tasks Documented**: 58 tasks across 6 categories
+**Completion Status**: 29 completed, 29 planned
+**Total Documented Effort**: 200.75-281 hours
+**Completed Effort**: ~74.25 hours
+**Remaining Effort**: ~126.5-206.75 hours
 
 ## Completed Tasks
 
