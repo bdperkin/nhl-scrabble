@@ -11,6 +11,7 @@ from typing import Any, ClassVar
 import requests
 import requests_cache
 
+from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_url_for_ssrf
 from nhl_scrabble.utils.retry import retry
 
 logger = logging.getLogger(__name__)
@@ -32,20 +33,22 @@ class NHLApiClient:
     """Client for interacting with the NHL API.
 
     This client provides methods to fetch team standings and roster data
-    from the official NHL API with built-in retry logic and rate limiting.
+    from the official NHL API with built-in retry logic, rate limiting,
+    and SSRF protection.
 
     Attributes:
-        base_url: Base URL for the NHL API
+        base_url: Base URL for the NHL API (SSRF-validated)
         timeout: Request timeout in seconds
         retries: Number of retry attempts for failed requests
         rate_limit_delay: Delay in seconds between requests to avoid rate limiting
     """
 
-    BASE_URL = "https://api-web.nhle.com/v1"
+    BASE_URL = "https://api-web.nhle.com/v1"  # Default base URL
     _instances: ClassVar[set[weakref.ref[Any]]] = set()  # Track all instances for cleanup
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
+        base_url: str | None = None,
         timeout: int = 10,
         retries: int = 3,
         rate_limit_delay: float = 0.3,
@@ -57,6 +60,8 @@ class NHLApiClient:
         """Initialize the NHL API client.
 
         Args:
+            base_url: Base URL for NHL API (default: https://api-web.nhle.com/v1).
+                Will be validated for SSRF protection on first request.
             timeout: Request timeout in seconds (default: 10)
             retries: Number of retry attempts for failed requests (default: 3)
             rate_limit_delay: Delay in seconds between requests (default: 0.3)
@@ -64,7 +69,13 @@ class NHLApiClient:
             max_backoff: Maximum backoff delay in seconds (default: 30.0)
             cache_enabled: Enable HTTP caching (default: True)
             cache_expiry: Cache expiration in seconds (default: 3600 = 1 hour)
+
+        Raises:
+            NHLApiError: If base_url fails SSRF protection validation
         """
+        # Use provided base_url or fall back to class default
+        self.base_url = base_url or self.BASE_URL
+
         self.timeout = timeout
         self.retries = retries
         self.rate_limit_delay = rate_limit_delay
@@ -99,6 +110,21 @@ class NHLApiClient:
         # Register instance for cleanup at exit (safety net)
         self._instances.add(weakref.ref(self, self._cleanup_callback))
         atexit.register(self._cleanup_all)
+
+    def _validate_request_url(self, url: str) -> None:
+        """Validate URL with SSRF protection before making request.
+
+        Args:
+            url: Full URL to validate
+
+        Raises:
+            NHLApiError: If URL fails SSRF protection validation
+        """
+        try:
+            validate_url_for_ssrf(url, allow_private=False)
+        except SSRFProtectionError as e:
+            logger.error(f"SSRF protection blocked request to {url}: {e}")
+            raise NHLApiError(f"Request blocked by security protection: {e}") from e
 
     def _calculate_backoff_delay(self, attempt: int, retry_after: int | None = None) -> float:
         """Calculate backoff delay with exponential backoff and jitter.
@@ -136,6 +162,7 @@ class NHLApiClient:
         """Fetch all NHL teams with division and conference information.
 
         This method uses the retry decorator to automatically retry on network errors.
+        The URL is validated with SSRF protection before making the request.
 
         Returns:
             Dictionary mapping team abbreviations to their metadata:
@@ -147,7 +174,7 @@ class NHLApiClient:
 
         Raises:
             NHLApiConnectionError: If unable to connect to the API
-            NHLApiError: For other API errors
+            NHLApiError: For other API errors, including SSRF protection blocks
 
         Examples:
             >>> client = NHLApiClient()
@@ -155,8 +182,11 @@ class NHLApiClient:
             >>> "TOR" in teams
             True
         """
-        url = f"{self.BASE_URL}/standings/now"
+        url = f"{self.base_url}/standings/now"
         logger.info("Fetching NHL teams from standings endpoint")
+
+        # Validate URL with SSRF protection
+        self._validate_request_url(url)
 
         @retry(
             max_attempts=self.retries,
@@ -214,6 +244,8 @@ class NHLApiClient:
     def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
         """Fetch the current roster for a specific team.
 
+        The URL is validated with SSRF protection before making the request.
+
         Args:
             team_abbrev: Team abbreviation (e.g., 'TOR', 'MTL')
 
@@ -223,7 +255,7 @@ class NHLApiClient:
         Raises:
             NHLApiNotFoundError: If the roster is not found (404 response)
             NHLApiConnectionError: If unable to connect to the API after all retries
-            NHLApiError: For other API errors
+            NHLApiError: For other API errors, including SSRF protection blocks
 
         Examples:
             >>> client = NHLApiClient()
@@ -231,8 +263,11 @@ class NHLApiClient:
             >>> "forwards" in roster
             True
         """
-        url = f"{self.BASE_URL}/roster/{team_abbrev}/current"
+        url = f"{self.base_url}/roster/{team_abbrev}/current"
         logger.debug(f"Fetching roster for {team_abbrev}")
+
+        # Validate URL with SSRF protection
+        self._validate_request_url(url)
 
         for attempt in range(self.retries):
             try:

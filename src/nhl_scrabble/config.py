@@ -1,10 +1,15 @@
 """Configuration management for NHL Scrabble."""
 
+import logging
 import os
 from dataclasses import dataclass
 from typing import Any
 
 from dotenv import load_dotenv
+
+from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_api_base_url
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -12,6 +17,7 @@ class Config:
     """Application configuration.
 
     Attributes:
+        api_base_url: Base URL for NHL API (validated with SSRF protection)
         api_timeout: Request timeout in seconds for NHL API calls
         api_retries: Number of retry attempts for failed API requests
         rate_limit_delay: Delay in seconds between API requests
@@ -24,6 +30,7 @@ class Config:
         sanitize_logs: Sanitize sensitive data from logs (disable only for debugging)
     """
 
+    api_base_url: str = "https://api-web.nhle.com/v1"
     api_timeout: int = 10
     api_retries: int = 3
     rate_limit_delay: float = 0.3
@@ -42,6 +49,7 @@ class Config:
         """Load configuration from environment variables with validation.
 
         Environment variables:
+            NHL_SCRABBLE_API_BASE_URL: Base URL for NHL API (must be HTTPS, validated for SSRF)
             NHL_SCRABBLE_API_TIMEOUT: API request timeout in seconds (must be >= 1)
             NHL_SCRABBLE_API_RETRIES: Number of API retry attempts (must be >= 0)
             NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between API requests (must be >= 0.0)
@@ -59,7 +67,8 @@ class Config:
             Config instance with values from environment
 
         Raises:
-            ValueError: If any environment variable has an invalid value
+            ValueError: If any environment variable has an invalid value,
+                including if API base URL fails SSRF protection validation
 
         Examples:
             >>> import os
@@ -72,6 +81,17 @@ class Config:
         """
         # Load .env file if it exists
         load_dotenv()
+
+        # Validate API base URL with SSRF protection
+        api_base_url = os.getenv("NHL_SCRABBLE_API_BASE_URL", "https://api-web.nhle.com/v1")
+        try:
+            validated_url = validate_api_base_url(api_base_url)
+        except SSRFProtectionError as e:
+            logger.error(
+                f"SSRF protection blocked API base URL '{api_base_url}': {e}. "
+                "Only official NHL API domains are allowed for security."
+            )
+            raise ValueError(f"Invalid API base URL: {e}") from e
 
         def get_int(key: str, default: str, min_value: int = 0) -> int:
             """Get integer from environment variable with validation.
@@ -124,6 +144,7 @@ class Config:
             return value
 
         return cls(
+            api_base_url=validated_url,
             api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1),
             api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0),
             rate_limit_delay=get_float("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0),
@@ -145,6 +166,7 @@ class Config:
             Dictionary representation of the configuration
         """
         return {
+            "api_base_url": self.api_base_url,
             "api_timeout": self.api_timeout,
             "api_retries": self.api_retries,
             "rate_limit_delay": self.rate_limit_delay,
