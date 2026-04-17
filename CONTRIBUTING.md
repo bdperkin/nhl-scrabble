@@ -576,6 +576,107 @@ class TestScrabbleScorer:
 - All new features must include tests
 - Bug fixes should include regression tests
 
+### Diff Coverage (PR-Specific Coverage)
+
+The project uses **diff-cover** to enforce test coverage on changed lines only in pull requests. This ensures new code is well-tested without requiring 100% coverage on existing code.
+
+**What is Diff Coverage?**
+
+- **Total Coverage**: Coverage across entire codebase (~50% currently)
+- **Diff Coverage**: Coverage on lines changed in your PR (target: ≥80%)
+
+**Why Both Matter:**
+
+| Metric       | Total Coverage  | Diff Coverage      |
+| ------------ | --------------- | ------------------ |
+| **Scope**    | Entire codebase | Changed lines only |
+| **Purpose**  | Overall health  | PR quality         |
+| **Target**   | ~50% (current)  | ≥80% (enforced)    |
+| **Enforced** | ⚠️ Optional     | ✅ Required in CI  |
+
+**Local Usage:**
+
+```bash
+# Generate coverage report
+pytest --cov=nhl_scrabble --cov-report=xml
+
+# Check diff coverage against main branch
+diff-cover coverage.xml --compare-branch=origin/main
+
+# Output shows coverage on changed lines only:
+# -------------
+# Diff Coverage
+# Diff: origin/main...HEAD, staged and unstaged changes
+# -------------
+# src/nhl_scrabble/api/nhl_client.py (100.0%)
+# src/nhl_scrabble/processors/team_processor.py (85.7%)
+# -------------
+# Total: 42 lines
+# Missing: 3 lines
+# Coverage: 92.9%
+# -------------
+
+# With enforcement (fails if < 80%)
+diff-cover coverage.xml --compare-branch=origin/main --fail-under=80
+
+# Generate HTML report for detailed review
+diff-cover coverage.xml --html-report=diff-cover.html
+open diff-cover.html
+```
+
+**Via Tox:**
+
+```bash
+# Run diff coverage check (same as CI)
+tox -e diff-cover
+
+# This runs:
+# 1. pytest --cov=nhl_scrabble --cov-report=xml
+# 2. diff-cover coverage.xml --compare-branch=origin/main --fail-under=80
+```
+
+**CI Enforcement:**
+
+Pull requests must meet the 80% diff coverage threshold to pass CI. If your PR fails diff coverage:
+
+1. Review which lines are missing coverage (check CI logs or run locally)
+1. Add tests for the uncovered lines
+1. Re-run `diff-cover` locally to verify
+1. Push updated tests
+
+**Example Scenario:**
+
+```
+Your PR adds 50 new lines:
+- 45 lines covered by tests
+- 5 lines not covered
+
+Total coverage: 50.4% (unchanged) ✓
+Diff coverage: 90.0% (45/50) ✓
+
+CI passes because diff coverage ≥ 80%
+```
+
+**Best Practices:**
+
+- ✅ Run `diff-cover` locally before pushing
+- ✅ Use HTML reports to see exactly which lines need tests
+- ✅ Add tests for all new functionality
+- ❌ Don't lower the 80% threshold to make CI pass
+- ❌ Don't skip coverage on new code without good reason
+
+**Configuration:**
+
+Diff-cover is configured in `pyproject.toml`:
+
+```toml
+[tool.diff_cover]
+compare_branch = "origin/main"
+fail_under = 80.0
+include_paths = ["src/"]
+exclude_paths = ["tests/", "*/__main__.py"]
+```
+
 ## Documentation
 
 ### Documentation Structure
