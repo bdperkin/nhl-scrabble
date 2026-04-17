@@ -1627,6 +1627,7 @@ dev = [
     { name = "blacken-docs" },
     { name = "build" },
     { name = "diff-cover" },
+    { name = "httpx" },
     { name = "mypy" },
     { name = "myst-parser", version = "4.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "myst-parser", version = "5.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -1707,6 +1708,7 @@ security = [
 test = [
     { name = "beautifulsoup4" },
     { name = "diff-cover" },
+    { name = "httpx" },
     { name = "pytest" },
     { name = "pytest-benchmark" },
     { name = "pytest-clarity" },
@@ -1739,6 +1741,7 @@ requires-dist = [
     { name = "click", specifier = ">=8.1.0" },
     { name = "diff-cover", marker = "extra == 'test'", specifier = ">=8.0.0" },
     { name = "fastapi", specifier = ">=0.110.0" },
+    { name = "httpx", marker = "extra == 'test'", specifier = ">=0.26.0" },
     { name = "jinja2", specifier = ">=3.1.0" },
     { name = "mypy", marker = "extra == 'type'", specifier = ">=1.8.0" },
     { name = "myst-parser", marker = "extra == 'docs'", specifier = ">=2.0.0" },
