@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Python 3.14 Support** - Official support and testing for Python 3.14
+
+  - Updated `requires-python` constraint to `>=3.10,<3.15`
+  - Added Python 3.14 classifier to package metadata
+  - Added Python 3.14 to CI/CD test matrix (GitHub Actions)
+  - Added py314 to tox environments for local testing
+  - Regenerated UV lock file with Python 3.14 compatibility
+  - Updated documentation (README.md, CLAUDE.md)
+  - No breaking changes - existing Python 3.10-3.13 users unaffected
+  - Ensures access to latest Python features and performance improvements
+
 - **HTML Output Format** - Professional HTML reports with responsive design
 
   - Generate beautiful HTML reports with `--format html`

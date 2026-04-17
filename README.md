@@ -9,7 +9,7 @@
 [![CI](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://bdperkin.github.io/nhl-scrabble/)
 [![codecov](https://codecov.io/gh/bdperkin/nhl-scrabble/branch/main/graph/badge.svg)](https://codecov.io/gh/bdperkin/nhl-scrabble)
-[![Python 3.10-3.13](https://img.shields.io/badge/python-3.10--3.13-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10-3.14](https://img.shields.io/badge/python-3.10--3.14-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
@@ -57,7 +57,7 @@ pip install -e ".[dev]"
 
 ### Requirements
 
-- Python 3.10-3.13
+- Python 3.10-3.14
 - Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`
 - Note: UV acceleration is automatic when using tox (via tox-uv plugin)
 
@@ -272,7 +272,7 @@ pytest tests/integration -m integration
 The project supports testing across multiple Python versions using [tox](https://tox.wiki/):
 
 ```bash
-# Test across all Python versions (3.10, 3.11, 3.12, 3.13)
+# Test across all Python versions (3.10, 3.11, 3.12, 3.13, 3.14)
 make tox
 
 # Run in parallel for faster results
@@ -437,7 +437,7 @@ nhl-scrabble/
 ├── pyproject.toml             # Project & UV configuration
 ├── uv.lock                    # Dependency lock file (1,957 lines)
 ├── .pre-commit-config.yaml    # Pre-commit hooks (32 hooks)
-├── .python-version            # Python versions (3.10-3.13)
+├── .python-version            # Python versions (3.10-3.14)
 └── tox.ini                    # Testing automation
 ```
 
@@ -600,7 +600,7 @@ All Dependabot PRs are automatically labeled, assigned, and follow conventional 
 - **Makefile Targets**: 55 documented targets
 - **Pre-commit Hooks**: 54 hooks (meta, pre-commit-hooks, pygrep-hooks, isort, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, absolufy-imports, validate-pyproject, pyroma, tox-ini-fmt, yamllint, codespell, pymarkdown, mdformat, doc8, rstcheck, uv, flake8, autoflake, black, docformatter, ruff, mypy)
 - **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
-- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13
+- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13, 3.14
 
 ______________________________________________________________________
 
