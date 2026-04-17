@@ -562,6 +562,39 @@ Dependabot PRs use conventional commits:
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
 
+### Dependency License Policy
+
+When adding new dependencies, ensure they use licenses compatible with our MIT license:
+
+**Runtime Dependencies** (distributed with the package):
+
+- ✅ **Allowed**: MIT, Apache 2.0, BSD (2-clause, 3-clause), ISC, PSF, MPL-2.0, Unlicense, Public Domain
+- ❌ **Prohibited**: GPL, LGPL, AGPL (copyleft), Proprietary
+
+**Development Dependencies** (build/test tools only):
+
+- More flexible, but document any non-permissive licenses with justification
+- LGPL is acceptable for dev-only tools (e.g., spell checkers, documentation generators)
+- Must not be distributed with or statically linked into the package
+
+**Verification**:
+
+Before committing new dependencies, verify license compliance:
+
+```bash
+# Check all licenses
+tox -e licenses
+
+# Add to pyproject.toml
+# Then update lock file
+uv lock
+
+# Re-check licenses
+tox -e licenses
+```
+
+CI will automatically fail if prohibited licenses are detected in runtime dependencies.
+
 ______________________________________________________________________
 
 Thank you for contributing to NHL Scrabble! 🏒🎯

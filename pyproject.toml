@@ -75,6 +75,7 @@ security = [
     "pip-audit>=2.7.0",    # Scan dependencies for known vulnerabilities
     "bandit[toml]>=1.7.5", # Security linter for Python code
     "safety>=3.0.0",       # Check dependencies against vulnerability database
+    "pip-licenses>=4.3.0", # License compliance checking
 ]
 
 # Branding asset generation dependencies
