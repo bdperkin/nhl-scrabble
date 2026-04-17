@@ -63,23 +63,22 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 1 documented)
 
-| ID  | Title                  | Priority | Effort | Issue |
-| --- | ---------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output  | MEDIUM   | 4-6h   | #46   |
-| 005 | Sphinx Quality Plugins | LOW      | 2-4h   | #82   |
-| ... | Progress Bars          | MEDIUM   | TBD    |       |
-| ... | Interactive Mode       | MEDIUM   | TBD    |       |
-| ... | Historical Data        | LOW      | TBD    |       |
-| ... | CSV/Excel Export       | LOW      | TBD    |       |
-| ... | Filtering Options      | LOW      | TBD    |       |
-| ... | Custom Scoring Rules   | LOW      | TBD    |       |
-| ... | Statistics Dashboard   | LOW      | TBD    |       |
-| ... | Watch Mode             | LOW      | TBD    |       |
-| ... | Player Search          | LOW      | TBD    |       |
+| ID  | Title                 | Priority | Effort | Issue |
+| --- | --------------------- | -------- | ------ | ----- |
+| 001 | Implement HTML Output | MEDIUM   | 4-6h   | #46   |
+| ... | Progress Bars         | MEDIUM   | TBD    |       |
+| ... | Interactive Mode      | MEDIUM   | TBD    |       |
+| ... | Historical Data       | LOW      | TBD    |       |
+| ... | CSV/Excel Export      | LOW      | TBD    |       |
+| ... | Filtering Options     | LOW      | TBD    |       |
+| ... | Custom Scoring Rules  | LOW      | TBD    |       |
+| ... | Statistics Dashboard  | LOW      | TBD    |       |
+| ... | Watch Mode            | LOW      | TBD    |       |
+| ... | Player Search         | LOW      | TBD    |       |
 
-**Documented Effort**: 6-10 hours
+**Documented Effort**: 4-6 hours
 
 ### Testing (0 tasks)
 
@@ -117,12 +116,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 10 tasks
-**Total Documented Effort**: 35-54 hours
+**Documented Tasks**: 9 tasks
+**Total Documented Effort**: 33-50 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 16 tasks (47.67h actual effort)
+**Completed Tasks**: 17 tasks (51.17h actual effort)
 
-**Grand Total**: ~135-174 hours for complete roadmap
+**Grand Total**: ~133-172 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -315,11 +314,14 @@ This section organizes all documented tasks into a recommended implementation se
    - Fast builds (\<2s), minimal dependencies
    - Completed 2026-04-16 (5.5h actual)
 
-1. **enhancement/005-sphinx-quality-plugins.md** (2-4h) - #82 (OPTIONAL)
+1. **enhancement/005-sphinx-quality-plugins.md** (2-4h) - #82 - Complete ✅
 
    - LOW priority, enhance Sphinx documentation quality
-   - **Depends on**: #64 (Sphinx - now complete ✅)
-   - Add quality plugins: coverage, linkcheck, doctest, sitemap
+
+   - Completed 2026-04-16 (3.5h actual)
+
+   - Quality plugins: coverage, linkcheck, doctest, sitemap, pytest-sphinx, blacken-docs
+
    - Can now be implemented as enhancement
 
 1. **enhancement/001-html-output.md** (4-6h) - #46
