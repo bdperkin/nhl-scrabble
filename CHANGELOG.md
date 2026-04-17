@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Improved
+
+- **Optimized Rate Limiting for Cache Hits** - Skip rate limit delays for cached responses
+
+  - Modified `NHLApiClient` to detect when responses are served from cache
+  - Rate limiting delays now only apply to real API requests, not cache hits
+  - Added `_is_url_cached()` method to check cache before applying rate limiting
+  - Cache hits no longer update `_last_request_time` timer
+  - Expected 5-10x performance improvement for cached requests
+  - Added 6 new tests to verify cache hit behavior
+  - Benefits: Faster response times for repeated requests, reduced unnecessary delays
+
 ### Refactored
 
 - **Cross-Platform Branch Protection Check** - Ported git hook to Python
