@@ -879,4 +879,4 @@ ______________________________________________________________________
 | 001 | Add pytest-timeout Plugin                  | Testing      | 2026-04-17 | 0.75h         | #168 |
 | 002 | Add pytest-xdist Parallel Testing          | Testing      | 2026-04-17 | 0.75h         | #169 |
 | 006 | Add diff-cover PR Coverage                 | Testing      | 2026-04-17 | 0.75h         | #170 |
-| 008 | Add check-jsonschema Validation            | Testing      | 2026-04-17 | 0.75h         | TBD  |
+| 008 | Add check-jsonschema Validation            | Testing      | 2026-04-17 | 0.75h         | #179 |
