@@ -63,11 +63,13 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 2 documented)
+### Enhancements (10 tasks, 4 documented)
 
 | ID  | Title                                                | Priority | Effort | Issue |
 | --- | ---------------------------------------------------- | -------- | ------ | ----- |
 | 001 | Implement HTML Output                                | MEDIUM   | 4-6h   | #46   |
+| 002 | Create Project Logo and Branding Assets              | MEDIUM   | 4-8h   | #89   |
+| 003 | Add Comprehensive Documentation Badges               | LOW      | 1-2h   | #91   |
 | 006 | Skill Optimizations: Pre-Flight Validation & CI Diag | HIGH     | 0.5-1h | #88   |
 | ... | Progress Bars                                        | MEDIUM   | TBD    |       |
 | ... | Interactive Mode                                     | MEDIUM   | TBD    |       |
@@ -79,11 +81,17 @@ Each task is assigned a priority:
 | ... | Watch Mode                                           | LOW      | TBD    |       |
 | ... | Player Search                                        | LOW      | TBD    |       |
 
-**Documented Effort**: 4.5-7 hours
+**Documented Effort**: 9.5-17 hours
 
-### Testing (0 tasks)
+### Testing (1 task, 1 documented)
 
-No active tasks. Coverage target achieved (90.93%).
+| ID  | Title                      | Priority | Effort | Issue |
+| --- | -------------------------- | -------- | ------ | ----- |
+| 001 | Enable Codecov Integration | MEDIUM   | 1-2h   | #90   |
+
+**Documented Effort**: 1-2 hours
+
+**Note**: Coverage target of 90.93% achieved. This task focuses on coverage tracking infrastructure.
 
 ### New Features (10+ tasks, 1 documented)
 
@@ -117,12 +125,12 @@ No active tasks. Coverage target achieved (90.93%).
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 10 tasks
-**Total Documented Effort**: 33.5-51 hours
+**Documented Tasks**: 13 tasks
+**Total Documented Effort**: 39.5-63 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
 **Completed Tasks**: 17 tasks (51.17h actual effort)
 
-**Grand Total**: ~133.5-173 hours for complete roadmap
+**Grand Total**: ~139.5-185 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -333,8 +341,29 @@ This section organizes all documented tasks into a recommended implementation se
 
 ### Phase 5: Performance & Polish (Week 9-10)
 
-**Focus**: Performance optimizations and low-priority fixes
-**Total Effort**: ~4-7 hours
+**Focus**: Performance optimizations, enhancements, and polish
+**Total Effort**: ~13-25 hours
+
+1. **enhancement/001-html-output.md** (4-6h) - #46
+
+   - MEDIUM priority, HTML report generation
+   - Adds HTML format for reports
+   - Can be done independently
+   - No dependencies
+
+1. **enhancement/002-project-logo-branding.md** (4-8h) - #89
+
+   - MEDIUM priority, project branding
+   - Create logo, favicons, and social media assets
+   - Improves project professionalism and recognition
+   - No dependencies
+
+1. **testing/001-enable-codecov.md** (1-2h) - #90
+
+   - MEDIUM priority, coverage tracking infrastructure
+   - Enable Codecov integration for coverage trends
+   - Fix "unknown" badge and 404 errors
+   - No dependencies, works with existing CI
 
 1. **bug-fixes/004-rate-limiting.md** (1h) - #47
 
@@ -367,6 +396,14 @@ This section organizes all documented tasks into a recommended implementation se
    - Depends on: Good test coverage (testing/001)
 
 ### Phase 7: Future Enhancements (Backlog)
+
+**Documented tasks:**
+
+1. **enhancement/003-comprehensive-documentation-badges.md** (1-2h) - #91
+   - LOW priority, documentation enhancement
+   - Add useful badges to README (CodeQL, contributors, activity, etc.)
+   - Improves project visibility and professionalism
+   - No dependencies, quick win
 
 **Undocumented tasks** - Create task files as needed:
 
@@ -576,9 +613,9 @@ As tasks are completed, track:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
-**Tasks Documented**: 19 of 50+
-**Completion Status**: 16 of 19 completed (84%)
-**Documented Effort Remaining**: 21.83-46.83 hours (excluding completed tasks)
+**Tasks Documented**: 22 of 50+
+**Completion Status**: 16 of 22 completed (73%)
+**Documented Effort Remaining**: 27.83-58.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
