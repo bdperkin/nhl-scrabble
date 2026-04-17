@@ -138,15 +138,24 @@ nhl-scrabble serve --host 0.0.0.0 --port 5000
 
 Once started, visit:
 
+- **Home Page**: http://localhost:8000/ (Interactive web interface)
+- **API Endpoint**: http://localhost:8000/api/analyze (JSON API)
 - **API Documentation**: http://localhost:8000/docs (Interactive Swagger UI)
 - **Alternative Docs**: http://localhost:8000/redoc (ReDoc)
 - **Health Check**: http://localhost:8000/health
 
 The web interface provides:
 
-- ✅ RESTful API endpoints for programmatic access
-- 📚 Auto-generated OpenAPI documentation
-- 🩺 Health check endpoint for monitoring
+- 🏠 **Interactive Home Page** - Browser-based interface with HTML forms
+- 🔌 **RESTful API** - `/api/analyze` endpoint for programmatic access
+  - Parameters: `top_players` (1-100), `top_team_players` (1-30), `use_cache` (boolean)
+  - Returns: JSON with teams, players, divisions, conferences, and playoff brackets
+- 🔒 **Security** - Built-in security headers (CSP, XSS protection, frame protection)
+- 🌐 **CORS** - Configured for local development
+- 🎨 **SEO Optimized** - Meta tags for search engines and social media
+- 📚 **Auto-generated OpenAPI documentation** - Interactive API exploration
+- 🩺 **Health check endpoint** - For monitoring and uptime checks
+- 🏒 **Favicon** - Hockey emoji favicon for browser tabs
 
 ### Configuration
 

@@ -328,6 +328,9 @@ ignore = [
     "PLC0415", # Conditional imports for logging configuration
     "PERF403", # Dict comprehension optimization (acceptable for clarity)
 ]
+"src/nhl_scrabble/web/app.py" = [
+    "TC002",   # Starlette is transitive dependency but needed for middleware
+]
 "src/nhl_scrabble/__main__.py" = [
     "T201",    # print statements are fine in __main__
 ]
@@ -899,7 +902,8 @@ ignore = []  # Empty list means check everything
 
 # Per-rule ignores for specific packages/modules (comprehensive by default)
 [tool.deptry.per_rule_ignores]
-# No per-rule ignores - comprehensive checking
+# Starlette is a transitive dependency via FastAPI, but we need it for BaseHTTPMiddleware
+DEP003 = ["starlette"]
 
 # Package to module name mapping
 # Deptry auto-detects most, but we can specify exceptions if needed
@@ -981,6 +985,11 @@ ignore_decorators = [
     "@pytest.fixture",     # Pytest fixtures
     "@pytest.mark.*",      # Pytest markers
     "@app.route",          # Flask/FastAPI routes
+    "@app.get",            # FastAPI GET routes
+    "@app.post",           # FastAPI POST routes
+    "@app.put",            # FastAPI PUT routes
+    "@app.delete",         # FastAPI DELETE routes
+    "@app.patch",          # FastAPI PATCH routes
     "@*.register",         # Registration decorators
     "@property",           # Property decorators
     "@*.setter",           # Property setters
@@ -1002,6 +1011,9 @@ ignore_names = [
     # FastAPI framework patterns (called at runtime by framework)
     "health",             # FastAPI endpoint function (registered via decorator)
     "root",               # FastAPI endpoint function (registered via decorator)
+    "favicon",            # FastAPI endpoint function (registered via decorator)
+    "analyze",            # FastAPI endpoint function (registered via decorator)
+    "dispatch",           # FastAPI middleware method (called by framework)
     "templates",          # Jinja2Templates instance (used by future endpoints)
 
     # Test-related patterns
