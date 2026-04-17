@@ -783,6 +783,43 @@ Background and design philosophy:
 - **CHANGELOG.md** - Version history
 - **CLAUDE.md** - This file
 
+### Documentation Badges
+
+The project uses comprehensive badges in README.md to provide at-a-glance project information organized into logical categories:
+
+**Badge Categories:**
+
+- **Build & Quality** - CI status, CodeQL security scanning, documentation builds, code coverage
+- **Code Quality** - Ruff formatting, MyPy type checking, pre-commit hooks
+- **Package Info** - Python versions, license, UV package manager, latest release
+- **Community & Activity** - Contributors, stars, PRs welcome, issues, commit activity, last commit
+- **Maintenance** - Maintenance status indicator
+
+**Badge Maintenance:**
+
+- Most badges auto-update via GitHub APIs and shields.io
+- Manual badges (Maintenance status) reviewed quarterly
+- Badge links verified monthly in CI
+- Add new badges via tasks/enhancement/003 process
+- Total badge count kept under 25 to avoid clutter
+
+**Badge Sources:**
+
+- **shields.io** - Primary badge generator with CDN
+- **GitHub Actions** - Workflow status badges (CI, CodeQL, Docs)
+- **codecov.io** - Code coverage badges
+- **GitHub native** - Stars, issues, commits, contributors
+
+**Badge Updates:**
+
+When updating or adding badges:
+
+1. Test badge URL displays correctly
+1. Verify linked destination is accurate
+1. Maintain category organization with HTML comments
+1. Keep consistent badge styles (flat, default shields.io)
+1. Update this documentation if adding new categories
+
 ## Common Tasks
 
 ### Adding a New Dependency
