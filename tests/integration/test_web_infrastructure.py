@@ -33,17 +33,17 @@ def test_health_endpoint(client: TestClient) -> None:
 
 
 def test_root_endpoint(client: TestClient) -> None:
-    """Test root endpoint returns API information."""
+    """Test root endpoint returns HTML home page."""
     response = client.get("/")
 
     assert response.status_code == 200
-    data = response.json()
+    assert response.headers["content-type"].startswith("text/html")
 
-    assert "message" in data
-    assert "docs" in data
-    assert "health" in data
-    assert data["docs"] == "/docs"
-    assert data["health"] == "/health"
+    # Check that the HTML contains expected content
+    html_content = response.text
+    assert "NHL Scrabble Analyzer" in html_content
+    assert "Analyze NHL Player Names" in html_content
+    assert "analysisForm" in html_content
 
 
 def test_openapi_docs_available(client: TestClient) -> None:
@@ -67,3 +67,60 @@ def test_openapi_json_available(client: TestClient) -> None:
 
     assert data["info"]["title"] == "NHL Scrabble Analyzer"
     assert data["info"]["version"] == __version__
+
+
+def test_static_css_available(client: TestClient) -> None:
+    """Test static CSS file is served correctly."""
+    response = client.get("/static/css/style.css")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/css")
+
+    # Check for some CSS content
+    css_content = response.text
+    assert "--color-primary" in css_content
+    assert "--color-secondary" in css_content
+    assert "NHL blue" in css_content
+
+
+def test_static_js_available(client: TestClient) -> None:
+    """Test static JavaScript file is served correctly."""
+    response = client.get("/static/js/app.js")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith(
+        "application/javascript"
+    ) or response.headers["content-type"].startswith("text/javascript")
+
+    # Check for some JS content
+    js_content = response.text
+    assert "analysisForm" in js_content
+    assert "handleFormSubmit" in js_content
+
+
+def test_home_page_has_form(client: TestClient) -> None:
+    """Test home page contains the analysis form."""
+    response = client.get("/")
+
+    assert response.status_code == 200
+    html_content = response.text
+
+    # Check for form elements
+    assert '<form id="analysisForm"' in html_content
+    assert 'id="topPlayers"' in html_content
+    assert 'id="topTeamPlayers"' in html_content
+    assert 'id="useCache"' in html_content
+    assert 'type="submit"' in html_content
+
+
+def test_home_page_has_info_section(client: TestClient) -> None:
+    """Test home page contains informational sections."""
+    response = client.get("/")
+
+    assert response.status_code == 200
+    html_content = response.text
+
+    # Check for info content
+    assert "Scrabble Letter Values" in html_content
+    assert "1 point:" in html_content
+    assert "10 points:" in html_content

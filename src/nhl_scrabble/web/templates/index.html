@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}NHL Scrabble Analyzer - Home{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h2>Analyze NHL Player Names by Scrabble Score</h2>
+    <p class="hero-subtitle">
+        Calculate Scrabble scores for NHL player names and see team standings,
+        playoff brackets, and statistics based on letter values.
+    </p>
+</div>
+
+<section class="analysis-form-section">
+    <h3>Run Analysis</h3>
+
+    <form id="analysisForm" class="analysis-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="topPlayers">
+                    Top Players to Display
+                    <span class="help-text">Number of top-scoring players (1-100)</span>
+                </label>
+                <input
+                    type="number"
+                    id="topPlayers"
+                    name="top_players"
+                    min="1"
+                    max="100"
+                    value="20"
+                    aria-describedby="topPlayersHelp"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="topTeamPlayers">
+                    Top Players per Team
+                    <span class="help-text">Players per team in results (1-30)</span>
+                </label>
+                <input
+                    type="number"
+                    id="topTeamPlayers"
+                    name="top_team_players"
+                    min="1"
+                    max="30"
+                    value="5"
+                    aria-describedby="topTeamPlayersHelp"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="useCache">
+                    <input
+                        type="checkbox"
+                        id="useCache"
+                        name="use_cache"
+                        checked
+                    >
+                    Use Cached Results (faster)
+                </label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="analyzeBtn">
+                <span class="btn-text">Analyze</span>
+                <span class="btn-loading" hidden>
+                    <span class="spinner"></span>
+                    Fetching NHL data...
+                </span>
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- Results container (populated by JavaScript) -->
+<div id="results" class="results-container" hidden>
+    <!-- Results will be inserted here -->
+</div>
+
+<!-- Error message container -->
+<div id="error" class="error-container" hidden role="alert">
+    <!-- Error messages will be inserted here -->
+</div>
+
+<section class="info-section">
+    <h3>About</h3>
+    <p>
+        NHL Scrabble Analyzer calculates Scrabble scores for all NHL players
+        using standard Scrabble letter point values. Teams are ranked by their
+        total roster score, creating an alternative playoff bracket based on
+        alphabetical prowess rather than on-ice performance.
+    </p>
+
+    <h4>Scrabble Letter Values</h4>
+    <div class="scrabble-values">
+        <div class="value-group">
+            <strong>1 point:</strong> A, E, I, O, U, L, N, S, T, R
+        </div>
+        <div class="value-group">
+            <strong>2 points:</strong> D, G
+        </div>
+        <div class="value-group">
+            <strong>3 points:</strong> B, C, M, P
+        </div>
+        <div class="value-group">
+            <strong>4 points:</strong> F, H, V, W, Y
+        </div>
+        <div class="value-group">
+            <strong>5 points:</strong> K
+        </div>
+        <div class="value-group">
+            <strong>8 points:</strong> J, X
+        </div>
+        <div class="value-group">
+            <strong>10 points:</strong> Q, Z
+        </div>
+    </div>
+</section>
+{% endblock %}
