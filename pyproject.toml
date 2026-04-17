@@ -62,6 +62,7 @@ test = [
     "pytest-clarity>=1.0.1",
     "pytest-timeout>=2.2.0",
     "pytest-xdist>=3.5.0",
+    "pytest-benchmark>=4.0.0",
     "diff-cover>=8.0.0",
     "beautifulsoup4>=4.12.0",
 ]
@@ -524,6 +525,35 @@ exclude_paths = [
     "tests/",
     "*/__main__.py",
 ]
+
+# Benchmark configuration
+[tool.pytest_benchmark]
+# Save results for comparison
+save = true
+save_data = true
+
+# Automatically compare against previous runs
+compare = "0001"  # Compare against run 0001 (baseline)
+
+# Fail if performance degrades beyond threshold
+fail_on_regression = true
+regression_threshold = 0.2  # 20% slower = fail
+
+# Storage location
+storage = ".benchmarks"
+
+# Columns to display
+columns = ["min", "max", "mean", "stddev", "median", "iqr", "outliers", "rounds", "iterations"]
+
+# Histogram display
+histogram = "normal"
+
+# Warmup rounds (iterations before measurement)
+warmup = true
+warmup_iterations = 5
+
+# Minimum time to run each benchmark
+min_time = 0.000005  # 5 microseconds
 
 # Codespell configuration
 [tool.codespell]
