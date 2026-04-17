@@ -480,7 +480,7 @@ A: Refactor to use fixtures. Order-dependent tests are a code smell.
 **Implemented**: 2026-04-17
 **Branch**: testing/003-add-pytest-randomly
 **PR**: #165 - https://github.com/bdperkin/nhl-scrabble/pull/165
-**Commits**: 1 commit (826d871)
+**Commits**: 4 commits (826d871, d63022f, b799bc1, 7248ea4)
 
 ### Actual Implementation
 
@@ -503,16 +503,22 @@ Followed the proposed solution exactly as specified:
 - Disable functionality verified with `-p no:randomly`
 - Coverage: 94.25% overall
 
-**No order-dependent test failures discovered** - excellent test isolation already in place!
+**Initial testing (local): No failures**
+**CI testing: Found hidden dependency in test_clear_cache!**
 
 ### Challenges Encountered
 
-None - implementation was straightforward:
+**pytest-randomly found a hidden test dependency in CI!**
 
-- pytest-randomly requires zero configuration
-- Works automatically after installation
-- All existing tests already properly isolated
-- No test refactoring needed
+- Local testing passed 170/170 tests
+- CI with randomized order exposed `test_clear_cache` failure
+- Test was patching `requests_cache.CachedSession.get` (cache layer)
+- This bypassed caching, so cache was never populated
+- Test expected cache.responses.count() > 0 but got 0
+- With alphabetical order, residual cache from other tests masked this
+- With randomization, test failed when running in isolation
+
+**This is exactly what pytest-randomly is designed to catch!**
 
 ### Deviations from Plan
 
@@ -539,14 +545,38 @@ None - followed task specification exactly.
 
 ### Hidden Dependencies Found
 
-**None!** All 170 tests pass consistently with randomization enabled across multiple runs.
+**YES! pytest-randomly found its first bug immediately!**
 
-This demonstrates excellent test isolation practices already in place:
+**Bug**: `test_clear_cache` in `tests/unit/test_nhl_client.py`
 
-- Proper fixture usage
-- No global state dependencies
-- Clean test teardown
-- No order-dependent assumptions
+**Root Cause**:
+
+- Test was patching `@patch("nhl_scrabble.api.nhl_client.requests_cache.CachedSession.get")`
+- This patches the cache layer itself, bypassing the caching mechanism
+- When you mock `CachedSession.get`, nothing actually gets cached
+- Test expected `cache.responses.count() > 0` but cache was always empty
+
+**Why it passed before**:
+
+- With alphabetical test order, other tests ran first and populated the cache file
+- Residual cache entries from previous tests made the assertion pass
+- Hidden dependency on test execution order and shared cache state
+
+**Why pytest-randomly caught it**:
+
+- With random order, test sometimes ran first or with empty cache
+- No residual cache to mask the bug
+- Test failed immediately: `AssertionError: assert 0 > 0`
+
+**The Fix**:
+
+- Changed patch to `@patch("nhl_scrabble.api.nhl_client.requests.Session.get")`
+- Patches HTTP transport layer instead of cache layer
+- Allows cache layer to intercept and store responses normally
+- Test now passes reliably in any execution order
+- Proper test isolation achieved
+
+**Impact**: This demonstrates pytest-randomly's value - it found a real test isolation bug that was hidden by deterministic test order. The test now properly validates cache functionality regardless of execution context.
 
 ### Performance Impact
 
