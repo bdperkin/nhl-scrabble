@@ -101,11 +101,10 @@ No active testing tasks.
 
 **Documented Effort**: 16-24 hours
 
-### Refactoring (8 tasks, 2 documented)
+### Refactoring (8 tasks, 1 documented)
 
 | ID  | Title                                              | Priority | Effort | Issue |
 | --- | -------------------------------------------------- | -------- | ------ | ----- |
-| 002 | Port check_docs.sh Shell Script to Python          | LOW      | 2-3h   | #100  |
 | 003 | Port check-branch-protection.sh Git Hook to Python | LOW      | 1-2h   | #101  |
 | ... | Consolidate Reports                                | LOW      | TBD    |       |
 | ... | Improve Type Safety                                | LOW      | TBD    |       |
@@ -113,16 +112,16 @@ No active testing tasks.
 | ... | Error Handling Strategy                            | LOW      | TBD    |       |
 | ... | Dependency Injection                               | LOW      | TBD    |       |
 
-**Documented Effort**: 3-5 hours
+**Documented Effort**: 1-2 hours
 
 ## Total Project Roadmap
 
-**Active Tasks**: 8 tasks (2 refactoring, 6 new-features)
-**Total Active Effort**: 24-41 hours
+**Active Tasks**: 7 tasks (1 refactoring, 6 new-features)
+**Total Active Effort**: 22-38 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 27 tasks (~70.75h actual effort)
+**Completed Tasks**: 28 tasks (~72.75h actual effort)
 
-**Grand Total**: ~124-163 hours for complete roadmap
+**Grand Total**: ~122-160 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -592,8 +591,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
 **Tasks Documented**: 25 of 52+
-**Completion Status**: 19 of 25 completed (76.0%)
-**Documented Effort Remaining**: 24.58-56.83 hours (excluding completed tasks)
+**Completion Status**: 20 of 25 completed (80.0%)
+**Documented Effort Remaining**: 22.58-54.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -625,3 +624,4 @@ ______________________________________________________________________
 | 001 | Extract Retry Logic                        | Refactoring  | 2026-04-17 | 2.5h          | #96  |
 | 004 | Add Python 3.14 Support and Testing        | Enhancement  | 2026-04-17 | 0.75h         | #99  |
 | 005 | Add Python 3.15-dev Support (Non-Blocking) | Enhancement  | 2026-04-17 | 1.5h          | #102 |
+| 002 | Port check_docs.sh to Python               | Refactoring  | 2026-04-17 | 2h            | #109 |
