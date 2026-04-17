@@ -371,7 +371,7 @@ repos:
         name: Check generated documentation is up-to-date
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
-        entry: bash tools/check_docs.sh
+        entry: python tools/check_docs.py
         language: system
         pass_filenames: false
         # Only run if docstrings or CLI code changed
