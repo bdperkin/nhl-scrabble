@@ -86,20 +86,19 @@ Each task is assigned a priority:
 
 **Documented Effort**: 35-49 hours
 
-### Testing (8 tasks, 8 documented)
+### Testing (7 tasks, 7 documented)
 
 | ID  | Title                                  | Priority | Effort   | Issue |
 | --- | -------------------------------------- | -------- | -------- | ----- |
 | 001 | Add pytest-timeout Plugin              | MEDIUM   | 30-60min | #119  |
 | 002 | Add pytest-xdist Parallel Testing      | MEDIUM   | 30-60min | #120  |
-| 003 | Add pytest-randomly Test Order         | MEDIUM   | 15-30min | #121  |
 | 004 | Add pytest-sugar Enhanced Output       | MEDIUM   | 15-30min | #122  |
 | 005 | Add pytest-clarity Improved Diffs      | MEDIUM   | 15-30min | #123  |
 | 006 | Add diff-cover PR Coverage             | MEDIUM   | 30-60min | #124  |
 | 007 | Add pytest-benchmark Performance Tests | MEDIUM   | 1-2h     | #125  |
 | 008 | Add check-jsonschema Validation        | LOW      | 30-60min | #128  |
 
-**Documented Effort**: 3.75-7.5 hours
+**Documented Effort**: 3.5-7.0 hours
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
@@ -141,21 +140,21 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 58 tasks across 6 categories
-**Total Estimated Effort**: 200.75-281 hours
+**Total Tasks**: 57 tasks across 6 categories
+**Total Estimated Effort**: 200.5-280.5 hours
 
 ### By Category
 
 - **Security**: 8 tasks, 18-23.5h
 - **Optimization**: 11 tasks, 16-24.5h (5-10x performance improvement)
 - **Enhancement**: 9 tasks, 35-49h
-- **Testing**: 8 tasks, 3.75-7.5h
+- **Testing**: 7 tasks, 3.5-7.0h
 - **New Features**: 15 tasks, 92-131h (web interface: 38-55h, standalone features: 54-76h)
 - **Refactoring**: 7 tasks, 35-45.5h
 
 ### By Priority
 
-- **MEDIUM**: 9 tasks, 46.25-69h (web interface 6 tasks, testing 3 tasks)
+- **MEDIUM**: 8 tasks, 46-68.5h (web interface 6 tasks, testing 2 tasks)
 - **LOW**: 49 tasks, 154.5-212h (long-term improvements and new capabilities)
 
 ## How to Use These Tasks
@@ -414,12 +413,6 @@ This section organizes all documented tasks into a recommended implementation se
    - 10x faster test runs
    - Better developer experience
 
-1. **testing/003-add-pytest-randomly.md** (15-30min) - #121
-
-   - MEDIUM priority, randomize test order
-   - Catch hidden test dependencies
-   - Improve test isolation
-
 1. **testing/004-add-pytest-sugar.md** (15-30min) - #122
 
    - MEDIUM priority, enhanced test output
@@ -554,7 +547,6 @@ Tasks with high impact and low effort:
 
 1. security/001-add-pip-licenses-compliance.md (30-60min) - #126
 1. Testing plugins (15-60min each):
-   - testing/003-add-pytest-randomly.md (15-30min) - #121
    - testing/004-add-pytest-sugar.md (15-30min) - #122
    - testing/005-add-pytest-clarity.md (15-30min) - #123
    - testing/001-add-pytest-timeout.md (30-60min) - #119
@@ -652,7 +644,6 @@ Valuable but not critical:
 
 - testing/001-add-pytest-timeout (30-60min) - #119
 - testing/002-add-pytest-xdist (30-60min) - #120
-- testing/003-add-pytest-randomly (15-30min) - #121
 - testing/004-add-pytest-sugar (15-30min) - #122
 - testing/005-add-pytest-clarity (15-30min) - #123
 - testing/006-add-diff-cover (30-60min) - #124
@@ -729,14 +720,14 @@ optimization/001-api-caching (#42) ✅
 All testing plugins (001-008) can be implemented independently in any order:
 - testing/001-add-pytest-timeout (#119) - 30-60min
 - testing/002-add-pytest-xdist (#120) - 30-60min
-- testing/003-add-pytest-randomly (#121) - 15-30min
+- testing/003-add-pytest-randomly (#121) - 15-30min ✅ COMPLETE
 - testing/004-add-pytest-sugar (#122) - 15-30min
 - testing/005-add-pytest-clarity (#123) - 15-30min
 - testing/006-add-diff-cover (#124) - 30-60min
 - testing/007-add-pytest-benchmark (#125) - 1-2h
 - testing/008-add-check-jsonschema (#128) - 30-60min
 
-Recommended order: 003, 004, 005 (quick UX wins), then 001, 002 (infrastructure), then 006, 007, 008
+Recommended order: 004, 005 (quick UX wins), then 001, 002 (infrastructure), then 006, 007, 008
 ```
 
 **Enhancement Chain**:
@@ -881,3 +872,4 @@ ______________________________________________________________________
 | 005 | Add Python 3.15-dev Support (Non-Blocking) | Enhancement  | 2026-04-17 | 1.5h          | #102 |
 | 002 | Port check_docs.sh to Python               | Refactoring  | 2026-04-17 | 2h            | #109 |
 | 003 | Port branch protection hook to Python      | Refactoring  | 2026-04-17 | 1.5h          | #110 |
+| 003 | Add pytest-randomly for test randomization | Testing      | 2026-04-17 | 0.42h         | #165 |

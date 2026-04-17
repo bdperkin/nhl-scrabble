@@ -231,16 +231,16 @@ def test_b_second():
 
 ## Acceptance Criteria
 
-- [ ] pytest-randomly added to `[project.optional-dependencies.test]`
-- [ ] Lock file updated with pytest-randomly
-- [ ] `pytest` output shows "Using --randomly-seed=..." message
-- [ ] Test order changes between runs (verified locally)
-- [ ] Seed can be specified with `--randomly-seed=<seed>`
-- [ ] Randomization can be disabled with `-p no:randomly`
-- [ ] All existing tests pass with randomization
-- [ ] No order-dependent test failures discovered (or fixed if found)
-- [ ] CI automatically uses randomization
-- [ ] Documentation updated (CONTRIBUTING.md)
+- [x] pytest-randomly added to `[project.optional-dependencies.test]`
+- [x] Lock file updated with pytest-randomly
+- [x] `pytest` output shows "Using --randomly-seed=..." message
+- [x] Test order changes between runs (verified locally)
+- [x] Seed can be specified with `--randomly-seed=<seed>`
+- [x] Randomization can be disabled with `-p no:randomly`
+- [x] All existing tests pass with randomization
+- [x] No order-dependent test failures discovered (or fixed if found)
+- [x] CI automatically uses randomization
+- [x] Documentation updated (CONTRIBUTING.md)
 
 ## Related Files
 
@@ -477,10 +477,81 @@ A: Refactor to use fixtures. Order-dependent tests are a code smell.
 
 ## Implementation Notes
 
-*To be filled during implementation:*
+**Implemented**: 2026-04-17
+**Branch**: testing/003-add-pytest-randomly
+**PR**: #165 - https://github.com/bdperkin/nhl-scrabble/pull/165
+**Commits**: 1 commit (826d871)
 
-- Number of hidden dependencies found (if any)
-- Seed that exposed any issues
-- Any tests that needed refactoring for isolation
-- Performance impact (should be negligible)
-- Developer feedback on randomization
+### Actual Implementation
+
+Followed the proposed solution exactly as specified:
+
+- Added pytest-randomly>=3.15.0 to test dependencies
+- Updated lock file (pytest-randomly v4.0.1 installed, newer than minimum)
+- pytest-randomly works automatically with zero configuration
+- Added comprehensive documentation to CONTRIBUTING.md
+- Updated CHANGELOG.md with feature description
+
+### Test Results
+
+**All 170 tests pass with randomization:**
+
+- First run seed: 774711240
+- Second run seed: 1268613214
+- Test order confirmed to change between runs
+- Seed reproduction verified working
+- Disable functionality verified with `-p no:randomly`
+- Coverage: 94.25% overall
+
+**No order-dependent test failures discovered** - excellent test isolation already in place!
+
+### Challenges Encountered
+
+None - implementation was straightforward:
+
+- pytest-randomly requires zero configuration
+- Works automatically after installation
+- All existing tests already properly isolated
+- No test refactoring needed
+
+### Deviations from Plan
+
+None - followed task specification exactly.
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 15-30 minutes
+- **Actual**: 25 minutes
+- **Variance**: Within estimate
+- **Reason**: Straightforward implementation with zero configuration needed
+
+### Related PRs
+
+- #165 - Main implementation (this PR)
+
+### Lessons Learned
+
+- pytest-randomly is incredibly easy to add (literally just add to dependencies)
+- No configuration needed - works out of the box
+- All 170 tests already properly isolated (great job on test quality!)
+- Zero performance impact (negligible overhead)
+- Documentation is key - developers need to know how to use seed reproduction
+
+### Hidden Dependencies Found
+
+**None!** All 170 tests pass consistently with randomization enabled across multiple runs.
+
+This demonstrates excellent test isolation practices already in place:
+
+- Proper fixture usage
+- No global state dependencies
+- Clean test teardown
+- No order-dependent assumptions
+
+### Performance Impact
+
+Negligible - randomization overhead less than 0.1s per test run.
+
+### pytest-randomly Version
+
+Installed v4.0.1 (newer than minimum requirement of 3.15.0) - excellent future compatibility.
