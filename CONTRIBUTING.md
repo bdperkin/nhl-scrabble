@@ -155,6 +155,39 @@ pytest -p no:sugar
 
 pytest-sugar auto-detects CI environments and falls back to plain output in non-interactive terminals, ensuring CI logs remain readable.
 
+**Enhanced Assertion Diffs with pytest-clarity:**
+
+The project includes pytest-clarity for improved assertion error output with better diff formatting and clearer visualization:
+
+```bash
+# pytest-clarity works automatically (no configuration needed)
+pytest
+
+# Enhanced features:
+# - Clearer visual diffs with only changed values highlighted
+# - Smart diff algorithms for nested structures (dicts, lists)
+# - Character-level precision for string differences
+# - Path annotations for nested differences
+# - Less noise: unchanged values shown once, not duplicated
+
+# Example: Dict difference
+# Instead of showing the entire dict twice (- expected, + actual),
+# pytest-clarity shows only the changed keys:
+#
+# E       Dict difference:
+# E         {
+# E           'team': 'TOR',
+# E       -   'score': 100,  ← Expected
+# E       +   'score': 105,  ← Actual
+# E           'players': ['Matthews', 'Marner'],
+# E         }
+
+# Disable pytest-clarity if needed (rare)
+pytest -p no:clarity
+```
+
+pytest-clarity works in CI environments (with or without colors) and is compatible with all other pytest plugins.
+
 ### Test Randomization
 
 The project uses pytest-randomly to randomize test execution order and catch hidden test dependencies:

@@ -85,18 +85,17 @@ Each task is assigned a priority:
 
 **Documented Effort**: 35-49 hours
 
-### Testing (6 tasks, 6 documented)
+### Testing (5 tasks, 5 documented)
 
 | ID  | Title                                  | Priority | Effort   | Issue |
 | --- | -------------------------------------- | -------- | -------- | ----- |
 | 001 | Add pytest-timeout Plugin              | MEDIUM   | 30-60min | #119  |
 | 002 | Add pytest-xdist Parallel Testing      | MEDIUM   | 30-60min | #120  |
-| 005 | Add pytest-clarity Improved Diffs      | MEDIUM   | 15-30min | #123  |
 | 006 | Add diff-cover PR Coverage             | MEDIUM   | 30-60min | #124  |
 | 007 | Add pytest-benchmark Performance Tests | MEDIUM   | 1-2h     | #125  |
 | 008 | Add check-jsonschema Validation        | LOW      | 30-60min | #128  |
 
-**Documented Effort**: 3.0-6.5 hours
+**Documented Effort**: 2.75-6.0 hours
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
@@ -833,10 +832,10 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-17
 **Tasks Documented**: 58 tasks across 6 categories
-**Completion Status**: 30 completed, 28 planned
+**Completion Status**: 31 completed, 27 planned
 **Total Documented Effort**: 199.75-280 hours
-**Completed Effort**: ~75 hours
-**Remaining Effort**: ~124.75-205 hours
+**Completed Effort**: ~75.33 hours
+**Remaining Effort**: ~124.42-204.67 hours
 
 ## Completed Tasks
 
@@ -873,3 +872,4 @@ ______________________________________________________________________
 | 001 | Add pip-licenses Compliance                | Security     | 2026-04-17 | 0.75h         | #164 |
 | 003 | Add pytest-randomly for test randomization | Testing      | 2026-04-17 | 0.42h         | #165 |
 | 004 | Add pytest-sugar Enhanced Output           | Testing      | 2026-04-17 | 0.33h         | #166 |
+| 005 | Add pytest-clarity Improved Diffs          | Testing      | 2026-04-17 | 0.33h         | #167 |
