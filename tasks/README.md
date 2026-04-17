@@ -36,19 +36,20 @@ Each task is assigned a priority:
 
 **Total Effort**: 0 hours
 
-### Security (10+ tasks, 0 documented)
+### Security (10+ tasks, 1 documented)
 
-| ID  | Title                       | Priority | Effort | Issue |
-| --- | --------------------------- | -------- | ------ | ----- |
-| ... | Input Validation            | MEDIUM   | TBD    |       |
-| ... | SSRF Protection             | MEDIUM   | TBD    |       |
-| ... | Rate Limit Enforcement      | MEDIUM   | TBD    |       |
-| ... | DoS Prevention              | LOW      | TBD    |       |
-| ... | SSL Verification            | LOW      | TBD    |       |
-| ... | PII Logging Prevention      | LOW      | TBD    |       |
-| ... | Config Injection Protection | LOW      | TBD    |       |
+| ID  | Title                       | Priority | Effort   | Issue |
+| --- | --------------------------- | -------- | -------- | ----- |
+| 001 | Add pip-licenses Compliance | MEDIUM   | 30-60min | #126  |
+| ... | Input Validation            | MEDIUM   | TBD      |       |
+| ... | SSRF Protection             | MEDIUM   | TBD      |       |
+| ... | Rate Limit Enforcement      | MEDIUM   | TBD      |       |
+| ... | DoS Prevention              | LOW      | TBD      |       |
+| ... | SSL Verification            | LOW      | TBD      |       |
+| ... | PII Logging Prevention      | LOW      | TBD      |       |
+| ... | Config Injection Protection | LOW      | TBD      |       |
 
-**Documented Effort**: 0 hours
+**Documented Effort**: 0.5-1 hour
 
 ### Optimization (11 tasks, 6 documented)
 
@@ -85,9 +86,20 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Testing (0 tasks, 0 documented)
+### Testing (8 tasks, 8 documented)
 
-No active testing tasks.
+| ID  | Title                                  | Priority | Effort   | Issue |
+| --- | -------------------------------------- | -------- | -------- | ----- |
+| 001 | Add pytest-timeout Plugin              | MEDIUM   | 30-60min | #119  |
+| 002 | Add pytest-xdist Parallel Testing      | MEDIUM   | 30-60min | #120  |
+| 003 | Add pytest-randomly Test Order         | MEDIUM   | 15-30min | #121  |
+| 004 | Add pytest-sugar Enhanced Output       | MEDIUM   | 15-30min | #122  |
+| 005 | Add pytest-clarity Improved Diffs      | MEDIUM   | 15-30min | #123  |
+| 006 | Add diff-cover PR Coverage             | MEDIUM   | 30-60min | #124  |
+| 007 | Add pytest-benchmark Performance Tests | MEDIUM   | 1-2h     | #125  |
+| 008 | Add check-jsonschema Validation        | LOW      | 30-60min | #128  |
+
+**Documented Effort**: 3.75-7.5 hours
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
@@ -113,25 +125,29 @@ No active testing tasks.
 
 **Documented Effort**: 38-55 hours (web interface subtasks: 22-31h)
 
-### Refactoring (8 tasks, 0 documented)
+### Refactoring (8 tasks, 2 documented)
 
-| ID  | Title                     | Priority | Effort | Issue |
-| --- | ------------------------- | -------- | ------ | ----- |
-| ... | Consolidate Reports       | LOW      | TBD    |       |
-| ... | Improve Type Safety       | LOW      | TBD    |       |
-| ... | Unified Config Management | LOW      | TBD    |       |
-| ... | Error Handling Strategy   | LOW      | TBD    |       |
-| ... | Dependency Injection      | LOW      | TBD    |       |
+| ID  | Title                              | Priority | Effort   | Issue |
+| --- | ---------------------------------- | -------- | -------- | ----- |
+| 004 | Add pyupgrade Syntax Modernization | MEDIUM   | 1-2h     | #118  |
+| 005 | Add djlint HTML Template Linting   | LOW      | 30-60min | #127  |
+| ... | Consolidate Reports                | LOW      | TBD      |       |
+| ... | Improve Type Safety                | LOW      | TBD      |       |
+| ... | Unified Config Management          | LOW      | TBD      |       |
+| ... | Error Handling Strategy            | LOW      | TBD      |       |
+| ... | Dependency Injection               | LOW      | TBD      |       |
 
-**Documented Effort**: 0 hours
+**Documented Effort**: 1.5-3 hours
 
 ## Total Project Roadmap
 
-**Active Tasks**: 12 tasks (6 optimization, 6 new-features)
-**Total Active Effort**: 47-70.5 hours
+**Active Tasks**: 15 tasks (6 optimization, 6 new-features, 1 refactoring, 2 testing)
+**Total Active Effort**: 49-75 hours
 
 - Optimization: 9-15.5h (5-10x performance improvement)
 - Web interface: 38-55h (22-31h subtasks)
+- Refactoring: 1-2h (syntax modernization)
+- Testing: 1-2h (timeout enforcement + parallel execution)
   **Undocumented Tasks**: 30+ tasks (estimated 90+ hours)
   **Completed Tasks**: 29 tasks (~74.25h actual effort)
 
