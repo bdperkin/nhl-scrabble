@@ -164,6 +164,7 @@ extend-ignore = [
 per-file-ignores = [
     "__init__.py:F401,F403",  # Unused imports in __init__.py (like ruff's per-file-ignores)
     "tests/*:S101",  # Use of assert (pytest uses assert)
+    "src/nhl_scrabble/api/nhl_client.py:C901",  # get_team_roster complexity from retry logic
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity
 exclude = [
