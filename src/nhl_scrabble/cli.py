@@ -276,6 +276,14 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
             conference_standings,
             playoff_standings,
         )
+    if config.output_format == "html":
+        return generate_html_report(
+            team_scores,
+            all_players,
+            division_standings,
+            conference_standings,
+            playoff_standings,
+        )
     # Generate text reports
     reports = [
         conference_reporter.generate(conference_standings),
@@ -342,6 +350,88 @@ def generate_json_report(
     }
 
     return json.dumps(report_data, indent=2)
+
+
+def generate_html_report(
+    team_scores: dict[str, Any],
+    all_players: list[Any],
+    division_standings: dict[str, Any],
+    conference_standings: dict[str, Any],
+    playoff_standings: dict[str, Any],
+) -> str:
+    """Generate HTML format report.
+
+    Args:
+        team_scores: Team scores dictionary
+        all_players: List of all players
+        division_standings: Division standings
+        conference_standings: Conference standings
+        playoff_standings: Playoff standings
+
+    Returns:
+        HTML string
+    """
+    from datetime import datetime
+
+    from jinja2 import Environment, PackageLoader, select_autoescape
+
+    # Setup Jinja2 environment
+    env = Environment(
+        loader=PackageLoader("nhl_scrabble", "templates"),
+        autoescape=select_autoescape(["html", "xml"]),
+    )
+
+    # Get top 20 players by score
+    sorted_players = sorted(all_players, key=lambda p: p.full_score, reverse=True)
+    top_players = sorted_players[:20]
+
+    # Prepare conferences data with actual team objects
+    conferences = []
+    for conf_name in sorted(conference_standings.keys()):
+        # Get all teams in this conference from playoff standings
+        conf_teams = [
+            team for team in playoff_standings.get(conf_name, []) if team.conference == conf_name
+        ]
+        conferences.append({"name": conf_name, "teams": conf_teams})
+
+    # Prepare divisions data
+    divisions = []
+    for div_name in sorted(division_standings.keys()):
+        # Get teams in this division from all playoff teams
+        div_teams = []
+        for conf_teams in playoff_standings.values():
+            div_teams.extend([team for team in conf_teams if team.division == div_name])
+        # Sort by total score descending
+        div_teams.sort(key=lambda t: (t.total, t.avg), reverse=True)
+        divisions.append({"name": div_name, "teams": div_teams})
+
+    # Calculate statistics
+    total_score = sum(p.full_score for p in all_players)
+    avg_score = total_score / len(all_players) if all_players else 0
+    highest_score = sorted_players[0].full_score if sorted_players else 0
+
+    stats = {
+        "total_players": len(all_players),
+        "total_teams": len(team_scores),
+        "average_score": avg_score,
+        "highest_score": highest_score,
+    }
+
+    # Render template
+    from datetime import timezone
+
+    template = env.get_template("report.html")
+    html = template.render(
+        timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
+        version=__version__,
+        stats=stats,
+        top_n=len(top_players),
+        top_players=top_players,
+        conferences=conferences,
+        divisions=divisions,
+    )
+
+    return html
 
 
 if __name__ == "__main__":

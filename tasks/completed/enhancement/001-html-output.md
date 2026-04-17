@@ -441,3 +441,57 @@ start report.html     # Windows
 - [ ] Add player photos
 - [ ] Add search/filter functionality
 - [ ] Add comparison view
+
+## Implementation Notes
+
+**Implemented**: 2026-04-16
+**Branch**: enhancement/001-html-output
+**PR**: #92 - https://github.com/bdperkin/nhl-scrabble/pull/92
+**Commits**: 1 commit (b0b5d3b)
+
+### Actual Implementation
+
+Followed the proposed solution with implementation directly in `cli.py` instead of creating a separate `HTMLReport` class:
+
+- Created HTML template at `src/nhl_scrabble/templates/report.html` with NHL color scheme
+- Implemented `generate_html_report()` function in `cli.py` using Jinja2 templating
+- Used existing data models (PlayerScore, TeamScore, PlayoffTeam) instead of custom data structures
+- Added Jinja2 autoescape for automatic XSS protection
+- Integrated with existing CLI analyze command via config.output_format check
+
+### Challenges Encountered
+
+- **Python 3.10 Compatibility**: `datetime.UTC` not available in Python 3.10
+
+  - Solution: Used `datetime.now(tz=timezone.utc)` instead
+
+- **Data Model Field Names**: Template needed to match actual model fields
+
+  - Fixed: Used `abbrev`, `total`, `avg`, `full_score` instead of assumed names
+
+- **Test Fixtures**: Initial fixtures used incorrect field names
+
+  - Fixed: Updated fixtures to match PlayerScore and TeamScore dataclass definitions
+
+### Deviations from Plan
+
+- **No separate HTMLReport class**: Implemented directly in `cli.py` as `generate_html_report()` function for simplicity
+- **Simplified data preparation**: Used PlayoffTeam objects directly from playoff standings instead of creating custom team dictionaries
+- **Division standings organization**: Pulled division teams from playoff standings rather than separate processing
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 4-6h
+- **Actual**: ~4h
+- **Reason**: Implementation was straightforward, most time spent on test fixture corrections and Python 3.10 compatibility
+
+### Related PRs
+
+- PR #92 - Main implementation
+
+### Lessons Learned
+
+- Always verify data model field names before writing templates
+- Python 3.10 compatibility requires checking for newer stdlib features (datetime.UTC)
+- Jinja2's autoescape provides excellent XSS protection out of the box
+- BeautifulSoup is valuable for HTML test validation

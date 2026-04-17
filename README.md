@@ -24,7 +24,7 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
   - NHL-style playoff bracket (wild card format)
   - Team scores with top players
   - League-wide statistics and fun facts
-- 🎯 **Flexible Output** - Text or JSON format output
+- 🎯 **Flexible Output** - Text, JSON, or HTML format output with responsive design
 - ⚙️ **Configurable** - Customize via environment variables or command-line options
 - 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules
 - 📦 **Modern Python** - Uses type hints, dataclasses, and follows best practices
@@ -83,6 +83,9 @@ nhl-scrabble analyze --output report.txt
 
 # Generate JSON output
 nhl-scrabble analyze --format json --output report.json
+
+# Generate HTML output (opens in browser)
+nhl-scrabble analyze --format html --output report.html
 
 # Customize number of top players shown
 nhl-scrabble analyze --top-players 50 --top-team-players 10
