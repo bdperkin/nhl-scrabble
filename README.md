@@ -138,15 +138,55 @@ nhl-scrabble serve --host 0.0.0.0 --port 5000
 
 Once started, visit:
 
+- **Home Page**: http://localhost:8000/ (Interactive web interface)
 - **API Documentation**: http://localhost:8000/docs (Interactive Swagger UI)
 - **Alternative Docs**: http://localhost:8000/redoc (ReDoc)
 - **Health Check**: http://localhost:8000/health
 
+#### API Endpoints
+
+The web interface provides these RESTful API endpoints:
+
+- **`GET /api/analyze`** - Run NHL Scrabble analysis
+
+  - Query parameters: `top_players` (1-100), `top_team_players` (1-30), `use_cache` (boolean)
+  - Returns: Complete analysis with team standings, playoff bracket, and statistics
+  - Caching: Results cached for 1 hour (configurable via `use_cache` parameter)
+
+- **`GET /api/teams/{team_abbrev}`** - Get details for a specific team
+
+  - Parameters: `team_abbrev` (e.g., 'TOR', 'MTL', 'BOS')
+  - Returns: Team roster with Scrabble scores for all players
+
+- **`GET /api/cache/clear`** - Clear the analysis cache
+
+  - Returns: Confirmation with number of entries cleared
+
+- **`GET /api/players/{player_id}`** - Get details for a specific player
+
+  - Status: Not implemented yet (returns 501)
+
+Example API usage:
+
+```bash
+# Run analysis with custom parameters
+curl "http://localhost:8000/api/analyze?top_players=50&top_team_players=10"
+
+# Get specific team data
+curl "http://localhost:8000/api/teams/TOR"
+
+# Clear cache
+curl "http://localhost:8000/api/cache/clear"
+```
+
 The web interface provides:
 
+- ✅ Browser-based interactive interface with forms
 - ✅ RESTful API endpoints for programmatic access
-- 📚 Auto-generated OpenAPI documentation
-- 🩺 Health check endpoint for monitoring
+- ✅ In-memory caching with 1-hour expiration
+- ✅ Auto-generated OpenAPI documentation
+- ✅ Health check endpoint for monitoring
+- ✅ Responsive design for mobile devices
 
 ### Configuration
 

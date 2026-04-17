@@ -33,6 +33,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **FastAPI Web Interface API Endpoints** - Complete web API implementation
+
+  - Implemented `/api/analyze` endpoint for NHL Scrabble analysis
+    - Configurable parameters: `top_players` (1-100), `top_team_players` (1-30), `use_cache` (boolean)
+    - Returns complete analysis with team standings, playoff brackets, and statistics
+    - In-memory caching with 1-hour expiration for improved performance
+    - Request validation using FastAPI Query parameters with min/max constraints
+  - Implemented `/api/teams/{team_abbrev}` endpoint for team-specific data
+    - Case-insensitive team abbreviation lookup (e.g., 'TOR', 'tor', 'ToR')
+    - Returns full roster with Scrabble scores for all players
+    - Includes team metadata (division, conference, total/average scores)
+  - Implemented `/api/cache/clear` endpoint for cache management
+    - Returns number of cache entries cleared
+    - Useful for testing and forcing fresh data retrieval
+  - Implemented `/api/players/{player_id}` endpoint stub (returns 501 Not Implemented)
+    - Placeholder for future individual player lookup functionality
+  - Added comprehensive integration tests for all endpoints
+    - Tests for default and custom parameters
+    - Tests for cache behavior and expiration
+    - Tests for parameter validation (422 errors on invalid input)
+    - Tests for error handling (404 for not found, 503 for API errors)
+    - Tests for case-insensitive lookups
+    - Mock NHL API client for reliable testing
+  - Updated README.md with API endpoint documentation and curl examples
+  - Benefits: Full programmatic access to analysis, caching for performance, comprehensive test coverage
+
 - **FastAPI Web Interface Infrastructure** - Foundation for browser-based NHL Scrabble access
 
   - Added FastAPI>=0.110.0 web framework with automatic OpenAPI documentation
