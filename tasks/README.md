@@ -63,24 +63,22 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 3 documented)
+### Enhancements (10 tasks, 1 documented)
 
-| ID  | Title                                                | Priority | Effort | Issue |
-| --- | ---------------------------------------------------- | -------- | ------ | ----- |
-| 002 | Create Project Logo and Branding Assets              | MEDIUM   | 4-8h   | #89   |
-| 003 | Add Comprehensive Documentation Badges               | LOW      | 1-2h   | #91   |
-| 006 | Skill Optimizations: Pre-Flight Validation & CI Diag | HIGH     | 0.5-1h | #88   |
-| ... | Progress Bars                                        | MEDIUM   | TBD    |       |
-| ... | Interactive Mode                                     | MEDIUM   | TBD    |       |
-| ... | Historical Data                                      | LOW      | TBD    |       |
-| ... | CSV/Excel Export                                     | LOW      | TBD    |       |
-| ... | Filtering Options                                    | LOW      | TBD    |       |
-| ... | Custom Scoring Rules                                 | LOW      | TBD    |       |
-| ... | Statistics Dashboard                                 | LOW      | TBD    |       |
-| ... | Watch Mode                                           | LOW      | TBD    |       |
-| ... | Player Search                                        | LOW      | TBD    |       |
+| ID  | Title                                  | Priority | Effort | Issue |
+| --- | -------------------------------------- | -------- | ------ | ----- |
+| 003 | Add Comprehensive Documentation Badges | LOW      | 1-2h   | #91   |
+| ... | Progress Bars                          | MEDIUM   | TBD    |       |
+| ... | Interactive Mode                       | MEDIUM   | TBD    |       |
+| ... | Historical Data                        | LOW      | TBD    |       |
+| ... | CSV/Excel Export                       | LOW      | TBD    |       |
+| ... | Filtering Options                      | LOW      | TBD    |       |
+| ... | Custom Scoring Rules                   | LOW      | TBD    |       |
+| ... | Statistics Dashboard                   | LOW      | TBD    |       |
+| ... | Watch Mode                             | LOW      | TBD    |       |
+| ... | Player Search                          | LOW      | TBD    |       |
 
-**Documented Effort**: 5.5-11 hours
+**Documented Effort**: 1-2 hours
 
 ### Testing (1 task, 1 documented)
 
@@ -124,12 +122,12 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 12 tasks
-**Total Documented Effort**: 35.5-57 hours
+**Documented Tasks**: 10 tasks
+**Total Documented Effort**: 30-47 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 18 tasks (55.17h actual effort)
+**Completed Tasks**: 21 tasks (62.17h actual effort)
 
-**Grand Total**: ~135.5-179 hours for complete roadmap
+**Grand Total**: ~130-169 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -624,3 +622,6 @@ ______________________________________________________________________
 | 004 | Automated API/CLI Documentation    | Enhancement  | 2026-04-16 | 5.5h          | #85 |
 | 003 | Build Sphinx Docs + GitHub Pages   | Enhancement  | 2026-04-16 | 8h            | #86 |
 | 001 | Implement HTML Output Format       | Enhancement  | 2026-04-16 | 4h            | #92 |
+| 005 | Add Sphinx Quality Plugins         | Enhancement  | 2026-04-16 | 3.5h          | #87 |
+| 006 | Skill Optimizations                | Enhancement  | 2026-04-16 | 0.5h          | N/A |
+| 002 | Create Project Logo and Branding   | Enhancement  | 2026-04-17 | 3h            | #89 |
