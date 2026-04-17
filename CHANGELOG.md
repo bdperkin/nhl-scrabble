@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **HTML Output Format** - Professional HTML reports with responsive design
+
+  - Generate beautiful HTML reports with `--format html`
+  - NHL-themed styling with team colors (#003087 blue, #C60C30 red)
+  - Responsive design works on desktop, tablet, and mobile
+  - Interactive tables with hover effects
+  - Statistics dashboard with cards
+  - Print-friendly stylesheet
+  - XSS protection with automatic HTML escaping
+  - Jinja2 templating engine for flexible rendering
+  - Usage: `nhl-scrabble analyze --format html --output report.html`
+
 - **Gitlint Integration** - Commit message linter
 
   - Comprehensive commit message linting matching ruff's ALL rules philosophy
