@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 55 comprehensive hooks for code quality, security, and consistency
+# 57 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -141,6 +141,23 @@ repos:
       - id: yamllint
         # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
         args: []  # Config is in .yamllint
+
+  # ============================================================================
+  # JSON/YAML Schema Validation - Structural Validation
+  # ============================================================================
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.28.0
+    hooks:
+      # Validate GitHub workflows against official schema
+      - id: check-github-workflows
+        name: Validate GitHub workflows
+        files: ^\.github/workflows/.*\.ya?ml$
+
+      # Validate Dependabot config against official schema
+      - id: check-dependabot
+        name: Validate Dependabot config
+        files: ^\.github/dependabot\.ya?ml$
 
   # ============================================================================
   # Spelling - Code and Documentation Spell Checking

@@ -436,5 +436,49 @@ def generate_html_report(
     return html
 
 
+@cli.command()
+@click.option("--host", default="127.0.0.1", help="Host to bind to")
+@click.option("--port", default=8000, type=int, help="Port to bind to")
+@click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
+def serve(host: str, port: int, reload: bool) -> None:
+    """Start web interface server.
+
+    Starts a FastAPI web server providing browser-based access to
+    NHL Scrabble analysis. Visit http://localhost:8000 after starting.
+
+    Examples:
+        # Start server on default port
+        nhl-scrabble serve
+
+        # Development mode with auto-reload
+        nhl-scrabble serve --reload
+
+        # Custom host and port
+        nhl-scrabble serve --host 0.0.0.0 --port 5000
+    """
+    try:
+        import uvicorn
+    except ImportError:
+        click.echo(
+            "Error: uvicorn not installed. Install with: pip install nhl-scrabble[web]",
+            err=True,
+        )
+        raise click.Abort from None
+
+    click.echo(f"Starting NHL Scrabble web server at http://{host}:{port}")
+    click.echo("Press CTRL+C to stop")
+
+    # Import here to avoid loading FastAPI when not needed
+    from nhl_scrabble.web.app import app
+
+    uvicorn.run(
+        app,
+        host=host,
+        port=port,
+        reload=reload,
+        log_level="info",
+    )
+
+
 if __name__ == "__main__":
     cli()

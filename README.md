@@ -46,6 +46,7 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
 ## Features
 
 - 🏒 **Live NHL Data** - Fetches current roster data directly from the official NHL API
+- 🌐 **Web Interface** - FastAPI-powered web server with auto-generated API documentation
 - 📊 **Comprehensive Reports** - Multiple report types including:
   - Conference standings with total and average scores
   - Division standings breakdown
@@ -79,7 +80,7 @@ pip install -e ".[dev]"
 
 - **Supported**: Python 3.10, 3.11, 3.12, 3.13, 3.14
 - **Experimental**: Python 3.15-dev (CI testing only, may have issues)
-- Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`
+- Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`, `fastapi`, `uvicorn`, `jinja2`
 - Note: UV acceleration is automatic when using tox (via tox-uv plugin)
 
 ## Quick Start
@@ -119,6 +120,33 @@ nhl-scrabble analyze --format html --output report.html
 # Customize number of top players shown
 nhl-scrabble analyze --top-players 50 --top-team-players 10
 ```
+
+### Web Interface
+
+Start the web server for browser-based access:
+
+```bash
+# Start web server on default port (8000)
+nhl-scrabble serve
+
+# Start with auto-reload for development
+nhl-scrabble serve --reload
+
+# Custom host and port
+nhl-scrabble serve --host 0.0.0.0 --port 5000
+```
+
+Once started, visit:
+
+- **API Documentation**: http://localhost:8000/docs (Interactive Swagger UI)
+- **Alternative Docs**: http://localhost:8000/redoc (ReDoc)
+- **Health Check**: http://localhost:8000/health
+
+The web interface provides:
+
+- ✅ RESTful API endpoints for programmatic access
+- 📚 Auto-generated OpenAPI documentation
+- 🩺 Health check endpoint for monitoring
 
 ### Configuration
 

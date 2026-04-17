@@ -555,6 +555,10 @@ ruff check --fix .
 make mypy
 # or directly: mypy src
 
+# Validate JSON/YAML files against schemas
+tox -e check-jsonschema
+# or directly: check-jsonschema --schemafile "https://json.schemastore.org/github-workflow.json" .github/workflows/*.yml
+
 # Run pre-commit hooks manually
 pre-commit run --all-files
 ```
