@@ -135,6 +135,26 @@ pytest tests/unit/test_scrabble.py
 pytest tests/unit/test_scrabble.py::TestScrabbleScorer::test_calculate_score_basic
 ```
 
+**Enhanced Test Output with pytest-sugar:**
+
+The project includes pytest-sugar for improved test output with real-time progress bars, instant failure display, and colored results:
+
+```bash
+# pytest-sugar works automatically (no configuration needed)
+pytest
+
+# Enhanced features:
+# - Real-time progress bar showing percentage completion
+# - Colored output (✓ green for pass, ✗ red for fail)
+# - Instant failure display (shows failures as they happen, not at end)
+# - Cleaner, more compact output format
+
+# Disable pytest-sugar if needed (for debugging)
+pytest -p no:sugar
+```
+
+pytest-sugar auto-detects CI environments and falls back to plain output in non-interactive terminals, ensuring CI logs remain readable.
+
 ### Multi-Environment Testing with Tox
 
 For testing across multiple Python versions before submitting a PR:
