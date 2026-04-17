@@ -67,7 +67,7 @@ git checkout -b fix/your-bug-fix
 
 **Required CI Checks:**
 
-- Pre-commit hooks (55 hooks)
+- Pre-commit hooks (54 hooks)
 - Python 3.10 tests
 - Python 3.11 tests
 - Python 3.12 tests
