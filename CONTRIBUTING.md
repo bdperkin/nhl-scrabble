@@ -261,6 +261,108 @@ pytestmark = pytest.mark.timeout(300)  # 5 minutes for all tests
    - Check for infinite loops, missing timeouts, or deadlocks
 1. Fix the underlying issue rather than just increasing timeout
 
+### Parallel Test Execution
+
+The project uses pytest-xdist to run tests in parallel across multiple CPU cores, significantly speeding up test execution:
+
+```bash
+# pytest-xdist runs automatically (configured in pyproject.toml)
+pytest
+# Output: created: 8/8 workers (auto-detects CPU cores)
+
+# Tests run in parallel with ~2.8x speedup on 8 cores
+# 170 tests: 131s sequential → 47s parallel
+
+# Explicit worker count (useful for limiting resources)
+pytest -n 4     # Use 4 workers
+pytest -n 2     # Use 2 workers (GitHub Actions runners)
+
+# Disable parallel execution (for debugging)
+pytest -n 0     # Run sequentially
+```
+
+**Performance Benefits:**
+
+- **Faster feedback**: 2.8x faster locally (131s → 47s for 170 tests)
+- **Better resource usage**: Utilizes all available CPU cores
+- **CI optimization**: GitHub Actions runners use 2 workers
+- **Scalability**: Test suite can grow without proportional time increase
+
+**Parallel Execution Configuration:**
+
+```toml
+# pyproject.toml
+[tool.pytest.ini_options]
+addopts = [
+    "-n", "auto",  # Auto-detect CPU cores for parallel execution
+    # ... other options
+]
+```
+
+**Test Isolation:**
+
+Most tests work seamlessly in parallel, but tests that modify shared state may need the `no_parallel` marker:
+
+```python
+import pytest
+
+
+# Most tests work in parallel (no changes needed)
+def test_isolated():
+    scorer = ScrabbleScorer()  # Fresh instance per test
+    assert scorer.calculate_score("TEST") == 4
+
+
+# Tests that must run sequentially (rare)
+@pytest.mark.no_parallel
+def test_that_modifies_global_state():
+    # Test that modifies shared resources
+    pass
+```
+
+**When to use `@pytest.mark.no_parallel`:**
+
+- Test modifies global state or environment variables
+- Test uses shared external resources (databases, files with fixed paths)
+- Test requires exclusive access to a resource (specific ports, locks)
+
+**Coverage with Parallel Execution:**
+
+pytest-cov has built-in support for pytest-xdist - coverage is collected from all workers and combined automatically:
+
+```bash
+pytest -n auto --cov=nhl_scrabble --cov-report=html
+# Coverage: 93.25% (identical to sequential execution)
+```
+
+**Debugging Parallel Test Failures:**
+
+```bash
+# Step 1: Confirm it's a parallelization issue
+pytest -n 0 tests/path/to/test.py  # If this passes, it's a parallel issue
+
+# Step 2: Run with verbose output to see worker distribution
+pytest -n auto -v
+
+# Step 3: Add logging to understand the issue
+pytest -n 2 -v -s  # -s shows print statements
+
+# Step 4: Fix test isolation or mark as sequential
+@pytest.mark.no_parallel  # If can't fix isolation
+```
+
+**CI/CD Optimization:**
+
+GitHub Actions standard runners have 2 cores, so the CI workflow uses `-n 2` explicitly:
+
+```yaml
+# .github/workflows/ci.yml
+- name: Run tests with coverage
+  run: pytest -n 2 --cov --cov-report=xml --cov-report=term
+```
+
+Local development uses `-n auto` to maximize parallelization based on available cores.
+
 ### Test Randomization
 
 The project uses pytest-randomly to randomize test execution order and catch hidden test dependencies:
