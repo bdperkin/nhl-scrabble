@@ -562,7 +562,7 @@ check-filenames = true
 check-hidden = true
 
 # Skip patterns for non-text files and generated content
-skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api/*'
+skip = '*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*'
 
 # Project-specific ignore words (like ruff's ignore list)
 # Add false positives here as they are discovered
