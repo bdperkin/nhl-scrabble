@@ -33,6 +33,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Interactive Mode (REPL)** - Explore NHL Scrabble data interactively
+
+  - Added `nhl-scrabble interactive` command for interactive data exploration
+  - Implemented full-featured REPL using prompt_toolkit
+  - 12 interactive commands: show, top, bottom, compare, filter, search, standings, playoff, stats, refresh, help, exit
+  - Tab completion for commands, team abbreviations, and player names (top 100)
+  - Persistent command history saved to `~/.nhl_scrabble_history`
+  - Fuzzy player name matching for flexible queries
+  - Rich formatted output with colored tables
+  - `--no-fetch` flag to use cached data (instant startup)
+  - `--verbose` flag for debug logging
+  - Commands execute instantly (\<100ms) without re-analysis
+  - Features:
+    - Show team/player details
+    - Top/bottom N player rankings
+    - Side-by-side player comparison
+    - Filter teams by division/conference
+    - Search players by name
+    - View team/division/conference standings
+    - Display playoff bracket
+    - Show statistics summary
+    - Refresh data without restart
+    - Context-sensitive help system
+  - 51 comprehensive tests (46 unit, 5 integration)
+  - Full documentation:
+    - Tutorial: docs/tutorials/04-interactive-mode.md
+    - CLI reference: docs/reference/cli.md
+  - Benefits: Fast ad-hoc queries, no scripting needed, better data exploration
+  - Use case: "Who's the top player on Toronto?" → Instant answer
+
 - **Test Randomization with pytest-randomly** - Randomize test execution order to catch hidden dependencies
 
   - Added pytest-randomly>=3.15.0 to test dependencies

@@ -105,6 +105,125 @@ The command validates output paths before fetching data. Common errors:
 | "Output file exists but is not writable" | Existing file is read-only                 | Change file permissions |
 | "NHL API Error"                          | Network or API issue                       | Check connection, retry |
 
+### `interactive`
+
+Start interactive mode for exploring NHL Scrabble data.
+
+**Synopsis**:
+
+```bash
+nhl-scrabble interactive [OPTIONS]
+```
+
+**Description**:
+
+Launches an interactive REPL (Read-Eval-Print Loop) for exploring NHL Scrabble scores through commands. Interactive mode allows you to query data, compare players, filter teams, and more without re-running the full analysis.
+
+**Options**:
+
+| Option          | Type | Default | Description                          |
+| --------------- | ---- | ------- | ------------------------------------ |
+| `--no-fetch`    | flag | false   | Skip fetching data (use cached data) |
+| `-v, --verbose` | flag | false   | Enable verbose logging (DEBUG level) |
+| `--help`        | flag | false   | Show command help and exit           |
+
+**Examples**:
+
+```bash
+# Start interactive mode (fetch fresh data)
+nhl-scrabble interactive
+
+# Use cached data from previous session
+nhl-scrabble interactive --no-fetch
+
+# Enable verbose logging
+nhl-scrabble interactive --verbose
+```
+
+**Interactive Commands**:
+
+Once in interactive mode, use these commands:
+
+| Command                       | Description                           |
+| ----------------------------- | ------------------------------------- |
+| `show team <abbrev>`          | Show team details                     |
+| `show player <name>`          | Show player details                   |
+| `top [N]`                     | Show top N players (default: 10)      |
+| `bottom [N]`                  | Show bottom N players (default: 10)   |
+| `compare <player1> <player2>` | Compare two players                   |
+| `filter division <div>`       | Filter teams by division              |
+| `filter conference <conf>`    | Filter teams by conference            |
+| `search <query>`              | Search players by name                |
+| `standings [type]`            | Show standings (team/division/conf)   |
+| `playoff`                     | Show playoff bracket                  |
+| `stats`                       | Show statistics                       |
+| `refresh`                     | Re-fetch data from NHL API            |
+| `help [command]`              | Show help for all or specific command |
+| `exit` or `quit`              | Exit interactive mode                 |
+
+**Features**:
+
+- **Tab Completion**: Commands, team names, and player names auto-complete
+- **Command History**: Navigate previous commands with arrow keys (saved to `~/.nhl_scrabble_history`)
+- **Rich Output**: Formatted tables with colors
+- **Fuzzy Matching**: Player search uses partial name matching
+- **Fast Queries**: No need to re-run full analysis for each query
+
+**Example Session**:
+
+```
+$ nhl-scrabble interactive
+Fetching NHL data...
+Data loaded successfully!
+
+NHL Scrabble Interactive Mode
+Type 'help' for available commands
+Type 'exit' to quit
+
+NHL Scrabble> top 5
+┏━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┓
+┃ Rank  ┃ Player                    ┃ Team   ┃ Score    ┃
+┡━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━┩
+│ 1     │ Alex Ovechkin             │ WSH    │ 28       │
+│ 2     │ Connor McDavid            │ EDM    │ 27       │
+│ 3     │ Auston Matthews           │ TOR    │ 26       │
+│ 4     │ Nathan MacKinnon          │ COL    │ 25       │
+│ 5     │ Sidney Crosby             │ PIT    │ 24       │
+└───────┴───────────────────────────┴────────┴──────────┘
+
+NHL Scrabble> compare McDavid Ovechkin
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ Attribute           ┃ Connor McDavid            ┃ Alex Ovechkin    ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ Team                │ EDM                       │ WSH              │
+│ Scrabble Score      │ 27                        │ 28               │
+│ Difference          │ 1                         │ 1                │
+└─────────────────────┴───────────────────────────┴──────────────────┘
+
+Alex Ovechkin has a higher score
+
+NHL Scrabble> exit
+
+Goodbye!
+```
+
+**Performance**:
+
+- **Startup**: ~10-15 seconds (with data fetch)
+- **Startup (cached)**: ~1 second (with --no-fetch)
+- **Commands**: Instant (\<100ms)
+- **Refresh**: ~10-15 seconds (re-fetches data)
+
+**Use Cases**:
+
+- **Quick queries**: "Who's the top player on Toronto?"
+- **Player comparison**: "How does McDavid compare to Ovechkin?"
+- **Data exploration**: "Show me all players with 'ov' in their name"
+- **Team analysis**: "What's the breakdown for the Bruins?"
+- **Learning**: Explore data interactively without scripting
+
+See [Interactive Mode Tutorial](../tutorials/04-interactive-mode.md) for detailed guide.
+
 ### Future Commands (Planned)
 
 **`nhl-scrabble compare`** (Planned)
