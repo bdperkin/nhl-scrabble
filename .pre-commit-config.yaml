@@ -163,7 +163,8 @@ repos:
       - id: pymarkdown
         args: [scan]  # Config is in pyproject.toml
         # Exclude GitHub issue templates (YAML frontmatter incompatible)
-        exclude: ^\.github/ISSUE_TEMPLATE/
+        # Exclude tasks (Python code examples trigger MD011 false positives)
+        exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.21

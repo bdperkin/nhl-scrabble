@@ -50,17 +50,24 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Optimization (5 tasks, 0 documented)
+### Optimization (11 tasks, 6 documented)
 
-| ID  | Title                  | Priority | Effort | Issue |
-| --- | ---------------------- | -------- | ------ | ----- |
-| ... | Parallel API Requests  | MEDIUM   | TBD    |       |
-| ... | Lazy Report Generation | LOW      | TBD    |       |
-| ... | Memoized Scoring       | LOW      | TBD    |       |
-| ... | Memory Optimization    | LOW      | TBD    |       |
-| ... | Log Level Optimization | LOW      | TBD    |       |
+| ID  | Title                                    | Priority | Effort   | Issue |
+| --- | ---------------------------------------- | -------- | -------- | ----- |
+| 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |
+| 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |
+| 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  |
+| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |
+| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |
+| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |
+| ... | Lazy Report Generation                   | LOW      | TBD      |       |
+| ... | Memoized Scoring                         | LOW      | TBD      |       |
+| ... | Memory Optimization (__slots__)          | LOW      | TBD      |       |
+| ... | Rate Limiting on Cache Hits              | LOW      | TBD      |       |
+| ... | Log Level Optimization                   | LOW      | TBD      |       |
 
-**Documented Effort**: 0 hours
+**Documented Effort**: 9-15.5 hours
+**Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
 ### Enhancements (10 tasks, 0 documented)
 
@@ -120,12 +127,15 @@ No active testing tasks.
 
 ## Total Project Roadmap
 
-**Active Tasks**: 6 tasks (0 refactoring, 6 new-features)
-**Total Active Effort**: 38-55 hours (web interface: 22-31h)
-**Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 29 tasks (~74.25h actual effort)
+**Active Tasks**: 12 tasks (6 optimization, 6 new-features)
+**Total Active Effort**: 47-70.5 hours
 
-**Grand Total**: ~138-180 hours for complete roadmap
+- Optimization: 9-15.5h (5-10x performance improvement)
+- Web interface: 38-55h (22-31h subtasks)
+  **Undocumented Tasks**: 30+ tasks (estimated 90+ hours)
+  **Completed Tasks**: 29 tasks (~74.25h actual effort)
+
+**Grand Total**: ~137-165 hours for complete roadmap
 
 ## How to Use These Tasks
 
