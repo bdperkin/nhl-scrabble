@@ -34,7 +34,7 @@ TEMPLATES_DIR = WEB_DIR / "templates"
 STATIC_DIR = WEB_DIR / "static"
 
 
-class SecurityHeadersMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Middleware to add security headers to all responses."""
 
     async def dispatch(self, request: Request, call_next: Any) -> Any:
