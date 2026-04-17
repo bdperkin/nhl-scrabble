@@ -132,6 +132,42 @@ class NHLApiClient:
 
         return max(0, delay)
 
+    def _is_url_cached(self, url: str) -> bool:
+        """Check if a URL response is cached and not expired.
+
+        Args:
+            url: The URL to check
+
+        Returns:
+            True if the URL response is cached and valid, False otherwise
+
+        Examples:
+            >>> client = NHLApiClient(cache_enabled=True)
+            >>> client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
+            False  # Not cached initially
+        """
+        if not self.cache_enabled:
+            return False
+
+        if not hasattr(self.session, "cache"):
+            return False
+
+        try:
+            # Check if URL is in cache using has_url() method (requests-cache 1.0+)
+            if hasattr(self.session.cache, "has_url"):
+                return self.session.cache.has_url(url)  # type: ignore[no-any-return]
+
+            # Fallback: check using contains() method
+            if hasattr(self.session.cache, "contains"):
+                return self.session.cache.contains(url=url)  # type: ignore[no-any-return]
+
+            # If no cache checking method available, assume not cached
+            return False
+        except Exception:  # noqa: BLE001
+            # If anything goes wrong checking cache, assume not cached
+            # This ensures we always apply rate limiting if uncertain
+            return False
+
     def get_teams(self) -> dict[str, dict[str, str]]:
         """Fetch all NHL teams with division and conference information.
 
@@ -169,8 +205,11 @@ class NHLApiClient:
         )
         def _fetch_teams() -> dict[str, dict[str, str]]:
             """Fetch teams with retry logic."""
-            # Rate limit: Ensure minimum delay between requests
-            if self._last_request_time is not None and self.rate_limit_delay > 0:
+            # Check if URL is cached
+            is_cached = self._is_url_cached(url)
+
+            # Only rate limit for actual API calls (not cached responses)
+            if not is_cached and self._last_request_time is not None and self.rate_limit_delay > 0:
                 elapsed = time.time() - self._last_request_time
                 if elapsed < self.rate_limit_delay:
                     sleep_time = self.rate_limit_delay - elapsed
@@ -192,8 +231,18 @@ class NHLApiClient:
 
                 logger.info(f"Successfully fetched {len(teams_info)} teams")
 
-                # Record successful request time for rate limiting
-                self._last_request_time = time.time()
+                # Only record request time if this was a real API call (not cached)
+                # Check from_cache attribute safely (handles Mock objects that don't have it set)
+                from_cache = (
+                    hasattr(response, "from_cache")
+                    and isinstance(response.from_cache, bool)
+                    and response.from_cache
+                )
+                if not from_cache:
+                    self._last_request_time = time.time()
+                    logger.debug("Real API request - updated rate limit timer")
+                else:
+                    logger.debug("Cache hit - skipped rate limiting")
 
                 return teams_info
 
@@ -211,7 +260,7 @@ class NHLApiClient:
             logger.error(f"Connection error after retries: {e}")
             raise NHLApiConnectionError("Unable to connect to NHL API after retries") from e
 
-    def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
+    def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:  # noqa: PLR0915
         """Fetch the current roster for a specific team.
 
         Args:
@@ -236,9 +285,15 @@ class NHLApiClient:
 
         for attempt in range(self.retries):
             try:
-                # Rate limit: Ensure minimum delay between requests
-                # Only applies to subsequent requests, not the first one
-                if self._last_request_time is not None and self.rate_limit_delay > 0:
+                # Check if URL is cached
+                is_cached = self._is_url_cached(url)
+
+                # Only rate limit for actual API calls (not cached responses)
+                if (
+                    not is_cached
+                    and self._last_request_time is not None
+                    and self.rate_limit_delay > 0
+                ):
                     elapsed = time.time() - self._last_request_time
                     if elapsed < self.rate_limit_delay:
                         sleep_time = self.rate_limit_delay - elapsed
@@ -276,8 +331,18 @@ class NHLApiClient:
                 data = response.json()
                 logger.debug(f"Successfully fetched roster for {team_abbrev}")
 
-                # Record successful request time for rate limiting
-                self._last_request_time = time.time()
+                # Only record request time if this was a real API call (not cached)
+                # Check from_cache attribute safely (handles Mock objects that don't have it set)
+                from_cache = (
+                    hasattr(response, "from_cache")
+                    and isinstance(response.from_cache, bool)
+                    and response.from_cache
+                )
+                if not from_cache:
+                    self._last_request_time = time.time()
+                    logger.debug("Real API request - updated rate limit timer")
+                else:
+                    logger.debug("Cache hit - skipped rate limiting")
 
                 return data  # type: ignore[no-any-return]
 
