@@ -49,6 +49,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
     "jinja2>=3.1.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
 ]
 
 [project.optional-dependencies]
@@ -453,6 +455,10 @@ module = ["nhl_scrabble.cli"]
 disallow_untyped_defs = false
 disallow_untyped_decorators = false
 warn_return_any = false
+
+[[tool.mypy.overrides]]
+module = ["nhl_scrabble.web.*"]
+disallow_untyped_decorators = false  # FastAPI decorators don't have type stubs
 
 # Pytest configuration
 [tool.pytest.ini_options]
@@ -992,6 +998,11 @@ ignore_names = [
 
     # Public API exceptions (part of public API even if not currently used)
     "NHLApiNotFoundError",  # Exception class reserved for future use
+
+    # FastAPI framework patterns (called at runtime by framework)
+    "health",             # FastAPI endpoint function (registered via decorator)
+    "root",               # FastAPI endpoint function (registered via decorator)
+    "templates",          # Jinja2Templates instance (used by future endpoints)
 
     # Test-related patterns
     "test_*",             # Test functions
