@@ -793,6 +793,7 @@ exclude = [
     ".*\\.egg-info",
     "__pycache__",
     "tests",  # Test files often have test-specific imports
+    "scripts",  # Standalone scripts with their own dependencies
 ]
 
 # Development dependency groups (PEP 621 optional-dependencies)
@@ -809,6 +810,7 @@ optional_dependencies_dev_groups = [
     "publish",
     "tox",
     "dev",
+    "branding",  # Asset generation (scripts/generate_branding.py)
 ]
 
 # Ignore specific errors if needed (comprehensive by default - no ignores)
