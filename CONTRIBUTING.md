@@ -135,6 +135,54 @@ pytest tests/unit/test_scrabble.py
 pytest tests/unit/test_scrabble.py::TestScrabbleScorer::test_calculate_score_basic
 ```
 
+### Test Randomization
+
+The project uses pytest-randomly to randomize test execution order and catch hidden test dependencies:
+
+```bash
+# pytest-randomly works automatically (no configuration needed)
+pytest
+# Output: Using --randomly-seed=1234567890
+
+# Reproduce exact same order (for debugging failures)
+pytest --randomly-seed=1234567890
+
+# Disable randomization temporarily (for debugging)
+pytest -p no:randomly
+
+# Set seed via environment variable
+PYTEST_RANDOMLY_SEED=1234567890 pytest
+```
+
+**Why randomization matters:**
+
+- **Catches hidden bugs**: Tests that depend on each other or shared global state
+- **Improves test quality**: Forces proper test isolation with fixtures
+- **Production reliability**: Order-dependent bugs won't surprise you in production
+
+**If tests fail randomly:**
+
+1. This is good! You found a hidden dependency
+1. Note the seed from the output: `Using --randomly-seed=1234567890`
+1. Reproduce: `pytest --randomly-seed=1234567890`
+1. Debug and fix the hidden dependency (usually missing fixture or global state)
+1. Re-run all tests to verify fix
+
+**Common patterns that pytest-randomly catches:**
+
+- Global state modified by tests
+- Database records created by one test, used by another
+- File system changes not cleaned up
+- Shared singletons modified
+- Module import side effects
+
+**Best practices:**
+
+- ✅ Use fixtures for test data setup
+- ✅ Clean up after each test (use yield fixtures)
+- ✅ Avoid global state in tests
+- ❌ Don't use `@pytest.mark.randomly_disable` (fix the dependency instead)
+
 ### Multi-Environment Testing with Tox
 
 For testing across multiple Python versions before submitting a PR:
