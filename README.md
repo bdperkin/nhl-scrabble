@@ -57,7 +57,8 @@ pip install -e ".[dev]"
 
 ### Requirements
 
-- Python 3.10-3.14
+- **Supported**: Python 3.10, 3.11, 3.12, 3.13, 3.14
+- **Experimental**: Python 3.15-dev (CI testing only, may have issues)
 - Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`
 - Note: UV acceleration is automatic when using tox (via tox-uv plugin)
 
@@ -600,7 +601,7 @@ All Dependabot PRs are automatically labeled, assigned, and follow conventional 
 - **Makefile Targets**: 55 documented targets
 - **Pre-commit Hooks**: 54 hooks (meta, pre-commit-hooks, pygrep-hooks, isort, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, absolufy-imports, validate-pyproject, pyroma, tox-ini-fmt, yamllint, codespell, pymarkdown, mdformat, doc8, rstcheck, uv, flake8, autoflake, black, docformatter, ruff, mypy)
 - **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
-- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13, 3.14
+- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
 
 ______________________________________________________________________
 
