@@ -70,9 +70,11 @@ type = [
     "types-requests>=2.31.0",
 ]
 
-# Security dependencies
+# Security audit dependencies
 security = [
-    "pip-audit>=2.7.0",
+    "pip-audit>=2.7.0",    # Scan dependencies for known vulnerabilities
+    "bandit[toml]>=1.7.5", # Security linter for Python code
+    "safety>=3.0.0",       # Check dependencies against vulnerability database
 ]
 
 # Branding asset generation dependencies
@@ -993,3 +995,42 @@ min_confidence = 60
 # - Aligns with conventional commits best practices
 # - Promotes clear git history for team collaboration
 # - Works harmoniously with conventional commit standards
+
+# ============================================================================
+# Bandit Security Linter Configuration
+# ============================================================================
+
+[tool.bandit]
+# Comprehensive security checking (matches ruff's ALL rules philosophy)
+# Scans Python code for common security issues and vulnerabilities
+
+# Directories to scan
+targets = ["src"]
+
+# Exclude test files and build artifacts
+exclude_dirs = [
+    "tests",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+]
+
+# Security level: LOW, MEDIUM, HIGH
+# Comprehensive by default - report all severity levels
+severity = "LOW"
+
+# Confidence level: LOW, MEDIUM, HIGH
+# Comprehensive by default - report all confidence levels
+confidence = "LOW"
+
+# Issues to skip (with justification)
+# S311: random used for jitter (not cryptographic purposes)
+# These are explicitly documented in code with noqa comments
+skips = []
+
+# Specific tests to exclude (if needed)
+# Currently: run all security tests comprehensively
+exclude_tests = []

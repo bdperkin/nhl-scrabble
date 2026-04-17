@@ -41,7 +41,8 @@ NC := \033[0m # No Color
         test test-unit test-integration test-cov test-watch test-failed test-verbose \
         tox tox-list tox-parallel tox-clean tox-recreate tox-envs \
         uv-pip uv-check \
-        ruff-check ruff-format ruff-format-check mypy quality check pre-commit pip-audit ci \
+        ruff-check ruff-format ruff-format-check mypy quality check pre-commit ci \
+        security-audit pip-audit bandit safety security-report \
         build publish publish-test \
         docs serve-docs \
         run run-verbose run-json \
@@ -289,12 +290,52 @@ pre-commit: ## Run pre-commit hooks on all files
 	@$(PRE_COMMIT) run --all-files
 
 ###################
-# Security & Dependencies
+# Security Audits
 ###################
 
-pip-audit: check-venv ## Security - scan for vulnerabilities (pip-audit)
-	@printf "$(BLUE)Running security audit...$(NC)\n"
-	@$(BIN)/tox -e pip-audit
+security-audit: check-venv ## Security - comprehensive security audit (pip-audit + bandit + safety)
+	@printf "$(BLUE)╔════════════════════════════════════════════════════════════╗$(NC)\n"
+	@printf "$(BLUE)║           COMPREHENSIVE SECURITY AUDIT                     ║$(NC)\n"
+	@printf "$(BLUE)╚════════════════════════════════════════════════════════════╝$(NC)\n"
+	@printf "\n"
+	@printf "$(YELLOW)1. Running pip-audit (dependency vulnerabilities)...$(NC)\n"
+	@$(BIN)/pip-audit --desc || (printf "$(RED)⚠️  Vulnerabilities found$(NC)\n" && exit 0)
+	@printf "$(GREEN)✓ pip-audit complete$(NC)\n\n"
+	@printf "$(YELLOW)2. Running bandit (code security analysis)...$(NC)\n"
+	@$(BIN)/bandit -r src/ -ll || (printf "$(RED)⚠️  Security issues found$(NC)\n" && exit 0)
+	@printf "$(GREEN)✓ bandit complete$(NC)\n\n"
+	@printf "$(YELLOW)3. Running safety check (vulnerability database)...$(NC)\n"
+	@$(BIN)/safety check || (printf "$(RED)⚠️  Known vulnerabilities found$(NC)\n" && exit 0)
+	@printf "$(GREEN)✓ safety complete$(NC)\n\n"
+	@printf "$(GREEN)╔════════════════════════════════════════════════════════════╗$(NC)\n"
+	@printf "$(GREEN)║           SECURITY AUDIT COMPLETE                          ║$(NC)\n"
+	@printf "$(GREEN)╚════════════════════════════════════════════════════════════╝$(NC)\n"
+
+pip-audit: check-venv ## Security - scan dependencies for vulnerabilities
+	@printf "$(BLUE)Running pip-audit dependency scan...$(NC)\n"
+	@$(BIN)/pip-audit --desc
+
+bandit: check-venv ## Security - scan code for security issues with bandit
+	@printf "$(BLUE)Running bandit security linter...$(NC)\n"
+	@$(BIN)/bandit -r src/ -ll
+
+safety: check-venv ## Security - check for known security vulnerabilities
+	@printf "$(BLUE)Running Safety vulnerability check...$(NC)\n"
+	@$(BIN)/safety check
+
+security-report: check-venv ## Security - generate detailed security reports
+	@printf "$(BLUE)Generating security reports...$(NC)\n"
+	@mkdir -p reports
+	@printf "  - pip-audit JSON report...\n"
+	@$(BIN)/pip-audit --desc --format json --output reports/pip-audit-report.json || true
+	@printf "  - bandit JSON report...\n"
+	@$(BIN)/bandit -r src/ -f json -o reports/bandit-report.json || true
+	@printf "  - bandit HTML report...\n"
+	@$(BIN)/bandit -r src/ -f html -o reports/bandit-report.html || true
+	@printf "  - safety JSON report...\n"
+	@$(BIN)/safety check --json --output reports/safety-report.json || true
+	@printf "$(GREEN)✓ Reports saved to reports/$(NC)\n"
+	@ls -lh reports/*.json reports/*.html 2>/dev/null || true
 
 ###################
 # Build & Publish

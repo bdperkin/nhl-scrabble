@@ -1,0 +1,180 @@
+name: Security Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run security audit weekly on Mondays at 9 AM UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  security-audit:
+    name: Security Dependency Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - name: Install dependencies with security group
+        run: |
+          uv pip install -e ".[security]" --system
+
+      - name: Run pip-audit
+        id: pip-audit
+        run: |
+          echo "Running pip-audit security scan..."
+          pip-audit --desc --format json --output pip-audit-report.json || true
+          pip-audit --desc --format markdown --output pip-audit-report.md || true
+
+          # Also run with default output for GitHub Actions logs
+          pip-audit --desc || echo "::warning::pip-audit found vulnerabilities"
+        continue-on-error: true
+
+      - name: Upload pip-audit JSON report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pip-audit-report-json
+          path: pip-audit-report.json
+          retention-days: 90
+
+      - name: Upload pip-audit Markdown report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pip-audit-report-markdown
+          path: pip-audit-report.md
+          retention-days: 90
+
+      - name: Comment on PR with findings
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = 'No report available';
+            try {
+              report = fs.readFileSync('pip-audit-report.md', 'utf8');
+            } catch (e) {
+              report = 'Security audit failed. Check workflow logs for details.';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🔒 Security Audit Results\n\n${report}`
+            });
+
+  bandit-security-scan:
+    name: Bandit Security Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install bandit
+        run: |
+          pip install bandit[toml]
+
+      - name: Run bandit security linter
+        run: |
+          echo "Running bandit security analysis..."
+          bandit -r src/ -f json -o bandit-report.json || true
+          bandit -r src/ -f txt -o bandit-report.txt || true
+
+          # Also run with default output for GitHub Actions logs
+          bandit -r src/ || echo "::warning::Bandit found potential security issues"
+        continue-on-error: true
+
+      - name: Upload bandit reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-security-reports
+          path: |
+            bandit-report.json
+            bandit-report.txt
+          retention-days: 90
+
+  safety-check:
+    name: Safety Vulnerability Database Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv and dependencies
+        run: |
+          pip install uv
+          uv pip install -e ".[dev]" --system
+          pip install safety
+
+      - name: Run Safety check
+        run: |
+          echo "Running Safety vulnerability database check..."
+          safety check --json --output safety-report.json || true
+          safety check --output text --output safety-report.txt || true
+
+          # Also run with default output
+          safety check || echo "::warning::Safety found known vulnerabilities"
+        continue-on-error: true
+
+      - name: Upload safety reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: safety-vulnerability-reports
+          path: |
+            safety-report.json
+            safety-report.txt
+          retention-days: 90
+
+  summary:
+    name: Security Audit Summary
+    runs-on: ubuntu-latest
+    needs: [security-audit, bandit-security-scan, safety-check]
+    if: always()
+
+    steps:
+      - name: Security Audit Complete
+        run: |
+          echo "🔒 Security audit workflows completed"
+          echo "Check individual job results and artifacts for detailed reports"
+          echo ""
+          echo "Audits run:"
+          echo "  ✓ pip-audit (dependency vulnerabilities)"
+          echo "  ✓ bandit (code security issues)"
+          echo "  ✓ safety (vulnerability database)"
+          echo ""
+          echo "Additional security measures:"
+          echo "  ✓ Dependabot (automated dependency updates)"
+          echo "  ✓ CodeQL (weekly code scanning)"
+          echo "  ✓ Secret scanning (GitHub native)"

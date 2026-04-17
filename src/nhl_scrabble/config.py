@@ -63,10 +63,12 @@ class Config:
 
         Examples:
             >>> import os
-            >>> os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "15"
+            >>> os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "15"  # Setting is safe
             >>> config = Config.from_env()
             >>> config.api_timeout
             15
+            >>> # Note: Reading should always use os.getenv() with default:
+            >>> timeout = os.getenv("NHL_SCRABBLE_API_TIMEOUT", "10")  # Safe
         """
         # Load .env file if it exists
         load_dotenv()
