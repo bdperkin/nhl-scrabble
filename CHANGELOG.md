@@ -9,7 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Refactored
 
+- **Cross-Platform Branch Protection Check** - Ported git hook to Python
+
+  - Converted `.git-hooks/check-branch-protection.sh` to `.git-hooks/check-branch-protection.py` for Windows compatibility
+  - Removed bash dependency for branch protection pre-commit hook
+  - Improved error handling with proper exception catching (KeyboardInterrupt, EOFError)
+  - Added type hints and comprehensive docstrings
+  - Detects 6 CI environments (GitHub Actions, GitLab CI, Travis, CircleCI, Jenkins, generic CI)
+  - Maintained identical functionality, exit codes, and user experience
+  - Updated `.pre-commit-config.yaml` to use Python script with system language
+  - Benefits: Works on Windows without bash/WSL, easier maintenance for Python developers, better error handling
+
 - **Cross-Platform Documentation Check** - Ported bash script to Python
+
   - Converted `tools/check_docs.sh` to `tools/check_docs.py` for Windows compatibility
   - Removed bash dependency for pre-commit documentation validation
   - Improved error handling with proper exceptions and return codes

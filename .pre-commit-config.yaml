@@ -315,8 +315,8 @@ repos:
         name: Check Branch Protection
         # Warn when committing directly to main/master
         description: Warn about committing to protected branches
-        entry: .git-hooks/check-branch-protection.sh
-        language: script
+        entry: python .git-hooks/check-branch-protection.py
+        language: system
         always_run: true
         pass_filenames: false
         stages: [pre-commit]
