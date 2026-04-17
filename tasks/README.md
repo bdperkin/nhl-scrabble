@@ -63,11 +63,10 @@ Each task is assigned a priority:
 
 **Documented Effort**: 0 hours
 
-### Enhancements (10 tasks, 4 documented)
+### Enhancements (10 tasks, 3 documented)
 
 | ID  | Title                                                | Priority | Effort | Issue |
 | --- | ---------------------------------------------------- | -------- | ------ | ----- |
-| 001 | Implement HTML Output                                | MEDIUM   | 4-6h   | #46   |
 | 002 | Create Project Logo and Branding Assets              | MEDIUM   | 4-8h   | #89   |
 | 003 | Add Comprehensive Documentation Badges               | LOW      | 1-2h   | #91   |
 | 006 | Skill Optimizations: Pre-Flight Validation & CI Diag | HIGH     | 0.5-1h | #88   |
@@ -81,7 +80,7 @@ Each task is assigned a priority:
 | ... | Watch Mode                                           | LOW      | TBD    |       |
 | ... | Player Search                                        | LOW      | TBD    |       |
 
-**Documented Effort**: 9.5-17 hours
+**Documented Effort**: 5.5-11 hours
 
 ### Testing (1 task, 1 documented)
 
@@ -125,12 +124,12 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Documented Tasks**: 13 tasks
-**Total Documented Effort**: 39.5-63 hours
+**Documented Tasks**: 12 tasks
+**Total Documented Effort**: 35.5-57 hours
 **Undocumented Tasks**: 36+ tasks (estimated 100+ hours)
-**Completed Tasks**: 17 tasks (51.17h actual effort)
+**Completed Tasks**: 18 tasks (55.17h actual effort)
 
-**Grand Total**: ~139.5-185 hours for complete roadmap
+**Grand Total**: ~135.5-179 hours for complete roadmap
 
 ## How to Use These Tasks
 
@@ -333,23 +332,10 @@ This section organizes all documented tasks into a recommended implementation se
 
    - Can now be implemented as enhancement
 
-1. **enhancement/001-html-output.md** (4-6h) - #46
-
-   - MEDIUM priority, HTML report generation
-   - Can be done independently
-   - Can be documented in Sphinx docs
-
 ### Phase 5: Performance & Polish (Week 9-10)
 
 **Focus**: Performance optimizations, enhancements, and polish
-**Total Effort**: ~13-25 hours
-
-1. **enhancement/001-html-output.md** (4-6h) - #46
-
-   - MEDIUM priority, HTML report generation
-   - Adds HTML format for reports
-   - Can be done independently
-   - No dependencies
+**Total Effort**: ~9-19 hours
 
 1. **enhancement/002-project-logo-branding.md** (4-8h) - #89
 
@@ -614,8 +600,8 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-16
 **Tasks Documented**: 22 of 50+
-**Completion Status**: 16 of 22 completed (73%)
-**Documented Effort Remaining**: 27.83-58.83 hours (excluding completed tasks)
+**Completion Status**: 17 of 22 completed (77%)
+**Documented Effort Remaining**: 23.83-52.83 hours (excluding completed tasks)
 
 ## Completed Tasks
 
@@ -637,3 +623,4 @@ ______________________________________________________________________
 | 002 | Implement Procida Documentation    | Enhancement  | 2026-04-16 | 10h           | #80 |
 | 004 | Automated API/CLI Documentation    | Enhancement  | 2026-04-16 | 5.5h          | #85 |
 | 003 | Build Sphinx Docs + GitHub Pages   | Enhancement  | 2026-04-16 | 8h            | #86 |
+| 001 | Implement HTML Output Format       | Enhancement  | 2026-04-16 | 4h            | #92 |
