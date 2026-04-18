@@ -1,0 +1,15 @@
+# Vulture allowlist for public API methods
+
+# CSV Exporter public API
+export_player_scores  # CSVExporter method for exporting player scores
+export_division_standings  # CSVExporter method for exporting division standings
+export_conference_standings  # CSVExporter method for exporting conference standings
+export_playoff_standings  # CSVExporter method for exporting playoff standings
+
+# Excel Exporter public API
+export_player_scores  # ExcelExporter method for exporting player scores
+
+# Excel Exporter internal formatting methods (used at runtime)
+fill  # openpyxl PatternFill attribute
+font  # openpyxl Font attribute
+alignment  # openpyxl Alignment attribute

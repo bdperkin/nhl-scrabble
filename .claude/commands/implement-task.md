@@ -161,7 +161,7 @@ This command automates the complete task implementation workflow from start to f
      pre-commit run --all-files      # All hooks
 
      # CI-specific checks (if available locally)
-     tox -e py310,py311,py312,py313  # Multi-version testing
+     tox -e py310,py311,py312,py313,py314,py315  # Multi-version testing
      make docs                       # Documentation build
      ```
 

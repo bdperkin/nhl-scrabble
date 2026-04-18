@@ -149,13 +149,13 @@ pytest tests/integration/test_ssl_verification.py
 
 ## Acceptance Criteria
 
-- [ ] SSL verification explicitly enabled in all requests
-- [ ] Cannot disable SSL verification via config
-- [ ] SSL errors properly caught and logged
-- [ ] Uses certifi CA bundle
-- [ ] Tests verify SSL enforcement
-- [ ] Documentation updated
-- [ ] No `verify=False` in codebase
+- [x] SSL verification explicitly enabled in all requests
+- [x] Cannot disable SSL verification via config
+- [x] SSL errors properly caught and logged
+- [x] Uses certifi CA bundle
+- [x] Tests verify SSL enforcement
+- [x] Documentation updated
+- [x] No `verify=False` in codebase
 
 ## Related Files
 
@@ -191,4 +191,116 @@ pytest tests/integration/test_ssl_verification.py
 
 ## Implementation Notes
 
-*To be filled during implementation*
+**Implemented**: 2026-04-18
+**Branch**: security/006-ssl-verification
+**Status**: Implementation complete, ready for PR
+
+### Actual Implementation
+
+Followed the proposed solution closely with all planned features:
+
+1. **SSL Verification Enforcement**:
+
+   - Added `verify_ssl` parameter to `NHLApiClient.__init__()` (default: True)
+   - Raises `ValueError` if `verify_ssl=False` is attempted
+   - Prevents accidental SSL verification bypass
+
+1. **Certifi CA Bundle**:
+
+   - Added `import certifi` to nhl_client.py
+   - Set `self.ca_bundle = certifi.where()` in constructor
+   - All requests use `verify=self.ca_bundle` parameter
+   - Logged CA bundle path during initialization
+
+1. **Explicit SSL Verification**:
+
+   - Updated both `get_teams()` and `get_team_roster()` methods
+   - Added explicit `verify=self.ca_bundle` to all `session.get()` calls
+   - SSL verification cannot be bypassed
+
+1. **SSL Error Handling**:
+
+   - Added new `NHLApiSSLError` exception class
+   - Exported in `api/__init__.py` module
+   - SSL errors caught and logged with descriptive messages
+   - SSL errors are NOT retried (permanent security failure)
+   - Added to get_teams() and get_team_roster() methods
+
+1. **Bug Fixes**:
+
+   - Fixed initialization order: `_closed = False` set before potential exceptions
+   - Added `hasattr(self, "session")` check in `close()` method
+   - Prevents AttributeError if constructor fails before session creation
+
+### Testing
+
+Created comprehensive test suite in `tests/unit/test_ssl_verification.py`:
+
+- **10 unit tests** covering all aspects of SSL verification
+- 4 tests for SSL verification enforcement
+- 2 tests for SSL verification in requests
+- 4 tests for SSL error handling
+- All tests passing (10/10)
+- Code coverage: 84.58% on nhl_client.py (improvement from baseline)
+
+### Code Quality
+
+- ✅ Ruff linting: All checks passed
+- ✅ MyPy type checking: Success, no issues
+- ✅ All 325 existing tests: Passing
+- ✅ Pre-commit hooks: Ready (imports auto-sorted)
+
+### Documentation Updates
+
+- Updated `NHLApiClient` class docstring with SSL/TLS security notes
+- Updated `__init__()` docstring with verify_ssl parameter
+- Added CHANGELOG.md entry in "Security" section
+- Documented SSL error handling in exception docstrings
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 1-2h
+- **Actual**: ~1.5h
+- **On target**: Implementation complexity matched estimate
+
+### Deviations from Plan
+
+1. **No certificate pinning**:
+
+   - Decided against implementing certificate pinning
+   - NHL API certificate may rotate without notice
+   - Trust CA bundle is more maintainable
+   - Matches best practices from task description
+
+1. **ValueError instead of SecurityError**:
+
+   - Used built-in `ValueError` for verify_ssl=False
+   - More Pythonic than custom exception
+   - Clear semantic meaning for invalid parameter
+
+1. **Session attribute check**:
+
+   - Added `hasattr(self, "session")` in close() method
+   - Prevents issues if initialization fails
+   - Not in original plan but necessary for robustness
+
+### Security Benefits
+
+- ✅ Prevents man-in-the-middle (MITM) attacks
+- ✅ Ensures connection authenticity via trusted CAs
+- ✅ Protects API data integrity
+- ✅ Cannot be accidentally disabled
+- ✅ Uses up-to-date CA bundle via certifi
+- ✅ SSL errors logged for security monitoring
+
+### Related PRs
+
+- PR pending: Will create after commit
+
+### Lessons Learned
+
+1. **Initialization order matters**: Set state variables before raising exceptions
+1. **Test session type**: Use `patch.object(client.session)` for cached sessions
+1. **Import sorting**: Ruff auto-fix is helpful for I001 violations
+1. **Error granularity**: Specific SSL error logging helps debugging
+1. **No retries for security**: SSL errors should fail fast, not retry

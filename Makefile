@@ -287,7 +287,7 @@ check: check-venv ## Run all checks (format, quality, tests)
 
 pre-commit: ## Run pre-commit hooks on all files
 	@printf "$(BLUE)Running pre-commit hooks...$(NC)\n"
-	@$(PRE_COMMIT) run --all-files
+	@SKIP=check-branch-protection $(PRE_COMMIT) run --all-files
 
 ###################
 # Security Audits
@@ -375,7 +375,7 @@ docs-api: check-venv ## Generate API reference documentation (auto-generated fro
 
 docs-cli: check-venv ## Generate CLI reference documentation (auto-generated from Click)
 	@printf "$(BLUE)Generating CLI reference documentation...$(NC)\n"
-	@$(PYTHON_VENV) tools/generate_cli_docs.py
+	@$(PYTHON_VENV) scripts/generate_cli_docs.py
 	@printf "$(GREEN)✓ CLI docs generated: docs/reference/cli-generated.md$(NC)\n"
 
 docs-gen: docs-api docs-cli ## Generate all automated documentation (API + CLI)

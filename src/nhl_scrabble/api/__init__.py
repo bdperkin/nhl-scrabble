@@ -5,6 +5,7 @@ from nhl_scrabble.api.nhl_client import (
     NHLApiConnectionError,
     NHLApiError,
     NHLApiNotFoundError,
+    NHLApiSSLError,
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "NHLApiConnectionError",
     "NHLApiError",
     "NHLApiNotFoundError",
+    "NHLApiSSLError",
 ]

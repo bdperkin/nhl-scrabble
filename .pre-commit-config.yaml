@@ -222,7 +222,7 @@ repos:
         # Format code blocks in documentation (RST, Markdown)
         # Exclude files with pseudo-code examples (ellipsis, placeholders)
         args: [--line-length=100]
-        additional_dependencies: [black==24.10.0]
+        additional_dependencies: [black==26.3.1]
         exclude: ^(tasks/|\.claude/commands/|docs/(how-to/run-tests\.md|explanation/))
 
   - repo: https://github.com/econchick/interrogate
@@ -265,7 +265,7 @@ repos:
       - id: vulture
         # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
         # Finds unused functions, classes, variables, imports, and properties
-        args: [src]  # Config is in pyproject.toml
+        args: [src, .vulture_allowlist]  # Config is in pyproject.toml, allowlist for public APIs
 
   - repo: https://github.com/PrincetonUniversity/blocklint
     rev: v0.3.0
@@ -321,7 +321,7 @@ repos:
           ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
+    rev: 26.3.1
     hooks:
       - id: black
         # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
@@ -389,8 +389,8 @@ repos:
         name: Check generated documentation is up-to-date
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
-        entry: python tools/check_docs.py
+        entry: python scripts/check_docs.py
         language: system
         pass_filenames: false
         # Only run if docstrings or CLI code changed
-        files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
+        files: ^(src/nhl_scrabble/.*\.py|scripts/generate_cli_docs\.py)$

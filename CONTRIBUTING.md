@@ -72,6 +72,8 @@ git checkout -b fix/your-bug-fix
 - Python 3.11 tests
 - Python 3.12 tests
 - Python 3.13 tests
+- Python 3.14 tests
+- Python 3.15-dev tests (experimental, non-blocking)
 - All tox environments (31 environments)
 
 **Before creating a PR:**

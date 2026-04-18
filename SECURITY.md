@@ -76,6 +76,7 @@ We take the security of NHL Scrabble seriously. If you believe you have found a 
 - **NHL API**: Data is fetched from `https://api-web.nhle.com/`
 - All API calls are read-only (GET requests)
 - No authentication or personal data is transmitted
+- **SSRF Protection**: Comprehensive Server-Side Request Forgery (SSRF) protection prevents unauthorized requests to internal networks, cloud metadata endpoints, and non-NHL domains
 
 ### Dependencies
 
@@ -95,6 +96,102 @@ We take the security of NHL Scrabble seriously. If you believe you have found a 
 - **Rate Limiting**: 0.3-second delay between API requests
 - **Input Validation**: CLI arguments validated via Click framework
 - **Output Sanitization**: File paths validated before writing
+- **SSRF Protection**: Multi-layer protection against Server-Side Request Forgery attacks
+
+### SSRF Protection
+
+The application implements comprehensive Server-Side Request Forgery (SSRF) protection to prevent unauthorized network requests:
+
+#### Protected Resources
+
+- **Private Networks (RFC 1918)**:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+- **Localhost**: 127.0.0.0/8, ::1
+- **Link-Local**: 169.254.0.0/16 (includes cloud metadata endpoints)
+- **Special Use Ranges**: Broadcast, multicast, reserved ranges
+- **IPv6 Private**: fc00::/7, fe80::/10, ff00::/8
+
+#### Cloud Metadata Endpoints Blocked
+
+- AWS EC2: http://169.254.169.254/latest/meta-data/
+- Azure: http://169.254.169.254/metadata/instance
+- GCP: http://169.254.169.254/computeMetadata/v1/
+- Oracle Cloud: http://169.254.169.254/opc/v1/instance/
+
+#### Allowed Domains (Allowlist)
+
+Only these domains are permitted for API requests:
+
+- api-web.nhle.com (primary NHL API)
+- api.nhle.com (alternative NHL API)
+
+To add a new domain, it must be explicitly added to `ALLOWED_DOMAINS` in `src/nhl_scrabble/security/ssrf_protection.py`.
+
+#### Blocked Ports
+
+Common internal service ports are blocked:
+
+- 22 (SSH), 23 (Telnet)
+- 25 (SMTP)
+- 3306 (MySQL), 5432 (PostgreSQL)
+- 6379 (Redis)
+- 8080 (Proxy/Admin), 8443 (HTTPS Alt)
+- 9200 (Elasticsearch), 27017 (MongoDB)
+
+#### Validation Layers
+
+1. **URL Scheme**: Only HTTP/HTTPS allowed
+1. **Domain Allowlist**: Hostname must be in allowed domains list
+1. **DNS Resolution**: Hostname resolved to IPs before validation
+1. **IP Blocklist**: All resolved IPs checked against blocked ranges
+1. **Port Blocklist**: Request port checked against blocked ports
+1. **HTTPS Enforcement**: API base URL must use HTTPS
+
+#### Attack Scenarios Prevented
+
+- ✅ **Internal Network Scanning**: Cannot access 192.168.x.x, 10.x.x.x
+- ✅ **Cloud Metadata Access**: Cannot access 169.254.169.254
+- ✅ **Localhost Services**: Cannot access 127.0.0.1, ::1
+- ✅ **DNS Rebinding**: DNS resolution happens before validation
+- ✅ **Port Scanning**: Common internal service ports blocked
+- ✅ **Non-NHL Domains**: Only official NHL domains allowed
+
+#### Configuration
+
+The API base URL can be configured via environment variable:
+
+```bash
+# Valid - Official NHL API
+export NHL_SCRABBLE_API_BASE_URL="https://api-web.nhle.com/v1"
+
+# Blocked - Private IP
+export NHL_SCRABBLE_API_BASE_URL="https://192.168.1.1"
+# Error: Invalid API base URL: Hostname '192.168.1.1' not in allowed domains list
+
+# Blocked - Localhost
+export NHL_SCRABBLE_API_BASE_URL="http://localhost:8080"
+# Error: Invalid API base URL: Hostname 'localhost' not in allowed domains list
+
+# Blocked - Cloud metadata
+export NHL_SCRABBLE_API_BASE_URL="http://169.254.169.254"
+# Error: Invalid API base URL: Hostname '169.254.169.254' not in allowed domains list
+```
+
+#### Reporting SSRF Bypasses
+
+If you discover a way to bypass SSRF protection:
+
+1. **Do not** exploit it or test against production systems
+1. Follow the vulnerability reporting process above
+1. Include:
+   - Exact URL that bypasses protection
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Potential impact
+
+We treat SSRF vulnerabilities as **HIGH** severity and will prioritize fixes.
 
 ## Security Tools in Use
 

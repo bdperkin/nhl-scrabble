@@ -125,7 +125,7 @@ This command automates the complete security finding remediation workflow:
 
    - Poll CI status: `gh pr checks` (after PR creation)
    - Wait for all checks to pass:
-     - Python version tests (3.10, 3.11, 3.12, 3.13)
+     - Python version tests (3.10, 3.11, 3.12, 3.13, 3.14, 3.15-dev)
      - Pre-commit hooks
      - Tox quality checks
      - Code scanning (CodeQL)

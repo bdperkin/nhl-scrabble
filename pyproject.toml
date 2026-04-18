@@ -45,6 +45,7 @@ classifiers = [
 dependencies = [
     "requests>=2.31.0",
     "requests-cache>=1.2.0",
+    "certifi>=2023.0.0",  # SSL/TLS CA bundle for certificate verification
     "click>=8.1.0",
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
@@ -95,6 +96,11 @@ branding = [
     "cairosvg>=2.7.0",     # SVG to PNG conversion
 ]
 
+# Export dependencies for CSV/Excel output
+export = [
+    "openpyxl>=3.1.0",     # Excel file creation and formatting
+]
+
 # Comprehensive Sphinx documentation dependencies (9 extensions + markdown support + quality plugins)
 docs = [
     "sphinx>=7.2.6",  # Core documentation engine
@@ -141,7 +147,7 @@ tox = [
 
 # Complete development environment
 dev = [
-    "nhl-scrabble[test,lint,type,security,docs,watch,build,publish,tox]",
+    "nhl-scrabble[test,lint,type,security,docs,export,watch,build,publish,tox]",
     "pre-commit>=3.6.0",
     "check-jsonschema>=0.28.0",  # JSON/YAML schema validation
 ]
@@ -230,7 +236,7 @@ exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info"]
 # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
 # Align with ruff's configuration for consistency
 line-length = 100  # Match ruff's line-length
-target-version = ["py310", "py311", "py312", "py313"]  # Match ruff's target-version
+target-version = ["py310", "py311", "py312", "py313", "py314"]  # All supported versions (3.10-3.14)
 skip-string-normalization = false  # Use double quotes (matches ruff's quote-style)
 skip-magic-trailing-comma = false  # Respect magic trailing commas
 # Exclude patterns (align with other tool exclusions)

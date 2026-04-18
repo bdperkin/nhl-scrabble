@@ -65,6 +65,9 @@ coverage.xml
 *.py,cover
 .cache
 
+# Benchmark results (pytest-benchmark)
+.benchmarks/
+
 # Tox
 .tox/
 .nox/
@@ -216,6 +219,19 @@ local_settings.py
 *.sqlite3
 *.sqlite3-journal
 *.db
+
+# Generated reports
+sync-report.md
+
+# ============================================================================
+# Claude Code
+# ============================================================================
+
+# Lock files
+.claude/*.lock
+
+# Temporary/runtime files
+.claude/*.tmp
 
 # ============================================================================
 # Debugging

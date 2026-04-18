@@ -5,7 +5,7 @@ the committed versions. Used in pre-commit hooks to ensure documentation stays
 in sync with code changes.
 
 Usage:
-    python tools/check_docs.py
+    python scripts/check_docs.py
 
 Exit Codes:
     0: Documentation is up-to-date or package not installed (skip)
@@ -95,7 +95,7 @@ def generate_cli_docs() -> None:
     print_colored("Generating CLI reference documentation...", Colors.BLUE)
 
     subprocess.run(
-        [sys.executable, "tools/generate_cli_docs.py"],
+        [sys.executable, "scripts/generate_cli_docs.py"],
         check=True,
         capture_output=True,
     )

@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
+  - Added `CSVExporter` class for exporting data to CSV format
+  - Added `ExcelExporter` class for exporting data to Excel (.xlsx) format with multiple sheets
+  - Added `openpyxl` as optional dependency in `[export]` group
+  - Extended CLI `--format` option to support `csv` and `excel` formats
+  - Added `--sheets` option for Excel to specify which sheets to include
+  - CSV exports include team scores with sorting by total score
+  - Excel exports include multiple formatted sheets: Teams, Players, Divisions, Conferences, Playoffs
+  - Excel reports feature header formatting, auto-adjusted columns, and professional styling
+  - Added 18 comprehensive tests covering both CSV and Excel export functionality
+  - Benefits: Business-friendly output, easy data analysis, chart creation, data sharing
+  - Related: Enhancement task #144 - CSV/Excel export support
+  - Usage:
+    ```bash
+    nhl-scrabble analyze --format csv --output report.csv
+    nhl-scrabble analyze --format excel --output report.xlsx
+    nhl-scrabble analyze --format excel --sheets teams,players --output custom.xlsx
+    ```
+
+### Security
+
+- **PII Logging Prevention** - Enhanced log sanitization to protect player privacy
+
+  - Extended `SensitiveDataFilter` to detect and redact Personally Identifiable Information (PII)
+  - Added patterns for player names (handles "Connor McDavid", "Marc-Andre Fleury", "Ryan O'Reilly")
+  - Added patterns for birthdates (ISO, slash, and US date formats)
+  - Added patterns for email addresses and birthplace information
+  - Added patterns for firstName/lastName field logging
+  - Implemented safe phrase allowlist to prevent false positives (division names, conference names)
+  - Player names in `PlayerScore` repr, log messages, and args are automatically redacted
+  - Added 18 comprehensive unit tests covering PII detection and sanitization
+  - Maintains compliance with privacy regulations (GDPR, CCPA)
+  - Benefits: Prevents accidental PII exposure in log files, supports data minimization
+  - Related: Security task #136 - PII logging prevention
+
+- **Enforced SSL/TLS Certificate Verification** - Enhanced API security with mandatory SSL verification
+
+  - Added explicit `verify=True` with certifi CA bundle to all NHL API requests
+  - Prevents SSL verification from being disabled (raises `ValueError` if attempted)
+  - Uses certifi for up-to-date certificate authority trust store
+  - Added `NHLApiSSLError` exception for SSL verification failures
+  - SSL errors are logged and not retried (permanent security failures)
+  - Added `verify_ssl` parameter to constructor (must be True, cannot be disabled)
+  - Added 10 comprehensive unit tests covering SSL enforcement and error handling
+  - Benefits: Prevents MITM attacks, ensures connection authenticity, protects API data
+  - Related: Security task #135 - SSL/TLS certificate verification
+
 ### Improved
 
 - **Memory Optimization with __slots__** - Reduced memory usage for data model instances
