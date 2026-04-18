@@ -36,19 +36,20 @@ Each task is assigned a priority:
 
 **Total Effort**: 0 hours
 
-### Security (7 tasks, 7 documented)
+### Security (6 tasks active, 7 documented, 1 completed)
 
-| ID  | Title                            | Priority | Effort | Issue |
-| --- | -------------------------------- | -------- | ------ | ----- |
-| 002 | Comprehensive Input Validation   | MEDIUM   | 3-4h   | #129  |
-| 003 | SSRF Protection                  | MEDIUM   | 2-3h   | #130  |
-| 004 | Rate Limit Enforcement           | MEDIUM   | 3-4h   | #131  |
-| 005 | DoS Prevention                   | LOW      | 2-3h   | #134  |
-| 006 | SSL/TLS Certificate Verification | LOW      | 1-2h   | #135  |
-| 007 | PII Logging Prevention           | LOW      | 2-3h   | #136  |
-| 008 | Config Injection Protection      | LOW      | 2-3h   | #137  |
+| ID  | Title                            | Priority | Effort | Issue | Status      |
+| --- | -------------------------------- | -------- | ------ | ----- | ----------- |
+| 002 | Comprehensive Input Validation   | MEDIUM   | 3-4h   | #129  |             |
+| 003 | SSRF Protection                  | MEDIUM   | 2-3h   | #130  | ✅ Complete |
+| 004 | Rate Limit Enforcement           | MEDIUM   | 3-4h   | #131  |             |
+| 005 | DoS Prevention                   | LOW      | 2-3h   | #134  |             |
+| 006 | SSL/TLS Certificate Verification | LOW      | 1-2h   | #135  |             |
+| 007 | PII Logging Prevention           | LOW      | 2-3h   | #136  |             |
+| 008 | Config Injection Protection      | LOW      | 2-3h   | #137  |             |
 
 **Documented Effort**: 17-22.5 hours
+**Completed**: 1.25 hours (Task 003: SSRF Protection 1.25h - PR #181)
 
 ### Optimization (4 tasks, 11 documented, 7 completed)
 
@@ -707,7 +708,7 @@ Pick tasks based on priority and available capacity
 
 ```
 security/002-input-validation (#129)
-└── security/003-ssrf-protection (#130)
+└── security/003-ssrf-protection (#130) ✅ COMPLETE
     └── Can benefit from validated inputs
 ```
 
