@@ -36,7 +36,7 @@ Each task is assigned a priority:
 
 **Total Effort**: 0 hours
 
-### Security (6 tasks active, 7 documented, 1 completed)
+### Security (5 tasks active, 7 documented, 2 completed)
 
 | ID  | Title                            | Priority | Effort | Issue | Status      |
 | --- | -------------------------------- | -------- | ------ | ----- | ----------- |
@@ -44,12 +44,12 @@ Each task is assigned a priority:
 | 003 | SSRF Protection                  | MEDIUM   | 2-3h   | #130  | ✅ Complete |
 | 004 | Rate Limit Enforcement           | MEDIUM   | 3-4h   | #131  |             |
 | 005 | DoS Prevention                   | LOW      | 2-3h   | #134  |             |
-| 006 | SSL/TLS Certificate Verification | LOW      | 1-2h   | #135  |             |
+| 006 | SSL/TLS Certificate Verification | LOW      | 1-2h   | #135  | ✅ Complete |
 | 007 | PII Logging Prevention           | LOW      | 2-3h   | #136  |             |
 | 008 | Config Injection Protection      | LOW      | 2-3h   | #137  |             |
 
 **Documented Effort**: 17-22.5 hours
-**Completed**: 1.25 hours (Task 003: SSRF Protection 1.25h - PR #181)
+**Completed**: 2.75 hours (Task 003: SSRF Protection 1.25h - PR #181, Task 006: SSL/TLS Verification 1.5h - PR #199)
 
 ### Optimization (4 tasks, 11 documented, 7 completed)
 
