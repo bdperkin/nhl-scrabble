@@ -60,18 +60,18 @@ async def get_standings(
         )
 
     try:
-        api_client = NHLApiClient()
-        scorer = ScrabbleScorer()
-        processor = TeamProcessor(api_client, scorer)
+        with NHLApiClient() as api_client:
+            scorer = ScrabbleScorer()
+            processor = TeamProcessor(api_client, scorer)
 
-        team_scores, _, _ = processor.process_all_teams()
+            team_scores, _, _ = processor.process_all_teams()
 
-        if standings_type == "division":
-            return _get_division_standings(processor, team_scores)
-        if standings_type == "conference":
-            return _get_conference_standings(processor, team_scores)
-        # standings_type == "playoffs"
-        return _get_playoff_standings(team_scores)
+            if standings_type == "division":
+                return _get_division_standings(processor, team_scores)
+            if standings_type == "conference":
+                return _get_conference_standings(processor, team_scores)
+            # standings_type == "playoffs"
+            return _get_playoff_standings(team_scores)
 
     except HTTPException:
         raise

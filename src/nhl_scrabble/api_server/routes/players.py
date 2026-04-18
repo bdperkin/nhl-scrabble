@@ -59,65 +59,65 @@ async def get_players(
         >>> response = await get_players(min_score=100, limit=10)
     """
     try:
-        api_client = NHLApiClient()
-        scorer = ScrabbleScorer()
-        processor = TeamProcessor(api_client, scorer)
+        with NHLApiClient() as api_client:
+            scorer = ScrabbleScorer()
+            processor = TeamProcessor(api_client, scorer)
 
-        team_scores, all_players, _ = processor.process_all_teams()
+            team_scores, all_players, _ = processor.process_all_teams()
 
-        # Apply team filter
-        if team:
-            team_upper = team.upper()
-            if team_upper not in team_scores:
-                raise HTTPException(status_code=404, detail=f"Team '{team}' not found")
-            all_players = team_scores[team_upper].players
+            # Apply team filter
+            if team:
+                team_upper = team.upper()
+                if team_upper not in team_scores:
+                    raise HTTPException(status_code=404, detail=f"Team '{team}' not found")
+                all_players = team_scores[team_upper].players
 
-        # Build player data
-        players_data = [
-            {
-                "name": f"{p.first_name} {p.last_name}",
-                "first_name": p.first_name,
-                "last_name": p.last_name,
-                "score": p.full_score,
-                "first_name_score": p.first_score,
-                "last_name_score": p.last_score,
-                "team": getattr(p, "team", team.upper() if team else ""),
+            # Build player data
+            players_data = [
+                {
+                    "name": f"{p.first_name} {p.last_name}",
+                    "first_name": p.first_name,
+                    "last_name": p.last_name,
+                    "score": p.full_score,
+                    "first_name_score": p.first_score,
+                    "last_name_score": p.last_score,
+                    "team": getattr(p, "team", team.upper() if team else ""),
+                }
+                for p in all_players
+            ]
+
+            # Apply score filters
+            if min_score is not None:
+                players_data = [p for p in players_data if p["score"] >= min_score]  # type: ignore[operator]
+            if max_score is not None:
+                players_data = [p for p in players_data if p["score"] <= max_score]  # type: ignore[operator]
+
+            # Sort
+            reverse = order.lower() == "desc"
+            if sort_by == "score":
+                players_data.sort(key=lambda p: p["score"], reverse=reverse)
+            elif sort_by == "name":
+                players_data.sort(
+                    key=lambda p: (p["last_name"], p["first_name"]),
+                    reverse=reverse,
+                )
+
+            # Apply limit
+            if limit is not None:
+                players_data = players_data[:limit]
+
+            return {
+                "players": players_data,
+                "count": len(players_data),
+                "filters": {
+                    "min_score": min_score,
+                    "max_score": max_score,
+                    "team": team,
+                    "limit": limit,
+                    "sort_by": sort_by,
+                    "order": order,
+                },
             }
-            for p in all_players
-        ]
-
-        # Apply score filters
-        if min_score is not None:
-            players_data = [p for p in players_data if p["score"] >= min_score]  # type: ignore[operator]
-        if max_score is not None:
-            players_data = [p for p in players_data if p["score"] <= max_score]  # type: ignore[operator]
-
-        # Sort
-        reverse = order.lower() == "desc"
-        if sort_by == "score":
-            players_data.sort(key=lambda p: p["score"], reverse=reverse)
-        elif sort_by == "name":
-            players_data.sort(
-                key=lambda p: (p["last_name"], p["first_name"]),
-                reverse=reverse,
-            )
-
-        # Apply limit
-        if limit is not None:
-            players_data = players_data[:limit]
-
-        return {
-            "players": players_data,
-            "count": len(players_data),
-            "filters": {
-                "min_score": min_score,
-                "max_score": max_score,
-                "team": team,
-                "limit": limit,
-                "sort_by": sort_by,
-                "order": order,
-            },
-        }
 
     except HTTPException:
         raise

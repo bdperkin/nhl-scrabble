@@ -57,48 +57,48 @@ async def get_teams(
         >>> response = await get_teams(division="Atlantic")
     """
     try:
-        api_client = NHLApiClient()
-        scorer = ScrabbleScorer()
-        processor = TeamProcessor(api_client, scorer)
+        with NHLApiClient() as api_client:
+            scorer = ScrabbleScorer()
+            processor = TeamProcessor(api_client, scorer)
 
-        team_scores, _, _ = processor.process_all_teams()
+            team_scores, _, _ = processor.process_all_teams()
 
-        # Apply filters
-        filtered_teams = [
-            team
-            for team in team_scores.values()
-            if (division is None or team.division == division)
-            and (conference is None or team.conference == conference)
-        ]
+            # Apply filters
+            filtered_teams = [
+                team
+                for team in team_scores.values()
+                if (division is None or team.division == division)
+                and (conference is None or team.conference == conference)
+            ]
 
-        teams_data = [
-            {
-                "abbrev": team.abbrev,
-                "name": team.abbrev,  # We don't have full name in current model
-                "division": team.division,
-                "conference": team.conference,
-                "total_score": team.total,
-                "average_score": team.avg_per_player,
-                "player_count": len(team.players),
-                "top_players": [
-                    {
-                        "name": f"{p.first_name} {p.last_name}",
-                        "score": p.full_score,
-                    }
-                    for p in sorted(team.players, key=lambda x: x.full_score, reverse=True)[:5]
-                ],
+            teams_data = [
+                {
+                    "abbrev": team.abbrev,
+                    "name": team.abbrev,  # We don't have full name in current model
+                    "division": team.division,
+                    "conference": team.conference,
+                    "total_score": team.total,
+                    "average_score": team.avg_per_player,
+                    "player_count": len(team.players),
+                    "top_players": [
+                        {
+                            "name": f"{p.first_name} {p.last_name}",
+                            "score": p.full_score,
+                        }
+                        for p in sorted(team.players, key=lambda x: x.full_score, reverse=True)[:5]
+                    ],
+                }
+                for team in filtered_teams
+            ]
+
+            return {
+                "teams": teams_data,
+                "count": len(teams_data),
+                "filters": {
+                    "division": division,
+                    "conference": conference,
+                },
             }
-            for team in filtered_teams
-        ]
-
-        return {
-            "teams": teams_data,
-            "count": len(teams_data),
-            "filters": {
-                "division": division,
-                "conference": conference,
-            },
-        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch teams: {e!s}") from e
@@ -122,39 +122,39 @@ async def get_team(abbrev: str) -> dict[str, Any]:
         >>> assert response["abbrev"] == "TOR"
     """
     try:
-        api_client = NHLApiClient()
-        scorer = ScrabbleScorer()
-        processor = TeamProcessor(api_client, scorer)
+        with NHLApiClient() as api_client:
+            scorer = ScrabbleScorer()
+            processor = TeamProcessor(api_client, scorer)
 
-        team_scores, _, _ = processor.process_all_teams()
+            team_scores, _, _ = processor.process_all_teams()
 
-        # Find the team
-        team = team_scores.get(abbrev.upper())
+            # Find the team
+            team = team_scores.get(abbrev.upper())
 
-        if team is None:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Team '{abbrev}' not found",
-            )
+            if team is None:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Team '{abbrev}' not found",
+                )
 
-        return {
-            "abbrev": team.abbrev,
-            "name": team.abbrev,
-            "division": team.division,
-            "conference": team.conference,
-            "total_score": team.total,
-            "average_score": team.avg_per_player,
-            "player_count": len(team.players),
-            "players": [
-                {
-                    "name": f"{p.first_name} {p.last_name}",
-                    "score": p.full_score,
-                    "first_name_score": p.first_score,
-                    "last_name_score": p.last_score,
-                }
-                for p in sorted(team.players, key=lambda x: x.full_score, reverse=True)
-            ],
-        }
+            return {
+                "abbrev": team.abbrev,
+                "name": team.abbrev,
+                "division": team.division,
+                "conference": team.conference,
+                "total_score": team.total,
+                "average_score": team.avg_per_player,
+                "player_count": len(team.players),
+                "players": [
+                    {
+                        "name": f"{p.first_name} {p.last_name}",
+                        "score": p.full_score,
+                        "first_name_score": p.first_score,
+                        "last_name_score": p.last_score,
+                    }
+                    for p in sorted(team.players, key=lambda x: x.full_score, reverse=True)
+                ],
+            }
 
     except HTTPException:
         raise
