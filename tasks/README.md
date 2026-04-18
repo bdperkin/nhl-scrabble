@@ -121,11 +121,10 @@ Each task is assigned a priority:
 **Documented Effort**: 87.5-126 hours (web interface subtasks: 14.5-21h remaining, standalone features: 70-100h)
 **Completed**: 7 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 004: Web Frontend Templates 3.5h - PR #176)
 
-### Refactoring (7 tasks, 7 documented)
+### Refactoring (6 tasks active, 7 documented, 1 completed)
 
 | ID  | Title                              | Priority | Effort   | Issue |
 | --- | ---------------------------------- | -------- | -------- | ----- |
-| 001 | Consolidate Report Classes         | LOW      | 6-8h     | #159  |
 | 002 | Improve Type Safety                | LOW      | 8-10h    | #160  |
 | 003 | Unified Config Management          | LOW      | 5-6h     | #161  |
 | 004 | Add pyupgrade Syntax Modernization | MEDIUM   | 1-2h     | #118  |
@@ -133,12 +132,14 @@ Each task is assigned a priority:
 | 006 | Error Handling Strategy            | LOW      | 6-8h     | #162  |
 | 007 | Dependency Injection               | LOW      | 8-10h    | #163  |
 
-**Documented Effort**: 35-45.5 hours
+**Documented Effort**: 29-37.5 hours remaining
+
+**Completed**: 3 hours (Task 001: Consolidate Report Classes 3h - PR #184)
 
 ## Total Project Roadmap
 
-**Total Tasks**: 53 tasks (48 active, 5 completed)
-**Remaining Effort**: 185-264 hours (14.5 hours completed)
+**Total Tasks**: 53 tasks (47 active, 6 completed)
+**Remaining Effort**: 182-256 hours (17.5 hours completed)
 
 ### By Category
 
@@ -149,7 +150,7 @@ Each task is assigned a priority:
 - **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
   - Web interface: 14.5-21h remaining (2 of 6 subtasks completed)
   - Standalone features: 70-100h
-- **Refactoring**: 7 tasks, 35-45.5h
+- **Refactoring**: 6 tasks active (1 completed), 29-37.5h remaining (completed: 3h)
 
 ### By Priority
 
