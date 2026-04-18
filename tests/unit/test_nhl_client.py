@@ -329,14 +329,20 @@ class TestNHLApiClient:
         client.close()
 
     def test_weakref_tracking(self) -> None:
-        """Test that instances are tracked with weak references."""
-        # Create clients and verify they are tracked
-        # Note: We check for presence rather than exact count due to parallel test execution
+        """Test that instances are tracked with weak references.
+
+        Note: In parallel test execution with pytest-xdist, counting instances
+        is unreliable because other tests may create/destroy clients concurrently.
+        Instead, we verify that our specific instances are tracked.
+        """
+        # Create clients
         client1 = NHLApiClient(cache_enabled=False)
         client2 = NHLApiClient(cache_enabled=False)
 
         # Verify both clients are tracked (weakrefs point to our instances)
+        # Get all alive instances from weakrefs
         tracked_instances = [ref() for ref in NHLApiClient._instances if ref() is not None]
+
         assert client1 in tracked_instances, "client1 should be tracked in _instances"
         assert client2 in tracked_instances, "client2 should be tracked in _instances"
 

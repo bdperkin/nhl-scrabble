@@ -153,6 +153,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Benefits: Improved UX, reduced perceived wait time, visibility into long operations
   - Accessibility: `--quiet` mode provides clean text output for screen readers
 
+- **Web API Endpoints for NHL Scrabble Analysis** - Complete REST API for analysis functionality
+
+  - Implemented `/api/analyze` POST endpoint with comprehensive analysis results
+  - Request validation via Pydantic models (top_players, top_team_players, use_cache)
+  - In-memory caching with 1-hour expiration for performance
+  - Returns top players, team standings, division/conference groupings, playoff bracket
+  - Implemented `/api/teams/{team_abbrev}` GET endpoint for team details
+  - Implemented `/api/cache/clear` DELETE endpoint for cache management
+  - Implemented `/api/cache/stats` GET endpoint for cache monitoring
+  - Integrated with TeamProcessor for data fetching and scoring
+  - Integrated with PlayoffCalculator for playoff bracket generation
+  - Comprehensive error handling with HTTP status codes (422 validation, 404 not found, 500 server error)
+  - Automatic OpenAPI schema generation with request/response models
+  - Added integration tests for all endpoints
+  - Note: Player by ID endpoint pending (PlayerScore model needs ID field)
+  - Benefits: Programmatic access to analysis, JSON API for frontends, efficient caching
+
 - **FastAPI Web Interface Infrastructure** - Foundation for browser-based NHL Scrabble access
 
   - Added FastAPI>=0.110.0 web framework with automatic OpenAPI documentation

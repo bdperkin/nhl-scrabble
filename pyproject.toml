@@ -53,6 +53,7 @@ dependencies = [
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.27.0",
     "prompt-toolkit>=3.0.0",
+    "pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -236,7 +237,7 @@ exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info"]
 # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
 # Align with ruff's configuration for consistency
 line-length = 100  # Match ruff's line-length
-target-version = ["py310", "py311", "py312", "py313", "py314"]  # All supported versions (3.10-3.14)
+target-version = ["py310", "py311", "py312", "py313"]  # All supported versions (3.10-3.14)
 skip-string-normalization = false  # Use double quotes (matches ruff's quote-style)
 skip-magic-trailing-comma = false  # Respect magic trailing commas
 # Exclude patterns (align with other tool exclusions)
@@ -477,7 +478,7 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 # Timeout configuration
-timeout = 10  # Default: 10 seconds for unit tests
+timeout = 60  # Default: 60 seconds (increased for integration tests with real API calls)
 timeout_method = "thread"  # Use threading for better compatibility
 
 addopts = [
@@ -488,7 +489,7 @@ addopts = [
     "--cov-report=term-missing:skip-covered",
     "--cov-report=html",
     "--cov-report=xml",
-    "--timeout=10",  # Enforce 10s default timeout
+    "--timeout=60",  # Enforce 60s timeout (accommodates integration tests)
 ]
 markers = [
     "unit: Unit tests",
@@ -990,6 +991,11 @@ ignore_decorators = [
     "@pytest.fixture",     # Pytest fixtures
     "@pytest.mark.*",      # Pytest markers
     "@app.route",          # Flask/FastAPI routes
+    "@app.get",            # FastAPI GET endpoints
+    "@app.post",           # FastAPI POST endpoints
+    "@app.put",            # FastAPI PUT endpoints
+    "@app.patch",          # FastAPI PATCH endpoints
+    "@app.delete",         # FastAPI DELETE endpoints
     "@*.register",         # Registration decorators
     "@property",           # Property decorators
     "@*.setter",           # Property setters
