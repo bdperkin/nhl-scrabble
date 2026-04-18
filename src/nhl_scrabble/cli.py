@@ -303,7 +303,8 @@ def run_analysis(
         base_url=config.api_base_url,
         timeout=config.api_timeout,
         retries=config.api_retries,
-        rate_limit_delay=config.rate_limit_delay,
+        rate_limit_max_requests=config.rate_limit_max_requests,
+        rate_limit_window=config.rate_limit_window,
         backoff_factor=config.backoff_factor,
         max_backoff=config.max_backoff,
         cache_enabled=config.cache_enabled,
@@ -337,6 +338,16 @@ def run_analysis(
         )
         if failed_teams:
             console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+    # Display rate limit stats if verbose
+    if config.verbose:
+        stats = api_client.get_rate_limit_stats()
+        console.print("\n[cyan]API Rate Limit Statistics:[/cyan]")
+        console.print(f"  Total requests: {stats['total_requests']}")
+        console.print(f"  Total waits: {stats['total_waits']}")
+        console.print(f"  Total wait time: {stats['total_wait_time']:.2f}s")
+        console.print(f"  Average wait: {stats['average_wait']:.2f}s")
+        console.print(f"  Current tokens: {stats['current_tokens']:.1f}/{stats['max_tokens']}")
 
     # Calculate standings
     division_standings = team_processor.calculate_division_standings(team_scores)
