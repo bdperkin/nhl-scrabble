@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Improved
 
+- **Lazy Report Generation** - Reports generated only when needed
+
+  - Implemented `ReportGenerator` class with lazy property evaluation
+  - Reports (team, division, conference, playoff, stats) only computed when accessed
+  - Added `--report` CLI option to filter specific report types
+  - Report results cached after first generation to avoid recomputation
+  - Expected 40-60% faster execution when viewing single report type
+  - Expected 50% memory reduction for filtered views
+  - Added 12 comprehensive unit tests for lazy evaluation behavior
+  - Benefits: Faster response for targeted queries, reduced resource usage, better user experience
+
 - **Single-Pass Statistics Calculation** - Combined multiple aggregations into one iteration
 
   - Optimized `StatsReporter` to calculate all player statistics in a single pass over the data

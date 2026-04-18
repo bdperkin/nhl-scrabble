@@ -59,19 +59,23 @@ Usage: nhl-scrabble analyze [OPTIONS]
   Examples:     nhl-scrabble analyze     nhl-scrabble analyze --verbose
   nhl-scrabble analyze --output report.txt     nhl-scrabble analyze --format
   json --output report.json     nhl-scrabble analyze --no-cache     nhl-
-  scrabble analyze --clear-cache
+  scrabble analyze --clear-cache     nhl-scrabble analyze --report team
+  nhl-scrabble analyze --report playoff --output playoffs.txt
 
 Options:
-  --format [text|json]        Output format (default: text)
-  -o, --output PATH           Output file path (default: stdout)
-  -v, --verbose               Enable verbose logging
-  --no-cache                  Disable API response caching (always fetch fresh
-                              data)
-  --clear-cache               Clear API cache before running
-  --top-players INTEGER       Number of top players to show (default: 20)
-  --top-team-players INTEGER  Number of top players per team to show (default:
-                              5)
-  --help                      Show this message and exit.
+  --format [text|json]            Output format (default: text)
+  -o, --output PATH               Output file path (default: stdout)
+  -v, --verbose                   Enable verbose logging
+  --no-cache                      Disable API response caching (always fetch
+                                  fresh data)
+  --clear-cache                   Clear API cache before running
+  --top-players INTEGER           Number of top players to show (default: 20)
+  --top-team-players INTEGER      Number of top players per team to show
+                                  (default: 5)
+  --report [conference|division|playoff|team|stats]
+                                  Generate specific report only (default: all
+                                  reports)
+  --help                          Show this message and exit.
 ```
 
 ### Examples

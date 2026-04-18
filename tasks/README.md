@@ -50,7 +50,7 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (8 tasks, 11 documented, 3 completed)
+### Optimization (7 tasks, 11 documented, 4 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue | Status      |
 | --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -60,14 +60,14 @@ Each task is assigned a priority:
 | 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  | ✅ Complete |
 | 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  | ✅ Complete |
 | 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |             |
-| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |             |
+| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  | ✅ Complete |
 | 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  |             |
 | 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  |             |
 | 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |             |
 | 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
-**Documented Effort**: 16-24.5 hours
-**Completed**: 4.33 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h)
+**Documented Effort**: 14-21.5 hours
+**Completed**: 6.83 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 007: lazy reports 2.5h - PR #192)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
 ### Enhancements (9 tasks, 9 documented)
