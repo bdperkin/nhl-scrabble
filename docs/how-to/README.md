@@ -84,14 +84,43 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Use with Python/JavaScript
   - Query JSON with jq
 
+### Web Interface
+
+- **[Use the Web Interface](use-web-interface.md)** - Access NHL Scrabble via browser
+
+  - Start the web server
+  - Use the interactive form
+  - Configure analysis parameters
+  - View API documentation
+  - Mobile usage
+
+- **[Deploy the Web Interface](deploy-web-interface.md)** - Production deployment
+
+  - Production server setup (Uvicorn, Gunicorn)
+  - Reverse proxy configuration (Nginx, Caddy, Traefik)
+  - Process management (Systemd, Docker)
+  - Security configuration
+  - Environment variables
+  - Performance tuning
+
 ### Troubleshooting
 
 - **[Debug API Issues](debug-api-issues.md)** - Diagnose NHL API problems
+
   - Connection timeouts
   - 404 errors
   - Rate limiting
   - Invalid responses
   - Network debugging
+
+- **[Web Interface Troubleshooting](troubleshooting-web.md)** - Fix web interface issues
+
+  - Server won't start
+  - Static files not loading
+  - API endpoint errors
+  - Performance issues
+  - Browser compatibility
+  - Docker issues
 
 ## How to use these guides
 

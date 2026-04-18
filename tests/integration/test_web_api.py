@@ -35,6 +35,83 @@ class TestAnalyzeEndpoint:
         response = client.get("/api/analyze?top_team_players=50")
         assert response.status_code == 422
 
+    @pytest.mark.timeout(60)
+    def test_analyze_endpoint_success_with_cache(self, client: TestClient) -> None:
+        """Test analyze endpoint returns successful results with caching."""
+        # Use small parameters for faster execution with cache
+        response = client.get("/api/analyze?top_players=5&top_team_players=3&use_cache=true")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        # Verify response structure
+        assert "metadata" in data
+        assert "teams" in data
+        assert "top_players" in data
+        assert "divisions" in data
+        assert "conferences" in data
+        assert "playoffs" in data
+
+        # Verify metadata
+        metadata = data["metadata"]
+        assert "version" in metadata
+        assert "timestamp" in metadata
+        assert "parameters" in metadata
+        assert "stats" in metadata
+
+        # Verify parameters match request
+        params = metadata["parameters"]
+        assert params["top_players"] == 5
+        assert params["top_team_players"] == 3
+        assert params["use_cache"] is True
+
+        # Verify stats structure
+        stats = metadata["stats"]
+        assert "total_teams" in stats
+        assert "failed_teams" in stats
+        assert "total_players" in stats
+        assert stats["total_teams"] > 0
+        assert stats["total_players"] > 0
+
+        # Verify top players (should be 5 as requested)
+        top_players = data["top_players"]
+        assert isinstance(top_players, list)
+        assert len(top_players) <= 5
+        if top_players:
+            player = top_players[0]
+            assert "first_name" in player
+            assert "last_name" in player
+            assert "full_score" in player
+            assert isinstance(player["full_score"], (int, float))
+
+        # Verify teams structure
+        teams = data["teams"]
+        assert isinstance(teams, dict)
+        assert len(teams) > 0
+        # Check first team structure
+        team_abbrev = next(iter(teams))
+        team = teams[team_abbrev]
+        assert "total" in team
+        assert "players" in team
+        assert "division" in team
+        assert "conference" in team
+        assert "avg_per_player" in team
+
+    @pytest.mark.timeout(60)
+    def test_analyze_endpoint_default_parameters(self, client: TestClient) -> None:
+        """Test analyze endpoint works with default parameters."""
+        # Call without parameters (should use defaults)
+        response = client.get("/api/analyze")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        # Verify metadata shows default parameters
+        params = data["metadata"]["parameters"]
+        assert params["top_players"] == 20  # Default
+        assert params["top_team_players"] == 5  # Default
+        assert params["use_cache"] is True  # Default
+
 
 class TestSecurityHeaders:
     """Tests for security headers."""
