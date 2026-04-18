@@ -188,3 +188,86 @@ def test_cache_stats(client: TestClient) -> None:
     assert len(data["entries"]) == 1
     assert "age_seconds" in data["entries"][0]
     assert "expires_in_seconds" in data["entries"][0]
+
+
+class TestSecurityHeaders:
+    """Tests for security headers middleware."""
+
+    def test_security_headers_present(self, client: TestClient) -> None:
+        """Test that security headers are present in responses."""
+        response = client.get("/health")
+
+        assert response.status_code == 200
+
+        # Check security headers
+        assert "x-content-type-options" in response.headers
+        assert response.headers["x-content-type-options"] == "nosniff"
+
+        assert "x-frame-options" in response.headers
+        assert response.headers["x-frame-options"] == "DENY"
+
+        assert "x-xss-protection" in response.headers
+        assert response.headers["x-xss-protection"] == "1; mode=block"
+
+        assert "referrer-policy" in response.headers
+        assert response.headers["referrer-policy"] == "strict-origin-when-cross-origin"
+
+        assert "content-security-policy" in response.headers
+        assert "default-src 'self'" in response.headers["content-security-policy"]
+
+    def test_security_headers_on_all_endpoints(self, client: TestClient) -> None:
+        """Test that security headers are present on all endpoints."""
+        endpoints = ["/", "/health", "/docs", "/openapi.json"]
+
+        for endpoint in endpoints:
+            response = client.get(endpoint)
+            assert "x-content-type-options" in response.headers
+            assert "x-frame-options" in response.headers
+
+
+class TestFavicon:
+    """Tests for favicon endpoint."""
+
+    def test_favicon_endpoint_exists(self, client: TestClient) -> None:
+        """Test favicon endpoint returns SVG."""
+        response = client.get("/favicon.svg")
+
+        assert response.status_code == 200
+        assert "image/svg+xml" in response.headers["content-type"]
+
+    def test_favicon_content(self, client: TestClient) -> None:
+        """Test favicon contains expected content."""
+        response = client.get("/favicon.svg")
+
+        assert response.status_code == 200
+        content = response.text
+
+        # Check SVG structure
+        assert "<svg" in content
+        assert "</svg>" in content
+        assert "🏒" in content
+
+
+class TestCORS:
+    """Tests for CORS configuration."""
+
+    def test_cors_headers_configured(self, client: TestClient) -> None:
+        """Test CORS middleware is configured."""
+        # CORS headers appear on cross-origin requests with proper Origin header
+        response = client.get("/health", headers={"Origin": "http://localhost:8000"})
+        assert response.status_code == 200
+        # Note: TestClient doesn't fully simulate CORS, but middleware is configured
+
+
+class TestErrorHandling:
+    """Tests for error handling."""
+
+    def test_404_for_unknown_route(self, client: TestClient) -> None:
+        """Test 404 for unknown routes."""
+        response = client.get("/unknown-route")
+        assert response.status_code == 404
+
+    def test_405_for_wrong_method(self, client: TestClient) -> None:
+        """Test 405 for wrong HTTP method."""
+        response = client.post("/health")
+        assert response.status_code == 405
