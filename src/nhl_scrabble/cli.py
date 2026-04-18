@@ -22,11 +22,7 @@ from nhl_scrabble.config import Config
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
-from nhl_scrabble.reports.conference_report import ConferenceReporter
-from nhl_scrabble.reports.division_report import DivisionReporter
-from nhl_scrabble.reports.playoff_report import PlayoffReporter
-from nhl_scrabble.reports.stats_report import StatsReporter
-from nhl_scrabble.reports.team_report import TeamReporter
+from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
 logger = logging.getLogger(__name__)
@@ -138,7 +134,12 @@ def cli() -> None:
     default=5,
     help="Number of top players per team to show (default: 5)",
 )
-def analyze(
+@click.option(
+    "--report",
+    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
+    help="Generate specific report only (default: all reports)",
+)
+def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     output_format: str,
     output: str | None,
     verbose: bool,
@@ -146,6 +147,7 @@ def analyze(
     clear_cache: bool,
     top_players: int,
     top_team_players: int,
+    report: str | None,
 ) -> None:
     """Run the NHL Scrabble analysis.
 
@@ -159,6 +161,8 @@ def analyze(
         nhl-scrabble analyze --format json --output report.json
         nhl-scrabble analyze --no-cache
         nhl-scrabble analyze --clear-cache
+        nhl-scrabble analyze --report team
+        nhl-scrabble analyze --report playoff --output playoffs.txt
     """
     # Load configuration first to get sanitize_logs setting
     config = Config.from_env()
@@ -186,7 +190,7 @@ def analyze(
 
     try:
         # Run the analysis
-        result = run_analysis(config, clear_cache=clear_cache)
+        result = run_analysis(config, clear_cache=clear_cache, report_filter=report)
 
         # Output results
         if output:
@@ -209,12 +213,16 @@ def analyze(
         sys.exit(1)
 
 
-def run_analysis(config: Config, clear_cache: bool = False) -> str:
+def run_analysis(
+    config: Config, clear_cache: bool = False, report_filter: str | None = None
+) -> str:
     """Run the complete NHL Scrabble analysis.
 
     Args:
         config: Configuration object
         clear_cache: Whether to clear the API cache before running
+        report_filter: Optional filter for specific report type
+            (conference, division, playoff, team, stats)
 
     Returns:
         Complete report string
@@ -240,13 +248,6 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
     scorer = ScrabbleScorer()
     team_processor = TeamProcessor(api_client, scorer)
     playoff_calculator = PlayoffCalculator()
-
-    # Initialize reporters
-    conference_reporter = ConferenceReporter()
-    division_reporter = DivisionReporter()
-    playoff_reporter = PlayoffReporter()
-    team_reporter = TeamReporter(top_players_per_team=config.top_team_players_count)
-    stats_reporter = StatsReporter(top_players_count=config.top_players_count)
 
     # Process all teams with progress indicator
     with Progress(
@@ -290,16 +291,20 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
             conference_standings,
             playoff_standings,
         )
-    # Generate text reports
-    reports = [
-        conference_reporter.generate(conference_standings),
-        division_reporter.generate(division_standings),
-        playoff_reporter.generate(playoff_standings),
-        team_reporter.generate(team_scores),
-        stats_reporter.generate((all_players, division_standings, conference_standings)),
-    ]
 
-    return "\n".join(reports) + "\n" + "=" * 80 + "\n"
+    # Use lazy report generator for text format
+    report_generator = ReportGenerator(
+        team_scores=team_scores,
+        all_players=all_players,
+        division_standings=division_standings,
+        conference_standings=conference_standings,
+        playoff_standings=playoff_standings,
+        top_players_count=config.top_players_count,
+        top_team_players_count=config.top_team_players_count,
+    )
+
+    # Generate requested report (lazy evaluation)
+    return report_generator.get_report(report_filter)
 
 
 def generate_json_report(
