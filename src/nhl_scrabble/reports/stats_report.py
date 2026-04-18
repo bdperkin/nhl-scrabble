@@ -96,35 +96,37 @@ class StatsReporter(BaseReporter):
             Formatted statistics report string
         """
         all_players, division_standings, conference_standings = data
-        output = ""
+        parts = []
 
         # Top players overall
-        output += self._format_header(
-            f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS (Across All Teams)"
+        parts.append(
+            self._format_header(
+                f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS (Across All Teams)"
+            )
         )
 
         top_players = heapq.nlargest(
             self.top_players_count, all_players, key=lambda x: x.full_score
         )
 
-        for rank, player in enumerate(top_players, 1):
-            div_abbrev = player.division.split()[0][:3].upper()
-            output += (
-                f"\n{rank:2}. {player.full_name:30} ({player.team:3}/{div_abbrev}): "
-                f"{self._format_score(player.full_score, width=3)} points "
-                f"[First: {self._format_score(player.first_score, width=2)}, "
-                f"Last: {self._format_score(player.last_score, width=2)}]"
-            )
+        parts.extend(
+            f"\n{rank:2}. {player.full_name:30} ({player.team:3}/{div_abbrev}): "
+            f"{self._format_score(player.full_score, width=3)} points "
+            f"[First: {self._format_score(player.first_score, width=2)}, "
+            f"Last: {self._format_score(player.last_score, width=2)}]"
+            for rank, player in enumerate(top_players, 1)
+            for div_abbrev in [player.division.split()[0][:3].upper()]
+        )
 
         # Fun stats
-        output += self._format_header("🎯 FUN STATS")
+        parts.append(self._format_header("🎯 FUN STATS"))
 
         # Calculate all statistics in a single pass
         stats = self._calculate_player_statistics(all_players)
 
         # Highest scoring first name
         top_first = stats["top_first"]
-        output += (
+        parts.append(
             f"\nHighest First Name: {top_first.first_name} "
             f"({top_first.full_name}, {top_first.team}) = "
             f"{self._format_score(top_first.first_score)} points"
@@ -132,17 +134,21 @@ class StatsReporter(BaseReporter):
 
         # Highest scoring last name
         top_last = stats["top_last"]
-        output += (
+        parts.append(
             f"\nHighest Last Name: {top_last.last_name} "
             f"({top_last.full_name}, {top_last.team}) = "
             f"{self._format_score(top_last.last_score)} points"
         )
 
         # Average scores overall
-        output += "\n\nLeague-Wide Average Scores:"
-        output += f"\n  Full Name: {self._format_average(stats['avg_full'], width=5)}"
-        output += f"\n  First Name: {self._format_average(stats['avg_first'], width=5)}"
-        output += f"\n  Last Name: {self._format_average(stats['avg_last'], width=5)}"
+        parts.extend(
+            [
+                "\n\nLeague-Wide Average Scores:",
+                f"\n  Full Name: {self._format_average(stats['avg_full'], width=5)}",
+                f"\n  First Name: {self._format_average(stats['avg_first'], width=5)}",
+                f"\n  Last Name: {self._format_average(stats['avg_last'], width=5)}",
+            ]
+        )
 
         # Division with highest average per player
         division_avg_per_player = {
@@ -152,7 +158,7 @@ class StatsReporter(BaseReporter):
 
         if division_avg_per_player:
             top_division = max(division_avg_per_player.items(), key=lambda x: x[1])
-            output += (
+            parts.append(
                 f"\n\nHighest Avg Division (per player): "
                 f"{top_division[0]} = {self._format_average(top_division[1])} points/player"
             )
@@ -165,9 +171,9 @@ class StatsReporter(BaseReporter):
 
         if conference_avg_per_player:
             top_conference = max(conference_avg_per_player.items(), key=lambda x: x[1])
-            output += (
+            parts.append(
                 f"\nHighest Avg Conference (per player): "
                 f"{top_conference[0]} = {self._format_average(top_conference[1])} points/player"
             )
 
-        return output
+        return "".join(parts)
