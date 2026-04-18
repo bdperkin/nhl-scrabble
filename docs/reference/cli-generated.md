@@ -58,14 +58,15 @@ Usage: nhl-scrabble analyze [OPTIONS]
   Scrabble scores for all players and teams.
 
   Examples:     nhl-scrabble analyze     nhl-scrabble analyze --verbose
-  nhl-scrabble analyze --output report.txt     nhl-scrabble analyze --format
-  json --output report.json     nhl-scrabble analyze --no-cache     nhl-
-  scrabble analyze --clear-cache
+  nhl-scrabble analyze --quiet     nhl-scrabble analyze --output report.txt
+  nhl-scrabble analyze --format json --output report.json     nhl-scrabble
+  analyze --no-cache     nhl-scrabble analyze --clear-cache
 
 Options:
   --format [text|json]        Output format (default: text)
   -o, --output PATH           Output file path (default: stdout)
   -v, --verbose               Enable verbose logging
+  -q, --quiet                 Suppress progress bars and non-essential output
   --no-cache                  Disable API response caching (always fetch fresh
                               data)
   --clear-cache               Clear API cache before running

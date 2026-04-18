@@ -10,7 +10,6 @@ from typing import Any
 
 import click
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
@@ -24,6 +23,7 @@ from nhl_scrabble.reports.playoff_report import PlayoffReporter
 from nhl_scrabble.reports.stats_report import StatsReporter
 from nhl_scrabble.reports.team_report import TeamReporter
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
+from nhl_scrabble.ui.progress import ProgressManager
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -113,6 +113,12 @@ def cli() -> None:
     help="Enable verbose logging",
 )
 @click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars and non-essential output",
+)
+@click.option(
     "--no-cache",
     is_flag=True,
     help="Disable API response caching (always fetch fresh data)",
@@ -134,10 +140,11 @@ def cli() -> None:
     default=5,
     help="Number of top players per team to show (default: 5)",
 )
-def analyze(
+def analyze(  # noqa: PLR0913 - CLI command requires all these parameters
     output_format: str,
     output: str | None,
     verbose: bool,
+    quiet: bool,
     no_cache: bool,
     clear_cache: bool,
     top_players: int,
@@ -151,6 +158,7 @@ def analyze(
     Examples:
         nhl-scrabble analyze
         nhl-scrabble analyze --verbose
+        nhl-scrabble analyze --quiet
         nhl-scrabble analyze --output report.txt
         nhl-scrabble analyze --format json --output report.json
         nhl-scrabble analyze --no-cache
@@ -176,24 +184,27 @@ def analyze(
     # Validate output path BEFORE making API calls
     validate_output_path(output)
 
-    # Display header
-    console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
-    console.print("=" * 80)
+    # Display header (suppress if quiet mode)
+    if not quiet:
+        console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
+        console.print("=" * 80)
 
     try:
         # Run the analysis
-        result = run_analysis(config, clear_cache=clear_cache)
+        result = run_analysis(config, clear_cache=clear_cache, quiet=quiet)
 
         # Output results
         if output:
             output_path = Path(output)
             output_path.write_text(result)
-            console.print(f"\n[green]✓[/green] Report saved to: {output}")
+            if not quiet:
+                console.print(f"\n[green]✓[/green] Report saved to: {output}")
         else:
             print(result)
 
-        console.print("\n" + "=" * 80)
-        console.print("[green]✓ Analysis complete![/green]")
+        if not quiet:
+            console.print("\n" + "=" * 80)
+            console.print("[green]✓ Analysis complete![/green]")
 
     except NHLApiError as e:
         logger.error(f"NHL API error: {e}")
@@ -205,12 +216,13 @@ def analyze(
         sys.exit(1)
 
 
-def run_analysis(config: Config, clear_cache: bool = False) -> str:
+def run_analysis(config: Config, clear_cache: bool = False, quiet: bool = False) -> str:
     """Run the complete NHL Scrabble analysis.
 
     Args:
         config: Configuration object
         clear_cache: Whether to clear the API cache before running
+        quiet: Whether to suppress progress bars and non-essential output
 
     Returns:
         Complete report string
@@ -244,25 +256,27 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
     team_reporter = TeamReporter(top_players_per_team=config.top_team_players_count)
     stats_reporter = StatsReporter(top_players_count=config.top_players_count)
 
-    # Process all teams with progress indicator
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        console=console,
-    ) as progress:
-        task = progress.add_task("Fetching NHL rosters...", total=None)
+    # Initialize progress manager
+    progress_manager = ProgressManager(enabled=not quiet)
 
-        team_scores, all_players, failed_teams = team_processor.process_all_teams()
+    # Get teams count for progress tracking
+    teams = api_client.get_teams()
+    total_teams = len(teams)
 
-        progress.update(task, description="[green]✓ Rosters fetched")
+    # Process all teams with progress tracking
+    with progress_manager.track_api_fetching(total_teams) as progress_callback:
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(
+            progress_callback=progress_callback
+        )
 
-    # Display summary
-    console.print(
-        f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-        f"{len(team_scores) + len(failed_teams)} teams"
-    )
-    if failed_teams:
-        console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+    # Display summary (suppress if quiet)
+    if not quiet:
+        console.print(
+            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+            f"{len(team_scores) + len(failed_teams)} teams"
+        )
+        if failed_teams:
+            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
 
     # Calculate standings
     division_standings = team_processor.calculate_division_standings(team_scores)
