@@ -8,6 +8,7 @@ import weakref
 from datetime import timedelta
 from typing import Any, ClassVar
 
+import certifi
 import requests
 import requests_cache
 
@@ -29,18 +30,28 @@ class NHLApiNotFoundError(NHLApiError):
     """Raised when the requested resource is not found."""
 
 
+class NHLApiSSLError(NHLApiError):
+    """Raised when SSL/TLS certificate verification fails."""
+
+
 class NHLApiClient:
     """Client for interacting with the NHL API.
 
     This client provides methods to fetch team standings and roster data
     from the official NHL API with built-in retry logic, rate limiting,
-    and SSRF protection.
+    SSRF protection, and enforced SSL/TLS certificate verification.
+
+    SSL/TLS Security:
+        - Certificate verification is always enabled and cannot be disabled
+        - Uses certifi CA bundle for up-to-date certificate authorities
+        - SSL errors are caught and logged for security monitoring
 
     Attributes:
         base_url: Base URL for the NHL API (SSRF-validated)
         timeout: Request timeout in seconds
         retries: Number of retry attempts for failed requests
         rate_limit_delay: Delay in seconds between requests to avoid rate limiting
+        ca_bundle: Path to CA bundle for SSL verification (uses certifi)
     """
 
     BASE_URL = "https://api-web.nhle.com/v1"  # Default base URL
@@ -56,6 +67,7 @@ class NHLApiClient:
         max_backoff: float = 30.0,
         cache_enabled: bool = True,
         cache_expiry: int = 3600,
+        verify_ssl: bool = True,
     ) -> None:
         """Initialize the NHL API client.
 
@@ -69,10 +81,22 @@ class NHLApiClient:
             max_backoff: Maximum backoff delay in seconds (default: 30.0)
             cache_enabled: Enable HTTP caching (default: True)
             cache_expiry: Cache expiration in seconds (default: 3600 = 1 hour)
+            verify_ssl: SSL verification (must be True, cannot be disabled for security)
 
         Raises:
             NHLApiError: If base_url fails SSRF protection validation
+            ValueError: If verify_ssl is False (SSL verification cannot be disabled)
         """
+        # Initialize state tracking FIRST (before any potential exceptions)
+        # This prevents AttributeError in __del__ if __init__ fails
+        self._closed = False
+
+        # Enforce SSL verification - cannot be disabled
+        if not verify_ssl:
+            error_msg = "SSL verification cannot be disabled for security reasons"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+
         # Use provided base_url or fall back to class default
         self.base_url = base_url or self.BASE_URL
 
@@ -83,10 +107,13 @@ class NHLApiClient:
         self.max_backoff = max_backoff
         self.cache_enabled = cache_enabled
         self.cache_expiry = cache_expiry
-        self._closed = False  # Track session state
         self._last_request_time: float | None = (
             None  # Track last successful request for rate limiting
         )
+
+        # Use certifi CA bundle for SSL verification
+        self.ca_bundle = certifi.where()
+        logger.debug(f"Using CA bundle for SSL verification: {self.ca_bundle}")
 
         # Session can be either CachedSession or regular Session
         self.session: requests_cache.CachedSession | requests.Session
@@ -247,7 +274,11 @@ class NHLApiClient:
                     time.sleep(sleep_time)
 
             try:
-                response = self.session.get(url, timeout=self.timeout)
+                response = self.session.get(
+                    url,
+                    timeout=self.timeout,
+                    verify=self.ca_bundle,  # Explicit SSL verification with certifi CA bundle
+                )
                 response.raise_for_status()
                 data = response.json()
 
@@ -276,6 +307,9 @@ class NHLApiClient:
 
                 return teams_info
 
+            except requests.exceptions.SSLError as e:
+                logger.error(f"SSL certificate verification failed for {url}: {e}")
+                raise NHLApiSSLError(f"SSL certificate verification failed for {url}: {e}") from e
             except requests.exceptions.HTTPError as e:
                 logger.error(f"HTTP error while fetching teams: {e}")
                 raise NHLApiError(f"HTTP error: {e}") from e
@@ -335,7 +369,11 @@ class NHLApiClient:
                         logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
                         time.sleep(sleep_time)
 
-                response = self.session.get(url, timeout=self.timeout)
+                response = self.session.get(
+                    url,
+                    timeout=self.timeout,
+                    verify=self.ca_bundle,  # Explicit SSL verification with certifi CA bundle
+                )
 
                 if response.status_code == 404:
                     logger.warning(f"No roster data available for {team_abbrev}")
@@ -396,6 +434,11 @@ class NHLApiClient:
                         f"Request timed out after {self.retries} attempts"
                     ) from None
 
+            except requests.exceptions.SSLError as e:
+                # SSL errors should not be retried - certificate validation failure is permanent
+                logger.error(f"SSL certificate verification failed for {team_abbrev}: {e}")
+                raise NHLApiSSLError(f"SSL certificate verification failed for {url}: {e}") from e
+
             except requests.exceptions.ConnectionError:
                 if attempt < self.retries - 1:
                     backoff_delay = self._calculate_backoff_delay(attempt)
@@ -428,7 +471,7 @@ class NHLApiClient:
 
     def close(self) -> None:
         """Close the session and release resources."""
-        if not self._closed:
+        if not self._closed and hasattr(self, "session"):
             self.session.close()
             self._closed = True
             logger.debug("NHL API client session closed")

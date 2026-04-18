@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **Enforced SSL/TLS Certificate Verification** - Enhanced API security with mandatory SSL verification
+
+  - Added explicit `verify=True` with certifi CA bundle to all NHL API requests
+  - Prevents SSL verification from being disabled (raises `ValueError` if attempted)
+  - Uses certifi for up-to-date certificate authority trust store
+  - Added `NHLApiSSLError` exception for SSL verification failures
+  - SSL errors are logged and not retried (permanent security failures)
+  - Added `verify_ssl` parameter to constructor (must be True, cannot be disabled)
+  - Added 10 comprehensive unit tests covering SSL enforcement and error handling
+  - Benefits: Prevents MITM attacks, ensures connection authenticity, protects API data
+  - Related: Security task #135 - SSL/TLS certificate verification
+
 ### Improved
 
 - **Memory Optimization with __slots__** - Reduced memory usage for data model instances

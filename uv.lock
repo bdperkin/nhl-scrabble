@@ -1646,6 +1646,7 @@ name = "nhl-scrabble"
 version = "2.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "certifi" },
     { name = "click" },
     { name = "fastapi" },
     { name = "jinja2" },
@@ -1782,6 +1783,7 @@ requires-dist = [
     { name = "blacken-docs", marker = "extra == 'docs'", specifier = ">=1.16.0" },
     { name = "build", marker = "extra == 'build'" },
     { name = "cairosvg", marker = "extra == 'branding'", specifier = ">=2.7.0" },
+    { name = "certifi", specifier = ">=2023.0.0" },
     { name = "check-jsonschema", marker = "extra == 'dev'", specifier = ">=0.28.0" },
     { name = "click", specifier = ">=8.1.0" },
     { name = "diff-cover", marker = "extra == 'test'", specifier = ">=8.0.0" },
