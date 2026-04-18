@@ -50,7 +50,7 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (5 tasks, 11 documented, 6 completed)
+### Optimization (4 tasks, 11 documented, 7 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue | Status      |
 | --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -63,11 +63,11 @@ Each task is assigned a priority:
 | 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  | ✅ Complete |
 | 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  | ✅ Complete |
 | 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  | ✅ Complete |
-| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |             |
+| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  | ✅ Complete |
 | 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
 **Documented Effort**: 16-24.5 hours
-**Completed**: 9.33 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194)
+**Completed**: 11.33 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
 ### Enhancements (9 tasks, 9 documented)
@@ -500,7 +500,6 @@ All tasks now fully documented with implementation plans, acceptance criteria, a
 - security/001-add-pip-licenses-compliance.md (30-60min) - #126
 - enhancement/003-comprehensive-documentation-badges.md (1-2h) - #91
 - optimization/008-memoized-scoring.md (1-2h) - #139
-- optimization/010-rate-limiting-cache-hits.md (1-2h) - #141
 - optimization/011-log-level-optimization.md (1-2h) - #142
 - security/006-ssl-verification.md (1-2h) - #135
 - enhancement/008-watch-mode.md (2-3h) - #148
@@ -715,7 +714,7 @@ security/002-input-validation (#129)
 
 ```
 optimization/001-api-caching (#42) ✅
-└── optimization/010-rate-limiting-cache-hits (#141)
+└── optimization/010-rate-limiting-cache-hits (#141) ✅
     └── Builds on caching implementation
 ```
 
