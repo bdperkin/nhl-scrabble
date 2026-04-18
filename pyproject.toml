@@ -1003,6 +1003,11 @@ ignore_names = [
     "NHLApiNotFoundError",  # Exception class reserved for future use
     "track_score_calculation",  # ProgressManager method used via context manager (vulture can't detect)
     "track_report_generation",  # ProgressManager method reserved for future use (lazy eval prevents current use)
+    "track_api_fetching",  # ProgressManager method used via TeamProcessor callback (vulture can't detect)
+
+    # Lazy report generation (used via CLI --report option, vulture can't detect dynamic invocation)
+    "ReportGenerator",    # ReportGenerator class used dynamically in CLI
+    "get_report",         # ReportGenerator method used via CLI --report flag
 
     # FastAPI framework patterns (called at runtime by framework)
     "health",             # FastAPI endpoint function (registered via decorator)
