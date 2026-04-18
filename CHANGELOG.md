@@ -7,47 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- **Report Classes Consolidation** - Refactored report classes to use shared base utilities
-  - Added comprehensive utility methods to `BaseReporter`:
-    - `_sort_by_key()` - Generic sorting helper for consistent sorting across reports
-    - `_take_top()` - Pagination helper for limiting results to top N items
-    - `_paginate()` - Generic pagination into chunks
-    - `_format_score()` - Consistent integer score formatting with configurable width
-    - `_format_average()` - Consistent float average formatting with configurable decimals
-    - `_format_team_list()` - Sorted, comma-separated team list formatting
-  - Updated all report classes to use base utilities:
-    - `TeamReporter` - Uses `_sort_by_key()`, `_take_top()`, `_format_score()`
-    - `DivisionReporter` - Uses `_sort_by_key()`, `_format_score()`, `_format_average()`, `_format_team_list()`
-    - `ConferenceReporter` - Uses `_sort_by_key()`, `_format_score()`, `_format_average()`, `_format_team_list()`
-    - `StatsReporter` - Uses `_sort_by_key()`, `_take_top()`, `_format_score()`, `_format_average()`
-    - `PlayoffReporter` - Uses `_format_score()`, `_format_average()`
-  - Added 29 comprehensive unit tests for base reporter utilities
-  - Eliminated duplicate sorting, formatting, and pagination logic across report classes
-  - Improved code maintainability and consistency across all reports
-  - Test coverage increased from 91.81% to 92.17%
-
 ### Added
 
-- **Player Search Functionality** - Quick lookup and filtering of players by name and attributes
+- **Watch Mode for Auto-Refresh** - Continuously monitor NHL roster changes with automatic refresh
 
-  - Added `PlayerSearch` class for searching players with multiple filtering options
-  - Added `search` CLI command for interactive player lookups
-  - Supports exact substring matching, fuzzy matching (typo-tolerant), and wildcard patterns (`*`, `?`)
-  - Filter by minimum/maximum Scrabble score, team, division, or conference
-  - Results sorted by score (descending) with configurable limit
-  - Text and JSON output formats available
-  - Includes database statistics (total players, average score, min/max scores, team count)
-  - Added 39 comprehensive unit tests covering all search modes and filters
-  - Benefits: Quick player lookup, convenient queries, better UX for finding specific players
-  - Related: Enhancement task #149 - Player search functionality
+  - Added `watch` command that auto-refreshes data at configurable intervals
+  - Default refresh interval: 5 minutes (300 seconds)
+  - Custom intervals supported via `--interval` option (minimum: 1 second)
+  - Supports all standard options: `--format`, `--report`, `--top-players`, etc.
+  - Graceful shutdown on Ctrl+C with proper signal handling (SIGINT)
+  - Error recovery: continues watching even if individual iterations fail
+  - Displays update count, timestamp, and next refresh time
+  - Added comprehensive unit tests for watch mode functionality
+  - Benefits: Monitor roster changes in real-time, convenient for active periods, live updates
+  - Related: Enhancement task #148 - Watch mode for auto-refresh
   - Usage:
     ```bash
-    nhl-scrabble search "Connor McDavid"
-    nhl-scrabble search McDavid --fuzzy
-    nhl-scrabble search "Connor*" --team EDM --min-score 30
-    nhl-scrabble search --min-score 50 --format json --output high-scorers.json
+    nhl-scrabble watch                              # Default 5-minute interval
+    nhl-scrabble watch --interval 60                # Custom 1-minute interval
+    nhl-scrabble watch --report team --interval 30  # Specific report, 30-second interval
+    nhl-scrabble watch --format json --interval 120 # JSON output, 2-minute interval
     ```
 
 - **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
@@ -70,44 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     nhl-scrabble analyze --format excel --sheets teams,players --output custom.xlsx
     ```
 
-- **REST API Server** - Standalone REST API for programmatic access to NHL Scrabble data (#150)
-
-  - Added `nhl-scrabble api` CLI command to start REST API server
-  - Implemented comprehensive API endpoints:
-    - `GET /api/v1/teams` - Get all team scores with optional division/conference filtering
-    - `GET /api/v1/teams/{abbrev}` - Get specific team with detailed player roster
-    - `GET /api/v1/players` - Get all players with filtering (min/max score, team, limit, sorting)
-    - `GET /api/v1/standings/division` - Division standings
-    - `GET /api/v1/standings/conference` - Conference standings
-    - `GET /api/v1/standings/playoffs` - Playoff bracket
-    - `GET /health` - Health check endpoint for monitoring
-  - Automatic OpenAPI documentation at `/docs` (Swagger UI) and `/redoc` (ReDoc)
-  - CORS middleware for cross-origin requests
-  - Comprehensive integration tests with FastAPI TestClient
-  - Separate from web interface for dedicated programmatic access
-  - Benefits: Third-party integrations, mobile apps, custom clients, API ecosystem
-
 ### Security
-
-- **Configuration Injection Protection** - Comprehensive validation to prevent injection attacks
-
-  - Created `config_validators.py` module with strict input validation for all config values
-  - Added `validate_positive_int()` - validates integers with range checking and injection prevention
-  - Added `validate_positive_float()` - validates floats with range checking and injection prevention
-  - Added `validate_safe_path()` - prevents path traversal and command injection in file paths
-  - Added `validate_enum()` - validates values against allowed set with injection prevention
-  - Added `validate_boolean()` - validates boolean strings with injection prevention
-  - Added `validate_url()` - validates URL format with HTTPS enforcement option
-  - All validators detect and reject shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, etc.)
-  - Updated `Config.from_env()` to use validators with strict range limits
-  - Added maximum value constraints: timeout ≤300s, retries ≤10, delay ≤10s, cache_expiry ≤86400s
-  - Added enum validation for `output_format` (only allows "text", "json", "html")
-  - Replaced manual boolean parsing with `validate_boolean()` for consistent validation
-  - Added 70 unit tests covering injection scenarios and validation logic
-  - Added 34 integration tests covering config security and range validation
-  - Prevents: command injection, path traversal, type confusion, range bypass attacks
-  - Benefits: Defense-in-depth, fail-fast validation, clear error messages
-  - Related: Security task #137 - Config injection protection
 
 - **PII Logging Prevention** - Enhanced log sanitization to protect player privacy
 
@@ -136,17 +78,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Related: Security task #135 - SSL/TLS certificate verification
 
 ### Improved
-
-- **Optimized JSON Serialization with to_dict() Methods** - 2-3x faster JSON serialization
-
-  - Added `to_dict()` methods to all dataclasses (PlayerScore, TeamScore, DivisionStandings, ConferenceStandings, PlayoffTeam)
-  - Avoids reflection overhead from `dataclasses.asdict()` by directly accessing attributes
-  - Performance: 2-3x faster JSON serialization for reports and API responses
-  - CLI JSON output (`--format json`) now significantly faster
-  - REST API endpoints benefit from faster response serialization
-  - Added 15 comprehensive unit tests covering all model serialization
-  - Benefits: Faster report generation, improved API response times, reduced CPU usage
-  - Related: Optimization task #117 - to_dict() methods for faster JSON serialization
 
 - **Memory Optimization with __slots__** - Reduced memory usage for data model instances
 
@@ -191,20 +122,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Expected 2-3x speedup for statistics calculations
   - Added 6 comprehensive unit tests for single-pass method (empty list, single player, ties, correctness)
   - Benefits: Faster stats report generation, cleaner code, easier to add new statistics
-
-- **Concurrent API Fetching for Team Rosters** - Fetch NHL team data in parallel for 5-8x speedup
-
-  - Implemented concurrent fetching using `ThreadPoolExecutor` in `TeamProcessor`
-  - Added `max_workers` parameter to control parallelism (default: 5 concurrent requests)
-  - Created `_fetch_and_process_team()` helper method for thread-safe processing
-  - Added `NHL_SCRABBLE_MAX_CONCURRENT` environment variable for configuration
-  - Updated `Config` class with `max_concurrent_requests` field
-  - Results identical to sequential processing (order-independent)
-  - Performance: Sequential ~10s → Concurrent ~1.5-2s (5-8x speedup)
-  - Thread-safe implementation with no shared mutable state
-  - Gracefully handles failures and mixed success/failure scenarios
-  - Added 8 unit tests and 4 integration tests for concurrent behavior
-  - Benefits: Dramatically faster data fetching, improved user experience, efficient I/O utilization
 
 - **Optimized Rate Limiting for Cache Hits** - Skip rate limit delays for cached responses
 
@@ -257,23 +174,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Benefits: Improved UX, reduced perceived wait time, visibility into long operations
   - Accessibility: `--quiet` mode provides clean text output for screen readers
 
-- **Web API Endpoints for NHL Scrabble Analysis** - Complete REST API for analysis functionality
-
-  - Implemented `/api/analyze` POST endpoint with comprehensive analysis results
-  - Request validation via Pydantic models (top_players, top_team_players, use_cache)
-  - In-memory caching with 1-hour expiration for performance
-  - Returns top players, team standings, division/conference groupings, playoff bracket
-  - Implemented `/api/teams/{team_abbrev}` GET endpoint for team details
-  - Implemented `/api/cache/clear` DELETE endpoint for cache management
-  - Implemented `/api/cache/stats` GET endpoint for cache monitoring
-  - Integrated with TeamProcessor for data fetching and scoring
-  - Integrated with PlayoffCalculator for playoff bracket generation
-  - Comprehensive error handling with HTTP status codes (422 validation, 404 not found, 500 server error)
-  - Automatic OpenAPI schema generation with request/response models
-  - Added integration tests for all endpoints
-  - Note: Player by ID endpoint pending (PlayerScore model needs ID field)
-  - Benefits: Programmatic access to analysis, JSON API for frontends, efficient caching
-
 - **FastAPI Web Interface Infrastructure** - Foundation for browser-based NHL Scrabble access
 
   - Added FastAPI>=0.110.0 web framework with automatic OpenAPI documentation
@@ -311,36 +211,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Benefits: Professional web UI, mobile-friendly interface, accessible design, NHL-themed branding
   - Task: #105 - tasks/new-features/004-web-frontend-templates.md
 
-- **Web Interface Security and Polish** - Production-ready web features with comprehensive security
-
-  - **Security Headers Middleware**: Added `SecurityHeadersMiddleware` class
-    - `X-Content-Type-Options: nosniff` - Prevents MIME type sniffing attacks
-    - `X-Frame-Options: DENY` - Prevents clickjacking attacks
-    - `X-XSS-Protection: 1; mode=block` - Enables browser XSS filtering
-    - `Referrer-Policy: strict-origin-when-cross-origin` - Controls referrer information leakage
-    - `Content-Security-Policy` - Restricts resource loading to same origin (style/script inline allowed)
-  - **CORS Configuration**: Added CORS middleware for local development
-    - Allows `localhost:8000` and `127.0.0.1:8000` origins
-    - Supports GET and POST methods for API access
-    - Configured for safe cross-origin requests during development
-  - **SEO Optimization**: Enhanced meta tags in base template
-    - Comprehensive meta description with keywords (NHL, Scrabble, hockey, player names, statistics)
-    - Author and robots meta tags for search engine indexing
-    - Open Graph tags for social media sharing (og:type, og:title, og:description, og:site_name)
-    - Twitter Card tags for Twitter previews (twitter:card, twitter:title, twitter:description)
-  - **Favicon Support**: Added dynamic SVG favicon endpoint
-    - Hockey emoji (🏒) served as SVG via `/favicon.svg`
-    - Fallback PNG support configured in base template
-    - Proper content-type headers (`image/svg+xml`)
-  - **Dependencies**: Added `starlette>=0.36.0` as explicit dependency for middleware support
-  - **Testing**: Added 7 new integration tests
-    - Security headers verification (all endpoints)
-    - Favicon endpoint tests (existence, content)
-    - CORS configuration tests
-    - Error handling tests (404, 405)
-  - Benefits: Production-ready security, SEO-friendly metadata, professional favicon, comprehensive test coverage
-  - Task: #111 - tasks/new-features/006-web-testing-polish.md
-
 - **Test Randomization with pytest-randomly** - Randomize test execution order to catch hidden dependencies
 
   - Added pytest-randomly>=3.15.0 to test dependencies
@@ -376,21 +246,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enables proactive compatibility testing before Python 3.15 release
   - Allows early detection of breaking changes and migration issues
   - Will be upgraded to official support when Python 3.15 is released
-
-- **Interactive REPL Mode** - Ad-hoc exploration of NHL Scrabble data
-
-  - Added prompt-toolkit>=3.0.0 dependency for advanced REPL features
-  - Created `nhl_scrabble.interactive` module with `InteractiveShell` class
-  - Implemented `nhl-scrabble interactive` CLI command with --no-fetch and --verbose options
-  - 11 interactive commands: show, top, bottom, compare, filter, search, standings, playoff, stats, refresh, help, exit
-  - Tab completion for commands, team names, and player names
-  - Persistent command history across sessions (~/.nhl_scrabble_history)
-  - Rich-based table formatting for beautiful terminal output
-  - Data cached in memory after first fetch for instant subsequent queries
-  - 46 comprehensive unit tests covering all commands and edge cases (73% coverage on interactive module)
-  - 5 integration tests for CLI command invocation and error handling
-  - Benefits: Instant ad-hoc queries, no re-fetching data, better data exploration UX
-  - Task: #133 - tasks/enhancement/002-interactive-mode.md
 
 - **HTML Output Format** - Professional HTML reports with responsive design
 

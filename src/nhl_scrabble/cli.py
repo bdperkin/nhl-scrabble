@@ -5,7 +5,9 @@ from __future__ import annotations
 import json
 import logging
 import os
+import signal
 import sys
+import time
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -1048,6 +1050,203 @@ def serve(host: str, port: int, reload: bool) -> None:
         reload=reload,
         log_level="info",
     )
+
+
+def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
+    """Sleep for specified seconds, checking shutdown flag every second.
+
+    Args:
+        seconds: Number of seconds to sleep
+        shutdown_flag: Mutable list containing shutdown boolean flag
+    """
+    for _ in range(seconds):
+        if shutdown_flag[0]:
+            return
+        time.sleep(1)
+
+
+@cli.command()
+@click.option(
+    "--interval",
+    type=int,
+    default=300,
+    help="Refresh interval in seconds (default: 300 = 5 minutes)",
+)
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json"], case_sensitive=False),
+    default="text",
+    help="Output format (default: text)",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
+@click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable API response caching (always fetch fresh data)",
+)
+@click.option(
+    "--top-players",
+    type=int,
+    default=20,
+    help="Number of top players to show (default: 20)",
+)
+@click.option(
+    "--top-team-players",
+    type=int,
+    default=5,
+    help="Number of top players per team to show (default: 5)",
+)
+@click.option(
+    "--report",
+    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
+    help="Generate specific report only (default: all reports)",
+)
+def watch(  # noqa: PLR0913, C901, PLR0915  # Complex but necessary for watch mode
+    interval: int,
+    output_format: str,
+    verbose: bool,
+    quiet: bool,
+    no_cache: bool,
+    top_players: int,
+    top_team_players: int,
+    report: str | None,
+) -> None:
+    """Watch mode - automatically refresh data at intervals.
+
+    Runs continuous analysis with auto-refresh, useful for monitoring
+    roster changes during active periods.
+
+    Press Ctrl+C to stop watching.
+
+    Examples:
+        # Watch with default 5-minute interval
+        nhl-scrabble watch
+
+        # Custom 1-minute interval
+        nhl-scrabble watch --interval 60
+
+        # Watch specific report with 30-second interval
+        nhl-scrabble watch --report team --interval 30
+
+        # Watch with JSON output
+        nhl-scrabble watch --format json --interval 120
+    """
+    # Validate interval
+    if interval < 1:
+        raise click.ClickException("Interval must be at least 1 second")
+
+    # Load configuration
+    config = Config.from_env()
+    config.verbose = verbose
+    config.output_format = output_format
+    config.top_players_count = top_players
+    config.top_team_players_count = top_team_players
+
+    # Override cache setting from CLI
+    if no_cache:
+        config.cache_enabled = False
+
+    # Setup logging
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
+
+    logger.info(f"Starting NHL Scrabble watch mode v{__version__} (interval: {interval}s)")
+
+    # Display header
+    console.print(
+        "\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer - Watch Mode 🏒[/bold cyan]\n"
+    )
+    console.print("=" * 80)
+    console.print(f"[yellow]Auto-refresh every {interval} seconds (Ctrl+C to stop)[/yellow]\n")
+    console.print("=" * 80)
+
+    # Use list to allow modification in nested function (mutable container)
+    shutdown_flag = [False]
+
+    def signal_handler(_signum: int, _frame: Any) -> None:  # Required signature
+        """Handle Ctrl+C gracefully."""
+        shutdown_flag[0] = True
+        console.print("\n\n[yellow]⏹  Stopping watch mode...[/yellow]")
+
+    # Register signal handler
+    signal.signal(signal.SIGINT, signal_handler)
+
+    # Watch loop
+    iteration = 0
+    try:
+        while not shutdown_flag[0]:
+            iteration += 1
+            timestamp = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+            console.print(f"\n[bold cyan]Update #{iteration}[/bold cyan] - {timestamp}")
+            console.print("-" * 80)
+
+            try:
+                # Run analysis
+                result = run_analysis(
+                    config,
+                    clear_cache=False,  # Don't clear cache between iterations
+                    report_filter=report,
+                    quiet=quiet,
+                    output_path=None,  # Always stdout for watch mode
+                    sheets=None,
+                )
+
+                # Display result
+                if result:
+                    print(result)
+
+                console.print("-" * 80)
+
+                # Wait for next iteration (unless shutdown requested)
+                if not shutdown_flag[0]:
+                    console.print(
+                        f"\n[dim]Next refresh in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
+                    )
+                    _interruptible_sleep(interval, shutdown_flag)
+
+            except NHLApiError as e:
+                logger.error(f"NHL API error: {e}")
+                console.print(f"[red]❌ NHL API Error: {e}[/red]", style="red")
+                console.print("[yellow]Will retry on next iteration...[/yellow]")
+
+                # Wait before retry
+                if not shutdown_flag[0]:
+                    console.print(
+                        f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
+                    )
+                    _interruptible_sleep(interval, shutdown_flag)
+
+            except Exception as e:
+                logger.exception("Unexpected error during watch iteration")
+                console.print(f"[red]❌ Unexpected error: {e}[/red]", style="red")
+                console.print("[yellow]Will retry on next iteration...[/yellow]")
+
+                # Wait before retry
+                if not shutdown_flag[0]:
+                    console.print(
+                        f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
+                    )
+                    _interruptible_sleep(interval, shutdown_flag)
+
+    except KeyboardInterrupt:
+        # Additional safety net
+        pass
+
+    # Clean shutdown
+    console.print("\n" + "=" * 80)
+    console.print(f"[green]✓ Watch mode stopped after {iteration} updates[/green]")
 
 
 if __name__ == "__main__":
