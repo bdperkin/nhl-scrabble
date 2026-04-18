@@ -190,6 +190,7 @@ per-file-ignores = [
     "tests/*:S101",  # Use of assert (pytest uses assert)
     "src/nhl_scrabble/api/nhl_client.py:C901",  # get_team_roster complexity from retry logic
     "src/nhl_scrabble/api_server/routes/players.py:C901",  # get_players complexity from filtering logic
+    "src/nhl_scrabble/cli.py:TC003",  # Path used at runtime, not just type checking
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity
 exclude = [
@@ -336,6 +337,7 @@ ignore = [
 "src/nhl_scrabble/cli.py" = [
     "T201",    # print statements are fine in CLI code
     "PLC0415", # Conditional imports for CLI dependencies
+    "TC003",   # Path used at runtime, not just type checking
 ]
 "src/nhl_scrabble/logging_config.py" = [
     "PLC0415", # Conditional imports for logging configuration
@@ -1036,6 +1038,7 @@ ignore_names = [
     # Lazy report generation (used via CLI --report option, vulture can't detect dynamic invocation)
     "ReportGenerator",    # ReportGenerator class used dynamically in CLI
     "get_report",         # ReportGenerator method used via CLI --report flag
+    "validate_url",       # Validator function part of public API (reserved for future use)
 
     # FastAPI framework patterns (called at runtime by framework)
     "health",             # FastAPI endpoint function (registered via decorator)

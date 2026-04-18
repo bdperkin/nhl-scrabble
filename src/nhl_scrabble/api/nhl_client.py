@@ -14,6 +14,12 @@ import requests_cache
 
 from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_url_for_ssrf
 from nhl_scrabble.utils.retry import retry
+from nhl_scrabble.validators import (
+    ValidationError,
+    validate_api_response_structure,
+    validate_player_name,
+    validate_team_abbreviation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -327,7 +333,10 @@ class NHLApiClient:
             raise NHLApiConnectionError("Unable to connect to NHL API after retries") from e
 
     def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:  # noqa: PLR0915
-        """Fetch the current roster for a specific team.
+        """Fetch the current roster for a specific team with input and response validation.
+
+        Validates team abbreviation before making API call and validates response
+        structure to prevent errors from malformed data.
 
         The URL is validated with SSRF protection before making the request.
 
@@ -338,19 +347,37 @@ class NHLApiClient:
             Dictionary containing roster data with 'forwards', 'defensemen', and 'goalies' keys
 
         Raises:
+            ValidationError: If team abbreviation is invalid
             NHLApiNotFoundError: If the roster is not found (404 response)
             NHLApiConnectionError: If unable to connect to the API after all retries
-            NHLApiError: For other API errors, including SSRF protection blocks
+            NHLApiError: For other API errors, including SSRF protection blocks and malformed responses
+
+        Security:
+            - Validates team abbreviation to prevent injection attacks
+            - Validates response structure to prevent KeyError exceptions
+            - Sanitizes player names from API responses
+            - SSRF protection on all API requests
 
         Examples:
             >>> client = NHLApiClient()
             >>> roster = client.get_team_roster("TOR")
             >>> "forwards" in roster
             True
+            >>> client.get_team_roster("INVALID")
+            Traceback (most recent call last):
+            ValidationError: Team abbreviation must be 2-3 characters...
         """
-        url = f"{self.base_url}/roster/{team_abbrev}/current"
+        # Validate team abbreviation BEFORE making API call
+        try:
+            validated_abbrev = validate_team_abbreviation(team_abbrev)
+        except ValidationError:
+            # Re-raise validation errors for consistency with other API errors
+            logger.error(f"Invalid team abbreviation: {team_abbrev}")
+            raise
+
+        url = f"{self.base_url}/roster/{validated_abbrev}/current"
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f"Fetching roster for {team_abbrev}")
+            logger.debug(f"Fetching roster for {validated_abbrev}")
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)
@@ -406,8 +433,23 @@ class NHLApiClient:
 
                 response.raise_for_status()
                 data = response.json()
+
+                # Validate response structure
+                try:
+                    validate_api_response_structure(
+                        data,
+                        required_keys=["forwards", "defensemen", "goalies"],
+                        context=f"Team roster response for {validated_abbrev}",
+                    )
+                except ValidationError as e:
+                    logger.error(f"Invalid roster response structure for {validated_abbrev}: {e}")
+                    raise NHLApiError(f"Invalid API response: {e}") from e
+
+                # Sanitize player names in response
+                self._sanitize_roster_player_names(data)
+
                 if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(f"Successfully fetched roster for {team_abbrev}")
+                    logger.debug(f"Successfully fetched and validated roster for {validated_abbrev}")
 
                 # Only record request time if this was a real API call (not cached)
                 # Check from_cache attribute safely (handles Mock objects that don't have it set)
@@ -465,6 +507,56 @@ class NHLApiClient:
 
         # This should never be reached as all paths above either return or raise
         raise NHLApiError("Unexpected error: retry loop completed without returning data")
+
+    def _sanitize_roster_player_names(self, roster_data: dict[str, Any]) -> None:
+        """Sanitize player names in roster data to prevent injection attacks.
+
+        Validates and sanitizes all player names (firstName and lastName) in the
+        roster data for all positions (forwards, defensemen, goalies).
+
+        Args:
+            roster_data: Roster data dictionary with forwards, defensemen, goalies
+
+        Raises:
+            NHLApiError: If player names contain invalid characters (potential attack)
+
+        Note:
+            Modifies roster_data in-place for efficiency
+        """
+        for position in ["forwards", "defensemen", "goalies"]:
+            if position not in roster_data:
+                continue
+
+            for player in roster_data[position]:
+                # Validate and sanitize first name
+                if (
+                    "firstName" in player
+                    and isinstance(player["firstName"], dict)
+                    and "default" in player["firstName"]
+                ):
+                    try:
+                        player["firstName"]["default"] = validate_player_name(
+                            player["firstName"]["default"]
+                        )
+                    except ValidationError as e:
+                        logger.warning(f"Invalid player first name in API response: {e}")
+                        # Use sanitized version or skip
+                        player["firstName"]["default"] = "Unknown"
+
+                # Validate and sanitize last name
+                if (
+                    "lastName" in player
+                    and isinstance(player["lastName"], dict)
+                    and "default" in player["lastName"]
+                ):
+                    try:
+                        player["lastName"]["default"] = validate_player_name(
+                            player["lastName"]["default"]
+                        )
+                    except ValidationError as e:
+                        logger.warning(f"Invalid player last name in API response: {e}")
+                        # Use sanitized version or skip
+                        player["lastName"]["default"] = "Unknown"
 
     def clear_cache(self) -> None:
         """Clear the HTTP cache."""

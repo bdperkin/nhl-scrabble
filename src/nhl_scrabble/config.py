@@ -10,6 +10,11 @@ from typing import Any
 from dotenv import load_dotenv
 
 from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_api_base_url
+from nhl_scrabble.validators import (
+    validate_float_range,
+    validate_integer_range,
+    validate_output_format,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -50,39 +55,53 @@ class Config:
 
     @classmethod
     def from_env(cls) -> "Config":  # noqa: C901
-        """Load configuration from environment variables with validation.
+        """Load configuration from environment variables with comprehensive validation.
+
+        Uses validators from validators module to ensure all configuration values
+        are within safe, reasonable bounds to prevent DoS attacks and invalid states.
+        Also validates API base URL with SSRF protection.
 
         Environment variables:
             NHL_SCRABBLE_API_BASE_URL: Base URL for NHL API (must be HTTPS, validated for SSRF)
-            NHL_SCRABBLE_API_TIMEOUT: API request timeout in seconds (must be >= 1)
-            NHL_SCRABBLE_API_RETRIES: Number of API retry attempts (must be >= 0)
-            NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between API requests (must be >= 0.0)
-            NHL_SCRABBLE_BACKOFF_FACTOR: Exponential backoff multiplier (must be >= 1.0)
-            NHL_SCRABBLE_MAX_BACKOFF: Maximum backoff delay in seconds (must be >= 1.0)
-            NHL_SCRABBLE_CACHE_ENABLED: Enable HTTP caching (true/false)
-            NHL_SCRABBLE_CACHE_EXPIRY: Cache expiration in seconds (must be >= 1)
+            NHL_SCRABBLE_API_TIMEOUT: API timeout in seconds (1-300, default: 10)
+            NHL_SCRABBLE_API_RETRIES: Retry attempts (0-10, default: 3)
+            NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between requests (0.0-60.0, default: 0.3)
+            NHL_SCRABBLE_BACKOFF_FACTOR: Backoff multiplier (1.0-10.0, default: 2.0)
+            NHL_SCRABBLE_MAX_BACKOFF: Max backoff delay (1.0-300.0, default: 30.0)
+            NHL_SCRABBLE_CACHE_ENABLED: Enable caching (true/false, default: true)
+            NHL_SCRABBLE_CACHE_EXPIRY: Cache expiry seconds (1-86400, default: 3600)
             NHL_SCRABBLE_MAX_CONCURRENT: Max concurrent API requests (must be >= 1)
-            NHL_SCRABBLE_TOP_PLAYERS: Number of top players to show (must be >= 1)
-            NHL_SCRABBLE_TOP_TEAM_PLAYERS: Number of top players per team (must be >= 1)
-            NHL_SCRABBLE_VERBOSE: Enable verbose logging (true/false)
-            NHL_SCRABBLE_OUTPUT_FORMAT: Output format (text/json/html)
-            NHL_SCRABBLE_SANITIZE_LOGS: Sanitize sensitive data from logs (true/false)
+            NHL_SCRABBLE_TOP_PLAYERS: Top players to show (1-100, default: 20)
+            NHL_SCRABBLE_TOP_TEAM_PLAYERS: Top players per team (1-50, default: 5)
+            NHL_SCRABBLE_VERBOSE: Verbose logging (true/false, default: false)
+            NHL_SCRABBLE_OUTPUT_FORMAT: Output format (text/json/html, default: text)
+            NHL_SCRABBLE_SANITIZE_LOGS: Sanitize logs (true/false, default: true)
 
         Returns:
-            Config instance with values from environment
+            Config instance with validated values from environment
 
         Raises:
-            ValueError: If any environment variable has an invalid value,
-                including if API base URL fails SSRF protection validation
+            ValueError: If any environment variable has an invalid value with specific
+                error message indicating the problem and valid range
+            SSRFProtectionError: If API base URL fails SSRF protection validation
+
+        Security:
+            - Validates API base URL with SSRF protection
+            - Validates all numeric values have max bounds to prevent DoS
+            - Validates output format to prevent injection
+            - Validates boolean values
+            - Provides clear error messages for invalid configuration
 
         Examples:
             >>> import os
-            >>> os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "15"  # Setting is safe
+            >>> os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "15"
             >>> config = Config.from_env()
             >>> config.api_timeout
             15
-            >>> # Note: Reading should always use os.getenv() with default:
-            >>> timeout = os.getenv("NHL_SCRABBLE_API_TIMEOUT", "10")  # Safe
+            >>> os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "99999"
+            >>> Config.from_env()
+            Traceback (most recent call last):
+            ValueError: NHL_SCRABBLE_API_TIMEOUT cannot exceed 300, got 99999
         """
         # Load .env file if it exists
         load_dotenv()
@@ -98,71 +117,101 @@ class Config:
             )
             raise ValueError(f"Invalid API base URL: {e}") from e
 
-        def get_int(key: str, default: str, min_value: int = 0) -> int:
-            """Get integer from environment variable with validation.
+        # Validate API timeout (1-300 seconds)
+        api_timeout = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_API_TIMEOUT", "10"),
+            min_val=1,
+            max_val=300,
+            name="NHL_SCRABBLE_API_TIMEOUT",
+        )
 
-            Args:
-                key: Environment variable name
-                default: Default value if variable not set
-                min_value: Minimum allowed value
+        # Validate API retries (0-10 attempts)
+        api_retries = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_API_RETRIES", "3"),
+            min_val=0,
+            max_val=10,
+            name="NHL_SCRABBLE_API_RETRIES",
+        )
 
-            Returns:
-                Validated integer value
+        # Validate rate limit delay (0.0-60.0 seconds)
+        rate_limit_delay = validate_float_range(
+            os.getenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3"),
+            min_val=0.0,
+            max_val=60.0,
+            name="NHL_SCRABBLE_RATE_LIMIT_DELAY",
+        )
 
-            Raises:
-                ValueError: If value is not a valid integer or is below minimum
-            """
-            value_str = os.getenv(key, default)
-            try:
-                value = int(value_str)
-            except ValueError as e:
-                raise ValueError(f"{key} must be a valid integer, got '{value_str}'") from e
+        # Validate backoff factor (1.0-10.0)
+        backoff_factor = validate_float_range(
+            os.getenv("NHL_SCRABBLE_BACKOFF_FACTOR", "2.0"),
+            min_val=1.0,
+            max_val=10.0,
+            name="NHL_SCRABBLE_BACKOFF_FACTOR",
+        )
 
-            if value < min_value:
-                msg = f"{key} must be >= {min_value}, got {value}"
-                raise ValueError(msg)
-            return value
+        # Validate max backoff (1.0-300.0 seconds)
+        max_backoff = validate_float_range(
+            os.getenv("NHL_SCRABBLE_MAX_BACKOFF", "30.0"),
+            min_val=1.0,
+            max_val=300.0,
+            name="NHL_SCRABBLE_MAX_BACKOFF",
+        )
 
-        def get_float(key: str, default: str, min_value: float = 0.0) -> float:
-            """Get float from environment variable with validation.
+        # Validate cache expiry (1-86400 seconds = 1 day max)
+        cache_expiry = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_CACHE_EXPIRY", "3600"),
+            min_val=1,
+            max_val=86400,
+            name="NHL_SCRABBLE_CACHE_EXPIRY",
+        )
 
-            Args:
-                key: Environment variable name
-                default: Default value if variable not set
-                min_value: Minimum allowed value
+        # Validate top players count (1-100)
+        top_players_count = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_TOP_PLAYERS", "20"),
+            min_val=1,
+            max_val=100,
+            name="NHL_SCRABBLE_TOP_PLAYERS",
+        )
 
-            Returns:
-                Validated float value
+        # Validate top team players count (1-50)
+        top_team_players_count = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5"),
+            min_val=1,
+            max_val=50,
+            name="NHL_SCRABBLE_TOP_TEAM_PLAYERS",
+        )
 
-            Raises:
-                ValueError: If value is not a valid number or is below minimum
-            """
-            value_str = os.getenv(key, default)
-            try:
-                value = float(value_str)
-            except ValueError as e:
-                raise ValueError(f"{key} must be a valid number, got '{value_str}'") from e
+        # Validate max concurrent requests (1-50)
+        max_concurrent_requests = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_MAX_CONCURRENT", "5"),
+            min_val=1,
+            max_val=50,
+            name="NHL_SCRABBLE_MAX_CONCURRENT",
+        )
 
-            if value < min_value:
-                msg = f"{key} must be >= {min_value}, got {value}"
-                raise ValueError(msg)
-            return value
+        # Validate output format
+        output_format = validate_output_format(os.getenv("NHL_SCRABBLE_OUTPUT_FORMAT", "text"))
+
+        # Boolean values (true/false)
+        cache_enabled = os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true"
+        verbose = os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true"
+        sanitize_logs = os.getenv("NHL_SCRABBLE_SANITIZE_LOGS", "true").lower() == "true"
 
         return cls(
             api_base_url=validated_url,
-            api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1),
-            api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0),
-            rate_limit_delay=get_float("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0),
-            backoff_factor=get_float("NHL_SCRABBLE_BACKOFF_FACTOR", "2.0", min_value=1.0),
-            max_backoff=get_float("NHL_SCRABBLE_MAX_BACKOFF", "30.0", min_value=1.0),
-            cache_enabled=os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true",
-            cache_expiry=get_int("NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1),
-            max_concurrent_requests=get_int("NHL_SCRABBLE_MAX_CONCURRENT", "5", min_value=1),
-            top_players_count=get_int("NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1),
-            top_team_players_count=get_int("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1),
-            verbose=os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true",
-            output_format=os.getenv("NHL_SCRABBLE_OUTPUT_FORMAT", "text"),
-            sanitize_logs=os.getenv("NHL_SCRABBLE_SANITIZE_LOGS", "true").lower() == "true",
+            api_timeout=api_timeout,
+            api_retries=api_retries,
+            rate_limit_delay=rate_limit_delay,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+            cache_enabled=cache_enabled,
+            cache_expiry=cache_expiry,
+            max_concurrent_requests=max_concurrent_requests,
+            top_players_count=top_players_count,
+            top_team_players_count=top_team_players_count,
+            verbose=verbose,
+            output_format=output_format,
+            sanitize_logs=sanitize_logs,
         )
 
     def to_dict(self) -> dict[str, Any]:
