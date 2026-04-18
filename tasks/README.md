@@ -50,14 +50,14 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (10 tasks, 11 documented, 1 completed)
+### Optimization (9 tasks, 11 documented, 2 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue | Status      |
 | --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
 | 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |             |
 | 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |             |
 | 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  | ✅ Complete |
-| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |             |
+| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  | ✅ Complete |
 | 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |             |
 | 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |             |
 | 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |             |
@@ -67,7 +67,7 @@ Each task is assigned a priority:
 | 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
 **Documented Effort**: 16-24.5 hours
-**Completed**: 2.5 hours (Task 003: heapq optimization - PR #188)
+**Completed**: 4 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
 ### Enhancements (9 tasks, 9 documented)
@@ -135,13 +135,13 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 52 tasks (49 active, 3 completed)
-**Remaining Effort**: 188-266.5 hours (9.5 hours completed)
+**Total Tasks**: 52 tasks (48 active, 4 completed)
+**Remaining Effort**: 186.5-265 hours (11 hours completed)
 
 ### By Category
 
 - **Security**: 7 tasks, 17-22.5h
-- **Optimization**: 11 tasks, 16-24.5h (5-10x performance improvement)
+- **Optimization**: 11 tasks, 12-20.5h remaining (5-10x performance improvement, 4h completed)
 - **Enhancement**: 9 tasks, 35-49h
 - **Testing**: 2 tasks, 1.5-3.0h
 - **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
