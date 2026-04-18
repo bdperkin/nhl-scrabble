@@ -13,17 +13,10 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from nhl_scrabble import __version__
-from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
+from nhl_scrabble.api.nhl_client import NHLApiError
 from nhl_scrabble.config import Config
+from nhl_scrabble.container import Container
 from nhl_scrabble.logging_config import setup_logging
-from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
-from nhl_scrabble.processors.team_processor import TeamProcessor
-from nhl_scrabble.reports.conference_report import ConferenceReporter
-from nhl_scrabble.reports.division_report import DivisionReporter
-from nhl_scrabble.reports.playoff_report import PlayoffReporter
-from nhl_scrabble.reports.stats_report import StatsReporter
-from nhl_scrabble.reports.team_report import TeamReporter
-from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -205,44 +198,56 @@ def analyze(
         sys.exit(1)
 
 
-def run_analysis(config: Config, clear_cache: bool = False) -> str:
+def run_analysis(
+    config: Config, clear_cache: bool = False, container: Container | None = None
+) -> str:
     """Run the complete NHL Scrabble analysis.
+
+    This function uses dependency injection to create all components needed for analysis.
+    Components can be overridden by providing a custom container (useful for testing).
 
     Args:
         config: Configuration object
         clear_cache: Whether to clear the API cache before running
+        container: Optional dependency injection container (creates default if not provided)
 
     Returns:
         Complete report string
 
     Raises:
         NHLApiError: If there are issues fetching data from NHL API
+
+    Examples:
+        # Production usage
+        >>> config = Config.from_env()
+        >>> report = run_analysis(config)
+
+        # Testing with mocked dependencies
+        >>> from unittest.mock import Mock
+        >>> mock_container = Container(config)
+        >>> mock_container.set_api_client(Mock(spec=APIClientProtocol))
+        >>> report = run_analysis(config, container=mock_container)
     """
-    # Initialize components
-    api_client = NHLApiClient(
-        timeout=config.api_timeout,
-        retries=config.api_retries,
-        rate_limit_delay=config.rate_limit_delay,
-        backoff_factor=config.backoff_factor,
-        max_backoff=config.max_backoff,
-        cache_enabled=config.cache_enabled,
-        cache_expiry=config.cache_expiry,
-    )
+    # Create container if not provided (dependency injection pattern)
+    if container is None:
+        container = Container(config)
+
+    # Get dependencies from container
+    api_client = container.api_client()
+    team_processor = container.team_processor()
+    playoff_calculator = container.playoff_calculator()
+
+    # Get reporters from container
+    conference_reporter = container.conference_reporter()
+    division_reporter = container.division_reporter()
+    playoff_reporter = container.playoff_reporter()
+    team_reporter = container.team_reporter()
+    stats_reporter = container.stats_reporter()
 
     # Clear cache if requested
     if clear_cache:
         api_client.clear_cache()
         logger.info("API cache cleared")
-    scorer = ScrabbleScorer()
-    team_processor = TeamProcessor(api_client, scorer)
-    playoff_calculator = PlayoffCalculator()
-
-    # Initialize reporters
-    conference_reporter = ConferenceReporter()
-    division_reporter = DivisionReporter()
-    playoff_reporter = PlayoffReporter()
-    team_reporter = TeamReporter(top_players_per_team=config.top_team_players_count)
-    stats_reporter = StatsReporter(top_players_count=config.top_players_count)
 
     # Process all teams with progress indicator
     with Progress(

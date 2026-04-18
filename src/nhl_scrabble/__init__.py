@@ -7,10 +7,24 @@ __version__ = "2.0.0"
 __author__ = "Brandon Perkins"
 
 from nhl_scrabble.api.nhl_client import NHLApiClient
+from nhl_scrabble.container import Container
+from nhl_scrabble.protocols import (
+    APIClientProtocol,
+    PlayoffCalculatorProtocol,
+    ReporterProtocol,
+    ScorerProtocol,
+    TeamProcessorProtocol,
+)
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
 __all__ = [
+    "APIClientProtocol",
+    "Container",
     "NHLApiClient",
+    "PlayoffCalculatorProtocol",
+    "ReporterProtocol",
+    "ScorerProtocol",
     "ScrabbleScorer",
+    "TeamProcessorProtocol",
     "__version__",
 ]

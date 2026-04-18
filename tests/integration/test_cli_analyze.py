@@ -19,7 +19,7 @@ pytestmark = [
 class TestCLIAnalyze:
     """Integration tests for the analyze command."""
 
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.container.NHLApiClient")
     def test_analyze_command_with_mocked_api(
         self,
         mock_client_class: Mock,
@@ -53,7 +53,7 @@ class TestCLIAnalyze:
         # Should have output
         assert len(result.output) > 0 or result.output == ""  # Might be empty in test mode
 
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.container.NHLApiClient")
     def test_analyze_command_json_output(
         self,
         mock_client_class: Mock,
