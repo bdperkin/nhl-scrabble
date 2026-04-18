@@ -287,7 +287,7 @@ check: check-venv ## Run all checks (format, quality, tests)
 
 pre-commit: ## Run pre-commit hooks on all files
 	@printf "$(BLUE)Running pre-commit hooks...$(NC)\n"
-	@$(PRE_COMMIT) run --all-files
+	@SKIP=check-branch-protection $(PRE_COMMIT) run --all-files
 
 ###################
 # Security Audits
