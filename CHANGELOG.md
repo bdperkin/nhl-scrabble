@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Improved
 
+- **Single-Pass Statistics Calculation** - Combined multiple aggregations into one iteration
+
+  - Optimized `StatsReporter` to calculate all player statistics in a single pass over the data
+  - Added `_calculate_player_statistics()` method that tracks maximums and accumulates totals in one loop
+  - Reduced statistics calculation from 5 separate passes (O(5n)) to 1 pass (O(n))
+  - For 700 players: 3,500 iterations → 700 iterations (5x reduction)
+  - Expected 2-3x speedup for statistics calculations
+  - Added 6 comprehensive unit tests for single-pass method (empty list, single player, ties, correctness)
+  - Benefits: Faster stats report generation, cleaner code, easier to add new statistics
+
 - **Optimized Rate Limiting for Cache Hits** - Skip rate limit delays for cached responses
 
   - Modified `NHLApiClient` to detect when responses are served from cache

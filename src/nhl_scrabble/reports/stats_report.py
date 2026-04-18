@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import heapq
+from typing import Any
 
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings
@@ -19,6 +20,66 @@ class StatsReporter(BaseReporter):
             top_players_count: Number of top players to show
         """
         self.top_players_count = top_players_count
+
+    def _calculate_player_statistics(self, players: list[PlayerScore]) -> dict[str, Any]:
+        """Calculate all player statistics in a single pass.
+
+        Args:
+            players: List of all players
+
+        Returns:
+            Dictionary with statistics:
+            - top_first: Player with highest first name score
+            - top_last: Player with highest last name score
+            - avg_full: Average full name score
+            - avg_first: Average first name score
+            - avg_last: Average last name score
+            - total_players: Total number of players
+
+        Complexity:
+            O(n) - single pass over all players
+        """
+        if not players:
+            return {
+                "top_first": None,
+                "top_last": None,
+                "avg_full": 0.0,
+                "avg_first": 0.0,
+                "avg_last": 0.0,
+                "total_players": 0,
+            }
+
+        # Initialize with first player
+        top_first = top_last = players[0]
+        total_full = total_first = total_last = 0
+
+        # Single pass - O(n)
+        for player in players:
+            # Track maximums
+            if player.first_score > top_first.first_score:
+                top_first = player
+            if player.last_score > top_last.last_score:
+                top_last = player
+
+            # Accumulate totals for averages
+            total_full += player.full_score
+            total_first += player.first_score
+            total_last += player.last_score
+
+        # Calculate averages
+        count = len(players)
+        avg_full = total_full / count
+        avg_first = total_first / count
+        avg_last = total_last / count
+
+        return {
+            "top_first": top_first,
+            "top_last": top_last,
+            "avg_full": avg_full,
+            "avg_first": avg_first,
+            "avg_last": avg_last,
+            "total_players": count,
+        }
 
     def generate(
         self,
@@ -57,29 +118,28 @@ class StatsReporter(BaseReporter):
         # Fun stats
         output += self._format_header("🎯 FUN STATS")
 
+        # Calculate all statistics in a single pass
+        stats = self._calculate_player_statistics(all_players)
+
         # Highest scoring first name
-        top_first = max(all_players, key=lambda x: x.first_score)
+        top_first = stats["top_first"]
         output += (
             f"\nHighest First Name: {top_first.first_name} "
             f"({top_first.full_name}, {top_first.team}) = {top_first.first_score} points"
         )
 
         # Highest scoring last name
-        top_last = max(all_players, key=lambda x: x.last_score)
+        top_last = stats["top_last"]
         output += (
             f"\nHighest Last Name: {top_last.last_name} "
             f"({top_last.full_name}, {top_last.team}) = {top_last.last_score} points"
         )
 
         # Average scores overall
-        avg_full = sum(p.full_score for p in all_players) / len(all_players)
-        avg_first = sum(p.first_score for p in all_players) / len(all_players)
-        avg_last = sum(p.last_score for p in all_players) / len(all_players)
-
         output += "\n\nLeague-Wide Average Scores:"
-        output += f"\n  Full Name: {avg_full:.2f}"
-        output += f"\n  First Name: {avg_first:.2f}"
-        output += f"\n  Last Name: {avg_last:.2f}"
+        output += f"\n  Full Name: {stats['avg_full']:.2f}"
+        output += f"\n  First Name: {stats['avg_first']:.2f}"
+        output += f"\n  Last Name: {stats['avg_last']:.2f}"
 
         # Division with highest average per player
         division_avg_per_player = {
