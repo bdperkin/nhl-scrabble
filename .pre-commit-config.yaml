@@ -265,7 +265,7 @@ repos:
       - id: vulture
         # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
         # Finds unused functions, classes, variables, imports, and properties
-        args: [src]  # Config is in pyproject.toml
+        args: [src, .vulture_allowlist]  # Config is in pyproject.toml, allowlist for public APIs
 
   - repo: https://github.com/PrincetonUniversity/blocklint
     rev: v0.3.0

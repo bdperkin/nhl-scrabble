@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
+  - Added `CSVExporter` class for exporting data to CSV format
+  - Added `ExcelExporter` class for exporting data to Excel (.xlsx) format with multiple sheets
+  - Added `openpyxl` as optional dependency in `[export]` group
+  - Extended CLI `--format` option to support `csv` and `excel` formats
+  - Added `--sheets` option for Excel to specify which sheets to include
+  - CSV exports include team scores with sorting by total score
+  - Excel exports include multiple formatted sheets: Teams, Players, Divisions, Conferences, Playoffs
+  - Excel reports feature header formatting, auto-adjusted columns, and professional styling
+  - Added 18 comprehensive tests covering both CSV and Excel export functionality
+  - Benefits: Business-friendly output, easy data analysis, chart creation, data sharing
+  - Related: Enhancement task #144 - CSV/Excel export support
+  - Usage:
+    ```bash
+    nhl-scrabble analyze --format csv --output report.csv
+    nhl-scrabble analyze --format excel --output report.xlsx
+    nhl-scrabble analyze --format excel --sheets teams,players --output custom.xlsx
+    ```
+
 ### Security
 
 - **PII Logging Prevention** - Enhanced log sanitization to protect player privacy

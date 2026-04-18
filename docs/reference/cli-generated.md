@@ -59,12 +59,17 @@ Usage: nhl-scrabble analyze [OPTIONS]
   Examples:     nhl-scrabble analyze     nhl-scrabble analyze --verbose
   nhl-scrabble analyze --quiet     nhl-scrabble analyze --output report.txt
   nhl-scrabble analyze --format json --output report.json     nhl-scrabble
-  analyze --no-cache     nhl-scrabble analyze --clear-cache     nhl-scrabble
-  analyze --report team     nhl-scrabble analyze --report playoff --output
-  playoffs.txt
+  analyze --format csv --output report.csv     nhl-scrabble analyze --format
+  excel --output report.xlsx     nhl-scrabble analyze --format excel --sheets
+  teams,players --output report.xlsx     nhl-scrabble analyze --no-cache
+  nhl-scrabble analyze --clear-cache     nhl-scrabble analyze --report team
+  nhl-scrabble analyze --report playoff --output playoffs.txt
 
 Options:
-  --format [text|json]            Output format (default: text)
+  --format [text|json|csv|excel]  Output format (default: text)
+  --sheets TEXT                   Comma-separated list of sheets for Excel
+                                  export (teams,players,divisions,conferences,
+                                  playoffs)
   -o, --output PATH               Output file path (default: stdout)
   -v, --verbose                   Enable verbose logging
   -q, --quiet                     Suppress progress bars
