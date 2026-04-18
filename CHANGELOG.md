@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- **PII Logging Prevention** - Enhanced log sanitization to protect player privacy
+
+  - Extended `SensitiveDataFilter` to detect and redact Personally Identifiable Information (PII)
+  - Added patterns for player names (handles "Connor McDavid", "Marc-Andre Fleury", "Ryan O'Reilly")
+  - Added patterns for birthdates (ISO, slash, and US date formats)
+  - Added patterns for email addresses and birthplace information
+  - Added patterns for firstName/lastName field logging
+  - Implemented safe phrase allowlist to prevent false positives (division names, conference names)
+  - Player names in `PlayerScore` repr, log messages, and args are automatically redacted
+  - Added 18 comprehensive unit tests covering PII detection and sanitization
+  - Maintains compliance with privacy regulations (GDPR, CCPA)
+  - Benefits: Prevents accidental PII exposure in log files, supports data minimization
+  - Related: Security task #136 - PII logging prevention
+
 - **Enforced SSL/TLS Certificate Verification** - Enhanced API security with mandatory SSL verification
 
   - Added explicit `verify=True` with certifi CA bundle to all NHL API requests
