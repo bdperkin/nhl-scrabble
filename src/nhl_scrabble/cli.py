@@ -303,7 +303,7 @@ def run_analysis(
         api_client.clear_cache()
         logger.info("API cache cleared")
     scorer = ScrabbleScorer()
-    team_processor = TeamProcessor(api_client, scorer)
+    team_processor = TeamProcessor(api_client, scorer, max_workers=config.max_concurrent_requests)
     playoff_calculator = PlayoffCalculator()
 
     # Create progress manager

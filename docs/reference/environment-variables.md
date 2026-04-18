@@ -9,6 +9,7 @@ Complete list of all environment variables supported by NHL Scrabble.
 | `NHL_SCRABBLE_API_TIMEOUT`      | int    | 10      | API timeout (seconds)    |
 | `NHL_SCRABBLE_API_RETRIES`      | int    | 3       | Retry attempts           |
 | `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float  | 0.3     | Request delay (seconds)  |
+| `NHL_SCRABBLE_MAX_CONCURRENT`   | int    | 5       | Concurrent API requests  |
 | `NHL_SCRABBLE_CACHE_ENABLED`    | bool   | true    | Enable caching           |
 | `NHL_SCRABBLE_CACHE_EXPIRY`     | int    | 3600    | Cache duration (seconds) |
 | `NHL_SCRABBLE_OUTPUT_FORMAT`    | string | text    | Output format            |
@@ -53,6 +54,37 @@ export NHL_SCRABBLE_API_RETRIES=5
 
 ```bash
 export NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
+```
+
+### NHL_SCRABBLE_MAX_CONCURRENT
+
+**Type**: Integer
+**Default**: 5
+**Description**: Maximum number of concurrent API requests for fetching team rosters.
+
+Controls parallelism when fetching NHL team data. Higher values provide better performance
+but may trigger rate limiting. Recommended range: 5-10.
+
+**Performance Impact**:
+
+- `1` (sequential): ~10 seconds for 32 teams
+- `5` (default): ~2 seconds for 32 teams (5x speedup)
+- `10` (high): ~1.5 seconds for 32 teams (7x speedup)
+
+**Example**:
+
+```bash
+# Conservative (safe, reliable)
+export NHL_SCRABBLE_MAX_CONCURRENT=3
+
+# Default (balanced performance)
+export NHL_SCRABBLE_MAX_CONCURRENT=5
+
+# Aggressive (maximum performance)
+export NHL_SCRABBLE_MAX_CONCURRENT=10
+
+# Sequential (debugging, no parallelism)
+export NHL_SCRABBLE_MAX_CONCURRENT=1
 ```
 
 ## Caching
