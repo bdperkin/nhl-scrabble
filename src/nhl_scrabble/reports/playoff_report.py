@@ -94,6 +94,7 @@ class PlayoffReporter(BaseReporter):
         """
         seed_part = f"{team.seed_type:20}" if show_seed else " " * 20
         return (
-            f"\n    {seed_part} {team.abbrev:4} {team.total:4} pts "
-            f"({team.players:2} players, avg: {team.avg:5.2f}) {team.status_indicator}"
+            f"\n    {seed_part} {team.abbrev:4} {self._format_score(team.total)} pts "
+            f"({team.players:2} players, avg: {self._format_average(team.avg)}) "
+            f"{team.status_indicator}"
         )

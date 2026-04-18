@@ -321,6 +321,7 @@ ignore = [
     "PLR2004", # Magic value used in comparison
     "ANN",     # Type annotations not required in tests
     "PLC0415", # Conditional imports for test exceptions
+    "SLF001",  # Private member accessed (testing private methods is intentional)
 ]
 "src/nhl_scrabble/cli.py" = [
     "T201",    # print statements are fine in CLI code

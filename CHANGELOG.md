@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Report Classes Consolidation** - Refactored report classes to use shared base utilities
+  - Added comprehensive utility methods to `BaseReporter`:
+    - `_sort_by_key()` - Generic sorting helper for consistent sorting across reports
+    - `_take_top()` - Pagination helper for limiting results to top N items
+    - `_paginate()` - Generic pagination into chunks
+    - `_format_score()` - Consistent integer score formatting with configurable width
+    - `_format_average()` - Consistent float average formatting with configurable decimals
+    - `_format_team_list()` - Sorted, comma-separated team list formatting
+  - Updated all report classes to use base utilities:
+    - `TeamReporter` - Uses `_sort_by_key()`, `_take_top()`, `_format_score()`
+    - `DivisionReporter` - Uses `_sort_by_key()`, `_format_score()`, `_format_average()`, `_format_team_list()`
+    - `ConferenceReporter` - Uses `_sort_by_key()`, `_format_score()`, `_format_average()`, `_format_team_list()`
+    - `StatsReporter` - Uses `_sort_by_key()`, `_take_top()`, `_format_score()`, `_format_average()`
+    - `PlayoffReporter` - Uses `_format_score()`, `_format_average()`
+  - Added 29 comprehensive unit tests for base reporter utilities
+  - Eliminated duplicate sorting, formatting, and pagination logic across report classes
+  - Improved code maintainability and consistency across all reports
+  - Test coverage increased from 91.81% to 92.17%
+
 ### Added
 
 - **Web Interface Testing, Polish, and API Endpoint** - Complete web interface with comprehensive testing

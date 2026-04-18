@@ -26,24 +26,27 @@ class TeamReporter(BaseReporter):
         """
         output = self._format_header("📊 TEAM SCRABBLE SCORES (Sorted by Total Score)")
 
-        sorted_teams = sorted(team_scores.items(), key=lambda x: x[1].total, reverse=True)
+        sorted_teams = self._sort_by_key(
+            team_scores.items(), key=lambda x: x[1].total, reverse=True
+        )
 
         for rank, (team_abbrev, team_data) in enumerate(sorted_teams, 1):
             output += (
                 f"\n\n#{rank} {team_abbrev} ({team_data.division}): "
-                f"{team_data.total} points ({team_data.player_count} players)"
+                f"{self._format_score(team_data.total)} points ({team_data.player_count} players)"
             )
 
             # Show top players from each team
-            top_players = sorted(team_data.players, key=lambda x: x.full_score, reverse=True)[
-                : self.top_players_per_team
-            ]
+            sorted_players = self._sort_by_key(
+                team_data.players, key=lambda x: x.full_score, reverse=True
+            )
+            top_players = self._take_top(sorted_players, self.top_players_per_team)
 
             for i, player in enumerate(top_players, 1):
                 output += (
-                    f"\n   {i}. {player.full_name}: {player.full_score} "
-                    f"({player.first_name}={player.first_score}, "
-                    f"{player.last_name}={player.last_score})"
+                    f"\n   {i}. {player.full_name}: {self._format_score(player.full_score)} "
+                    f"({player.first_name}={self._format_score(player.first_score, width=2)}, "
+                    f"{player.last_name}={self._format_score(player.last_score, width=2)})"
                 )
 
         return output
