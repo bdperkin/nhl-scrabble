@@ -49,6 +49,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
     "jinja2>=3.1.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
     "prompt-toolkit>=3.0.0",
 ]
 
@@ -66,6 +68,7 @@ test = [
     "pytest-benchmark>=4.0.0",
     "diff-cover>=8.0.0",
     "beautifulsoup4>=4.12.0",
+    "httpx>=0.27.0",  # Required for FastAPI TestClient
 ]
 
 # Code quality dependencies
@@ -140,6 +143,7 @@ tox = [
 dev = [
     "nhl-scrabble[test,lint,type,security,docs,watch,build,publish,tox]",
     "pre-commit>=3.6.0",
+    "check-jsonschema>=0.28.0",  # JSON/YAML schema validation
 ]
 
 
@@ -455,6 +459,10 @@ disallow_untyped_defs = false
 disallow_untyped_decorators = false
 warn_return_any = false
 
+[[tool.mypy.overrides]]
+module = ["nhl_scrabble.web.*"]
+disallow_untyped_decorators = false  # FastAPI decorators don't have type stubs
+
 # Pytest configuration
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -563,7 +571,7 @@ check-filenames = true
 check-hidden = true
 
 # Skip patterns for non-text files and generated content
-skip = '*.lock,*.json,*.min.js,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api/*'
+skip = '*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*'
 
 # Project-specific ignore words (like ruff's ignore list)
 # Add false positives here as they are discovered
@@ -993,6 +1001,13 @@ ignore_names = [
 
     # Public API exceptions (part of public API even if not currently used)
     "NHLApiNotFoundError",  # Exception class reserved for future use
+    "track_score_calculation",  # ProgressManager method used via context manager (vulture can't detect)
+    "track_report_generation",  # ProgressManager method reserved for future use (lazy eval prevents current use)
+
+    # FastAPI framework patterns (called at runtime by framework)
+    "health",             # FastAPI endpoint function (registered via decorator)
+    "root",               # FastAPI endpoint function (registered via decorator)
+    "templates",          # Jinja2Templates instance (used by future endpoints)
 
     # Test-related patterns
     "test_*",             # Test functions

@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from nhl_scrabble.models.player import PlayerScore
 
 
-@dataclass
+@dataclass(slots=True)
 class TeamScore:
     """Represents a team with aggregated Scrabble score information.
 

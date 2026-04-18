@@ -46,12 +46,14 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
 ## Features
 
 - 🏒 **Live NHL Data** - Fetches current roster data directly from the official NHL API
+- 🌐 **Web Interface** - FastAPI-powered web server with auto-generated API documentation
 - 📊 **Comprehensive Reports** - Multiple report types including:
   - Conference standings with total and average scores
   - Division standings breakdown
   - NHL-style playoff bracket (wild card format)
   - Team scores with top players
   - League-wide statistics and fun facts
+- 📈 **Progress Tracking** - Real-time progress bars show operation status (API fetching, scoring, report generation)
 - 🎯 **Flexible Output** - Text, JSON, or HTML format output with responsive design
 - ⚙️ **Configurable** - Customize via environment variables or command-line options
 - 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules
@@ -79,7 +81,7 @@ pip install -e ".[dev]"
 
 - **Supported**: Python 3.10, 3.11, 3.12, 3.13, 3.14
 - **Experimental**: Python 3.15-dev (CI testing only, may have issues)
-- Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`
+- Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`, `fastapi`, `uvicorn`, `jinja2`
 - Note: UV acceleration is automatic when using tox (via tox-uv plugin)
 
 ## Quick Start
@@ -101,11 +103,14 @@ python -m nhl_scrabble analyze
 ### Basic Usage
 
 ```bash
-# Run analysis with default settings
+# Run analysis with default settings (shows progress bars)
 nhl-scrabble analyze
 
 # Enable verbose logging
 nhl-scrabble analyze --verbose
+
+# Suppress progress bars (useful for scripting/automation)
+nhl-scrabble analyze --quiet
 
 # Save output to a file
 nhl-scrabble analyze --output report.txt
@@ -119,6 +124,33 @@ nhl-scrabble analyze --format html --output report.html
 # Customize number of top players shown
 nhl-scrabble analyze --top-players 50 --top-team-players 10
 ```
+
+### Web Interface
+
+Start the web server for browser-based access:
+
+```bash
+# Start web server on default port (8000)
+nhl-scrabble serve
+
+# Start with auto-reload for development
+nhl-scrabble serve --reload
+
+# Custom host and port
+nhl-scrabble serve --host 0.0.0.0 --port 5000
+```
+
+Once started, visit:
+
+- **API Documentation**: http://localhost:8000/docs (Interactive Swagger UI)
+- **Alternative Docs**: http://localhost:8000/redoc (ReDoc)
+- **Health Check**: http://localhost:8000/health
+
+The web interface provides:
+
+- ✅ RESTful API endpoints for programmatic access
+- 📚 Auto-generated OpenAPI documentation
+- 🩺 Health check endpoint for monitoring
 
 ### Configuration
 
@@ -151,6 +183,7 @@ Options:
   --format [text|json]      Output format (default: text)
   -o, --output PATH         Output file path (default: stdout)
   -v, --verbose             Enable verbose logging
+  -q, --quiet               Suppress progress bars
   --top-players INTEGER     Number of top players to show (default: 20)
   --top-team-players INTEGER
                            Number of top players per team (default: 5)

@@ -1,5 +1,6 @@
 """Playoff standings calculator module."""
 
+import heapq
 import logging
 from collections import defaultdict
 
@@ -45,10 +46,6 @@ class PlayoffCalculator:
 
         # Group teams by division
         teams_by_division = self._group_teams_by_division(team_scores)
-
-        # Sort teams within each division
-        for division in teams_by_division:
-            teams_by_division[division].sort(key=lambda x: (x.total, x.avg), reverse=True)
 
         # Determine division leaders (top 3 from each division)
         playoff_teams, all_teams = self._determine_division_leaders(teams_by_division)
@@ -103,7 +100,7 @@ class PlayoffCalculator:
         """Determine top 3 teams from each division (automatic playoff spots).
 
         Args:
-            teams_by_division: Teams grouped by division (must be pre-sorted)
+            teams_by_division: Teams grouped by division
 
         Returns:
             Tuple of (playoff_teams dict, all_teams list)
@@ -112,19 +109,25 @@ class PlayoffCalculator:
         all_teams: list[PlayoffTeam] = []
 
         for division, teams in teams_by_division.items():
+            # Get top 3 from each division using heapq for O(n log k) complexity
+            top_3 = heapq.nlargest(3, teams, key=lambda x: (x.total, x.avg))
+
             # Top 3 from each division make playoffs
-            for i, team in enumerate(teams[:3]):
+            for i, team in enumerate(top_3):
                 team.seed_type = f"{division} #{i + 1}"
                 team.in_playoffs = True
                 team.division_rank = i + 1
                 playoff_teams[team.abbrev] = team
 
+            # Get remaining teams (not in top 3)
+            remaining = [t for t in teams if t not in top_3]
+
             # Mark division rank for remaining teams
-            for i, team in enumerate(teams[3:], start=4):
+            for i, team in enumerate(remaining, start=4):
                 team.in_playoffs = False
                 team.division_rank = i
 
-            all_teams.extend(teams)
+            all_teams.extend(top_3 + remaining)
 
         return playoff_teams, all_teams
 
@@ -151,21 +154,24 @@ class PlayoffCalculator:
             for _division, teams in teams_by_division.items():
                 # Check if this division is in this conference
                 if teams and teams[0].conference == conference:
-                    # Add teams ranked 4th and below as wild card candidates
-                    wild_card_candidates.extend(teams[3:])
+                    # Add teams not already in playoffs (not in top 3 of their division)
+                    wild_card_candidates.extend(
+                        team for team in teams if team.abbrev not in playoff_teams
+                    )
 
-            # Sort by total (with avg as tiebreaker) and take top 2
-            wild_card_candidates.sort(key=lambda x: (x.total, x.avg), reverse=True)
+            # Get top 2 wild cards using heapq for O(n log k) complexity
+            conference_wild_cards = heapq.nlargest(
+                2, wild_card_candidates, key=lambda x: (x.total, x.avg)
+            )
 
-            conference_wild_cards: list[PlayoffTeam] = []
-            for i, team in enumerate(wild_card_candidates[:2]):
+            for i, team in enumerate(conference_wild_cards):
                 team.seed_type = f"{conference} WC{i + 1}"
                 team.in_playoffs = True
                 playoff_teams[team.abbrev] = team
-                conference_wild_cards.append(team)
 
             # Mark remaining teams as eliminated
-            for team in wild_card_candidates[2:]:
+            eliminated = [t for t in wild_card_candidates if t not in conference_wild_cards]
+            for team in eliminated:
                 team.seed_type = "Eliminated"
                 team.in_playoffs = False
 

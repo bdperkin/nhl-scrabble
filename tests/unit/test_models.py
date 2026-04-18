@@ -165,3 +165,87 @@ class TestPlayoffTeam:
         assert team.in_playoffs is False
         assert team.division_rank == 0
         assert team.status_indicator == ""
+
+
+class TestSlotsOptimization:
+    """Tests for __slots__ memory optimization."""
+
+    def test_player_score_has_slots(self) -> None:
+        """Test that PlayerScore uses __slots__."""
+        assert hasattr(PlayerScore, "__slots__")
+
+        player = PlayerScore(
+            first_name="Connor",
+            last_name="McDavid",
+            full_name="Connor McDavid",
+            first_score=15,
+            last_score=17,
+            full_score=32,
+            team="EDM",
+            division="Pacific",
+            conference="Western",
+        )
+
+        # Verify no __dict__ (slots prevents it)
+        assert not hasattr(player, "__dict__")
+
+    def test_team_score_has_slots(self, sample_player: PlayerScore) -> None:
+        """Test that TeamScore uses __slots__."""
+        assert hasattr(TeamScore, "__slots__")
+
+        team = TeamScore(
+            abbrev="EDM",
+            total=100,
+            players=[sample_player],
+            division="Pacific",
+            conference="Western",
+        )
+
+        # Verify no __dict__ (slots prevents it)
+        assert not hasattr(team, "__dict__")
+
+    def test_division_standings_has_slots(self) -> None:
+        """Test that DivisionStandings uses __slots__."""
+        assert hasattr(DivisionStandings, "__slots__")
+
+        standings = DivisionStandings(
+            name="Pacific",
+            total=1000,
+            teams=["EDM", "VAN", "CGY"],
+            player_count=75,
+            avg_per_team=333.33,
+        )
+
+        # Verify no __dict__ (slots prevents it)
+        assert not hasattr(standings, "__dict__")
+
+    def test_conference_standings_has_slots(self) -> None:
+        """Test that ConferenceStandings uses __slots__."""
+        assert hasattr(ConferenceStandings, "__slots__")
+
+        standings = ConferenceStandings(
+            name="Western",
+            total=5000,
+            teams=["EDM", "VAN", "CGY", "SEA"],
+            player_count=150,
+            avg_per_team=1250.0,
+        )
+
+        # Verify no __dict__ (slots prevents it)
+        assert not hasattr(standings, "__dict__")
+
+    def test_playoff_team_has_slots(self) -> None:
+        """Test that PlayoffTeam uses __slots__."""
+        assert hasattr(PlayoffTeam, "__slots__")
+
+        team = PlayoffTeam(
+            abbrev="EDM",
+            total=1500,
+            players=25,
+            avg=60.0,
+            conference="Western",
+            division="Pacific",
+        )
+
+        # Verify no __dict__ (slots prevents it)
+        assert not hasattr(team, "__dict__")
