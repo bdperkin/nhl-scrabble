@@ -9,9 +9,9 @@ NHL Scrabble Score Analyzer Documentation
    :target: https://codecov.io/gh/bdperkin/nhl-scrabble
    :alt: Code Coverage
 
-.. image:: https://img.shields.io/badge/python-3.10--3.13-blue.svg
+.. image:: https://img.shields.io/badge/python-3.10--3.14-blue.svg
    :target: https://www.python.org/downloads/
-   :alt: Python 3.10-3.13
+   :alt: Python 3.10-3.14
 
 A Python application that fetches current NHL roster data and calculates
 "Scrabble scores" for player names based on standard Scrabble letter values.
