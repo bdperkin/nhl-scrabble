@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
+
   - Added `CSVExporter` class for exporting data to CSV format
   - Added `ExcelExporter` class for exporting data to Excel (.xlsx) format with multiple sheets
   - Added `openpyxl` as optional dependency in `[export]` group
