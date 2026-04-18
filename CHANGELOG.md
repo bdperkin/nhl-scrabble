@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
+
   - Added `CSVExporter` class for exporting data to CSV format
   - Added `ExcelExporter` class for exporting data to Excel (.xlsx) format with multiple sheets
   - Added `openpyxl` as optional dependency in `[export]` group
@@ -27,6 +28,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     nhl-scrabble analyze --format excel --output report.xlsx
     nhl-scrabble analyze --format excel --sheets teams,players --output custom.xlsx
     ```
+
+- **REST API Server** - Standalone REST API for programmatic access to NHL Scrabble data (#150)
+
+  - Added `nhl-scrabble api` CLI command to start REST API server
+  - Implemented comprehensive API endpoints:
+    - `GET /api/v1/teams` - Get all team scores with optional division/conference filtering
+    - `GET /api/v1/teams/{abbrev}` - Get specific team with detailed player roster
+    - `GET /api/v1/players` - Get all players with filtering (min/max score, team, limit, sorting)
+    - `GET /api/v1/standings/division` - Division standings
+    - `GET /api/v1/standings/conference` - Conference standings
+    - `GET /api/v1/standings/playoffs` - Playoff bracket
+    - `GET /health` - Health check endpoint for monitoring
+  - Automatic OpenAPI documentation at `/docs` (Swagger UI) and `/redoc` (ReDoc)
+  - CORS middleware for cross-origin requests
+  - Comprehensive integration tests with FastAPI TestClient
+  - Separate from web interface for dedicated programmatic access
+  - Benefits: Third-party integrations, mobile apps, custom clients, API ecosystem
 
 ### Security
 

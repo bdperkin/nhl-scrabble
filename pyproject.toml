@@ -189,6 +189,7 @@ per-file-ignores = [
     "__init__.py:F401,F403",  # Unused imports in __init__.py (like ruff's per-file-ignores)
     "tests/*:S101",  # Use of assert (pytest uses assert)
     "src/nhl_scrabble/api/nhl_client.py:C901",  # get_team_roster complexity from retry logic
+    "src/nhl_scrabble/api_server/routes/players.py:C901",  # get_players complexity from filtering logic
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity
 exclude = [
@@ -350,6 +351,12 @@ ignore = [
     "C901",    # get_team_roster complexity from retry + 429 handling
     "PLR0912", # Too many branches from retry + 429 handling
 ]
+"src/nhl_scrabble/api_server/routes/*.py" = [
+    "FAST002",  # FastAPI Query/Path params don't need Annotated (pre-3.10 style is fine)
+    "TRY301",   # Inline raises are fine in FastAPI route handlers
+    "ERA001",   # Commented code for clarity (e.g., "# standings_type == ...")
+    "C901",     # Route complexity from filtering logic is acceptable
+]
 "tests/unit/test_nhl_client.py" = [
     "SLF001",  # Private member access for testing internal methods
 ]
@@ -471,6 +478,12 @@ warn_return_any = false
 module = ["nhl_scrabble.web.*"]
 disallow_untyped_decorators = false  # FastAPI decorators don't have type stubs
 disallow_subclassing_any = false  # Allow BaseHTTPMiddleware (has type Any in some mypy versions)
+
+[[tool.mypy.overrides]]
+module = ["nhl_scrabble.api_server.*"]
+disallow_untyped_decorators = false  # FastAPI decorators don't have type stubs
+warn_return_any = false  # FastAPI routes return Any via decorators
+check_untyped_defs = false  # FastAPI decorated functions are untyped
 
 # Pytest configuration
 [tool.pytest.ini_options]
@@ -1029,6 +1042,10 @@ ignore_names = [
     "favicon",            # FastAPI endpoint function (registered via decorator)
     "dispatch",           # Middleware method (called by Starlette BaseHTTPMiddleware)
     "templates",          # Jinja2Templates instance (used by future endpoints)
+    "get_players",        # FastAPI endpoint (api_server/routes/players.py)
+    "get_standings",      # FastAPI endpoint (api_server/routes/standings.py)
+    "get_team",           # FastAPI endpoint (api_server/routes/teams.py)
+    "get_teams",          # FastAPI endpoint (api_server/routes/teams.py)
 
     # Test-related patterns
     "test_*",             # Test functions
