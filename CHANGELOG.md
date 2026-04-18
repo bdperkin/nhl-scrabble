@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Improved
 
+- **Memory Optimization with __slots__** - Reduced memory usage for data model instances
+
+  - Added `slots=True` parameter to all dataclass decorators (`@dataclass(slots=True)`)
+  - Applied to 5 model classes: `PlayerScore`, `TeamScore`, `DivisionStandings`, `ConferenceStandings`, `PlayoffTeam`
+  - Prevents `__dict__` overhead by using fixed-size slot arrays for attribute storage
+  - Expected 30-50% memory reduction per instance with ~700 player objects and ~32 team objects
+  - Python 3.10+ feature - compatible with project's minimum Python version (3.10)
+  - Added 5 comprehensive unit tests verifying `__slots__` presence and `__dict__` absence
+  - All existing tests pass - no breaking changes to functionality
+  - Benefits: Lower memory footprint, faster attribute access, better cache locality
+
 - **Memoized Scrabble Scoring** - Added LRU cache to score calculations
 
   - Added `@lru_cache(maxsize=2048)` decorator to `calculate_score()` method
