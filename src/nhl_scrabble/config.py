@@ -1,5 +1,7 @@
 """Configuration management for NHL Scrabble."""
 
+# ruff: noqa: RUF100
+
 import logging
 import os
 from dataclasses import dataclass
@@ -45,7 +47,7 @@ class Config:
     sanitize_logs: bool = True
 
     @classmethod
-    def from_env(cls) -> "Config":
+    def from_env(cls) -> "Config":  # noqa: C901
         """Load configuration from environment variables with validation.
 
         Environment variables:
