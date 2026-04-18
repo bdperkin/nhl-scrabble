@@ -248,8 +248,7 @@ repos:
       - id: vulture
         # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
         # Finds unused functions, classes, variables, imports, and properties
-        # Note: Excluding web/app.py due to Pydantic model false positives
-        args: [src, --exclude, "src/nhl_scrabble/web/app.py"]
+        args: [src, .vulture_allowlist]  # Config is in pyproject.toml, allowlist for public APIs
 
   - repo: https://github.com/PrincetonUniversity/blocklint
     rev: v0.3.0
@@ -373,7 +372,7 @@ repos:
         name: Check generated documentation is up-to-date
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
-        entry: python tools/check_docs.py
+        entry: python scripts/check_docs.py
         language: system
         pass_filenames: false
         # Only run if docstrings or CLI code changed

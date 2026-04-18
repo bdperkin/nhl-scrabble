@@ -13,3 +13,8 @@ export_player_scores  # ExcelExporter method for exporting player scores
 fill  # openpyxl PatternFill attribute
 font  # openpyxl Font attribute
 alignment  # openpyxl Alignment attribute
+
+# Pydantic model fields in web/app.py (used by FastAPI)
+timestamp  # AnalysisResponse field
+cache_hit  # AnalysisResponse field
+team_standings  # AnalysisResponse field
