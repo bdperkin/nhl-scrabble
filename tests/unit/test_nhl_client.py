@@ -330,13 +330,15 @@ class TestNHLApiClient:
 
     def test_weakref_tracking(self) -> None:
         """Test that instances are tracked with weak references."""
-        initial_count = len(NHLApiClient._instances)
-
+        # Create clients and verify they are tracked
+        # Note: We check for presence rather than exact count due to parallel test execution
         client1 = NHLApiClient(cache_enabled=False)
-        assert len(NHLApiClient._instances) >= initial_count + 1
-
         client2 = NHLApiClient(cache_enabled=False)
-        assert len(NHLApiClient._instances) >= initial_count + 2
+
+        # Verify both clients are tracked (weakrefs point to our instances)
+        tracked_instances = [ref() for ref in NHLApiClient._instances if ref() is not None]
+        assert client1 in tracked_instances, "client1 should be tracked in _instances"
+        assert client2 in tracked_instances, "client2 should be tracked in _instances"
 
         # Clean up
         client1.close()
