@@ -11,10 +11,7 @@ from nhl_scrabble.web.app import app
 
 # Run these tests sequentially in the same worker group due to real NHL API calls
 # This prevents parallel API requests that cause timeouts and worker crashes
-pytestmark = [
-    pytest.mark.timeout(120),  # 2 minutes timeout for real API calls
-    pytest.mark.xdist_group("web_api_sequential"),  # Force sequential execution
-]
+pytestmark = pytest.mark.xdist_group("web_api_sequential")
 
 
 @pytest.fixture(autouse=True)

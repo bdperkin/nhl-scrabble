@@ -478,7 +478,7 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 # Timeout configuration
-timeout = 10  # Default: 10 seconds for unit tests
+timeout = 60  # Default: 60 seconds (increased for integration tests with real API calls)
 timeout_method = "thread"  # Use threading for better compatibility
 
 addopts = [
@@ -489,7 +489,7 @@ addopts = [
     "--cov-report=term-missing:skip-covered",
     "--cov-report=html",
     "--cov-report=xml",
-    "--timeout=10",  # Enforce 10s default timeout
+    "--timeout=60",  # Enforce 60s timeout (accommodates integration tests)
 ]
 markers = [
     "unit: Unit tests",
