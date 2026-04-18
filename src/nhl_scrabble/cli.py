@@ -687,5 +687,62 @@ def serve(host: str, port: int, reload: bool) -> None:
     )
 
 
+@cli.command()
+@click.option("--host", default="127.0.0.1", help="Host to bind to")
+@click.option("--port", default=8000, type=int, help="Port to bind to")
+@click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
+@click.option("--workers", default=1, type=int, help="Number of worker processes (production)")
+def api(host: str, port: int, reload: bool, workers: int) -> None:
+    """Start REST API server.
+
+    Starts a FastAPI REST API server providing programmatic access to
+    NHL Scrabble data. Visit http://localhost:8000/docs for API documentation.
+
+    The API provides endpoints for:
+    - Team scores (/api/v1/teams)
+    - Player scores (/api/v1/players)
+    - Division standings (/api/v1/standings/division)
+    - Conference standings (/api/v1/standings/conference)
+    - Playoff bracket (/api/v1/standings/playoffs)
+
+    Examples:
+        # Start API server on default port
+        nhl-scrabble api
+
+        # Development mode with auto-reload
+        nhl-scrabble api --reload
+
+        # Production mode with multiple workers
+        nhl-scrabble api --workers 4 --host 0.0.0.0
+
+        # Custom host and port
+        nhl-scrabble api --host 0.0.0.0 --port 5000
+    """
+    try:
+        import uvicorn
+    except ImportError:
+        click.echo(
+            "Error: uvicorn not installed. Install with: pip install nhl-scrabble",
+            err=True,
+        )
+        raise click.Abort from None
+
+    click.echo(f"Starting NHL Scrabble REST API server at http://{host}:{port}")
+    click.echo(f"API Documentation: http://{host}:{port}/docs")
+    click.echo("Press CTRL+C to stop")
+
+    # Import here to avoid loading FastAPI when not needed
+    from nhl_scrabble.api_server.app import app
+
+    uvicorn.run(
+        app,
+        host=host,
+        port=port,
+        reload=reload,
+        workers=workers if not reload else 1,  # Multiple workers not compatible with reload
+        log_level="info",
+    )
+
+
 if __name__ == "__main__":
     cli()
