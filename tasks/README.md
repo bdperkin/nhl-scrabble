@@ -50,7 +50,7 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (9 tasks, 11 documented, 2 completed)
+### Optimization (8 tasks, 11 documented, 3 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue | Status      |
 | --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -58,7 +58,7 @@ Each task is assigned a priority:
 | 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |             |
 | 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  | ✅ Complete |
 | 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  | ✅ Complete |
-| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |             |
+| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  | ✅ Complete |
 | 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |             |
 | 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |             |
 | 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  |             |
@@ -67,7 +67,7 @@ Each task is assigned a priority:
 | 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
 **Documented Effort**: 16-24.5 hours
-**Completed**: 4 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189)
+**Completed**: 4.33 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
 ### Enhancements (9 tasks, 9 documented)
@@ -159,6 +159,8 @@ Each task is assigned a priority:
 - **Task 002** (new-features): FastAPI Infrastructure - 3.5h (PR #174, 2026-04-17)
 - **Task 003** (optimization): heapq.nlargest() for Top-N Queries - 2.5h (PR #188, 2026-04-17)
 - **Task 004** (new-features): Web Frontend Templates - 3.5h (PR #176, 2026-04-17)
+- **Task 004** (optimization): Single-Pass Aggregations in Stats Report - 1.5h (PR #189, 2026-04-17)
+- **Task 005** (optimization): Move Imports to Module Level - 0.33h (2026-04-17)
 
 ## How to Use These Tasks
 
