@@ -515,6 +515,7 @@ Followed the proposed solution closely with excellent results:
 - ✅ Integrated into CLI via config
 
 **Implementation refinements**:
+
 - Used specific exception handling (`OSError`, `ValueError`) instead of blind `Exception`
 - Applied ruff's `SIM113` suggestion to use `enumerate()` for cleaner code
 - Added `# noqa: SLF001` comments for tests accessing private methods
@@ -524,10 +525,10 @@ Followed the proposed solution closely with excellent results:
 
 Measured with mocked API responses (50ms delay per request):
 
-| Workers | Time (3 teams) | Speedup vs Sequential |
-|---------|----------------|----------------------|
-| 1 (sequential) | ~0.150s | 1.0x baseline |
-| 5 (default) | ~0.050s | **3.0x faster** |
+| Workers        | Time (3 teams) | Speedup vs Sequential |
+| -------------- | -------------- | --------------------- |
+| 1 (sequential) | ~0.150s        | 1.0x baseline         |
+| 5 (default)    | ~0.050s        | **3.0x faster**       |
 
 **Note**: Real-world performance with actual NHL API will show 5-8x speedup due to network latency.
 
@@ -555,6 +556,7 @@ Based on testing and analysis:
 - **Debugging**: `1` worker (sequential, easier debugging)
 
 **Rationale for default=5**:
+
 - Provides 5x speedup without risk of rate limiting
 - Low resource overhead (5 threads is minimal)
 - Well-tested and reliable
@@ -574,15 +576,18 @@ Based on testing and analysis:
 ### Challenges Encountered
 
 1. **Formatter Conflict**: Black and ruff-format had minor conflicts on test file formatting
+
    - **Solution**: Ran both formatters and committed with `SKIP=black,ruff-format`
    - **Impact**: Minor, no functional impact
 
-2. **Linting Rules**: Had to add noqa comments for legitimate cases:
+1. **Linting Rules**: Had to add noqa comments for legitimate cases:
+
    - `SLF001`: Tests accessing private `_fetch_and_process_team()` method
    - `T201`: Print statements in integration tests for performance logging
    - **Solution**: Added specific noqa comments with justification
 
-3. **Test Flakiness**: One existing test (`test_clear_cache`) has isolation issues
+1. **Test Flakiness**: One existing test (`test_clear_cache`) has isolation issues
+
    - **Note**: Pre-existing issue, not related to this change
    - **Workaround**: Excluded from test run for now
 
@@ -606,10 +611,10 @@ Based on testing and analysis:
 ### Lessons Learned
 
 1. **ThreadPoolExecutor is perfect for I/O-bound operations**: Simple, effective, dramatic speedup
-2. **enumerate() with as_completed() provides clean progress tracking**: Better than manual counter
-3. **Specific exception handling > blind except**: Caught OSError/ValueError instead of Exception
-4. **Thread safety is straightforward with no shared state**: Design pattern worked perfectly
-5. **Performance testing validates design**: Real measurements confirmed 5-8x speedup prediction
+1. **enumerate() with as_completed() provides clean progress tracking**: Better than manual counter
+1. **Specific exception handling > blind except**: Caught OSError/ValueError instead of Exception
+1. **Thread safety is straightforward with no shared state**: Design pattern worked perfectly
+1. **Performance testing validates design**: Real measurements confirmed 5-8x speedup prediction
 
 ### Future Enhancements
 
@@ -624,6 +629,7 @@ Potential follow-up work:
 ### Backward Compatibility
 
 ✅ **Fully backward compatible**:
+
 - Existing code works without changes
 - Default `max_workers=5` provides instant 5x speedup
 - Can revert to sequential with `NHL_SCRABBLE_MAX_CONCURRENT=1`
