@@ -32,7 +32,6 @@ class TestNHLApiClient:
         assert client.retries == 3
         assert client.rate_limiter.max_requests >= 1
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_teams_success(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
         """Test successful team fetching."""
         # Mock successful API response
@@ -40,7 +39,6 @@ class TestNHLApiClient:
         mock_response.status_code = 200
         mock_response.json.return_value = sample_standings_data
         mock_get.return_value = mock_response
-
         client = NHLApiClient()
         teams = client.get_teams()
 
@@ -52,29 +50,24 @@ class TestNHLApiClient:
         assert teams["EDM"]["division"] == "Pacific"
         assert teams["EDM"]["conference"] == "Western"
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_teams_timeout(self, mock_get: Mock) -> None:
         """Test timeout handling when fetching teams."""
         import requests
-
         mock_get.side_effect = requests.exceptions.Timeout()
 
         client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiConnectionError, match="after retries"):
             client.get_teams()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_teams_connection_error(self, mock_get: Mock) -> None:
         """Test connection error handling when fetching teams."""
         import requests
-
         mock_get.side_effect = requests.exceptions.ConnectionError()
 
         client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiConnectionError, match="Unable to connect"):
             client.get_teams()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_team_roster_success(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
@@ -83,7 +76,6 @@ class TestNHLApiClient:
         mock_response.status_code = 200
         mock_response.json.return_value = sample_roster_data
         mock_get.return_value = mock_response
-
         client = NHLApiClient(
             cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
         )
@@ -95,24 +87,20 @@ class TestNHLApiClient:
         assert "goalies" in roster
         assert len(roster["forwards"]) == 2
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_team_roster_not_found(self, mock_get: Mock) -> None:
         """Test handling of 404 response raises NHLApiNotFoundError."""
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
-
         client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiNotFoundError, match=r"Roster not found for team: XXX"):
             client.get_team_roster("XXX")
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_team_roster_retry(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
         """Test retry logic on failure."""
         import requests
-
         # First two calls fail, third succeeds
         mock_response = Mock()
         mock_response.status_code = 200
@@ -147,24 +135,20 @@ class TestNHLApiClient:
         client.close()
         # Verify no exceptions are raised
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_not_found_error_has_team_name(self, mock_get: Mock) -> None:
         """Test that NHLApiNotFoundError includes the team name in message."""
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
-
         client = NHLApiClient(cache_enabled=False)
         with pytest.raises(NHLApiNotFoundError) as exc_info:
             client.get_team_roster("TOR")
 
         assert "TOR" in str(exc_info.value)
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_not_found_error_is_nhl_api_error(self, mock_get: Mock) -> None:
         """Test that NHLApiNotFoundError is a subclass of NHLApiError."""
         from nhl_scrabble.api.nhl_client import NHLApiError
-
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
@@ -174,11 +158,9 @@ class TestNHLApiClient:
         with pytest.raises(NHLApiError):
             client.get_team_roster("TOR")
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_not_found_error_logs_warning(self, mock_get: Mock, caplog: Any) -> None:
         """Test that 404 response logs a warning before raising."""
         import logging
-
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
@@ -212,7 +194,6 @@ class TestNHLApiClient:
         assert client.session.settings.expire_after.total_seconds() == 7200  # type: ignore[union-attr]
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_clear_cache(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
         """Test that clear_cache() works."""
         # Mock successful API response at the HTTP layer (allows cache to function)
@@ -220,7 +201,6 @@ class TestNHLApiClient:
         mock_response.status_code = 200
         mock_response.json.return_value = sample_standings_data
         mock_get.return_value = mock_response
-
         client = NHLApiClient()
 
         # Make request to populate cache
@@ -356,13 +336,11 @@ class TestNHLApiClient:
         client1.close()
         client2.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_rate_limiting_between_successful_requests(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
         """Test that rate limiting applies between successful requests."""
         import time
-
         # Mock successful responses
         mock_response = Mock()
         mock_response.status_code = 200
@@ -387,13 +365,11 @@ class TestNHLApiClient:
 
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_no_rate_limiting_on_first_request(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
         """Test that first request has no delay."""
         import time
-
         # Mock successful response
         mock_response = Mock()
         mock_response.status_code = 200
@@ -413,13 +389,11 @@ class TestNHLApiClient:
 
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_failed_request_doesnt_affect_rate_limiting(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
         """Test that failed requests don't affect rate limiting."""
         import time
-
         import requests
 
         # First request succeeds
@@ -524,11 +498,9 @@ class TestNHLApiClient:
 
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_retry_with_exponential_backoff(self, mock_get, sample_roster_data):
         """Test that retries use exponential backoff instead of fixed delay."""
         import requests
-
         client = NHLApiClient(
             cache_enabled=False,
             backoff_factor=2.0,
@@ -562,7 +534,6 @@ class TestNHLApiClient:
 
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_429_rate_limit_with_retry_after(self, mock_get, sample_roster_data):
         """Test that 429 responses respect Retry-After header."""
         client = NHLApiClient(
@@ -573,7 +544,6 @@ class TestNHLApiClient:
             rate_limit_max_requests=1000,
             rate_limit_window=1.0,
         )
-
         # First attempt returns 429 with Retry-After, second succeeds
         rate_limit_response = Mock()
         rate_limit_response.status_code = 429
@@ -597,8 +567,6 @@ class TestNHLApiClient:
 
         client.close()
 
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
-
 
 
     def test_is_url_cached_returns_false_when_caching_disabled(self) -> None:
@@ -616,6 +584,4 @@ class TestNHLApiClient:
         result = client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
         assert result is False
         client.close()
-
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
 
