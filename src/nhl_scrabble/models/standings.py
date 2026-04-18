@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-@dataclass
+@dataclass(slots=True)
 class DivisionStandings:
     """Represents division-level standings based on Scrabble scores.
 
@@ -27,7 +27,7 @@ class DivisionStandings:
         return f"DivisionStandings(name='{self.name}', total={self.total}, teams={len(self.teams)})"
 
 
-@dataclass
+@dataclass(slots=True)
 class ConferenceStandings:
     """Represents conference-level standings based on Scrabble scores.
 
@@ -55,7 +55,7 @@ class ConferenceStandings:
 StatusIndicator = Literal["p", "z", "y", "x", "e", ""]
 
 
-@dataclass
+@dataclass(slots=True)
 class PlayoffTeam:
     """Represents a team in playoff standings context.
 
