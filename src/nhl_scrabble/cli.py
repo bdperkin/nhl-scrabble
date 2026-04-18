@@ -244,6 +244,7 @@ def run_analysis(
     """
     # Initialize components
     api_client = NHLApiClient(
+        base_url=config.api_base_url,
         timeout=config.api_timeout,
         retries=config.api_retries,
         rate_limit_delay=config.rate_limit_delay,
