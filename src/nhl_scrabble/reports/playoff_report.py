@@ -18,17 +18,19 @@ class PlayoffReporter(BaseReporter):
         Returns:
             Formatted playoff report string
         """
-        output = self._format_header("🎰 WILD CARD PLAYOFF STANDINGS (Scrabble Edition)")
-        output += "\nTop 3 from each division + 2 wild cards per conference"
-        output += "\nTiebreaker: Average points per player"
-        output += "\n\nLegend: x-Clinched Playoff, y-Clinched Division, z-Clinched Conference,"
-        output += "\n        p-Presidents' Trophy, e-Eliminated"
+        parts = [
+            self._format_header("🎰 WILD CARD PLAYOFF STANDINGS (Scrabble Edition)"),
+            "\nTop 3 from each division + 2 wild cards per conference",
+            "\nTiebreaker: Average points per player",
+            "\n\nLegend: x-Clinched Playoff, y-Clinched Division, z-Clinched Conference,",
+            "\n        p-Presidents' Trophy, e-Eliminated",
+        ]
 
         for conference in ["Eastern", "Western"]:
             if conference not in standings:
                 continue
 
-            output += self._format_subheader(f"\n{conference} Conference")
+            parts.append(self._format_subheader(f"\n{conference} Conference"))
 
             # Group teams by division and playoff status
             teams_by_division = self._group_teams_by_division(standings[conference])
@@ -45,23 +47,22 @@ class PlayoffReporter(BaseReporter):
                 ]
 
                 if playoff_division_teams:
-                    output += f"\n\n  {division} Division:"
-                    for team in playoff_division_teams:
-                        output += self._format_team_line(team)
+                    parts.append(f"\n\n  {division} Division:")
+                    parts.extend(self._format_team_line(team) for team in playoff_division_teams)
 
             # Print wild cards
             if wild_card_teams:
-                output += "\n\n  Wild Card:"
-                for team in wild_card_teams:
-                    output += self._format_team_line(team)
+                parts.append("\n\n  Wild Card:")
+                parts.extend(self._format_team_line(team) for team in wild_card_teams)
 
             # Print eliminated teams
             if eliminated_teams:
-                output += "\n\n  Eliminated from Playoff Contention:"
-                for team in eliminated_teams:
-                    output += self._format_team_line(team, show_seed=False)
+                parts.append("\n\n  Eliminated from Playoff Contention:")
+                parts.extend(
+                    self._format_team_line(team, show_seed=False) for team in eliminated_teams
+                )
 
-        return output
+        return "".join(parts)
 
     def _group_teams_by_division(self, teams: list[PlayoffTeam]) -> dict[str, list[PlayoffTeam]]:
         """Group teams by division.
