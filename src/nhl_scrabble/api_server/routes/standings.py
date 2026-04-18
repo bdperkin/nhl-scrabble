@@ -99,18 +99,25 @@ def _get_division_standings(
 
     division_data = []
     for division_name, standing in division_standings.items():
+        # Get team details from team_scores dict using team abbreviations
+        teams_in_division = [
+            team_scores[abbrev] for abbrev in standing.teams if abbrev in team_scores
+        ]
+        # Sort by total score descending
+        teams_in_division.sort(key=lambda t: t.total, reverse=True)
+
         division_data.append(
             {
                 "division": division_name,
                 "teams": [
                     {
                         "rank": i + 1,
-                        "abbrev": team.abbrev,  # type: ignore[attr-defined]
-                        "name": team.abbrev,  # type: ignore[attr-defined]
-                        "total_score": team.total,  # type: ignore[attr-defined]
-                        "average_score": team.avg,  # type: ignore[attr-defined]
+                        "abbrev": team.abbrev,
+                        "name": team.abbrev,
+                        "total_score": team.total,
+                        "average_score": team.avg_per_player,
                     }
-                    for i, team in enumerate(standing.teams)
+                    for i, team in enumerate(teams_in_division)
                 ],
             },
         )
@@ -138,19 +145,26 @@ def _get_conference_standings(
 
     conference_data = []
     for conference_name, standing in conference_standings.items():
+        # Get team details from team_scores dict using team abbreviations
+        teams_in_conference = [
+            team_scores[abbrev] for abbrev in standing.teams if abbrev in team_scores
+        ]
+        # Sort by total score descending
+        teams_in_conference.sort(key=lambda t: t.total, reverse=True)
+
         conference_data.append(
             {
                 "conference": conference_name,
                 "teams": [
                     {
                         "rank": i + 1,
-                        "abbrev": team.abbrev,  # type: ignore[attr-defined]
-                        "name": team.abbrev,  # type: ignore[attr-defined]
-                        "division": team.division,  # type: ignore[attr-defined]
-                        "total_score": team.total,  # type: ignore[attr-defined]
-                        "average_score": team.avg,  # type: ignore[attr-defined]
+                        "abbrev": team.abbrev,
+                        "name": team.abbrev,
+                        "division": team.division,
+                        "total_score": team.total,
+                        "average_score": team.avg_per_player,
                     }
-                    for i, team in enumerate(standing.teams)
+                    for i, team in enumerate(teams_in_conference)
                 ],
             },
         )
