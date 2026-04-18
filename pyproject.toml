@@ -95,6 +95,11 @@ branding = [
     "cairosvg>=2.7.0",     # SVG to PNG conversion
 ]
 
+# Export dependencies for CSV/Excel output
+export = [
+    "openpyxl>=3.1.0",     # Excel file creation and formatting
+]
+
 # Comprehensive Sphinx documentation dependencies (9 extensions + markdown support + quality plugins)
 docs = [
     "sphinx>=7.2.6",  # Core documentation engine
@@ -141,7 +146,7 @@ tox = [
 
 # Complete development environment
 dev = [
-    "nhl-scrabble[test,lint,type,security,docs,watch,build,publish,tox]",
+    "nhl-scrabble[test,lint,type,security,docs,export,watch,build,publish,tox]",
     "pre-commit>=3.6.0",
     "check-jsonschema>=0.28.0",  # JSON/YAML schema validation
 ]

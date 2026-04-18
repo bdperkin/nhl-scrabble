@@ -18,6 +18,8 @@ from rich.console import Console
 from nhl_scrabble import __version__
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
 from nhl_scrabble.config import Config
+from nhl_scrabble.exporters.csv_exporter import CSVExporter
+from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
@@ -96,9 +98,13 @@ def cli() -> None:
 @click.option(
     "--format",
     "output_format",
-    type=click.Choice(["text", "json"], case_sensitive=False),
+    type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
     default="text",
     help="Output format (default: text)",
+)
+@click.option(
+    "--sheets",
+    help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
 )
 @click.option(
     "--output",
@@ -147,6 +153,7 @@ def cli() -> None:
 )
 def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     output_format: str,
+    sheets: str | None,
     output: str | None,
     verbose: bool,
     quiet: bool,
@@ -167,6 +174,9 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
         nhl-scrabble analyze --quiet
         nhl-scrabble analyze --output report.txt
         nhl-scrabble analyze --format json --output report.json
+        nhl-scrabble analyze --format csv --output report.csv
+        nhl-scrabble analyze --format excel --output report.xlsx
+        nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
         nhl-scrabble analyze --no-cache
         nhl-scrabble analyze --clear-cache
         nhl-scrabble analyze --report team
@@ -189,6 +199,13 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
     logger.debug(f"Configuration: {config}")
 
+    # Validate CSV/Excel require output file
+    if output_format in ("csv", "excel") and not output:
+        raise click.ClickException(
+            f"{output_format.upper()} format requires --output option\n"
+            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
+        )
+
     # Validate output path BEFORE making API calls
     validate_output_path(output)
 
@@ -197,16 +214,35 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     console.print("=" * 80)
 
     try:
+        # Parse sheets list for Excel export
+        sheets_list = None
+        if sheets:
+            sheets_list = [s.strip() for s in sheets.split(",")]
+
         # Run the analysis
-        result = run_analysis(config, clear_cache=clear_cache, report_filter=report, quiet=quiet)
+        result = run_analysis(
+            config,
+            clear_cache=clear_cache,
+            report_filter=report,
+            quiet=quiet,
+            output_path=Path(output) if output else None,
+            sheets=sheets_list,
+        )
 
         # Output results
         if output:
             output_path = Path(output)
-            output_path.write_text(result)
+            if isinstance(result, str):
+                # Text/JSON output
+                output_path.write_text(result)
+            # CSV/Excel are written directly by exporters
             console.print(f"\n[green]✓[/green] Report saved to: {output}")
-        else:
+        elif isinstance(result, str):
             print(result)
+        else:
+            console.print(
+                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
+            )
 
         console.print("\n" + "=" * 80)
         console.print("[green]✓ Analysis complete![/green]")
@@ -226,7 +262,9 @@ def run_analysis(
     clear_cache: bool = False,
     report_filter: str | None = None,
     quiet: bool = False,
-) -> str:
+    output_path: Path | None = None,
+    sheets: list[str] | None = None,
+) -> str | None:
     """Run the complete NHL Scrabble analysis.
 
     Args:
@@ -235,9 +273,12 @@ def run_analysis(
         report_filter: Optional filter for specific report type
             (conference, division, playoff, team, stats)
         quiet: Whether to suppress progress bars
+        output_path: Optional output file path for CSV/Excel exports
+        sheets: Optional list of sheets for Excel export
 
     Returns:
-        Complete report string
+        Complete report string for text/JSON formats, or None for CSV/Excel
+        (CSV/Excel are written directly to output file)
 
     Raises:
         NHLApiError: If there are issues fetching data from NHL API
@@ -306,6 +347,31 @@ def run_analysis(
             conference_standings,
             playoff_standings,
         )
+    if config.output_format == "csv":
+        if output_path:
+            generate_csv_report(
+                team_scores,
+                all_players,
+                division_standings,
+                conference_standings,
+                playoff_standings,
+                output_path,
+            )
+            return None
+        raise ValueError("CSV format requires output path")
+    if config.output_format == "excel":
+        if output_path:
+            generate_excel_report(
+                team_scores,
+                all_players,
+                division_standings,
+                conference_standings,
+                playoff_standings,
+                output_path,
+                sheets,
+            )
+            return None
+        raise ValueError("Excel format requires output path")
 
     # Use lazy report generator for text format
     report_generator = ReportGenerator(
@@ -449,6 +515,87 @@ def generate_html_report(
     )
 
     return html
+
+
+def generate_csv_report(
+    team_scores: dict[str, Any],
+    all_players: list[Any],  # noqa: ARG001
+    division_standings: dict[str, Any],  # noqa: ARG001
+    conference_standings: dict[str, Any],  # noqa: ARG001
+    playoff_standings: dict[str, Any],  # noqa: ARG001
+    output: Path,
+) -> None:
+    """Generate CSV format report.
+
+    Creates a CSV report with team scores. For more detailed CSV exports,
+    use the CSVExporter class directly with specific export methods.
+
+    Args:
+        team_scores: Team scores dictionary
+        all_players: List of all players (not used in basic CSV export)
+        division_standings: Division standings (not used in basic CSV export)
+        conference_standings: Conference standings (not used in basic CSV export)
+        playoff_standings: Playoff standings (not used in basic CSV export)
+        output: Output file path
+
+    Returns:
+        None (writes directly to file)
+    """
+    exporter = CSVExporter()
+
+    # For CSV, we export the full team report
+    # This includes all teams with their scores
+    exporter.export_team_scores(team_scores, output)
+
+    logger.info(f"CSV report written to {output}")
+
+
+def generate_excel_report(
+    team_scores: dict[str, Any],
+    all_players: list[Any],
+    division_standings: dict[str, Any],
+    conference_standings: dict[str, Any],
+    playoff_standings: dict[str, Any],
+    output: Path,
+    sheets: list[str] | None = None,
+) -> None:
+    """Generate Excel format report.
+
+    Creates a comprehensive Excel workbook with multiple sheets for different
+    aspects of the analysis.
+
+    Args:
+        team_scores: Team scores dictionary
+        all_players: List of all players
+        division_standings: Division standings
+        conference_standings: Conference standings
+        playoff_standings: Playoff standings
+        output: Output file path
+        sheets: Optional list of sheets to include (default: all)
+
+    Returns:
+        None (writes directly to file)
+
+    Raises:
+        ImportError: If openpyxl is not installed
+    """
+    try:
+        exporter = ExcelExporter()
+    except ImportError as e:
+        raise click.ClickException(str(e)) from e
+
+    # Export full report with all sheets
+    exporter.export_full_report(
+        team_scores=team_scores,
+        all_players=all_players,
+        division_standings=division_standings,
+        conference_standings=conference_standings,
+        playoff_standings=playoff_standings,
+        output=output,
+        sheets=sheets,
+    )
+
+    logger.info(f"Excel report written to {output}")
 
 
 @cli.command()
