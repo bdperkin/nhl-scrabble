@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import heapq
+
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings
 from nhl_scrabble.reports.base import BaseReporter
@@ -40,9 +42,9 @@ class StatsReporter(BaseReporter):
             f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS (Across All Teams)"
         )
 
-        top_players = sorted(all_players, key=lambda x: x.full_score, reverse=True)[
-            : self.top_players_count
-        ]
+        top_players = heapq.nlargest(
+            self.top_players_count, all_players, key=lambda x: x.full_score
+        )
 
         for rank, player in enumerate(top_players, 1):
             div_abbrev = player.division.split()[0][:3].upper()

@@ -50,23 +50,24 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (11 tasks, 11 documented)
+### Optimization (10 tasks, 11 documented, 1 completed)
 
-| ID  | Title                                    | Priority | Effort   | Issue |
-| --- | ---------------------------------------- | -------- | -------- | ----- |
-| 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |
-| 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |
-| 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  |
-| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |
-| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |
-| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |
-| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |
-| 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  |
-| 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  |
-| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |
-| 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |
+| ID  | Title                                    | Priority | Effort   | Issue | Status      |
+| --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
+| 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |             |
+| 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |             |
+| 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  | ✅ Complete |
+| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |             |
+| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |             |
+| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |             |
+| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |             |
+| 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  |             |
+| 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  |             |
+| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |             |
+| 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
 **Documented Effort**: 16-24.5 hours
+**Completed**: 2.5 hours (Task 003: heapq optimization - PR #188)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
 ### Enhancements (9 tasks, 9 documented)
@@ -134,8 +135,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 52 tasks (50 active, 2 completed)
-**Remaining Effort**: 190.5-269 hours (7 hours completed)
+**Total Tasks**: 52 tasks (49 active, 3 completed)
+**Remaining Effort**: 188-266.5 hours (9.5 hours completed)
 
 ### By Category
 
@@ -150,12 +151,14 @@ Each task is assigned a priority:
 
 ### By Priority
 
-- **MEDIUM**: 5 tasks remaining, 41.25-63h (web interface 5 tasks)
-- **LOW**: 46 tasks, 152.75-209.5h (long-term improvements and new capabilities)
+- **MEDIUM**: 4 tasks remaining, 39.25-61h (web interface 4 tasks, optimization 1 task)
+- **LOW**: 45 tasks, 148.75-205.5h (long-term improvements and new capabilities)
 
 ### Completed Tasks
 
 - **Task 002** (new-features): FastAPI Infrastructure - 3.5h (PR #174, 2026-04-17)
+- **Task 003** (optimization): heapq.nlargest() for Top-N Queries - 2.5h (PR #188, 2026-04-17)
+- **Task 004** (new-features): Web Frontend Templates - 3.5h (PR #176, 2026-04-17)
 
 ## How to Use These Tasks
 
