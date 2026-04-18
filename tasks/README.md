@@ -36,11 +36,11 @@ Each task is assigned a priority:
 
 **Total Effort**: 0 hours
 
-### Security (4 tasks active, 7 documented, 3 completed)
+### Security (3 tasks active, 7 documented, 4 completed)
 
 | ID  | Title                            | Priority | Effort | Issue | Status      |
 | --- | -------------------------------- | -------- | ------ | ----- | ----------- |
-| 002 | Comprehensive Input Validation   | MEDIUM   | 3-4h   | #129  |             |
+| 002 | Comprehensive Input Validation   | MEDIUM   | 3-4h   | #129  | ✅ Complete |
 | 003 | SSRF Protection                  | MEDIUM   | 2-3h   | #130  | ✅ Complete |
 | 004 | Rate Limit Enforcement           | MEDIUM   | 3-4h   | #131  |             |
 | 005 | DoS Prevention                   | LOW      | 2-3h   | #134  |             |
@@ -49,7 +49,7 @@ Each task is assigned a priority:
 | 008 | Config Injection Protection      | LOW      | 2-3h   | #137  |             |
 
 **Documented Effort**: 17-22.5 hours
-**Completed**: 5.25 hours (Task 003: SSRF Protection 1.25h - PR #181, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200)
+**Completed**: 8.75 hours (Task 002: Input Validation 3.5h - PR #196, Task 003: SSRF Protection 1.25h - PR #181, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200)
 
 ### Optimization (1 task, 11 documented, 10 completed)
 
@@ -138,14 +138,14 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 53 tasks (43 active, 10 completed)
-**Remaining Effort**: 175.5-250 hours (23.83 hours completed)
+**Total Tasks**: 53 tasks (39 active, 14 completed)
+**Remaining Effort**: 166.75-241.25 hours (32.58 hours completed)
 
 ### By Category
 
-- **Security**: 7 tasks, 17-22.5h
+- **Security**: 7 tasks, 8.25-13.75h remaining (4 completed, 8.75h completed)
 - **Optimization**: 11 tasks, 1-2h remaining (10 completed, 16.33h completed, 5-10x performance improvement achieved)
-- **Enhancement**: 9 tasks, 31.5-45h remaining (3.5h completed)
+- **Enhancement**: 9 tasks, 28.5-42h remaining (2 completed, 6.5h completed)
 - **Testing**: 3 tasks, 3.5-6.0h (1 new: Codecov Test Analytics)
 - **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
   - Web interface: 14.5-21h remaining (2 of 6 subtasks completed)
@@ -159,16 +159,22 @@ Each task is assigned a priority:
 
 ### Completed Tasks
 
+- **Task 001** (enhancement): Progress Bars - 3h (PR #172, 2026-04-16)
 - **Task 001** (optimization): Report String Concatenation - 1.5h (PR #214, 2026-04-18)
+- **Task 001** (refactoring): Consolidate Report Classes - 3h (PR #184, 2026-04-17)
 - **Task 002** (new-features): FastAPI Infrastructure - 3.5h (PR #174, 2026-04-17)
 - **Task 002** (optimization): Concurrent API Fetching - 3.5h (PR #187, 2026-04-18)
+- **Task 002** (security): Comprehensive Input Validation - 3.5h (PR #196, 2026-04-18)
 - **Task 003** (optimization): heapq.nlargest() for Top-N Queries - 2.5h (PR #188, 2026-04-17)
-- **Task 004** (new-features): Web Frontend Templates - 3.5h (PR #176, 2026-04-17)
+- **Task 003** (security): SSRF Protection - 1.25h (PR #181, 2026-04-17)
 - **Task 004** (enhancement): CSV/Excel Export - 3.5h (PR #203, 2026-04-18)
+- **Task 004** (new-features): Web Frontend Templates - 3.5h (PR #176, 2026-04-17)
 - **Task 004** (optimization): Single-Pass Aggregations in Stats Report - 1.5h (PR #189, 2026-04-17)
 - **Task 005** (optimization): Move Imports to Module Level - 0.33h (PR #190, 2026-04-17)
 - **Task 006** (optimization): Add to_dict() Methods to Dataclasses - 1.5h (PR #191, 2026-04-17)
+- **Task 006** (security): SSL/TLS Certificate Verification - 1.5h (PR #199, 2026-04-18)
 - **Task 007** (optimization): Lazy Report Generation - 2.5h (PR #192, 2026-04-17)
+- **Task 007** (security): PII Logging Prevention - 2.5h (PR #200, 2026-04-18)
 - **Task 008** (optimization): Memoized Scoring - 1.5h (PR #193, 2026-04-17)
 - **Task 009** (optimization): Memory Optimization (__slots__) - 1h (PR #194, 2026-04-17)
 - **Task 010** (optimization): Rate Limiting on Cache Hits - 2h (PR #182, 2026-04-17)
