@@ -88,15 +88,15 @@ Each task is assigned a priority:
 **Documented Effort**: 35-49 hours
 **Completed**: 6.5 hours (Task 001: progress bars 3h - PR #172, Task 004: CSV/Excel export 3.5h - PR #203)
 
-### Testing (0 tasks)
+### Testing (1 task)
 
-| ID  | Title | Priority | Effort | Issue |
-| --- | ----- | -------- | ------ | ----- |
-|     |       |          |        |       |
+| ID  | Title                        | Priority | Effort | Issue |
+| --- | ---------------------------- | -------- | ------ | ----- |
+| 001 | Codecov Test Analytics in CI | MEDIUM   | 2-3h   | #211  |
 
-**Total Effort**: 0 hours
+**Total Effort**: 2-3 hours
 
-**Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
+**Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking. Test Analytics will provide insights into test performance and flaky test detection.
 
 ### New Features (13 tasks active, 15 documented, 2 completed)
 
@@ -137,15 +137,15 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 52 tasks (47 active, 5 completed)
-**Remaining Effort**: 183-261 hours (14.5 hours completed)
+**Total Tasks**: 53 tasks (48 active, 5 completed)
+**Remaining Effort**: 185-264 hours (14.5 hours completed)
 
 ### By Category
 
 - **Security**: 7 tasks, 17-22.5h
 - **Optimization**: 11 tasks, 12-20.5h remaining (5-10x performance improvement, 4h completed)
 - **Enhancement**: 9 tasks, 31.5-45h remaining (3.5h completed)
-- **Testing**: 2 tasks, 1.5-3.0h
+- **Testing**: 3 tasks, 3.5-6.0h (1 new: Codecov Test Analytics)
 - **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
   - Web interface: 14.5-21h remaining (2 of 6 subtasks completed)
   - Standalone features: 70-100h
