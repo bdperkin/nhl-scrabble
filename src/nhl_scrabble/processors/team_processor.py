@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiNotFoundError
 from nhl_scrabble.models.player import PlayerScore
@@ -34,8 +37,13 @@ class TeamProcessor:
 
     def process_all_teams(
         self,
+        progress_callback: Callable[[str], None] | None = None,
     ) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
         """Process all NHL teams and calculate scores.
+
+        Args:
+            progress_callback: Optional callback to report progress after each team.
+                Called with team abbreviation after successfully processing each team.
 
         Returns:
             Tuple containing:
@@ -88,6 +96,10 @@ class TeamProcessor:
             )
 
             all_players.extend(team_players)
+
+            # Report progress if callback provided
+            if progress_callback:
+                progress_callback(team_abbrev)
 
         logger.info(
             f"Processing complete: {len(team_scores)} teams processed, {len(failed_teams)} failed"
