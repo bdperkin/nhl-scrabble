@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import logging
+from functools import lru_cache
 from typing import Any, ClassVar
 
 from nhl_scrabble.models.player import PlayerScore
+
+logger = logging.getLogger(__name__)
 
 
 class ScrabbleScorer:
@@ -52,8 +56,16 @@ class ScrabbleScorer:
         "Z": 10,
     }
 
-    def calculate_score(self, name: str) -> int:
+    @staticmethod
+    @lru_cache(maxsize=2048)
+    def calculate_score(name: str) -> int:
         """Calculate the Scrabble score for a given name.
+
+        This method uses LRU caching to avoid recomputing scores for duplicate
+        names, which significantly improves performance when processing ~700 NHL
+        players with many duplicate first/last names.
+
+        Cache size: 2048 entries (sufficient for all unique name components)
 
         Args:
             name: The name to score (can include spaces and special characters)
@@ -62,13 +74,12 @@ class ScrabbleScorer:
             The total Scrabble score (non-letter characters are worth 0 points)
 
         Examples:
-            >>> scorer = ScrabbleScorer()
-            >>> scorer.calculate_score("ALEX")
+            >>> ScrabbleScorer.calculate_score("ALEX")
             11
-            >>> scorer.calculate_score("Ovechkin")
+            >>> ScrabbleScorer.calculate_score("Ovechkin")
             22
         """
-        return sum(self.LETTER_VALUES.get(char.upper(), 0) for char in name)
+        return sum(ScrabbleScorer.LETTER_VALUES.get(char.upper(), 0) for char in name)
 
     def score_player(
         self, player_data: dict[str, Any], team: str, division: str, conference: str
@@ -110,3 +121,62 @@ class ScrabbleScorer:
             division=division,
             conference=conference,
         )
+
+    @staticmethod
+    def get_cache_info() -> dict[str, int]:
+        """Get cache statistics for the score calculation cache.
+
+        Returns:
+            Dictionary with cache statistics:
+                - hits: Number of cache hits
+                - misses: Number of cache misses
+                - maxsize: Maximum cache size
+                - currsize: Current cache size
+
+        Examples:
+            >>> info = ScrabbleScorer.get_cache_info()
+            >>> info['maxsize']
+            2048
+        """
+        cache_info = ScrabbleScorer.calculate_score.cache_info()
+        return {
+            "hits": cache_info.hits,
+            "misses": cache_info.misses,
+            "maxsize": cache_info.maxsize or 0,
+            "currsize": cache_info.currsize,
+        }
+
+    @staticmethod
+    def log_cache_stats() -> None:
+        """Log cache statistics for monitoring and performance analysis.
+
+        Logs hit rate, total calls, and cache utilization at INFO level.
+        """
+        stats = ScrabbleScorer.get_cache_info()
+        total_calls = stats["hits"] + stats["misses"]
+
+        if total_calls > 0:
+            hit_rate = (stats["hits"] / total_calls) * 100
+            utilization = (
+                (stats["currsize"] / stats["maxsize"]) * 100 if stats["maxsize"] > 0 else 0
+            )
+
+            logger.info(
+                "Scrabble scoring cache stats: "
+                f"hits={stats['hits']}, "
+                f"misses={stats['misses']}, "
+                f"hit_rate={hit_rate:.1f}%, "
+                f"size={stats['currsize']}/{stats['maxsize']} "
+                f"({utilization:.1f}% full)"
+            )
+        else:
+            logger.info("Scrabble scoring cache: No calls yet")
+
+    @staticmethod
+    def clear_cache() -> None:
+        """Clear the score calculation cache.
+
+        Useful for testing or when memory needs to be freed.
+        """
+        ScrabbleScorer.calculate_score.cache_clear()
+        logger.debug("Scrabble scoring cache cleared")
