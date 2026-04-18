@@ -19,7 +19,7 @@ def clear_cache() -> None:
     """Clear analysis cache before each test."""
     # Get the module object
     web_app_module = sys.modules["nhl_scrabble.web.app"]
-    web_app_module._analysis_cache.clear()  # noqa: SLF001  # Test fixture needs cache access
+    web_app_module._analysis_cache.clear()  # Test fixture needs cache access
 
 
 @pytest.fixture

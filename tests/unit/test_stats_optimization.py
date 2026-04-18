@@ -53,7 +53,7 @@ def test_single_pass_stats_calculation(sample_players: list[PlayerScore]) -> Non
     reporter = StatsReporter()
 
     # Calculate stats with optimized method
-    stats = reporter._calculate_player_statistics(sample_players)  # noqa: SLF001
+    stats = reporter._calculate_player_statistics(sample_players)
 
     # Verify maximums
     top_first_score = max(p.first_score for p in sample_players)
@@ -79,7 +79,7 @@ def test_single_pass_stats_calculation(sample_players: list[PlayerScore]) -> Non
 def test_stats_calculation_empty_list() -> None:
     """Verify handling of empty player list."""
     reporter = StatsReporter()
-    stats = reporter._calculate_player_statistics([])  # noqa: SLF001
+    stats = reporter._calculate_player_statistics([])
 
     assert stats["top_first"] is None
     assert stats["top_last"] is None
@@ -104,7 +104,7 @@ def test_stats_calculation_single_player() -> None:
     )
 
     reporter = StatsReporter()
-    stats = reporter._calculate_player_statistics([player])  # noqa: SLF001
+    stats = reporter._calculate_player_statistics([player])
 
     assert stats["top_first"] == player
     assert stats["top_last"] == player
@@ -117,7 +117,7 @@ def test_stats_calculation_single_player() -> None:
 def test_stats_identifies_correct_top_players(sample_players: list[PlayerScore]) -> None:
     """Verify correct players are identified as having highest scores."""
     reporter = StatsReporter()
-    stats = reporter._calculate_player_statistics(sample_players)  # noqa: SLF001
+    stats = reporter._calculate_player_statistics(sample_players)
 
     # Auston Matthews has highest first name score (18)
     assert stats["top_first"].first_name == "Auston"
@@ -156,7 +156,7 @@ def test_stats_calculation_with_ties() -> None:
     ]
 
     reporter = StatsReporter()
-    stats = reporter._calculate_player_statistics(players)  # noqa: SLF001
+    stats = reporter._calculate_player_statistics(players)
 
     # Should pick first one encountered
     assert stats["top_first"].first_score == 20
@@ -183,7 +183,7 @@ def test_stats_calculation_return_keys() -> None:
     )
 
     reporter = StatsReporter()
-    stats = reporter._calculate_player_statistics([player])  # noqa: SLF001
+    stats = reporter._calculate_player_statistics([player])
 
     expected_keys = {
         "top_first",

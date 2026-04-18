@@ -12,13 +12,13 @@ class TestProgressManager:
         """Test ProgressManager initialization with enabled=True."""
         mgr = ProgressManager(enabled=True)
         assert mgr.enabled is True
-        assert mgr._progress is None  # noqa: SLF001
+        assert mgr._progress is None
 
     def test_init_disabled(self) -> None:
         """Test ProgressManager initialization with enabled=False."""
         mgr = ProgressManager(enabled=False)
         assert mgr.enabled is False
-        assert mgr._progress is None  # noqa: SLF001
+        assert mgr._progress is None
 
     def test_init_default(self) -> None:
         """Test ProgressManager initialization with default settings."""
@@ -187,11 +187,11 @@ class TestProgressManager:
         mock_progress_class.return_value = mock_progress
 
         mgr = ProgressManager(enabled=True)
-        assert mgr._progress is None  # noqa: SLF001
+        assert mgr._progress is None
 
         with mgr.create_progress() as progress:
             # Progress instance should be stored and match mock
-            assert mgr._progress is progress  # noqa: SLF001
+            assert mgr._progress is progress
             assert progress is mock_progress
 
         # _progress is guaranteed to be None after context exit (set in finally block)
@@ -210,10 +210,10 @@ class TestProgressManager:
         with mgr.create_progress() as progress1:
             assert progress1 is mock_progress_1
 
-        assert mgr._progress is None  # noqa: SLF001
+        assert mgr._progress is None
 
         # Second context
         with mgr.create_progress() as progress2:
             assert progress2 is mock_progress_2
 
-        assert mgr._progress is None  # noqa: SLF001
+        assert mgr._progress is None

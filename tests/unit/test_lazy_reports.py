@@ -4,7 +4,7 @@ Note: These tests access private members (_*_report) to verify lazy evaluation b
 This is intentional and necessary for testing the caching mechanism.
 """
 
-# ruff: noqa: SLF001  # Private member access required for lazy evaluation testing
+# Private member access required for lazy evaluation testing
 
 from typing import Any
 from unittest.mock import Mock, patch
