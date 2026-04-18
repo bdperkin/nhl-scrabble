@@ -45,6 +45,7 @@ classifiers = [
 dependencies = [
     "requests>=2.31.0",
     "requests-cache>=1.2.0",
+    "certifi>=2023.0.0",  # SSL/TLS CA bundle for certificate verification
     "click>=8.1.0",
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
