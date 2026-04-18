@@ -70,21 +70,22 @@ Each task is assigned a priority:
 **Completed**: 11.33 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (9 tasks, 9 documented)
+### Enhancements (8 tasks active, 9 documented, 1 completed)
 
-| ID  | Title                            | Priority | Effort | Issue |
-| --- | -------------------------------- | -------- | ------ | ----- |
-| 001 | Progress Bars                    | MEDIUM   | 2-3h   | #132  |
-| 002 | Interactive Mode                 | MEDIUM   | 4-6h   | #133  |
-| 003 | Historical Data                  | LOW      | 8-12h  | #143  |
-| 004 | CSV/Excel Export                 | LOW      | 3-4h   | #144  |
-| 005 | Advanced Filtering Options       | LOW      | 4-5h   | #145  |
-| 006 | Custom Scoring Rules             | LOW      | 3-4h   | #146  |
-| 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  |
-| 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  |
-| 009 | Player Search                    | LOW      | 3-4h   | #149  |
+| ID  | Title                            | Priority | Effort | Issue | Status      |
+| --- | -------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Progress Bars                    | MEDIUM   | 2-3h   | #132  | ✅ Complete |
+| 002 | Interactive Mode                 | MEDIUM   | 4-6h   | #133  |             |
+| 003 | Historical Data                  | LOW      | 8-12h  | #143  |             |
+| 004 | CSV/Excel Export                 | LOW      | 3-4h   | #144  |             |
+| 005 | Advanced Filtering Options       | LOW      | 4-5h   | #145  |             |
+| 006 | Custom Scoring Rules             | LOW      | 3-4h   | #146  |             |
+| 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  |             |
+| 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  |             |
+| 009 | Player Search                    | LOW      | 3-4h   | #149  |             |
 
 **Documented Effort**: 35-49 hours
+**Completed**: 3 hours (Task 001: progress bars 3h - PR #172)
 
 ### Testing (0 tasks)
 
