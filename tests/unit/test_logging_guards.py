@@ -53,9 +53,7 @@ class TestLoggingGuards:
 
         try:
             # Call the method
-            result = processor._process_team_roster(  # noqa: SLF001
-                roster, "TOR", "Atlantic", "Eastern"
-            )
+            result = processor._process_team_roster(roster, "TOR", "Atlantic", "Eastern")
 
             # Verify result is correct (17 players total)
             assert len(result) == 17
@@ -112,9 +110,7 @@ class TestLoggingGuards:
             # Capture debug log calls
             with patch.object(logger, "debug") as mock_debug:
                 # Call the method
-                result = processor._process_team_roster(  # noqa: SLF001
-                    roster, "TOR", "Atlantic", "Eastern"
-                )
+                result = processor._process_team_roster(roster, "TOR", "Atlantic", "Eastern")
 
                 # Verify result is correct
                 assert len(result) == 10

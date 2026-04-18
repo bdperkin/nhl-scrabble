@@ -100,8 +100,8 @@ None
 
 **Implemented**: 2026-04-17
 **Branch**: optimization/011-log-level-optimization
-**PR**: TBD
-**Commits**: TBD
+**PR**: #195 - https://github.com/bdperkin/nhl-scrabble/pull/195
+**Commits**: c7188fa
 
 ### Actual Implementation
 

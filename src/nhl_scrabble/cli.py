@@ -150,7 +150,7 @@ def cli() -> None:
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
-def analyze(  # noqa: PLR0913, C901  # CLI function needs many parameters and has complex logic
+def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many parameters and has complex logic
     output_format: str,
     sheets: str | None,
     output: str | None,
