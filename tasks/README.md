@@ -50,11 +50,10 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (11 tasks, 11 documented)
+### Optimization (10 tasks active, 11 documented, 1 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue |
 | --- | ---------------------------------------- | -------- | -------- | ----- |
-| 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |
 | 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |
 | 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  |
 | 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |
@@ -66,7 +65,7 @@ Each task is assigned a priority:
 | 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |
 | 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |
 
-**Documented Effort**: 16-24.5 hours
+**Documented Effort**: 15-22.5 hours (active tasks)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
 
 ### Enhancements (9 tasks, 9 documented)
@@ -881,3 +880,4 @@ ______________________________________________________________________
 | 006 | Add diff-cover PR Coverage                 | Testing      | 2026-04-17 | 0.75h         | #170 |
 | 007 | Add pytest-benchmark Performance Tests     | Testing      | 2026-04-17 | 2.5h          | #178 |
 | 008 | Add check-jsonschema Validation            | Testing      | 2026-04-17 | 0.75h         | #179 |
+| 001 | Optimize Report String Concatenation       | Optimization | 2026-04-17 | 1.5h          | #186 |
