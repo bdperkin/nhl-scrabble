@@ -127,7 +127,8 @@ class NHLApiClient:
                 allowable_methods=["GET"],
                 cache_control=True,  # Respect Cache-Control headers
             )
-            logger.debug(f"HTTP caching enabled (expiry: {cache_expiry}s)")
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"HTTP caching enabled (expiry: {cache_expiry}s)")
         else:
             self.session = requests.Session()
             logger.debug("HTTP caching disabled")
@@ -270,7 +271,8 @@ class NHLApiClient:
                 elapsed = time.time() - self._last_request_time
                 if elapsed < self.rate_limit_delay:
                     sleep_time = self.rate_limit_delay - elapsed
-                    logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
                     time.sleep(sleep_time)
 
             try:
@@ -347,7 +349,8 @@ class NHLApiClient:
             True
         """
         url = f"{self.base_url}/roster/{team_abbrev}/current"
-        logger.debug(f"Fetching roster for {team_abbrev}")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Fetching roster for {team_abbrev}")
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)
@@ -366,7 +369,8 @@ class NHLApiClient:
                     elapsed = time.time() - self._last_request_time
                     if elapsed < self.rate_limit_delay:
                         sleep_time = self.rate_limit_delay - elapsed
-                        logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
+                        if logger.isEnabledFor(logging.DEBUG):
+                            logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
                         time.sleep(sleep_time)
 
                 response = self.session.get(
@@ -402,7 +406,8 @@ class NHLApiClient:
 
                 response.raise_for_status()
                 data = response.json()
-                logger.debug(f"Successfully fetched roster for {team_abbrev}")
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f"Successfully fetched roster for {team_abbrev}")
 
                 # Only record request time if this was a real API call (not cached)
                 # Check from_cache attribute safely (handles Mock objects that don't have it set)

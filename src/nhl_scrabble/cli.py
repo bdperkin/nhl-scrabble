@@ -196,7 +196,8 @@ def analyze(  # noqa: PLR0913, C901  # CLI function needs many parameters and ha
     setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
 
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
-    logger.debug(f"Configuration: {config}")
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(f"Configuration: {config}")
 
     # Validate CSV/Excel require output file
     if output_format in ("csv", "excel") and not output:

@@ -183,10 +183,12 @@ class TeamProcessor:
                 )
                 team_players.append(player_score)
 
-        logger.debug(
-            f"Scored {len(team_players)} players for {team_abbrev} "
-            f"(total: {sum(p.full_score for p in team_players)})"
-        )
+        # Use level guard to avoid expensive sum() call when DEBUG disabled
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                f"Scored {len(team_players)} players for {team_abbrev} "
+                f"(total: {sum(p.full_score for p in team_players)})"
+            )
 
         return team_players
 
@@ -228,7 +230,8 @@ class TeamProcessor:
                 avg_per_team=avg_per_team,
             )
 
-        logger.debug(f"Calculated standings for {len(standings)} divisions")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Calculated standings for {len(standings)} divisions")
         return standings
 
     def calculate_conference_standings(
@@ -269,5 +272,6 @@ class TeamProcessor:
                 avg_per_team=avg_per_team,
             )
 
-        logger.debug(f"Calculated standings for {len(standings)} conferences")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Calculated standings for {len(standings)} conferences")
         return standings

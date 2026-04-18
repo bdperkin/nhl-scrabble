@@ -65,7 +65,8 @@ class PlayoffCalculator:
         # Group results by conference
         result = self._group_by_conference(all_teams)
 
-        logger.info(f"Playoff standings calculated for {len(all_teams)} teams")
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f"Playoff standings calculated for {len(all_teams)} teams")
         return result
 
     def _group_teams_by_division(
