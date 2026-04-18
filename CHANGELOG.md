@@ -30,6 +30,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Player Search Functionality** - Quick lookup and filtering of players by name and attributes
+
+  - Added `PlayerSearch` class for searching players with multiple filtering options
+  - Added `search` CLI command for interactive player lookups
+  - Supports exact substring matching, fuzzy matching (typo-tolerant), and wildcard patterns (`*`, `?`)
+  - Filter by minimum/maximum Scrabble score, team, division, or conference
+  - Results sorted by score (descending) with configurable limit
+  - Text and JSON output formats available
+  - Includes database statistics (total players, average score, min/max scores, team count)
+  - Added 39 comprehensive unit tests covering all search modes and filters
+  - Benefits: Quick player lookup, convenient queries, better UX for finding specific players
+  - Related: Enhancement task #149 - Player search functionality
+  - Usage:
+    ```bash
+    nhl-scrabble search "Connor McDavid"
+    nhl-scrabble search McDavid --fuzzy
+    nhl-scrabble search "Connor*" --team EDM --min-score 30
+    nhl-scrabble search --min-score 50 --format json --output high-scorers.json
+    ```
+
 - **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
 
   - Added `CSVExporter` class for exporting data to CSV format

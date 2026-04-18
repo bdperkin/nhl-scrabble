@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import sys
+from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -23,67 +25,64 @@ from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
 from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
+from nhl_scrabble.search import PlayerSearch
 from nhl_scrabble.ui.progress import ProgressManager
-from nhl_scrabble.validators import ValidationError, validate_file_path, validate_integer_range
 
 logger = logging.getLogger(__name__)
 console = Console()
 
 
-def validate_cli_arguments(
-    output: str | None, top_players: int, top_team_players: int
-) -> tuple[Path | None, int, int]:
-    """Validate all CLI arguments before processing.
+def validate_output_path(output: str | None) -> None:
+    """Validate that output path is writable before processing.
 
-    Uses comprehensive validators from validators module to check all inputs
-    for security issues and invalid values. This validation happens before
-    any API calls to provide immediate feedback.
+    Checks that the output path's parent directory exists and is writable,
+    and that any existing file at the path is also writable. This validation
+    happens before any API calls to provide immediate feedback on path issues.
 
     Args:
-        output: Output file path, or None for stdout
-        top_players: Number of top players to show
-        top_team_players: Number of top players per team to show
-
-    Returns:
-        Tuple of (validated_output_path, validated_top_players, validated_top_team_players)
+        output: Output file path, or None for stdout.
 
     Raises:
-        click.ClickException: If any argument is invalid with helpful error message
+        click.ClickException: If output path is not writable, with helpful
+            error message explaining the issue and how to fix it.
 
-    Security:
-        - Prevents path traversal attacks via output path
-        - Validates numeric parameters to prevent DoS via memory exhaustion
-        - Provides early validation before expensive operations
-
-    Examples:
-        >>> validate_cli_arguments("output.txt", 20, 5)
-        (PosixPath('/current/dir/output.txt'), 20, 5)
-        >>> validate_cli_arguments(None, 20, 5)  # stdout
-        (None, 20, 5)
+    Example:
+        >>> validate_output_path("/tmp/output.txt")  # OK
+        >>> validate_output_path(None)  # OK (stdout)
+        >>> validate_output_path("/nonexistent/dir/file.txt")  # Raises
+        ClickException: Output directory does not exist: /nonexistent/dir
+        Create it first: mkdir -p /nonexistent/dir
     """
-    validated_output: Path | None = None
+    if output is None:
+        return  # stdout is always writable
 
-    try:
-        # Validate output path if provided
-        if output:
-            # Allow overwrite since we'll warn the user
-            validated_output = validate_file_path(output, allow_overwrite=True)
-            if validated_output.exists():
-                logger.warning(f"Output file exists and will be overwritten: {validated_output}")
+    # Resolve to absolute path
+    output_path = Path(output).resolve()
+    output_dir = output_path.parent
 
-        # Validate numeric parameters
-        validated_top_players = validate_integer_range(
-            top_players, min_val=1, max_val=100, name="top_players"
+    # Check if directory exists
+    if not output_dir.exists():
+        raise click.ClickException(
+            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}"
         )
 
-        validated_top_team_players = validate_integer_range(
-            top_team_players, min_val=1, max_val=50, name="top_team_players"
+    # Check if directory is writable
+    if not os.access(output_dir, os.W_OK):
+        raise click.ClickException(
+            f"Output directory is not writable: {output_dir}\n"
+            f"Check permissions with: ls -ld {output_dir}"
         )
 
-        return validated_output, validated_top_players, validated_top_team_players
+    # Check if file exists and is writable
+    if output_path.exists():
+        if not os.access(output_path, os.W_OK):
+            raise click.ClickException(
+                f"Output file exists but is not writable: {output_path}\n"
+                f"Check permissions with: ls -l {output_path}"
+            )
 
-    except ValidationError as e:
-        raise click.ClickException(str(e)) from e
+        # Warn if file will be overwritten
+        logger.warning(f"Output file exists and will be overwritten: {output_path}")
 
 
 @click.group()
@@ -94,6 +93,169 @@ def cli() -> None:
     Fetch NHL roster data and calculate Scrabble scores for player names. Generate comprehensive
     reports showing team, division, and conference standings.
     """
+
+
+@cli.command()
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
+    default="text",
+    help="Output format (default: text)",
+)
+@click.option(
+    "--sheets",
+    help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    help="Output file path (default: stdout)",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
+@click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable API response caching (always fetch fresh data)",
+)
+@click.option(
+    "--clear-cache",
+    is_flag=True,
+    help="Clear API cache before running",
+)
+@click.option(
+    "--top-players",
+    type=int,
+    default=20,
+    help="Number of top players to show (default: 20)",
+)
+@click.option(
+    "--top-team-players",
+    type=int,
+    default=5,
+    help="Number of top players per team to show (default: 5)",
+)
+@click.option(
+    "--report",
+    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
+    help="Generate specific report only (default: all reports)",
+)
+def analyze(  # noqa: PLR0913  # CLI function needs many parameters
+    output_format: str,
+    sheets: str | None,
+    output: str | None,
+    verbose: bool,
+    quiet: bool,
+    no_cache: bool,
+    clear_cache: bool,
+    top_players: int,
+    top_team_players: int,
+    report: str | None,
+) -> None:
+    """Run the NHL Scrabble analysis.
+
+    Fetches current NHL roster data and generates comprehensive reports
+    with Scrabble scores for all players and teams.
+
+    Examples:
+        nhl-scrabble analyze
+        nhl-scrabble analyze --verbose
+        nhl-scrabble analyze --quiet
+        nhl-scrabble analyze --output report.txt
+        nhl-scrabble analyze --format json --output report.json
+        nhl-scrabble analyze --format csv --output report.csv
+        nhl-scrabble analyze --format excel --output report.xlsx
+        nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
+        nhl-scrabble analyze --no-cache
+        nhl-scrabble analyze --clear-cache
+        nhl-scrabble analyze --report team
+        nhl-scrabble analyze --report playoff --output playoffs.txt
+    """
+    # Load configuration first to get sanitize_logs setting
+    config = Config.from_env()
+    config.verbose = verbose
+    config.output_format = output_format
+    config.top_players_count = top_players
+    config.top_team_players_count = top_team_players
+
+    # Override cache setting from CLI
+    if no_cache:
+        config.cache_enabled = False
+
+    # Setup logging with sanitization setting from config
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
+
+    logger.info(f"Starting NHL Scrabble analysis v{__version__}")
+    logger.debug(f"Configuration: {config}")
+
+    # Validate CSV/Excel require output file
+    if output_format in ("csv", "excel") and not output:
+        raise click.ClickException(
+            f"{output_format.upper()} format requires --output option\n"
+            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
+        )
+
+    # Validate output path BEFORE making API calls
+    validate_output_path(output)
+
+    # Display header
+    console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
+    console.print("=" * 80)
+
+    try:
+        # Parse sheets list for Excel export
+        sheets_list = None
+        if sheets:
+            sheets_list = [s.strip() for s in sheets.split(",")]
+
+        # Run the analysis
+        result = run_analysis(
+            config,
+            clear_cache=clear_cache,
+            report_filter=report,
+            quiet=quiet,
+            output_path=Path(output) if output else None,
+            sheets=sheets_list,
+        )
+
+        # Output results
+        if output:
+            output_path = Path(output)
+            if isinstance(result, str):
+                # Text/JSON output
+                output_path.write_text(result)
+            # CSV/Excel are written directly by exporters
+            console.print(f"\n[green]✓[/green] Report saved to: {output}")
+        elif isinstance(result, str):
+            print(result)
+        else:
+            console.print(
+                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
+            )
+
+        console.print("\n" + "=" * 80)
+        console.print("[green]✓ Analysis complete![/green]")
+
+    except NHLApiError as e:
+        logger.error(f"NHL API error: {e}")
+        console.print(f"\n[red]❌ NHL API Error: {e}[/red]", style="red")
+        sys.exit(1)
+    except Exception as e:
+        logger.exception("Unexpected error during analysis")
+        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        sys.exit(1)
 
 
 def run_analysis(
@@ -140,7 +302,7 @@ def run_analysis(
         api_client.clear_cache()
         logger.info("API cache cleared")
     scorer = ScrabbleScorer()
-    team_processor = TeamProcessor(api_client, scorer, max_workers=config.max_concurrent_requests)
+    team_processor = TeamProcessor(api_client, scorer)
     playoff_calculator = PlayoffCalculator()
 
     # Create progress manager
@@ -151,8 +313,10 @@ def run_analysis(
     total_teams = len(teams_info)
 
     # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams()
+    with progress_mgr.track_api_fetching(total_teams) as update_progress:
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(
+            progress_callback=update_progress
+        )
 
     # Display summary (only if not quiet)
     if not quiet:
@@ -162,16 +326,6 @@ def run_analysis(
         )
         if failed_teams:
             console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
-
-    # Display rate limit stats if verbose
-    if config.verbose:
-        stats = api_client.get_rate_limit_stats()
-        console.print("\n[cyan]API Rate Limit Statistics:[/cyan]")
-        console.print(f"  Total requests: {stats['total_requests']}")
-        console.print(f"  Total waits: {stats['total_waits']}")
-        console.print(f"  Total wait time: {stats['total_wait_time']:.2f}s")
-        console.print(f"  Average wait: {stats['average_wait']:.2f}s")
-        console.print(f"  Current tokens: {stats['current_tokens']:.1f}/{stats['max_tokens']}")
 
     # Calculate standings
     division_standings = team_processor.calculate_division_standings(team_scores)
@@ -236,182 +390,6 @@ def run_analysis(
     return report_generator.get_report(report_filter)
 
 
-@cli.command()
-@click.option(
-    "--format",
-    "output_format",
-    type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
-    default="text",
-    help="Output format (default: text)",
-)
-@click.option(
-    "--sheets",
-    help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
-)
-@click.option(
-    "--output",
-    "-o",
-    type=click.Path(),
-    help="Output file path (default: stdout)",
-)
-@click.option(
-    "--verbose",
-    "-v",
-    is_flag=True,
-    help="Enable verbose logging",
-)
-@click.option(
-    "--quiet",
-    "-q",
-    is_flag=True,
-    help="Suppress progress bars",
-)
-@click.option(
-    "--no-cache",
-    is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
-)
-@click.option(
-    "--clear-cache",
-    is_flag=True,
-    help="Clear API cache before running",
-)
-@click.option(
-    "--top-players",
-    type=int,
-    default=20,
-    help="Number of top players to show (default: 20)",
-)
-@click.option(
-    "--top-team-players",
-    type=int,
-    default=5,
-    help="Number of top players per team to show (default: 5)",
-)
-@click.option(
-    "--report",
-    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
-    help="Generate specific report only (default: all reports)",
-)
-def analyze(  # noqa: PLR0913, PLR0912  # CLI function needs many parameters and has complex logic
-    output_format: str,
-    sheets: str | None,
-    output: str | None,
-    verbose: bool,
-    quiet: bool,
-    no_cache: bool,
-    clear_cache: bool,
-    top_players: int,
-    top_team_players: int,
-    report: str | None,
-) -> None:
-    """Run the NHL Scrabble analysis.
-
-    Fetches current NHL roster data and generates comprehensive reports
-    with Scrabble scores for all players and teams.
-
-    Examples:
-        nhl-scrabble analyze
-        nhl-scrabble analyze --verbose
-        nhl-scrabble analyze --quiet
-        nhl-scrabble analyze --output report.txt
-        nhl-scrabble analyze --format json --output report.json
-        nhl-scrabble analyze --format csv --output report.csv
-        nhl-scrabble analyze --format excel --output report.xlsx
-        nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
-        nhl-scrabble analyze --no-cache
-        nhl-scrabble analyze --clear-cache
-        nhl-scrabble analyze --report team
-        nhl-scrabble analyze --report playoff --output playoffs.txt
-    """
-    # Validate ALL CLI arguments first (before any processing)
-    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
-        output, top_players, top_team_players
-    )
-
-    # Load configuration (which will also validate environment variables)
-    try:
-        config = Config.from_env()
-    except ValueError as e:
-        # Convert config validation errors to ClickException for consistent error handling
-        raise click.ClickException(f"Configuration error: {e}") from e
-
-    config.verbose = verbose
-    config.output_format = output_format
-    config.top_players_count = validated_top_players
-    config.top_team_players_count = validated_top_team_players
-
-    # Override cache setting from CLI
-    if no_cache:
-        config.cache_enabled = False
-
-    # Setup logging with sanitization setting from config
-    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
-
-    logger.info(f"Starting NHL Scrabble analysis v{__version__}")
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(f"Configuration: {config}")
-
-    # Validate CSV/Excel require output file
-    if output_format in ("csv", "excel") and not output:
-        raise click.ClickException(
-            f"{output_format.upper()} format requires --output option\n"
-            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
-        )
-
-    # NOTE: Validated arguments already set in config above at line 188
-    # No need to validate again here
-
-    # Display header (suppress if quiet mode)
-    if not quiet:
-        console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
-        console.print("=" * 80)
-
-    try:
-        # Parse sheets list for Excel export
-        sheets_list = None
-        if sheets:
-            sheets_list = [s.strip() for s in sheets.split(",")]
-
-        # Run the analysis
-        result = run_analysis(
-            config,
-            clear_cache=clear_cache,
-            report_filter=report,
-            quiet=quiet,
-            output_path=Path(output) if output else None,
-            sheets=sheets_list,
-        )
-
-        # Output results
-        if validated_output:
-            if isinstance(result, str):
-                # Text/JSON output
-                validated_output.write_text(result)
-            # CSV/Excel are written directly by exporters
-            if not quiet:
-                console.print(f"\n[green]✓[/green] Report saved to: {validated_output}")
-        elif isinstance(result, str):
-            print(result)
-        else:
-            console.print(
-                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
-            )
-
-        if not quiet:
-            console.print("\n" + "=" * 80)
-            console.print("[green]✓ Analysis complete![/green]")
-
-    except NHLApiError as e:
-        logger.error(f"NHL API error: {e}")
-        console.print(f"\n[red]❌ NHL API Error: {e}[/red]", style="red")
-        sys.exit(1)
-    except Exception as e:
-        logger.exception("Unexpected error during analysis")
-        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
-        sys.exit(1)
-
-
 def generate_json_report(
     team_scores: dict[str, Any],
     all_players: list[Any],
@@ -432,14 +410,23 @@ def generate_json_report(
         JSON string
     """
     # Convert dataclasses to dictionaries
-    teams_data = {abbrev: team.to_dict() for abbrev, team in team_scores.items()}
+    teams_data = {
+        abbrev: {
+            "total": team.total,
+            "players": [asdict(p) for p in team.players],
+            "division": team.division,
+            "conference": team.conference,
+            "avg_per_player": team.avg_per_player,
+        }
+        for abbrev, team in team_scores.items()
+    }
 
-    divisions_data = {name: standing.to_dict() for name, standing in division_standings.items()}
+    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
 
-    conferences_data = {name: standing.to_dict() for name, standing in conference_standings.items()}
+    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
 
     playoffs_data = {
-        conf: [team.to_dict() for team in teams] for conf, teams in playoff_standings.items()
+        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
     }
 
     report_data = {
@@ -656,6 +643,306 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
 
 
 @cli.command()
+@click.argument("query", required=False)
+@click.option(
+    "--fuzzy",
+    "-f",
+    is_flag=True,
+    help="Enable fuzzy matching",
+)
+@click.option(
+    "--min-score",
+    type=int,
+    help="Minimum Scrabble score",
+)
+@click.option(
+    "--max-score",
+    type=int,
+    help="Maximum Scrabble score",
+)
+@click.option(
+    "--team",
+    "-t",
+    help="Filter by team abbreviation (e.g., TOR, MTL)",
+)
+@click.option(
+    "--division",
+    "-d",
+    help="Filter by division name",
+)
+@click.option(
+    "--conference",
+    "-c",
+    help="Filter by conference name",
+)
+@click.option(
+    "--limit",
+    "-n",
+    type=int,
+    default=20,
+    help="Maximum number of results to show (default: 20)",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
+@click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars",
+)
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json"], case_sensitive=False),
+    default="text",
+    help="Output format (default: text)",
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    help="Output file path (default: stdout)",
+)
+def search(  # noqa: PLR0913  # CLI function needs many parameters
+    query: str | None,
+    fuzzy: bool,
+    min_score: int | None,
+    max_score: int | None,
+    team: str | None,
+    division: str | None,
+    conference: str | None,
+    limit: int,
+    verbose: bool,
+    quiet: bool,
+    output_format: str,
+    output: str | None,
+) -> None:
+    """Search for players by name and filter by attributes.
+
+    Search the NHL player database by name with support for exact matching,
+    fuzzy matching, and wildcard patterns. Filter results by score, team,
+    division, or conference.
+
+    Examples:
+        # Exact search
+        nhl-scrabble search "Connor McDavid"
+
+        # Fuzzy search
+        nhl-scrabble search McDavid --fuzzy
+
+        # Wildcard search
+        nhl-scrabble search "Connor*"
+
+        # Score filtering
+        nhl-scrabble search --min-score 50
+
+        # Team filtering
+        nhl-scrabble search --team TOR
+
+        # Combined filters
+        nhl-scrabble search "Connor*" --team EDM --min-score 40
+
+        # JSON output
+        nhl-scrabble search McDavid --fuzzy --format json
+
+        # Save to file
+        nhl-scrabble search --min-score 60 --output high-scorers.txt
+    """
+    # Load configuration
+    config = Config.from_env()
+    config.verbose = verbose
+
+    # Setup logging
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
+
+    logger.info("Starting NHL player search")
+
+    # Validate output path
+    validate_output_path(output)
+
+    try:
+        # Fetch player data
+        if not quiet:
+            console.print("\n[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n")
+            console.print("=" * 80)
+
+        # Initialize components
+        api_client = NHLApiClient(
+            base_url=config.api_base_url,
+            timeout=config.api_timeout,
+            retries=config.api_retries,
+            rate_limit_max_requests=config.rate_limit_max_requests,
+        rate_limit_window=config.rate_limit_window,
+            backoff_factor=config.backoff_factor,
+            max_backoff=config.max_backoff,
+            cache_enabled=config.cache_enabled,
+            cache_expiry=config.cache_expiry,
+        )
+        scorer = ScrabbleScorer()
+        team_processor = TeamProcessor(api_client, scorer)
+
+        # Create progress manager
+        progress_mgr = ProgressManager(enabled=not quiet)
+
+        # Get team count for progress tracking
+        teams_info = api_client.get_teams()
+        total_teams = len(teams_info)
+
+        # Process all teams with progress tracking
+        with progress_mgr.track_api_fetching(total_teams) as update_progress:
+            _, all_players, failed_teams = team_processor.process_all_teams(
+                progress_callback=update_progress
+            )
+
+        # Display summary (only if not quiet)
+        if not quiet and failed_teams:
+            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+        # Create search instance
+        searcher = PlayerSearch(all_players)
+
+        # Perform search
+        results = searcher.search(
+            query or "",
+            fuzzy=fuzzy,
+            min_score=min_score,
+            max_score=max_score,
+            team=team,
+            division=division,
+            conference=conference,
+        )
+
+        # Limit results
+        if limit and len(results) > limit:
+            results = results[:limit]
+
+        # Generate output
+        if output_format == "json":
+            output_text = generate_search_json(results, query, searcher.get_stats())
+        else:
+            output_text = generate_search_text(
+                results, query, fuzzy, min_score, max_score, team, division, conference, limit
+            )
+
+        # Output results
+        if output:
+            Path(output).write_text(output_text)
+            if not quiet:
+                console.print(f"\n[green]✓[/green] Results saved to: {output}")
+        else:
+            print(output_text)
+
+        if not quiet:
+            console.print("\n" + "=" * 80)
+            console.print("[green]✓ Search complete![/green]")
+
+    except NHLApiError as e:
+        logger.error(f"NHL API error: {e}")
+        console.print(f"\n[red]❌ NHL API Error: {e}[/red]", style="red")
+        sys.exit(1)
+    except Exception as e:
+        logger.exception("Unexpected error during search")
+        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        sys.exit(1)
+
+
+def generate_search_text(  # noqa: PLR0913  # Need all search parameters
+    results: list[Any],
+    query: str | None,
+    fuzzy: bool,
+    min_score: int | None,
+    max_score: int | None,
+    team: str | None,
+    division: str | None,
+    conference: str | None,
+    limit: int,
+) -> str:
+    """Generate text format search results.
+
+    Args:
+        results: List of PlayerScore objects
+        query: Search query
+        fuzzy: Whether fuzzy matching was used
+        min_score: Minimum score filter
+        max_score: Maximum score filter
+        team: Team filter
+        division: Division filter
+        conference: Conference filter
+        limit: Result limit
+
+    Returns:
+        Formatted text output
+    """
+    lines = []
+    lines.append("\n🔍 PLAYER SEARCH RESULTS\n")
+    lines.append("=" * 80)
+
+    # Display search parameters
+    lines.append("\nSearch Parameters:")
+    if query:
+        match_type = "Fuzzy" if fuzzy else ("Wildcard" if "*" in query or "?" in query else "Exact")
+        lines.append(f"  Query: {query} ({match_type} matching)")
+    if min_score is not None:
+        lines.append(f"  Minimum Score: {min_score}")
+    if max_score is not None:
+        lines.append(f"  Maximum Score: {max_score}")
+    if team:
+        lines.append(f"  Team: {team}")
+    if division:
+        lines.append(f"  Division: {division}")
+    if conference:
+        lines.append(f"  Conference: {conference}")
+
+    lines.append(f"\nFound {len(results)} player(s)")
+    if limit and len(results) >= limit:
+        lines.append(f"(showing top {limit})")
+    lines.append("\n" + "-" * 80 + "\n")
+
+    # Display results
+    if results:
+        for i, player in enumerate(results, 1):
+            lines.append(
+                f"{i:3d}. {player.full_name:<30} | Score: {player.full_score:3d} | "
+                f"Team: {player.team:4s} | {player.division}"
+            )
+            lines.append(
+                f"     First: {player.first_name} ({player.first_score}) | "
+                f"Last: {player.last_name} ({player.last_score})"
+            )
+            lines.append("")
+    else:
+        lines.append("No players found matching the search criteria.\n")
+
+    lines.append("-" * 80)
+
+    return "\n".join(lines)
+
+
+def generate_search_json(results: list[Any], query: str | None, stats: dict[str, Any]) -> str:
+    """Generate JSON format search results.
+
+    Args:
+        results: List of PlayerScore objects
+        query: Search query
+        stats: Player database statistics
+
+    Returns:
+        JSON string
+    """
+    data = {
+        "query": query,
+        "result_count": len(results),
+        "stats": stats,
+        "results": [asdict(p) for p in results],
+    }
+    return json.dumps(data, indent=2)
+
+
+@cli.command()
 @click.option("--host", default="127.0.0.1", help="Host to bind to")
 @click.option("--port", default=8000, type=int, help="Port to bind to")
 @click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
@@ -695,63 +982,6 @@ def serve(host: str, port: int, reload: bool) -> None:
         host=host,
         port=port,
         reload=reload,
-        log_level="info",
-    )
-
-
-@cli.command()
-@click.option("--host", default="127.0.0.1", help="Host to bind to")
-@click.option("--port", default=8000, type=int, help="Port to bind to")
-@click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
-@click.option("--workers", default=1, type=int, help="Number of worker processes (production)")
-def api(host: str, port: int, reload: bool, workers: int) -> None:
-    """Start REST API server.
-
-    Starts a FastAPI REST API server providing programmatic access to
-    NHL Scrabble data. Visit http://localhost:8000/docs for API documentation.
-
-    The API provides endpoints for:
-    - Team scores (/api/v1/teams)
-    - Player scores (/api/v1/players)
-    - Division standings (/api/v1/standings/division)
-    - Conference standings (/api/v1/standings/conference)
-    - Playoff bracket (/api/v1/standings/playoffs)
-
-    Examples:
-        # Start API server on default port
-        nhl-scrabble api
-
-        # Development mode with auto-reload
-        nhl-scrabble api --reload
-
-        # Production mode with multiple workers
-        nhl-scrabble api --workers 4 --host 0.0.0.0
-
-        # Custom host and port
-        nhl-scrabble api --host 0.0.0.0 --port 5000
-    """
-    try:
-        import uvicorn
-    except ImportError:
-        click.echo(
-            "Error: uvicorn not installed. Install with: pip install nhl-scrabble",
-            err=True,
-        )
-        raise click.Abort from None
-
-    click.echo(f"Starting NHL Scrabble REST API server at http://{host}:{port}")
-    click.echo(f"API Documentation: http://{host}:{port}/docs")
-    click.echo("Press CTRL+C to stop")
-
-    # Import here to avoid loading FastAPI when not needed
-    from nhl_scrabble.api_server.app import app
-
-    uvicorn.run(
-        app,
-        host=host,
-        port=port,
-        reload=reload,
-        workers=workers if not reload else 1,  # Multiple workers not compatible with reload
         log_level="info",
     )
 
