@@ -1000,6 +1000,8 @@ ignore_names = [
 
     # Public API exceptions (part of public API even if not currently used)
     "NHLApiNotFoundError",  # Exception class reserved for future use
+    "track_score_calculation",  # ProgressManager method used via context manager (vulture can't detect)
+    "track_report_generation",  # ProgressManager method reserved for future use (lazy eval prevents current use)
 
     # FastAPI framework patterns (called at runtime by framework)
     "health",             # FastAPI endpoint function (registered via decorator)

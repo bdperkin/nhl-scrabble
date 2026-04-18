@@ -89,6 +89,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Progress Bars for Long Operations** - Real-time visual feedback during analysis
+
+  - Added `ui/progress.py` module with ProgressManager class
+  - Progress bars for API fetching (30 teams × 0.3s = 9+ seconds)
+  - Progress bars for report generation (5 report types)
+  - Shows percentage complete, items processed (M of N), and time remaining
+  - Displays current item being processed (team abbreviation, report name)
+  - Added `--quiet` / `-q` flag to suppress progress bars for scripting/automation
+  - Progress bars work alongside `--verbose` logging
+  - Uses rich library's Progress component with spinner, bar, percentage, ETA
+  - TeamProcessor updated with optional progress callback support
+  - 21 new tests (14 unit tests for ProgressManager, 7 integration tests for CLI)
+  - Benefits: Improved UX, reduced perceived wait time, visibility into long operations
+  - Accessibility: `--quiet` mode provides clean text output for screen readers
+
 - **FastAPI Web Interface Infrastructure** - Foundation for browser-based NHL Scrabble access
 
   - Added FastAPI>=0.110.0 web framework with automatic OpenAPI documentation
