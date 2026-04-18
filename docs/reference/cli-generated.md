@@ -70,7 +70,11 @@ Usage: nhl-scrabble analyze [OPTIONS]
   nhl-scrabble analyze --report playoff --output playoffs.txt     nhl-scrabble
   analyze --scoring wordle     nhl-scrabble analyze --scoring uniform --output
   uniform_scores.txt     nhl-scrabble analyze --scoring-config
-  custom_values.json
+  custom_values.json     nhl-scrabble analyze --division Atlantic     nhl-
+  scrabble analyze --conference Eastern     nhl-scrabble analyze --teams
+  TOR,MTL,OTT     nhl-scrabble analyze --min-score 50 --max-score 100     nhl-
+  scrabble analyze --exclude BOS,NYR     nhl-scrabble analyze --division
+  Atlantic --min-score 60
 
 Options:
   --format [text|json|csv|excel]  Output format (default: text)
@@ -94,6 +98,16 @@ Options:
                                   scrabble)
   --scoring-config FILE           Path to custom scoring configuration JSON
                                   file
+  --division TEXT                 Filter by division (comma-separated:
+                                  Atlantic,Metropolitan,Central,Pacific)
+  --conference TEXT               Filter by conference (comma-separated:
+                                  Eastern,Western)
+  --teams TEXT                    Filter by teams (comma-separated
+                                  abbreviations: TOR,MTL,BOS)
+  --exclude TEXT                  Exclude teams (comma-separated
+                                  abbreviations: NYR,PHI)
+  --min-score INTEGER             Minimum player score to include
+  --max-score INTEGER             Maximum player score to include
   --help                          Show this message and exit.
 ```
 
