@@ -15,7 +15,6 @@ from rich.table import Table
 
 if TYPE_CHECKING:
     from nhl_scrabble.models.player import PlayerScore
-    from nhl_scrabble.models.standings import ConferenceStandings
     from nhl_scrabble.models.team import TeamScore
 
 
@@ -61,46 +60,62 @@ class InteractiveShell:
 
     def fetch_data(self) -> None:
         """Fetch NHL data from API."""
-        from nhl_scrabble.api.nhl_client import NHLApiClient
-        from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
-        from nhl_scrabble.processors.team_processor import TeamProcessor
-        from nhl_scrabble.scoring.scrabble import ScrabbleScorer
+        # Imports inside method to avoid circular dependencies
+        from nhl_scrabble.api.nhl_client import NHLApiClient  # noqa: PLC0415
+        from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator  # noqa: PLC0415
+        from nhl_scrabble.processors.team_processor import TeamProcessor  # noqa: PLC0415
+        from nhl_scrabble.scoring.scrabble import ScrabbleScorer  # noqa: PLC0415
 
         self.console.print("[cyan]Fetching NHL data...[/cyan]")
 
-        with NHLApiClient() as client:
-            standings = client.get_standings()
+        # Create API client and processors
+        api_client = NHLApiClient()
+        scorer = ScrabbleScorer()
+        team_processor = TeamProcessor(api_client, scorer)
 
-            team_scores = []
-            scorer = ScrabbleScorer()
+        try:
+            # Process all teams
+            team_scores_dict, all_players, failed_teams = team_processor.process_all_teams()
 
-            for team in standings.teams:
-                roster = client.get_team_roster(team.abbrev)
-                team_score = TeamProcessor.process_roster(roster, team, scorer)
-                team_scores.append(team_score)
+            # Calculate playoff positions
+            playoff_calculator = PlayoffCalculator()
+            playoff_standings_data = playoff_calculator.calculate_playoff_standings(
+                team_scores_dict
+            )
 
-        # Calculate playoff positions
-        playoff_calculator = PlayoffCalculator()
-        playoff_standings_data = playoff_calculator.calculate_playoff_standings(team_scores)
+            # Extract playoff teams from standings
+            playoff_teams = []
+            for conf_teams in playoff_standings_data.values():
+                playoff_teams.extend(conf_teams)
 
-        # Extract playoff teams from standings
-        playoff_teams = []
-        for conf_teams in playoff_standings_data.values():
-            playoff_teams.extend(conf_teams)
+            # Convert dict to list for easier iteration
+            team_scores_list = list(team_scores_dict.values())
 
-        # Organize by conference
-        eastern_teams = [t for t in team_scores if t.conference == "Eastern"]
-        western_teams = [t for t in team_scores if t.conference == "Western"]
+            # Organize by conference
+            eastern_teams = [t for t in team_scores_list if t.conference == "Eastern"]
+            western_teams = [t for t in team_scores_list if t.conference == "Western"]
 
-        self.data = {
-            "teams": team_scores,
-            "standings": standings,
-            "playoff_teams": playoff_teams,
-            "eastern": eastern_teams,
-            "western": western_teams,
-        }
+            self.data = {
+                "teams": team_scores_list,
+                "teams_dict": team_scores_dict,
+                "all_players": all_players,
+                "playoff_teams": playoff_teams,
+                "playoff_standings": playoff_standings_data,
+                "eastern": eastern_teams,
+                "western": western_teams,
+                "failed_teams": failed_teams,
+            }
 
-        self.console.print("[green]Data loaded successfully![/green]")
+            self.console.print("[green]Data loaded successfully![/green]")
+
+            if failed_teams:
+                self.console.print(
+                    f"[yellow]⚠ Warning: Failed to fetch {len(failed_teams)} teams: "
+                    f"{', '.join(failed_teams)}[/yellow]"
+                )
+        finally:
+            # Always close the API client
+            api_client.close()
 
     def get_completer(self) -> WordCompleter:
         """Get command completer with team/player names."""
@@ -118,7 +133,7 @@ class InteractiveShell:
         words = self.commands + teams + players[:100]
         return WordCompleter(words, ignore_case=True)
 
-    def run(self) -> None:
+    def run(self) -> None:  # noqa: C901, PLR0912, PLR0915
         """Run interactive shell."""
         self.console.print("\n[bold cyan]NHL Scrabble Interactive Mode[/bold cyan]")
         self.console.print("Type [yellow]'help'[/yellow] for available commands")
@@ -149,15 +164,13 @@ class InteractiveShell:
 
                 # Check if data is loaded (except for help/exit/refresh)
                 if command not in ["help", "exit", "quit", "refresh"] and not self.data:
-                    self.console.print(
-                        "[red]No data loaded. Use 'refresh' to fetch data.[/red]"
-                    )
+                    self.console.print("[red]No data loaded. Use 'refresh' to fetch data.[/red]")
                     continue
 
                 # Execute command
                 if command in ["exit", "quit"]:
                     break
-                elif command == "help":
+                if command == "help":
                     self.cmd_help(args)
                 elif command == "show":
                     self.cmd_show(args)
@@ -380,14 +393,17 @@ class InteractiveShell:
             self.console.print("[yellow]Usage: search <query>[/yellow]")
             return
 
+        if not self.data:
+            self.console.print("[red]No data loaded. Use 'refresh' to fetch data.[/red]")
+            return
+
         query = " ".join(args).lower()
 
         # Find all matching players
-        matches: list[PlayerScore] = []
-        for team in self.data["teams"]:  # type: ignore[index]
-            for player in team.players:
-                if query in player.full_name.lower():
-                    matches.append(player)
+        teams: list[TeamScore] = self.data["teams"]
+        matches: list[PlayerScore] = [
+            player for team in teams for player in team.players if query in player.full_name.lower()
+        ]
 
         if not matches:
             self.console.print(f"[red]No players found matching: {query}[/red]")
@@ -420,9 +436,7 @@ class InteractiveShell:
             table.add_column("Score", style="magenta", width=8)
 
             for i, team in enumerate(teams, 1):
-                table.add_row(
-                    str(i), team.abbrev, team.conference, team.division, str(team.total)
-                )
+                table.add_row(str(i), team.abbrev, team.conference, team.division, str(team.total))
 
             self.console.print(table)
 
@@ -452,11 +466,9 @@ class InteractiveShell:
             )
 
         else:
-            self.console.print(
-                "[yellow]Usage: standings [team|division|conference][/yellow]"
-            )
+            self.console.print("[yellow]Usage: standings [team|division|conference][/yellow]")
 
-    def cmd_playoff(self, args: list[str]) -> None:
+    def cmd_playoff(self, _args: list[str]) -> None:
         """Show playoff bracket."""
         playoff_teams = self.data["playoff_teams"]  # type: ignore[index]
 
@@ -493,7 +505,7 @@ class InteractiveShell:
 
         self.console.print(table)
 
-    def cmd_stats(self, args: list[str]) -> None:
+    def cmd_stats(self, _args: list[str]) -> None:
         """Show statistics."""
         teams = self.data["teams"]  # type: ignore[index]
 
@@ -529,7 +541,7 @@ class InteractiveShell:
 
         self.console.print(table)
 
-    def cmd_refresh(self, args: list[str]) -> None:
+    def cmd_refresh(self, _args: list[str]) -> None:
         """Re-fetch data from NHL API."""
         self.fetch_data()
 
@@ -585,29 +597,37 @@ class InteractiveShell:
 
     def _find_team(self, abbrev: str) -> TeamScore | None:
         """Find team by abbreviation."""
-        for team in self.data["teams"]:  # type: ignore[index]
+        if not self.data:
+            return None
+
+        teams: list[TeamScore] = self.data["teams"]
+        for team in teams:
             if team.abbrev.upper() == abbrev.upper():
                 return team
         return None
 
-    def _find_player(self, name: str) -> PlayerScore | None:
+    def _find_player(self, name: str) -> PlayerScore | None:  # noqa: C901
         """Find player by name (fuzzy match)."""
+        if not self.data:
+            return None
+
         name_lower = name.lower()
+        teams: list[TeamScore] = self.data["teams"]
 
         # Exact match first
-        for team in self.data["teams"]:  # type: ignore[index]
+        for team in teams:
             for player in team.players:
                 if player.full_name.lower() == name_lower:
                     return player
 
         # Partial match (last name)
-        for team in self.data["teams"]:  # type: ignore[index]
+        for team in teams:
             for player in team.players:
                 if name_lower in player.last_name.lower():
                     return player
 
         # Partial match (any part)
-        for team in self.data["teams"]:  # type: ignore[index]
+        for team in teams:
             for player in team.players:
                 if name_lower in player.full_name.lower():
                     return player

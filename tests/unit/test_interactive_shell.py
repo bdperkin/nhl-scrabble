@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import pytest
 
 from nhl_scrabble.interactive.shell import InteractiveShell
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
+
+# ruff: noqa: SLF001
+# Allow private member access in tests
 
 
 @pytest.fixture
@@ -358,7 +361,9 @@ class TestSearchCommand:
         """Test search command with no matches."""
         with patch.object(shell_with_data.console, "print") as mock_print:
             shell_with_data.cmd_search(["Nonexistent"])
-            assert any("no players found" in str(call).lower() for call in mock_print.call_args_list)
+            assert any(
+                "no players found" in str(call).lower() for call in mock_print.call_args_list
+            )
 
 
 class TestStandingsCommand:

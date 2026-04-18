@@ -51,9 +51,7 @@ class TestInteractiveCommand:
         mock_shell.run.assert_called_once()
 
     @patch("nhl_scrabble.interactive.InteractiveShell")
-    def test_interactive_with_verbose(
-        self, mock_shell_class: MagicMock, runner: CliRunner
-    ) -> None:
+    def test_interactive_with_verbose(self, mock_shell_class: MagicMock, runner: CliRunner) -> None:
         """Test interactive command with verbose logging."""
         # Setup mock
         mock_shell = MagicMock()
