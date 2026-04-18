@@ -375,8 +375,10 @@ class NHLApiClient:
             logger.error(f"Connection error after retries: {e}")
             raise NHLApiConnectionError("Unable to connect to NHL API after retries") from e
 
-    def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:  # noqa: PLR0915
-        """Fetch the current roster for a specific team with input and response validation.
+    def get_team_roster(  # noqa: PLR0915
+        self, team_abbrev: str, season: str | None = None
+    ) -> dict[str, Any]:
+        """Fetch the roster for a specific team with input and response validation.
 
         Validates team abbreviation before making API call and validates response
         structure to prevent errors from malformed data.
@@ -385,6 +387,8 @@ class NHLApiClient:
 
         Args:
             team_abbrev: Team abbreviation (e.g., 'TOR', 'MTL')
+            season: Optional season in format 'YYYYYYYY' (e.g., '20222023' for 2022-23).
+                If None, fetches current season roster.
 
         Returns:
             Dictionary containing roster data with 'forwards', 'defensemen', and 'goalies' keys
@@ -406,6 +410,9 @@ class NHLApiClient:
             >>> roster = client.get_team_roster("TOR")
             >>> "forwards" in roster
             True
+            >>> roster_2022 = client.get_team_roster("TOR", season="20222023")
+            >>> "forwards" in roster_2022
+            True
             >>> client.get_team_roster("INVALID")
             Traceback (most recent call last):
             ValidationError: Team abbreviation must be 2-3 characters...
@@ -418,9 +425,13 @@ class NHLApiClient:
             logger.error(f"Invalid team abbreviation: {team_abbrev}")
             raise
 
-        url = f"{self.base_url}/roster/{validated_abbrev}/current"
+        # Use season-specific endpoint or current season endpoint
+        endpoint = f"roster/{validated_abbrev}/{season}" if season else f"roster/{validated_abbrev}/current"
+        url = f"{self.base_url}/{endpoint}"
+
+        season_desc = f"season {season}" if season else "current season"
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f"Fetching roster for {validated_abbrev}")
+            logger.debug(f"Fetching roster for {validated_abbrev} ({season_desc})")
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)

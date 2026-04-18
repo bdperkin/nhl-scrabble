@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
@@ -41,11 +42,19 @@ class TeamProcessor:
 
     def process_all_teams(
         self,
+        progress_callback: Callable[[str], None] | None = None,
+        season: str | None = None,
     ) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
         """Process all NHL teams and calculate scores with concurrent fetching.
 
         Uses ThreadPoolExecutor to fetch team rosters concurrently, improving performance
         for I/O-bound operations. The number of concurrent workers is controlled by max_workers.
+
+        Args:
+            progress_callback: Optional callback to report progress after each team.
+                Called with team abbreviation after successfully processing each team.
+            season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023).
+                If None, fetches current season data.
 
         Returns:
             Tuple containing:
@@ -60,11 +69,18 @@ class TeamProcessor:
             >>> teams, players, failed = processor.process_all_teams()
             >>> len(teams) > 0
             True
+            >>> teams_2022, players_2022, failed = processor.process_all_teams(season="20222023")
+            >>> len(teams_2022) > 0
+            True
         """
-        logger.info(f"Starting team processing (concurrent mode, max_workers={self.max_workers})")
+        season_desc = f"for season {season}" if season else "for current season"
+        logger.info(
+            f"Starting team processing {season_desc} "
+            f"(concurrent mode, max_workers={self.max_workers})"
+        )
 
         # Fetch all teams metadata
-        teams_info = self.api_client.get_teams()
+        teams_info = self.api_client.get_teams(season=season)
         total_teams = len(teams_info)
         logger.info(f"Fetched {total_teams} teams from NHL API")
 
@@ -76,7 +92,9 @@ class TeamProcessor:
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             # Submit all roster fetch jobs
             future_to_team = {
-                executor.submit(self._fetch_and_process_team, team_abbrev, team_meta): team_abbrev
+                executor.submit(
+                    self._fetch_and_process_team, team_abbrev, team_meta, season
+                ): team_abbrev
                 for team_abbrev, team_meta in teams_info.items()
             }
 
@@ -100,6 +118,10 @@ class TeamProcessor:
                         all_players.extend(team_players)
                         logger.info(f"Processed {team_abbrev} ({completed}/{total_teams})")
 
+                        # Call progress callback if provided
+                        if progress_callback:
+                            progress_callback(team_abbrev)
+
                 except (OSError, ValueError) as e:
                     # OSError covers network/connection errors, ValueError for data parsing
                     logger.error(f"Error processing {team_abbrev}: {e}")
@@ -112,7 +134,7 @@ class TeamProcessor:
         return team_scores, all_players, failed_teams
 
     def _fetch_and_process_team(
-        self, team_abbrev: str, team_meta: dict[str, str]
+        self, team_abbrev: str, team_meta: dict[str, str], season: str | None = None
     ) -> tuple[TeamScore, list[PlayerScore]] | None:
         """Fetch and process a single team (thread-safe).
 
@@ -122,6 +144,7 @@ class TeamProcessor:
         Args:
             team_abbrev: Team abbreviation (e.g., "TOR", "BOS")
             team_meta: Team metadata containing division and conference
+            season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023)
 
         Returns:
             Tuple of (TeamScore, player list) if successful, None if team fetch failed
@@ -132,7 +155,7 @@ class TeamProcessor:
         """
         try:
             # Fetch roster (with built-in retry and rate limiting)
-            roster = self.api_client.get_team_roster(team_abbrev)
+            roster = self.api_client.get_team_roster(team_abbrev, season=season)
 
             # Process roster
             team_players = self._process_team_roster(

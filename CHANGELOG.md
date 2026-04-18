@@ -132,6 +132,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Separate from web interface for dedicated programmatic access
   - Benefits: Third-party integrations, mobile apps, custom clients, API ecosystem
 
+- **Historical Data Support** - Analyze NHL Scrabble scores across multiple seasons
+
+  - Added season parameter to `NHLApiClient.get_teams()` and `get_team_roster()` methods
+  - Season format: `YYYYYYYY` (e.g., "20222023" for 2022-23 season)
+  - Created `HistoricalDataStore` for local caching of historical season data
+  - Added `--season` option to `analyze` command for analyzing specific seasons
+  - Created `SeasonComparison` class for comparing multiple seasons
+  - Created `TrendAnalysis` class for analyzing score trends over time
+  - Added `compare` CLI command for season-by-season comparison
+  - Added `trends` CLI command for trend analysis across season ranges
+  - Stores historical data as JSON files in `data/historical/` directory
+  - Added 32 comprehensive unit tests for historical data features
+  - Test coverage: 78% for storage module, 94% for comparison module
+  - Benefits: Track score evolution, identify roster change impacts, historical analysis
+  - Related: Enhancement task #143 - Historical data support
+
 ### Security
 
 - **Configuration Injection Protection** - Comprehensive validation to prevent injection attacks

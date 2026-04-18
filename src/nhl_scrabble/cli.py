@@ -251,6 +251,11 @@ def cli() -> None:
     type=int,
     help="Maximum player score to include",
 )
+@click.option(
+    "--season",
+    type=str,
+    help="Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)",
+)
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
     sheets: str | None,
@@ -270,6 +275,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     exclude: str | None,
     min_score: int | None,
     max_score: int | None,
+    season: str | None,
 ) -> None:
     """Run the NHL Scrabble analysis.
 
@@ -298,6 +304,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         nhl-scrabble analyze --min-score 50 --max-score 100
         nhl-scrabble analyze --exclude BOS,NYR
         nhl-scrabble analyze --division Atlantic --min-score 60
+        nhl-scrabble analyze --season 20222023
     """
     # Validate CLI arguments first (before expensive operations)
     validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
