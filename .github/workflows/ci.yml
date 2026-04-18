@@ -77,7 +77,7 @@ jobs:
           verbose: true
 
   tox:
-    name: Tox tests with UV
+    name: Tox tests with UV (${{ matrix.tox-env }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -87,7 +87,6 @@ jobs:
           - py312
           - py313
           - py314
-          - py315
           - ruff-check
           - mypy
           - coverage
@@ -115,6 +114,12 @@ jobs:
           - autopep8
           - doc8
           - rstcheck
+        experimental: [false]
+        include:
+          - tox-env: py315
+            experimental: true
+
+    continue-on-error: ${{ matrix.experimental }}
 
     steps:
       - name: Checkout code
