@@ -151,7 +151,7 @@ def cli() -> None:
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
-def analyze(  # noqa: PLR0913  # CLI function needs many parameters
+def analyze(  # noqa: PLR0913, C901  # CLI function needs many parameters and has complex logic
     output_format: str,
     sheets: str | None,
     output: str | None,
@@ -209,9 +209,10 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     # Validate output path BEFORE making API calls
     validate_output_path(output)
 
-    # Display header
-    console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
-    console.print("=" * 80)
+    # Display header (suppress if quiet mode)
+    if not quiet:
+        console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
+        console.print("=" * 80)
 
     try:
         # Parse sheets list for Excel export
@@ -236,7 +237,8 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
                 # Text/JSON output
                 output_path.write_text(result)
             # CSV/Excel are written directly by exporters
-            console.print(f"\n[green]✓[/green] Report saved to: {output}")
+            if not quiet:
+                console.print(f"\n[green]✓[/green] Report saved to: {output}")
         elif isinstance(result, str):
             print(result)
         else:
@@ -244,8 +246,9 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
                 "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
             )
 
-        console.print("\n" + "=" * 80)
-        console.print("[green]✓ Analysis complete![/green]")
+        if not quiet:
+            console.print("\n" + "=" * 80)
+            console.print("[green]✓ Analysis complete![/green]")
 
     except NHLApiError as e:
         logger.error(f"NHL API error: {e}")
@@ -596,6 +599,48 @@ def generate_excel_report(
     )
 
     logger.info(f"Excel report written to {output}")
+
+
+@cli.command()
+@click.option("--no-fetch", is_flag=True, help="Skip fetching data from NHL API on startup")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
+def interactive(no_fetch: bool, verbose: bool) -> None:
+    """Start interactive mode for exploring NHL Scrabble data.
+
+    Interactive mode provides a REPL (Read-Eval-Print Loop) for exploring
+    NHL Scrabble scores through commands like show, top, compare, and more.
+
+    Examples:
+        nhl-scrabble interactive
+        nhl-scrabble interactive --no-fetch
+        nhl-scrabble interactive --verbose
+    """
+    from nhl_scrabble.interactive import InteractiveShell
+
+    # Load configuration
+    config = Config.from_env()
+    config.verbose = verbose
+
+    # Setup logging
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
+
+    logger.info(f"Starting NHL Scrabble interactive mode v{__version__}")
+
+    try:
+        shell = InteractiveShell()
+
+        if not no_fetch:
+            shell.fetch_data()
+
+        shell.run()
+
+    except KeyboardInterrupt:
+        console.print("\n[cyan]Goodbye![/cyan]")
+        sys.exit(0)
+    except Exception as e:
+        logger.exception("Unexpected error in interactive mode")
+        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        sys.exit(1)
 
 
 @cli.command()

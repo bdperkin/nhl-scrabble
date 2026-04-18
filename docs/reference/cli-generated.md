@@ -37,8 +37,9 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  analyze  Run the NHL Scrabble analysis.
-  serve    Start web interface server.
+  analyze      Run the NHL Scrabble analysis.
+  interactive  Start interactive mode for exploring NHL Scrabble data.
+  serve        Start web interface server.
 ```
 
 ______________________________________________________________________

@@ -226,6 +226,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Allows early detection of breaking changes and migration issues
   - Will be upgraded to official support when Python 3.15 is released
 
+- **Interactive REPL Mode** - Ad-hoc exploration of NHL Scrabble data
+
+  - Added prompt-toolkit>=3.0.0 dependency for advanced REPL features
+  - Created `nhl_scrabble.interactive` module with `InteractiveShell` class
+  - Implemented `nhl-scrabble interactive` CLI command with --no-fetch and --verbose options
+  - 11 interactive commands: show, top, bottom, compare, filter, search, standings, playoff, stats, refresh, help, exit
+  - Tab completion for commands, team names, and player names
+  - Persistent command history across sessions (~/.nhl_scrabble_history)
+  - Rich-based table formatting for beautiful terminal output
+  - Data cached in memory after first fetch for instant subsequent queries
+  - 46 comprehensive unit tests covering all commands and edge cases (73% coverage on interactive module)
+  - 5 integration tests for CLI command invocation and error handling
+  - Benefits: Instant ad-hoc queries, no re-fetching data, better data exploration UX
+  - Task: #133 - tasks/enhancement/002-interactive-mode.md
+
 - **HTML Output Format** - Professional HTML reports with responsive design
 
   - Generate beautiful HTML reports with `--format html`
