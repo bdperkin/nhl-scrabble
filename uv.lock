@@ -1665,6 +1665,7 @@ dependencies = [
     { name = "requests" },
     { name = "requests-cache" },
     { name = "rich" },
+    { name = "starlette" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -1843,6 +1844,7 @@ requires-dist = [
     { name = "sphinxcontrib-programoutput", marker = "extra == 'docs'", specifier = ">=0.17" },
     { name = "sphinxcontrib-spelling", marker = "extra == 'docs'", specifier = ">=8.0.0" },
     { name = "sphinxext-opengraph", marker = "extra == 'docs'", specifier = ">=0.9.1" },
+    { name = "starlette", specifier = ">=0.36.0" },
     { name = "tox", marker = "extra == 'tox'", specifier = ">=4.0.0" },
     { name = "tox-uv", marker = "extra == 'tox'", specifier = ">=1.0.0" },
     { name = "twine", marker = "extra == 'publish'", specifier = ">=5.0.0" },

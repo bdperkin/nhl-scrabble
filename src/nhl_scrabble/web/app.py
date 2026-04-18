@@ -11,10 +11,13 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api import NHLApiClient, NHLApiError
@@ -29,6 +32,34 @@ WEB_DIR = Path(__file__).parent
 TEMPLATES_DIR = WEB_DIR / "templates"
 STATIC_DIR = WEB_DIR / "static"
 
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Middleware to add security headers to all responses."""
+
+    async def dispatch(self, request: Request, call_next: Any) -> Any:
+        """Add security headers to response.
+
+        Args:
+            request: Incoming request
+            call_next: Next middleware/handler in chain
+
+        Returns:
+            Response with security headers added
+        """
+        response = await call_next(request)
+
+        # Security headers
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'"
+        )
+
+        return response
+
+
 # Create FastAPI application
 app = FastAPI(
     title="NHL Scrabble Analyzer",
@@ -36,6 +67,18 @@ app = FastAPI(
     version=__version__,
     docs_url="/docs",
     redoc_url="/redoc",
+)
+
+# Add security headers middleware
+app.add_middleware(SecurityHeadersMiddleware)
+
+# Add CORS middleware (for local development)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8000", "http://127.0.0.1:8000"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
 )
 
 # Mount static files (if directory exists)
@@ -100,6 +143,19 @@ async def root() -> dict[str, str]:
         "docs": "/docs",
         "health": "/health",
     }
+
+
+@app.get("/favicon.svg")
+async def favicon() -> HTMLResponse:
+    """Serve favicon as SVG.
+
+    Returns:
+        SVG favicon with hockey emoji
+    """
+    svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <text y="0.9em" font-size="90">🏒</text>
+</svg>"""
+    return HTMLResponse(content=svg_content, media_type="image/svg+xml")
 
 
 def _convert_players_to_dict(
