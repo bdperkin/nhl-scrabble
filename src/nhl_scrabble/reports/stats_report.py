@@ -111,8 +111,9 @@ class StatsReporter(BaseReporter):
             div_abbrev = player.division.split()[0][:3].upper()
             output += (
                 f"\n{rank:2}. {player.full_name:30} ({player.team:3}/{div_abbrev}): "
-                f"{player.full_score:3} points "
-                f"[First: {player.first_score:2}, Last: {player.last_score:2}]"
+                f"{self._format_score(player.full_score, width=3)} points "
+                f"[First: {self._format_score(player.first_score, width=2)}, "
+                f"Last: {self._format_score(player.last_score, width=2)}]"
             )
 
         # Fun stats
@@ -125,21 +126,23 @@ class StatsReporter(BaseReporter):
         top_first = stats["top_first"]
         output += (
             f"\nHighest First Name: {top_first.first_name} "
-            f"({top_first.full_name}, {top_first.team}) = {top_first.first_score} points"
+            f"({top_first.full_name}, {top_first.team}) = "
+            f"{self._format_score(top_first.first_score)} points"
         )
 
         # Highest scoring last name
         top_last = stats["top_last"]
         output += (
             f"\nHighest Last Name: {top_last.last_name} "
-            f"({top_last.full_name}, {top_last.team}) = {top_last.last_score} points"
+            f"({top_last.full_name}, {top_last.team}) = "
+            f"{self._format_score(top_last.last_score)} points"
         )
 
         # Average scores overall
         output += "\n\nLeague-Wide Average Scores:"
-        output += f"\n  Full Name: {stats['avg_full']:.2f}"
-        output += f"\n  First Name: {stats['avg_first']:.2f}"
-        output += f"\n  Last Name: {stats['avg_last']:.2f}"
+        output += f"\n  Full Name: {self._format_average(stats['avg_full'], width=5)}"
+        output += f"\n  First Name: {self._format_average(stats['avg_first'], width=5)}"
+        output += f"\n  Last Name: {self._format_average(stats['avg_last'], width=5)}"
 
         # Division with highest average per player
         division_avg_per_player = {
@@ -151,7 +154,7 @@ class StatsReporter(BaseReporter):
             top_division = max(division_avg_per_player.items(), key=lambda x: x[1])
             output += (
                 f"\n\nHighest Avg Division (per player): "
-                f"{top_division[0]} = {top_division[1]:.2f} points/player"
+                f"{top_division[0]} = {self._format_average(top_division[1])} points/player"
             )
 
         # Conference with highest average per player
@@ -164,7 +167,7 @@ class StatsReporter(BaseReporter):
             top_conference = max(conference_avg_per_player.items(), key=lambda x: x[1])
             output += (
                 f"\nHighest Avg Conference (per player): "
-                f"{top_conference[0]} = {top_conference[1]:.2f} points/player"
+                f"{top_conference[0]} = {self._format_average(top_conference[1])} points/player"
             )
 
         return output

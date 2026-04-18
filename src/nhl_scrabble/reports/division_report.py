@@ -18,13 +18,17 @@ class DivisionReporter(BaseReporter):
         """
         output = self._format_header("🗺️  DIVISION SCRABBLE SCORES")
 
-        sorted_divisions = sorted(standings.items(), key=lambda x: x[1].total, reverse=True)
+        sorted_divisions = self._sort_by_key(
+            standings.items(), key=lambda x: x[1].total, reverse=True
+        )
 
         for rank, (division, data) in enumerate(sorted_divisions, 1):
             output += f"\n\n#{rank} {division}"
-            output += f"\n   Total: {data.total} points"
-            output += f"\n   Teams: {len(data.teams)} ({', '.join(sorted(data.teams))})"
+            output += f"\n   Total: {self._format_score(data.total)} points"
+            output += f"\n   Teams: {len(data.teams)} ({self._format_team_list(data.teams)})"
             output += f"\n   Players: {data.player_count}"
-            output += f"\n   Avg per team: {data.avg_per_team:.1f}"
+            output += (
+                f"\n   Avg per team: {self._format_average(data.avg_per_team, width=6, decimals=1)}"
+            )
 
         return output

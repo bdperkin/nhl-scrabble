@@ -10,7 +10,6 @@ from nhl_scrabble.interactive.shell import InteractiveShell
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 
-# ruff: noqa: SLF001
 # Allow private member access in tests
 
 
