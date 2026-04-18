@@ -46,7 +46,7 @@ class TestFullWorkflow:
         ]
 
         # Initialize components
-        api_client = NHLApiClient(rate_limit_delay=0.0)
+        api_client = NHLApiClient(rate_limit_max_requests=1000, rate_limit_window=1.0)
         scorer = ScrabbleScorer()
         team_processor = TeamProcessor(api_client, scorer)
         playoff_calculator = PlayoffCalculator()
@@ -105,7 +105,9 @@ class TestFullWorkflow:
             not_found_response,
         ]
 
-        api_client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.0)
+        api_client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         scorer = ScrabbleScorer()
         team_processor = TeamProcessor(api_client, scorer)
 

@@ -15,7 +15,8 @@ class TestConfig:
         config = Config()
         assert config.api_timeout == 10
         assert config.api_retries == 3
-        assert config.rate_limit_delay == 0.3
+        assert config.rate_limit_max_requests == 30
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 20
         assert config.top_team_players_count == 5
         assert config.verbose is False
@@ -26,7 +27,8 @@ class TestConfig:
         config = Config(
             api_timeout=30,
             api_retries=5,
-            rate_limit_delay=0.5,
+            rate_limit_max_requests=120,
+            rate_limit_window=60.0,
             top_players_count=50,
             top_team_players_count=10,
             verbose=True,
@@ -34,7 +36,8 @@ class TestConfig:
         )
         assert config.api_timeout == 30
         assert config.api_retries == 5
-        assert config.rate_limit_delay == 0.5
+        assert config.rate_limit_max_requests == 120
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 50
         assert config.top_team_players_count == 10
         assert config.verbose is True
@@ -69,7 +72,8 @@ class TestConfigFromEnv:
         config = Config.from_env()
         assert config.api_timeout == 10
         assert config.api_retries == 3
-        assert config.rate_limit_delay == 0.3
+        assert config.rate_limit_max_requests == 30
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 20
         assert config.top_team_players_count == 5
         assert config.verbose is False
@@ -88,7 +92,8 @@ class TestConfigFromEnv:
         config = Config.from_env()
         assert config.api_timeout == 30
         assert config.api_retries == 5
-        assert config.rate_limit_delay == 0.5
+        assert config.rate_limit_max_requests == 120
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 50
         assert config.top_team_players_count == 10
         assert config.verbose is True
@@ -158,7 +163,8 @@ class TestConfigFromEnv:
         """Test Config.from_env() with zero rate limit (valid)."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.0")
         config = Config.from_env()
-        assert config.rate_limit_delay == 0.0
+        assert config.rate_limit_max_requests == 30
+        assert config.rate_limit_window == 60.0
 
     def test_from_env_negative_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative top_players."""
@@ -202,7 +208,8 @@ class TestConfigFromEnv:
         """Test Config.from_env() with float value for rate_limit_delay."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "1.5")
         config = Config.from_env()
-        assert config.rate_limit_delay == 1.5
+        assert config.rate_limit_max_requests == 90
+        assert config.rate_limit_window == 60.0
 
     def test_from_env_error_message_includes_variable_name(
         self, monkeypatch: pytest.MonkeyPatch

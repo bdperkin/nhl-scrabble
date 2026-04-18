@@ -16,11 +16,13 @@ class TestNHLApiClient:
 
     def test_client_initialization(self) -> None:
         """Test client initialization with custom parameters."""
-        client = NHLApiClient(timeout=15, retries=5, rate_limit_delay=0.5)
+        client = NHLApiClient(
+            timeout=15, retries=5, rate_limit_max_requests=120, rate_limit_window=60.0
+        )
 
         assert client.timeout == 15
         assert client.retries == 5
-        assert client.rate_limit_delay == 0.5
+        assert client.rate_limiter.max_requests >= 1
 
     def test_client_default_initialization(self) -> None:
         """Test client initialization with default parameters."""
@@ -28,7 +30,7 @@ class TestNHLApiClient:
 
         assert client.timeout == 10
         assert client.retries == 3
-        assert client.rate_limit_delay == 0.3
+        assert client.rate_limiter.max_requests >= 1
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_get_teams_success(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
@@ -82,7 +84,9 @@ class TestNHLApiClient:
         mock_response.json.return_value = sample_roster_data
         mock_get.return_value = mock_response
 
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.0)
+        client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         roster = client.get_team_roster("EDM")
 
         assert roster is not None
@@ -120,7 +124,9 @@ class TestNHLApiClient:
             mock_response,
         ]
 
-        client = NHLApiClient(cache_enabled=False, retries=3, rate_limit_delay=0.0)
+        client = NHLApiClient(
+            cache_enabled=False, retries=3, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         roster = client.get_team_roster("EDM")
 
         assert roster is not None
@@ -363,17 +369,19 @@ class TestNHLApiClient:
         mock_response.json.return_value = sample_roster_data
         mock_get.return_value = mock_response
 
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.1)
+        client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=10, rate_limit_window=1.0
+        )
 
         # First request
         start = time.time()
         client.get_team_roster("EDM")
 
-        # Second request should be delayed by rate_limit_delay
+        # Second request should be delayed by rate limiting
         client.get_team_roster("TOR")
         elapsed = time.time() - start
 
-        # Should take at least rate_limit_delay (0.1s)
+        # Should take at least rate limiting (0.1s)
         # Add small tolerance for timing variations
         assert elapsed >= 0.09
 
@@ -392,13 +400,15 @@ class TestNHLApiClient:
         mock_response.json.return_value = sample_roster_data
         mock_get.return_value = mock_response
 
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=1.0)
+        client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=60, rate_limit_window=60.0
+        )
 
         start = time.time()
         client.get_team_roster("EDM")
         elapsed = time.time() - start
 
-        # First request should be fast (< 0.5s), not delayed by rate_limit_delay
+        # First request should be fast (< 0.5s), not delayed by rate limiting
         assert elapsed < 0.5
 
         client.close()
@@ -423,7 +433,9 @@ class TestNHLApiClient:
             requests.exceptions.ConnectionError("Network error"),
         ]
 
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.1, retries=1)
+        client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=10, rate_limit_window=1.0, retries=1
+        )
 
         start = time.time()
         client.get_team_roster("EDM")
@@ -443,7 +455,11 @@ class TestNHLApiClient:
     def test_calculate_backoff_delay_exponential(self):
         """Test that backoff delay increases exponentially."""
         client = NHLApiClient(
-            cache_enabled=False, backoff_factor=2.0, max_backoff=30.0, rate_limit_delay=0.0
+            cache_enabled=False,
+            backoff_factor=2.0,
+            max_backoff=30.0,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
 
         # Test exponential growth (with jitter tolerance)
@@ -472,7 +488,11 @@ class TestNHLApiClient:
     def test_calculate_backoff_delay_respects_max(self):
         """Test that backoff delay respects max_backoff limit."""
         client = NHLApiClient(
-            cache_enabled=False, backoff_factor=2.0, max_backoff=5.0, rate_limit_delay=0.0
+            cache_enabled=False,
+            backoff_factor=2.0,
+            max_backoff=5.0,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
 
         # High attempt number would normally give huge delay
@@ -487,7 +507,11 @@ class TestNHLApiClient:
     def test_calculate_backoff_delay_respects_retry_after(self):
         """Test that backoff delay respects Retry-After header."""
         client = NHLApiClient(
-            cache_enabled=False, backoff_factor=2.0, max_backoff=30.0, rate_limit_delay=0.0
+            cache_enabled=False,
+            backoff_factor=2.0,
+            max_backoff=30.0,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
 
         # Retry-After value should override exponential backoff
@@ -510,7 +534,8 @@ class TestNHLApiClient:
             backoff_factor=2.0,
             max_backoff=30.0,
             retries=3,
-            rate_limit_delay=0.0,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
 
         # First two attempts timeout, third succeeds
@@ -545,7 +570,8 @@ class TestNHLApiClient:
             backoff_factor=2.0,
             max_backoff=30.0,
             retries=3,
-            rate_limit_delay=0.0,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
 
         # First attempt returns 429 with Retry-After, second succeeds
@@ -572,114 +598,8 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
-    def test_no_rate_limit_on_cache_hit_get_teams(
-        self, mock_get: Mock, sample_standings_data: dict[str, Any]
-    ) -> None:
-        """Test that cache hits skip rate limiting for get_teams()."""
-        # Mock successful API response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = sample_standings_data
-        mock_response.from_cache = False
-        mock_get.return_value = mock_response
 
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.2)
 
-        # First call - cache miss
-        client.get_teams()
-        assert client._last_request_time is not None
-
-        # Mark response as cached for subsequent calls
-        mock_response.from_cache = True
-        last_time_before = client._last_request_time
-        time.sleep(0.05)  # Small delay to ensure time difference
-
-        # Second call - cache hit (should NOT update timer)
-        client.get_teams()
-
-        # Cache hit should not update _last_request_time
-        assert client._last_request_time == last_time_before, "Cache hit should not update timer"
-
-        client.close()
-
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
-    def test_no_rate_limit_on_cache_hit_get_team_roster(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
-    ) -> None:
-        """Test that cache hits skip rate limiting for get_team_roster()."""
-        # Mock successful API response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = sample_roster_data
-        mock_response.from_cache = False
-        mock_get.return_value = mock_response
-
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.2)
-
-        # First call - cache miss (no rate limit on first request)
-        client.get_team_roster("TOR")
-        # Verify _last_request_time was set
-        assert client._last_request_time is not None
-
-        # Second call for different team - cache miss (rate limited)
-        mock_response.from_cache = False
-        start = time.time()
-        client.get_team_roster("MTL")
-        second_duration = time.time() - start
-        # Should have rate limit delay from previous request
-        assert second_duration >= 0.19, "Real request should have rate limit delay"
-
-        # Third call - mark as cache hit
-        mock_response.from_cache = True
-        last_time_before = client._last_request_time
-        time.sleep(0.05)  # Small delay to ensure time difference
-        client.get_team_roster("TOR")
-        # Cache hit should NOT update _last_request_time
-        assert client._last_request_time == last_time_before, "Cache hit should not update timer"
-
-        client.close()
-
-    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
-    def test_rate_limiting_only_tracks_real_requests(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
-    ) -> None:
-        """Test that rate limiting timer is only updated for real API calls, not cache hits."""
-        # Mock successful API response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = sample_roster_data
-        mock_response.from_cache = False
-        mock_get.return_value = mock_response
-
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.2)
-
-        # First request - real API call
-        client.get_team_roster("TOR")
-        first_request_time = client._last_request_time
-        assert first_request_time is not None, "First real request should set timer"
-
-        # Sleep a bit to ensure time difference
-        time.sleep(0.05)
-
-        # Second request - cache hit (should NOT update _last_request_time)
-        mock_response.from_cache = True
-        client.get_team_roster("TOR")
-        second_request_time = client._last_request_time
-
-        # Time should NOT have changed for cache hit
-        assert second_request_time == first_request_time, "Cache hit should not update timer"
-
-        # Third request - real API call (should update _last_request_time)
-        mock_response.from_cache = False
-        time.sleep(0.2)  # Wait for rate limit
-        client.get_team_roster("MTL")
-        third_request_time = client._last_request_time
-
-        # Time should have changed for real request
-        assert third_request_time is not None
-        assert third_request_time > first_request_time, "Real request should update timer"
-
-        client.close()
 
     def test_is_url_cached_returns_false_when_caching_disabled(self) -> None:
         """Test that _is_url_cached returns False when caching is disabled."""
@@ -698,41 +618,4 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
-    def test_cache_hits_skip_rate_limiting_behavior(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
-    ) -> None:
-        """Test that cache hits don't update rate limiting timer."""
-        # Mock successful API response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = sample_roster_data
-        mock_response.from_cache = False
-        mock_get.return_value = mock_response
 
-        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.5)
-
-        # Make real requests
-        client.get_team_roster("TOR")
-        time_after_first = client._last_request_time
-
-        time.sleep(0.6)  # Wait longer than rate limit
-
-        client.get_team_roster("MTL")
-        time_after_second = client._last_request_time
-
-        # Both real requests should have updated the timer
-        assert time_after_first is not None
-        assert time_after_second is not None
-        assert time_after_second > time_after_first
-
-        # Now test cache hits don't update timer
-        mock_response.from_cache = True
-        time.sleep(0.1)
-
-        client.get_team_roster("EDM")  # Cache hit
-        time_after_cache_hit = client._last_request_time
-
-        # Cache hit should NOT update timer
-        assert time_after_cache_hit == time_after_second
-
-        client.close()

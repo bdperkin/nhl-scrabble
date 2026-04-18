@@ -43,7 +43,7 @@ def scrabble_scorer() -> ScrabbleScorer:
 @pytest.fixture
 def api_client() -> NHLApiClient:
     """Return an NHLApiClient instance with test configuration."""
-    return NHLApiClient(timeout=5, retries=2, rate_limit_delay=0.0)
+    return NHLApiClient(timeout=5, retries=2, rate_limit_max_requests=1000, rate_limit_window=1.0)
 
 
 @pytest.fixture
