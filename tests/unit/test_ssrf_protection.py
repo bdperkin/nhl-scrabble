@@ -175,8 +175,8 @@ class TestValidateUrlForSsrf:
         # These are test assertions, not URL validation - CodeQL false positive
         assert (
             "api-web.nhle.com" in ALLOWED_DOMAINS
-        )  # lgtm[py/incomplete-url-substring-sanitization]
-        assert "api.nhle.com" in ALLOWED_DOMAINS  # lgtm[py/incomplete-url-substring-sanitization]
+        )  # codeql[py/incomplete-url-substring-sanitization]
+        assert "api.nhle.com" in ALLOWED_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
         assert len(ALLOWED_DOMAINS) >= 2
 
     def test_blocked_ip_ranges_constant(self) -> None:
