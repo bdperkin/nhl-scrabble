@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import sys
+from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 import click
+from jinja2 import Environment, PackageLoader, select_autoescape
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
@@ -317,9 +321,6 @@ def generate_json_report(
     Returns:
         JSON string
     """
-    import json
-    from dataclasses import asdict
-
     # Convert dataclasses to dictionaries
     teams_data = {
         abbrev: {
@@ -373,10 +374,6 @@ def generate_html_report(
     Returns:
         HTML string
     """
-    from datetime import datetime
-
-    from jinja2 import Environment, PackageLoader, select_autoescape
-
     # Setup Jinja2 environment
     env = Environment(
         loader=PackageLoader("nhl_scrabble", "templates"),
@@ -420,8 +417,6 @@ def generate_html_report(
     }
 
     # Render template
-    from datetime import timezone
-
     template = env.get_template("report.html")
     html = template.render(
         timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
