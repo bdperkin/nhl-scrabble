@@ -196,6 +196,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Benefits: Prevents MITM attacks, ensures connection authenticity, protects API data
   - Related: Security task #135 - SSL/TLS certificate verification
 
+- **DoS Prevention with Circuit Breaker** - Protection against denial-of-service and cascading failures
+
+  - Added `CircuitBreaker` class implementing circuit breaker pattern for failure detection
+  - Integrated circuit breaker into `NHLApiClient` to wrap all API requests
+  - Added connection pool limits via HTTPAdapter (configurable max connections per host)
+  - Added configuration parameters for DoS prevention:
+    - `dos_max_connections`: Maximum connection pool connections (default: 10)
+    - `dos_max_per_host`: Maximum connections per host (default: 5)
+    - `dos_circuit_breaker_threshold`: Number of failures before circuit opens (default: 5)
+    - `dos_circuit_breaker_timeout`: Circuit breaker timeout in seconds (default: 60.0)
+  - Circuit breaker states: Closed (normal), Open (failing fast), Half-Open (testing recovery)
+  - Prevents resource exhaustion from repeated failing requests
+  - Automatic recovery testing after timeout period
+  - Added comprehensive unit tests for circuit breaker functionality
+  - Benefits: Prevents cascading failures, reduces resource exhaustion, faster failure recovery
+  - Related: Security task #134 - DoS prevention with circuit breaker
+
 ### Improved
 
 - **Optimized JSON Serialization with to_dict() Methods** - 2-3x faster JSON serialization

@@ -486,6 +486,10 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
         max_backoff=config.max_backoff,
         cache_enabled=config.cache_enabled,
         cache_expiry=config.cache_expiry,
+        dos_max_connections=config.dos_max_connections,
+        dos_max_per_host=config.dos_max_per_host,
+        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
+        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
     )
 
     # Clear cache if requested
@@ -1365,6 +1369,10 @@ def fetch_dashboard_data(
         max_backoff=config.max_backoff,
         cache_enabled=config.cache_enabled,
         cache_expiry=config.cache_expiry,
+        dos_max_connections=config.dos_max_connections,
+        dos_max_per_host=config.dos_max_per_host,
+        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
+        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
     )
 
     scorer = ScrabbleScorer()

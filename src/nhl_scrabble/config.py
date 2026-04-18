@@ -39,6 +39,10 @@ class Config:
         verbose: Enable verbose logging
         output_format: Output format (text, json, html)
         sanitize_logs: Sanitize sensitive data from logs (disable only for debugging)
+        dos_max_connections: Maximum number of connection pool connections (DoS prevention)
+        dos_max_per_host: Maximum connections per host (DoS prevention)
+        dos_circuit_breaker_threshold: Number of failures before circuit opens
+        dos_circuit_breaker_timeout: Circuit breaker timeout in seconds
     """
 
     api_base_url: str = "https://api-web.nhle.com/v1"
@@ -56,6 +60,10 @@ class Config:
     verbose: bool = False
     output_format: str = "text"
     sanitize_logs: bool = True
+    dos_max_connections: int = 10
+    dos_max_per_host: int = 5
+    dos_circuit_breaker_threshold: int = 5
+    dos_circuit_breaker_timeout: float = 60.0
 
     @classmethod
     def from_env(cls) -> "Config":  # noqa: C901
@@ -81,6 +89,10 @@ class Config:
             NHL_SCRABBLE_VERBOSE: Verbose logging (true/false, default: false)
             NHL_SCRABBLE_OUTPUT_FORMAT: Output format (text/json/html, default: text)
             NHL_SCRABBLE_SANITIZE_LOGS: Sanitize logs (true/false, default: true)
+            NHL_SCRABBLE_DOS_MAX_CONNECTIONS: Max connection pool connections (1-100, default: 10)
+            NHL_SCRABBLE_DOS_MAX_PER_HOST: Max connections per host (1-50, default: 5)
+            NHL_SCRABBLE_DOS_CIRCUIT_BREAKER_THRESHOLD: Circuit breaker failure threshold (1-20, default: 5)
+            NHL_SCRABBLE_DOS_CIRCUIT_BREAKER_TIMEOUT: Circuit breaker timeout seconds (1.0-300.0, default: 60.0)
 
         Returns:
             Config instance with validated values from environment
@@ -249,6 +261,18 @@ class Config:
             verbose=get_bool("NHL_SCRABBLE_VERBOSE", "false"),
             output_format=get_enum("NHL_SCRABBLE_OUTPUT_FORMAT", "text", {"text", "json", "html"}),
             sanitize_logs=get_bool("NHL_SCRABBLE_SANITIZE_LOGS", "true"),
+            dos_max_connections=get_int(
+                "NHL_SCRABBLE_DOS_MAX_CONNECTIONS", "10", min_value=1, max_value=100
+            ),
+            dos_max_per_host=get_int(
+                "NHL_SCRABBLE_DOS_MAX_PER_HOST", "5", min_value=1, max_value=50
+            ),
+            dos_circuit_breaker_threshold=get_int(
+                "NHL_SCRABBLE_DOS_CIRCUIT_BREAKER_THRESHOLD", "5", min_value=1, max_value=20
+            ),
+            dos_circuit_breaker_timeout=get_float(
+                "NHL_SCRABBLE_DOS_CIRCUIT_BREAKER_TIMEOUT", "60.0", min_value=1.0, max_value=300.0
+            ),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -273,6 +297,10 @@ class Config:
             "verbose": self.verbose,
             "output_format": self.output_format,
             "sanitize_logs": self.sanitize_logs,
+            "dos_max_connections": self.dos_max_connections,
+            "dos_max_per_host": self.dos_max_per_host,
+            "dos_circuit_breaker_threshold": self.dos_circuit_breaker_threshold,
+            "dos_circuit_breaker_timeout": self.dos_circuit_breaker_timeout,
         }
 
     def __repr__(self) -> str:
