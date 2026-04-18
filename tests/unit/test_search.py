@@ -164,7 +164,7 @@ class TestPlayerSearchWildcardSearch:
         assert all("Mac" in p.full_name for p in results)
 
     def test_wildcard_search_question_mark(self, searcher: PlayerSearch) -> None:
-        """Test wildcard search with ? (single character)."""
+        """Test wildcard search using question mark for single character matching."""
         results = searcher.search("?lex Ovechkin")
         assert len(results) == 1
         assert results[0].full_name == "Alex Ovechkin"
