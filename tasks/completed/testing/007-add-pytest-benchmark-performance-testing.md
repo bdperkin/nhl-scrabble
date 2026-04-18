@@ -439,21 +439,21 @@ pytest tests/benchmarks/ --benchmark-only --benchmark-histogram
 
 ## Acceptance Criteria
 
-- [ ] pytest-benchmark added to `[project.optional-dependencies.test]`
-- [ ] Lock file updated with pytest-benchmark
-- [ ] `tests/benchmarks/` directory created
-- [ ] Benchmark tests written for scoring, reports (minimum 4 benchmarks)
-- [ ] `[tool.pytest_benchmark]` configuration added to `pyproject.toml`
-- [ ] Regression threshold set (e.g., 20%)
-- [ ] `[testenv:benchmark]` added to `tox.ini`
-- [ ] Baseline established and saved
-- [ ] Running `pytest tests/benchmarks/` shows timing statistics
-- [ ] `--benchmark-compare` shows comparison against baseline
-- [ ] Regression detection works (fails if too slow)
-- [ ] Histogram generation works with `--benchmark-histogram`
-- [ ] Works with existing pytest configuration
-- [ ] Documentation updated (CONTRIBUTING.md)
-- [ ] Baseline values documented
+- [x] pytest-benchmark added to `[project.optional-dependencies.test]`
+- [x] Lock file updated with pytest-benchmark
+- [x] `tests/benchmarks/` directory created
+- [x] Benchmark tests written for scoring, reports (14 benchmarks total)
+- [x] `[tool.pytest_benchmark]` configuration added to `pyproject.toml`
+- [x] Regression threshold set (20%)
+- [x] `[testenv:benchmark]` and `[testenv:benchmark-compare]` added to `tox.ini`
+- [x] Baseline established and saved
+- [x] Running `pytest tests/benchmarks/` shows timing statistics
+- [x] `--benchmark-compare` shows comparison against baseline
+- [x] Regression detection works (fails if >20% slower)
+- [x] Histogram generation works with `--benchmark-histogram`
+- [x] Works with existing pytest configuration
+- [x] Documentation updated (CONTRIBUTING.md with 82 lines of benchmark guidance)
+- [x] Baseline values documented
 
 ## Related Files
 
@@ -752,3 +752,142 @@ A: pytest-benchmark focuses on time. Use memory_profiler for memory.
 - Whether benchmarks added to CI (optional)
 - Any performance optimizations discovered
 - Developer feedback on benchmark utility
+
+## Implementation Notes
+
+**Implemented**: 2026-04-17
+**Branch**: testing/007-add-pytest-benchmark-performance-testing
+**PR**: #178 - https://github.com/bdperkin/nhl-scrabble/pull/178
+**Commits**: 2 commits (1553a18, 94558d3)
+
+### Actual Implementation
+
+Followed the proposed solution with enhancements:
+
+**Benchmark Suite (14 tests total):**
+
+- Scrabble scoring: 8 tests (short/medium/long names, full names, team rosters, player models)
+- Data processing: 4 tests (player sorting, team sorting, division aggregation, team totals)
+- String operations: 2 tests (player formatting, report generation)
+
+**Configuration:**
+
+- Regression threshold: 20% (as planned)
+- Storage: `.benchmarks/` committed to git for cross-branch comparison
+- Warmup iterations: 5
+- Statistical analysis: comprehensive (min, max, mean, stddev, median, IQR, outliers, rounds, iterations)
+
+**Baselines Established:**
+
+- Short name scoring: ~800 ns (target: \<100 ns baseline was conservative)
+- Full league scoring (~700 players): ~1.9 ms (target: \<100 μs - actual is slower due to realistic data)
+- Player sorting: ~51 μs (target: \<1 ms - excellent performance)
+- Division aggregation: ~67 μs (target: \<500 μs - excellent performance)
+- Report formatting: ~252 μs (target: N/A - new baseline established)
+
+**Documentation:**
+
+- CONTRIBUTING.md: Added 82-line comprehensive benchmark section
+- Covers usage, targets, configuration, when to run, example output, regression detection, best practices
+
+### Challenges Encountered
+
+1. **Tox + xdist conflict**: pytest-xdist automatically disables benchmarks
+
+   - **Solution**: Added `-n 0` flag to benchmark tox environments to force sequential execution
+
+1. **Linting generated files**: doc8, codespell, yamllint checking generated documentation
+
+   - **Solution**:
+     - Updated `.yamllint` with ignore patterns for `.venv/`, `.tox/`, etc.
+     - Updated codespell skip patterns to exclude `docs/_build/`
+     - Updated doc8 tox command with `--ignore-path docs/_build`
+     - Removed generated docs from working tree
+
+1. **Baseline values**: Initial targets were conservative, actual performance varies with real data complexity
+
+   - **Solution**: Established realistic baselines based on actual test runs with representative data
+
+### Deviations from Plan
+
+1. **More benchmarks than minimum**: Created 14 tests instead of minimum 4
+
+   - **Rationale**: Comprehensive coverage of critical paths (scoring, data processing, string operations)
+
+1. **Committed baselines to git**: Chose to commit `.benchmarks/` directory
+
+   - **Rationale**: Enables cross-branch comparison and CI integration
+   - **Alternative considered**: Local-only baselines (excluded from git)
+
+1. **Configuration fixes in separate commit**: Split linting config fixes from main implementation
+
+   - **Rationale**: Clearer git history and easier to review
+
+1. **Enhanced documentation**: Added more detailed documentation than planned
+
+   - **Rationale**: Better developer experience and clearer usage patterns
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 1-2h
+- **Actual**: ~2.5h
+- **Breakdown**:
+  - Main implementation: 1.5h (benchmark tests, configuration, baselines)
+  - Configuration fixes: 0.5h (linting configs for generated files)
+  - Documentation: 0.5h (CONTRIBUTING.md updates)
+- **Reason**: Additional time for troubleshooting tox/xdist conflict and fixing linting config issues
+
+### Related PRs
+
+- #178 - Main implementation (this PR)
+
+### Lessons Learned
+
+1. **Benchmark execution mode**: Always use `-n 0` with benchmarks to avoid xdist conflicts
+1. **Linting generated files**: Need explicit ignore patterns for docs/\_build, .venv, .tox
+1. **Baseline establishment**: Run benchmarks 2-3 times to ensure stable baselines
+1. **Documentation importance**: Comprehensive docs prevent future confusion about usage
+1. **Git storage for baselines**: Committing baselines enables better cross-branch comparisons
+
+### Performance Metrics
+
+**14 Benchmark Tests:**
+
+- All tests passing
+- Baseline saved: `.benchmarks/Linux-CPython-3.10-64bit/0001_baseline.json`
+- Regression threshold: 20%
+- Statistical analysis: min, max, mean, stddev, median, IQR
+
+**Example Results:**
+
+- `test_benchmark_short_name`: 754ns min, 798ns mean (excellent)
+- `test_benchmark_full_league`: 1.9ms mean for 700 players (good)
+- `test_benchmark_sort_players_by_score`: 51μs mean (excellent)
+- `test_benchmark_aggregate_by_division`: 67μs mean (excellent)
+
+### Test Coverage
+
+- **Total tests**: 184 (170 existing + 14 new benchmark tests)
+- **All tests passing**: ✅
+- **Overall coverage**: 93.25%
+- **Benchmark-specific coverage**: Benchmarks measure performance, not coverage
+
+### Files Created/Modified
+
+**Created:**
+
+- `tests/benchmarks/__init__.py` (26 lines)
+- `tests/benchmarks/test_benchmark_scoring.py` (190 lines, 8 tests)
+- `tests/benchmarks/test_benchmark_reports.py` (233 lines, 6 tests)
+- `.benchmarks/Linux-CPython-3.10-64bit/0001_baseline.json` (670 lines)
+
+**Modified:**
+
+- `pyproject.toml` (+32 lines: dependency + configuration)
+- `tox.ini` (+24 lines: benchmark environments + linting fixes)
+- `CONTRIBUTING.md` (+82 lines: benchmark usage guide)
+- `.yamllint` (+17 lines: ignore patterns)
+- `uv.lock` (+25 lines: pytest-benchmark dependencies)
+
+**Total Lines Added**: 1,297 lines
+**Total Files Changed**: 9 files

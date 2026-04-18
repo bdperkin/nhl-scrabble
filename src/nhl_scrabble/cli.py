@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import sys
+from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 import click
+from jinja2 import Environment, PackageLoader, select_autoescape
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
@@ -18,12 +21,9 @@ from nhl_scrabble.config import Config
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
-from nhl_scrabble.reports.conference_report import ConferenceReporter
-from nhl_scrabble.reports.division_report import DivisionReporter
-from nhl_scrabble.reports.playoff_report import PlayoffReporter
-from nhl_scrabble.reports.stats_report import StatsReporter
-from nhl_scrabble.reports.team_report import TeamReporter
+from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
+from nhl_scrabble.ui.progress import ProgressManager
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -113,6 +113,12 @@ def cli() -> None:
     help="Enable verbose logging",
 )
 @click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars",
+)
+@click.option(
     "--no-cache",
     is_flag=True,
     help="Disable API response caching (always fetch fresh data)",
@@ -134,14 +140,21 @@ def cli() -> None:
     default=5,
     help="Number of top players per team to show (default: 5)",
 )
-def analyze(
+@click.option(
+    "--report",
+    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
+    help="Generate specific report only (default: all reports)",
+)
+def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     output_format: str,
     output: str | None,
     verbose: bool,
+    quiet: bool,
     no_cache: bool,
     clear_cache: bool,
     top_players: int,
     top_team_players: int,
+    report: str | None,
 ) -> None:
     """Run the NHL Scrabble analysis.
 
@@ -151,10 +164,13 @@ def analyze(
     Examples:
         nhl-scrabble analyze
         nhl-scrabble analyze --verbose
+        nhl-scrabble analyze --quiet
         nhl-scrabble analyze --output report.txt
         nhl-scrabble analyze --format json --output report.json
         nhl-scrabble analyze --no-cache
         nhl-scrabble analyze --clear-cache
+        nhl-scrabble analyze --report team
+        nhl-scrabble analyze --report playoff --output playoffs.txt
     """
     # Load configuration first to get sanitize_logs setting
     config = Config.from_env()
@@ -182,7 +198,7 @@ def analyze(
 
     try:
         # Run the analysis
-        result = run_analysis(config, clear_cache=clear_cache)
+        result = run_analysis(config, clear_cache=clear_cache, report_filter=report, quiet=quiet)
 
         # Output results
         if output:
@@ -205,12 +221,20 @@ def analyze(
         sys.exit(1)
 
 
-def run_analysis(config: Config, clear_cache: bool = False) -> str:
+def run_analysis(
+    config: Config,
+    clear_cache: bool = False,
+    report_filter: str | None = None,
+    quiet: bool = False,
+) -> str:
     """Run the complete NHL Scrabble analysis.
 
     Args:
         config: Configuration object
         clear_cache: Whether to clear the API cache before running
+        report_filter: Optional filter for specific report type
+            (conference, division, playoff, team, stats)
+        quiet: Whether to suppress progress bars
 
     Returns:
         Complete report string
@@ -238,32 +262,27 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
     team_processor = TeamProcessor(api_client, scorer)
     playoff_calculator = PlayoffCalculator()
 
-    # Initialize reporters
-    conference_reporter = ConferenceReporter()
-    division_reporter = DivisionReporter()
-    playoff_reporter = PlayoffReporter()
-    team_reporter = TeamReporter(top_players_per_team=config.top_team_players_count)
-    stats_reporter = StatsReporter(top_players_count=config.top_players_count)
+    # Create progress manager
+    progress_mgr = ProgressManager(enabled=not quiet)
 
-    # Process all teams with progress indicator
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        console=console,
-    ) as progress:
-        task = progress.add_task("Fetching NHL rosters...", total=None)
+    # Get team count for progress tracking
+    teams_info = api_client.get_teams()
+    total_teams = len(teams_info)
 
-        team_scores, all_players, failed_teams = team_processor.process_all_teams()
+    # Process all teams with progress tracking
+    with progress_mgr.track_api_fetching(total_teams) as update_progress:
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(
+            progress_callback=update_progress
+        )
 
-        progress.update(task, description="[green]✓ Rosters fetched")
-
-    # Display summary
-    console.print(
-        f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-        f"{len(team_scores) + len(failed_teams)} teams"
-    )
-    if failed_teams:
-        console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+    # Display summary (only if not quiet)
+    if not quiet:
+        console.print(
+            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+            f"{len(team_scores) + len(failed_teams)} teams"
+        )
+        if failed_teams:
+            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
 
     # Calculate standings
     division_standings = team_processor.calculate_division_standings(team_scores)
@@ -287,16 +306,20 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
             conference_standings,
             playoff_standings,
         )
-    # Generate text reports
-    reports = [
-        conference_reporter.generate(conference_standings),
-        division_reporter.generate(division_standings),
-        playoff_reporter.generate(playoff_standings),
-        team_reporter.generate(team_scores),
-        stats_reporter.generate((all_players, division_standings, conference_standings)),
-    ]
 
-    return "\n".join(reports) + "\n" + "=" * 80 + "\n"
+    # Use lazy report generator for text format
+    report_generator = ReportGenerator(
+        team_scores=team_scores,
+        all_players=all_players,
+        division_standings=division_standings,
+        conference_standings=conference_standings,
+        playoff_standings=playoff_standings,
+        top_players_count=config.top_players_count,
+        top_team_players_count=config.top_team_players_count,
+    )
+
+    # Generate requested report (lazy evaluation)
+    return report_generator.get_report(report_filter)
 
 
 def generate_json_report(
@@ -318,9 +341,6 @@ def generate_json_report(
     Returns:
         JSON string
     """
-    import json
-    from dataclasses import asdict
-
     # Convert dataclasses to dictionaries
     teams_data = {
         abbrev: {
@@ -374,10 +394,6 @@ def generate_html_report(
     Returns:
         HTML string
     """
-    from datetime import datetime
-
-    from jinja2 import Environment, PackageLoader, select_autoescape
-
     # Setup Jinja2 environment
     env = Environment(
         loader=PackageLoader("nhl_scrabble", "templates"),
@@ -421,8 +437,6 @@ def generate_html_report(
     }
 
     # Render template
-    from datetime import timezone
-
     template = env.get_template("report.html")
     html = template.render(
         timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),

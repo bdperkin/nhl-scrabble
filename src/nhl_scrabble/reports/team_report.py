@@ -1,5 +1,7 @@
 """Team scores reporter."""
 
+import heapq
+
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.reports.base import BaseReporter
 
@@ -35,9 +37,9 @@ class TeamReporter(BaseReporter):
             )
 
             # Show top players from each team
-            top_players = sorted(team_data.players, key=lambda x: x.full_score, reverse=True)[
-                : self.top_players_per_team
-            ]
+            top_players = heapq.nlargest(
+                self.top_players_per_team, team_data.players, key=lambda x: x.full_score
+            )
 
             for i, player in enumerate(top_players, 1):
                 output += (

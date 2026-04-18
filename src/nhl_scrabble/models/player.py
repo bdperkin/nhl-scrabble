@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(slots=True)
 class PlayerScore:
     """Represents a player with their Scrabble score information.
 

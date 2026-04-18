@@ -562,3 +562,169 @@ class TestNHLApiClient:
         assert mock_get.call_count == 2
 
         client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_no_rate_limit_on_cache_hit_get_teams(
+        self, mock_get: Mock, sample_standings_data: dict[str, Any]
+    ) -> None:
+        """Test that cache hits skip rate limiting for get_teams()."""
+        # Mock successful API response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_standings_data
+        mock_response.from_cache = False
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.2)
+
+        # First call - cache miss
+        client.get_teams()
+        assert client._last_request_time is not None
+
+        # Mark response as cached for subsequent calls
+        mock_response.from_cache = True
+        last_time_before = client._last_request_time
+        time.sleep(0.05)  # Small delay to ensure time difference
+
+        # Second call - cache hit (should NOT update timer)
+        client.get_teams()
+
+        # Cache hit should not update _last_request_time
+        assert client._last_request_time == last_time_before, "Cache hit should not update timer"
+
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_no_rate_limit_on_cache_hit_get_team_roster(
+        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+    ) -> None:
+        """Test that cache hits skip rate limiting for get_team_roster()."""
+        # Mock successful API response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_roster_data
+        mock_response.from_cache = False
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.2)
+
+        # First call - cache miss (no rate limit on first request)
+        client.get_team_roster("TOR")
+        # Verify _last_request_time was set
+        assert client._last_request_time is not None
+
+        # Second call for different team - cache miss (rate limited)
+        mock_response.from_cache = False
+        start = time.time()
+        client.get_team_roster("MTL")
+        second_duration = time.time() - start
+        # Should have rate limit delay from previous request
+        assert second_duration >= 0.19, "Real request should have rate limit delay"
+
+        # Third call - mark as cache hit
+        mock_response.from_cache = True
+        last_time_before = client._last_request_time
+        time.sleep(0.05)  # Small delay to ensure time difference
+        client.get_team_roster("TOR")
+        # Cache hit should NOT update _last_request_time
+        assert client._last_request_time == last_time_before, "Cache hit should not update timer"
+
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_rate_limiting_only_tracks_real_requests(
+        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+    ) -> None:
+        """Test that rate limiting timer is only updated for real API calls, not cache hits."""
+        # Mock successful API response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_roster_data
+        mock_response.from_cache = False
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.2)
+
+        # First request - real API call
+        client.get_team_roster("TOR")
+        first_request_time = client._last_request_time
+        assert first_request_time is not None, "First real request should set timer"
+
+        # Sleep a bit to ensure time difference
+        time.sleep(0.05)
+
+        # Second request - cache hit (should NOT update _last_request_time)
+        mock_response.from_cache = True
+        client.get_team_roster("TOR")
+        second_request_time = client._last_request_time
+
+        # Time should NOT have changed for cache hit
+        assert second_request_time == first_request_time, "Cache hit should not update timer"
+
+        # Third request - real API call (should update _last_request_time)
+        mock_response.from_cache = False
+        time.sleep(0.2)  # Wait for rate limit
+        client.get_team_roster("MTL")
+        third_request_time = client._last_request_time
+
+        # Time should have changed for real request
+        assert third_request_time is not None
+        assert third_request_time > first_request_time, "Real request should update timer"
+
+        client.close()
+
+    def test_is_url_cached_returns_false_when_caching_disabled(self) -> None:
+        """Test that _is_url_cached returns False when caching is disabled."""
+        client = NHLApiClient(cache_enabled=False)
+        result = client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
+        assert result is False
+        client.close()
+
+    def test_is_url_cached_returns_false_for_no_cache_attribute(self) -> None:
+        """Test that _is_url_cached returns False when session has no cache attribute."""
+        client = NHLApiClient(cache_enabled=False)
+        # Regular session doesn't have 'cache' attribute
+        assert not hasattr(client.session, "cache")
+        result = client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
+        assert result is False
+        client.close()
+
+    @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    def test_cache_hits_skip_rate_limiting_behavior(
+        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+    ) -> None:
+        """Test that cache hits don't update rate limiting timer."""
+        # Mock successful API response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = sample_roster_data
+        mock_response.from_cache = False
+        mock_get.return_value = mock_response
+
+        client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.5)
+
+        # Make real requests
+        client.get_team_roster("TOR")
+        time_after_first = client._last_request_time
+
+        time.sleep(0.6)  # Wait longer than rate limit
+
+        client.get_team_roster("MTL")
+        time_after_second = client._last_request_time
+
+        # Both real requests should have updated the timer
+        assert time_after_first is not None
+        assert time_after_second is not None
+        assert time_after_second > time_after_first
+
+        # Now test cache hits don't update timer
+        mock_response.from_cache = True
+        time.sleep(0.1)
+
+        client.get_team_roster("EDM")  # Cache hit
+        time_after_cache_hit = client._last_request_time
+
+        # Cache hit should NOT update timer
+        assert time_after_cache_hit == time_after_second
+
+        client.close()

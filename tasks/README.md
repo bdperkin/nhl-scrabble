@@ -50,48 +50,50 @@ Each task is assigned a priority:
 
 **Documented Effort**: 17-22.5 hours
 
-### Optimization (11 tasks, 11 documented)
+### Optimization (4 tasks, 11 documented, 7 completed)
 
-| ID  | Title                                    | Priority | Effort   | Issue |
-| --- | ---------------------------------------- | -------- | -------- | ----- |
-| 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |
-| 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |
-| 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  |
-| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  |
-| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  |
-| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |
-| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  |
-| 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  |
-| 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  |
-| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  |
-| 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |
+| ID  | Title                                    | Priority | Effort   | Issue | Status      |
+| --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
+| 001 | Optimize Report String Concatenation     | HIGH     | 1-2h     | #112  |             |
+| 002 | Implement Concurrent API Fetching        | HIGH     | 3-4h     | #113  |             |
+| 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  | ✅ Complete |
+| 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  | ✅ Complete |
+| 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  | ✅ Complete |
+| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |             |
+| 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  | ✅ Complete |
+| 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  | ✅ Complete |
+| 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  | ✅ Complete |
+| 010 | Rate Limiting on Cache Hits              | LOW      | 1-2h     | #141  | ✅ Complete |
+| 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
 **Documented Effort**: 16-24.5 hours
-**Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x)
+**Completed**: 11.33 hours (Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182)
+**Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (9 tasks, 9 documented)
+### Enhancements (8 tasks active, 9 documented, 1 completed)
 
-| ID  | Title                            | Priority | Effort | Issue |
-| --- | -------------------------------- | -------- | ------ | ----- |
-| 001 | Progress Bars                    | MEDIUM   | 2-3h   | #132  |
-| 002 | Interactive Mode                 | MEDIUM   | 4-6h   | #133  |
-| 003 | Historical Data                  | LOW      | 8-12h  | #143  |
-| 004 | CSV/Excel Export                 | LOW      | 3-4h   | #144  |
-| 005 | Advanced Filtering Options       | LOW      | 4-5h   | #145  |
-| 006 | Custom Scoring Rules             | LOW      | 3-4h   | #146  |
-| 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  |
-| 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  |
-| 009 | Player Search                    | LOW      | 3-4h   | #149  |
+| ID  | Title                            | Priority | Effort | Issue | Status      |
+| --- | -------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Progress Bars                    | MEDIUM   | 2-3h   | #132  | ✅ Complete |
+| 002 | Interactive Mode                 | MEDIUM   | 4-6h   | #133  |             |
+| 003 | Historical Data                  | LOW      | 8-12h  | #143  |             |
+| 004 | CSV/Excel Export                 | LOW      | 3-4h   | #144  |             |
+| 005 | Advanced Filtering Options       | LOW      | 4-5h   | #145  |             |
+| 006 | Custom Scoring Rules             | LOW      | 3-4h   | #146  |             |
+| 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  |             |
+| 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  |             |
+| 009 | Player Search                    | LOW      | 3-4h   | #149  |             |
 
 **Documented Effort**: 35-49 hours
+**Completed**: 3 hours (Task 001: progress bars 3h - PR #172)
 
-### Testing (1 task, 1 documented)
+### Testing (0 tasks)
 
-| ID  | Title                                  | Priority | Effort | Issue |
-| --- | -------------------------------------- | -------- | ------ | ----- |
-| 007 | Add pytest-benchmark Performance Tests | MEDIUM   | 1-2h   | #125  |
+| ID  | Title | Priority | Effort | Issue |
+| --- | ----- | -------- | ------ | ----- |
+|     |       |          |        |       |
 
-**Documented Effort**: 1-2 hours
+**Total Effort**: 0 hours
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking.
 
@@ -134,13 +136,13 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 52 tasks (50 active, 2 completed)
-**Remaining Effort**: 190.5-269 hours (7 hours completed)
+**Total Tasks**: 52 tasks (48 active, 4 completed)
+**Remaining Effort**: 186.5-265 hours (11 hours completed)
 
 ### By Category
 
 - **Security**: 7 tasks, 17-22.5h
-- **Optimization**: 11 tasks, 16-24.5h (5-10x performance improvement)
+- **Optimization**: 11 tasks, 12-20.5h remaining (5-10x performance improvement, 4h completed)
 - **Enhancement**: 9 tasks, 35-49h
 - **Testing**: 2 tasks, 1.5-3.0h
 - **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
@@ -150,12 +152,16 @@ Each task is assigned a priority:
 
 ### By Priority
 
-- **MEDIUM**: 5 tasks remaining, 41.25-63h (web interface 5 tasks)
-- **LOW**: 46 tasks, 152.75-209.5h (long-term improvements and new capabilities)
+- **MEDIUM**: 4 tasks remaining, 39.25-61h (web interface 4 tasks, optimization 1 task)
+- **LOW**: 45 tasks, 148.75-205.5h (long-term improvements and new capabilities)
 
 ### Completed Tasks
 
 - **Task 002** (new-features): FastAPI Infrastructure - 3.5h (PR #174, 2026-04-17)
+- **Task 003** (optimization): heapq.nlargest() for Top-N Queries - 2.5h (PR #188, 2026-04-17)
+- **Task 004** (new-features): Web Frontend Templates - 3.5h (PR #176, 2026-04-17)
+- **Task 004** (optimization): Single-Pass Aggregations in Stats Report - 1.5h (PR #189, 2026-04-17)
+- **Task 005** (optimization): Move Imports to Module Level - 0.33h (2026-04-17)
 
 ## How to Use These Tasks
 
@@ -495,7 +501,6 @@ All tasks now fully documented with implementation plans, acceptance criteria, a
 - security/001-add-pip-licenses-compliance.md (30-60min) - #126
 - enhancement/003-comprehensive-documentation-badges.md (1-2h) - #91
 - optimization/008-memoized-scoring.md (1-2h) - #139
-- optimization/010-rate-limiting-cache-hits.md (1-2h) - #141
 - optimization/011-log-level-optimization.md (1-2h) - #142
 - security/006-ssl-verification.md (1-2h) - #135
 - enhancement/008-watch-mode.md (2-3h) - #148
@@ -710,7 +715,7 @@ security/002-input-validation (#129)
 
 ```
 optimization/001-api-caching (#42) ✅
-└── optimization/010-rate-limiting-cache-hits (#141)
+└── optimization/010-rate-limiting-cache-hits (#141) ✅
     └── Builds on caching implementation
 ```
 
@@ -879,4 +884,5 @@ ______________________________________________________________________
 | 001 | Add pytest-timeout Plugin                  | Testing      | 2026-04-17 | 0.75h         | #168 |
 | 002 | Add pytest-xdist Parallel Testing          | Testing      | 2026-04-17 | 0.75h         | #169 |
 | 006 | Add diff-cover PR Coverage                 | Testing      | 2026-04-17 | 0.75h         | #170 |
+| 007 | Add pytest-benchmark Performance Tests     | Testing      | 2026-04-17 | 2.5h          | #178 |
 | 008 | Add check-jsonschema Validation            | Testing      | 2026-04-17 | 0.75h         | #179 |
