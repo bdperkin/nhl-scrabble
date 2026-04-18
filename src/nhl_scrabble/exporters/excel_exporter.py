@@ -77,6 +77,8 @@ class ExcelExporter:
                     if cell.value:
                         max_length = max(max_length, len(str(cell.value)))
                 except (AttributeError, TypeError):
+                    # Ignore cells with values that can't be converted to string
+                    # (e.g., merged cells, formula errors, or special cell types)
                     pass
 
             adjusted_width = min(max_length + 2, 50)  # Cap at 50
