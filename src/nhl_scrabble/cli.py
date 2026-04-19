@@ -27,6 +27,7 @@ from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 from nhl_scrabble.search import PlayerSearch
 from nhl_scrabble.ui.progress import ProgressManager
+from nhl_scrabble.validators import ValidationError, validate_file_path, validate_integer_range
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -83,6 +84,62 @@ def validate_output_path(output: str | None) -> None:
 
         # Warn if file will be overwritten
         logger.warning(f"Output file exists and will be overwritten: {output_path}")
+
+
+def validate_cli_arguments(
+    output: str | None, top_players: int, top_team_players: int
+) -> tuple[Path | None, int, int]:
+    """Validate all CLI arguments before processing.
+
+    Uses comprehensive validators from validators module to check all inputs
+    for security issues and invalid values. This validation happens before
+    any API calls to provide immediate feedback.
+
+    Args:
+        output: Output file path, or None for stdout
+        top_players: Number of top players to show
+        top_team_players: Number of top players per team to show
+
+    Returns:
+        Tuple of (validated_output_path, validated_top_players, validated_top_team_players)
+
+    Raises:
+        click.ClickException: If any argument is invalid with helpful error message
+
+    Security:
+        - Prevents path traversal attacks via output path
+        - Validates numeric parameters to prevent DoS via memory exhaustion
+        - Provides early validation before expensive operations
+
+    Examples:
+        >>> validate_cli_arguments("output.txt", 20, 5)
+        (PosixPath('/current/dir/output.txt'), 20, 5)
+        >>> validate_cli_arguments(None, 20, 5)  # stdout
+        (None, 20, 5)
+    """
+    validated_output: Path | None = None
+
+    try:
+        # Validate output path if provided
+        if output:
+            # Allow overwrite since we'll warn the user
+            validated_output = validate_file_path(output, allow_overwrite=True)
+            if validated_output.exists():
+                logger.warning(f"Output file exists and will be overwritten: {validated_output}")
+
+        # Validate numeric parameters
+        validated_top_players = validate_integer_range(
+            top_players, min_val=1, max_val=100, name="top_players"
+        )
+
+        validated_top_team_players = validate_integer_range(
+            top_team_players, min_val=1, max_val=50, name="top_team_players"
+        )
+
+        return validated_output, validated_top_players, validated_top_team_players
+
+    except ValidationError as e:
+        raise click.ClickException(str(e)) from e
 
 
 @click.group()
@@ -183,12 +240,22 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
         nhl-scrabble analyze --report team
         nhl-scrabble analyze --report playoff --output playoffs.txt
     """
-    # Load configuration first to get sanitize_logs setting
-    config = Config.from_env()
+    # Validate CLI arguments first (before expensive operations)
+    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
+        output, top_players, top_team_players
+    )
+
+    # Load configuration (which will also validate environment variables)
+    try:
+        config = Config.from_env()
+    except ValueError as e:
+        # Convert config validation errors to ClickException for consistent error handling
+        raise click.ClickException(f"Configuration error: {e}") from e
+
     config.verbose = verbose
     config.output_format = output_format
-    config.top_players_count = top_players
-    config.top_team_players_count = top_team_players
+    config.top_players_count = validated_top_players
+    config.top_team_players_count = validated_top_team_players
 
     # Override cache setting from CLI
     if no_cache:
@@ -226,18 +293,17 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
             clear_cache=clear_cache,
             report_filter=report,
             quiet=quiet,
-            output_path=Path(output) if output else None,
+            output_path=validated_output,
             sheets=sheets_list,
         )
 
         # Output results
-        if output:
-            output_path = Path(output)
+        if validated_output:
             if isinstance(result, str):
                 # Text/JSON output
-                output_path.write_text(result)
+                validated_output.write_text(result)
             # CSV/Excel are written directly by exporters
-            console.print(f"\n[green]✓[/green] Report saved to: {output}")
+            console.print(f"\n[green]✓[/green] Report saved to: {validated_output}")
         elif isinstance(result, str):
             print(result)
         else:
@@ -313,10 +379,8 @@ def run_analysis(
     total_teams = len(teams_info)
 
     # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams) as update_progress:
-        team_scores, all_players, failed_teams = team_processor.process_all_teams(
-            progress_callback=update_progress
-        )
+    with progress_mgr.track_api_fetching(total_teams):
+        team_scores, all_players, failed_teams = team_processor.process_all_teams()
 
     # Display summary (only if not quiet)
     if not quiet:
@@ -617,7 +681,12 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
     from nhl_scrabble.interactive import InteractiveShell
 
     # Load configuration
-    config = Config.from_env()
+    try:
+        config = Config.from_env()
+    except ValueError as e:
+        # Convert config validation errors to ClickException for consistent error handling
+        raise click.ClickException(f"Configuration error: {e}") from e
+
     config.verbose = verbose
 
     # Setup logging
@@ -753,7 +822,12 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
         nhl-scrabble search --min-score 60 --output high-scorers.txt
     """
     # Load configuration
-    config = Config.from_env()
+    try:
+        config = Config.from_env()
+    except ValueError as e:
+        # Convert config validation errors to ClickException for consistent error handling
+        raise click.ClickException(f"Configuration error: {e}") from e
+
     config.verbose = verbose
 
     # Setup logging
@@ -776,7 +850,7 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
             timeout=config.api_timeout,
             retries=config.api_retries,
             rate_limit_max_requests=config.rate_limit_max_requests,
-        rate_limit_window=config.rate_limit_window,
+            rate_limit_window=config.rate_limit_window,
             backoff_factor=config.backoff_factor,
             max_backoff=config.max_backoff,
             cache_enabled=config.cache_enabled,
@@ -785,18 +859,8 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
         scorer = ScrabbleScorer()
         team_processor = TeamProcessor(api_client, scorer)
 
-        # Create progress manager
-        progress_mgr = ProgressManager(enabled=not quiet)
-
-        # Get team count for progress tracking
-        teams_info = api_client.get_teams()
-        total_teams = len(teams_info)
-
-        # Process all teams with progress tracking
-        with progress_mgr.track_api_fetching(total_teams) as update_progress:
-            _, all_players, failed_teams = team_processor.process_all_teams(
-                progress_callback=update_progress
-            )
+        # Process all teams (progress handled internally by TeamProcessor)
+        _, all_players, failed_teams = team_processor.process_all_teams()
 
         # Display summary (only if not quiet)
         if not quiet and failed_teams:

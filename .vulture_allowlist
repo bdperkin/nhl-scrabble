@@ -1,5 +1,11 @@
 # Vulture allowlist for public API methods
 
+# API Client methods used in tests
+get_rate_limit_stats  # NHLApiClient method - used in rate limiting tests
+
+# Search methods used in tests
+get_top_players  # PlayerSearch method - used in search tests
+
 # CSV Exporter public API
 export_player_scores  # CSVExporter method for exporting player scores
 export_division_standings  # CSVExporter method for exporting division standings

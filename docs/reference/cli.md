@@ -105,6 +105,54 @@ The command validates output paths before fetching data. Common errors:
 | "Output file exists but is not writable" | Existing file is read-only                 | Change file permissions |
 | "NHL API Error"                          | Network or API issue                       | Check connection, retry |
 
+### `interactive`
+
+Start interactive mode for exploring NHL Scrabble data.
+
+**Synopsis**:
+
+```bash
+nhl-scrabble interactive [OPTIONS]
+```
+
+**Description**:
+
+Interactive mode provides a REPL (Read-Eval-Print Loop) for exploring NHL Scrabble scores through commands like show, top, compare, and more. Allows dynamic exploration without re-running the full analysis.
+
+**Options**:
+
+| Option          | Type | Default | Description                                |
+| --------------- | ---- | ------- | ------------------------------------------ |
+| `--no-fetch`    | flag | false   | Skip fetching data from NHL API on startup |
+| `-v, --verbose` | flag | false   | Enable verbose logging (DEBUG level)       |
+| `--help`        | flag | false   | Show command help and exit                 |
+
+**Examples**:
+
+```bash
+# Start interactive mode
+nhl-scrabble interactive
+
+# Skip initial data fetch
+nhl-scrabble interactive --no-fetch
+
+# Verbose logging
+nhl-scrabble interactive --verbose
+```
+
+**Interactive Commands**:
+
+Once in interactive mode, you can use commands like:
+
+- `show` - Display team standings
+- `top` - Show top players
+- `compare` - Compare players or teams
+- `filter` - Filter by division or conference
+- `help` - Show available commands
+- `exit` or `quit` - Exit interactive mode
+
+See the interactive mode help (`help` command) for full command details.
+
 ### `search`
 
 Search for NHL players by name with advanced filtering.
