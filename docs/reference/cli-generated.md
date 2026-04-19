@@ -38,8 +38,8 @@ Options:
 
 Commands:
   analyze      Run the NHL Scrabble analysis.
-  api          Start REST API server.
   interactive  Start interactive mode for exploring NHL Scrabble data.
+  search       Search for players by name and filter by attributes.
   serve        Start web interface server.
 ```
 

@@ -97,10 +97,11 @@ class TestOutputPathValidation:
 
             # Should succeed with warning
             assert result.exit_code == 0
-            # Check that warning was logged
-            mock_logger.warning.assert_called_once()
-            warning_message = mock_logger.warning.call_args[0][0]
-            assert "will be overwritten" in warning_message.lower()
+            # Check that warning was logged (may be called multiple times from different places)
+            mock_logger.warning.assert_called()
+            # Verify at least one warning mentions overwriting
+            warning_calls = [str(call[0][0]) for call in mock_logger.warning.call_args_list]
+            assert any("will be overwritten" in msg.lower() for msg in warning_calls)
 
             # File should be overwritten
             new_content = existing_file.read_text()

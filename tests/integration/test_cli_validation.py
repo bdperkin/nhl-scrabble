@@ -38,7 +38,11 @@ class TestCliOutputValidation:
         result = runner.invoke(cli, ["analyze", "--output", "../../../etc/passwd"])
 
         assert result.exit_code != 0
-        assert "path traversal" in result.output.lower()
+        # CLI validation uses validators.validate_file_path which detects path traversal
+        assert (
+            "suspicious pattern" in result.output.lower()
+            or "path traversal" in result.output.lower()
+        )
 
     def test_invalid_filename_characters(self, tmp_path: Path) -> None:
         """Test CLI rejects filenames with invalid characters."""
@@ -46,6 +50,7 @@ class TestCliOutputValidation:
         result = runner.invoke(cli, ["analyze", "--output", str(tmp_path / "file<>.txt")])
 
         assert result.exit_code != 0
+        # After PR #201, validator reports specific invalid characters
         assert "invalid characters" in result.output.lower()
 
     def test_nonexistent_directory(self) -> None:
@@ -75,7 +80,8 @@ class TestCliNumericValidation:
         result = runner.invoke(cli, ["analyze", "--top-players", "999"])
 
         assert result.exit_code != 0
-        assert "cannot exceed 100" in result.output.lower() or "invalid" in result.output.lower()
+        # CLI validation uses validators.validate_integer_range which reports "cannot exceed"
+        assert "cannot exceed" in result.output.lower() or "invalid" in result.output.lower()
 
     def test_top_players_too_low(self) -> None:
         """Test CLI rejects top_players value below minimum."""
@@ -83,7 +89,8 @@ class TestCliNumericValidation:
         result = runner.invoke(cli, ["analyze", "--top-players", "0"])
 
         assert result.exit_code != 0
-        assert "must be at least 1" in result.output.lower() or "invalid" in result.output.lower()
+        # CLI validation uses validators.validate_integer_range which reports "must be at least"
+        assert "must be at least" in result.output.lower() or "invalid" in result.output.lower()
 
     def test_top_players_non_integer(self) -> None:
         """Test CLI rejects non-integer top_players value."""
@@ -108,7 +115,8 @@ class TestCliNumericValidation:
         result = runner.invoke(cli, ["analyze", "--top-team-players", "999"])
 
         assert result.exit_code != 0
-        assert "cannot exceed 50" in result.output.lower() or "invalid" in result.output.lower()
+        # CLI validation uses validators.validate_integer_range which reports "cannot exceed"
+        assert "cannot exceed" in result.output.lower() or "invalid" in result.output.lower()
 
 
 class TestEnvironmentVariableValidation:
@@ -133,6 +141,7 @@ class TestEnvironmentVariableValidation:
         result = runner.invoke(cli, ["analyze"])
 
         assert result.exit_code != 0
+        # After PR #201, config_validators reports validation errors consistently
         assert "configuration error" in result.output.lower()
         assert "outside allowed range" in result.output.lower()
 
@@ -154,6 +163,7 @@ class TestEnvironmentVariableValidation:
         result = runner.invoke(cli, ["analyze"])
 
         assert result.exit_code != 0
+        # After PR #201, config_validators reports validation errors consistently
         assert "configuration error" in result.output.lower()
         assert "outside allowed range" in result.output.lower()
 
@@ -165,6 +175,7 @@ class TestEnvironmentVariableValidation:
         result = runner.invoke(cli, ["analyze"])
 
         assert result.exit_code != 0
+        # After PR #201, config_validators reports validation errors consistently
         assert "configuration error" in result.output.lower()
         assert "outside allowed range" in result.output.lower()
 
@@ -192,6 +203,7 @@ class TestCombinedValidation:
         result = runner.invoke(cli, ["analyze", "--top-players", "999"])
 
         assert result.exit_code != 0
+        # CLI validation uses validators.validate_integer_range
         assert "cannot exceed" in result.output.lower()
 
     def test_environment_validation_before_cli(

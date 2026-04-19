@@ -117,112 +117,174 @@ nhl-scrabble interactive [OPTIONS]
 
 **Description**:
 
-Launches an interactive REPL (Read-Eval-Print Loop) for exploring NHL Scrabble scores through commands. Interactive mode allows you to query data, compare players, filter teams, and more without re-running the full analysis.
+Interactive mode provides a REPL (Read-Eval-Print Loop) for exploring NHL Scrabble scores through commands like show, top, compare, and more. Allows dynamic exploration without re-running the full analysis.
 
 **Options**:
 
-| Option          | Type | Default | Description                          |
-| --------------- | ---- | ------- | ------------------------------------ |
-| `--no-fetch`    | flag | false   | Skip fetching data (use cached data) |
-| `-v, --verbose` | flag | false   | Enable verbose logging (DEBUG level) |
-| `--help`        | flag | false   | Show command help and exit           |
+| Option          | Type | Default | Description                                |
+| --------------- | ---- | ------- | ------------------------------------------ |
+| `--no-fetch`    | flag | false   | Skip fetching data from NHL API on startup |
+| `-v, --verbose` | flag | false   | Enable verbose logging (DEBUG level)       |
+| `--help`        | flag | false   | Show command help and exit                 |
 
 **Examples**:
 
 ```bash
-# Start interactive mode (fetch fresh data)
+# Start interactive mode
 nhl-scrabble interactive
 
-# Use cached data from previous session
+# Skip initial data fetch
 nhl-scrabble interactive --no-fetch
 
-# Enable verbose logging
+# Verbose logging
 nhl-scrabble interactive --verbose
 ```
 
 **Interactive Commands**:
 
-Once in interactive mode, use these commands:
+Once in interactive mode, you can use commands like:
 
-| Command                       | Description                           |
-| ----------------------------- | ------------------------------------- |
-| `show team <abbrev>`          | Show team details                     |
-| `show player <name>`          | Show player details                   |
-| `top [N]`                     | Show top N players (default: 10)      |
-| `bottom [N]`                  | Show bottom N players (default: 10)   |
-| `compare <player1> <player2>` | Compare two players                   |
-| `filter division <div>`       | Filter teams by division              |
-| `filter conference <conf>`    | Filter teams by conference            |
-| `search <query>`              | Search players by name                |
-| `standings [type]`            | Show standings (team/division/conf)   |
-| `playoff`                     | Show playoff bracket                  |
-| `stats`                       | Show statistics                       |
-| `refresh`                     | Re-fetch data from NHL API            |
-| `help [command]`              | Show help for all or specific command |
-| `exit` or `quit`              | Exit interactive mode                 |
+- `show` - Display team standings
+- `top` - Show top players
+- `compare` - Compare players or teams
+- `filter` - Filter by division or conference
+- `help` - Show available commands
+- `exit` or `quit` - Exit interactive mode
 
-**Features**:
+See the interactive mode help (`help` command) for full command details.
 
-- **Tab Completion**: Commands, team names, and player names auto-complete
-- **Command History**: Navigate previous commands with arrow keys (saved to `~/.nhl_scrabble_history`)
-- **Rich Output**: Formatted tables with colors
-- **Fuzzy Matching**: Player search uses partial name matching
-- **Fast Queries**: No need to re-run full analysis for each query
+### `search`
 
-**Example Session**:
+Search for NHL players by name with advanced filtering.
 
+**Synopsis**:
+
+```bash
+nhl-scrabble search [QUERY] [OPTIONS]
 ```
-$ nhl-scrabble interactive
-Fetching NHL data...
-Data loaded successfully!
 
-NHL Scrabble Interactive Mode
-Type 'help' for available commands
-Type 'exit' to quit
+**Description**:
 
-NHL Scrabble> top 5
-┏━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┓
-┃ Rank  ┃ Player                    ┃ Team   ┃ Score    ┃
-┡━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━┩
-│ 1     │ Alex Ovechkin             │ WSH    │ 28       │
-│ 2     │ Connor McDavid            │ EDM    │ 27       │
-│ 3     │ Auston Matthews           │ TOR    │ 26       │
-│ 4     │ Nathan MacKinnon          │ COL    │ 25       │
-│ 5     │ Sidney Crosby             │ PIT    │ 24       │
-└───────┴───────────────────────────┴────────┴──────────┘
+Search the NHL player database by name with support for exact matching, fuzzy matching, and wildcard patterns. Filter results by Scrabble score, team, division, or conference.
 
-NHL Scrabble> compare McDavid Ovechkin
-┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
-┃ Attribute           ┃ Connor McDavid            ┃ Alex Ovechkin    ┃
-┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
-│ Team                │ EDM                       │ WSH              │
-│ Scrabble Score      │ 27                        │ 28               │
-│ Difference          │ 1                         │ 1                │
-└─────────────────────┴───────────────────────────┴──────────────────┘
+**Arguments**:
 
-Alex Ovechkin has a higher score
+| Argument | Type   | Required | Description                              |
+| -------- | ------ | -------- | ---------------------------------------- |
+| `QUERY`  | string | no       | Search query (name or pattern to search) |
 
-NHL Scrabble> exit
+**Options**:
 
-Goodbye!
+| Option                  | Type   | Default | Description                                      |
+| ----------------------- | ------ | ------- | ------------------------------------------------ |
+| `-f, --fuzzy`           | flag   | false   | Enable fuzzy matching for typo tolerance         |
+| `--min-score INT`       | int    | none    | Filter players with score >= INT                 |
+| `--max-score INT`       | int    | none    | Filter players with score \<= INT                |
+| `-t, --team CODE`       | string | none    | Filter by team abbreviation (e.g., TOR, EDM)     |
+| `-d, --division NAME`   | string | none    | Filter by division name                          |
+| `-c, --conference NAME` | string | none    | Filter by conference name (Eastern/Western)      |
+| `-n, --limit INT`       | int    | 20      | Maximum number of results to show                |
+| `-v, --verbose`         | flag   | false   | Enable verbose logging (DEBUG level)             |
+| `-q, --quiet`           | flag   | false   | Suppress progress bars                           |
+| `--format FORMAT`       | choice | `text`  | Output format: `text` or `json`                  |
+| `-o, --output PATH`     | path   | stdout  | Output file path (writes to stdout if not given) |
+| `--help`                | flag   | false   | Show command help and exit                       |
+
+**Examples**:
+
+```bash
+# Exact search
+nhl-scrabble search "Connor McDavid"
+
+# Fuzzy search (tolerates typos)
+nhl-scrabble search McDavd --fuzzy
+
+# Wildcard search
+nhl-scrabble search "Connor*"
+
+# Find high-scoring players
+nhl-scrabble search --min-score 50
+
+# Find players on a team
+nhl-scrabble search --team TOR
+
+# Combine filters
+nhl-scrabble search "Connor*" --team EDM --min-score 30
+
+# Show more results
+nhl-scrabble search McDavid --fuzzy --limit 50
+
+# JSON output
+nhl-scrabble search --min-score 60 --format json --output high-scorers.json
+
+# Division search
+nhl-scrabble search --division Pacific --min-score 35
+
+# Conference search
+nhl-scrabble search --conference Eastern --limit 100
 ```
+
+**Search Modes**:
+
+1. **Exact Search** (default): Case-insensitive substring matching
+
+   ```bash
+   nhl-scrabble search "McDavid"  # Finds "Connor McDavid"
+   ```
+
+1. **Fuzzy Search**: Uses similarity matching to handle typos
+
+   ```bash
+   nhl-scrabble search "McDavd" --fuzzy  # Still finds "McDavid"
+   ```
+
+1. **Wildcard Search**: Supports `*` (any chars) and `?` (single char)
+
+   ```bash
+   nhl-scrabble search "Connor*"    # Finds all "Connor ..."
+   nhl-scrabble search "?lex*"      # Finds "Alex ..."
+   ```
+
+**Output**:
+
+Text format shows:
+
+- Search parameters used
+- Number of results found
+- Player details: name, score, team, division
+- Score breakdown (first name + last name)
+
+JSON format includes:
+
+- Query information
+- Result count
+- Database statistics
+- Full player data as array
 
 **Performance**:
 
-- **Startup**: ~10-15 seconds (with data fetch)
-- **Startup (cached)**: ~1 second (with --no-fetch)
-- **Commands**: Instant (\<100ms)
-- **Refresh**: ~10-15 seconds (re-fetches data)
+- **First search**: ~5-15 seconds (fetches all player data)
+- **Subsequent searches**: \<2 seconds (uses cached data)
+- **Search time**: \<0.1 seconds (instant once data is loaded)
 
-**Use Cases**:
+**Filtering**:
 
-- **Quick queries**: "Who's the top player on Toronto?"
-- **Player comparison**: "How does McDavid compare to Ovechkin?"
-- **Data exploration**: "Show me all players with 'ov' in their name"
-- **Team analysis**: "What's the breakdown for the Bruins?"
-- **Learning**: Explore data interactively without scripting
+Filters can be combined and are applied in order:
 
-See [Interactive Mode Tutorial](../tutorials/04-interactive-mode.md) for detailed guide.
+1. Team filter
+1. Division filter
+1. Conference filter
+1. Score range filters
+1. Name search
+1. Result limit
+
+**Error Handling**:
+
+| Error               | Cause                     | Solution         |
+| ------------------- | ------------------------- | ---------------- |
+| "NHL API Error"     | Network or API issue      | Check connection |
+| "No players found"  | No matches for criteria   | Broaden search   |
+| "Invalid team code" | Unknown team abbreviation | Use valid code   |
 
 ### Future Commands (Planned)
 
