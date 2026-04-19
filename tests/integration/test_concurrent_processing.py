@@ -217,15 +217,12 @@ class TestConcurrentProcessingPerformance:
 
         # Verify logging includes concurrent mode message
         log_messages = [record.message for record in caplog.records]
-        assert any(
-            "concurrent mode" in msg.lower() for msg in log_messages
-        ), "Should log concurrent mode"
+        concurrent_mode_logged = any("concurrent mode" in msg.lower() for msg in log_messages)
+        assert concurrent_mode_logged, "Should log concurrent mode"
 
         # Verify progress logging for each team
         processed_logs = [msg for msg in log_messages if "Processed" in msg]
-        assert len(processed_logs) == len(
-            team_scores
-        ), "Should log each successfully processed team"
+        assert len(processed_logs) == len(team_scores), "Log each processed team"
 
 
 class TestConcurrentProcessingRealWorld:
