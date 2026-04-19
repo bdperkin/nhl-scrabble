@@ -165,7 +165,7 @@ class RateLimiter:
                 "max_tokens": self.burst_size,
             }
 
-    def reset(self) -> None:  # noqa: vulture
+    def reset(self) -> None:
         """Reset rate limiter to initial state.
 
         Useful for testing or resetting quota usage.

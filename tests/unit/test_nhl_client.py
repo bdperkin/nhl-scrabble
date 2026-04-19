@@ -6,6 +6,7 @@ from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
+import requests
 import requests_cache
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError, NHLApiNotFoundError
@@ -55,6 +56,7 @@ class TestNHLApiClient:
     def test_get_teams_timeout(self, mock_get: Mock) -> None:
         """Test timeout handling when fetching teams."""
         import requests
+
         mock_get.side_effect = requests.exceptions.Timeout()
 
         client = NHLApiClient(cache_enabled=False)
@@ -65,6 +67,7 @@ class TestNHLApiClient:
     def test_get_teams_connection_error(self, mock_get: Mock) -> None:
         """Test connection error handling when fetching teams."""
         import requests
+
         mock_get.side_effect = requests.exceptions.ConnectionError()
 
         client = NHLApiClient(cache_enabled=False)
@@ -107,6 +110,7 @@ class TestNHLApiClient:
     ) -> None:
         """Test retry logic on failure."""
         import requests
+
         # First two calls fail, third succeeds
         mock_response = Mock()
         mock_response.status_code = 200
@@ -157,6 +161,7 @@ class TestNHLApiClient:
     def test_not_found_error_is_nhl_api_error(self, mock_get: Mock) -> None:
         """Test that NHLApiNotFoundError is a subclass of NHLApiError."""
         from nhl_scrabble.api.nhl_client import NHLApiError
+
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
@@ -170,6 +175,7 @@ class TestNHLApiClient:
     def test_not_found_error_logs_warning(self, mock_get: Mock, caplog: Any) -> None:
         """Test that 404 response logs a warning before raising."""
         import logging
+
         mock_response = Mock()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
@@ -352,6 +358,7 @@ class TestNHLApiClient:
     ) -> None:
         """Test that rate limiting applies between successful requests."""
         import time
+
         # Mock successful responses
         mock_response = Mock()
         mock_response.status_code = 200
@@ -360,9 +367,7 @@ class TestNHLApiClient:
         mock_get.return_value = mock_response
 
         # Use very low rate limit: 1 request per second
-        client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1, rate_limit_window=1.0
-        )
+        client = NHLApiClient(cache_enabled=False, rate_limit_max_requests=1, rate_limit_window=1.0)
 
         # First request should be fast
         start = time.time()
@@ -383,6 +388,7 @@ class TestNHLApiClient:
     ) -> None:
         """Test that first request has no delay."""
         import time
+
         # Mock successful response
         mock_response = Mock()
         mock_response.status_code = 200
@@ -407,9 +413,6 @@ class TestNHLApiClient:
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
         """Test that failed requests don't affect rate limiting."""
-        import time
-        import requests
-
         # First request succeeds
         success_response = Mock()
         success_response.status_code = 200
@@ -516,6 +519,7 @@ class TestNHLApiClient:
     def test_retry_with_exponential_backoff(self, mock_get, sample_roster_data):
         """Test that retries use exponential backoff instead of fixed delay."""
         import requests
+
         client = NHLApiClient(
             cache_enabled=False,
             backoff_factor=2.0,
@@ -583,8 +587,6 @@ class TestNHLApiClient:
 
         client.close()
 
-
-
     def test_is_url_cached_returns_false_when_caching_disabled(self) -> None:
         """Test that _is_url_cached returns False when caching is disabled."""
         client = NHLApiClient(cache_enabled=False)
@@ -600,4 +602,3 @@ class TestNHLApiClient:
         result = client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
         assert result is False
         client.close()
-
