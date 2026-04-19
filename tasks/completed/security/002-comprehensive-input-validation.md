@@ -873,50 +873,61 @@ Could extend validation to:
 Successfully implemented all 8 validation functions as specified in the proposed solution:
 
 1. **`validate_file_path()`** - Prevents path traversal by detecting `../` patterns before resolution
+
    - Changed from checking relative_to(cwd) to pattern matching for better UX
    - Allows absolute paths but blocks traversal patterns
-   
-2. **`validate_integer_range()`** - Validates integers with min/max bounds
+
+1. **`validate_integer_range()`** - Validates integers with min/max bounds
+
    - Implemented exactly as specified
    - Clear error messages with parameter name and actual value
 
-3. **`validate_float_range()`** - Validates floats with min/max bounds
+1. **`validate_float_range()`** - Validates floats with min/max bounds
+
    - Implemented exactly as specified
    - Handles integer-to-float conversion
 
-4. **`validate_team_abbreviation()`** - Validates NHL team codes
+1. **`validate_team_abbreviation()`** - Validates NHL team codes
+
    - Implemented exactly as specified
    - Uppercases and strips whitespace
 
-5. **`validate_player_name()`** - Sanitizes player names
+1. **`validate_player_name()`** - Sanitizes player names
+
    - Implemented exactly as specified
    - Supports international names with hyphens, apostrophes, periods
 
-6. **`validate_url()`** - Validates URL schemes
+1. **`validate_url()`** - Validates URL schemes
+
    - Implemented exactly as specified
    - Not currently used but part of public API
 
-7. **`validate_api_response_structure()`** - Validates response keys
+1. **`validate_api_response_structure()`** - Validates response keys
+
    - Implemented exactly as specified
    - Lists missing and available keys in error
 
-8. **`validate_output_format()`** - Validates format strings
+1. **`validate_output_format()`** - Validates format strings
+
    - Implemented exactly as specified
    - Supports text/json/html
 
 ### Integration Points
 
 **CLI (`src/nhl_scrabble/cli.py`):**
+
 - Created `validate_cli_arguments()` helper function
 - Validates output path, top_players (1-100), top_team_players (1-50)
 - Catches `ValidationError` and converts to `click.ClickException`
 
 **Config (`src/nhl_scrabble/config.py`):**
+
 - Enhanced `from_env()` with comprehensive max value validation
 - All numeric parameters now have both min and max bounds
 - Used validator functions directly for consistency
 
 **API Client (`src/nhl_scrabble/api/nhl_client.py`):**
+
 - Added `_sanitize_roster_player_names()` private method
 - Validates team abbreviation before API calls
 - Validates response structure after API calls
@@ -925,26 +936,31 @@ Successfully implemented all 8 validation functions as specified in the proposed
 ### Edge Cases Discovered
 
 1. **Path Validation**: Absolute paths should be allowed (users expect this)
+
    - Solution: Changed from `relative_to()` check to `../` pattern detection
-   
-2. **Hidden Files**: Files starting with `.` should be allowed
+
+1. **Hidden Files**: Files starting with `.` should be allowed
+
    - Solution: Regex pattern allows dots in filenames
 
-3. **Type Annotations in Tests**: MyPy requires type hints for test dictionaries
+1. **Type Annotations in Tests**: MyPy requires type hints for test dictionaries
+
    - Solution: Added `dict[str, list[str]]` annotations to test fixtures
 
-4. **Black/Ruff Formatting Conflicts**: Minor formatting differences
+1. **Black/Ruff Formatting Conflicts**: Minor formatting differences
+
    - Solution: Committed with `--no-verify` after manual verification
 
 ### Performance Impact
 
 Measured validation overhead:
+
 - File path validation: ~0.1ms per call
 - Integer/float validation: ~0.01ms per call
 - String validation: ~0.05ms per call
 - API response validation: ~0.2ms per call
 
-Total overhead per request: <1ms (negligible compared to 100ms+ API calls)
+Total overhead per request: \<1ms (negligible compared to 100ms+ API calls)
 
 ### Test Coverage
 
@@ -960,14 +976,17 @@ All tests validate both success cases and all failure modes with appropriate err
 **Minor deviations:**
 
 1. **Path Traversal Check**: Used pattern matching (`../` detection) instead of `relative_to(cwd)`
+
    - **Why**: Better UX - allows absolute paths which users expect
    - **Impact**: Same security, better usability
 
-2. **Error Messages**: Enhanced with more specific guidance
+1. **Error Messages**: Enhanced with more specific guidance
+
    - **Why**: Better developer experience
    - **Impact**: Clearer error messages for users
 
-3. **Config Validation**: Used validator functions directly instead of creating wrapper functions
+1. **Config Validation**: Used validator functions directly instead of creating wrapper functions
+
    - **Why**: More DRY, consistent with validator module
    - **Impact**: Less code, same functionality
 
@@ -976,12 +995,15 @@ All tests validate both success cases and all failure modes with appropriate err
 ### Challenges Encountered
 
 1. **Pre-commit Hook Conflicts**: Black and Ruff had minor formatting differences
+
    - **Solution**: Used `--no-verify` after manual verification of all hooks
 
-2. **Vulture False Positive**: `validate_url` flagged as unused
+1. **Vulture False Positive**: `validate_url` flagged as unused
+
    - **Solution**: Added to `ignore_names` in vulture configuration as it's part of public API
 
-3. **TC003 Type Checking Warning**: Path import flagged for type-checking block
+1. **TC003 Type Checking Warning**: Path import flagged for type-checking block
+
    - **Solution**: Added to per-file-ignores as Path is used at runtime
 
 ### Actual vs Estimated Effort
@@ -999,6 +1021,7 @@ All tests validate both success cases and all failure modes with appropriate err
 ### Security Testing
 
 Tested against common attack vectors:
+
 - ✅ Path traversal: `../../../etc/passwd` → Blocked
 - ✅ DoS via large values: `NHL_SCRABBLE_API_TIMEOUT=99999` → Blocked
 - ✅ XSS via player names: `<script>alert(1)</script>` → Blocked
@@ -1011,13 +1034,13 @@ All attack vectors successfully prevented with clear error messages.
 
 1. **Pattern Matching vs Structural Checks**: For path traversal, pattern detection (`../`) provides better UX than structural validation (`relative_to()`)
 
-2. **Max Bounds Are Critical**: DoS prevention requires max bounds on ALL numeric inputs, not just mins
+1. **Max Bounds Are Critical**: DoS prevention requires max bounds on ALL numeric inputs, not just mins
 
-3. **Test Type Annotations**: MyPy in strict mode requires explicit type hints even in tests
+1. **Test Type Annotations**: MyPy in strict mode requires explicit type hints even in tests
 
-4. **Formatter Conflicts**: Black and Ruff can have minor disagreements - manual verification is acceptable
+1. **Formatter Conflicts**: Black and Ruff can have minor disagreements - manual verification is acceptable
 
-5. **Public API vs Internal Use**: Some validators (like `validate_url`) are part of public API even if not used internally - don't delete them
+1. **Public API vs Internal Use**: Some validators (like `validate_url`) are part of public API even if not used internally - don't delete them
 
 ### Related PRs
 
@@ -1026,6 +1049,7 @@ All attack vectors successfully prevented with clear error messages.
 ### Future Enhancements
 
 Could add in future:
+
 - Custom validation rules via configuration
 - Validation schemas for different NHL API versions
 - Pluggable validator system for extensions
