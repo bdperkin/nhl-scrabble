@@ -51,7 +51,6 @@ Each task is assigned a priority:
 **Documented Effort**: 17-22.5 hours
 **Completed**: 5.25 hours (Task 003: SSRF Protection 1.25h - PR #181, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200)
 
-<<<<<<< HEAD
 ### Optimization (1 task, 11 documented, 10 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue | Status      |
