@@ -1113,7 +1113,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
-def watch(  # noqa: PLR0913, C901, PLR0915  # Complex but necessary for watch mode
+def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     interval: int,
     output_format: str,
     verbose: bool,
