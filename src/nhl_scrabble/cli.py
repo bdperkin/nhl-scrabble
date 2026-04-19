@@ -6,7 +6,6 @@ import json
 import logging
 import os
 import sys
-from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -409,23 +408,14 @@ def generate_json_report(
         JSON string
     """
     # Convert dataclasses to dictionaries
-    teams_data = {
-        abbrev: {
-            "total": team.total,
-            "players": [asdict(p) for p in team.players],
-            "division": team.division,
-            "conference": team.conference,
-            "avg_per_player": team.avg_per_player,
-        }
-        for abbrev, team in team_scores.items()
-    }
+    teams_data = {abbrev: team.to_dict() for abbrev, team in team_scores.items()}
 
-    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
+    divisions_data = {name: standing.to_dict() for name, standing in division_standings.items()}
 
-    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
+    conferences_data = {name: standing.to_dict() for name, standing in conference_standings.items()}
 
     playoffs_data = {
-        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
+        conf: [team.to_dict() for team in teams] for conf, teams in playoff_standings.items()
     }
 
     report_data = {

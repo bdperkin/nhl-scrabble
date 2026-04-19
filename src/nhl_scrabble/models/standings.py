@@ -1,7 +1,7 @@
 """Standings data models."""
 
 from dataclasses import dataclass
-from typing import Literal
+from typing import Any, Literal
 
 
 @dataclass(slots=True)
@@ -21,6 +21,16 @@ class DivisionStandings:
     teams: list[str]
     player_count: int
     avg_per_team: float
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "name": self.name,
+            "total": self.total,
+            "teams": self.teams,
+            "player_count": self.player_count,
+            "avg_per_team": self.avg_per_team,
+        }
 
     def __repr__(self) -> str:
         """Return a string representation of the division standings."""
@@ -44,6 +54,16 @@ class ConferenceStandings:
     teams: list[str]
     player_count: int
     avg_per_team: float
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "name": self.name,
+            "total": self.total,
+            "teams": self.teams,
+            "player_count": self.player_count,
+            "avg_per_team": self.avg_per_team,
+        }
 
     def __repr__(self) -> str:
         """Return a string representation of the conference standings."""
@@ -82,6 +102,21 @@ class PlayoffTeam:
     in_playoffs: bool = False
     division_rank: int = 0
     status_indicator: StatusIndicator = ""
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "abbrev": self.abbrev,
+            "total": self.total,
+            "players": self.players,
+            "avg": self.avg,
+            "conference": self.conference,
+            "division": self.division,
+            "seed_type": self.seed_type,
+            "in_playoffs": self.in_playoffs,
+            "division_rank": self.division_rank,
+            "status_indicator": self.status_indicator,
+        }
 
     def __repr__(self) -> str:
         """Return a string representation of the playoff team."""

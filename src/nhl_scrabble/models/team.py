@@ -1,6 +1,7 @@
 """Team data models."""
 
 from dataclasses import dataclass, field
+from typing import Any
 
 from nhl_scrabble.models.player import PlayerScore
 
@@ -28,6 +29,29 @@ class TeamScore:
     def __post_init__(self) -> None:
         """Calculate average score per player after initialization."""
         self.avg_per_player = self.total / len(self.players) if self.players else 0.0
+
+    def to_dict(self, include_players: bool = True) -> dict[str, Any]:
+        """Convert to dictionary for JSON serialization.
+
+        Args:
+            include_players: Whether to include full player list (default: True)
+
+        Returns:
+            Dictionary representation of team
+        """
+        result = {
+            "abbrev": self.abbrev,
+            "total": self.total,
+            "division": self.division,
+            "conference": self.conference,
+            "avg_per_player": self.avg_per_player,
+            "player_count": len(self.players),
+        }
+
+        if include_players:
+            result["players"] = [p.to_dict() for p in self.players]
+
+        return result
 
     @property
     def player_count(self) -> int:

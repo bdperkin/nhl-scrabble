@@ -1,7 +1,5 @@
 """Unit tests for Scrabble scoring module."""
 
-import time
-
 import pytest
 
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
@@ -228,37 +226,33 @@ class TestScrabbleScorerCaching:
         assert "No calls yet" in caplog.text
 
     def test_performance_improvement(self) -> None:
-        """Test that caching provides measurable performance improvement."""
+        """Test that caching correctly handles repeated calls.
+
+        Note: Performance benchmarking is done in tests/benchmarks/.
+        This test validates functional correctness of cache behavior.
+        """
         ScrabbleScorer.clear_cache()
 
-        test_name = "Constantine"  # Longer name for measurable timing
+        test_name = "Constantine"
 
-        # Time cached calls (1 miss + 999 hits)
-        start = time.perf_counter()
+        # Make cached calls (1 miss + 999 hits)
         for _ in range(1000):
             ScrabbleScorer.calculate_score(test_name)
-        cached_time = time.perf_counter() - start
 
         # Verify cache hits
         stats_after_cached = ScrabbleScorer.get_cache_info()
         assert stats_after_cached["hits"] == 999  # Second through thousandth calls
         assert stats_after_cached["misses"] == 1  # First call only
 
-        # Time uncached calls (1000 misses)
+        # Make uncached calls (1000 misses)
         ScrabbleScorer.clear_cache()
-        start = time.perf_counter()
         for i in range(1000):
             ScrabbleScorer.calculate_score(f"{test_name}{i}")
-        uncached_time = time.perf_counter() - start
 
         # Verify all were misses
         stats_after_uncached = ScrabbleScorer.get_cache_info()
         assert stats_after_uncached["hits"] == 0
         assert stats_after_uncached["misses"] == 1000
-
-        # Cached should be significantly faster
-        # Typically 10-50x faster depending on system
-        assert cached_time < uncached_time
 
     def test_cache_integration_with_score_player(self) -> None:
         """Test that cache works correctly with score_player method."""

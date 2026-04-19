@@ -51,7 +51,7 @@ Each task is assigned a priority:
 **Documented Effort**: 17-22.5 hours
 **Completed**: 5.25 hours (Task 003: SSRF Protection 1.25h - PR #181, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200)
 
-### Optimization (2 tasks, 11 documented, 9 completed)
+### Optimization (1 task, 11 documented, 10 completed)
 
 | ID  | Title                                    | Priority | Effort   | Issue | Status      |
 | --- | ---------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -60,7 +60,7 @@ Each task is assigned a priority:
 | 003 | Use heapq.nlargest() for Top-N Queries   | MEDIUM   | 1-2h     | #114  | ✅ Complete |
 | 004 | Single-Pass Aggregations in Stats Report | MEDIUM   | 1-2h     | #115  | ✅ Complete |
 | 005 | Move Imports to Module Level             | LOW      | 15-30min | #116  | ✅ Complete |
-| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  |             |
+| 006 | Add to_dict() Methods to Dataclasses     | MEDIUM   | 2-3h     | #117  | ✅ Complete |
 | 007 | Lazy Report Generation                   | LOW      | 2-3h     | #138  | ✅ Complete |
 | 008 | Memoized Scoring                         | LOW      | 1-2h     | #139  | ✅ Complete |
 | 009 | Memory Optimization (__slots__)          | LOW      | 2-3h     | #140  | ✅ Complete |
@@ -68,7 +68,7 @@ Each task is assigned a priority:
 | 011 | Log Level Optimization                   | LOW      | 1-2h     | #142  |             |
 
 **Documented Effort**: 16-24.5 hours
-**Completed**: 14.83 hours (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182)
+**Completed**: 16.33 hours (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 006: to_dict() methods 1.5h - PR #191, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182)
 **Expected Speedup**: 5-10x overall performance improvement (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
 ### Enhancements (7 tasks active, 9 documented, 2 completed)
@@ -138,13 +138,13 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 53 tasks (44 active, 9 completed)
-**Remaining Effort**: 177-252.5 hours (22.33 hours completed)
+**Total Tasks**: 53 tasks (43 active, 10 completed)
+**Remaining Effort**: 175.5-250 hours (23.83 hours completed)
 
 ### By Category
 
 - **Security**: 7 tasks, 17-22.5h
-- **Optimization**: 11 tasks, 1.67-3.5h remaining (9 completed, 14.83h completed, 5-10x performance improvement achieved)
+- **Optimization**: 11 tasks, 1-2h remaining (10 completed, 16.33h completed, 5-10x performance improvement achieved)
 - **Enhancement**: 9 tasks, 31.5-45h remaining (3.5h completed)
 - **Testing**: 3 tasks, 3.5-6.0h (1 new: Codecov Test Analytics)
 - **New Features**: 13 tasks active (2 completed), 87.5-126h remaining (completed: 7h)
@@ -167,6 +167,7 @@ Each task is assigned a priority:
 - **Task 004** (enhancement): CSV/Excel Export - 3.5h (PR #203, 2026-04-18)
 - **Task 004** (optimization): Single-Pass Aggregations in Stats Report - 1.5h (PR #189, 2026-04-17)
 - **Task 005** (optimization): Move Imports to Module Level - 0.33h (PR #190, 2026-04-17)
+- **Task 006** (optimization): Add to_dict() Methods to Dataclasses - 1.5h (PR #191, 2026-04-17)
 - **Task 007** (optimization): Lazy Report Generation - 2.5h (PR #192, 2026-04-17)
 - **Task 008** (optimization): Memoized Scoring - 1.5h (PR #193, 2026-04-17)
 - **Task 009** (optimization): Memory Optimization (__slots__) - 1h (PR #194, 2026-04-17)
