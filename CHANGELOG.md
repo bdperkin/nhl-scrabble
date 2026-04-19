@@ -50,6 +50,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     nhl-scrabble search --min-score 50 --format json --output high-scorers.json
     ```
 
+- **Watch Mode for Auto-Refresh** - Continuously monitor NHL roster changes with automatic refresh
+
+  - Added `watch` command that auto-refreshes data at configurable intervals
+  - Default refresh interval: 5 minutes (300 seconds)
+  - Custom intervals supported via `--interval` option (minimum: 1 second)
+  - Supports all standard options: `--format`, `--report`, `--top-players`, etc.
+  - Graceful shutdown on Ctrl+C with proper signal handling (SIGINT)
+  - Error recovery: continues watching even if individual iterations fail
+  - Displays update count, timestamp, and next refresh time
+  - Added comprehensive unit tests for watch mode functionality
+  - Benefits: Monitor roster changes in real-time, convenient for active periods, live updates
+  - Related: Enhancement task #148 - Watch mode for auto-refresh
+  - Usage:
+    ```bash
+    nhl-scrabble watch                              # Default 5-minute interval
+    nhl-scrabble watch --interval 60                # Custom 1-minute interval
+    nhl-scrabble watch --report team --interval 30  # Specific report, 30-second interval
+    nhl-scrabble watch --format json --interval 120 # JSON output, 2-minute interval
+    ```
+
 - **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
 
   - Added `CSVExporter` class for exporting data to CSV format

@@ -41,6 +41,7 @@ Commands:
   interactive  Start interactive mode for exploring NHL Scrabble data.
   search       Search for players by name and filter by attributes.
   serve        Start web interface server.
+  watch        Watch mode - automatically refresh data at intervals.
 ```
 
 ______________________________________________________________________
