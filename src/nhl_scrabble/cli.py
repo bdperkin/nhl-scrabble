@@ -314,10 +314,8 @@ def run_analysis(
     total_teams = len(teams_info)
 
     # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams) as update_progress:
-        team_scores, all_players, failed_teams = team_processor.process_all_teams(
-            progress_callback=update_progress
-        )
+    with progress_mgr.track_api_fetching(total_teams):
+        team_scores, all_players, failed_teams = team_processor.process_all_teams()
 
     # Display summary (only if not quiet)
     if not quiet:

@@ -130,7 +130,11 @@ class TestCLIProgress:
         mock_team_processor: Mock,
         mock_api_client: Mock,
     ) -> None:
-        """Test progress callback is passed to TeamProcessor.process_all_teams()."""
+        """Test TeamProcessor.process_all_teams() is called without progress callback.
+
+        Note: With concurrent processing, progress is logged internally by TeamProcessor
+        rather than via callback, as we can't predict the order teams will complete.
+        """
         # Setup mocks
         mock_client_instance = MagicMock()
         mock_api_client.return_value = mock_client_instance
@@ -154,8 +158,6 @@ class TestCLIProgress:
         runner = CliRunner()
         runner.invoke(cli, ["analyze"])
 
-        # Verify process_all_teams was called with progress_callback
-        mock_processor_instance.process_all_teams.assert_called_once()
-        call_kwargs = mock_processor_instance.process_all_teams.call_args[1]
-        assert "progress_callback" in call_kwargs
-        assert call_kwargs["progress_callback"] is mock_callback
+        # Verify process_all_teams was called without progress_callback
+        # (concurrent processing logs progress internally)
+        mock_processor_instance.process_all_teams.assert_called_once_with()
