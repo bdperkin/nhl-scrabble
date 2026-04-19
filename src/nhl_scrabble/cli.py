@@ -251,6 +251,11 @@ def cli() -> None:
     type=int,
     help="Maximum player score to include",
 )
+@click.option(
+    "--season",
+    type=str,
+    help="Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)",
+)
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
     sheets: str | None,
@@ -270,6 +275,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     exclude: str | None,
     min_score: int | None,
     max_score: int | None,
+    season: str | None,
 ) -> None:
     """Run the NHL Scrabble analysis.
 
@@ -298,6 +304,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         nhl-scrabble analyze --min-score 50 --max-score 100
         nhl-scrabble analyze --exclude BOS,NYR
         nhl-scrabble analyze --division Atlantic --min-score 60
+        nhl-scrabble analyze --season 20222023
     """
     # Validate CLI arguments first (before expensive operations)
     validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
@@ -404,6 +411,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             sheets=sheets_list,
             scoring_values=scoring_values,
             filters=filters,
+            season=season,
         )
 
         # Output results
@@ -442,6 +450,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     sheets: list[str] | None = None,
     scoring_values: dict[str, int] | None = None,
     filters: AnalysisFilters | None = None,
+    season: str | None = None,
 ) -> str | None:
     """Run the complete NHL Scrabble analysis.
 
@@ -456,6 +465,8 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
         scoring_values: Optional custom letter-to-point value mapping.
             If None, uses standard Scrabble values.
         filters: Optional filters to apply to analysis results
+        season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023).
+            If None, analyzes current season.
 
     Returns:
         Complete report string for text/JSON formats, or None for CSV/Excel
@@ -491,12 +502,12 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     progress_mgr = ProgressManager(enabled=not quiet)
 
     # Get team count for progress tracking
-    teams_info = api_client.get_teams()
+    teams_info = api_client.get_teams(season=season)
     total_teams = len(teams_info)
 
     # Process all teams with progress tracking
     with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams()
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
 
     # Display summary (only if not quiet)
     if not quiet:
@@ -1330,12 +1341,14 @@ def dashboard(
 def fetch_dashboard_data(
     config: Config,
     quiet: bool = False,
+    season: str | None = None,
 ) -> dict[str, Any] | None:
     """Fetch data needed for dashboard.
 
     Args:
         config: Configuration object
         quiet: Whether to suppress progress bars
+        season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023)
 
     Returns:
         Dictionary with team_scores, all_players, division_standings,
@@ -1361,12 +1374,12 @@ def fetch_dashboard_data(
     progress_mgr = ProgressManager(enabled=not quiet)
 
     # Get team count for progress tracking
-    teams_info = api_client.get_teams()
+    teams_info = api_client.get_teams(season=season)
     total_teams = len(teams_info)
 
     # Process all teams with progress tracking
     with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams()
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
 
     # Display summary (only if not quiet)
     if not quiet:

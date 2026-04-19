@@ -158,6 +158,6 @@ class TestCLIProgress:
         runner = CliRunner()
         runner.invoke(cli, ["analyze"])
 
-        # Verify process_all_teams was called without progress_callback
-        # (concurrent processing logs progress internally)
-        mock_processor_instance.process_all_teams.assert_called_once_with()
+        # Verify process_all_teams was called with season=None
+        # (concurrent processing logs progress internally, no callback needed)
+        mock_processor_instance.process_all_teams.assert_called_once_with(season=None)
