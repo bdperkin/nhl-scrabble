@@ -96,6 +96,146 @@ def cli() -> None:
     """
 
 
+def run_analysis(
+    config: Config,
+    clear_cache: bool = False,
+    report_filter: str | None = None,
+    quiet: bool = False,
+    output_path: Path | None = None,
+    sheets: list[str] | None = None,
+) -> str | None:
+    """Run the complete NHL Scrabble analysis.
+
+    Args:
+        config: Configuration object
+        clear_cache: Whether to clear the API cache before running
+        report_filter: Optional filter for specific report type
+            (conference, division, playoff, team, stats)
+        quiet: Whether to suppress progress bars
+        output_path: Optional output file path for CSV/Excel exports
+        sheets: Optional list of sheets for Excel export
+
+    Returns:
+        Complete report string for text/JSON formats, or None for CSV/Excel
+        (CSV/Excel are written directly to output file)
+
+    Raises:
+        NHLApiError: If there are issues fetching data from NHL API
+    """
+    # Initialize components
+    api_client = NHLApiClient(
+        base_url=config.api_base_url,
+        timeout=config.api_timeout,
+        retries=config.api_retries,
+        rate_limit_max_requests=config.rate_limit_max_requests,
+        rate_limit_window=config.rate_limit_window,
+        backoff_factor=config.backoff_factor,
+        max_backoff=config.max_backoff,
+        cache_enabled=config.cache_enabled,
+        cache_expiry=config.cache_expiry,
+    )
+
+    # Clear cache if requested
+    if clear_cache:
+        api_client.clear_cache()
+        logger.info("API cache cleared")
+    scorer = ScrabbleScorer()
+    team_processor = TeamProcessor(api_client, scorer, max_workers=config.max_concurrent_requests)
+    playoff_calculator = PlayoffCalculator()
+
+    # Create progress manager
+    progress_mgr = ProgressManager(enabled=not quiet)
+
+    # Get team count for progress tracking
+    teams_info = api_client.get_teams()
+    total_teams = len(teams_info)
+
+    # Process all teams with progress tracking
+    with progress_mgr.track_api_fetching(total_teams):
+        team_scores, all_players, failed_teams = team_processor.process_all_teams()
+
+    # Display summary (only if not quiet)
+    if not quiet:
+        console.print(
+            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+            f"{len(team_scores) + len(failed_teams)} teams"
+        )
+        if failed_teams:
+            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+    # Display rate limit stats if verbose
+    if config.verbose:
+        stats = api_client.get_rate_limit_stats()
+        console.print("\n[cyan]API Rate Limit Statistics:[/cyan]")
+        console.print(f"  Total requests: {stats['total_requests']}")
+        console.print(f"  Total waits: {stats['total_waits']}")
+        console.print(f"  Total wait time: {stats['total_wait_time']:.2f}s")
+        console.print(f"  Average wait: {stats['average_wait']:.2f}s")
+        console.print(f"  Current tokens: {stats['current_tokens']:.1f}/{stats['max_tokens']}")
+
+    # Calculate standings
+    division_standings = team_processor.calculate_division_standings(team_scores)
+    conference_standings = team_processor.calculate_conference_standings(team_scores)
+    playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
+
+    # Generate reports based on format
+    if config.output_format == "json":
+        return generate_json_report(
+            team_scores,
+            all_players,
+            division_standings,
+            conference_standings,
+            playoff_standings,
+        )
+    if config.output_format == "html":
+        return generate_html_report(
+            team_scores,
+            all_players,
+            division_standings,
+            conference_standings,
+            playoff_standings,
+        )
+    if config.output_format == "csv":
+        if output_path:
+            generate_csv_report(
+                team_scores,
+                all_players,
+                division_standings,
+                conference_standings,
+                playoff_standings,
+                output_path,
+            )
+            return None
+        raise ValueError("CSV format requires output path")
+    if config.output_format == "excel":
+        if output_path:
+            generate_excel_report(
+                team_scores,
+                all_players,
+                division_standings,
+                conference_standings,
+                playoff_standings,
+                output_path,
+                sheets,
+            )
+            return None
+        raise ValueError("Excel format requires output path")
+
+    # Use lazy report generator for text format
+    report_generator = ReportGenerator(
+        team_scores=team_scores,
+        all_players=all_players,
+        division_standings=division_standings,
+        conference_standings=conference_standings,
+        playoff_standings=playoff_standings,
+        top_players_count=config.top_players_count,
+        top_team_players_count=config.top_team_players_count,
+    )
+
+    # Generate requested report (lazy evaluation)
+    return report_generator.get_report(report_filter)
+
+
 @cli.command()
 @click.option(
     "--format",
@@ -153,7 +293,7 @@ def cli() -> None:
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
-def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many parameters and has complex logic
+def analyze(  # noqa: PLR0913, PLR0912  # CLI function needs many parameters and has complex logic
     output_format: str,
     sheets: str | None,
     output: str | None,
@@ -270,135 +410,6 @@ def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many paramete
         logger.exception("Unexpected error during analysis")
         console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
         sys.exit(1)
-
-
-def run_analysis(
-    config: Config,
-    clear_cache: bool = False,
-    report_filter: str | None = None,
-    quiet: bool = False,
-    output_path: Path | None = None,
-    sheets: list[str] | None = None,
-) -> str | None:
-    """Run the complete NHL Scrabble analysis.
-
-    Args:
-        config: Configuration object
-        clear_cache: Whether to clear the API cache before running
-        report_filter: Optional filter for specific report type
-            (conference, division, playoff, team, stats)
-        quiet: Whether to suppress progress bars
-        output_path: Optional output file path for CSV/Excel exports
-        sheets: Optional list of sheets for Excel export
-
-    Returns:
-        Complete report string for text/JSON formats, or None for CSV/Excel
-        (CSV/Excel are written directly to output file)
-
-    Raises:
-        NHLApiError: If there are issues fetching data from NHL API
-    """
-    # Initialize components
-    api_client = NHLApiClient(
-        base_url=config.api_base_url,
-        timeout=config.api_timeout,
-        retries=config.api_retries,
-        rate_limit_delay=config.rate_limit_delay,
-        backoff_factor=config.backoff_factor,
-        max_backoff=config.max_backoff,
-        cache_enabled=config.cache_enabled,
-        cache_expiry=config.cache_expiry,
-    )
-
-    # Clear cache if requested
-    if clear_cache:
-        api_client.clear_cache()
-        logger.info("API cache cleared")
-    scorer = ScrabbleScorer()
-    team_processor = TeamProcessor(api_client, scorer, max_workers=config.max_concurrent_requests)
-    playoff_calculator = PlayoffCalculator()
-
-    # Create progress manager
-    progress_mgr = ProgressManager(enabled=not quiet)
-
-    # Get team count for progress tracking
-    teams_info = api_client.get_teams()
-    total_teams = len(teams_info)
-
-    # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams()
-
-    # Display summary (only if not quiet)
-    if not quiet:
-        console.print(
-            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-            f"{len(team_scores) + len(failed_teams)} teams"
-        )
-        if failed_teams:
-            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
-
-    # Calculate standings
-    division_standings = team_processor.calculate_division_standings(team_scores)
-    conference_standings = team_processor.calculate_conference_standings(team_scores)
-    playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
-
-    # Generate reports based on format
-    if config.output_format == "json":
-        return generate_json_report(
-            team_scores,
-            all_players,
-            division_standings,
-            conference_standings,
-            playoff_standings,
-        )
-    if config.output_format == "html":
-        return generate_html_report(
-            team_scores,
-            all_players,
-            division_standings,
-            conference_standings,
-            playoff_standings,
-        )
-    if config.output_format == "csv":
-        if output_path:
-            generate_csv_report(
-                team_scores,
-                all_players,
-                division_standings,
-                conference_standings,
-                playoff_standings,
-                output_path,
-            )
-            return None
-        raise ValueError("CSV format requires output path")
-    if config.output_format == "excel":
-        if output_path:
-            generate_excel_report(
-                team_scores,
-                all_players,
-                division_standings,
-                conference_standings,
-                playoff_standings,
-                output_path,
-                sheets,
-            )
-            return None
-        raise ValueError("Excel format requires output path")
-
-    # Use lazy report generator for text format
-    report_generator = ReportGenerator(
-        team_scores=team_scores,
-        all_players=all_players,
-        division_standings=division_standings,
-        conference_standings=conference_standings,
-        playoff_standings=playoff_standings,
-        top_players_count=config.top_players_count,
-        top_team_players_count=config.top_team_players_count,
-    )
-
-    # Generate requested report (lazy evaluation)
-    return report_generator.get_report(report_filter)
 
 
 def generate_json_report(

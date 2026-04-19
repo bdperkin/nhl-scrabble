@@ -191,7 +191,7 @@ per-file-ignores = [
     "src/nhl_scrabble/api/nhl_client.py:C901",  # get_team_roster complexity from retry logic
     "src/nhl_scrabble/api_server/routes/players.py:C901",  # get_players complexity from filtering logic
     "src/nhl_scrabble/validators.py:C901",  # validate_file_path complexity from comprehensive security checks
-    "src/nhl_scrabble/cli.py:TC003",  # Path used at runtime, not just type checking
+    "src/nhl_scrabble/cli.py:TC003,C901",  # Path used at runtime; run_analysis complexity from error handling
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity
 exclude = [
@@ -339,6 +339,7 @@ ignore = [
     "T201",    # print statements are fine in CLI code
     "PLC0415", # Conditional imports for CLI dependencies
     "TC003",   # Path used at runtime, not just type checking
+    "C901",    # run_analysis complexity (11) from comprehensive error handling
 ]
 "src/nhl_scrabble/logging_config.py" = [
     "PLC0415", # Conditional imports for logging configuration
@@ -1040,6 +1041,7 @@ ignore_names = [
     "ReportGenerator",    # ReportGenerator class used dynamically in CLI
     "get_report",         # ReportGenerator method used via CLI --report flag
     "validate_url",       # Validator function part of public API (reserved for future use)
+    "reset",              # RateLimiter.reset() method part of public API (used for testing/manual reset)
 
     # FastAPI framework patterns (called at runtime by framework)
     "health",             # FastAPI endpoint function (registered via decorator)

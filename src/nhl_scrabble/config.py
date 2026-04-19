@@ -27,7 +27,8 @@ class Config:
         api_base_url: Base URL for NHL API (validated with SSRF protection)
         api_timeout: Request timeout in seconds for NHL API calls
         api_retries: Number of retry attempts for failed API requests
-        rate_limit_delay: Delay in seconds between API requests
+        rate_limit_max_requests: Maximum requests allowed per time window
+        rate_limit_window: Time window for rate limiting in seconds
         cache_enabled: Enable HTTP caching for API responses
         cache_expiry: Cache expiration time in seconds
         max_concurrent_requests: Maximum number of concurrent API requests
@@ -41,7 +42,8 @@ class Config:
     api_base_url: str = "https://api-web.nhle.com/v1"
     api_timeout: int = 10
     api_retries: int = 3
-    rate_limit_delay: float = 0.3
+    rate_limit_max_requests: int = 30
+    rate_limit_window: float = 60.0
     backoff_factor: float = 2.0
     max_backoff: float = 30.0
     cache_enabled: bool = True
@@ -65,12 +67,13 @@ class Config:
             NHL_SCRABBLE_API_BASE_URL: Base URL for NHL API (must be HTTPS, validated for SSRF)
             NHL_SCRABBLE_API_TIMEOUT: API timeout in seconds (1-300, default: 10)
             NHL_SCRABBLE_API_RETRIES: Retry attempts (0-10, default: 3)
-            NHL_SCRABBLE_RATE_LIMIT_DELAY: Delay between requests (0.0-60.0, default: 0.3)
+            NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS: Maximum requests per time window (1-1000, default: 30)
+            NHL_SCRABBLE_RATE_LIMIT_WINDOW: Time window for rate limiting in seconds (1.0-3600.0, default: 60.0)
             NHL_SCRABBLE_BACKOFF_FACTOR: Backoff multiplier (1.0-10.0, default: 2.0)
             NHL_SCRABBLE_MAX_BACKOFF: Max backoff delay (1.0-300.0, default: 30.0)
             NHL_SCRABBLE_CACHE_ENABLED: Enable caching (true/false, default: true)
             NHL_SCRABBLE_CACHE_EXPIRY: Cache expiry seconds (1-86400, default: 3600)
-            NHL_SCRABBLE_MAX_CONCURRENT: Max concurrent API requests (must be >= 1)
+            NHL_SCRABBLE_MAX_CONCURRENT: Max concurrent API requests (1-50, default: 5)
             NHL_SCRABBLE_TOP_PLAYERS: Top players to show (1-100, default: 20)
             NHL_SCRABBLE_TOP_TEAM_PLAYERS: Top players per team (1-50, default: 5)
             NHL_SCRABBLE_VERBOSE: Verbose logging (true/false, default: false)
@@ -133,12 +136,20 @@ class Config:
             name="NHL_SCRABBLE_API_RETRIES",
         )
 
-        # Validate rate limit delay (0.0-60.0 seconds)
-        rate_limit_delay = validate_float_range(
-            os.getenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3"),
-            min_val=0.0,
-            max_val=60.0,
-            name="NHL_SCRABBLE_RATE_LIMIT_DELAY",
+        # Validate rate limit max requests (1-1000)
+        rate_limit_max_requests = validate_integer_range(
+            os.getenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "30"),
+            min_val=1,
+            max_val=1000,
+            name="NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS",
+        )
+
+        # Validate rate limit window (1.0-3600.0 seconds = 1 hour max)
+        rate_limit_window = validate_float_range(
+            os.getenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "60.0"),
+            min_val=1.0,
+            max_val=3600.0,
+            name="NHL_SCRABBLE_RATE_LIMIT_WINDOW",
         )
 
         # Validate backoff factor (1.0-10.0)
@@ -201,7 +212,8 @@ class Config:
             api_base_url=validated_url,
             api_timeout=api_timeout,
             api_retries=api_retries,
-            rate_limit_delay=rate_limit_delay,
+            rate_limit_max_requests=rate_limit_max_requests,
+            rate_limit_window=rate_limit_window,
             backoff_factor=backoff_factor,
             max_backoff=max_backoff,
             cache_enabled=cache_enabled,
@@ -224,7 +236,8 @@ class Config:
             "api_base_url": self.api_base_url,
             "api_timeout": self.api_timeout,
             "api_retries": self.api_retries,
-            "rate_limit_delay": self.rate_limit_delay,
+            "rate_limit_max_requests": self.rate_limit_max_requests,
+            "rate_limit_window": self.rate_limit_window,
             "backoff_factor": self.backoff_factor,
             "max_backoff": self.max_backoff,
             "cache_enabled": self.cache_enabled,

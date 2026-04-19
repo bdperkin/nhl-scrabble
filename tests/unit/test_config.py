@@ -15,7 +15,8 @@ class TestConfig:
         config = Config()
         assert config.api_timeout == 10
         assert config.api_retries == 3
-        assert config.rate_limit_delay == 0.3
+        assert config.rate_limit_max_requests == 30
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 20
         assert config.top_team_players_count == 5
         assert config.verbose is False
@@ -26,7 +27,8 @@ class TestConfig:
         config = Config(
             api_timeout=30,
             api_retries=5,
-            rate_limit_delay=0.5,
+            rate_limit_max_requests=120,
+            rate_limit_window=60.0,
             top_players_count=50,
             top_team_players_count=10,
             verbose=True,
@@ -34,7 +36,8 @@ class TestConfig:
         )
         assert config.api_timeout == 30
         assert config.api_retries == 5
-        assert config.rate_limit_delay == 0.5
+        assert config.rate_limit_max_requests == 120
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 50
         assert config.top_team_players_count == 10
         assert config.verbose is True
@@ -69,7 +72,8 @@ class TestConfigFromEnv:
         config = Config.from_env()
         assert config.api_timeout == 10
         assert config.api_retries == 3
-        assert config.rate_limit_delay == 0.3
+        assert config.rate_limit_max_requests == 30
+        assert config.rate_limit_window == 60.0
         assert config.top_players_count == 20
         assert config.top_team_players_count == 5
         assert config.verbose is False
@@ -79,7 +83,8 @@ class TestConfigFromEnv:
         """Test Config.from_env() with valid custom values."""
         monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "30")
         monkeypatch.setenv("NHL_SCRABBLE_API_RETRIES", "5")
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.5")
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "120")
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "120.0")
         monkeypatch.setenv("NHL_SCRABBLE_TOP_PLAYERS", "50")
         monkeypatch.setenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "10")
         monkeypatch.setenv("NHL_SCRABBLE_VERBOSE", "true")
@@ -88,7 +93,8 @@ class TestConfigFromEnv:
         config = Config.from_env()
         assert config.api_timeout == 30
         assert config.api_retries == 5
-        assert config.rate_limit_delay == 0.5
+        assert config.rate_limit_max_requests == 120
+        assert config.rate_limit_window == 120.0
         assert config.top_players_count == 50
         assert config.top_team_players_count == 10
         assert config.verbose is True
@@ -108,8 +114,10 @@ class TestConfigFromEnv:
 
     def test_from_env_invalid_rate_limit(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid rate limit."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "not_a_number")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be a number"):
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "not_a_number")
+        with pytest.raises(
+            ValueError, match="NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS must be an integer"
+        ):
             Config.from_env()
 
     def test_from_env_invalid_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -150,15 +158,19 @@ class TestConfigFromEnv:
 
     def test_from_env_negative_rate_limit(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative rate limit."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "-0.5")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be at least 0"):
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "-1")
+        with pytest.raises(
+            ValueError, match="NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS must be at least 1"
+        ):
             Config.from_env()
 
-    def test_from_env_zero_rate_limit_valid(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test Config.from_env() with zero rate limit (valid)."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.0")
-        config = Config.from_env()
-        assert config.rate_limit_delay == 0.0
+    def test_from_env_zero_rate_limit_invalid(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with zero rate limit (invalid)."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "0")
+        with pytest.raises(
+            ValueError, match="NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS must be at least 1"
+        ):
+            Config.from_env()
 
     def test_from_env_negative_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative top_players."""
@@ -199,10 +211,11 @@ class TestConfigFromEnv:
             assert config.verbose is False, f"Failed for value: {false_value}"
 
     def test_from_env_float_as_string(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test Config.from_env() with float value for rate_limit_delay."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "1.5")
+        """Test Config.from_env() with float value for rate_limit_window."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "90.5")
         config = Config.from_env()
-        assert config.rate_limit_delay == 1.5
+        assert config.rate_limit_max_requests == 30
+        assert config.rate_limit_window == 90.5
 
     def test_from_env_error_message_includes_variable_name(
         self, monkeypatch: pytest.MonkeyPatch
@@ -218,9 +231,9 @@ class TestConfigFromEnv:
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         """Test that error messages include the invalid value."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "invalid_float")
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "invalid_float")
         with pytest.raises(
-            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_DELAY.*invalid_float"
+            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS.*invalid_float"
         ) as exc_info:
             Config.from_env()
         assert "invalid_float" in str(exc_info.value)

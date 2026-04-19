@@ -12,6 +12,7 @@ import certifi
 import requests
 import requests_cache
 
+from nhl_scrabble.rate_limiter import RateLimiter
 from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_url_for_ssrf
 from nhl_scrabble.utils.retry import retry
 from nhl_scrabble.validators import (
@@ -56,7 +57,7 @@ class NHLApiClient:
         base_url: Base URL for the NHL API (SSRF-validated)
         timeout: Request timeout in seconds
         retries: Number of retry attempts for failed requests
-        rate_limit_delay: Delay in seconds between requests to avoid rate limiting
+        rate_limiter: Token bucket rate limiter for API requests
         ca_bundle: Path to CA bundle for SSL verification (uses certifi)
     """
 
@@ -68,7 +69,8 @@ class NHLApiClient:
         base_url: str | None = None,
         timeout: int = 10,
         retries: int = 3,
-        rate_limit_delay: float = 0.3,
+        rate_limit_max_requests: int = 30,
+        rate_limit_window: float = 60.0,
         backoff_factor: float = 2.0,
         max_backoff: float = 30.0,
         cache_enabled: bool = True,
@@ -82,7 +84,8 @@ class NHLApiClient:
                 Will be validated for SSRF protection on first request.
             timeout: Request timeout in seconds (default: 10)
             retries: Number of retry attempts for failed requests (default: 3)
-            rate_limit_delay: Delay in seconds between requests (default: 0.3)
+            rate_limit_max_requests: Maximum requests per time window (default: 30)
+            rate_limit_window: Time window for rate limiting in seconds (default: 60.0)
             backoff_factor: Exponential backoff multiplier (default: 2.0)
             max_backoff: Maximum backoff delay in seconds (default: 30.0)
             cache_enabled: Enable HTTP caching (default: True)
@@ -108,13 +111,17 @@ class NHLApiClient:
 
         self.timeout = timeout
         self.retries = retries
-        self.rate_limit_delay = rate_limit_delay
         self.backoff_factor = backoff_factor
         self.max_backoff = max_backoff
         self.cache_enabled = cache_enabled
         self.cache_expiry = cache_expiry
-        self._last_request_time: float | None = (
-            None  # Track last successful request for rate limiting
+
+        # Initialize rate limiter
+        self.rate_limiter = RateLimiter(
+            max_requests=rate_limit_max_requests, time_window=rate_limit_window
+        )
+        logger.info(
+            f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s"
         )
 
         # Use certifi CA bundle for SSL verification
@@ -159,6 +166,38 @@ class NHLApiClient:
         except SSRFProtectionError as e:
             logger.error(f"SSRF protection blocked request to {url}: {e}")
             raise NHLApiError(f"Request blocked by security protection: {e}") from e
+
+    def _get_retry_after(self, response: requests.Response) -> float:
+        """Extract Retry-After header value from 429 response.
+
+        Args:
+            response: HTTP response with 429 status
+
+        Returns:
+            Seconds to wait before retry
+
+        Examples:
+            >>> client = NHLApiClient()
+            >>> from unittest.mock import Mock
+            >>> response = Mock()
+            >>> response.headers = {"Retry-After": "60"}
+            >>> client._get_retry_after(response)
+            60.0
+        """
+        retry_after = response.headers.get("Retry-After")
+
+        if retry_after:
+            try:
+                # Try as integer (seconds)
+                return float(retry_after)
+            except ValueError:
+                # Could be HTTP date format, but uncommon for 429
+                # Default to exponential backoff
+                pass
+
+        # No Retry-After header, use exponential backoff
+        # Start with 1 second
+        return 1.0
 
     def _calculate_backoff_delay(self, attempt: int, retry_after: int | None = None) -> float:
         """Calculate backoff delay with exponential backoff and jitter.
@@ -273,13 +312,10 @@ class NHLApiClient:
             is_cached = self._is_url_cached(url)
 
             # Only rate limit for actual API calls (not cached responses)
-            if not is_cached and self._last_request_time is not None and self.rate_limit_delay > 0:
-                elapsed = time.time() - self._last_request_time
-                if elapsed < self.rate_limit_delay:
-                    sleep_time = self.rate_limit_delay - elapsed
-                    if logger.isEnabledFor(logging.DEBUG):
-                        logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
-                    time.sleep(sleep_time)
+            if not is_cached:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug("Rate limiting: acquiring token for teams request")
+                self.rate_limiter.acquire()
 
             try:
                 response = self.session.get(
@@ -287,6 +323,15 @@ class NHLApiClient:
                     timeout=self.timeout,
                     verify=self.ca_bundle,  # Explicit SSL verification with certifi CA bundle
                 )
+
+                # Handle rate limiting (429)
+                if response.status_code == 429:
+                    retry_after = self._get_retry_after(response)
+                    logger.warning(f"Rate limited (429). Waiting {retry_after}s before retry.")
+                    time.sleep(retry_after)
+                    # Raise to trigger retry
+                    response.raise_for_status()
+
                 response.raise_for_status()
                 data = response.json()
 
@@ -300,18 +345,16 @@ class NHLApiClient:
 
                 logger.info(f"Successfully fetched {len(teams_info)} teams")
 
-                # Only record request time if this was a real API call (not cached)
-                # Check from_cache attribute safely (handles Mock objects that don't have it set)
+                # Log cache status
                 from_cache = (
                     hasattr(response, "from_cache")
                     and isinstance(response.from_cache, bool)
                     and response.from_cache
                 )
-                if not from_cache:
-                    self._last_request_time = time.time()
-                    logger.debug("Real API request - updated rate limit timer")
-                else:
+                if from_cache:
                     logger.debug("Cache hit - skipped rate limiting")
+                else:
+                    logger.debug("Real API request - rate limited")
 
                 return teams_info
 
@@ -388,17 +431,10 @@ class NHLApiClient:
                 is_cached = self._is_url_cached(url)
 
                 # Only rate limit for actual API calls (not cached responses)
-                if (
-                    not is_cached
-                    and self._last_request_time is not None
-                    and self.rate_limit_delay > 0
-                ):
-                    elapsed = time.time() - self._last_request_time
-                    if elapsed < self.rate_limit_delay:
-                        sleep_time = self.rate_limit_delay - elapsed
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug(f"Rate limiting: sleeping {sleep_time:.3f}s")
-                        time.sleep(sleep_time)
+                if not is_cached:
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f"Rate limiting: acquiring token for {team_abbrev} roster")
+                    self.rate_limiter.acquire()
 
                 response = self.session.get(
                     url,
@@ -413,16 +449,13 @@ class NHLApiClient:
                 # Handle 429 rate limiting with exponential backoff
                 if response.status_code == 429:
                     if attempt < self.retries - 1:
-                        # Extract Retry-After header (seconds)
-                        retry_after = response.headers.get("Retry-After")
-                        retry_after_int = int(retry_after) if retry_after else None
-                        backoff_delay = self._calculate_backoff_delay(attempt, retry_after_int)
+                        retry_after = self._get_retry_after(response)
                         logger.warning(
                             f"Rate limited (429) for {team_abbrev} "
                             f"(attempt {attempt + 1}/{self.retries}), "
-                            f"retrying in {backoff_delay:.2f}s..."
+                            f"retrying in {retry_after:.2f}s..."
                         )
-                        time.sleep(backoff_delay)
+                        time.sleep(retry_after)
                         continue
                     logger.error(
                         f"Rate limited (429) for {team_abbrev} after {self.retries} attempts"
@@ -453,18 +486,16 @@ class NHLApiClient:
                         f"Successfully fetched and validated roster for {validated_abbrev}"
                     )
 
-                # Only record request time if this was a real API call (not cached)
-                # Check from_cache attribute safely (handles Mock objects that don't have it set)
+                # Log cache status
                 from_cache = (
                     hasattr(response, "from_cache")
                     and isinstance(response.from_cache, bool)
                     and response.from_cache
                 )
-                if not from_cache:
-                    self._last_request_time = time.time()
-                    logger.debug("Real API request - updated rate limit timer")
-                else:
+                if from_cache:
                     logger.debug("Cache hit - skipped rate limiting")
+                else:
+                    logger.debug("Real API request - rate limited")
 
                 return data  # type: ignore[no-any-return]
 
@@ -559,6 +590,26 @@ class NHLApiClient:
                         logger.warning(f"Invalid player last name in API response: {e}")
                         # Use sanitized version or skip
                         player["lastName"]["default"] = "Unknown"
+
+    def get_rate_limit_stats(self) -> dict[str, Any]:
+        """Get rate limiter statistics.
+
+        Returns:
+            Dictionary with rate limiter statistics including:
+                - total_requests: Total requests made
+                - total_waits: Total times waited for tokens
+                - total_wait_time: Total time spent waiting
+                - average_wait: Average wait time per wait
+                - current_tokens: Current token count
+                - max_tokens: Maximum token capacity
+
+        Examples:
+            >>> client = NHLApiClient()
+            >>> stats = client.get_rate_limit_stats()
+            >>> "total_requests" in stats
+            True
+        """
+        return self.rate_limiter.get_stats()
 
     def clear_cache(self) -> None:
         """Clear the HTTP cache."""
