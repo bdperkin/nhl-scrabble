@@ -236,9 +236,7 @@ class Config:
                 "NHL_SCRABBLE_MAX_BACKOFF", "30.0", min_value=1.0, max_value=300.0
             ),
             cache_enabled=get_bool("NHL_SCRABBLE_CACHE_ENABLED", "true"),
-            cache_expiry=get_int(
-                "NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1, max_value=86400
-            ),
+            cache_expiry=get_int("NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1, max_value=86400),
             max_concurrent_requests=get_int(
                 "NHL_SCRABBLE_MAX_CONCURRENT", "5", min_value=1, max_value=50
             ),
@@ -249,9 +247,7 @@ class Config:
                 "NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1, max_value=100
             ),
             verbose=get_bool("NHL_SCRABBLE_VERBOSE", "false"),
-            output_format=get_enum(
-                "NHL_SCRABBLE_OUTPUT_FORMAT", "text", {"text", "json", "html"}
-            ),
+            output_format=get_enum("NHL_SCRABBLE_OUTPUT_FORMAT", "text", {"text", "json", "html"}),
             sanitize_logs=get_bool("NHL_SCRABBLE_SANITIZE_LOGS", "true"),
         )
 

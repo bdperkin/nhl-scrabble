@@ -119,7 +119,9 @@ class TestConfigFromEnv:
     def test_from_env_invalid_rate_limit(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid rate limit."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "not_a_number")
-        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS.*Invalid integer"):
+        with pytest.raises(
+            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS.*Invalid integer"
+        ):
             Config.from_env()
 
     def test_from_env_invalid_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -166,7 +168,9 @@ class TestConfigFromEnv:
         ):
             Config.from_env()
 
-    def test_from_env_minimum_rate_limit_window_valid(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_from_env_minimum_rate_limit_window_valid(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test Config.from_env() with minimum rate limit window (valid)."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "1.0")
         config = Config.from_env()

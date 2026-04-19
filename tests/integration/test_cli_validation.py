@@ -134,7 +134,7 @@ class TestEnvironmentVariableValidation:
 
         assert result.exit_code != 0
         assert "configuration error" in result.output.lower()
-        assert "cannot exceed 300" in result.output.lower()
+        assert "outside allowed range" in result.output.lower()
 
     def test_api_timeout_invalid(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test non-integer API timeout is rejected."""
@@ -155,7 +155,7 @@ class TestEnvironmentVariableValidation:
 
         assert result.exit_code != 0
         assert "configuration error" in result.output.lower()
-        assert "cannot exceed 1000" in result.output.lower()
+        assert "outside allowed range" in result.output.lower()
 
     def test_top_players_too_high_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test top players count from env above maximum is rejected."""

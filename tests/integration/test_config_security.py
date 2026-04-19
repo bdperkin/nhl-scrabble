@@ -24,11 +24,13 @@ class TestConfigInjectionPrevention:
         with pytest.raises(ValueError, match=r"NHL_SCRABBLE_API_RETRIES.*dangerous character"):
             Config.from_env()
 
-    def test_rejects_command_injection_in_delay(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test config rejects command injection in rate limit delay."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3 | whoami")
+    def test_rejects_command_injection_in_window(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test config rejects command injection in rate limit window."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "60.0 | whoami")
 
-        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_DELAY.*dangerous character"):
+        with pytest.raises(
+            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*dangerous character"
+        ):
             Config.from_env()
 
     def test_rejects_non_integer_timeout(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -38,11 +40,11 @@ class TestConfigInjectionPrevention:
         with pytest.raises(ValueError, match=r"NHL_SCRABBLE_API_TIMEOUT.*Invalid integer"):
             Config.from_env()
 
-    def test_rejects_non_float_delay(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test config rejects non-float delay value."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "not_a_float")
+    def test_rejects_non_float_window(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test config rejects non-float window value."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "not_a_float")
 
-        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_DELAY.*Invalid float"):
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*Invalid float"):
             Config.from_env()
 
     def test_rejects_timeout_below_minimum(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -73,21 +75,21 @@ class TestConfigInjectionPrevention:
         with pytest.raises(ValueError, match=r"NHL_SCRABBLE_API_RETRIES.*outside allowed range"):
             Config.from_env()
 
-    def test_rejects_delay_below_minimum(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test config rejects delay below minimum."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "-0.5")
+    def test_rejects_window_below_minimum(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test config rejects window below minimum."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "0.5")
 
         with pytest.raises(
-            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_DELAY.*outside allowed range"
+            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*outside allowed range"
         ):
             Config.from_env()
 
-    def test_rejects_delay_above_maximum(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test config rejects delay above maximum."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "15.0")
+    def test_rejects_window_above_maximum(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test config rejects window above maximum."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "5000.0")
 
         with pytest.raises(
-            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_DELAY.*outside allowed range"
+            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*outside allowed range"
         ):
             Config.from_env()
 
@@ -141,11 +143,11 @@ class TestConfigValidValues:
         config = Config.from_env()
         assert config.api_retries == 5
 
-    def test_accepts_valid_delay(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test config accepts valid delay value."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.5")
+    def test_accepts_valid_window(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test config accepts valid window value."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "120.0")
         config = Config.from_env()
-        assert config.rate_limit_delay == 0.5
+        assert config.rate_limit_window == 120.0
 
     def test_accepts_valid_output_format(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test config accepts valid output format."""
@@ -220,10 +222,10 @@ class TestConfigDefaults:
         config = Config.from_env()
         assert config.api_retries == 3
 
-    def test_default_delay(self) -> None:
-        """Test default rate limit delay."""
+    def test_default_window(self) -> None:
+        """Test default rate limit window."""
         config = Config.from_env()
-        assert config.rate_limit_delay == 0.3
+        assert config.rate_limit_window == 60.0
 
     def test_default_output_format(self) -> None:
         """Test default output format."""
