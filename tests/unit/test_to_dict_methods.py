@@ -207,7 +207,7 @@ class TestTeamScoreToDict:
         assert isinstance(result["players"], list)
         assert len(result["players"]) > 0
         assert isinstance(result["players"][0], dict)
-        assert not isinstance(result["players"][0], PlayerScore)
+        assert not isinstance(result["players"][0], PlayerScore)  # type: ignore[unreachable]
 
 
 class TestDivisionStandingsToDict:
