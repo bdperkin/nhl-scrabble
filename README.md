@@ -152,6 +152,41 @@ The web interface provides:
 - 📚 Auto-generated OpenAPI documentation
 - 🩺 Health check endpoint for monitoring
 
+### Interactive Dashboard
+
+Launch an interactive terminal dashboard with real-time statistics and visualizations:
+
+```bash
+# Launch dashboard
+nhl-scrabble dashboard
+
+# Filter by division
+nhl-scrabble dashboard --division Atlantic
+
+# Filter by conference
+nhl-scrabble dashboard --conference Eastern
+
+# Run for 30 seconds then exit
+nhl-scrabble dashboard --duration 30
+
+# Display static snapshot (no live updates)
+nhl-scrabble dashboard --static
+
+# Combine filters
+nhl-scrabble dashboard --division Metropolitan --conference Eastern
+```
+
+The dashboard displays:
+
+- 🏆 Top teams by total Scrabble score
+- ⭐ Top players by individual score
+- 📊 Division standings with statistics
+- 🏟️ Conference standings overview
+- 🎨 Rich visualizations with tables and panels
+- ⚡ Live updates (configurable refresh rate)
+
+Press `Ctrl+C` to exit the dashboard.
+
 ### Configuration
 
 Configure via environment variables:

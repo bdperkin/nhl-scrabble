@@ -70,6 +70,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     nhl-scrabble watch --format json --interval 120 # JSON output, 2-minute interval
     ```
 
+- **Statistics Dashboard** - Real-time interactive visualization of NHL Scrabble data
+
+  - Added `dashboard` command for live statistics monitoring with auto-refresh
+  - Real-time dashboard with team scores, top players, and league statistics
+  - Auto-refresh capabilities with configurable update intervals
+  - Filter by division or conference for focused analysis
+  - Static snapshot mode for one-time viewing without live updates
+  - Duration control for timed dashboard sessions
+  - Quiet mode to suppress data fetching progress bars
+  - Cache control option to force fresh data retrieval
+  - Rich library-based visualization with tables and progress indicators
+  - Graceful keyboard interrupt handling (Ctrl+C)
+  - Added comprehensive unit tests for dashboard functionality
+  - Benefits: Visual data exploration, real-time monitoring, better data presentation
+  - Related: Enhancement task #147 - Statistics dashboard
+  - Usage:
+    ```bash
+    nhl-scrabble dashboard                          # Live dashboard (until Ctrl+C)
+    nhl-scrabble dashboard --static                 # Static snapshot
+    nhl-scrabble dashboard --duration 60            # Run for 60 seconds
+    nhl-scrabble dashboard --division Atlantic      # Filter by division
+    nhl-scrabble dashboard --conference Eastern     # Filter by conference
+    nhl-scrabble dashboard --quiet                  # Suppress progress bars
+    ```
+
 - **CSV and Excel Export Formats** - New export formats for data analysis in spreadsheets
 
   - Added `CSVExporter` class for exporting data to CSV format
