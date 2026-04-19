@@ -267,11 +267,15 @@ class NHLApiClient:
             # This ensures we always apply rate limiting if uncertain
             return False
 
-    def get_teams(self) -> dict[str, dict[str, str]]:
+    def get_teams(self, season: str | None = None) -> dict[str, dict[str, str]]:
         """Fetch all NHL teams with division and conference information.
 
         This method uses the retry decorator to automatically retry on network errors.
         The URL is validated with SSRF protection before making the request.
+
+        Args:
+            season: Optional season in format 'YYYYYYYY' (e.g., '20222023' for 2022-23).
+                If None, fetches current season data.
 
         Returns:
             Dictionary mapping team abbreviations to their metadata:
@@ -290,9 +294,16 @@ class NHLApiClient:
             >>> teams = client.get_teams()
             >>> "TOR" in teams
             True
+            >>> teams_2022 = client.get_teams(season="20222023")
+            >>> "TOR" in teams_2022
+            True
         """
-        url = f"{self.base_url}/standings/now"
-        logger.info("Fetching NHL teams from standings endpoint")
+        # Use season-specific endpoint or current season endpoint
+        endpoint = f"standings/{season}" if season else "standings/now"
+        url = f"{self.base_url}/{endpoint}"
+
+        season_desc = f"season {season}" if season else "current season"
+        logger.info(f"Fetching NHL teams from standings endpoint for {season_desc}")
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)
@@ -426,7 +437,11 @@ class NHLApiClient:
             raise
 
         # Use season-specific endpoint or current season endpoint
-        endpoint = f"roster/{validated_abbrev}/{season}" if season else f"roster/{validated_abbrev}/current"
+        endpoint = (
+            f"roster/{validated_abbrev}/{season}"
+            if season
+            else f"roster/{validated_abbrev}/current"
+        )
         url = f"{self.base_url}/{endpoint}"
 
         season_desc = f"season {season}" if season else "current season"

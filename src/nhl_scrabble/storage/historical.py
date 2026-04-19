@@ -12,7 +12,7 @@ class HistoricalDataStoreError(Exception):
     """Base exception for historical data storage errors."""
 
 
-class HistoricalDataStore:  # noqa: vulture  # Used in tests and future CLI integration
+class HistoricalDataStore:
     """Storage manager for historical NHL Scrabble data.
 
     This class manages local caching of historical season data to reduce

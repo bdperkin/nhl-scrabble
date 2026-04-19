@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiNotFoundError
 from nhl_scrabble.models.player import PlayerScore

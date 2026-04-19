@@ -8,7 +8,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
-class SeasonComparison:  # noqa: vulture  # Used in tests
+class SeasonComparison:
     """Compare NHL Scrabble scores across multiple seasons.
 
     This class provides functionality to compare team and player scores
@@ -171,7 +171,7 @@ class SeasonComparison:  # noqa: vulture  # Used in tests
         }
 
 
-class TrendAnalysis:  # noqa: vulture  # Used in tests
+class TrendAnalysis:
     """Analyze NHL Scrabble score trends across seasons.
 
     This class provides functionality to analyze how scores change
