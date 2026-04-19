@@ -172,11 +172,10 @@ class TestValidateUrlForSsrf:
 
     def test_allowed_domains_constant(self) -> None:
         """Test that ALLOWED_DOMAINS constant is correctly configured."""
-        # These are test assertions, not URL validation - CodeQL false positive
-        assert (
-            "api-web.nhle.com" in ALLOWED_DOMAINS
-        )  # codeql[py/incomplete-url-substring-sanitization]
-        assert "api.nhle.com" in ALLOWED_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
+        # Check expected domains are in the allowed list (membership test, not substring match)
+        expected_domains = {"api-web.nhle.com", "api.nhle.com"}
+        for domain in expected_domains:
+            assert domain in ALLOWED_DOMAINS, f"{domain} should be in ALLOWED_DOMAINS"
         assert len(ALLOWED_DOMAINS) >= 2
 
     def test_blocked_ip_ranges_constant(self) -> None:
