@@ -97,53 +97,49 @@ class TestConfigFromEnv:
     def test_from_env_invalid_timeout(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid timeout."""
         monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "invalid")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be a valid integer"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be an integer"):
             Config.from_env()
 
     def test_from_env_invalid_retries(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid retries."""
         monkeypatch.setenv("NHL_SCRABBLE_API_RETRIES", "not_a_number")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_RETRIES must be a valid integer"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_RETRIES must be an integer"):
             Config.from_env()
 
     def test_from_env_invalid_rate_limit(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid rate limit."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "not_a_number")
-        with pytest.raises(
-            ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be a valid number"
-        ):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be a number"):
             Config.from_env()
 
     def test_from_env_invalid_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid top_players."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_PLAYERS", "xyz")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be a valid integer"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be an integer"):
             Config.from_env()
 
     def test_from_env_invalid_top_team_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid top_team_players."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "abc")
-        with pytest.raises(
-            ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be a valid integer"
-        ):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be an integer"):
             Config.from_env()
 
     def test_from_env_negative_timeout(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative timeout."""
         monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "-5")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be >= 1"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be at least 1"):
             Config.from_env()
 
     def test_from_env_zero_timeout(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with zero timeout (invalid)."""
         monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "0")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be >= 1"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be at least 1"):
             Config.from_env()
 
     def test_from_env_negative_retries(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative retries."""
         monkeypatch.setenv("NHL_SCRABBLE_API_RETRIES", "-1")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_RETRIES must be >= 0"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_RETRIES must be at least 0"):
             Config.from_env()
 
     def test_from_env_zero_retries_valid(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -155,7 +151,7 @@ class TestConfigFromEnv:
     def test_from_env_negative_rate_limit(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative rate limit."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "-0.5")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be >= 0"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be at least 0"):
             Config.from_env()
 
     def test_from_env_zero_rate_limit_valid(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -167,25 +163,25 @@ class TestConfigFromEnv:
     def test_from_env_negative_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative top_players."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_PLAYERS", "-10")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be >= 1"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be at least 1"):
             Config.from_env()
 
     def test_from_env_zero_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with zero top_players (invalid)."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_PLAYERS", "0")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be >= 1"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be at least 1"):
             Config.from_env()
 
     def test_from_env_negative_top_team_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with negative top_team_players."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "-5")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be >= 1"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be at least 1"):
             Config.from_env()
 
     def test_from_env_zero_top_team_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with zero top_team_players (invalid)."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "0")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be >= 1"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be at least 1"):
             Config.from_env()
 
     def test_from_env_verbose_true_variations(self, monkeypatch: pytest.MonkeyPatch) -> None:

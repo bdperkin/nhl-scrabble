@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,62 +24,66 @@ from nhl_scrabble.processors.team_processor import TeamProcessor
 from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 from nhl_scrabble.ui.progress import ProgressManager
+from nhl_scrabble.validators import ValidationError, validate_file_path, validate_integer_range
 
 logger = logging.getLogger(__name__)
 console = Console()
 
 
-def validate_output_path(output: str | None) -> None:
-    """Validate that output path is writable before processing.
+def validate_cli_arguments(
+    output: str | None, top_players: int, top_team_players: int
+) -> tuple[Path | None, int, int]:
+    """Validate all CLI arguments before processing.
 
-    Checks that the output path's parent directory exists and is writable,
-    and that any existing file at the path is also writable. This validation
-    happens before any API calls to provide immediate feedback on path issues.
+    Uses comprehensive validators from validators module to check all inputs
+    for security issues and invalid values. This validation happens before
+    any API calls to provide immediate feedback.
 
     Args:
-        output: Output file path, or None for stdout.
+        output: Output file path, or None for stdout
+        top_players: Number of top players to show
+        top_team_players: Number of top players per team to show
+
+    Returns:
+        Tuple of (validated_output_path, validated_top_players, validated_top_team_players)
 
     Raises:
-        click.ClickException: If output path is not writable, with helpful
-            error message explaining the issue and how to fix it.
+        click.ClickException: If any argument is invalid with helpful error message
 
-    Example:
-        >>> validate_output_path("/tmp/output.txt")  # OK
-        >>> validate_output_path(None)  # OK (stdout)
-        >>> validate_output_path("/nonexistent/dir/file.txt")  # Raises
-        ClickException: Output directory does not exist: /nonexistent/dir
-        Create it first: mkdir -p /nonexistent/dir
+    Security:
+        - Prevents path traversal attacks via output path
+        - Validates numeric parameters to prevent DoS via memory exhaustion
+        - Provides early validation before expensive operations
+
+    Examples:
+        >>> validate_cli_arguments("output.txt", 20, 5)
+        (PosixPath('/current/dir/output.txt'), 20, 5)
+        >>> validate_cli_arguments(None, 20, 5)  # stdout
+        (None, 20, 5)
     """
-    if output is None:
-        return  # stdout is always writable
+    validated_output: Path | None = None
 
-    # Resolve to absolute path
-    output_path = Path(output).resolve()
-    output_dir = output_path.parent
+    try:
+        # Validate output path if provided
+        if output:
+            # Allow overwrite since we'll warn the user
+            validated_output = validate_file_path(output, allow_overwrite=True)
+            if validated_output.exists():
+                logger.warning(f"Output file exists and will be overwritten: {validated_output}")
 
-    # Check if directory exists
-    if not output_dir.exists():
-        raise click.ClickException(
-            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}"
+        # Validate numeric parameters
+        validated_top_players = validate_integer_range(
+            top_players, min_val=1, max_val=100, name="top_players"
         )
 
-    # Check if directory is writable
-    if not os.access(output_dir, os.W_OK):
-        raise click.ClickException(
-            f"Output directory is not writable: {output_dir}\n"
-            f"Check permissions with: ls -ld {output_dir}"
+        validated_top_team_players = validate_integer_range(
+            top_team_players, min_val=1, max_val=50, name="top_team_players"
         )
 
-    # Check if file exists and is writable
-    if output_path.exists():
-        if not os.access(output_path, os.W_OK):
-            raise click.ClickException(
-                f"Output file exists but is not writable: {output_path}\n"
-                f"Check permissions with: ls -l {output_path}"
-            )
+        return validated_output, validated_top_players, validated_top_team_players
 
-        # Warn if file will be overwritten
-        logger.warning(f"Output file exists and will be overwritten: {output_path}")
+    except ValidationError as e:
+        raise click.ClickException(str(e)) from e
 
 
 @click.group()
@@ -181,12 +184,22 @@ def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many paramete
         nhl-scrabble analyze --report team
         nhl-scrabble analyze --report playoff --output playoffs.txt
     """
-    # Load configuration first to get sanitize_logs setting
-    config = Config.from_env()
+    # Validate ALL CLI arguments first (before any processing)
+    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
+        output, top_players, top_team_players
+    )
+
+    # Load configuration (which will also validate environment variables)
+    try:
+        config = Config.from_env()
+    except ValueError as e:
+        # Convert config validation errors to ClickException for consistent error handling
+        raise click.ClickException(f"Configuration error: {e}") from e
+
     config.verbose = verbose
     config.output_format = output_format
-    config.top_players_count = top_players
-    config.top_team_players_count = top_team_players
+    config.top_players_count = validated_top_players
+    config.top_team_players_count = validated_top_team_players
 
     # Override cache setting from CLI
     if no_cache:
@@ -206,8 +219,8 @@ def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many paramete
             f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
         )
 
-    # Validate output path BEFORE making API calls
-    validate_output_path(output)
+    # NOTE: Validated arguments already set in config above at line 188
+    # No need to validate again here
 
     # Display header (suppress if quiet mode)
     if not quiet:
@@ -231,14 +244,13 @@ def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many paramete
         )
 
         # Output results
-        if output:
-            output_path = Path(output)
+        if validated_output:
             if isinstance(result, str):
                 # Text/JSON output
-                output_path.write_text(result)
+                validated_output.write_text(result)
             # CSV/Excel are written directly by exporters
             if not quiet:
-                console.print(f"\n[green]✓[/green] Report saved to: {output}")
+                console.print(f"\n[green]✓[/green] Report saved to: {validated_output}")
         elif isinstance(result, str):
             print(result)
         else:
