@@ -46,7 +46,7 @@ class TestTeamProcessorConcurrent:
 
         # Test fetching a single team
         team_meta = {"division": "Atlantic", "conference": "Eastern"}
-        result = processor._fetch_and_process_team("TOR", team_meta)  # noqa: SLF001
+        result = processor._fetch_and_process_team("TOR", team_meta)
 
         # Verify result
         assert result is not None
@@ -71,7 +71,7 @@ class TestTeamProcessorConcurrent:
 
         # Test fetching non-existent team
         team_meta = {"division": "Unknown", "conference": "Unknown"}
-        result = processor._fetch_and_process_team("XXX", team_meta)  # noqa: SLF001
+        result = processor._fetch_and_process_team("XXX", team_meta)
 
         # Should return None for 404
         assert result is None

@@ -5,10 +5,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
+from typing import Any
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiNotFoundError
 from nhl_scrabble.models.player import PlayerScore
@@ -44,16 +41,11 @@ class TeamProcessor:
 
     def process_all_teams(
         self,
-        progress_callback: Callable[[str], None] | None = None,
     ) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
         """Process all NHL teams and calculate scores with concurrent fetching.
 
         Uses ThreadPoolExecutor to fetch team rosters concurrently, improving performance
         for I/O-bound operations. The number of concurrent workers is controlled by max_workers.
-
-        Args:
-            progress_callback: Optional callback to report progress after each team.
-                Called with team abbreviation after successfully processing each team.
 
         Returns:
             Tuple containing:
