@@ -11,8 +11,10 @@ from typing import Any, ClassVar
 import certifi
 import requests
 import requests_cache
+from requests.adapters import HTTPAdapter
 
 from nhl_scrabble.rate_limiter import RateLimiter
+from nhl_scrabble.security.circuit_breaker import CircuitBreaker
 from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_url_for_ssrf
 from nhl_scrabble.utils.retry import retry
 from nhl_scrabble.validators import (
@@ -46,18 +48,24 @@ class NHLApiClient:
 
     This client provides methods to fetch team standings and roster data
     from the official NHL API with built-in retry logic, rate limiting,
-    SSRF protection, and enforced SSL/TLS certificate verification.
+    SSRF protection, DoS prevention, and enforced SSL/TLS certificate verification.
 
     SSL/TLS Security:
         - Certificate verification is always enabled and cannot be disabled
         - Uses certifi CA bundle for up-to-date certificate authorities
         - SSL errors are caught and logged for security monitoring
 
+    DoS Prevention:
+        - Circuit breaker pattern to prevent cascading failures
+        - Connection pool limits to prevent resource exhaustion
+        - Configurable failure thresholds and timeouts
+
     Attributes:
         base_url: Base URL for the NHL API (SSRF-validated)
         timeout: Request timeout in seconds
         retries: Number of retry attempts for failed requests
         rate_limiter: Token bucket rate limiter for API requests
+        circuit_breaker: Circuit breaker for DoS prevention
         ca_bundle: Path to CA bundle for SSL verification (uses certifi)
     """
 
@@ -76,6 +84,10 @@ class NHLApiClient:
         cache_enabled: bool = True,
         cache_expiry: int = 3600,
         verify_ssl: bool = True,
+        dos_max_connections: int = 10,
+        dos_max_per_host: int = 5,
+        dos_circuit_breaker_threshold: int = 5,
+        dos_circuit_breaker_timeout: float = 60.0,
     ) -> None:
         """Initialize the NHL API client.
 
@@ -91,6 +103,10 @@ class NHLApiClient:
             cache_enabled: Enable HTTP caching (default: True)
             cache_expiry: Cache expiration in seconds (default: 3600 = 1 hour)
             verify_ssl: SSL verification (must be True, cannot be disabled for security)
+            dos_max_connections: Maximum connection pool connections (default: 10)
+            dos_max_per_host: Maximum connections per host (default: 5)
+            dos_circuit_breaker_threshold: Circuit breaker failure threshold (default: 5)
+            dos_circuit_breaker_timeout: Circuit breaker timeout in seconds (default: 60.0)
 
         Raises:
             NHLApiError: If base_url fails SSRF protection validation
@@ -124,6 +140,20 @@ class NHLApiClient:
             f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s"
         )
 
+        # Initialize circuit breaker for DoS prevention
+        self.circuit_breaker = CircuitBreaker(
+            failure_threshold=dos_circuit_breaker_threshold,
+            timeout=dos_circuit_breaker_timeout,
+            expected_exception=(
+                requests.exceptions.RequestException,
+                NHLApiError,
+            ),
+        )
+        logger.info(
+            f"Circuit breaker initialized: threshold={dos_circuit_breaker_threshold}, "
+            f"timeout={dos_circuit_breaker_timeout}s"
+        )
+
         # Use certifi CA bundle for SSL verification
         self.ca_bundle = certifi.where()
         logger.debug(f"Using CA bundle for SSL verification: {self.ca_bundle}")
@@ -145,6 +175,19 @@ class NHLApiClient:
         else:
             self.session = requests.Session()
             logger.debug("HTTP caching disabled")
+
+        # Configure connection pool limits for DoS protection
+        adapter = HTTPAdapter(
+            pool_connections=dos_max_connections,
+            pool_maxsize=dos_max_per_host,
+            max_retries=0,  # We handle retries ourselves via @retry decorator
+        )
+        self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
+        logger.info(
+            f"Connection pool configured: max_connections={dos_max_connections}, "
+            f"max_per_host={dos_max_per_host}"
+        )
 
         self.session.headers.update({"User-Agent": "NHL-Scrabble/2.0"})
 
@@ -380,7 +423,8 @@ class NHLApiClient:
                 raise NHLApiError(f"Invalid API response format: {e}") from e
 
         try:
-            return _fetch_teams()
+            # Wrap with circuit breaker for DoS prevention
+            return self.circuit_breaker.call(_fetch_teams)
         except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
             # Convert to NHLApiConnectionError after retries exhausted
             logger.error(f"Connection error after retries: {e}")
@@ -451,121 +495,130 @@ class NHLApiClient:
         # Validate URL with SSRF protection
         self._validate_request_url(url)
 
-        for attempt in range(self.retries):
-            try:
-                # Check if URL is cached
-                is_cached = self._is_url_cached(url)
-
-                # Only rate limit for actual API calls (not cached responses)
-                if not is_cached:
-                    if logger.isEnabledFor(logging.DEBUG):
-                        logger.debug(f"Rate limiting: acquiring token for {team_abbrev} roster")
-                    self.rate_limiter.acquire()
-
-                response = self.session.get(
-                    url,
-                    timeout=self.timeout,
-                    verify=self.ca_bundle,  # Explicit SSL verification with certifi CA bundle
-                )
-
-                if response.status_code == 404:
-                    logger.warning(f"No roster data available for {team_abbrev}")
-                    raise NHLApiNotFoundError(f"Roster not found for team: {team_abbrev}")
-
-                # Handle 429 rate limiting with exponential backoff
-                if response.status_code == 429:
-                    if attempt < self.retries - 1:
-                        retry_after = self._get_retry_after(response)
-                        logger.warning(
-                            f"Rate limited (429) for {team_abbrev} "
-                            f"(attempt {attempt + 1}/{self.retries}), "
-                            f"retrying in {retry_after:.2f}s..."
-                        )
-                        time.sleep(retry_after)
-                        continue
-                    logger.error(
-                        f"Rate limited (429) for {team_abbrev} after {self.retries} attempts"
-                    )
-                    raise NHLApiConnectionError(
-                        f"Rate limited after {self.retries} attempts"
-                    ) from None
-
-                response.raise_for_status()
-                data = response.json()
-
-                # Validate response structure
+        def _fetch_roster() -> dict[str, Any]:  # noqa: PLR0915
+            """Fetch roster with retry logic."""
+            for attempt in range(self.retries):
                 try:
-                    validate_api_response_structure(
-                        data,
-                        required_keys=["forwards", "defensemen", "goalies"],
-                        context=f"Team roster response for {validated_abbrev}",
-                    )
-                except ValidationError as e:
-                    logger.error(f"Invalid roster response structure for {validated_abbrev}: {e}")
-                    raise NHLApiError(f"Invalid API response: {e}") from e
+                    # Check if URL is cached
+                    is_cached = self._is_url_cached(url)
 
-                # Sanitize player names in response
-                self._sanitize_roster_player_names(data)
+                    # Only rate limit for actual API calls (not cached responses)
+                    if not is_cached:
+                        if logger.isEnabledFor(logging.DEBUG):
+                            logger.debug(f"Rate limiting: acquiring token for {team_abbrev} roster")
+                        self.rate_limiter.acquire()
 
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(
-                        f"Successfully fetched and validated roster for {validated_abbrev}"
+                    response = self.session.get(
+                        url,
+                        timeout=self.timeout,
+                        verify=self.ca_bundle,  # Explicit SSL verification with certifi CA bundle
                     )
 
-                # Log cache status
-                from_cache = (
-                    hasattr(response, "from_cache")
-                    and isinstance(response.from_cache, bool)
-                    and response.from_cache
-                )
-                if from_cache:
-                    logger.debug("Cache hit - skipped rate limiting")
-                else:
-                    logger.debug("Real API request - rate limited")
+                    if response.status_code == 404:
+                        logger.warning(f"No roster data available for {team_abbrev}")
+                        raise NHLApiNotFoundError(f"Roster not found for team: {team_abbrev}")
 
-                return data  # type: ignore[no-any-return]
+                    # Handle 429 rate limiting with exponential backoff
+                    if response.status_code == 429:
+                        if attempt < self.retries - 1:
+                            retry_after = self._get_retry_after(response)
+                            logger.warning(
+                                f"Rate limited (429) for {team_abbrev} "
+                                f"(attempt {attempt + 1}/{self.retries}), "
+                                f"retrying in {retry_after:.2f}s..."
+                            )
+                            time.sleep(retry_after)
+                            continue
+                        logger.error(
+                            f"Rate limited (429) for {team_abbrev} after {self.retries} attempts"
+                        )
+                        raise NHLApiConnectionError(
+                            f"Rate limited after {self.retries} attempts"
+                        ) from None
 
-            except requests.exceptions.Timeout:
-                if attempt < self.retries - 1:
-                    backoff_delay = self._calculate_backoff_delay(attempt)
-                    logger.warning(
-                        f"Timeout fetching {team_abbrev} "
-                        f"(attempt {attempt + 1}/{self.retries}), "
-                        f"retrying in {backoff_delay:.2f}s..."
+                    response.raise_for_status()
+                    data = response.json()
+
+                    # Validate response structure
+                    try:
+                        validate_api_response_structure(
+                            data,
+                            required_keys=["forwards", "defensemen", "goalies"],
+                            context=f"Team roster response for {validated_abbrev}",
+                        )
+                    except ValidationError as e:
+                        logger.error(
+                            f"Invalid roster response structure for {validated_abbrev}: {e}"
+                        )
+                        raise NHLApiError(f"Invalid API response: {e}") from e
+
+                    # Sanitize player names in response
+                    self._sanitize_roster_player_names(data)
+
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(
+                            f"Successfully fetched and validated roster for {validated_abbrev}"
+                        )
+
+                    # Log cache status
+                    from_cache = (
+                        hasattr(response, "from_cache")
+                        and isinstance(response.from_cache, bool)
+                        and response.from_cache
                     )
-                    time.sleep(backoff_delay)
-                else:
-                    logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
-                    raise NHLApiConnectionError(
-                        f"Request timed out after {self.retries} attempts"
-                    ) from None
+                    if from_cache:
+                        logger.debug("Cache hit - skipped rate limiting")
+                    else:
+                        logger.debug("Real API request - rate limited")
 
-            except requests.exceptions.SSLError as e:
-                # SSL errors should not be retried - certificate validation failure is permanent
-                logger.error(f"SSL certificate verification failed for {team_abbrev}: {e}")
-                raise NHLApiSSLError(f"SSL certificate verification failed for {url}: {e}") from e
+                    return data  # type: ignore[no-any-return]
 
-            except requests.exceptions.ConnectionError:
-                if attempt < self.retries - 1:
-                    backoff_delay = self._calculate_backoff_delay(attempt)
-                    logger.warning(
-                        f"Connection error for {team_abbrev} "
-                        f"(attempt {attempt + 1}/{self.retries}), "
-                        f"retrying in {backoff_delay:.2f}s..."
-                    )
-                    time.sleep(backoff_delay)
-                else:
-                    logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
-                    raise NHLApiConnectionError(
-                        f"Connection failed after {self.retries} attempts"
-                    ) from None
+                except requests.exceptions.Timeout:
+                    if attempt < self.retries - 1:
+                        backoff_delay = self._calculate_backoff_delay(attempt)
+                        logger.warning(
+                            f"Timeout fetching {team_abbrev} "
+                            f"(attempt {attempt + 1}/{self.retries}), "
+                            f"retrying in {backoff_delay:.2f}s..."
+                        )
+                        time.sleep(backoff_delay)
+                    else:
+                        logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
+                        raise NHLApiConnectionError(
+                            f"Request timed out after {self.retries} attempts"
+                        ) from None
 
-            except requests.exceptions.HTTPError as e:
-                logger.error(f"HTTP error fetching {team_abbrev}: {e}")
-                raise NHLApiError(f"HTTP error: {e}") from e
+                except requests.exceptions.SSLError as e:
+                    # SSL errors should not be retried - certificate validation failure is permanent
+                    logger.error(f"SSL certificate verification failed for {team_abbrev}: {e}")
+                    raise NHLApiSSLError(
+                        f"SSL certificate verification failed for {url}: {e}"
+                    ) from e
 
-        # This should never be reached as all paths above either return or raise
-        raise NHLApiError("Unexpected error: retry loop completed without returning data")
+                except requests.exceptions.ConnectionError:
+                    if attempt < self.retries - 1:
+                        backoff_delay = self._calculate_backoff_delay(attempt)
+                        logger.warning(
+                            f"Connection error for {team_abbrev} "
+                            f"(attempt {attempt + 1}/{self.retries}), "
+                            f"retrying in {backoff_delay:.2f}s..."
+                        )
+                        time.sleep(backoff_delay)
+                    else:
+                        logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
+                        raise NHLApiConnectionError(
+                            f"Connection failed after {self.retries} attempts"
+                        ) from None
+
+                except requests.exceptions.HTTPError as e:
+                    logger.error(f"HTTP error fetching {team_abbrev}: {e}")
+                    raise NHLApiError(f"HTTP error: {e}") from e
+
+            # This should never be reached as all paths above either return or raise
+            raise NHLApiError("Unexpected error: retry loop completed without returning data")
+
+        # Wrap with circuit breaker for DoS prevention
+        return self.circuit_breaker.call(_fetch_roster)
 
     def _sanitize_roster_player_names(self, roster_data: dict[str, Any]) -> None:
         """Sanitize player names in roster data to prevent injection attacks.
