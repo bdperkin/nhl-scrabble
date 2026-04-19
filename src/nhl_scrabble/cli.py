@@ -219,14 +219,8 @@ def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many paramete
             f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
         )
 
-    # Validate ALL CLI arguments first (before any processing)
-    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
-        output, top_players, top_team_players
-    )
-
-    # Update config with validated values
-    config.top_players_count = validated_top_players
-    config.top_team_players_count = validated_top_team_players
+    # NOTE: Validated arguments already set in config above at line 188
+    # No need to validate again here
 
     # Display header (suppress if quiet mode)
     if not quiet:

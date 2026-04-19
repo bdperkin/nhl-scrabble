@@ -97,35 +97,31 @@ class TestConfigFromEnv:
     def test_from_env_invalid_timeout(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid timeout."""
         monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "invalid")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be a valid integer"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_TIMEOUT must be an integer"):
             Config.from_env()
 
     def test_from_env_invalid_retries(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid retries."""
         monkeypatch.setenv("NHL_SCRABBLE_API_RETRIES", "not_a_number")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_RETRIES must be a valid integer"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_API_RETRIES must be an integer"):
             Config.from_env()
 
     def test_from_env_invalid_rate_limit(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid rate limit."""
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "not_a_number")
-        with pytest.raises(
-            ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be a valid number"
-        ):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_RATE_LIMIT_DELAY must be a number"):
             Config.from_env()
 
     def test_from_env_invalid_top_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid top_players."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_PLAYERS", "xyz")
-        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be a valid integer"):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_PLAYERS must be an integer"):
             Config.from_env()
 
     def test_from_env_invalid_top_team_players(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with invalid top_team_players."""
         monkeypatch.setenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "abc")
-        with pytest.raises(
-            ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be a valid integer"
-        ):
+        with pytest.raises(ValueError, match="NHL_SCRABBLE_TOP_TEAM_PLAYERS must be an integer"):
             Config.from_env()
 
     def test_from_env_negative_timeout(self, monkeypatch: pytest.MonkeyPatch) -> None:

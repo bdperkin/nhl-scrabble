@@ -82,18 +82,18 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     # Check parent directory exists
     if not file_path.parent.exists():
         raise ValidationError(
-            f"Directory {file_path.parent} does not exist. "
+            f"Directory does not exist: {file_path.parent}. "
             f"Create it first: mkdir -p {file_path.parent}"
         )
 
     # Check parent directory is a directory (not a file)
     if not file_path.parent.is_dir():
-        raise ValidationError(f"Path {file_path.parent} is not a directory")
+        raise ValidationError(f"Path is not a directory: {file_path.parent}")
 
     # Check parent directory is writable
     if not (file_path.parent.stat().st_mode & 0o200):  # Owner write permission
         raise ValidationError(
-            f"Directory {file_path.parent} is not writable. "
+            f"Directory is not writable: {file_path.parent}. "
             f"Check permissions: ls -ld {file_path.parent}"
         )
 
@@ -155,13 +155,11 @@ def validate_integer_range(
     try:
         int_val = int(value)
     except (ValueError, TypeError):
-        raise ValidationError(
-            f"{name} must be an integer, got {type(value).__name__}: '{value}'"
-        ) from None
+        raise ValidationError(f"{name} must be an integer, got: {value}") from None
 
     # Check minimum bound
     if min_val is not None and int_val < min_val:
-        raise ValidationError(f"{name} must be at least {min_val}, got {int_val}")
+        raise ValidationError(f"{name} must be >= {min_val}")
 
     # Check maximum bound
     if max_val is not None and int_val > max_val:
@@ -203,13 +201,11 @@ def validate_float_range(
     try:
         float_val = float(value)
     except (ValueError, TypeError):
-        raise ValidationError(
-            f"{name} must be a number, got {type(value).__name__}: '{value}'"
-        ) from None
+        raise ValidationError(f"{name} must be a number, got: {value}") from None
 
     # Check minimum bound
     if min_val is not None and float_val < min_val:
-        raise ValidationError(f"{name} must be at least {min_val}, got {float_val}")
+        raise ValidationError(f"{name} must be >= {min_val}")
 
     # Check maximum bound
     if max_val is not None and float_val > max_val:
