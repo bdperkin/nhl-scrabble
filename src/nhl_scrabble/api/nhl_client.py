@@ -313,7 +313,8 @@ class NHLApiClient:
 
             # Only rate limit for actual API calls (not cached responses)
             if not is_cached:
-                logger.debug("Rate limiting: acquiring token for teams request")
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug("Rate limiting: acquiring token for teams request")
                 self.rate_limiter.acquire()
 
             try:
@@ -431,7 +432,8 @@ class NHLApiClient:
 
                 # Only rate limit for actual API calls (not cached responses)
                 if not is_cached:
-                    logger.debug(f"Rate limiting: acquiring token for {team_abbrev} roster")
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f"Rate limiting: acquiring token for {team_abbrev} roster")
                     self.rate_limiter.acquire()
 
                 response = self.session.get(

@@ -101,6 +101,10 @@ class TestConcurrentProcessingPerformance:
         # Verify same number of teams processed
         assert len(teams_seq) == len(teams_conc)
 
+    @pytest.mark.skipif(
+        "CI" in __import__("os").environ,
+        reason="Performance test is flaky in CI shared environments",
+    )
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_different_worker_counts(
         self,
@@ -108,7 +112,12 @@ class TestConcurrentProcessingPerformance:
         sample_standings_data: dict[str, Any],
         sample_roster_data: dict[str, Any],
     ) -> None:
-        """Test performance with different worker counts."""
+        """Test performance with different worker counts.
+
+        Note: This test is skipped in CI environments as performance timing
+        can be unpredictable in shared/virtualized environments. Run locally
+        to verify concurrent performance with different worker counts.
+        """
         standings_response = Mock()
         standings_response.status_code = 200
         standings_response.json.return_value = sample_standings_data

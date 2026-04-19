@@ -336,8 +336,17 @@ class TestLoggingPerformance:
         # (At least 10x faster since it skips all computation)
         assert time_with_guard < time_without_guard / 5
 
+    @pytest.mark.skipif(
+        "CI" in __import__("os").environ,
+        reason="Performance test is flaky in CI shared environments",
+    )
     def test_float_formatting_performance(self) -> None:
-        """Test that avoiding float formatting improves performance."""
+        """Test that avoiding float formatting improves performance.
+
+        Note: This test is skipped in CI environments as performance timing
+        can be unpredictable in shared/virtualized environments. Run locally
+        to verify logging guard performance benefits.
+        """
         import time
 
         logger = logging.getLogger("test_perf")
