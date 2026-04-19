@@ -96,182 +96,6 @@ def cli() -> None:
     """
 
 
-@cli.command()
-@click.option(
-    "--format",
-    "output_format",
-    type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
-    default="text",
-    help="Output format (default: text)",
-)
-@click.option(
-    "--sheets",
-    help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
-)
-@click.option(
-    "--output",
-    "-o",
-    type=click.Path(),
-    help="Output file path (default: stdout)",
-)
-@click.option(
-    "--verbose",
-    "-v",
-    is_flag=True,
-    help="Enable verbose logging",
-)
-@click.option(
-    "--quiet",
-    "-q",
-    is_flag=True,
-    help="Suppress progress bars",
-)
-@click.option(
-    "--no-cache",
-    is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
-)
-@click.option(
-    "--clear-cache",
-    is_flag=True,
-    help="Clear API cache before running",
-)
-@click.option(
-    "--top-players",
-    type=int,
-    default=20,
-    help="Number of top players to show (default: 20)",
-)
-@click.option(
-    "--top-team-players",
-    type=int,
-    default=5,
-    help="Number of top players per team to show (default: 5)",
-)
-@click.option(
-    "--report",
-    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
-    help="Generate specific report only (default: all reports)",
-)
-def analyze(  # noqa: PLR0913, PLR0912, C901  # CLI function needs many parameters and has complex logic
-    output_format: str,
-    sheets: str | None,
-    output: str | None,
-    verbose: bool,
-    quiet: bool,
-    no_cache: bool,
-    clear_cache: bool,
-    top_players: int,
-    top_team_players: int,
-    report: str | None,
-) -> None:
-    """Run the NHL Scrabble analysis.
-
-    Fetches current NHL roster data and generates comprehensive reports
-    with Scrabble scores for all players and teams.
-
-    Examples:
-        nhl-scrabble analyze
-        nhl-scrabble analyze --verbose
-        nhl-scrabble analyze --quiet
-        nhl-scrabble analyze --output report.txt
-        nhl-scrabble analyze --format json --output report.json
-        nhl-scrabble analyze --format csv --output report.csv
-        nhl-scrabble analyze --format excel --output report.xlsx
-        nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
-        nhl-scrabble analyze --no-cache
-        nhl-scrabble analyze --clear-cache
-        nhl-scrabble analyze --report team
-        nhl-scrabble analyze --report playoff --output playoffs.txt
-    """
-    # Validate ALL CLI arguments first (before any processing)
-    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
-        output, top_players, top_team_players
-    )
-
-    # Load configuration (which will also validate environment variables)
-    try:
-        config = Config.from_env()
-    except ValueError as e:
-        # Convert config validation errors to ClickException for consistent error handling
-        raise click.ClickException(f"Configuration error: {e}") from e
-
-    config.verbose = verbose
-    config.output_format = output_format
-    config.top_players_count = validated_top_players
-    config.top_team_players_count = validated_top_team_players
-
-    # Override cache setting from CLI
-    if no_cache:
-        config.cache_enabled = False
-
-    # Setup logging with sanitization setting from config
-    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
-
-    logger.info(f"Starting NHL Scrabble analysis v{__version__}")
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(f"Configuration: {config}")
-
-    # Validate CSV/Excel require output file
-    if output_format in ("csv", "excel") and not output:
-        raise click.ClickException(
-            f"{output_format.upper()} format requires --output option\n"
-            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
-        )
-
-    # NOTE: Validated arguments already set in config above at line 188
-    # No need to validate again here
-
-    # Display header (suppress if quiet mode)
-    if not quiet:
-        console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
-        console.print("=" * 80)
-
-    try:
-        # Parse sheets list for Excel export
-        sheets_list = None
-        if sheets:
-            sheets_list = [s.strip() for s in sheets.split(",")]
-
-        # Run the analysis
-        result = run_analysis(
-            config,
-            clear_cache=clear_cache,
-            report_filter=report,
-            quiet=quiet,
-            output_path=Path(output) if output else None,
-            sheets=sheets_list,
-        )
-
-        # Output results
-        if validated_output:
-            if isinstance(result, str):
-                # Text/JSON output
-                validated_output.write_text(result)
-            # CSV/Excel are written directly by exporters
-            if not quiet:
-                console.print(f"\n[green]✓[/green] Report saved to: {validated_output}")
-        elif isinstance(result, str):
-            print(result)
-        else:
-            console.print(
-                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
-            )
-
-        if not quiet:
-            console.print("\n" + "=" * 80)
-            console.print("[green]✓ Analysis complete![/green]")
-
-    except NHLApiError as e:
-        logger.error(f"NHL API error: {e}")
-        console.print(f"\n[red]❌ NHL API Error: {e}[/red]", style="red")
-        sys.exit(1)
-    except Exception as e:
-        logger.exception("Unexpected error during analysis")
-        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
-        sys.exit(1)
-
-
 def run_analysis(
     config: Config,
     clear_cache: bool = False,
@@ -410,6 +234,182 @@ def run_analysis(
 
     # Generate requested report (lazy evaluation)
     return report_generator.get_report(report_filter)
+
+
+@cli.command()
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
+    default="text",
+    help="Output format (default: text)",
+)
+@click.option(
+    "--sheets",
+    help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    help="Output file path (default: stdout)",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
+@click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable API response caching (always fetch fresh data)",
+)
+@click.option(
+    "--clear-cache",
+    is_flag=True,
+    help="Clear API cache before running",
+)
+@click.option(
+    "--top-players",
+    type=int,
+    default=20,
+    help="Number of top players to show (default: 20)",
+)
+@click.option(
+    "--top-team-players",
+    type=int,
+    default=5,
+    help="Number of top players per team to show (default: 5)",
+)
+@click.option(
+    "--report",
+    type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
+    help="Generate specific report only (default: all reports)",
+)
+def analyze(  # noqa: PLR0913, PLR0912  # CLI function needs many parameters and has complex logic
+    output_format: str,
+    sheets: str | None,
+    output: str | None,
+    verbose: bool,
+    quiet: bool,
+    no_cache: bool,
+    clear_cache: bool,
+    top_players: int,
+    top_team_players: int,
+    report: str | None,
+) -> None:
+    """Run the NHL Scrabble analysis.
+
+    Fetches current NHL roster data and generates comprehensive reports
+    with Scrabble scores for all players and teams.
+
+    Examples:
+        nhl-scrabble analyze
+        nhl-scrabble analyze --verbose
+        nhl-scrabble analyze --quiet
+        nhl-scrabble analyze --output report.txt
+        nhl-scrabble analyze --format json --output report.json
+        nhl-scrabble analyze --format csv --output report.csv
+        nhl-scrabble analyze --format excel --output report.xlsx
+        nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
+        nhl-scrabble analyze --no-cache
+        nhl-scrabble analyze --clear-cache
+        nhl-scrabble analyze --report team
+        nhl-scrabble analyze --report playoff --output playoffs.txt
+    """
+    # Validate ALL CLI arguments first (before any processing)
+    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
+        output, top_players, top_team_players
+    )
+
+    # Load configuration (which will also validate environment variables)
+    try:
+        config = Config.from_env()
+    except ValueError as e:
+        # Convert config validation errors to ClickException for consistent error handling
+        raise click.ClickException(f"Configuration error: {e}") from e
+
+    config.verbose = verbose
+    config.output_format = output_format
+    config.top_players_count = validated_top_players
+    config.top_team_players_count = validated_top_team_players
+
+    # Override cache setting from CLI
+    if no_cache:
+        config.cache_enabled = False
+
+    # Setup logging with sanitization setting from config
+    setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
+
+    logger.info(f"Starting NHL Scrabble analysis v{__version__}")
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(f"Configuration: {config}")
+
+    # Validate CSV/Excel require output file
+    if output_format in ("csv", "excel") and not output:
+        raise click.ClickException(
+            f"{output_format.upper()} format requires --output option\n"
+            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
+        )
+
+    # NOTE: Validated arguments already set in config above at line 188
+    # No need to validate again here
+
+    # Display header (suppress if quiet mode)
+    if not quiet:
+        console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
+        console.print("=" * 80)
+
+    try:
+        # Parse sheets list for Excel export
+        sheets_list = None
+        if sheets:
+            sheets_list = [s.strip() for s in sheets.split(",")]
+
+        # Run the analysis
+        result = run_analysis(
+            config,
+            clear_cache=clear_cache,
+            report_filter=report,
+            quiet=quiet,
+            output_path=Path(output) if output else None,
+            sheets=sheets_list,
+        )
+
+        # Output results
+        if validated_output:
+            if isinstance(result, str):
+                # Text/JSON output
+                validated_output.write_text(result)
+            # CSV/Excel are written directly by exporters
+            if not quiet:
+                console.print(f"\n[green]✓[/green] Report saved to: {validated_output}")
+        elif isinstance(result, str):
+            print(result)
+        else:
+            console.print(
+                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
+            )
+
+        if not quiet:
+            console.print("\n" + "=" * 80)
+            console.print("[green]✓ Analysis complete![/green]")
+
+    except NHLApiError as e:
+        logger.error(f"NHL API error: {e}")
+        console.print(f"\n[red]❌ NHL API Error: {e}[/red]", style="red")
+        sys.exit(1)
+    except Exception as e:
+        logger.exception("Unexpected error during analysis")
+        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        sys.exit(1)
 
 
 def generate_json_report(

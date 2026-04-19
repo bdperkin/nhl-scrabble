@@ -339,6 +339,7 @@ ignore = [
     "T201",    # print statements are fine in CLI code
     "PLC0415", # Conditional imports for CLI dependencies
     "TC003",   # Path used at runtime, not just type checking
+    "C901",    # run_analysis complexity (11) from comprehensive error handling
 ]
 "src/nhl_scrabble/logging_config.py" = [
     "PLC0415", # Conditional imports for logging configuration
