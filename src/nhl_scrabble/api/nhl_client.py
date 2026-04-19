@@ -449,7 +449,9 @@ class NHLApiClient:
                 self._sanitize_roster_player_names(data)
 
                 if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(f"Successfully fetched and validated roster for {validated_abbrev}")
+                    logger.debug(
+                        f"Successfully fetched and validated roster for {validated_abbrev}"
+                    )
 
                 # Only record request time if this was a real API call (not cached)
                 # Check from_cache attribute safely (handles Mock objects that don't have it set)
