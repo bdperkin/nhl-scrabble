@@ -23,6 +23,7 @@ from nhl_scrabble.config import Config
 from nhl_scrabble.dashboard import StatisticsDashboard
 from nhl_scrabble.exporters.csv_exporter import CSVExporter
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
+from nhl_scrabble.filters import AnalysisFilters
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
@@ -224,6 +225,32 @@ def cli() -> None:
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     help="Path to custom scoring configuration JSON file",
 )
+@click.option(
+    "--division",
+    help="Filter by division (comma-separated: Atlantic,Metropolitan,Central,Pacific)",
+)
+@click.option(
+    "--conference",
+    help="Filter by conference (comma-separated: Eastern,Western)",
+)
+@click.option(
+    "--teams",
+    help="Filter by teams (comma-separated abbreviations: TOR,MTL,BOS)",
+)
+@click.option(
+    "--exclude",
+    help="Exclude teams (comma-separated abbreviations: NYR,PHI)",
+)
+@click.option(
+    "--min-score",
+    type=int,
+    help="Minimum player score to include",
+)
+@click.option(
+    "--max-score",
+    type=int,
+    help="Maximum player score to include",
+)
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
     sheets: str | None,
@@ -237,6 +264,12 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     report: str | None,
     scoring: str,
     scoring_config: Path | None,
+    division: str | None,
+    conference: str | None,
+    teams: str | None,
+    exclude: str | None,
+    min_score: int | None,
+    max_score: int | None,
 ) -> None:
     """Run the NHL Scrabble analysis.
 
@@ -259,6 +292,12 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         nhl-scrabble analyze --scoring wordle
         nhl-scrabble analyze --scoring uniform --output uniform_scores.txt
         nhl-scrabble analyze --scoring-config custom_values.json
+        nhl-scrabble analyze --division Atlantic
+        nhl-scrabble analyze --conference Eastern
+        nhl-scrabble analyze --teams TOR,MTL,OTT
+        nhl-scrabble analyze --min-score 50 --max-score 100
+        nhl-scrabble analyze --exclude BOS,NYR
+        nhl-scrabble analyze --division Atlantic --min-score 60
     """
     # Validate CLI arguments first (before expensive operations)
     validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
@@ -326,6 +365,35 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         if sheets:
             sheets_list = [s.strip() for s in sheets.split(",")]
 
+        # Create filters from CLI options
+        filters = AnalysisFilters.from_options(
+            division=division,
+            conference=conference,
+            teams=teams,
+            exclude=exclude,
+            min_score=min_score,
+            max_score=max_score,
+        )
+
+        # Log active filters
+        if filters.is_active():
+            logger.info(f"Active filters: {filters}")
+            if not quiet:
+                console.print("\n[yellow]Filters active:[/yellow]")
+                if filters.divisions:
+                    console.print(f"  • Divisions: {', '.join(sorted(filters.divisions))}")
+                if filters.conferences:
+                    console.print(f"  • Conferences: {', '.join(sorted(filters.conferences))}")
+                if filters.teams:
+                    console.print(f"  • Teams: {', '.join(sorted(filters.teams))}")
+                if filters.excluded_teams:
+                    console.print(f"  • Excluded: {', '.join(sorted(filters.excluded_teams))}")
+                if filters.min_score is not None:
+                    console.print(f"  • Min score: {filters.min_score}")
+                if filters.max_score is not None:
+                    console.print(f"  • Max score: {filters.max_score}")
+                console.print()
+
         # Run the analysis
         result = run_analysis(
             config,
@@ -335,6 +403,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             output_path=validated_output,
             sheets=sheets_list,
             scoring_values=scoring_values,
+            filters=filters,
         )
 
         # Output results
@@ -364,7 +433,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         sys.exit(1)
 
 
-def run_analysis(
+def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function with many parameters
     config: Config,
     clear_cache: bool = False,
     report_filter: str | None = None,
@@ -372,6 +441,7 @@ def run_analysis(
     output_path: Path | None = None,
     sheets: list[str] | None = None,
     scoring_values: dict[str, int] | None = None,
+    filters: AnalysisFilters | None = None,
 ) -> str | None:
     """Run the complete NHL Scrabble analysis.
 
@@ -385,6 +455,7 @@ def run_analysis(
         sheets: Optional list of sheets for Excel export
         scoring_values: Optional custom letter-to-point value mapping.
             If None, uses standard Scrabble values.
+        filters: Optional filters to apply to analysis results
 
     Returns:
         Complete report string for text/JSON formats, or None for CSV/Excel
@@ -440,6 +511,30 @@ def run_analysis(
     division_standings = team_processor.calculate_division_standings(team_scores)
     conference_standings = team_processor.calculate_conference_standings(team_scores)
     playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
+
+    # Apply filters if specified
+    if filters and filters.is_active():
+        from nhl_scrabble.filters import (
+            filter_conference_standings,
+            filter_division_standings,
+            filter_players,
+            filter_playoff_standings,
+            filter_teams,
+        )
+
+        logger.info("Applying filters to analysis results")
+        team_scores = filter_teams(team_scores, filters)
+        all_players = filter_players(all_players, filters)
+        division_standings = filter_division_standings(division_standings, filters)
+        conference_standings = filter_conference_standings(conference_standings, filters)
+        playoff_standings = filter_playoff_standings(playoff_standings, filters)
+
+        # Log filter results
+        if not quiet:
+            console.print(
+                f"\n[green]✓[/green] Filters applied: {len(team_scores)} teams, "
+                f"{len(all_players)} players"
+            )
 
     # Generate reports based on format
     if config.output_format == "json":
