@@ -68,12 +68,12 @@ class InteractiveShell:
 
         self.console.print("[cyan]Fetching NHL data...[/cyan]")
 
-        # Create API client and processors
-        api_client = NHLApiClient()
+        # Create processors with API client context manager
         scorer = ScrabbleScorer()
-        team_processor = TeamProcessor(api_client, scorer)
 
-        try:
+        with NHLApiClient() as api_client:
+            team_processor = TeamProcessor(api_client, scorer)
+
             # Process all teams
             team_scores_dict, all_players, failed_teams = team_processor.process_all_teams()
 
@@ -113,9 +113,6 @@ class InteractiveShell:
                     f"[yellow]⚠ Warning: Failed to fetch {len(failed_teams)} teams: "
                     f"{', '.join(failed_teams)}[/yellow]"
                 )
-        finally:
-            # Always close the API client
-            api_client.close()
 
     def get_completer(self) -> WordCompleter:
         """Get command completer with team/player names."""

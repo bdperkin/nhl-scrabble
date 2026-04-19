@@ -237,10 +237,13 @@ class TestLoggingGuards:
             logger.debug(f"Result: {expensive_operation()}")
             assert expensive_call_count == 1  # Called even though DEBUG is disabled!
 
+            # Reset counter for guarded test
+            expensive_call_count = 0
+
             # With guard (good) - operation is skipped
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(f"Result: {expensive_operation()}")
-            assert expensive_call_count == 1  # NOT called because guard prevents it!
+            assert expensive_call_count == 0  # NOT called because guard prevents it!
 
             # Test with DEBUG enabled
             logger.setLevel(logging.DEBUG)
