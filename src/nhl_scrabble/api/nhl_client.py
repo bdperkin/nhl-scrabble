@@ -144,7 +144,10 @@ class NHLApiClient:
         self.circuit_breaker = CircuitBreaker(
             failure_threshold=dos_circuit_breaker_threshold,
             timeout=dos_circuit_breaker_timeout,
-            expected_exception=(requests.exceptions.RequestException, NHLApiError,),
+            expected_exception=(
+                requests.exceptions.RequestException,
+                NHLApiError,
+            ),
         )
         logger.info(
             f"Circuit breaker initialized: threshold={dos_circuit_breaker_threshold}, "
@@ -492,7 +495,7 @@ class NHLApiClient:
         # Validate URL with SSRF protection
         self._validate_request_url(url)
 
-        def _fetch_roster() -> dict[str, Any]:
+        def _fetch_roster() -> dict[str, Any]:  # noqa: PLR0915
             """Fetch roster with retry logic."""
             for attempt in range(self.retries):
                 try:
@@ -544,7 +547,9 @@ class NHLApiClient:
                             context=f"Team roster response for {validated_abbrev}",
                         )
                     except ValidationError as e:
-                        logger.error(f"Invalid roster response structure for {validated_abbrev}: {e}")
+                        logger.error(
+                            f"Invalid roster response structure for {validated_abbrev}: {e}"
+                        )
                         raise NHLApiError(f"Invalid API response: {e}") from e
 
                     # Sanitize player names in response
@@ -586,7 +591,9 @@ class NHLApiClient:
                 except requests.exceptions.SSLError as e:
                     # SSL errors should not be retried - certificate validation failure is permanent
                     logger.error(f"SSL certificate verification failed for {team_abbrev}: {e}")
-                    raise NHLApiSSLError(f"SSL certificate verification failed for {url}: {e}") from e
+                    raise NHLApiSSLError(
+                        f"SSL certificate verification failed for {url}: {e}"
+                    ) from e
 
                 except requests.exceptions.ConnectionError:
                     if attempt < self.retries - 1:

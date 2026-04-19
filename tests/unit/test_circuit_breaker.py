@@ -19,7 +19,7 @@ class TestCircuitBreakerInitialization:
         cb = CircuitBreaker()
         assert cb.failure_threshold == 5
         assert cb.timeout == 60.0
-        assert cb.expected_exception == Exception
+        assert cb.expected_exception is Exception
         assert cb.state == CircuitState.CLOSED
         assert cb.failure_count == 0
         assert cb.last_failure_time is None
@@ -33,7 +33,7 @@ class TestCircuitBreakerInitialization:
         )
         assert cb.failure_threshold == 3
         assert cb.timeout == 30.0
-        assert cb.expected_exception == ValueError
+        assert cb.expected_exception is ValueError
 
     def test_invalid_threshold(self) -> None:
         """Test that invalid failure threshold raises ValueError."""
@@ -78,7 +78,7 @@ class TestCircuitBreakerStates:
 
         # First 3 failures should open circuit
         for i in range(3):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
             assert cb.failure_count == i + 1
 
@@ -96,7 +96,7 @@ class TestCircuitBreakerStates:
 
         # Cause circuit to open
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         assert cb.state == CircuitState.OPEN
@@ -114,7 +114,7 @@ class TestCircuitBreakerStates:
 
         # Open the circuit
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         assert cb.state == CircuitState.OPEN
@@ -129,7 +129,7 @@ class TestCircuitBreakerStates:
 
         result = cb.call(success)
         assert result == "OK"
-        assert cb.state == CircuitState.CLOSED  # Success in HALF_OPEN closes circuit
+        assert cb.state == CircuitState.CLOSED  # type: ignore[comparison-overlap]  # Success in HALF_OPEN closes circuit
 
     def test_half_open_success_closes_circuit(self) -> None:
         """Test successful request in HALF_OPEN state closes circuit."""
@@ -140,7 +140,7 @@ class TestCircuitBreakerStates:
 
         # Open the circuit
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         # Wait for timeout
@@ -164,14 +164,14 @@ class TestCircuitBreakerStates:
 
         # Open the circuit
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         # Wait for timeout
         time.sleep(0.15)
 
         # Failed call should reopen circuit
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
             cb.call(failing)
 
         assert cb.state == CircuitState.OPEN
@@ -191,7 +191,7 @@ class TestCircuitBreakerExceptionHandling:
             raise TypeError("Unexpected")
 
         # ValueError should be counted
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="Expected"):
             cb.call(value_error)
         assert cb.failure_count == 1
 
@@ -214,7 +214,7 @@ class TestCircuitBreakerExceptionHandling:
             raise TypeError("Second type")
 
         # Both should be counted
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="First type"):
             cb.call(value_error)
         assert cb.failure_count == 1
 
@@ -235,7 +235,7 @@ class TestCircuitBreakerReset:
 
         # Open the circuit
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         assert cb.state == CircuitState.OPEN
@@ -243,8 +243,8 @@ class TestCircuitBreakerReset:
 
         # Reset
         cb.reset()
-        assert cb.state == CircuitState.CLOSED
-        assert cb.failure_count == 0
+        assert cb.state == CircuitState.CLOSED  # type: ignore[comparison-overlap]
+        assert cb.failure_count == 0  # type: ignore[unreachable]
         assert cb.last_failure_time is None
 
     def test_reset_from_closed(self) -> None:
@@ -311,7 +311,7 @@ class TestCircuitBreakerRepresentation:
 
         # Open the circuit
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         repr_str = repr(cb)
@@ -330,7 +330,7 @@ class TestCircuitBreakerEdgeCases:
             raise ValueError("Fail")
 
         # Single failure should open circuit
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
             cb.call(failing)
 
         assert cb.state == CircuitState.OPEN
@@ -344,7 +344,7 @@ class TestCircuitBreakerEdgeCases:
 
         # Open the circuit
         for _ in range(2):
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
                 cb.call(failing)
 
         assert cb.state == CircuitState.OPEN
@@ -355,7 +355,7 @@ class TestCircuitBreakerEdgeCases:
 
         result = cb.call(success)
         assert result == "OK"
-        assert cb.state == CircuitState.CLOSED
+        assert cb.state == CircuitState.CLOSED  # type: ignore[comparison-overlap]
 
     def test_successive_failures_and_successes(self) -> None:
         """Test alternating failures and successes."""
@@ -368,7 +368,7 @@ class TestCircuitBreakerEdgeCases:
             return "OK"
 
         # Failure
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
             cb.call(failing)
         assert cb.failure_count == 1
 
@@ -377,7 +377,7 @@ class TestCircuitBreakerEdgeCases:
         assert cb.failure_count == 0
 
         # Failure
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"(Fail|Simulated failure)"):
             cb.call(failing)
         assert cb.failure_count == 1
 

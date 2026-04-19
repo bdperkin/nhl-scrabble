@@ -27,8 +27,8 @@ class TestCreateProtectedSession:
         # Verify connection pool settings
         # Note: pool_connections and pool_maxsize are internal to HTTPAdapter
         # We verify by checking the adapter is configured
-        assert https_adapter._pool_connections == 10  # noqa: SLF001  # type: ignore[attr-defined]
-        assert https_adapter._pool_maxsize == 5  # noqa: SLF001  # type: ignore[attr-defined]
+        assert https_adapter._pool_connections == 10  # type: ignore[attr-defined]
+        assert https_adapter._pool_maxsize == 5  # type: ignore[attr-defined]
 
     def test_custom_parameters(self) -> None:
         """Test session creation with custom parameters."""
@@ -39,8 +39,8 @@ class TestCreateProtectedSession:
         )
 
         https_adapter = session.get_adapter("https://example.com")
-        assert https_adapter._pool_connections == 20  # noqa: SLF001  # type: ignore[attr-defined]
-        assert https_adapter._pool_maxsize == 10  # noqa: SLF001  # type: ignore[attr-defined]
+        assert https_adapter._pool_connections == 20  # type: ignore[attr-defined]
+        assert https_adapter._pool_maxsize == 10  # type: ignore[attr-defined]
 
     def test_invalid_max_connections(self) -> None:
         """Test that invalid max_connections raises ValueError."""
@@ -125,8 +125,8 @@ class TestProtectedSessionEdgeCases:
             max_connections_per_host=100,
         )
         adapter = session.get_adapter("https://example.com")
-        assert adapter._pool_connections == 1000  # noqa: SLF001  # type: ignore[attr-defined]
-        assert adapter._pool_maxsize == 100  # noqa: SLF001  # type: ignore[attr-defined]
+        assert adapter._pool_connections == 1000  # type: ignore[attr-defined]
+        assert adapter._pool_maxsize == 100  # type: ignore[attr-defined]
 
     def test_equal_max_connections(self) -> None:
         """Test when max_connections equals max_connections_per_host."""
@@ -135,5 +135,5 @@ class TestProtectedSessionEdgeCases:
             max_connections_per_host=10,
         )
         adapter = session.get_adapter("https://example.com")
-        assert adapter._pool_connections == 10  # noqa: SLF001  # type: ignore[attr-defined]
-        assert adapter._pool_maxsize == 10  # noqa: SLF001  # type: ignore[attr-defined]
+        assert adapter._pool_connections == 10  # type: ignore[attr-defined]
+        assert adapter._pool_maxsize == 10  # type: ignore[attr-defined]
