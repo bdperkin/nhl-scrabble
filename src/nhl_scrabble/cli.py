@@ -27,6 +27,7 @@ from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
 from nhl_scrabble.reports.generator import ReportGenerator
+from nhl_scrabble.scoring.config import ScoringConfig
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 from nhl_scrabble.search import PlayerSearch
 from nhl_scrabble.ui.progress import ProgressManager
@@ -212,7 +213,18 @@ def cli() -> None:
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
-def analyze(  # noqa: PLR0913  # CLI function needs many parameters
+@click.option(
+    "--scoring",
+    type=click.Choice(["scrabble", "wordle", "uniform"], case_sensitive=False),
+    default="scrabble",
+    help="Built-in scoring system to use (default: scrabble)",
+)
+@click.option(
+    "--scoring-config",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    help="Path to custom scoring configuration JSON file",
+)
+def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
     sheets: str | None,
     output: str | None,
@@ -223,6 +235,8 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
     top_players: int,
     top_team_players: int,
     report: str | None,
+    scoring: str,
+    scoring_config: Path | None,
 ) -> None:
     """Run the NHL Scrabble analysis.
 
@@ -242,6 +256,9 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
         nhl-scrabble analyze --clear-cache
         nhl-scrabble analyze --report team
         nhl-scrabble analyze --report playoff --output playoffs.txt
+        nhl-scrabble analyze --scoring wordle
+        nhl-scrabble analyze --scoring uniform --output uniform_scores.txt
+        nhl-scrabble analyze --scoring-config custom_values.json
     """
     # Validate CLI arguments first (before expensive operations)
     validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
@@ -269,6 +286,25 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
 
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
     logger.debug(f"Configuration: {config}")
+
+    # Validate scoring options (mutually exclusive)
+    if scoring_config and scoring != "scrabble":
+        raise click.ClickException(
+            "--scoring and --scoring-config are mutually exclusive. "
+            "Use --scoring for built-in systems or --scoring-config for custom values."
+        )
+
+    # Load scoring configuration
+    scoring_values = None
+    if scoring_config:
+        try:
+            scoring_values = ScoringConfig.load_from_file(scoring_config)
+            logger.info(f"Using custom scoring config from: {scoring_config}")
+        except (FileNotFoundError, ValueError, json.JSONDecodeError) as e:
+            raise click.ClickException(f"Error loading scoring config: {e}") from e
+    elif scoring != "scrabble":
+        scoring_values = ScoringConfig.get_scoring_system(scoring)
+        logger.info(f"Using built-in scoring system: {scoring}")
 
     # Validate CSV/Excel require output file
     if output_format in ("csv", "excel") and not output:
@@ -298,6 +334,7 @@ def analyze(  # noqa: PLR0913  # CLI function needs many parameters
             quiet=quiet,
             output_path=validated_output,
             sheets=sheets_list,
+            scoring_values=scoring_values,
         )
 
         # Output results
@@ -334,6 +371,7 @@ def run_analysis(
     quiet: bool = False,
     output_path: Path | None = None,
     sheets: list[str] | None = None,
+    scoring_values: dict[str, int] | None = None,
 ) -> str | None:
     """Run the complete NHL Scrabble analysis.
 
@@ -345,6 +383,8 @@ def run_analysis(
         quiet: Whether to suppress progress bars
         output_path: Optional output file path for CSV/Excel exports
         sheets: Optional list of sheets for Excel export
+        scoring_values: Optional custom letter-to-point value mapping.
+            If None, uses standard Scrabble values.
 
     Returns:
         Complete report string for text/JSON formats, or None for CSV/Excel
@@ -370,7 +410,9 @@ def run_analysis(
     if clear_cache:
         api_client.clear_cache()
         logger.info("API cache cleared")
-    scorer = ScrabbleScorer()
+
+    # Initialize scorer with custom or default values
+    scorer = ScrabbleScorer(letter_values=scoring_values)
     team_processor = TeamProcessor(api_client, scorer)
     playoff_calculator = PlayoffCalculator()
 

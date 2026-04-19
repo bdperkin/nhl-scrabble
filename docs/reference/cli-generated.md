@@ -67,7 +67,10 @@ Usage: nhl-scrabble analyze [OPTIONS]
   excel --output report.xlsx     nhl-scrabble analyze --format excel --sheets
   teams,players --output report.xlsx     nhl-scrabble analyze --no-cache
   nhl-scrabble analyze --clear-cache     nhl-scrabble analyze --report team
-  nhl-scrabble analyze --report playoff --output playoffs.txt
+  nhl-scrabble analyze --report playoff --output playoffs.txt     nhl-scrabble
+  analyze --scoring wordle     nhl-scrabble analyze --scoring uniform --output
+  uniform_scores.txt     nhl-scrabble analyze --scoring-config
+  custom_values.json
 
 Options:
   --format [text|json|csv|excel]  Output format (default: text)
@@ -86,6 +89,11 @@ Options:
   --report [conference|division|playoff|team|stats]
                                   Generate specific report only (default: all
                                   reports)
+  --scoring [scrabble|wordle|uniform]
+                                  Built-in scoring system to use (default:
+                                  scrabble)
+  --scoring-config FILE           Path to custom scoring configuration JSON
+                                  file
   --help                          Show this message and exit.
 ```
 
