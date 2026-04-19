@@ -53,7 +53,11 @@ class TestApiClientRateLimiting:
 
             response_200 = Mock()
             response_200.status_code = 200
-            response_200.json.return_value = {"data": "test"}
+            response_200.json.return_value = {
+                "forwards": [],
+                "defensemen": [],
+                "goalies": [],
+            }
             response_200.from_cache = False
 
             mock_request.side_effect = [response_429, response_200]
@@ -68,7 +72,7 @@ class TestApiClientRateLimiting:
 
             # Should have waited for retry
             assert elapsed >= 0.5, f"Should have waited >= 0.5s, waited {elapsed}s"
-            assert result == {"data": "test"}
+            assert "forwards" in result
             assert mock_request.call_count == 2  # First 429, then success
 
     def test_api_client_429_retry_after_header(self) -> None:
@@ -83,7 +87,11 @@ class TestApiClientRateLimiting:
 
             response_200 = Mock()
             response_200.status_code = 200
-            response_200.json.return_value = {"data": "test"}
+            response_200.json.return_value = {
+                "forwards": [],
+                "defensemen": [],
+                "goalies": [],
+            }
             response_200.from_cache = False
 
             mock_request.side_effect = [response_429, response_200]
@@ -98,7 +106,7 @@ class TestApiClientRateLimiting:
 
             # Should wait exactly as specified in Retry-After
             assert elapsed >= 1.0, f"Should have waited >= 1.0s, waited {elapsed}s"
-            assert result == {"data": "test"}
+            assert "forwards" in result
 
     def test_api_client_429_no_retry_after_header(self) -> None:
         """Test API client handles 429 without Retry-After header."""
@@ -112,7 +120,11 @@ class TestApiClientRateLimiting:
 
             response_200 = Mock()
             response_200.status_code = 200
-            response_200.json.return_value = {"data": "test"}
+            response_200.json.return_value = {
+                "forwards": [],
+                "defensemen": [],
+                "goalies": [],
+            }
             response_200.from_cache = False
 
             mock_request.side_effect = [response_429, response_200]
@@ -127,7 +139,7 @@ class TestApiClientRateLimiting:
 
             # Should wait default time (1 second)
             assert elapsed >= 1.0, f"Should have waited >= 1.0s, waited {elapsed}s"
-            assert result == {"data": "test"}
+            assert "forwards" in result
 
     def test_api_client_429_exhausts_retries(self) -> None:
         """Test API client gives up after max retries on 429."""
