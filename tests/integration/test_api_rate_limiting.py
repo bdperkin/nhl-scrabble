@@ -185,7 +185,9 @@ class TestApiClientRateLimiting:
             assert stats["total_wait_time"] > 0
             assert stats["average_wait"] > 0
 
-    @pytest.mark.skip(reason="Cache checking logic is complex to mock - functionality verified by other tests")
+    @pytest.mark.skip(
+        reason="Cache checking logic is complex to mock - functionality verified by other tests"
+    )
     def test_api_client_skips_rate_limit_for_cached_responses(self) -> None:
         """Test API client doesn't rate limit cached responses."""
         client = NHLApiClient(rate_limit_max_requests=2, rate_limit_window=1.0, cache_enabled=True)
@@ -252,8 +254,8 @@ class TestApiClientRateLimiting:
                 with lock:
                     results.append(result)
 
-            # Create threads with different team names
-            teams = [f"T{i:02d}" for i in range(6)]
+            # Create threads with different team names (valid 2-3 letter abbreviations)
+            teams = ["TOR", "MTL", "BOS", "NYR", "CHI", "VGK"]
             threads = [threading.Thread(target=make_request, args=(team,)) for team in teams]
 
             # Start all threads
@@ -280,15 +282,15 @@ class TestApiClientRateLimiting:
         # Test with valid Retry-After header
         response = Mock()
         response.headers = {"Retry-After": "60"}
-        assert client._get_retry_after(response) == 60.0  # noqa: SLF001
+        assert client._get_retry_after(response) == 60.0
 
         # Test with missing Retry-After header
         response.headers = {}
-        assert client._get_retry_after(response) == 1.0  # Default  # noqa: SLF001
+        assert client._get_retry_after(response) == 1.0  # Default
 
         # Test with invalid Retry-After value
         response.headers = {"Retry-After": "invalid"}
-        assert client._get_retry_after(response) == 1.0  # Default  # noqa: SLF001
+        assert client._get_retry_after(response) == 1.0  # Default
 
     def test_rate_limiter_initialization(self) -> None:
         """Test rate limiter is initialized with correct parameters."""

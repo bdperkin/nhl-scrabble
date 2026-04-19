@@ -138,7 +138,8 @@ class TestLoggingGuards:
             client = NHLApiClient(
                 timeout=1,
                 retries=1,
-                rate_limit_delay=0.5,
+                rate_limit_max_requests=1000,
+                rate_limit_window=1.0,
                 cache_enabled=False,
             )
 
@@ -181,7 +182,8 @@ class TestLoggingGuards:
             client = NHLApiClient(
                 timeout=1,
                 retries=1,
-                rate_limit_delay=0.1,  # Small delay for testing
+                rate_limit_max_requests=1000,  # High limit for testing
+                rate_limit_window=1.0,
                 cache_enabled=False,
             )
 

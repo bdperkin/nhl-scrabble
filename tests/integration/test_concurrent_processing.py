@@ -48,7 +48,8 @@ class TestConcurrentProcessingPerformance:
         mock_get.side_effect = [standings_response] + [roster_response] * num_teams
         api_client_seq = NHLApiClient(
             cache_enabled=False,
-            rate_limit_delay=0.05,  # 50ms delay to simulate network
+            rate_limit_max_requests=1000,  # High limit for testing
+            rate_limit_window=1.0,
         )
         scorer_seq = ScrabbleScorer()
         processor_seq = TeamProcessor(api_client_seq, scorer_seq, max_workers=1)
@@ -63,7 +64,8 @@ class TestConcurrentProcessingPerformance:
         # Test concurrent mode (max_workers=5)
         api_client_conc = NHLApiClient(
             cache_enabled=False,
-            rate_limit_delay=0.05,  # Same delay
+            rate_limit_max_requests=1000,  # High limit for testing
+            rate_limit_window=1.0,
         )
         scorer_conc = ScrabbleScorer()
         processor_conc = TeamProcessor(api_client_conc, scorer_conc, max_workers=5)
@@ -116,7 +118,9 @@ class TestConcurrentProcessingPerformance:
             # Reset mock
             mock_get.side_effect = [standings_response] + [roster_response] * num_teams
 
-            api_client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.03)
+            api_client = NHLApiClient(
+                cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            )
             scorer = ScrabbleScorer()
             processor = TeamProcessor(api_client, scorer, max_workers=worker_count)
 
@@ -171,7 +175,9 @@ class TestConcurrentProcessingPerformance:
 
         mock_get.side_effect = responses
 
-        api_client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.01)
+        api_client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=5)
 
@@ -208,7 +214,9 @@ class TestConcurrentProcessingPerformance:
         num_teams = len(sample_standings_data["standings"])
         mock_get.side_effect = [standings_response] + [roster_response] * num_teams
 
-        api_client = NHLApiClient(cache_enabled=False, rate_limit_delay=0.0)
+        api_client = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=5)
 
@@ -241,7 +249,9 @@ class TestConcurrentProcessingRealWorld:
         - Speedup: 4-5x
         """
         # Sequential mode
-        api_client_seq = NHLApiClient(cache_enabled=False, rate_limit_delay=0.3)
+        api_client_seq = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         scorer_seq = ScrabbleScorer()
         processor_seq = TeamProcessor(api_client_seq, scorer_seq, max_workers=1)
 
@@ -250,7 +260,9 @@ class TestConcurrentProcessingRealWorld:
         sequential_time = time.perf_counter() - start_seq
 
         # Concurrent mode
-        api_client_conc = NHLApiClient(cache_enabled=False, rate_limit_delay=0.3)
+        api_client_conc = NHLApiClient(
+            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+        )
         scorer_conc = ScrabbleScorer()
         processor_conc = TeamProcessor(api_client_conc, scorer_conc, max_workers=5)
 

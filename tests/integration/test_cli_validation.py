@@ -146,16 +146,16 @@ class TestEnvironmentVariableValidation:
         assert result.exit_code != 0
         assert "configuration error" in result.output.lower()
 
-    def test_rate_limit_delay_too_high(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test rate limit delay above maximum is rejected."""
-        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "999.0")
+    def test_rate_limit_max_requests_too_high(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test rate limit max requests above maximum is rejected."""
+        monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "9999")
 
         runner = CliRunner()
         result = runner.invoke(cli, ["analyze"])
 
         assert result.exit_code != 0
         assert "configuration error" in result.output.lower()
-        assert "cannot exceed 60" in result.output.lower()
+        assert "cannot exceed 1000" in result.output.lower()
 
     def test_top_players_too_high_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test top players count from env above maximum is rejected."""
