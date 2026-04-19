@@ -9,12 +9,14 @@ from typing import Any
 
 from dotenv import load_dotenv
 
-from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_api_base_url
-from nhl_scrabble.validators import (
-    validate_float_range,
-    validate_integer_range,
-    validate_output_format,
+from nhl_scrabble.config_validators import (
+    ConfigValidationError,
+    validate_boolean,
+    validate_enum,
+    validate_positive_float,
+    validate_positive_int,
 )
+from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_api_base_url
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +61,7 @@ class Config:
     def from_env(cls) -> "Config":  # noqa: C901
         """Load configuration from environment variables with comprehensive validation.
 
-        Uses validators from validators module to ensure all configuration values
+        Uses validators from config_validators module to ensure all configuration values
         are within safe, reasonable bounds to prevent DoS attacks and invalid states.
         Also validates API base URL with SSRF protection.
 
@@ -120,110 +122,133 @@ class Config:
             )
             raise ValueError(f"Invalid API base URL: {e}") from e
 
-        # Validate API timeout (1-300 seconds)
-        api_timeout = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_API_TIMEOUT", "10"),
-            min_val=1,
-            max_val=300,
-            name="NHL_SCRABBLE_API_TIMEOUT",
-        )
+        def get_int(
+            key: str,
+            default: str,
+            min_value: int = 0,
+            max_value: int = 3600,
+        ) -> int:
+            """Get integer from environment variable with injection protection.
 
-        # Validate API retries (0-10 attempts)
-        api_retries = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_API_RETRIES", "3"),
-            min_val=0,
-            max_val=10,
-            name="NHL_SCRABBLE_API_RETRIES",
-        )
+            Args:
+                key: Environment variable name
+                default: Default value if variable not set
+                min_value: Minimum allowed value
+                max_value: Maximum allowed value
 
-        # Validate rate limit max requests (1-1000)
-        rate_limit_max_requests = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "30"),
-            min_val=1,
-            max_val=1000,
-            name="NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS",
-        )
+            Returns:
+                Validated integer value
 
-        # Validate rate limit window (1.0-3600.0 seconds = 1 hour max)
-        rate_limit_window = validate_float_range(
-            os.getenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "60.0"),
-            min_val=1.0,
-            max_val=3600.0,
-            name="NHL_SCRABBLE_RATE_LIMIT_WINDOW",
-        )
+            Raises:
+                ValueError: If value is not a valid integer, contains injection attempts,
+                    or is outside allowed range
+            """
+            value_str = os.getenv(key, default)
+            try:
+                return validate_positive_int(value_str, min_val=min_value, max_val=max_value)
+            except ConfigValidationError as e:
+                raise ValueError(f"{key}: {e}") from e
 
-        # Validate backoff factor (1.0-10.0)
-        backoff_factor = validate_float_range(
-            os.getenv("NHL_SCRABBLE_BACKOFF_FACTOR", "2.0"),
-            min_val=1.0,
-            max_val=10.0,
-            name="NHL_SCRABBLE_BACKOFF_FACTOR",
-        )
+        def get_float(
+            key: str,
+            default: str,
+            min_value: float = 0.0,
+            max_value: float = 60.0,
+        ) -> float:
+            """Get float from environment variable with injection protection.
 
-        # Validate max backoff (1.0-300.0 seconds)
-        max_backoff = validate_float_range(
-            os.getenv("NHL_SCRABBLE_MAX_BACKOFF", "30.0"),
-            min_val=1.0,
-            max_val=300.0,
-            name="NHL_SCRABBLE_MAX_BACKOFF",
-        )
+            Args:
+                key: Environment variable name
+                default: Default value if variable not set
+                min_value: Minimum allowed value
+                max_value: Maximum allowed value
 
-        # Validate cache expiry (1-86400 seconds = 1 day max)
-        cache_expiry = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_CACHE_EXPIRY", "3600"),
-            min_val=1,
-            max_val=86400,
-            name="NHL_SCRABBLE_CACHE_EXPIRY",
-        )
+            Returns:
+                Validated float value
 
-        # Validate top players count (1-100)
-        top_players_count = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_TOP_PLAYERS", "20"),
-            min_val=1,
-            max_val=100,
-            name="NHL_SCRABBLE_TOP_PLAYERS",
-        )
+            Raises:
+                ValueError: If value is not a valid float, contains injection attempts,
+                    or is outside allowed range
+            """
+            value_str = os.getenv(key, default)
+            try:
+                return validate_positive_float(value_str, min_val=min_value, max_val=max_value)
+            except ConfigValidationError as e:
+                raise ValueError(f"{key}: {e}") from e
 
-        # Validate top team players count (1-50)
-        top_team_players_count = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5"),
-            min_val=1,
-            max_val=50,
-            name="NHL_SCRABBLE_TOP_TEAM_PLAYERS",
-        )
+        def get_bool(key: str, default: str) -> bool:
+            """Get boolean from environment variable with injection protection.
 
-        # Validate max concurrent requests (1-50)
-        max_concurrent_requests = validate_integer_range(
-            os.getenv("NHL_SCRABBLE_MAX_CONCURRENT", "5"),
-            min_val=1,
-            max_val=50,
-            name="NHL_SCRABBLE_MAX_CONCURRENT",
-        )
+            Args:
+                key: Environment variable name
+                default: Default value if variable not set
 
-        # Validate output format
-        output_format = validate_output_format(os.getenv("NHL_SCRABBLE_OUTPUT_FORMAT", "text"))
+            Returns:
+                Validated boolean value
 
-        # Boolean values (true/false)
-        cache_enabled = os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true"
-        verbose = os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true"
-        sanitize_logs = os.getenv("NHL_SCRABBLE_SANITIZE_LOGS", "true").lower() == "true"
+            Raises:
+                ValueError: If value is not a valid boolean or contains injection attempts
+            """
+            value_str = os.getenv(key, default)
+            try:
+                return validate_boolean(value_str)
+            except ConfigValidationError as e:
+                raise ValueError(f"{key}: {e}") from e
+
+        def get_enum(
+            key: str,
+            default: str,
+            allowed_values: set[str],
+        ) -> str:
+            """Get enum value from environment variable with injection protection.
+
+            Args:
+                key: Environment variable name
+                default: Default value if variable not set
+                allowed_values: Set of allowed values
+
+            Returns:
+                Validated enum value (normalized to lowercase)
+
+            Raises:
+                ValueError: If value is not in allowed set or contains injection attempts
+            """
+            value_str = os.getenv(key, default)
+            try:
+                return validate_enum(value_str, allowed_values)
+            except ConfigValidationError as e:
+                raise ValueError(f"{key}: {e}") from e
 
         return cls(
             api_base_url=validated_url,
-            api_timeout=api_timeout,
-            api_retries=api_retries,
-            rate_limit_max_requests=rate_limit_max_requests,
-            rate_limit_window=rate_limit_window,
-            backoff_factor=backoff_factor,
-            max_backoff=max_backoff,
-            cache_enabled=cache_enabled,
-            cache_expiry=cache_expiry,
-            max_concurrent_requests=max_concurrent_requests,
-            top_players_count=top_players_count,
-            top_team_players_count=top_team_players_count,
-            verbose=verbose,
-            output_format=output_format,
-            sanitize_logs=sanitize_logs,
+            api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1, max_value=300),
+            api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0, max_value=10),
+            rate_limit_max_requests=get_int(
+                "NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", "30", min_value=1, max_value=1000
+            ),
+            rate_limit_window=get_float(
+                "NHL_SCRABBLE_RATE_LIMIT_WINDOW", "60.0", min_value=1.0, max_value=3600.0
+            ),
+            backoff_factor=get_float(
+                "NHL_SCRABBLE_BACKOFF_FACTOR", "2.0", min_value=1.0, max_value=10.0
+            ),
+            max_backoff=get_float(
+                "NHL_SCRABBLE_MAX_BACKOFF", "30.0", min_value=1.0, max_value=300.0
+            ),
+            cache_enabled=get_bool("NHL_SCRABBLE_CACHE_ENABLED", "true"),
+            cache_expiry=get_int("NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1, max_value=86400),
+            max_concurrent_requests=get_int(
+                "NHL_SCRABBLE_MAX_CONCURRENT", "5", min_value=1, max_value=50
+            ),
+            top_players_count=get_int(
+                "NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1, max_value=1000
+            ),
+            top_team_players_count=get_int(
+                "NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1, max_value=100
+            ),
+            verbose=get_bool("NHL_SCRABBLE_VERBOSE", "false"),
+            output_format=get_enum("NHL_SCRABBLE_OUTPUT_FORMAT", "text", {"text", "json", "html"}),
+            sanitize_logs=get_bool("NHL_SCRABBLE_SANITIZE_LOGS", "true"),
         )
 
     def to_dict(self) -> dict[str, Any]:

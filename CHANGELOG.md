@@ -69,6 +69,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- **Configuration Injection Protection** - Comprehensive validation to prevent injection attacks
+
+  - Created `config_validators.py` module with strict input validation for all config values
+  - Added `validate_positive_int()` - validates integers with range checking and injection prevention
+  - Added `validate_positive_float()` - validates floats with range checking and injection prevention
+  - Added `validate_safe_path()` - prevents path traversal and command injection in file paths
+  - Added `validate_enum()` - validates values against allowed set with injection prevention
+  - Added `validate_boolean()` - validates boolean strings with injection prevention
+  - Added `validate_url()` - validates URL format with HTTPS enforcement option
+  - All validators detect and reject shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, etc.)
+  - Updated `Config.from_env()` to use validators with strict range limits
+  - Added maximum value constraints: timeout ≤300s, retries ≤10, delay ≤10s, cache_expiry ≤86400s
+  - Added enum validation for `output_format` (only allows "text", "json", "html")
+  - Replaced manual boolean parsing with `validate_boolean()` for consistent validation
+  - Added 70 unit tests covering injection scenarios and validation logic
+  - Added 34 integration tests covering config security and range validation
+  - Prevents: command injection, path traversal, type confusion, range bypass attacks
+  - Benefits: Defense-in-depth, fail-fast validation, clear error messages
+  - Related: Security task #137 - Config injection protection
+
 - **PII Logging Prevention** - Enhanced log sanitization to protect player privacy
 
   - Extended `SensitiveDataFilter` to detect and redact Personally Identifiable Information (PII)

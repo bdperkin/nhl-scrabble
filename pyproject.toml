@@ -192,6 +192,7 @@ per-file-ignores = [
     "src/nhl_scrabble/api_server/routes/players.py:C901",  # get_players complexity from filtering logic
     "src/nhl_scrabble/validators.py:C901",  # validate_file_path complexity from comprehensive security checks
     "src/nhl_scrabble/cli.py:TC003,C901",  # Path used at runtime; run_analysis complexity from error handling
+    "src/nhl_scrabble/config_validators.py:C901",  # validate_safe_path complexity from path traversal checks
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity
 exclude = [
@@ -1040,7 +1041,10 @@ ignore_names = [
     # Lazy report generation (used via CLI --report option, vulture can't detect dynamic invocation)
     "ReportGenerator",    # ReportGenerator class used dynamically in CLI
     "get_report",         # ReportGenerator method used via CLI --report flag
-    "validate_url",       # Validator function part of public API (reserved for future use)
+    "validate_safe_path",   # config_validators function - public API for configuration validation
+    "validate_url",       # Validator/config_validators function part of public API (reserved for future use)
+    "validate_float_range",  # validators function - public API (legacy, replaced by config_validators)
+    "validate_output_format",  # validators function - public API (legacy, replaced by config_validators)
     "reset",              # RateLimiter.reset() method part of public API (used for testing/manual reset)
 
     # FastAPI framework patterns (called at runtime by framework)
