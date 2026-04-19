@@ -53,8 +53,9 @@ jobs:
         run: |
           uv pip install -e ".[dev]" --system
 
-      - name: Run ruff format check
-        run: ruff format --check .
+      # NOTE: Format checking is handled by pre-commit job (with black 24.10)
+      # Removed redundant format check here to avoid version conflicts
+      # between ruff-format and black
 
       - name: Run ruff lint
         run: ruff check .
