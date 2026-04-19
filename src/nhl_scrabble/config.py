@@ -25,6 +25,7 @@ class Config:
         rate_limit_delay: Delay in seconds between API requests
         cache_enabled: Enable HTTP caching for API responses
         cache_expiry: Cache expiration time in seconds
+        max_concurrent_requests: Maximum number of concurrent API requests
         top_players_count: Number of top players to show in reports
         top_team_players_count: Number of top players per team to show
         verbose: Enable verbose logging
@@ -40,6 +41,7 @@ class Config:
     max_backoff: float = 30.0
     cache_enabled: bool = True
     cache_expiry: int = 3600
+    max_concurrent_requests: int = 5
     top_players_count: int = 20
     top_team_players_count: int = 5
     verbose: bool = False
@@ -59,6 +61,7 @@ class Config:
             NHL_SCRABBLE_MAX_BACKOFF: Maximum backoff delay in seconds (must be >= 1.0)
             NHL_SCRABBLE_CACHE_ENABLED: Enable HTTP caching (true/false)
             NHL_SCRABBLE_CACHE_EXPIRY: Cache expiration in seconds (must be >= 1)
+            NHL_SCRABBLE_MAX_CONCURRENT: Max concurrent API requests (must be >= 1)
             NHL_SCRABBLE_TOP_PLAYERS: Number of top players to show (must be >= 1)
             NHL_SCRABBLE_TOP_TEAM_PLAYERS: Number of top players per team (must be >= 1)
             NHL_SCRABBLE_VERBOSE: Enable verbose logging (true/false)
@@ -154,6 +157,7 @@ class Config:
             max_backoff=get_float("NHL_SCRABBLE_MAX_BACKOFF", "30.0", min_value=1.0),
             cache_enabled=os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true",
             cache_expiry=get_int("NHL_SCRABBLE_CACHE_EXPIRY", "3600", min_value=1),
+            max_concurrent_requests=get_int("NHL_SCRABBLE_MAX_CONCURRENT", "5", min_value=1),
             top_players_count=get_int("NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1),
             top_team_players_count=get_int("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1),
             verbose=os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true",
@@ -176,6 +180,7 @@ class Config:
             "max_backoff": self.max_backoff,
             "cache_enabled": self.cache_enabled,
             "cache_expiry": self.cache_expiry,
+            "max_concurrent_requests": self.max_concurrent_requests,
             "top_players_count": self.top_players_count,
             "top_team_players_count": self.top_team_players_count,
             "verbose": self.verbose,

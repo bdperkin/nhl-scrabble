@@ -21,6 +21,7 @@ NHL Scrabble can be configured via:
 | `NHL_SCRABBLE_API_TIMEOUT`      | int   | 10      | API request timeout in seconds      |
 | `NHL_SCRABBLE_API_RETRIES`      | int   | 3       | Number of retry attempts on failure |
 | `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float | 0.3     | Delay between requests in seconds   |
+| `NHL_SCRABBLE_MAX_CONCURRENT`   | int   | 5       | Max concurrent API requests         |
 
 **Example**:
 
@@ -28,6 +29,7 @@ NHL Scrabble can be configured via:
 export NHL_SCRABBLE_API_TIMEOUT=30
 export NHL_SCRABBLE_API_RETRIES=5
 export NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
+export NHL_SCRABBLE_MAX_CONCURRENT=10
 ```
 
 ### Caching Configuration
@@ -83,6 +85,7 @@ Create `.env` in project root:
 NHL_SCRABBLE_API_TIMEOUT=30
 NHL_SCRABBLE_API_RETRIES=5
 NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
+NHL_SCRABBLE_MAX_CONCURRENT=10
 
 # Caching
 NHL_SCRABBLE_CACHE_ENABLED=true
@@ -122,6 +125,7 @@ See [CLI Reference](cli.md) for all options.
 NHL_SCRABBLE_VERBOSE=true
 NHL_SCRABBLE_CACHE_ENABLED=false
 NHL_SCRABBLE_RATE_LIMIT_DELAY=0
+NHL_SCRABBLE_MAX_CONCURRENT=10
 NHL_SCRABBLE_SANITIZE_LOGS=false
 ```
 
@@ -131,6 +135,7 @@ NHL_SCRABBLE_SANITIZE_LOGS=false
 NHL_SCRABBLE_API_TIMEOUT=15
 NHL_SCRABBLE_API_RETRIES=3
 NHL_SCRABBLE_RATE_LIMIT_DELAY=0.3
+NHL_SCRABBLE_MAX_CONCURRENT=5
 NHL_SCRABBLE_CACHE_ENABLED=true
 NHL_SCRABBLE_CACHE_EXPIRY=7200
 NHL_SCRABBLE_SANITIZE_LOGS=true

@@ -4,10 +4,8 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Any
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiNotFoundError
 from nhl_scrabble.models.player import PlayerScore
@@ -23,27 +21,31 @@ class TeamProcessor:
 
     This class orchestrates fetching roster data for all NHL teams, calculating Scrabble scores for
     all players, and aggregating statistics at team, division, and conference levels.
+
+    Supports concurrent fetching of team rosters to improve performance for I/O-bound operations.
     """
 
-    def __init__(self, api_client: NHLApiClient, scorer: ScrabbleScorer) -> None:
+    def __init__(
+        self, api_client: NHLApiClient, scorer: ScrabbleScorer, max_workers: int = 5
+    ) -> None:
         """Initialize the team processor.
 
         Args:
             api_client: NHL API client for fetching data
             scorer: Scrabble scorer for calculating player scores
+            max_workers: Maximum number of concurrent API requests (default: 5)
         """
         self.api_client = api_client
         self.scorer = scorer
+        self.max_workers = max_workers
 
     def process_all_teams(
         self,
-        progress_callback: Callable[[str], None] | None = None,
     ) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
-        """Process all NHL teams and calculate scores.
+        """Process all NHL teams and calculate scores with concurrent fetching.
 
-        Args:
-            progress_callback: Optional callback to report progress after each team.
-                Called with team abbreviation after successfully processing each team.
+        Uses ThreadPoolExecutor to fetch team rosters concurrently, improving performance
+        for I/O-bound operations. The number of concurrent workers is controlled by max_workers.
 
         Returns:
             Tuple containing:
@@ -54,14 +56,14 @@ class TeamProcessor:
         Examples:
             >>> client = NHLApiClient()
             >>> scorer = ScrabbleScorer()
-            >>> processor = TeamProcessor(client, scorer)
+            >>> processor = TeamProcessor(client, scorer, max_workers=5)
             >>> teams, players, failed = processor.process_all_teams()
             >>> len(teams) > 0
             True
         """
-        logger.info("Starting team processing")
+        logger.info(f"Starting team processing (concurrent mode, max_workers={self.max_workers})")
 
-        # Fetch all teams
+        # Fetch all teams metadata
         teams_info = self.api_client.get_teams()
         total_teams = len(teams_info)
         logger.info(f"Fetched {total_teams} teams from NHL API")
@@ -70,24 +72,77 @@ class TeamProcessor:
         all_players: list[PlayerScore] = []
         failed_teams: list[str] = []
 
-        # Process each team
-        for i, (team_abbrev, team_meta) in enumerate(teams_info.items(), 1):
-            logger.info(f"Processing {team_abbrev} ({i}/{total_teams})")
+        # Concurrent fetching with controlled parallelism
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            # Submit all roster fetch jobs
+            future_to_team = {
+                executor.submit(self._fetch_and_process_team, team_abbrev, team_meta): team_abbrev
+                for team_abbrev, team_meta in teams_info.items()
+            }
 
-            try:
-                roster = self.api_client.get_team_roster(team_abbrev)
-            except NHLApiNotFoundError:
-                logger.warning(f"No roster data for {team_abbrev}")
-                failed_teams.append(team_abbrev)
-                continue
+            # Process results as they complete
+            for completed, future in enumerate(as_completed(future_to_team), start=1):
+                team_abbrev = future_to_team[future]
 
+                try:
+                    result = future.result()
+
+                    if result is None:
+                        # Team failed to fetch
+                        failed_teams.append(team_abbrev)
+                        logger.warning(
+                            f"No roster data for {team_abbrev} ({completed}/{total_teams})"
+                        )
+                    else:
+                        # Success
+                        team_score, team_players = result
+                        team_scores[team_abbrev] = team_score
+                        all_players.extend(team_players)
+                        logger.info(f"Processed {team_abbrev} ({completed}/{total_teams})")
+
+                except (OSError, ValueError) as e:
+                    # OSError covers network/connection errors, ValueError for data parsing
+                    logger.error(f"Error processing {team_abbrev}: {e}")
+                    failed_teams.append(team_abbrev)
+
+        logger.info(
+            f"Processing complete: {len(team_scores)} teams processed, "
+            f"{len(failed_teams)} failed (concurrent mode)"
+        )
+        return team_scores, all_players, failed_teams
+
+    def _fetch_and_process_team(
+        self, team_abbrev: str, team_meta: dict[str, str]
+    ) -> tuple[TeamScore, list[PlayerScore]] | None:
+        """Fetch and process a single team (thread-safe).
+
+        This method is called concurrently from multiple threads. It fetches the roster
+        for a single team, calculates scores for all players, and aggregates team statistics.
+
+        Args:
+            team_abbrev: Team abbreviation (e.g., "TOR", "BOS")
+            team_meta: Team metadata containing division and conference
+
+        Returns:
+            Tuple of (TeamScore, player list) if successful, None if team fetch failed
+
+        Note:
+            This method is thread-safe as it operates only on local variables and
+            thread-safe API client methods. No shared mutable state is accessed.
+        """
+        try:
+            # Fetch roster (with built-in retry and rate limiting)
+            roster = self.api_client.get_team_roster(team_abbrev)
+
+            # Process roster
             team_players = self._process_team_roster(
                 roster, team_abbrev, team_meta["division"], team_meta["conference"]
             )
 
+            # Calculate team score
             team_total = sum(player.full_score for player in team_players)
 
-            team_scores[team_abbrev] = TeamScore(
+            team_score = TeamScore(
                 abbrev=team_abbrev,
                 total=team_total,
                 players=team_players,
@@ -95,16 +150,11 @@ class TeamProcessor:
                 conference=team_meta["conference"],
             )
 
-            all_players.extend(team_players)
+            return (team_score, team_players)
 
-            # Report progress if callback provided
-            if progress_callback:
-                progress_callback(team_abbrev)
-
-        logger.info(
-            f"Processing complete: {len(team_scores)} teams processed, {len(failed_teams)} failed"
-        )
-        return team_scores, all_players, failed_teams
+        except NHLApiNotFoundError:
+            # Team has no roster data
+            return None
 
     def _process_team_roster(
         self, roster: dict[str, Any], team_abbrev: str, division: str, conference: str
