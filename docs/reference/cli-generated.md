@@ -74,7 +74,7 @@ Usage: nhl-scrabble analyze [OPTIONS]
   scrabble analyze --conference Eastern     nhl-scrabble analyze --teams
   TOR,MTL,OTT     nhl-scrabble analyze --min-score 50 --max-score 100     nhl-
   scrabble analyze --exclude BOS,NYR     nhl-scrabble analyze --division
-  Atlantic --min-score 60
+  Atlantic --min-score 60     nhl-scrabble analyze --season 20222023
 
 Options:
   --format [text|json|csv|excel]  Output format (default: text)
@@ -108,6 +108,8 @@ Options:
                                   abbreviations: NYR,PHI)
   --min-score INTEGER             Minimum player score to include
   --max-score INTEGER             Maximum player score to include
+  --season TEXT                   Analyze specific season (format: YYYYYYYY,
+                                  e.g., 20222023 for 2022-23)
   --help                          Show this message and exit.
 ```
 
