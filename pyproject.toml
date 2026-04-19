@@ -190,6 +190,7 @@ per-file-ignores = [
     "tests/*:S101",  # Use of assert (pytest uses assert)
     "src/nhl_scrabble/api/nhl_client.py:C901",  # get_team_roster complexity from retry logic
     "src/nhl_scrabble/api_server/routes/players.py:C901",  # get_players complexity from filtering logic
+    "src/nhl_scrabble/validators.py:C901",  # validate_file_path complexity from comprehensive security checks
     "src/nhl_scrabble/cli.py:TC003",  # Path used at runtime, not just type checking
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity

@@ -103,6 +103,12 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
             f"File {file_path} already exists. Use --force to overwrite or choose a different name."
         )
 
+    # Check file is writable if it exists and we're allowing overwrite
+    if file_path.exists() and allow_overwrite and not (file_path.stat().st_mode & 0o200):
+        raise ValidationError(
+            f"File is not writable: {file_path}. Check permissions: ls -l {file_path}"
+        )
+
     # Validate filename is safe (alphanumeric, dash, underscore, dot only)
     # This prevents shell injection and other filename-based attacks
     if not re.match(r"^[\w\-\.]+$", file_path.name):
@@ -159,7 +165,7 @@ def validate_integer_range(
 
     # Check minimum bound
     if min_val is not None and int_val < min_val:
-        raise ValidationError(f"{name} must be >= {min_val}")
+        raise ValidationError(f"{name} must be at least {min_val}")
 
     # Check maximum bound
     if max_val is not None and int_val > max_val:
@@ -205,7 +211,7 @@ def validate_float_range(
 
     # Check minimum bound
     if min_val is not None and float_val < min_val:
-        raise ValidationError(f"{name} must be >= {min_val}")
+        raise ValidationError(f"{name} must be at least {min_val}")
 
     # Check maximum bound
     if max_val is not None and float_val > max_val:
