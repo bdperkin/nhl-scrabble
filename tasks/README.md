@@ -71,23 +71,24 @@ Each task is assigned a priority:
 **Completed**: All tasks complete! (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 006: to_dict() methods 1.5h - PR #191, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182, Task 011: log level optimization - PR #215)
 **Expected Speedup**: 5-10x overall performance improvement achieved! (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (1 task active, 10 documented, 9 completed)
+### Enhancements (2 tasks active, 11 documented, 9 completed)
 
-| ID  | Title                            | Priority | Effort | Issue | Status      |
-| --- | -------------------------------- | -------- | ------ | ----- | ----------- |
-| 001 | Progress Bars                    | MEDIUM   | 2-3h   | #132  | ✅ Complete |
-| 002 | Interactive Mode                 | MEDIUM   | 4-6h   | #133  | ✅ Complete |
-| 003 | Historical Data                  | LOW      | 8-12h  | #143  | ✅ Complete |
-| 004 | CSV/Excel Export                 | LOW      | 3-4h   | #144  | ✅ Complete |
-| 005 | Advanced Filtering Options       | LOW      | 4-5h   | #145  | ✅ Complete |
-| 006 | Custom Scoring Rules             | LOW      | 3-4h   | #146  | ✅ Complete |
-| 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  | ✅ Complete |
-| 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  | ✅ Complete |
-| 009 | Player Search                    | LOW      | 3-4h   | #149  | ✅ Complete |
-| 010 | Python 3.14 and 3.15-dev Support | MEDIUM   | 3-5h   | #217  |             |
+| ID  | Title                                    | Priority | Effort | Issue | Status      |
+| --- | ---------------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Progress Bars                            | MEDIUM   | 2-3h   | #132  | ✅ Complete |
+| 002 | Interactive Mode                         | MEDIUM   | 4-6h   | #133  | ✅ Complete |
+| 003 | Historical Data                          | LOW      | 8-12h  | #143  | ✅ Complete |
+| 004 | CSV/Excel Export                         | LOW      | 3-4h   | #144  | ✅ Complete |
+| 005 | Advanced Filtering Options               | LOW      | 4-5h   | #145  | ✅ Complete |
+| 006 | Custom Scoring Rules                     | LOW      | 3-4h   | #146  | ✅ Complete |
+| 007 | Interactive Statistics Dashboard         | LOW      | 6-8h   | #147  | ✅ Complete |
+| 008 | Watch Mode Auto-Refresh                  | LOW      | 2-3h   | #148  | ✅ Complete |
+| 009 | Player Search                            | LOW      | 3-4h   | #149  | ✅ Complete |
+| 010 | Python 3.14 and 3.15-dev Support         | MEDIUM   | 3-5h   | #217  |             |
+| 011 | Hyperlink Documentation to External URLs | LOW      | 2-4h   | #223  |             |
 
-**Documented Effort**: 38-54 hours
-**Remaining Effort**: 3-5h
+**Documented Effort**: 40-58 hours
+**Remaining Effort**: 5-9h
 **Completed**: 9 of 10 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
 
 ### Testing (2 tasks)
@@ -147,8 +148,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 95 tasks (25 active, 70 completed)
-**Remaining Effort**: ~161.5-241 hours (major milestones achieved!)
+**Total Tasks**: 96 tasks (26 active, 70 completed)
+**Remaining Effort**: ~163.5-245 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -156,7 +157,7 @@ Each task is assigned a priority:
 - **Bug Fixes**: 0 active (0 completed in tasks/)
 - **Security**: 0 active (7 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
-- **Enhancement**: 1 active (9 completed), 3-5h remaining
+- **Enhancement**: 2 active (9 completed), 5-9h remaining
 - **Testing**: 2 active (14-23h remaining)
 - **New Features**: 13 active (4 completed), 107.5-162h remaining
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
