@@ -71,7 +71,7 @@ Each task is assigned a priority:
 **Completed**: All tasks complete! (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 006: to_dict() methods 1.5h - PR #191, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182, Task 011: log level optimization - PR #215)
 **Expected Speedup**: 5-10x overall performance improvement achieved! (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (0 tasks active, 9 documented, 9 completed)
+### Enhancements (1 task active, 10 documented, 9 completed)
 
 | ID  | Title                            | Priority | Effort | Issue | Status      |
 | --- | -------------------------------- | -------- | ------ | ----- | ----------- |
@@ -84,9 +84,11 @@ Each task is assigned a priority:
 | 007 | Interactive Statistics Dashboard | LOW      | 6-8h   | #147  | ✅ Complete |
 | 008 | Watch Mode Auto-Refresh          | LOW      | 2-3h   | #148  | ✅ Complete |
 | 009 | Player Search                    | LOW      | 3-4h   | #149  | ✅ Complete |
+| 010 | Python 3.14 and 3.15-dev Support | MEDIUM   | 3-5h   | #217  |             |
 
-**Documented Effort**: 35-49 hours
-**Completed**: All tasks complete! (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
+**Documented Effort**: 38-54 hours
+**Remaining Effort**: 3-5h
+**Completed**: 9 of 10 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
 
 ### Testing (1 task)
 
@@ -140,8 +142,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 89 tasks (19 active, 70 completed)
-**Remaining Effort**: ~104-154 hours (major milestones achieved!)
+**Total Tasks**: 90 tasks (20 active, 70 completed)
+**Remaining Effort**: ~107-159 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -149,7 +151,7 @@ Each task is assigned a priority:
 - **Bug Fixes**: 0 active (0 completed in tasks/)
 - **Security**: 0 active (7 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
-- **Enhancement**: 0 active (9 completed - 100% complete! 🎉)
+- **Enhancement**: 1 active (9 completed), 3-5h remaining
 - **Testing**: 1 active (2-3h remaining)
 - **New Features**: 11 active (4 completed), 67.5-102h remaining
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
@@ -158,14 +160,13 @@ Each task is assigned a priority:
 
 ### By Priority
 
-- **MEDIUM**: 4 tasks remaining (~24-36h) - Web interface completion + repository cleanup
+- **MEDIUM**: 5 tasks remaining (~27-41h) - Web interface completion + repository cleanup + Python version support
 - **LOW**: 15 tasks remaining (~80-120h) - Long-term improvements
 
 ### Major Achievements
 
 🎉 **All Security Tasks Complete** (7/7) - Project is secure!
 🎉 **All Optimization Tasks Complete** (11/11) - 5-10x performance improvement!
-🎉 **All Enhancement Tasks Complete** (9/9) - Rich feature set delivered!
 
 ### Completed Tasks
 
