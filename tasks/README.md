@@ -147,7 +147,7 @@ Each task is assigned a priority:
 **Remaining Effort**: 119.5-180h (web interface subtasks: 10-15h remaining, standalone features: 94-144h, automation: 12-18h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
-### Refactoring (10 tasks active, 13 documented, 3 completed)
+### Refactoring (11 tasks active, 14 documented, 3 completed)
 
 | ID  | Title                                     | Priority | Effort   | Issue |
 | --- | ----------------------------------------- | -------- | -------- | ----- |
@@ -167,8 +167,9 @@ Each task is assigned a priority:
 | 017 | Extend JSON/YAML Schema Validation        | MEDIUM   | 1-2h     | #244  |
 | 018 | Add check-wheel-contents Validation       | LOW      | 1-2h     | #245  |
 | 019 | Add ssort Statement Sorting               | LOW      | 2-3h     | #246  |
+| 020 | Migrate from Deprecated codecov Action    | MEDIUM   | 30-60min | #285  |
 
-**Documented Effort**: 48.5-69 hours remaining
+**Documented Effort**: 49-70 hours remaining
 
 **Completed**: 5.25 hours
 
@@ -178,8 +179,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 140 tasks (70 active, 70 completed)
-**Remaining Effort**: ~269-403 hours
+**Total Tasks**: 141 tasks (71 active, 70 completed)
+**Remaining Effort**: ~269.5-404 hours
 **Completed Effort**: ~205.75+ hours
 
 ### By Category
@@ -197,12 +198,12 @@ Each task is assigned a priority:
   - i18n sub-tasks (020-024): 5 tasks, 23-33h
   - Release automation sub-tasks (025-031): 7 tasks, 9-14h
   - Standalone features: 13 tasks, 85-121h
-- **Refactoring**: 16 active (3 completed), 46.5-67h remaining
+- **Refactoring**: 11 active (3 completed), 49-70h remaining
 
 ### By Priority
 
 - **HIGH**: 2 tasks (~2-4h) - Security scanning tools (bandit, safety)
-- **MEDIUM**: 28 tasks (~94-148h) - Test coverage improvement, web interface, repository cleanup, Python version support, modernization tools, config formatting
+- **MEDIUM**: 29 tasks (~94.5-149h) - Test coverage improvement, web interface, repository cleanup, Python version support, modernization tools, config formatting, CI/CD maintenance
 - **LOW**: 39 tasks (~110-153h) - Long-term improvements, i18n/l10n, advanced features
 
 ### Major Achievements
