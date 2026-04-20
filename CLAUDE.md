@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.14 (supported), 3.15-dev (experimental)
 **License:** MIT
-**Pre-commit Hooks:** 57 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 58 hooks (comprehensive quality checks)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -997,7 +997,7 @@ The project uses UV automatically via tox-uv:
 - **Modules:** 15 core modules
 - **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Pre-commit Hooks:** 57 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint)
+- **Pre-commit Hooks:** 58 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, bandit, safety)
 - **Dependency Lock:** uv.lock with 1,957 lines
 - **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization
