@@ -45,6 +45,24 @@ pip install -e ".[dev]"
 pre-commit install
 ```
 
+### Python Version Support
+
+The project supports Python 3.10 through 3.14. We also test against Python 3.15-dev to ensure forward compatibility, but this version is experimental and may fail CI checks without blocking merges.
+
+**Local Development:**
+
+Use Python 3.14 for local development (see `.python-version`). To test other versions, use tox:
+
+```bash
+tox -e py310  # Test Python 3.10
+tox -e py314  # Test Python 3.14
+tox -e py315  # Test Python 3.15-dev (experimental)
+```
+
+**CI Testing:**
+
+All PRs are tested on Python 3.10-3.14 (required to pass). Python 3.15-dev tests run but failures don't block merges.
+
 ## Development Workflow
 
 ### Creating a Feature Branch
