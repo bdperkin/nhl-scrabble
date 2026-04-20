@@ -139,7 +139,7 @@ Each task is assigned a priority:
 **Remaining Effort**: 111.5-168h (web interface subtasks: 10-15h remaining, standalone features: 94-144h, automation: 4-6h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
-### Refactoring (10 tasks active, 11 documented, 1 completed)
+### Refactoring (11 tasks active, 12 documented, 1 completed)
 
 | ID  | Title                                     | Priority | Effort   | Issue |
 | --- | ----------------------------------------- | -------- | -------- | ----- |
@@ -153,15 +153,16 @@ Each task is assigned a priority:
 | 009 | Git Branch Pruning Automation             | LOW      | 30-60min | #220  |
 | 010 | Dynamic Versioning from Git Tags          | LOW      | 2-4h     | #222  |
 | 011 | Dependency Synchronization and Automation | MEDIUM   | 3-4h     | #226  |
+| 012 | Audit and Standardize CLI Options         | MEDIUM   | 2-4h     | #236  |
 
-**Documented Effort**: 38.5-52 hours remaining
+**Documented Effort**: 40.5-56 hours remaining
 
 **Completed**: 3 hours (Task 001: Consolidate Report Classes 3h - PR #184)
 
 ## Total Project Roadmap
 
-**Total Tasks**: 108 tasks (38 active, 70 completed)
-**Remaining Effort**: ~183.75-277.5 hours (major milestones achieved!)
+**Total Tasks**: 109 tasks (39 active, 70 completed)
+**Remaining Effort**: ~185.75-281.5 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -175,7 +176,7 @@ Each task is assigned a priority:
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 94-144h
   - Automation: 4-6h
-- **Refactoring**: 10 active (1 completed), 38.5-52h remaining
+- **Refactoring**: 11 active (1 completed), 40.5-56h remaining
 
 ### By Priority
 
