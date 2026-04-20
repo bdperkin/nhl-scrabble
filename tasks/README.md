@@ -47,11 +47,11 @@ Each task is assigned a priority:
 | 006 | SSL/TLS Certificate Verification  | LOW      | 1-2h   | #135  | ✅ Complete |
 | 007 | PII Logging Prevention            | LOW      | 2-3h   | #136  | ✅ Complete |
 | 008 | Config Injection Protection       | LOW      | 2-3h   | #137  | ✅ Complete |
-| 009 | Add Bandit Security Linting       | HIGH     | 1-2h   | #239  |             |
+| 009 | Add Bandit Security Linting       | HIGH     | 1-2h   | #239  | ✅ Complete |
 | 010 | Add Safety Vulnerability Scanning | HIGH     | 1-2h   | #240  |             |
 
 **Documented Effort**: 19-26.5 hours
-**Remaining Effort**: 2-4h
+**Remaining Effort**: 1-2h
 **Completed**: 7 tasks complete! (Task 002: Input Validation 3.5h - PR #196, Task 003: SSRF Protection 1.25h - PR #181, Task 004: Rate Limit Enforcement - PR #197, Task 005: DoS Prevention - PR #198, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200, Task 008: Config Injection Protection - PR #201)
 
 ### Optimization (0 tasks active, 11 documented, 11 completed)
@@ -703,11 +703,10 @@ See **Recommended Implementation Order** for the full 12-phase strategy with all
 ### Current Sprint (Sprint 9, 2 weeks)
 
 **Focus**: Security + Test Coverage Foundation
-**Planned Effort**: 8-12 hours
+**Planned Effort**: 7-10 hours
 
-**Security (HIGH priority, 2-4h):**
+**Security (HIGH priority, 1-2h):**
 
-1. security/009: Bandit security linting (#239, 1-2h)
 1. security/010: Safety vulnerability scanning (#240, 1-2h)
 
 **Testing (MEDIUM priority, 6-9h):**
@@ -821,9 +820,8 @@ This section maps dependencies between tasks to help determine implementation or
 
 ### Independent Tasks (Can start anytime)
 
-**Security** (2 tasks):
+**Security** (1 task):
 
-- security/009: Bandit linting - No dependencies
 - security/010: Safety scanning - No dependencies
 
 **Testing - Independent** (2 tasks):
@@ -1068,3 +1066,4 @@ ______________________________________________________________________
 | 006 | Add diff-cover PR Coverage                 | Testing      | 2026-04-17 | 0.75h         | #170 |
 | 007 | Add pytest-benchmark Performance Tests     | Testing      | 2026-04-17 | 2.5h          | #178 |
 | 008 | Add check-jsonschema Validation            | Testing      | 2026-04-17 | 0.75h         | #179 |
+| 009 | Add Bandit Security Linting                | Security     | 2026-04-20 | 3h            | #268 |

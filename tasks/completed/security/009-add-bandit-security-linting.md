@@ -751,3 +751,122 @@ config = yaml.safe_load(file)  # Safe
 1. **Documentation**: Clear security guidelines help team maintain security posture
 1. **Automation**: Multi-layer security checks provide defense in depth
 1. **False Positives**: Document and justify all `# nosec` comments
+
+## Implementation Notes
+
+**Implemented**: 2026-04-20
+**Branch**: security/009-add-bandit-security-linting
+**PR**: #268 - https://github.com/bdperkin/nhl-scrabble/pull/268
+**Commits**: 3 commits (5a7e4b1, c66cbf3, 34574ed)
+
+### Actual Implementation
+
+Followed the proposed solution with modifications:
+
+**Completed Tasks:**
+
+- ✅ Added bandit configuration to `pyproject.toml` with skips for B101 (assert in tests) and B311 (random for jitter)
+- ✅ Integrated bandit into pre-commit hooks (hook #52 of 57)
+- ✅ Created two tox environments: `bandit` (quick scan) and `security` (comprehensive with JSON/TXT reports)
+- ✅ Added GitHub Actions security workflow with three jobs: pip-audit, bandit, and safety
+- ✅ Updated Makefile bandit target to use pyproject.toml configuration
+- ✅ Documented security scanning workflow in CONTRIBUTING.md
+- ✅ Updated .gitignore to ignore generated reports (with root-specific patterns)
+
+**Deviations from Plan:**
+
+- ❌ **SARIF format NOT supported**: Bandit 1.9.4 does not support SARIF output format
+  - Attempted: `bandit --format sarif` → Error: invalid choice
+  - Solution: Removed SARIF generation, used JSON + TXT formats instead
+  - Impact: No GitHub Security tab integration (not critical, reports still accessible as artifacts)
+- ✅ **Root-specific gitignore patterns**: Changed `reports/` to `/reports/` to prevent excluding source code directory
+
+### Challenges Encountered
+
+**Challenge 1: SARIF Format Not Supported**
+
+- **Issue**: Bandit CLI does not support SARIF format despite documentation suggesting otherwise
+- **Discovery**: CI failure in GitHub Actions job
+- **Fix**: Removed SARIF generation, used JSON + TXT formats with 90-day artifact retention
+- **Impact**: ~15 minutes debugging + 1 extra commit
+
+**Challenge 2: Package Build Excluding reports/ Module**
+
+- **Issue**: ModuleNotFoundError for `nhl_scrabble.reports` in tox py311, py313, py315 tests
+- **Root Cause**: `.gitignore` pattern `reports/` matched both:
+  - Root-level generated reports/ directory (intended)
+  - src/nhl_scrabble/reports/ source code directory (NOT intended)
+- **Investigation**: ~30 minutes comparing main vs branch package builds
+- **Fix**: Changed gitignore patterns to be root-specific:
+  - `reports/` → `/reports/`
+  - `bandit-report.*` → `/bandit-report.*`
+  - `.bandit_baseline` → `/.bandit_baseline`
+- **Impact**: All Python tests (py310-py314) passed after fix
+
+**Challenge 3: Bandit TOML Parser Dependency**
+
+- **Issue**: Pre-commit hook failed: "toml parser not available"
+- **Discovery**: Running `pre-commit run bandit --all-files`
+- **Fix**: Added `additional_dependencies: ["bandit[toml]"]` to hook configuration
+- **Impact**: ~5 minutes
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 1-2 hours
+- **Actual**: ~3 hours
+- **Breakdown**:
+  - Initial implementation: 45 minutes
+  - SARIF format debugging: 15 minutes
+  - Package build issue investigation: 45 minutes
+  - Testing and verification: 30 minutes
+  - Documentation: 15 minutes
+  - CI monitoring: 30 minutes
+- **Reason**: Unexpected SARIF format incompatibility and complex package build issue (gitignore affecting hatchling)
+
+### Related PRs
+
+- **#268** - feat(security): Add Bandit security linting
+
+### Security Scan Results
+
+**Initial Scan (Pre-implementation):**
+
+- 0 issues found (clean codebase)
+
+**Post-implementation Scan:**
+
+- 0 HIGH severity issues
+- 0 MEDIUM severity issues
+- 2 LOW severity issues (skipped via configuration):
+  - B101: assert_used in tests (expected, tests excluded)
+  - B311: random for jitter in retry logic (documented, not cryptographic)
+
+**CI Integration Results:**
+
+- ✅ All Python versions (3.10-3.14) passing
+- ✅ Pre-commit hooks passing (57/57)
+- ✅ Security workflows passing (pip-audit, bandit, safety)
+- ❌ Python 3.15-dev failing (expected, experimental)
+- ⚠️ Codecov/project failing (informational, not blocking)
+
+### Files Modified
+
+**Configuration:**
+
+- `pyproject.toml` (+4 lines) - Bandit configuration with skips
+- `.pre-commit-config.yaml` (+17 lines) - Bandit hook (hook #52)
+- `tox.ini` (+24 lines) - bandit and security environments
+- `.gitignore` (+7 lines, modified patterns) - Root-specific report patterns
+
+**CI/CD:**
+
+- `.github/workflows/security.yml` (+59 lines, -28 lines) - Enhanced with bandit job
+
+**Documentation:**
+
+- `CONTRIBUTING.md` (+53 lines) - Security Scanning section
+- `Makefile` (+1 line) - Updated bandit target
+
+**Tasks:**
+
+- `tasks/security/009-add-bandit-security-linting.md` (+206 lines) - Expanded implementation details and notes
