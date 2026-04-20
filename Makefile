@@ -47,7 +47,7 @@ NC := \033[0m # No Color
         docs serve-docs \
         run run-verbose run-json \
         shell watch init info status version \
-        git-prune-local git-prune-remote-refs git-status-branches git-cleanup \
+        git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
         count tree all release
 
 ###################
@@ -520,8 +520,53 @@ git-prune-local: ## Prune local branches merged to main (with confirmation)
 		printf "$(RED)❌ Cancelled$(NC)\n"; \
 	fi
 
+git-prune-closed-prs: ## Prune local branches from closed (not merged) PRs (with confirmation)
+	@printf "$(BLUE)🔍 Finding branches with closed (not merged) PRs...$(NC)\n"
+	@if ! command -v gh >/dev/null 2>&1; then \
+		printf "$(RED)❌ GitHub CLI (gh) not found. Install from https://cli.github.com$(NC)\n"; \
+		exit 1; \
+	fi; \
+	CLOSED_BRANCHES=$$(gh pr list --state closed --limit 100 --json headRefName,mergedAt --jq '.[] | select(.mergedAt == null) | .headRefName' 2>/dev/null | sort -u); \
+	if [ -z "$$CLOSED_BRANCHES" ]; then \
+		printf "$(GREEN)✅ No branches with closed PRs found$(NC)\n"; \
+		exit 0; \
+	fi; \
+	LOCAL_CLOSED_BRANCHES=""; \
+	for branch in $$CLOSED_BRANCHES; do \
+		if git show-ref --verify --quiet refs/heads/$$branch; then \
+			LOCAL_CLOSED_BRANCHES="$$LOCAL_CLOSED_BRANCHES$$branch\n"; \
+		fi; \
+	done; \
+	if [ -z "$$LOCAL_CLOSED_BRANCHES" ]; then \
+		printf "$(GREEN)✅ No local branches with closed PRs to prune$(NC)\n"; \
+		exit 0; \
+	fi; \
+	BRANCH_COUNT=$$(echo -e "$$LOCAL_CLOSED_BRANCHES" | grep -c .); \
+	printf "Found $$BRANCH_COUNT local branch(es) with closed (not merged) PRs\n"; \
+	printf "\n"; \
+	printf "$(YELLOW)⚠️  About to FORCE DELETE these branches (work not merged to main):$(NC)\n"; \
+	echo -e "$$LOCAL_CLOSED_BRANCHES"; \
+	printf "\n"; \
+	printf "$(RED)⚠️  WARNING: This will permanently delete unmerged work!$(NC)\n"; \
+	printf "$(YELLOW)Make sure you don't need any changes from these branches.$(NC)\n"; \
+	printf "\n"; \
+	read -p "Continue? [y/N] " -n 1 -r; echo; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		echo -e "$$LOCAL_CLOSED_BRANCHES" | while read branch; do \
+			if [ -n "$$branch" ]; then \
+				git branch -D $$branch 2>/dev/null && printf "  $(GREEN)✓$(NC) Deleted $$branch\n" || printf "  $(RED)✗$(NC) Failed to delete $$branch\n"; \
+			fi; \
+		done; \
+		printf "$(GREEN)✅ Closed PR branches pruned$(NC)\n"; \
+	else \
+		printf "$(RED)❌ Cancelled$(NC)\n"; \
+	fi
+
 git-cleanup: git-prune-remote-refs git-prune-local ## Full git cleanup (prune remote refs + local branches)
 	@printf "$(GREEN)✅ Git cleanup complete$(NC)\n"
+
+git-cleanup-all: git-prune-remote-refs git-prune-local git-prune-closed-prs ## Complete cleanup (remote refs + merged branches + closed PRs)
+	@printf "$(GREEN)✅ Complete git cleanup finished$(NC)\n"
 
 ###################
 # All-in-one
