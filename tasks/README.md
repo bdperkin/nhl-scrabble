@@ -707,12 +707,12 @@ See **Recommended Implementation Order** for the full 12-phase strategy with all
 
 **Focus**: Test Coverage Foundation
 **Planned Effort**: 6-9 hours
-**Completed**: 2.5 hours (1 of 3 tasks)
+**Completed**: 4.0 hours (2 of 3 tasks)
 
 **Testing (MEDIUM priority, 6-9h):**
 
 1. testing/004: CLI test coverage (#253, 2.5h) ✅ **COMPLETE** - PR #270
-1. testing/007: Config/logging coverage (#256, 1-2h)
+1. testing/007: Config/logging coverage (#256, 1.5h) ✅ **COMPLETE** - PR #271
 1. testing/001: Codecov analytics (#211, 2-3h)
 
 ### Future Sprints (Planned)
@@ -851,15 +851,15 @@ testing/002 (Comprehensive Test Coverage, PARENT) → 8 sub-tasks:
 ├── testing/004: CLI coverage (#253, 2.5h) ✅ COMPLETE - PR #270
 ├── testing/005: Web coverage (#254, 3-4h)
 ├── testing/006: Interactive coverage (#255, 2-3h)
-├── testing/007: Config/logging coverage (#256, 1-2h)
+├── testing/007: Config/logging coverage (#256, 1.5h) ✅ COMPLETE - PR #271
 ├── testing/008: Reports coverage (#257, 2-3h)
 ├── testing/009: Edge cases (#258, 2-3h)
 ├── testing/010: Integration/E2E (#259, 2-3h)
 └── testing/011: Coverage audit (#260, 2-3h)
 
-Sub-tasks status: 1 of 8 complete (12.5%)
+Sub-tasks status: 2 of 8 complete (25%)
 Sub-tasks can be implemented independently in any order.
-Recommended sequence: 004 (CLI) ✅ → 007 (config) → 008 (reports) → 005 (web) → 006 (interactive) → 009 (edge cases) → 010 (integration) → 011 (audit)
+Recommended sequence: 004 (CLI) ✅ → 007 (config) ✅ → 008 (reports) → 005 (web) → 006 (interactive) → 009 (edge cases) → 010 (integration) → 011 (audit)
 ```
 
 **i18n/l10n (Parent: new-features/016 #218)**
