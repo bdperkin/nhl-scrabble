@@ -74,6 +74,8 @@ coverage.xml
 
 # Test artifacts
 nosetests.xml
+junit.xml
+junit-*.xml
 cover/
 
 # ============================================================================

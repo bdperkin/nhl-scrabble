@@ -502,6 +502,10 @@ python_functions = ["test_*"]
 timeout = 60  # Default: 60 seconds (increased for integration tests with real API calls)
 timeout_method = "thread"  # Use threading for better compatibility
 
+# JUnit XML configuration for Codecov Test Analytics
+junit_family = "xunit2"
+junit_logging = "all"
+
 addopts = [
     "--strict-markers",
     "--strict-config",
