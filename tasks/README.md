@@ -130,28 +130,29 @@ Each task is assigned a priority:
 **Remaining Effort**: 111.5-168h (web interface subtasks: 10-15h remaining, standalone features: 94-144h, automation: 4-6h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
-### Refactoring (9 tasks active, 10 documented, 1 completed)
+### Refactoring (10 tasks active, 11 documented, 1 completed)
 
-| ID  | Title                                | Priority | Effort   | Issue |
-| --- | ------------------------------------ | -------- | -------- | ----- |
-| 002 | Improve Type Safety                  | LOW      | 8-10h    | #160  |
-| 003 | Unified Config Management            | LOW      | 5-6h     | #161  |
-| 004 | Add pyupgrade Syntax Modernization   | MEDIUM   | 1-2h     | #118  |
-| 005 | Add djlint HTML Template Linting     | LOW      | 30-60min | #127  |
-| 006 | Error Handling Strategy              | LOW      | 6-8h     | #162  |
-| 007 | Dependency Injection                 | LOW      | 8-10h    | #163  |
-| 008 | Repository Cleanup and Consolidation | MEDIUM   | 4-6h     | #216  |
-| 009 | Git Branch Pruning Automation        | LOW      | 30-60min | #220  |
-| 010 | Dynamic Versioning from Git Tags     | LOW      | 2-4h     | #222  |
+| ID  | Title                                     | Priority | Effort   | Issue |
+| --- | ----------------------------------------- | -------- | -------- | ----- |
+| 002 | Improve Type Safety                       | LOW      | 8-10h    | #160  |
+| 003 | Unified Config Management                 | LOW      | 5-6h     | #161  |
+| 004 | Add pyupgrade Syntax Modernization        | MEDIUM   | 1-2h     | #118  |
+| 005 | Add djlint HTML Template Linting          | LOW      | 30-60min | #127  |
+| 006 | Error Handling Strategy                   | LOW      | 6-8h     | #162  |
+| 007 | Dependency Injection                      | LOW      | 8-10h    | #163  |
+| 008 | Repository Cleanup and Consolidation      | MEDIUM   | 4-6h     | #216  |
+| 009 | Git Branch Pruning Automation             | LOW      | 30-60min | #220  |
+| 010 | Dynamic Versioning from Git Tags          | LOW      | 2-4h     | #222  |
+| 011 | Dependency Synchronization and Automation | MEDIUM   | 3-4h     | #226  |
 
-**Documented Effort**: 35.5-48 hours remaining
+**Documented Effort**: 38.5-52 hours remaining
 
 **Completed**: 3 hours (Task 001: Consolidate Report Classes 3h - PR #184)
 
 ## Total Project Roadmap
 
-**Total Tasks**: 98 tasks (28 active, 70 completed)
-**Remaining Effort**: ~168.5-253 hours (major milestones achieved!)
+**Total Tasks**: 99 tasks (29 active, 70 completed)
+**Remaining Effort**: ~171.5-257 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -165,7 +166,7 @@ Each task is assigned a priority:
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 94-144h
   - Automation: 4-6h
-- **Refactoring**: 9 active (1 completed), 35.5-48h remaining
+- **Refactoring**: 10 active (1 completed), 38.5-52h remaining
 
 ### By Priority
 
