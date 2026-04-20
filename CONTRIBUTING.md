@@ -125,7 +125,7 @@ The repository is configured with `git config fetch.prune true`, which means eve
 After a PR is merged, the remote branch is automatically deleted by GitHub, but your local branch remains. Use the Makefile targets to clean up:
 
 ```bash
-# Check branch status
+# Check branch status (merged vs active)
 make git-status-branches
 
 # Prune local merged branches (with confirmation)
@@ -134,9 +134,30 @@ make git-prune-local
 # Prune remote tracking refs
 make git-prune-remote-refs
 
-# Full cleanup (both remote refs and local branches)
+# Prune branches from closed (not merged) PRs (with confirmation)
+make git-prune-closed-prs
+
+# Standard cleanup (remote refs + merged branches)
 make git-cleanup
+
+# Complete cleanup (remote refs + merged branches + closed PRs)
+make git-cleanup-all
 ```
+
+**Two Types of Branch Cleanup:**
+
+1. **Merged Branches** (`make git-prune-local`)
+
+   - Branches fully merged to main
+   - Safe deletion with `git branch -d`
+   - No work is lost (already in main)
+
+1. **Closed PR Branches** (`make git-prune-closed-prs`)
+
+   - Branches from PRs that were closed without merging
+   - Work may have been redone in another PR
+   - Deletes BOTH local branches (`git branch -D`) AND remote branches (`git push origin --delete`)
+   - **Warning**: Permanently deletes unmerged work from local AND remote
 
 **Typical Workflow After PR Merge:**
 
@@ -145,13 +166,22 @@ make git-cleanup
 1. Run `make git-prune-local` to delete local merged branch
 1. Or run `make git-cleanup` for complete cleanup
 
+**Typical Workflow for Closed PRs:**
+
+1. PR closed without merging (work abandoned or redone elsewhere)
+1. Remote branch may still exist on GitHub
+1. Run `make git-prune-closed-prs` to delete BOTH local and remote orphaned branches
+1. Verify you don't need any changes before confirming deletion (deletes from GitHub!)
+
 **Safety Features:**
 
-- Only deletes branches fully merged to main (`git branch -d`)
+- **Merged branches**: Only deletes fully merged branches (`git branch -d`), local only
+- **Closed PR branches**: Warns before force deletion, requires confirmation, deletes BOTH local and remote
 - Never deletes the main branch
 - Never deletes your current branch
-- Confirmation prompt before deletion
-- Unmerged branches are never deleted
+- Confirmation prompts before all deletions
+- GitHub CLI integration to verify PR status
+- Clear warnings when remote branches will be deleted from GitHub
 
 **Recommended Cleanup Schedule:**
 

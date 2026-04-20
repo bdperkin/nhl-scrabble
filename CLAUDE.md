@@ -683,8 +683,14 @@ make git-prune-remote-refs
 # Delete local branches merged to main (with confirmation)
 make git-prune-local
 
-# Full cleanup (remote refs + local branches)
+# Delete branches from closed (not merged) PRs (with confirmation)
+make git-prune-closed-prs
+
+# Standard cleanup (remote refs + merged branches)
 make git-cleanup
+
+# Complete cleanup (includes closed PR branches)
+make git-cleanup-all
 ```
 
 **Automatic Configuration:**
@@ -693,10 +699,11 @@ The repository is configured with `git config fetch.prune true`, which automatic
 
 **Safety Features:**
 
-- Only deletes branches fully merged to main
-- Requires confirmation before deletion
+- **Merged branches**: Only deletes fully merged branches (`git branch -d`), local only
+- **Closed PR branches**: Deletes BOTH local and remote, warns before deletion, requires confirmation
 - Never deletes main or current branch
-- Unmerged branches are protected
+- GitHub CLI integration to verify PR status
+- Clear warnings when remote branches will be deleted from GitHub
 
 ## CI/CD
 
