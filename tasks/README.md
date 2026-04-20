@@ -159,15 +159,20 @@ Each task is assigned a priority:
 | 012 | Audit and Standardize CLI Options         | MEDIUM   | 2-4h     | #236  |
 | 013 | Perform Project-Wide Documentation Audit  | MEDIUM   | 4-6h     | #237  |
 | 014 | Add Refurb Modernization Linting          | MEDIUM   | 2-3h     | #241  |
+| 015 | Add pyproject-fmt Formatting              | MEDIUM   | 30-60min | #242  |
+| 016 | Add Trailing Comma Formatting             | MEDIUM   | 30-60min | #243  |
+| 017 | Extend JSON/YAML Schema Validation        | MEDIUM   | 1-2h     | #244  |
+| 018 | Add check-wheel-contents Validation       | LOW      | 1-2h     | #245  |
+| 019 | Add ssort Statement Sorting               | LOW      | 2-3h     | #246  |
 
-**Documented Effort**: 46.5-65 hours remaining
+**Documented Effort**: 53-76 hours remaining
 
 **Completed**: 3 hours (Task 001: Consolidate Report Classes 3h - PR #184)
 
 ## Total Project Roadmap
 
-**Total Tasks**: 113 tasks (43 active, 70 completed)
-**Remaining Effort**: ~195.75-296.5 hours (major milestones achieved!)
+**Total Tasks**: 118 tasks (48 active, 70 completed)
+**Remaining Effort**: ~202.25-307.5 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -181,13 +186,13 @@ Each task is assigned a priority:
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 94-144h
   - Automation: 4-6h
-- **Refactoring**: 13 active (1 completed), 46.5-65h remaining
+- **Refactoring**: 18 active (1 completed), 53-76h remaining
 
 ### By Priority
 
 - **HIGH**: 2 tasks remaining (~2-4h) - Security scanning tools (bandit, safety)
-- **MEDIUM**: 6 tasks remaining (~31-48h) - Web interface completion + repository cleanup + Python version support + modernization tools
-- **LOW**: 20 tasks remaining (~115.75-174.5h) - Long-term improvements
+- **MEDIUM**: 10 tasks remaining (~36.5-57h) - Web interface completion + repository cleanup + Python version support + modernization tools + config formatting
+- **LOW**: 22 tasks remaining (~120.75-180.5h) - Long-term improvements
 
 ### Major Achievements
 
