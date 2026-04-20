@@ -102,30 +102,31 @@ Each task is assigned a priority:
 
 **Note**: Current coverage ~50% overall, >90% on core modules. Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Codecov integration enabled for ongoing coverage tracking.
 
-### New Features (13 tasks active, 17 documented, 4 completed)
+### New Features (14 tasks active, 18 documented, 4 completed)
 
-| ID  | Title                                 | Priority | Effort | Issue | Status      |
-| --- | ------------------------------------- | -------- | ------ | ----- | ----------- |
-| 001 | Build Web Interface (Parent)          | MEDIUM   | 16-24h | #50   | In Progress |
-| 002 | FastAPI Infrastructure                | MEDIUM   | 3.5h   | #103  | ✅ Complete |
-| 003 | Web API Endpoints                     | MEDIUM   | 4-6h   | #104  | ✅ Complete |
-| 004 | Web Frontend Templates                | MEDIUM   | 3.5h   | #105  | ✅ Complete |
-| 005 | JavaScript Interactivity              | MEDIUM   | 8-12h  | #106  |             |
-| 006 | Web Testing and Polish                | MEDIUM   | 2-3h   | #111  |             |
-| 007 | Standalone REST API Server            | LOW      | 8-12h  | #150  | ✅ Complete |
-| 008 | Database Backend                      | LOW      | 12-16h | #151  |             |
-| 009 | Notification System                   | LOW      | 6-8h   | #152  |             |
-| 010 | Player Comparison Tool                | LOW      | 4-6h   | #153  |             |
-| 011 | Offline Mode                          | LOW      | 4-5h   | #154  |             |
-| 012 | Config Profiles                       | LOW      | 3-4h   | #155  |             |
-| 013 | Plugin System                         | LOW      | 10-14h | #156  |             |
-| 014 | Docker Support                        | LOW      | 4-6h   | #157  |             |
-| 015 | Data Export/Import                    | LOW      | 4-5h   | #158  |             |
-| 016 | Internationalization and Localization | LOW      | 32-48h | #218  |             |
-| 017 | Free Python Hosting and Deployment    | LOW      | 8-12h  | #219  |             |
+| ID  | Title                                     | Priority | Effort | Issue | Status      |
+| --- | ----------------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Build Web Interface (Parent)              | MEDIUM   | 16-24h | #50   | In Progress |
+| 002 | FastAPI Infrastructure                    | MEDIUM   | 3.5h   | #103  | ✅ Complete |
+| 003 | Web API Endpoints                         | MEDIUM   | 4-6h   | #104  | ✅ Complete |
+| 004 | Web Frontend Templates                    | MEDIUM   | 3.5h   | #105  | ✅ Complete |
+| 005 | JavaScript Interactivity                  | MEDIUM   | 8-12h  | #106  |             |
+| 006 | Web Testing and Polish                    | MEDIUM   | 2-3h   | #111  |             |
+| 007 | Standalone REST API Server                | LOW      | 8-12h  | #150  | ✅ Complete |
+| 008 | Database Backend                          | LOW      | 12-16h | #151  |             |
+| 009 | Notification System                       | LOW      | 6-8h   | #152  |             |
+| 010 | Player Comparison Tool                    | LOW      | 4-6h   | #153  |             |
+| 011 | Offline Mode                              | LOW      | 4-5h   | #154  |             |
+| 012 | Config Profiles                           | LOW      | 3-4h   | #155  |             |
+| 013 | Plugin System                             | LOW      | 10-14h | #156  |             |
+| 014 | Docker Support                            | LOW      | 4-6h   | #157  |             |
+| 015 | Data Export/Import                        | LOW      | 4-5h   | #158  |             |
+| 016 | Internationalization and Localization     | LOW      | 32-48h | #218  |             |
+| 017 | Free Python Hosting and Deployment        | LOW      | 8-12h  | #219  |             |
+| 018 | Automated Package Building and Publishing | MEDIUM   | 4-6h   | #224  |             |
 
-**Documented Effort**: 127.5-186 hours
-**Remaining Effort**: 107.5-162h (web interface subtasks: 10-15h remaining, standalone features: 94-144h)
+**Documented Effort**: 131.5-192 hours
+**Remaining Effort**: 111.5-168h (web interface subtasks: 10-15h remaining, standalone features: 94-144h, automation: 4-6h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
 ### Refactoring (9 tasks active, 10 documented, 1 completed)
@@ -148,8 +149,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 96 tasks (26 active, 70 completed)
-**Remaining Effort**: ~163.5-245 hours (major milestones achieved!)
+**Total Tasks**: 97 tasks (27 active, 70 completed)
+**Remaining Effort**: ~167.5-251 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -159,9 +160,10 @@ Each task is assigned a priority:
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 2 active (9 completed), 5-9h remaining
 - **Testing**: 2 active (14-23h remaining)
-- **New Features**: 13 active (4 completed), 107.5-162h remaining
+- **New Features**: 14 active (4 completed), 111.5-168h remaining
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 94-144h
+  - Automation: 4-6h
 - **Refactoring**: 9 active (1 completed), 35.5-48h remaining
 
 ### By Priority
