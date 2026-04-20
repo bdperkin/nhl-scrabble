@@ -156,8 +156,8 @@ make git-cleanup-all
 
    - Branches from PRs that were closed without merging
    - Work may have been redone in another PR
-   - Force deletion with `git branch -D`
-   - **Warning**: Permanently deletes unmerged work
+   - Deletes BOTH local branches (`git branch -D`) AND remote branches (`git push origin --delete`)
+   - **Warning**: Permanently deletes unmerged work from local AND remote
 
 **Typical Workflow After PR Merge:**
 
@@ -170,17 +170,18 @@ make git-cleanup-all
 
 1. PR closed without merging (work abandoned or redone elsewhere)
 1. Remote branch may still exist on GitHub
-1. Run `make git-prune-closed-prs` to force-delete local orphaned branches
-1. Verify you don't need any changes before confirming deletion
+1. Run `make git-prune-closed-prs` to delete BOTH local and remote orphaned branches
+1. Verify you don't need any changes before confirming deletion (deletes from GitHub!)
 
 **Safety Features:**
 
-- **Merged branches**: Only deletes fully merged branches (`git branch -d`)
-- **Closed PR branches**: Warns before force deletion, requires confirmation
+- **Merged branches**: Only deletes fully merged branches (`git branch -d`), local only
+- **Closed PR branches**: Warns before force deletion, requires confirmation, deletes BOTH local and remote
 - Never deletes the main branch
 - Never deletes your current branch
 - Confirmation prompts before all deletions
 - GitHub CLI integration to verify PR status
+- Clear warnings when remote branches will be deleted from GitHub
 
 **Recommended Cleanup Schedule:**
 

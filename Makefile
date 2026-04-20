@@ -520,7 +520,7 @@ git-prune-local: ## Prune local branches merged to main (with confirmation)
 		printf "$(RED)❌ Cancelled$(NC)\n"; \
 	fi
 
-git-prune-closed-prs: ## Prune local branches from closed (not merged) PRs (with confirmation)
+git-prune-closed-prs: ## Prune local and remote branches from closed (not merged) PRs (with confirmation)
 	@printf "$(BLUE)🔍 Finding branches with closed (not merged) PRs...$(NC)\n"
 	@if ! command -v gh >/dev/null 2>&1; then \
 		printf "$(RED)❌ GitHub CLI (gh) not found. Install from https://cli.github.com$(NC)\n"; \
@@ -532,32 +532,59 @@ git-prune-closed-prs: ## Prune local branches from closed (not merged) PRs (with
 		exit 0; \
 	fi; \
 	LOCAL_CLOSED_BRANCHES=""; \
+	REMOTE_CLOSED_BRANCHES=""; \
 	for branch in $$CLOSED_BRANCHES; do \
+		HAS_LOCAL=false; \
+		HAS_REMOTE=false; \
 		if git show-ref --verify --quiet refs/heads/$$branch; then \
 			LOCAL_CLOSED_BRANCHES="$$LOCAL_CLOSED_BRANCHES$$branch\n"; \
+			HAS_LOCAL=true; \
+		fi; \
+		if git show-ref --verify --quiet refs/remotes/origin/$$branch; then \
+			REMOTE_CLOSED_BRANCHES="$$REMOTE_CLOSED_BRANCHES$$branch\n"; \
+			HAS_REMOTE=true; \
 		fi; \
 	done; \
-	if [ -z "$$LOCAL_CLOSED_BRANCHES" ]; then \
-		printf "$(GREEN)✅ No local branches with closed PRs to prune$(NC)\n"; \
+	if [ -z "$$LOCAL_CLOSED_BRANCHES" ] && [ -z "$$REMOTE_CLOSED_BRANCHES" ]; then \
+		printf "$(GREEN)✅ No local or remote branches with closed PRs to prune$(NC)\n"; \
 		exit 0; \
 	fi; \
-	BRANCH_COUNT=$$(echo -e "$$LOCAL_CLOSED_BRANCHES" | grep -c .); \
-	printf "Found $$BRANCH_COUNT local branch(es) with closed (not merged) PRs\n"; \
+	LOCAL_COUNT=$$(echo -e "$$LOCAL_CLOSED_BRANCHES" | grep -c . 2>/dev/null || echo 0); \
+	REMOTE_COUNT=$$(echo -e "$$REMOTE_CLOSED_BRANCHES" | grep -c . 2>/dev/null || echo 0); \
+	printf "Found $$LOCAL_COUNT local and $$REMOTE_COUNT remote branch(es) with closed (not merged) PRs\n"; \
 	printf "\n"; \
-	printf "$(YELLOW)⚠️  About to FORCE DELETE these branches (work not merged to main):$(NC)\n"; \
-	echo -e "$$LOCAL_CLOSED_BRANCHES"; \
+	printf "$(YELLOW)⚠️  About to DELETE these branches (work not merged to main):$(NC)\n"; \
+	if [ -n "$$LOCAL_CLOSED_BRANCHES" ]; then \
+		printf "\n$(BLUE)Local branches:$(NC)\n"; \
+		echo -e "$$LOCAL_CLOSED_BRANCHES" | sed 's/^/  /'; \
+	fi; \
+	if [ -n "$$REMOTE_CLOSED_BRANCHES" ]; then \
+		printf "\n$(BLUE)Remote branches (origin):$(NC)\n"; \
+		echo -e "$$REMOTE_CLOSED_BRANCHES" | sed 's/^/  /'; \
+	fi; \
 	printf "\n"; \
-	printf "$(RED)⚠️  WARNING: This will permanently delete unmerged work!$(NC)\n"; \
+	printf "$(RED)⚠️  WARNING: This will permanently delete unmerged work from BOTH local and remote!$(NC)\n"; \
 	printf "$(YELLOW)Make sure you don't need any changes from these branches.$(NC)\n"; \
 	printf "\n"; \
-	read -p "Continue? [y/N] " -n 1 -r; echo; \
+	read -p "Delete both local and remote branches? [y/N] " -n 1 -r; echo; \
 	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-		echo -e "$$LOCAL_CLOSED_BRANCHES" | while read branch; do \
-			if [ -n "$$branch" ]; then \
-				git branch -D $$branch 2>/dev/null && printf "  $(GREEN)✓$(NC) Deleted $$branch\n" || printf "  $(RED)✗$(NC) Failed to delete $$branch\n"; \
-			fi; \
-		done; \
-		printf "$(GREEN)✅ Closed PR branches pruned$(NC)\n"; \
+		if [ -n "$$LOCAL_CLOSED_BRANCHES" ]; then \
+			printf "\n$(BLUE)Deleting local branches...$(NC)\n"; \
+			echo -e "$$LOCAL_CLOSED_BRANCHES" | while read branch; do \
+				if [ -n "$$branch" ]; then \
+					git branch -D $$branch 2>/dev/null && printf "  $(GREEN)✓$(NC) Deleted local: $$branch\n" || printf "  $(RED)✗$(NC) Failed to delete local: $$branch\n"; \
+				fi; \
+			done; \
+		fi; \
+		if [ -n "$$REMOTE_CLOSED_BRANCHES" ]; then \
+			printf "\n$(BLUE)Deleting remote branches...$(NC)\n"; \
+			echo -e "$$REMOTE_CLOSED_BRANCHES" | while read branch; do \
+				if [ -n "$$branch" ]; then \
+					git push origin --delete $$branch 2>/dev/null && printf "  $(GREEN)✓$(NC) Deleted remote: $$branch\n" || printf "  $(YELLOW)⚠$(NC)  Remote may already be deleted: $$branch\n"; \
+				fi; \
+			done; \
+		fi; \
+		printf "\n$(GREEN)✅ Closed PR branches pruned (local and remote)$(NC)\n"; \
 	else \
 		printf "$(RED)❌ Cancelled$(NC)\n"; \
 	fi

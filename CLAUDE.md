@@ -699,10 +699,11 @@ The repository is configured with `git config fetch.prune true`, which automatic
 
 **Safety Features:**
 
-- **Merged branches**: Only deletes fully merged branches (`git branch -d`)
-- **Closed PR branches**: Warns before force deletion, requires confirmation
+- **Merged branches**: Only deletes fully merged branches (`git branch -d`), local only
+- **Closed PR branches**: Deletes BOTH local and remote, warns before deletion, requires confirmation
 - Never deletes main or current branch
 - GitHub CLI integration to verify PR status
+- Clear warnings when remote branches will be deleted from GitHub
 
 ## CI/CD
 
