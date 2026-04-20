@@ -244,3 +244,31 @@ class TestConfigFromEnv:
         ) as exc_info:
             Config.from_env()
         assert "invalid_float" in str(exc_info.value)
+
+    def test_from_env_invalid_api_base_url(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with invalid API base URL (SSRF protection)."""
+        # Set URL that would fail SSRF validation (e.g., localhost)
+        monkeypatch.setenv("NHL_SCRABBLE_API_BASE_URL", "http://localhost:8000")
+        with pytest.raises(ValueError, match=r"Invalid API base URL"):
+            Config.from_env()
+
+    def test_from_env_invalid_boolean_with_injection(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with invalid boolean containing injection attempt."""
+        # Boolean validation should reject values with special characters
+        monkeypatch.setenv("NHL_SCRABBLE_VERBOSE", "true; rm -rf /")
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_VERBOSE"):
+            Config.from_env()
+
+    def test_from_env_invalid_output_format(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with invalid output format (enum validation)."""
+        # Only "text" and "json" are allowed
+        monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", "xml")
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_OUTPUT_FORMAT"):
+            Config.from_env()
+
+    def test_from_env_output_format_with_injection(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with output format containing injection attempt."""
+        # Enum validation should reject values with special characters
+        monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", "text; cat /etc/passwd")
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_OUTPUT_FORMAT"):
+            Config.from_env()
