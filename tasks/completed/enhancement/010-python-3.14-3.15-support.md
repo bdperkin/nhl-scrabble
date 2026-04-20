@@ -447,7 +447,7 @@ and can take advantage of security improvements in newer Python releases.
 **Implemented**: 2026-04-20
 **Branch**: enhancement/010-python-3.14-3.15-support
 **PR**: #282 - https://github.com/bdperkin/nhl-scrabble/pull/282
-**Commits**: 2 commits (fd8381d, f56a4e3)
+**Commits**: 4 commits (fd8381d, f56a4e3, df19b58, f66f057)
 
 ### Actual Implementation
 
@@ -481,9 +481,18 @@ Successfully updated all configuration and documentation files to support Python
 
 ### Deviations from Plan
 
-**Minimal Deviations:**
+**Scope Clarification:**
 
-- Black target-version kept at py313 instead of py314 (black limitation)
+After initial implementation, clarified that the task goal was to ensure consistency in **documentation and testing** for Python 3.14/3.15-dev support, NOT to change the default Python version from 3.10.
+
+Reverted configuration changes (commit f66f057) to keep Python 3.10 as default:
+
+- .python-version: Restored multi-version list with 3.10 first (default)
+- ruff target-version: Kept at py310 (not py314)
+- Kept documentation updates explaining 3.14/3.15-dev support in CI/testing
+
+**Other Deviations:**
+
 - tox-ini-fmt removed inline comments from tox.ini, so experimental notes moved to description field
 
 ### Actual vs Estimated Effort
