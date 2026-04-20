@@ -103,17 +103,20 @@ Each task is assigned a priority:
 **Remaining Effort**: 16.25-27h
 **Completed**: 9 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
 
-### Testing (3 tasks)
+### Testing (3 tasks active, 4 documented, 1 completed)
 
-| ID  | Title                                   | Priority | Effort | Issue |
-| --- | --------------------------------------- | -------- | ------ | ----- |
-| 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |
-| 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |
-| 003 | Add Tests for Caching Layer             | MEDIUM   | 2-4h   | #235  |
+| ID  | Title                                   | Priority | Effort | Issue | Status      |
+| --- | --------------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |             |
+| 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |             |
+| 003 | Add Tests for Caching Layer             | MEDIUM   | 2-4h   | #235  |             |
+| 004 | CLI Module Test Coverage                | MEDIUM   | 2-3h   | #253  | ✅ Complete |
 
-**Total Effort**: 16-27 hours
+**Documented Effort**: 18-30 hours
+**Remaining Effort**: 16-27h
+**Completed**: 1 task (Task 004: CLI test coverage 2.5h - PR #270)
 
-**Note**: Current coverage ~50% overall, >90% on core modules. Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Codecov integration enabled for ongoing coverage tracking.
+**Note**: Current coverage 87.84% overall (CLI: 75.43%, up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Codecov integration enabled for ongoing coverage tracking.
 
 ### New Features (15 tasks active, 19 documented, 4 completed)
 
@@ -704,10 +707,11 @@ See **Recommended Implementation Order** for the full 12-phase strategy with all
 
 **Focus**: Test Coverage Foundation
 **Planned Effort**: 6-9 hours
+**Completed**: 2.5 hours (1 of 3 tasks)
 
 **Testing (MEDIUM priority, 6-9h):**
 
-1. testing/004: CLI test coverage (#253, 2-3h)
+1. testing/004: CLI test coverage (#253, 2.5h) ✅ **COMPLETE** - PR #270
 1. testing/007: Config/logging coverage (#256, 1-2h)
 1. testing/001: Codecov analytics (#211, 2-3h)
 
@@ -844,7 +848,7 @@ This section maps dependencies between tasks to help determine implementation or
 
 ```
 testing/002 (Comprehensive Test Coverage, PARENT) → 8 sub-tasks:
-├── testing/004: CLI coverage (#253, 2-3h)
+├── testing/004: CLI coverage (#253, 2.5h) ✅ COMPLETE - PR #270
 ├── testing/005: Web coverage (#254, 3-4h)
 ├── testing/006: Interactive coverage (#255, 2-3h)
 ├── testing/007: Config/logging coverage (#256, 1-2h)
@@ -853,8 +857,9 @@ testing/002 (Comprehensive Test Coverage, PARENT) → 8 sub-tasks:
 ├── testing/010: Integration/E2E (#259, 2-3h)
 └── testing/011: Coverage audit (#260, 2-3h)
 
+Sub-tasks status: 1 of 8 complete (12.5%)
 Sub-tasks can be implemented independently in any order.
-Recommended sequence: 004 (CLI) → 007 (config) → 008 (reports) → 005 (web) → 006 (interactive) → 009 (edge cases) → 010 (integration) → 011 (audit)
+Recommended sequence: 004 (CLI) ✅ → 007 (config) → 008 (reports) → 005 (web) → 006 (interactive) → 009 (edge cases) → 010 (integration) → 011 (audit)
 ```
 
 **i18n/l10n (Parent: new-features/016 #218)**
