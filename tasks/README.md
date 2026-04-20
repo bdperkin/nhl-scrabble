@@ -832,32 +832,203 @@ refactoring/002-improve-type-safety (#160)
     └── Type safety helps DI implementation
 ```
 
-### Recommended Order for Maximum Value
+### Recommended Implementation Order
 
-**Phase 1: Foundation** (Completed ✅)
+All non-completed tasks organized by priority, dependencies, and strategic value. Complete earlier phases before starting later ones for optimal workflow.
 
-- Testing, security hardening, documentation
+**Phase 1: Foundation & Quick Wins** (Completed ✅)
 
-**Phase 2: Performance** (Next recommended)
+- ✅ Testing infrastructure, security hardening, documentation
+- ✅ Performance optimization (11 tasks, 5-10x speedup achieved!)
+- ✅ Core enhancements (9 tasks: progress bars, interactive mode, filtering, etc.)
 
-1. optimization/001-011 (16-24.5h) - Quick wins with major impact
-1. enhancement/001-002 (6-9h) - Progress bars + Interactive mode
+**Phase 2: Security Hardening** (2-4h total, HIGH priority)
 
-**Phase 3: Security Hardening**
+Essential security tooling to prevent vulnerabilities:
 
-1. security/002-008 (17-22.5h) - Complete security posture
+1. **security/009**: Add Bandit Security Linting (#239, 1-2h)
+   - Python code security scanning (SQL injection, hardcoded secrets, etc.)
+   - Integrates with pre-commit, CI, and GitHub Security
+1. **security/010**: Add Safety Vulnerability Scanning (#240, 1-2h)
+   - Dependency CVE scanning (50+ dependencies)
+   - Catches vulnerabilities before deployment
 
-**Phase 4: User Features**
+**Phase 3: Code Quality & Tooling** (7-13h total, MEDIUM priority)
 
-1. enhancement/003-009 (29-40h) - Historical data, export, filtering, etc.
+Quick improvements to code quality and development workflow:
 
-**Phase 5: Major Features**
+1. **refactoring/015**: Add pyproject-fmt Formatting (#242, 30-60min)
+   - Auto-format pyproject.toml (200+ lines)
+   - Consistent structure, sorted arrays
+1. **refactoring/016**: Add Trailing Comma Formatting (#243, 30-60min)
+   - Better git diffs, fewer merge conflicts
+1. **refactoring/017**: Extend JSON/YAML Schema Validation (#244, 1-2h)
+   - Validate .codecov.yml and .pre-commit-config.yaml
+1. **refactoring/004**: Add pyupgrade Syntax Modernization (#118, 1-2h)
+   - Modernize to Python 3.10+ syntax patterns
+1. **refactoring/014**: Add Refurb Modernization Linting (#241, 2-3h)
+   - Detect code that can use modern Python features
+1. **enhancement/010**: Python 3.14 and 3.15-dev Support (#217, 3-5h)
+   - Extend CI testing to Python 3.14 and 3.15-dev
 
-1. new-features/007-015 (54-76h) - REST API, database, plugins, etc.
+**Phase 4: Testing Infrastructure** (18-30h total, MEDIUM priority)
 
-**Phase 6: Code Quality**
+Build comprehensive test coverage for reliability:
 
-1. refactoring/001-007 (35-45.5h) - Long-term maintainability
+1. **testing/001**: Codecov Test Analytics (#211, 2-3h)
+   - Enable test analytics dashboard
+1. **testing/003**: Caching Layer Tests (#235, 2-4h)
+   - Test API caching functionality
+1. **testing/002**: Comprehensive Test Coverage (#221, 12-20h) - PARENT TASK
+   - Sub-task: **testing/004**: CLI Test Coverage (#253, 2-3h) - 70% → 90%+
+   - Sub-task: **testing/007**: Config/Logging Coverage (#256, 1-2h) - 55% → 90%+
+   - Sub-task: **testing/008**: Reports Coverage (#257, 2-3h) - 40% → 90%+
+   - Sub-task: **testing/009**: Edge Cases & Error Paths (#258, 2-3h)
+   - Sub-task: **testing/005**: Web Interface Coverage (#254, 3-4h) - 30% → 85%+
+   - Sub-task: **testing/006**: Interactive Mode Coverage (#255, 2-3h) - 20% → 85%+
+   - Sub-task: **testing/010**: Integration/E2E Testing (#259, 2-3h)
+   - Sub-task: **testing/011**: Coverage Audit & Finalization (#260, 2-3h)
+
+**Phase 5: Web Interface Completion** (10-15h total, MEDIUM priority)
+
+Finish the web interface (4 of 6 subtasks already complete):
+
+1. **new-features/005**: JavaScript Interactivity (#106, 8-12h)
+   - HTMX, Chart.js, sorting, export functionality
+1. **new-features/006**: Web Testing and Polish (#111, 2-3h)
+   - Final testing, UI polish, accessibility
+
+**Phase 6: Repository & Documentation** (15-24h total, MEDIUM priority)
+
+Improve project organization and documentation:
+
+1. **enhancement/012**: Implement-Task Pre-Flight Validation (#225, 1-2h)
+   - Add validation to /implement-task skill
+1. **refactoring/008**: Repository Cleanup (#216, 4-6h)
+   - Consolidate docs, remove duplicates, organize structure
+1. **refactoring/013**: Documentation Audit (#237, 4-6h)
+   - Comprehensive docs review and updates
+1. **refactoring/012**: CLI Options Audit (#236, 2-4h)
+   - Standardize CLI argument patterns
+1. **refactoring/011**: Dependency Synchronization (#226, 3-4h)
+   - Automate dependency updates
+1. **enhancement/017**: Expand Output Formats (#231, 3-4h)
+   - Add YAML, XML, table formats
+
+**Phase 7: Package Publishing & Release** (5-8h total, MEDIUM priority)
+
+Automate package building and release processes:
+
+1. **new-features/018**: Automated Package Building (#224, 4-6h)
+   - GitHub Actions for automated PyPI publishing
+1. **refactoring/018**: Add check-wheel-contents Validation (#245, 1-2h)
+   - Validate wheel contents before publishing
+
+**Phase 8: Release Automation Skill** (10-15h total, LOW priority)
+
+Build comprehensive release automation (7 sub-tasks):
+
+1. **new-features/019**: Release Automation Skill (#247) - PARENT TASK
+   - Sub-task: **new-features/025**: Pre-Release Validation (#261, 1-2h)
+   - Sub-task: **new-features/026**: Version Bumping (#262, 1-2h)
+   - Sub-task: **new-features/027**: Build & Validate (#263, 1-2h)
+   - Sub-task: **new-features/028**: Publish Phase (#264, 1-2h)
+   - Sub-task: **new-features/029**: Post-Release (#265, 1-2h)
+   - Sub-task: **new-features/030**: Verification (#266, 1-2h)
+   - Sub-task: **new-features/031**: Orchestration & CLI (#267, 2-3h)
+
+**Phase 9: Enhancements & Polish** (6-13h total, LOW priority)
+
+User-facing improvements and polish:
+
+1. **enhancement/011**: Hyperlink Documentation (#223, 2-4h)
+   - Add external URL hyperlinks to docs
+1. **enhancement/013**: Refine Logo Branding (#227, 1-2h)
+   - Improve logo tiles and hockey stick overlap
+1. **enhancement/014**: Integrate Astral 'ty' Type Checker (#228, 2-3h)
+   - Add ty LSP for advanced type checking
+1. **enhancement/015**: Add CLI Short Options (#229, 30-60min)
+   - Standard short flags (-v, -o, etc.)
+1. **enhancement/016**: Format CLI Help Examples (#230, 15-30min)
+   - Add comments to help text examples
+1. **enhancement/018**: Support Additional Sphinx Formats (#232, 2-3h)
+   - ePub, PDF, LaTeX output formats
+1. **enhancement/019**: Sphinx Doctest and Linkcheck (#233, 1-2h)
+   - Validate code examples and external links
+1. **enhancement/020**: Colorized Log Output (#234, 30-60min)
+   - Colored log levels for better visibility
+1. **refactoring/005**: Add djlint HTML Template Linting (#127, 30-60min)
+   - Lint Jinja2 templates
+1. **refactoring/009**: Git Branch Pruning Automation (#220, 30-60min)
+   - Auto-cleanup merged branches
+1. **refactoring/010**: Dynamic Versioning from Git Tags (#222, 2-4h)
+   - Version from git tags instead of manual updates
+1. **refactoring/019**: Add ssort Statement Sorting (#246, 2-3h)
+   - Auto-sort Python class members (requires team consensus)
+
+**Phase 10: Internationalization (i18n/l10n)** (27-39h total, LOW priority)
+
+Multi-language support for international users (6 sub-tasks):
+
+1. **new-features/016**: Internationalization & Localization (#218) - PARENT TASK
+   - Sub-task: I18n Infrastructure Setup (4-6h) - Being created by agent
+   - Sub-task: **new-features/020**: CLI Internationalization (#248, 4-6h)
+   - Sub-task: **new-features/021**: Web Internationalization (#249, 6-8h)
+   - Sub-task: **new-features/022**: TUI Internationalization (#250, 3-4h)
+   - Sub-task: **new-features/023**: Create Translation Files (#251, 2-3h)
+   - Sub-task: **new-features/024**: Priority Language Translations (#252, 8-12h)
+
+**Phase 11: Major Features** (94-144h total, LOW priority)
+
+Large-scale new features for advanced use cases:
+
+1. **new-features/008**: Database Backend (#151, 12-16h)
+   - SQLite/PostgreSQL for data persistence
+1. **new-features/009**: Notification System (#152, 6-8h)
+   - Alerts for score changes, new data
+1. **new-features/010**: Player Comparison Tool (#153, 4-6h)
+   - Compare player stats side-by-side
+1. **new-features/011**: Offline Mode (#154, 4-5h)
+   - Work without internet connection
+1. **new-features/012**: Config Profiles (#155, 3-4h)
+   - Multiple configuration profiles
+1. **new-features/013**: Plugin System (#156, 10-14h)
+   - Extensible plugin architecture
+1. **new-features/014**: Docker Support (#157, 4-6h)
+   - Containerized deployment
+1. **new-features/015**: Data Export/Import (#158, 4-5h)
+   - Bulk data import/export
+1. **new-features/017**: Free Python Hosting (#219, 8-12h)
+   - Deploy to free hosting platforms
+
+**Phase 12: Advanced Refactoring** (19-28h total, LOW priority)
+
+Long-term architectural improvements:
+
+1. **refactoring/002**: Improve Type Safety (#160, 8-10h)
+   - Comprehensive type hint coverage
+1. **refactoring/003**: Unified Config Management (#161, 5-6h)
+   - Centralized configuration system
+1. **refactoring/006**: Error Handling Strategy (#162, 6-8h)
+   - Consistent error handling patterns
+1. **refactoring/007**: Dependency Injection (#163, 8-10h)
+   - DI framework for better testability
+
+**Summary by Phase:**
+
+- **Phase 2**: Security (2-4h) - 🔥 **DO FIRST** (HIGH priority)
+- **Phase 3**: Code Quality (7-13h) - Quick wins
+- **Phase 4**: Testing (18-30h) - Build reliability
+- **Phase 5**: Web Interface (10-15h) - Complete in-progress work
+- **Phase 6**: Repo/Docs (15-24h) - Organization
+- **Phase 7**: Publishing (5-8h) - Automation
+- **Phase 8**: Release Automation (10-15h) - Full automation
+- **Phase 9**: Enhancements (6-13h) - Polish
+- **Phase 10**: i18n/l10n (27-39h) - Multi-language
+- **Phase 11**: Major Features (94-144h) - Long-term goals
+- **Phase 12**: Advanced Refactoring (19-28h) - Architecture
+
+**Total Remaining Effort**: ~213-333 hours across 12 phases
 
 ## Contributing
 
