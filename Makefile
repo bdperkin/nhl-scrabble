@@ -317,7 +317,7 @@ pip-audit: check-venv ## Security - scan dependencies for vulnerabilities
 
 bandit: check-venv ## Security - scan code for security issues with bandit
 	@printf "$(BLUE)Running bandit security linter...$(NC)\n"
-	@$(BIN)/bandit -r src/ -ll
+	@$(BIN)/bandit -r src/ --configfile pyproject.toml --severity-level medium --confidence-level medium
 
 safety: check-venv ## Security - check for known security vulnerabilities
 	@printf "$(BLUE)Running Safety vulnerability check...$(NC)\n"
@@ -329,13 +329,15 @@ security-report: check-venv ## Security - generate detailed security reports
 	@printf "  - pip-audit JSON report...\n"
 	@$(BIN)/pip-audit --desc --format json --output reports/pip-audit-report.json || true
 	@printf "  - bandit JSON report...\n"
-	@$(BIN)/bandit -r src/ -f json -o reports/bandit-report.json || true
+	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format json --output reports/bandit-report.json || true
 	@printf "  - bandit HTML report...\n"
-	@$(BIN)/bandit -r src/ -f html -o reports/bandit-report.html || true
+	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format html --output reports/bandit-report.html || true
+	@printf "  - bandit text report...\n"
+	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format txt --output reports/bandit-report.txt || true
 	@printf "  - safety JSON report...\n"
 	@$(BIN)/safety check --json --output reports/safety-report.json || true
 	@printf "$(GREEN)✓ Reports saved to reports/$(NC)\n"
-	@ls -lh reports/*.json reports/*.html 2>/dev/null || true
+	@ls -lh reports/*.json reports/*.html reports/*.txt 2>/dev/null || true
 
 ###################
 # Build & Publish
