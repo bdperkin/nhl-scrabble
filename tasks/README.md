@@ -100,14 +100,15 @@ Each task is assigned a priority:
 **Remaining Effort**: 16.25-27h
 **Completed**: 9 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
 
-### Testing (2 tasks)
+### Testing (3 tasks)
 
 | ID  | Title                                   | Priority | Effort | Issue |
 | --- | --------------------------------------- | -------- | ------ | ----- |
 | 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |
 | 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |
+| 003 | Add Tests for Caching Layer             | MEDIUM   | 2-4h   | #235  |
 
-**Total Effort**: 14-23 hours
+**Total Effort**: 16-27 hours
 
 **Note**: Current coverage ~50% overall, >90% on core modules. Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Codecov integration enabled for ongoing coverage tracking.
 
@@ -159,8 +160,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 107 tasks (37 active, 70 completed)
-**Remaining Effort**: ~181.75-273.5 hours (major milestones achieved!)
+**Total Tasks**: 108 tasks (38 active, 70 completed)
+**Remaining Effort**: ~183.75-277.5 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -169,7 +170,7 @@ Each task is assigned a priority:
 - **Security**: 0 active (7 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 11 active (9 completed), 16.25-27h remaining
-- **Testing**: 2 active (14-23h remaining)
+- **Testing**: 3 active (16-27h remaining)
 - **New Features**: 14 active (4 completed), 111.5-168h remaining
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 94-144h
