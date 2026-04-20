@@ -122,25 +122,26 @@ Each task is assigned a priority:
 **Remaining Effort**: 67.5-102h (web interface subtasks: 10-15h remaining, standalone features: 54-84h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
-### Refactoring (6 tasks active, 7 documented, 1 completed)
+### Refactoring (7 tasks active, 8 documented, 1 completed)
 
-| ID  | Title                              | Priority | Effort   | Issue |
-| --- | ---------------------------------- | -------- | -------- | ----- |
-| 002 | Improve Type Safety                | LOW      | 8-10h    | #160  |
-| 003 | Unified Config Management          | LOW      | 5-6h     | #161  |
-| 004 | Add pyupgrade Syntax Modernization | MEDIUM   | 1-2h     | #118  |
-| 005 | Add djlint HTML Template Linting   | LOW      | 30-60min | #127  |
-| 006 | Error Handling Strategy            | LOW      | 6-8h     | #162  |
-| 007 | Dependency Injection               | LOW      | 8-10h    | #163  |
+| ID  | Title                                | Priority | Effort   | Issue |
+| --- | ------------------------------------ | -------- | -------- | ----- |
+| 002 | Improve Type Safety                  | LOW      | 8-10h    | #160  |
+| 003 | Unified Config Management            | LOW      | 5-6h     | #161  |
+| 004 | Add pyupgrade Syntax Modernization   | MEDIUM   | 1-2h     | #118  |
+| 005 | Add djlint HTML Template Linting     | LOW      | 30-60min | #127  |
+| 006 | Error Handling Strategy              | LOW      | 6-8h     | #162  |
+| 007 | Dependency Injection                 | LOW      | 8-10h    | #163  |
+| 008 | Repository Cleanup and Consolidation | MEDIUM   | 4-6h     | #216  |
 
-**Documented Effort**: 29-37.5 hours remaining
+**Documented Effort**: 33-43.5 hours remaining
 
 **Completed**: 3 hours (Task 001: Consolidate Report Classes 3h - PR #184)
 
 ## Total Project Roadmap
 
-**Total Tasks**: 88 tasks (18 active, 70 completed)
-**Remaining Effort**: ~100-150 hours (major milestones achieved!)
+**Total Tasks**: 89 tasks (19 active, 70 completed)
+**Remaining Effort**: ~104-154 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -153,11 +154,11 @@ Each task is assigned a priority:
 - **New Features**: 11 active (4 completed), 67.5-102h remaining
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 54-84h
-- **Refactoring**: 6 active (1 completed), 29-37.5h remaining
+- **Refactoring**: 7 active (1 completed), 33-43.5h remaining
 
 ### By Priority
 
-- **MEDIUM**: 3 tasks remaining (~20-30h) - Web interface completion
+- **MEDIUM**: 4 tasks remaining (~24-36h) - Web interface completion + repository cleanup
 - **LOW**: 15 tasks remaining (~80-120h) - Long-term improvements
 
 ### Major Achievements
