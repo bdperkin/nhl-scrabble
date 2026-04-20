@@ -476,7 +476,7 @@ tox -e benchmark-compare      # Compare against baseline
 
 **Benchmark Configuration:**
 
-- **Storage**: `.benchmarks/` directory (committed to git)
+- **Storage**: `.benchmarks/` directory (auto-created, git-ignored)
 - **Regression threshold**: 20% (configurable in `pyproject.toml`)
 - **Warmup**: 5 iterations before measurement
 - **Statistical analysis**: min, max, mean, stddev, median, IQR, outliers
