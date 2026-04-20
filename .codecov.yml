@@ -30,3 +30,19 @@ ignore:
 flags:
   unittests:
     carryforward: true       # Use previous coverage if upload fails
+
+# Test Analytics configuration
+# Docs: https://docs.codecov.com/docs/test-analytics
+test_analytics:
+  enabled: true
+
+  # Flaky test detection
+  notifications:
+    flaky_tests:
+      enabled: true
+      threshold: 2           # Alert after 2 flaky runs
+
+  # Performance tracking
+  performance:
+    enabled: true
+    threshold: 10%           # Alert if tests slow down >10%
