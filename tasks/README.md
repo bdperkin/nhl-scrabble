@@ -74,7 +74,7 @@ Each task is assigned a priority:
 **Completed**: All tasks complete! (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 006: to_dict() methods 1.5h - PR #191, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182, Task 011: log level optimization - PR #215)
 **Expected Speedup**: 5-10x overall performance improvement achieved! (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (11 tasks active, 20 documented, 9 completed)
+### Enhancements (10 tasks active, 20 documented, 10 completed)
 
 | ID  | Title                                             | Priority | Effort   | Issue | Status      |
 | --- | ------------------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -89,7 +89,7 @@ Each task is assigned a priority:
 | 009 | Player Search                                     | LOW      | 3-4h     | #149  | ✅ Complete |
 | 010 | Python 3.14 and 3.15-dev Support                  | MEDIUM   | 3-5h     | #217  |             |
 | 011 | Hyperlink Documentation to External URLs          | LOW      | 2-4h     | #223  |             |
-| 012 | Enhance Implement-Task with Pre-Flight Validation | MEDIUM   | 1-2h     | #225  |             |
+| 012 | Enhance Implement-Task with Pre-Flight Validation | MEDIUM   | 1-2h     | #225  | ✅ Complete |
 | 013 | Refine Logo Tiles and Hockey Stick Overlap        | LOW      | 1-2h     | #227  |             |
 | 014 | Integrate Astral 'ty' Type Checker/LSP            | LOW      | 2-3h     | #228  |             |
 | 015 | Add Standard CLI Short Options                    | LOW      | 30-60min | #229  |             |
@@ -100,8 +100,8 @@ Each task is assigned a priority:
 | 020 | Enable Colorized Log Output Formatting            | LOW      | 30-60min | #234  |             |
 
 **Documented Effort**: 51.25-76.5 hours
-**Remaining Effort**: 16.25-27h
-**Completed**: 9 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
+**Remaining Effort**: 14.75-25h
+**Completed**: 10 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
 ### Testing (4 tasks active, 4 documented, 0 completed)
 
@@ -177,16 +177,16 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 139 tasks (71 active, 68 completed)
-**Remaining Effort**: ~269.5-402 hours
-**Completed Effort**: ~202.25+ hours
+**Total Tasks**: 139 tasks (70 active, 69 completed)
+**Remaining Effort**: ~268-400 hours
+**Completed Effort**: ~203.75+ hours
 
 ### By Category
 
 - **Bug Fixes**: 0 active (0 completed in tasks/)
 - **Security**: 2 active (7 completed), 2-4h remaining
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
-- **Enhancement**: 11 active (9 completed), 16.25-27.5h remaining
+- **Enhancement**: 10 active (10 completed), 14.75-25h remaining
 - **Testing**: 11 active (19 completed), 20-31h remaining
   - Parent task (002): Broken into 8 sub-tasks
   - Sub-tasks (004-011): Coverage improvement by module
@@ -229,6 +229,7 @@ Each task is assigned a priority:
 - **Task 008** (optimization): Memoized Scoring - 1.5h (PR #193, 2026-04-17)
 - **Task 009** (optimization): Memory Optimization (__slots__) - 1h (PR #194, 2026-04-17)
 - **Task 010** (optimization): Rate Limiting on Cache Hits - 2h (PR #182, 2026-04-17)
+- **Task 012** (enhancement): Pre-Flight Validation - 1.5h (PR #281, 2026-04-20)
 
 ## How to Use These Tasks
 
