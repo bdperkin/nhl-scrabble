@@ -190,9 +190,9 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "pyproject.toml"
 
-      - name: Install docformatter, pyroma, deptry, and pydocstyle for pre-commit
+      - name: Install docformatter, pyroma, deptry, pydocstyle, and safety for pre-commit
         run: |
-          uv pip install docformatter pyroma deptry pydocstyle --system
+          uv pip install docformatter pyroma deptry pydocstyle safety --system
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.1

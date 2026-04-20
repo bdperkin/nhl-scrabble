@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 57 comprehensive hooks for code quality, security, and consistency
+# 58 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 # NOTE: Using black 24.10 as authoritative formatter (ruff-format disabled)
@@ -362,6 +362,28 @@ repos:
           ]
         # Skip tests directory (test code uses assert, mock patterns)
         exclude: ^tests/
+
+  # ============================================================================
+  # Python Security - Dependency Vulnerability Scanning
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: safety
+        name: safety
+        # Comprehensive dependency vulnerability scanning (matches ruff's ALL rules philosophy)
+        # Scans installed packages against CVE databases for known vulnerabilities
+        description: Scan dependencies for known security vulnerabilities
+        entry: safety
+        args:
+          [
+            check,
+            --continue-on-error,  # Don't block commit, just warn
+          ]
+        language: system
+        pass_filenames: false
+        # Only run when dependency files change
+        files: ^(pyproject\.toml|requirements.*\.txt|uv\.lock)$
 
   # ============================================================================
   # Type Checking - Static Type Analysis

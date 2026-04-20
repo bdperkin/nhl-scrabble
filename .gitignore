@@ -229,6 +229,11 @@ sync-report.md
 /bandit-results.json
 /bandit-results.txt
 /.bandit_baseline
+/safety-report.html
+/safety-report.json
+/safety-report.txt
+/safety-results.json
+/safety-results.txt
 
 # ============================================================================
 # Claude Code

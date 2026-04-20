@@ -575,13 +575,17 @@ make security-report
 
 ### Security Scanning
 
-The project uses **bandit** for security vulnerability detection:
+The project uses two complementary security tools:
+
+#### Bandit - Code Security Scanning
+
+**Bandit** scans Python source code for security vulnerabilities:
 
 ```bash
 # Quick security scan (MEDIUM+ severity/confidence)
 make bandit
 
-# Comprehensive security scan with reports
+# Comprehensive security scan with bandit + safety
 tox -e security
 
 # Generate detailed HTML/JSON/TXT reports
@@ -609,12 +613,55 @@ password = os.getenv("DATABASE_PASSWORD")  # nosec B105
 subprocess.run(["ls", validated_path], check=True)  # nosec B603
 ```
 
+#### Safety - Dependency Vulnerability Scanning
+
+**Safety** scans installed packages against CVE databases for known vulnerabilities:
+
+```bash
+# Quick dependency vulnerability scan
+make safety
+
+# Detailed safety scan with tox
+tox -e safety
+
+# Generate safety reports (JSON + TXT)
+make safety-report
+```
+
+**What Safety Detects:**
+
+- **Known CVEs**: Common Vulnerabilities and Exposures in dependencies
+- **Security Advisories**: PyUP, NVD, and OSV vulnerability databases
+- **Outdated Packages**: Dependencies with known security patches
+- **Critical Vulnerabilities**: HIGH and CRITICAL severity issues
+
+**Handling Known Vulnerabilities:**
+
+If safety reports a vulnerability that is acceptable (disputed, test-only, mitigated), add it to `.safety-policy.yml`:
+
+```yaml
+security:
+  ignore-cvs:
+    - id: "51457"
+      package: "py"
+      reason: "DISPUTED CVE - ReDoS in test-only dependency, not in production"
+      expires: "2026-07-20"  # Quarterly review
+```
+
+**Vulnerability Severity Levels:**
+
+- **CRITICAL**: Immediate action required - blocks CI builds
+- **HIGH**: Fix ASAP - plan remediation within sprint
+- **MEDIUM**: Review and assess - document if acceptable
+- **LOW**: Informational - assess risk and document decision
+
 **Security Integration:**
 
-- ✅ Pre-commit hook: Catches issues before commit
+- ✅ Pre-commit hooks: Bandit (code) + Safety (dependencies)
 - ✅ CI/CD: Automated scanning on all PRs
 - ✅ Artifact storage: JSON/TXT reports retained for 90 days
-- ✅ Weekly scans: Scheduled security audits
+- ✅ Weekly scans: Scheduled security audits (Sundays 12 AM UTC)
+- ✅ Auto-issue creation: Critical vulnerabilities create GitHub issues
 
 ### Commit Messages
 

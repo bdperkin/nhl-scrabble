@@ -1,0 +1,16 @@
+# Safety 3.x Policy File
+# See: https://docs.safetycli.com/safety-docs/safety-3.0/scanning-your-project/policy-files
+
+security:
+  # Ignore specific vulnerabilities with justification
+  ignore-vulnerabilities:
+    # PyUp ID: 51457 - CVE-2022-42969
+    # Package: py <=1.11.0
+    # Reason: DISPUTED CVE - ReDoS in test-only dependency (pytest), not in production
+    # Expires: 2026-07-20
+    51457:
+      reason: "DISPUTED CVE-2022-42969 - ReDoS in test-only dependency (pytest), not in production"
+      expires: "2026-07-20"
+
+  # Don't fail builds on vulnerabilities (warning only)
+  continue-on-vulnerability-error: true
