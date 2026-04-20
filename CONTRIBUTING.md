@@ -584,7 +584,7 @@ make bandit
 # Comprehensive security scan with reports
 tox -e security
 
-# Generate detailed HTML/JSON/SARIF reports
+# Generate detailed HTML/JSON/TXT reports
 make security-report
 ```
 
@@ -613,7 +613,7 @@ subprocess.run(["ls", validated_path], check=True)  # nosec B603
 
 - ✅ Pre-commit hook: Catches issues before commit
 - ✅ CI/CD: Automated scanning on all PRs
-- ✅ GitHub Security: SARIF upload to Security tab
+- ✅ Artifact storage: JSON/TXT reports retained for 90 days
 - ✅ Weekly scans: Scheduled security audits
 
 ### Commit Messages

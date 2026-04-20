@@ -332,12 +332,12 @@ security-report: check-venv ## Security - generate detailed security reports
 	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format json --output reports/bandit-report.json || true
 	@printf "  - bandit HTML report...\n"
 	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format html --output reports/bandit-report.html || true
-	@printf "  - bandit SARIF report...\n"
-	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format sarif --output reports/bandit-report.sarif || true
+	@printf "  - bandit text report...\n"
+	@$(BIN)/bandit -r src/ --configfile pyproject.toml --format txt --output reports/bandit-report.txt || true
 	@printf "  - safety JSON report...\n"
 	@$(BIN)/safety check --json --output reports/safety-report.json || true
 	@printf "$(GREEN)✓ Reports saved to reports/$(NC)\n"
-	@ls -lh reports/*.json reports/*.html reports/*.sarif 2>/dev/null || true
+	@ls -lh reports/*.json reports/*.html reports/*.txt 2>/dev/null || true
 
 ###################
 # Build & Publish

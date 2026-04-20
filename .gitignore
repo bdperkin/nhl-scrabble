@@ -227,7 +227,7 @@ bandit-report.html
 bandit-report.json
 bandit-report.txt
 bandit-results.json
-bandit-results.sarif
+bandit-results.txt
 .bandit_baseline
 
 # ============================================================================

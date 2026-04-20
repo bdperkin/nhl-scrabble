@@ -111,13 +111,13 @@ jobs:
             --severity-level medium \
             --confidence-level medium || true
 
-      - name: Run bandit security scanner (SARIF)
+      - name: Run bandit security scanner (Text)
         run: |
-          echo "Running bandit security analysis (SARIF)..."
+          echo "Running bandit security analysis (Text)..."
           bandit -r src/ \
             --configfile pyproject.toml \
-            --format sarif \
-            --output bandit-results.sarif \
+            --format txt \
+            --output bandit-results.txt \
             --severity-level medium \
             --confidence-level medium || true
 
@@ -128,15 +128,8 @@ jobs:
           name: bandit-security-scan
           path: |
             bandit-results.json
-            bandit-results.sarif
+            bandit-results.txt
           retention-days: 90
-
-      - name: Upload SARIF to GitHub Security
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: bandit-results.sarif
-          category: bandit
 
       - name: Check for HIGH severity issues
         run: |
