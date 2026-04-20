@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
-**Generated**: 2026-04-19
-**Total Tasks**: 69 active tasks
-**Estimated Effort**: 206-305 hours
+**Generated**: 2026-04-20
+**Total Tasks**: 73 active tasks
+**Estimated Effort**: 274-409 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -69,7 +69,7 @@ ______________________________________________________________________
 
 ## Phase 4: Test Coverage - Core + Integration (MEDIUM Priority)
 
-**Total Effort**: 8-11 hours
+**Total Effort**: 20-31 hours
 **Focus**: Complete test coverage to 90-100% target
 **Dependencies**: Benefits from all previous test tasks
 
@@ -79,25 +79,32 @@ ______________________________________________________________________
 /implement-task testing/009-edge-cases-error-paths.md                # 2-3h, Issue #258
 /implement-task testing/010-integration-end-to-end-testing.md        # 2-3h, Issue #259
 /implement-task testing/011-coverage-audit-finalization.md           # 2-3h, Issue #260
+
+# Comprehensive Coverage Improvement (Alternative/Complementary approach)
+/implement-task testing/002-comprehensive-test-coverage-90-100.md    # 12-20h, Issue #221
 ```
 
-**Rationale**: Reports are core output. Edge cases catch bugs. Integration tests validate full workflows. Audit task finalizes coverage goal. Sequential order recommended for cumulative coverage.
+**Rationale**: Reports are core output. Edge cases catch bugs. Integration tests validate full workflows. Audit task finalizes coverage goal. Sequential order recommended for cumulative coverage. Task 002 provides comprehensive coverage improvement across all untested/under-tested modules.
 
 ______________________________________________________________________
 
-## Phase 5: Web Interface Completion (MEDIUM Priority)
+## Phase 5: Web Interface (MEDIUM Priority)
 
-**Total Effort**: 10-15 hours
-**Focus**: Complete the web interface feature
+**Total Effort**: 26-39 hours
+**Focus**: Build and complete the web interface feature
 **Dependencies**: Requires new-features/002-004 (FastAPI, API endpoints, templates - all complete ✅)
+**Parent Task**: #50 - Build Web Interface with FastAPI
 
 ```bash
-# Web Interface Completion
+# Web Interface Foundation (Parent task documenting full scope)
+/implement-task new-features/001-web-interface.md                    # 16-24h, Issue #50
+
+# Web Interface Completion (Sub-tasks)
 /implement-task new-features/005-web-interactivity.md                # 8-12h, Issue #106
 /implement-task new-features/006-web-testing-polish.md               # 2-3h, Issue #111
 ```
 
-**Rationale**: Completes the web interface parent task (#50). JavaScript interactivity adds dynamic features. Testing/polish ensures production quality. Must be done in this order.
+**Rationale**: Task 001 is the parent task documenting the full web interface scope. JavaScript interactivity (005) adds dynamic features. Testing/polish (006) ensures production quality. Must be done in this order.
 
 ______________________________________________________________________
 
@@ -224,13 +231,17 @@ ______________________________________________________________________
 
 ## Phase 13: Release Automation (LOW Priority, Sequential)
 
-**Total Effort**: 9-14 hours
+**Total Effort**: 17-26 hours
 **Focus**: Complete release automation workflow
 **Dependencies**: Sequential - each task depends on previous
 **Prerequisite**: new-features/018 (package automation) from Phase 12
+**Parent Task**: #247 - Create comprehensive release automation skill
 
 ```bash
-# Release Automation Pipeline (MUST BE SEQUENTIAL)
+# Release Automation Parent Task (documents full automation scope)
+/implement-task new-features/019-comprehensive-release-automation-skill.md  # 8-12h, Issue #247
+
+# Release Automation Pipeline Sub-tasks (MUST BE SEQUENTIAL)
 /implement-task new-features/025-release-pre-release-validation.md   # 1-2h, Issue #261
 /implement-task new-features/026-release-version-bumping.md          # 1-2h, Issue #262
 /implement-task new-features/027-release-build-validate.md           # 1-2h, Issue #263
@@ -240,25 +251,27 @@ ______________________________________________________________________
 /implement-task new-features/031-release-orchestration-cli.md        # 2-3h, Issue #267
 ```
 
-**Rationale**: Complete release automation. Sequential workflow: validate → version → build → publish → post-release → verify → orchestrate. Parent task: new-features/019 (#247).
+**Rationale**: Task 019 is the parent task documenting comprehensive release automation. Sub-tasks 025-031 implement the sequential workflow: validate → version → build → publish → post-release → verify → orchestrate.
 
 ______________________________________________________________________
 
-## Phase 14: i18n Infrastructure (LOW Priority)
+## Phase 14: Internationalization & Localization (LOW Priority)
 
-**Total Effort**: 4-6 hours
-**Focus**: Setup internationalization infrastructure
-**Dependencies**: None (but prerequisite for Phase 15)
-**Note**: Sub-task 1 needs to be created first
+**Total Effort**: 36-54 hours
+**Focus**: Full internationalization and localization (i18n/l10n)
+**Dependencies**: Infrastructure setup before component translation
+**Parent Task**: #218 - Implement internationalization and localization
 
 ```bash
-# i18n Infrastructure Setup
-# TODO: Create new-features/016 sub-task 1: i18n infrastructure setup
-# This task should setup Babel, gettext, locale directories, translation utilities
-# Estimated: 4-6h, will be prerequisite for tasks 020-024
+# i18n/l10n Parent Task (documents full i18n scope and infrastructure)
+/implement-task new-features/016-internationalization-localization.md  # 32-48h, Issue #218
+
+# Note: Task 016 includes infrastructure setup as sub-task 1
+# Infrastructure will include: Babel, gettext, locale directories, translation utilities
+# This is prerequisite for component internationalization (020-024)
 ```
 
-**Rationale**: Infrastructure must be in place before internationalizing components. This is the missing sub-task 1 from parent task new-features/016 (#218).
+**Rationale**: Task 016 is the comprehensive parent task covering i18n infrastructure setup and overall l10n strategy. Infrastructure must be in place before internationalizing components (Phase 15).
 
 ______________________________________________________________________
 

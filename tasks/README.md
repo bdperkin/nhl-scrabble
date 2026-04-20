@@ -103,20 +103,20 @@ Each task is assigned a priority:
 **Remaining Effort**: 16.25-27h
 **Completed**: 9 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209)
 
-### Testing (3 tasks active, 4 documented, 1 completed)
+### Testing (4 tasks active, 4 documented, 0 completed)
 
-| ID  | Title                                   | Priority | Effort | Issue | Status      |
-| --- | --------------------------------------- | -------- | ------ | ----- | ----------- |
-| 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |             |
-| 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |             |
-| 003 | Add Tests for Caching Layer             | MEDIUM   | 2-4h   | #235  |             |
-| 004 | CLI Module Test Coverage                | MEDIUM   | 2-3h   | #253  | ✅ Complete |
+| ID  | Title                                   | Priority | Effort | Issue | Status |
+| --- | --------------------------------------- | -------- | ------ | ----- | ------ |
+| 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |        |
+| 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |        |
+| 003 | Add Tests for Caching Layer             | MEDIUM   | 2-4h   | #235  |        |
+| 004 | CLI Module Test Coverage                | MEDIUM   | 2-3h   | #253  |        |
 
 **Documented Effort**: 18-30 hours
-**Remaining Effort**: 16-27h
-**Completed**: 1 task (Task 004: CLI test coverage 2.5h - PR #270)
+**Remaining Effort**: 18-30h
+**Completed**: 0 tasks
 
-**Note**: Current coverage 87.84% overall (CLI: 75.43%, up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Codecov integration enabled for ongoing coverage tracking.
+**Note**: Current coverage ~50% overall. Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Tasks 001 and 004 have active PRs but need additional work before closure.
 
 ### New Features (15 tasks active, 19 documented, 4 completed)
 
@@ -175,8 +175,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 139 tasks (69 active, 70 completed)
-**Remaining Effort**: ~206-305 hours
+**Total Tasks**: 139 tasks (73 active, 66 completed)
+**Remaining Effort**: ~274-409 hours
 **Completed Effort**: ~200+ hours
 
 ### By Category
