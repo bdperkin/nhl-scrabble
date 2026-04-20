@@ -104,18 +104,18 @@ Each task is assigned a priority:
 **Remaining Effort**: 15.75-28h
 **Completed**: 11 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
-### Testing (4 tasks active, 4 documented, 0 completed)
+### Testing (3 tasks active, 4 documented, 1 completed)
 
-| ID  | Title                                   | Priority | Effort | Issue | Status |
-| --- | --------------------------------------- | -------- | ------ | ----- | ------ |
-| 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |        |
-| 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |        |
-| 003 | Add Tests for Caching Layer             | MEDIUM   | 2-4h   | #235  |        |
-| 004 | CLI Module Test Coverage                | MEDIUM   | 2-3h   | #253  |        |
+| ID  | Title                                   | Priority | Effort | Issue | Status      |
+| --- | --------------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |             |
+| 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |             |
+| 003 | Add Tests for Caching Layer             | MEDIUM   | 3h     | #235  | ✅ Complete |
+| 004 | CLI Module Test Coverage                | MEDIUM   | 2-3h   | #253  |             |
 
 **Documented Effort**: 18-30 hours
-**Remaining Effort**: 18-30h
-**Completed**: 0 tasks
+**Remaining Effort**: 15-27h
+**Completed**: 1 task (Task 003: Caching Layer Tests 3h - PR #284)
 
 **Note**: Current coverage ~50% overall. Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Tasks 001 and 004 have active PRs but need additional work before closure.
 
@@ -188,10 +188,10 @@ Each task is assigned a priority:
 - **Security**: 2 active (7 completed), 2-4h remaining
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 10 active (10 completed), 14.75-25h remaining
-- **Testing**: 11 active (19 completed), 20-31h remaining
+- **Testing**: 10 active (20 completed), 17-28h remaining
   - Parent task (002): Broken into 8 sub-tasks
   - Sub-tasks (004-011): Coverage improvement by module
-  - Independent tasks (001, 003): Analytics and caching tests
+  - Independent tasks (001, 003): Analytics (active), caching tests (complete - PR #284)
 - **New Features**: 27 active (4 completed), 117-168h remaining
   - Parent tasks (2): i18n/l10n (016), release automation (019)
   - i18n sub-tasks (020-024): 5 tasks, 23-33h
