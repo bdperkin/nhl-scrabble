@@ -100,28 +100,29 @@ Each task is assigned a priority:
 
 **Note**: Coverage target of 90.93% achieved. Codecov integration enabled for ongoing coverage tracking. Test Analytics will provide insights into test performance and flaky test detection.
 
-### New Features (11 tasks active, 15 documented, 4 completed)
+### New Features (12 tasks active, 16 documented, 4 completed)
 
-| ID  | Title                        | Priority | Effort | Issue | Status      |
-| --- | ---------------------------- | -------- | ------ | ----- | ----------- |
-| 001 | Build Web Interface (Parent) | MEDIUM   | 16-24h | #50   | In Progress |
-| 002 | FastAPI Infrastructure       | MEDIUM   | 3.5h   | #103  | ✅ Complete |
-| 003 | Web API Endpoints            | MEDIUM   | 4-6h   | #104  | ✅ Complete |
-| 004 | Web Frontend Templates       | MEDIUM   | 3.5h   | #105  | ✅ Complete |
-| 005 | JavaScript Interactivity     | MEDIUM   | 8-12h  | #106  |             |
-| 006 | Web Testing and Polish       | MEDIUM   | 2-3h   | #111  |             |
-| 007 | Standalone REST API Server   | LOW      | 8-12h  | #150  | ✅ Complete |
-| 008 | Database Backend             | LOW      | 12-16h | #151  |             |
-| 009 | Notification System          | LOW      | 6-8h   | #152  |             |
-| 010 | Player Comparison Tool       | LOW      | 4-6h   | #153  |             |
-| 011 | Offline Mode                 | LOW      | 4-5h   | #154  |             |
-| 012 | Config Profiles              | LOW      | 3-4h   | #155  |             |
-| 013 | Plugin System                | LOW      | 10-14h | #156  |             |
-| 014 | Docker Support               | LOW      | 4-6h   | #157  |             |
-| 015 | Data Export/Import           | LOW      | 4-5h   | #158  |             |
+| ID  | Title                                 | Priority | Effort | Issue | Status      |
+| --- | ------------------------------------- | -------- | ------ | ----- | ----------- |
+| 001 | Build Web Interface (Parent)          | MEDIUM   | 16-24h | #50   | In Progress |
+| 002 | FastAPI Infrastructure                | MEDIUM   | 3.5h   | #103  | ✅ Complete |
+| 003 | Web API Endpoints                     | MEDIUM   | 4-6h   | #104  | ✅ Complete |
+| 004 | Web Frontend Templates                | MEDIUM   | 3.5h   | #105  | ✅ Complete |
+| 005 | JavaScript Interactivity              | MEDIUM   | 8-12h  | #106  |             |
+| 006 | Web Testing and Polish                | MEDIUM   | 2-3h   | #111  |             |
+| 007 | Standalone REST API Server            | LOW      | 8-12h  | #150  | ✅ Complete |
+| 008 | Database Backend                      | LOW      | 12-16h | #151  |             |
+| 009 | Notification System                   | LOW      | 6-8h   | #152  |             |
+| 010 | Player Comparison Tool                | LOW      | 4-6h   | #153  |             |
+| 011 | Offline Mode                          | LOW      | 4-5h   | #154  |             |
+| 012 | Config Profiles                       | LOW      | 3-4h   | #155  |             |
+| 013 | Plugin System                         | LOW      | 10-14h | #156  |             |
+| 014 | Docker Support                        | LOW      | 4-6h   | #157  |             |
+| 015 | Data Export/Import                    | LOW      | 4-5h   | #158  |             |
+| 016 | Internationalization and Localization | LOW      | 32-48h | #218  |             |
 
-**Documented Effort**: 87.5-126 hours
-**Remaining Effort**: 67.5-102h (web interface subtasks: 10-15h remaining, standalone features: 54-84h)
+**Documented Effort**: 119.5-174 hours
+**Remaining Effort**: 99.5-150h (web interface subtasks: 10-15h remaining, standalone features: 86-132h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
 ### Refactoring (7 tasks active, 8 documented, 1 completed)
@@ -142,8 +143,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 90 tasks (20 active, 70 completed)
-**Remaining Effort**: ~107-159 hours (major milestones achieved!)
+**Total Tasks**: 91 tasks (21 active, 70 completed)
+**Remaining Effort**: ~139-207 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
@@ -153,15 +154,15 @@ Each task is assigned a priority:
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 1 active (9 completed), 3-5h remaining
 - **Testing**: 1 active (2-3h remaining)
-- **New Features**: 11 active (4 completed), 67.5-102h remaining
+- **New Features**: 12 active (4 completed), 99.5-150h remaining
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
-  - Standalone features: 54-84h
+  - Standalone features: 86-132h
 - **Refactoring**: 7 active (1 completed), 33-43.5h remaining
 
 ### By Priority
 
 - **MEDIUM**: 5 tasks remaining (~27-41h) - Web interface completion + repository cleanup + Python version support
-- **LOW**: 15 tasks remaining (~80-120h) - Long-term improvements
+- **LOW**: 16 tasks remaining (~112-168h) - Long-term improvements
 
 ### Major Achievements
 
