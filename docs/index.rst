@@ -82,6 +82,27 @@ Features
 📦 **Modern Python**
    Type hints, Pydantic models, and best practices
 
+Requirements
+------------
+
+**Python Version:**
+
+- Python 3.10 or higher (3.10, 3.11, 3.12, 3.13, 3.14)
+- Python 3.15-dev is tested but experimental
+
+**Dependencies:**
+
+- requests, click, pydantic, python-dotenv, rich, fastapi, uvicorn, jinja2
+
+Compatibility
+-------------
+
+The project is tested on Python 3.10 through 3.14 in CI. Python 3.15
+is in development and while we test against it, compatibility is not
+guaranteed until Python 3.15 is officially released.
+
+See `.github/workflows/ci.yml <https://github.com/bdperkin/nhl-scrabble/blob/main/.github/workflows/ci.yml>`_ for the full test matrix.
+
 Quick Example
 -------------
 

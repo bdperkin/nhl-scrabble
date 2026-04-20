@@ -87,7 +87,7 @@ Each task is assigned a priority:
 | 007 | Interactive Statistics Dashboard                  | LOW      | 6-8h     | #147  | ✅ Complete |
 | 008 | Watch Mode Auto-Refresh                           | LOW      | 2-3h     | #148  | ✅ Complete |
 | 009 | Player Search                                     | LOW      | 3-4h     | #149  | ✅ Complete |
-| 010 | Python 3.14 and 3.15-dev Support                  | MEDIUM   | 3-5h     | #217  |             |
+| 010 | Python 3.14 and 3.15-dev Support                  | MEDIUM   | 2h       | #217  | ✅ Complete |
 | 011 | Hyperlink Documentation to External URLs          | LOW      | 2-4h     | #223  |             |
 | 012 | Enhance Implement-Task with Pre-Flight Validation | MEDIUM   | 1-2h     | #225  | ✅ Complete |
 | 013 | Refine Logo Tiles and Hockey Stick Overlap        | LOW      | 1-2h     | #227  |             |
@@ -100,8 +100,8 @@ Each task is assigned a priority:
 | 020 | Enable Colorized Log Output Formatting            | LOW      | 30-60min | #234  |             |
 
 **Documented Effort**: 51.25-76.5 hours
-**Remaining Effort**: 14.75-25h
-**Completed**: 10 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 012: Pre-Flight Validation 1.5h - PR #281)
+**Remaining Effort**: 12.75-23h
+**Completed**: 11 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
 ### Testing (4 tasks active, 4 documented, 0 completed)
 
@@ -177,9 +177,9 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 139 tasks (70 active, 69 completed)
-**Remaining Effort**: ~268-400 hours
-**Completed Effort**: ~203.75+ hours
+**Total Tasks**: 139 tasks (69 active, 70 completed)
+**Remaining Effort**: ~266-398 hours
+**Completed Effort**: ~205.75+ hours
 
 ### By Category
 
