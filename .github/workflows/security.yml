@@ -84,6 +84,9 @@ jobs:
   bandit-security-scan:
     name: Bandit Security Linter
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # For SARIF upload
 
     steps:
       - name: Checkout code
@@ -98,25 +101,60 @@ jobs:
         run: |
           pip install bandit[toml]
 
-      - name: Run bandit security linter
+      - name: Run bandit security scanner (JSON)
         run: |
-          echo "Running bandit security analysis..."
-          bandit -r src/ -f json -o bandit-report.json || true
-          bandit -r src/ -f txt -o bandit-report.txt || true
+          echo "Running bandit security analysis (JSON)..."
+          bandit -r src/ \
+            --configfile pyproject.toml \
+            --format json \
+            --output bandit-results.json \
+            --severity-level medium \
+            --confidence-level medium || true
 
-          # Also run with default output for GitHub Actions logs
-          bandit -r src/ || echo "::warning::Bandit found potential security issues"
-        continue-on-error: true
+      - name: Run bandit security scanner (SARIF)
+        run: |
+          echo "Running bandit security analysis (SARIF)..."
+          bandit -r src/ \
+            --configfile pyproject.toml \
+            --format sarif \
+            --output bandit-results.sarif \
+            --severity-level medium \
+            --confidence-level medium || true
 
-      - name: Upload bandit reports
-        uses: actions/upload-artifact@v4
+      - name: Upload bandit results
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: bandit-security-reports
+          name: bandit-security-scan
           path: |
-            bandit-report.json
-            bandit-report.txt
+            bandit-results.json
+            bandit-results.sarif
           retention-days: 90
+
+      - name: Upload SARIF to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: bandit-results.sarif
+          category: bandit
+
+      - name: Check for HIGH severity issues
+        run: |
+          echo "Checking for HIGH severity security issues..."
+          python -c "
+          import json
+          with open('bandit-results.json') as f:
+              data = json.load(f)
+          high_issues = [r for r in data['results'] if r['issue_severity'] == 'HIGH']
+          if high_issues:
+              print(f'❌ Found {len(high_issues)} HIGH severity issues!')
+              for issue in high_issues:
+                  loc = f\"{issue['filename']}:{issue['line_number']}\"
+                  print(f\"  - {issue['test_id']}: {issue['issue_text']} ({loc})\")
+              exit(1)
+          else:
+              print('✅ No HIGH severity issues found')
+          "
 
   safety-check:
     name: Safety Vulnerability Database Check

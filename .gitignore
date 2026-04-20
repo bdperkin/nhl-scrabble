@@ -222,6 +222,13 @@ local_settings.py
 
 # Generated reports
 sync-report.md
+reports/
+bandit-report.html
+bandit-report.json
+bandit-report.txt
+bandit-results.json
+bandit-results.sarif
+.bandit_baseline
 
 # ============================================================================
 # Claude Code

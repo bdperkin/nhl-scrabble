@@ -1155,9 +1155,13 @@ severity = "LOW"
 confidence = "LOW"
 
 # Issues to skip (with justification)
-# S311: random used for jitter (not cryptographic purposes)
+# B311: random used for jitter in retry logic (not cryptographic purposes)
+# B101: assert_used - tests use assert statements (excluded via exclude_dirs)
 # These are explicitly documented in code with noqa comments
-skips = []
+skips = [
+    "B101",  # assert_used - Used in tests (excluded anyway)
+    "B311",  # random - Jitter in retry logic, not crypto
+]
 
 # Specific tests to exclude (if needed)
 # Currently: run all security tests comprehensively

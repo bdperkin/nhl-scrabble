@@ -100,7 +100,7 @@ git commit --no-verify -m "message"
 **Why this matters**:
 
 - The `check-branch-protection` hook is a workflow reminder, not a quality check
-- All 54 other hooks (ruff, mypy, black, security checks, etc.) **MUST always run**
+- All 56 other hooks (ruff, mypy, black, bandit, security checks, etc.) **MUST always run**
 - Quality checks prevent bugs, security issues, and maintain code standards
 - Even admin commits must meet the same quality standards as PR commits
 
@@ -563,7 +563,58 @@ tox -e check-jsonschema
 
 # Run pre-commit hooks manually
 pre-commit run --all-files
+
+# Security scanning with bandit
+make bandit
+# or via tox: tox -e bandit
+
+# Generate security reports
+make security-report
+# Reports saved to reports/ directory
 ```
+
+### Security Scanning
+
+The project uses **bandit** for security vulnerability detection:
+
+```bash
+# Quick security scan (MEDIUM+ severity/confidence)
+make bandit
+
+# Comprehensive security scan with reports
+tox -e security
+
+# Generate detailed HTML/JSON/SARIF reports
+make security-report
+```
+
+**What Bandit Detects:**
+
+- **SQL Injection** (B201-B299): Unparameterized SQL queries
+- **Hardcoded Secrets** (B301-B399): Passwords, API keys, tokens in code
+- **Weak Cryptography** (B401-B499): MD5, SHA1, weak random generators
+- **Shell Injection** (B501-B599): Unsafe subprocess calls with `shell=True`
+- **Unsafe YAML** (B601-B699): `yaml.load()` vs `yaml.safe_load()`
+- **Dangerous Functions** (B701-B799): `eval()`, `exec()`, `pickle`
+
+**Handling False Positives:**
+
+If bandit reports a false positive, add a `# nosec` comment with justification:
+
+```python
+# Safe: password from environment, not hardcoded
+password = os.getenv("DATABASE_PASSWORD")  # nosec B105
+
+# Safe: subprocess call with validated, trusted input
+subprocess.run(["ls", validated_path], check=True)  # nosec B603
+```
+
+**Security Integration:**
+
+- ✅ Pre-commit hook: Catches issues before commit
+- ✅ CI/CD: Automated scanning on all PRs
+- ✅ GitHub Security: SARIF upload to Security tab
+- ✅ Weekly scans: Scheduled security audits
 
 ### Commit Messages
 
