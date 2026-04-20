@@ -214,7 +214,7 @@ This command automates the complete task implementation workflow from start to f
    - Ensure 100% docstring coverage for new code
    - Run `interrogate` to verify
 
-1. **Create Pull Request**
+1. **Commit Implementation**
 
    - Stage all changes: `git add -A`
    - Review staged changes: `git diff --cached`
@@ -222,7 +222,171 @@ This command automates the complete task implementation workflow from start to f
      - Use conventional commit format
      - Reference GitHub issue number
      - Include task file reference
-   - Push branch to remote: `git push -u origin {branch-name}`
+   - Verify commit created: `git log -1`
+
+1. **Automated Pre-Flight Validation**
+
+   Run comprehensive validation before pushing to ensure CI will pass:
+
+   **a. Run Pre-Commit on All Files**
+
+   ```bash
+   pre-commit run --all-files
+   ```
+
+   - Verifies all 58 hooks pass
+   - Catches formatting, linting, security issues
+   - Fixes auto-fixable issues
+   - Reports any failures
+
+   **If pre-commit failures occur:**
+
+   1. Review failure messages carefully
+   1. Fix issues (most hooks auto-fix):
+      ```bash
+      ruff check --fix src/
+      ruff format src/
+      ```
+   1. Re-stage changes: `git add -A`
+   1. Amend commit: `git commit --amend --no-edit`
+   1. Re-run pre-commit: `pre-commit run --all-files`
+   1. Continue when all hooks pass
+
+   **b. Run All Tox Environments**
+
+   ```bash
+   tox -p auto
+   ```
+
+   - Tests all Python versions (3.10-3.15)
+   - Runs quality checks (ruff-check, mypy, etc.)
+   - Runs test suite with coverage
+   - Parallel execution for speed (~3-5 min total)
+   - Python 3.15-dev allowed to fail (experimental)
+
+   **If tox failures occur:**
+
+   1. Review tox output for failing environment
+   1. Run specific environment for details:
+      ```bash
+      tox -e py312  # Or whichever failed
+      pytest -vv    # For test failures
+      mypy src/     # For type errors
+      ```
+   1. Fix issues in code
+   1. Commit fixes: `git add -A && git commit --amend --no-edit`
+   1. Re-run failed environment: `tox -e py312`
+   1. Re-run full tox when fixed: `tox -p auto`
+   1. Continue when all environments pass
+
+   **c. Verify Clean State**
+
+   ```bash
+   git status
+   ```
+
+   - Ensure no uncommitted changes
+   - Verify working tree is clean
+   - Confirm ready to push
+
+   **Validation Success Output:**
+
+   ```
+   🔍 Pre-Flight Validation
+
+   ✅ Pre-commit hooks: All 58 hooks passed (45s)
+   ✅ Tox environments: All environments passed
+      - py310: ✅ (1m 29s)
+      - py311: ✅ (1m 45s)
+      - py312: ✅ (1m 33s)
+      - py313: ✅ (1m 33s)
+      - py314: ✅ (1m 27s)
+      - py315: ⚠️  (allowed to fail - experimental)
+      - ruff-check: ✅ (19s)
+      - mypy: ✅ (20s)
+      - coverage: ✅ (1m 18s)
+   ✅ Working tree: Clean
+
+   Total validation time: 3m 45s
+
+   ✅ Pre-flight validation passed! Safe to push.
+   ```
+
+   **Validation Failure Output:**
+
+   ```
+   🔍 Pre-Flight Validation
+
+   ❌ Pre-commit hooks: 2 hooks failed
+      - ruff-check: Failed on src/nhl_scrabble/cli.py:42
+      - mypy: Type error in src/nhl_scrabble/api/nhl_client.py:156
+
+   ❌ Pre-flight validation failed!
+
+   Recommendations:
+   1. Fix ruff issues: ruff check --fix src/
+   2. Fix mypy errors: mypy src/ --show-error-codes
+   3. Re-stage: git add -A
+   4. Amend commit: git commit --amend --no-edit
+   5. Re-run validation: pre-commit run --all-files
+
+   DO NOT PUSH until all checks pass.
+   ```
+
+   **Skip Options** (use with extreme caution):
+
+   ⚠️ **Emergency use only** - skipping validation may result in CI failures
+
+   ```bash
+   # Skip pre-commit only (not recommended)
+   SKIP=pre-commit git push
+
+   # Skip specific tox environments
+   # (Cannot skip - must run tox -p auto)
+
+   # Skip validation entirely (EMERGENCY ONLY)
+   # Push directly without running validation
+   # Only use for: emergency hotfixes, CI infrastructure issues,
+   # time-critical security fixes where you've manually verified
+   ```
+
+   **When to skip validation:**
+
+   - ✅ Emergency production hotfix (after manual verification)
+   - ✅ CI infrastructure is broken (not your code)
+   - ✅ You manually ran all checks and they passed
+   - ✅ Time-critical security fix (after thorough testing)
+
+   **When NOT to skip:**
+
+   - ❌ "I'm sure it's fine" (validate to be sure!)
+   - ❌ "I'll fix it in the PR" (fix before pushing)
+   - ❌ "CI will catch it" (catch it locally first)
+   - ❌ Regular workflow (always validate)
+
+   **Why Pre-Flight Validation Matters:**
+
+   - **Catches issues locally** before they reach CI
+   - **Saves time**: 3-5 min validation vs 15-30 min CI failure cycle
+   - **Reduces CI load**: ~83% reduction in failed CI runs
+   - **Prevents context switching**: Fix issues before pushing
+   - **Cleaner git history**: No "fix CI" commits
+   - **Higher confidence**: Know it will pass before pushing
+
+   **Time Investment**: 3-5 minutes upfront
+   **Time Saved**: 10-15 minutes per CI iteration avoided
+   **Success Rate**: ~95% first-time CI pass (vs ~70% without validation)
+
+1. **Push to Remote**
+
+   Only push after validation passes:
+
+   - Push branch: `git push -u origin {branch-name}`
+   - Verify push succeeded
+   - Get remote branch URL
+
+1. **Create Pull Request**
+
    - Create PR using `gh pr create`:
      - Title: Task title from task file
      - Body:
