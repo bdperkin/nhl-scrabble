@@ -146,7 +146,7 @@ Each task is assigned a priority:
 **Remaining Effort**: 119.5-180h (web interface subtasks: 10-15h remaining, standalone features: 94-144h, automation: 12-18h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
-### Refactoring (11 tasks active, 13 documented, 2 completed)
+### Refactoring (10 tasks active, 13 documented, 3 completed)
 
 | ID  | Title                                     | Priority | Effort   | Issue |
 | --- | ----------------------------------------- | -------- | -------- | ----- |
@@ -156,7 +156,6 @@ Each task is assigned a priority:
 | 005 | Add djlint HTML Template Linting          | LOW      | 30-60min | #127  |
 | 006 | Error Handling Strategy                   | LOW      | 6-8h     | #162  |
 | 007 | Dependency Injection                      | LOW      | 8-10h    | #163  |
-| 009 | Git Branch Pruning Automation             | LOW      | 30-60min | #220  |
 | 010 | Dynamic Versioning from Git Tags          | LOW      | 2-4h     | #222  |
 | 011 | Dependency Synchronization and Automation | MEDIUM   | 3-4h     | #226  |
 | 012 | Audit and Standardize CLI Options         | MEDIUM   | 2-4h     | #236  |
@@ -168,18 +167,19 @@ Each task is assigned a priority:
 | 018 | Add check-wheel-contents Validation       | LOW      | 1-2h     | #245  |
 | 019 | Add ssort Statement Sorting               | LOW      | 2-3h     | #246  |
 
-**Documented Effort**: 49-70 hours remaining
+**Documented Effort**: 48.5-69 hours remaining
 
-**Completed**: 4.5 hours
+**Completed**: 5.25 hours
 
 - Task 001: Consolidate Report Classes 3h - PR #184
 - Task 008: Repository Cleanup 1.5h - PR #278
+- Task 009: Git Branch Pruning 0.75h - PR #279
 
 ## Total Project Roadmap
 
-**Total Tasks**: 139 tasks (72 active, 67 completed)
-**Remaining Effort**: ~270-403 hours
-**Completed Effort**: ~201.5+ hours
+**Total Tasks**: 139 tasks (71 active, 68 completed)
+**Remaining Effort**: ~269.5-402 hours
+**Completed Effort**: ~202.25+ hours
 
 ### By Category
 
@@ -196,7 +196,7 @@ Each task is assigned a priority:
   - i18n sub-tasks (020-024): 5 tasks, 23-33h
   - Release automation sub-tasks (025-031): 7 tasks, 9-14h
   - Standalone features: 13 tasks, 85-121h
-- **Refactoring**: 17 active (2 completed), 47-68h remaining
+- **Refactoring**: 16 active (3 completed), 46.5-67h remaining
 
 ### By Priority
 
