@@ -47,6 +47,7 @@ NC := \033[0m # No Color
         docs serve-docs \
         run run-verbose run-json \
         shell watch init info status version \
+        git-prune-local git-prune-remote-refs git-status-branches git-cleanup \
         count tree all release
 
 ###################
@@ -477,6 +478,50 @@ release: ci ## Prepare for release (run all checks)
 version: check-venv ## Show current version
 	@printf "$(BLUE)Current version:$(NC)\n"
 	@$(BIN)/tox -e version
+
+###################
+# Git Branch Management
+###################
+
+git-status-branches: ## Show git branch status (merged vs active)
+	@printf "$(BLUE)📊 Git Branch Status$(NC)\n"
+	@printf "\n"
+	@printf "$(GREEN)Active branches (not merged to main):$(NC)\n"
+	@git branch --no-merged main | cat || printf "  (none)\n"
+	@printf "\n"
+	@printf "$(YELLOW)Merged branches (can be deleted):$(NC)\n"
+	@git branch --merged main | grep -v "^\*" | grep -v "main" | cat || printf "  (none)\n"
+	@printf "\n"
+	@printf "$(BLUE)Remote tracking branches:$(NC)\n"
+	@git branch -r | cat
+
+git-prune-remote-refs: ## Prune stale remote tracking branches
+	@printf "$(BLUE)🔍 Pruning stale remote tracking branches...$(NC)\n"
+	@git fetch --prune origin
+	@printf "$(GREEN)✅ Remote references pruned$(NC)\n"
+
+git-prune-local: ## Prune local branches merged to main (with confirmation)
+	@printf "$(BLUE)🔍 Finding local branches merged to main...$(NC)\n"
+	@MERGED_COUNT=$$(git branch --merged main | grep -v "^\*" | grep -v "main" | wc -l); \
+	printf "Found $$MERGED_COUNT merged branch(es)\n"; \
+	if [ $$MERGED_COUNT -eq 0 ]; then \
+		printf "$(GREEN)✅ No merged branches to prune$(NC)\n"; \
+		exit 0; \
+	fi; \
+	printf "\n"; \
+	printf "$(YELLOW)⚠️  About to delete these local branches (safe - fully merged to main):$(NC)\n"; \
+	git branch --merged main | grep -v "^\*" | grep -v "main"; \
+	printf "\n"; \
+	read -p "Continue? [y/N] " -n 1 -r; echo; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		git branch --merged main | grep -v "^\*" | grep -v "main" | xargs -r git branch -d; \
+		printf "$(GREEN)✅ Local branches pruned$(NC)\n"; \
+	else \
+		printf "$(RED)❌ Cancelled$(NC)\n"; \
+	fi
+
+git-cleanup: git-prune-remote-refs git-prune-local ## Full git cleanup (prune remote refs + local branches)
+	@printf "$(GREEN)✅ Git cleanup complete$(NC)\n"
 
 ###################
 # All-in-one

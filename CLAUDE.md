@@ -669,6 +669,35 @@ make ci
 # Everything should be green!
 ```
 
+### Git Branch Cleanup
+
+After PRs are merged, clean up local branches to maintain a tidy repository:
+
+```bash
+# Check branch status (merged vs active)
+make git-status-branches
+
+# Prune stale remote tracking branches
+make git-prune-remote-refs
+
+# Delete local branches merged to main (with confirmation)
+make git-prune-local
+
+# Full cleanup (remote refs + local branches)
+make git-cleanup
+```
+
+**Automatic Configuration:**
+
+The repository is configured with `git config fetch.prune true`, which automatically removes stale remote tracking branches on every `git fetch`.
+
+**Safety Features:**
+
+- Only deletes branches fully merged to main
+- Requires confirmation before deletion
+- Never deletes main or current branch
+- Unmerged branches are protected
+
 ## CI/CD
 
 ### GitHub Actions

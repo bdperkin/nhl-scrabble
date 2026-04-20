@@ -112,6 +112,66 @@ git commit --no-verify -m "message"
 
 **Rule**: NEVER use `--no-verify` - Always run pre-commit hooks.
 
+### Git Branch Cleanup
+
+The repository uses automated branch cleanup to maintain a clean git state and reduce clutter in branch listings.
+
+**Automatic Remote Pruning:**
+
+The repository is configured with `git config fetch.prune true`, which means every `git fetch` automatically removes stale remote tracking branches (branches that were deleted on GitHub).
+
+**Manual Local Branch Cleanup:**
+
+After a PR is merged, the remote branch is automatically deleted by GitHub, but your local branch remains. Use the Makefile targets to clean up:
+
+```bash
+# Check branch status
+make git-status-branches
+
+# Prune local merged branches (with confirmation)
+make git-prune-local
+
+# Prune remote tracking refs
+make git-prune-remote-refs
+
+# Full cleanup (both remote refs and local branches)
+make git-cleanup
+```
+
+**Typical Workflow After PR Merge:**
+
+1. GitHub auto-deletes remote branch (when PR merged)
+1. Run `git fetch --prune` to update local refs (automatic with fetch.prune = true)
+1. Run `make git-prune-local` to delete local merged branch
+1. Or run `make git-cleanup` for complete cleanup
+
+**Safety Features:**
+
+- Only deletes branches fully merged to main (`git branch -d`)
+- Never deletes the main branch
+- Never deletes your current branch
+- Confirmation prompt before deletion
+- Unmerged branches are never deleted
+
+**Recommended Cleanup Schedule:**
+
+- **After each PR merge**: `git fetch --prune` (happens automatically)
+- **Weekly**: `make git-status-branches` to check status
+- **Monthly**: `make git-cleanup` for full cleanup
+- **Before releases**: Full repository cleanup
+
+**Recovery from Accidental Deletion:**
+
+If you accidentally delete a branch, you can recover it within 30 days:
+
+```bash
+# Find the commit hash
+git reflog
+
+# Recreate the branch
+git branch branch-name <commit-hash>
+```
+
 ### Making Changes
 
 1. **Write your code** following the project's style guidelines
