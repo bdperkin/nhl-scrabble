@@ -36,20 +36,23 @@ Each task is assigned a priority:
 
 **Total Effort**: 0 hours
 
-### Security (0 tasks active, 7 documented, 7 completed)
+### Security (2 tasks active, 9 documented, 7 completed)
 
-| ID  | Title                            | Priority | Effort | Issue | Status      |
-| --- | -------------------------------- | -------- | ------ | ----- | ----------- |
-| 002 | Comprehensive Input Validation   | MEDIUM   | 3-4h   | #129  | ✅ Complete |
-| 003 | SSRF Protection                  | MEDIUM   | 2-3h   | #130  | ✅ Complete |
-| 004 | Rate Limit Enforcement           | MEDIUM   | 3-4h   | #131  | ✅ Complete |
-| 005 | DoS Prevention                   | LOW      | 2-3h   | #134  | ✅ Complete |
-| 006 | SSL/TLS Certificate Verification | LOW      | 1-2h   | #135  | ✅ Complete |
-| 007 | PII Logging Prevention           | LOW      | 2-3h   | #136  | ✅ Complete |
-| 008 | Config Injection Protection      | LOW      | 2-3h   | #137  | ✅ Complete |
+| ID  | Title                             | Priority | Effort | Issue | Status      |
+| --- | --------------------------------- | -------- | ------ | ----- | ----------- |
+| 002 | Comprehensive Input Validation    | MEDIUM   | 3-4h   | #129  | ✅ Complete |
+| 003 | SSRF Protection                   | MEDIUM   | 2-3h   | #130  | ✅ Complete |
+| 004 | Rate Limit Enforcement            | MEDIUM   | 3-4h   | #131  | ✅ Complete |
+| 005 | DoS Prevention                    | LOW      | 2-3h   | #134  | ✅ Complete |
+| 006 | SSL/TLS Certificate Verification  | LOW      | 1-2h   | #135  | ✅ Complete |
+| 007 | PII Logging Prevention            | LOW      | 2-3h   | #136  | ✅ Complete |
+| 008 | Config Injection Protection       | LOW      | 2-3h   | #137  | ✅ Complete |
+| 009 | Add Bandit Security Linting       | HIGH     | 1-2h   | #239  |             |
+| 010 | Add Safety Vulnerability Scanning | HIGH     | 1-2h   | #240  |             |
 
-**Documented Effort**: 17-22.5 hours
-**Completed**: All tasks complete! (Task 002: Input Validation 3.5h - PR #196, Task 003: SSRF Protection 1.25h - PR #181, Task 004: Rate Limit Enforcement - PR #197, Task 005: DoS Prevention - PR #198, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200, Task 008: Config Injection Protection - PR #201)
+**Documented Effort**: 19-26.5 hours
+**Remaining Effort**: 2-4h
+**Completed**: 7 tasks complete! (Task 002: Input Validation 3.5h - PR #196, Task 003: SSRF Protection 1.25h - PR #181, Task 004: Rate Limit Enforcement - PR #197, Task 005: DoS Prevention - PR #198, Task 006: SSL/TLS Verification 1.5h - PR #199, Task 007: PII Logging Prevention 2.5h - PR #200, Task 008: Config Injection Protection - PR #201)
 
 ### Optimization (0 tasks active, 11 documented, 11 completed)
 
@@ -155,21 +158,22 @@ Each task is assigned a priority:
 | 011 | Dependency Synchronization and Automation | MEDIUM   | 3-4h     | #226  |
 | 012 | Audit and Standardize CLI Options         | MEDIUM   | 2-4h     | #236  |
 | 013 | Perform Project-Wide Documentation Audit  | MEDIUM   | 4-6h     | #237  |
+| 014 | Add Refurb Modernization Linting          | MEDIUM   | 2-3h     | #241  |
 
-**Documented Effort**: 44.5-62 hours remaining
+**Documented Effort**: 46.5-65 hours remaining
 
 **Completed**: 3 hours (Task 001: Consolidate Report Classes 3h - PR #184)
 
 ## Total Project Roadmap
 
-**Total Tasks**: 110 tasks (40 active, 70 completed)
-**Remaining Effort**: ~189.75-287.5 hours (major milestones achieved!)
+**Total Tasks**: 113 tasks (43 active, 70 completed)
+**Remaining Effort**: ~195.75-296.5 hours (major milestones achieved!)
 **Completed Effort**: ~200+ hours
 
 ### By Category
 
 - **Bug Fixes**: 0 active (0 completed in tasks/)
-- **Security**: 0 active (7 completed - 100% complete! 🎉)
+- **Security**: 2 active (7 completed), 2-4h remaining
 - **Optimization**: 0 active (11 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 11 active (9 completed), 16.25-27h remaining
 - **Testing**: 3 active (16-27h remaining)
@@ -177,16 +181,16 @@ Each task is assigned a priority:
   - Web interface: 10-15h remaining (4 of 6 subtasks completed)
   - Standalone features: 94-144h
   - Automation: 4-6h
-- **Refactoring**: 12 active (1 completed), 44.5-62h remaining
+- **Refactoring**: 13 active (1 completed), 46.5-65h remaining
 
 ### By Priority
 
-- **MEDIUM**: 5 tasks remaining (~27-41h) - Web interface completion + repository cleanup + Python version support
+- **HIGH**: 2 tasks remaining (~2-4h) - Security scanning tools (bandit, safety)
+- **MEDIUM**: 6 tasks remaining (~31-48h) - Web interface completion + repository cleanup + Python version support + modernization tools
 - **LOW**: 20 tasks remaining (~115.75-174.5h) - Long-term improvements
 
 ### Major Achievements
 
-🎉 **All Security Tasks Complete** (7/7) - Project is secure!
 🎉 **All Optimization Tasks Complete** (11/11) - 5-10x performance improvement!
 
 ### Completed Tasks
