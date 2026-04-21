@@ -121,14 +121,14 @@ class SeasonComparison:
 
             # Sort teams by total score
             sorted_teams = sorted(
-                teams.items(), key=lambda x: (x[1].total, x[1].avg), reverse=True
+                teams.items(), key=lambda x: (x[1].total, x[1].avg_per_player), reverse=True
             )[:5]
 
             lines.append(f"\n{season} Top 5:")
             for rank, (abbrev, team) in enumerate(sorted_teams, 1):
                 lines.append(
                     f"  {rank}. {abbrev:4} - {team.total:6,} points "
-                    f"({team.player_count} players, avg: {team.avg:.2f})"
+                    f"({team.player_count} players, avg: {team.avg_per_player:.2f})"
                 )
 
         lines.append("")
