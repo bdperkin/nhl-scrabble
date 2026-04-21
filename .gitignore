@@ -216,6 +216,7 @@ local_settings.py
 .nhl_cache.sqlite
 .nhl_cache.sqlite-shm
 .nhl_cache.sqlite-wal
+.nhl_cache.sqlite-journal
 
 # Database files
 *.sqlite3
