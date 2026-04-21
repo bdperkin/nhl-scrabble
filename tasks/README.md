@@ -199,7 +199,7 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 142 tasks (54 active, 88 completed)
+**Total Tasks**: 142 tasks (52 active, 90 completed)
 **Remaining Effort**: ~278.6-414.5 hours
 **Completed Effort**: ~227.0+ hours
 
