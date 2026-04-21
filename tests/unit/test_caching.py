@@ -18,42 +18,30 @@ class TestCacheConfiguration:
 
     def test_cache_enabled_creates_cached_session(self) -> None:
         """Test that caching creates a CachedSession."""
-        client = NHLApiClient(cache_enabled=True)
-        try:
+        with NHLApiClient(cache_enabled=True) as client:
             assert client.cache_enabled
             assert isinstance(client.session, requests_cache.CachedSession)
             assert hasattr(client.session, "cache")
-        finally:
-            client.close()
 
     def test_cache_disabled_creates_regular_session(self) -> None:
         """Test that disabled caching creates regular Session."""
-        client = NHLApiClient(cache_enabled=False)
-        try:
+        with NHLApiClient(cache_enabled=False) as client:
             assert not client.cache_enabled
             assert isinstance(client.session, requests.Session)
             assert not isinstance(client.session, requests_cache.CachedSession)
-        finally:
-            client.close()
 
     def test_cache_expiry_configuration(self) -> None:
         """Test that cache expiry is configurable."""
         custom_expiry = 7200  # 2 hours
-        client = NHLApiClient(cache_expiry=custom_expiry)
-        try:
+        with NHLApiClient(cache_expiry=custom_expiry) as client:
             assert client.cache_expiry == custom_expiry
-        finally:
-            client.close()
 
     def test_cache_backend_is_sqlite(self) -> None:
         """Test that cache uses SQLite backend."""
-        client = NHLApiClient(cache_enabled=True)
-        try:
+        with NHLApiClient(cache_enabled=True) as client:
             # Cache file should be .nhl_cache.sqlite
             # requests-cache creates it in current directory
             assert isinstance(client.session, requests_cache.CachedSession)
-        finally:
-            client.close()
 
 
 class TestCacheHitDetection:
@@ -61,22 +49,16 @@ class TestCacheHitDetection:
 
     def test_is_url_cached_returns_false_when_disabled(self) -> None:
         """Test _is_url_cached returns False when caching disabled."""
-        client = NHLApiClient(cache_enabled=False)
-        try:
+        with NHLApiClient(cache_enabled=False) as client:
             url = "https://api-web.nhle.com/v1/standings/now"
             assert not client._is_url_cached(url)
-        finally:
-            client.close()
 
     def test_is_url_cached_returns_false_for_uncached_url(self) -> None:
         """Test _is_url_cached returns False for uncached URL."""
-        client = NHLApiClient(cache_enabled=True)
-        try:
+        with NHLApiClient(cache_enabled=True) as client:
             client.clear_cache()  # Ensure empty cache
             url = "https://api-web.nhle.com/v1/standings/now"
             assert not client._is_url_cached(url)
-        finally:
-            client.close()
 
     @patch("requests.Session.get")
     def test_is_url_cached_returns_true_after_caching(self, mock_get: Mock) -> None:
@@ -88,8 +70,7 @@ class TestCacheHitDetection:
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
 
-        client = NHLApiClient(cache_enabled=True)
-        try:
+        with NHLApiClient(cache_enabled=True) as client:
             client.clear_cache()
 
             url = "https://api-web.nhle.com/v1/standings/now"
@@ -103,19 +84,14 @@ class TestCacheHitDetection:
             # Note: Actual caching depends on requests-cache internals
             # This test verifies the method doesn't error
             assert isinstance(is_cached, bool)
-        finally:
-            client.close()
 
     def test_is_url_cached_handles_no_cache_attribute(self) -> None:
         """Test _is_url_cached handles session without cache attribute."""
-        client = NHLApiClient(cache_enabled=False)
-        try:
+        with NHLApiClient(cache_enabled=False) as client:
             # Regular session doesn't have cache attribute
             url = "https://api-web.nhle.com/v1/standings/now"
             result = client._is_url_cached(url)
             assert result is False
-        finally:
-            client.close()
 
 
 class TestCacheClearing:
@@ -129,8 +105,7 @@ class TestCacheClearing:
         os.chdir(tmp_path)
 
         try:
-            client = NHLApiClient(cache_enabled=True)
-            try:
+            with NHLApiClient(cache_enabled=True) as client:
                 # Clear cache to ensure clean state
                 client.clear_cache()
 
@@ -139,8 +114,6 @@ class TestCacheClearing:
 
                 # Clear again - should be safe
                 client.clear_cache()
-            finally:
-                client.close()
         finally:
             os.chdir(original_dir)
             cache_file = tmp_path / ".nhl_cache.sqlite"
@@ -149,25 +122,19 @@ class TestCacheClearing:
 
     def test_clear_cache_when_disabled_is_safe(self) -> None:
         """Test that clear_cache handles disabled caching gracefully."""
-        client = NHLApiClient(cache_enabled=False)
-        try:
+        with NHLApiClient(cache_enabled=False) as client:
             # Should not raise exception
             client.clear_cache()
             # If we get here, test passes
             assert True
-        finally:
-            client.close()
 
     def test_clear_cache_logs_success(self) -> None:
         """Test that clear_cache does not raise exception."""
-        client = NHLApiClient(cache_enabled=True)
-        try:
+        with NHLApiClient(cache_enabled=True) as client:
             # Should not raise exception
             client.clear_cache()
             # If we get here, test passes
             assert True
-        finally:
-            client.close()
 
 
 class TestCacheExpiration:
@@ -183,16 +150,13 @@ class TestCacheExpiration:
 
         try:
             # Create client with very short TTL
-            client = NHLApiClient(cache_enabled=True, cache_expiry=1)
-            try:
+            with NHLApiClient(cache_enabled=True, cache_expiry=1) as client:
                 # Verify expiry is set correctly
                 assert client.cache_expiry == 1
 
                 # Cache should be enabled with short expiry
                 assert client.cache_enabled
                 assert isinstance(client.session, requests_cache.CachedSession)
-            finally:
-                client.close()
         finally:
             os.chdir(original_dir)
             # Cleanup cache file
@@ -245,13 +209,10 @@ class TestCacheEdgeCases:
         os.chdir(tmp_path)
 
         try:
-            client = NHLApiClient(cache_enabled=True)
-            try:
+            with NHLApiClient(cache_enabled=True) as client:
                 # Cache file should exist after creating client
                 # requests-cache creates it lazily on first request
                 assert isinstance(client.session, requests_cache.CachedSession)
-            finally:
-                client.close()
         finally:
             os.chdir(original_dir)
 
@@ -263,16 +224,13 @@ class TestCacheEdgeCases:
         os.chdir(tmp_path)
 
         try:
-            client = NHLApiClient(cache_enabled=True)
-            try:
+            with NHLApiClient(cache_enabled=True) as client:
                 # URL with query params should be cacheable
                 url = "https://api-web.nhle.com/v1/standings/20222023?include=metadata"
 
                 # Should not raise exception
                 is_cached = client._is_url_cached(url)
                 assert isinstance(is_cached, bool)
-            finally:
-                client.close()
         finally:
             os.chdir(original_dir)
 
@@ -285,19 +243,16 @@ class TestCacheEdgeCases:
 
         try:
             # Create multiple clients sharing same cache
-            client1 = NHLApiClient(cache_enabled=True)
-            client2 = NHLApiClient(cache_enabled=True)
-
-            try:
+            with (
+                NHLApiClient(cache_enabled=True) as client1,
+                NHLApiClient(cache_enabled=True) as client2,
+            ):
                 # Both can clear cache without issues
                 client1.clear_cache()
                 client2.clear_cache()
 
                 # Verify no exceptions
                 assert True
-            finally:
-                client1.close()
-                client2.close()
         finally:
             os.chdir(original_dir)
             cache_file = tmp_path / ".nhl_cache.sqlite"
