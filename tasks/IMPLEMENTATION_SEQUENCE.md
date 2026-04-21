@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-21
-**Total Tasks**: 61 active tasks
-**Estimated Effort**: 245.2-361.5 hours
+**Total Tasks**: 60 active tasks
+**Estimated Effort**: 242.2-357.5 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -36,17 +36,16 @@ ______________________________________________________________________
 
 ## Phase 2: Test Coverage - User Interfaces (MEDIUM Priority)
 
-**Total Effort**: 5-7 hours
+**Total Effort**: 2-3 hours
 **Focus**: Test user-facing components
 **Dependencies**: None (but benefits from Phase 1 patterns)
 
 ```bash
 # User Interface Testing
-/implement-task testing/005-web-interface-test-coverage.md           # 3-4h, Issue #254
 /implement-task testing/006-interactive-mode-test-coverage.md        # 2-3h, Issue #255
 ```
 
-**Rationale**: Web interface is a major feature. Interactive mode is user-facing. Order: web → interactive.
+**Rationale**: Interactive mode is user-facing and needs comprehensive testing.
 
 ______________________________________________________________________
 
@@ -460,16 +459,15 @@ ______________________________________________________________________
 
 ## Quick Reference
 
-### Next 4 Tasks (Immediate Work)
+### Next 3 Tasks (Immediate Work)
 
 ```bash
 /implement-task testing/007-config-logging-test-coverage.md          # 1-2h, MEDIUM
 /implement-task testing/001-codecov-test-analytics.md                # 2-3h, MEDIUM
-/implement-task testing/005-web-interface-test-coverage.md           # 3-4h, MEDIUM
 /implement-task testing/006-interactive-mode-test-coverage.md        # 2-3h, MEDIUM
 ```
 
-**Total**: 8-12 hours of high-value work
+**Total**: 5-8 hours of high-value work
 
 ### Quick Wins (Under 1 hour each)
 
@@ -490,9 +488,9 @@ ______________________________________________________________________
 ## Notes
 
 **Last Updated**: 2026-04-21
-**Active Tasks**: 61
-**Completed Tasks**: 81
-**Completion Rate**: 57.0% (81/142)
+**Active Tasks**: 60
+**Completed Tasks**: 82
+**Completion Rate**: 57.7% (82/142)
 
 **Phase Distribution**:
 

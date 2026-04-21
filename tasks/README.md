@@ -117,7 +117,7 @@ Each task is assigned a priority:
 **Remaining Effort**: 14-23h
 **Completed**: 2 tasks (Task 003: Caching Layer Tests 3h - PR #284, Task 004: CLI Coverage 2.5h - PR #270)
 
-**Note**: Current coverage ~87% overall (up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. CLI module coverage improved from 50% to 75.43%.
+**Note**: Current coverage ~87% overall (up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Module improvements: CLI 50%→75.43%, Web 30%→94.30%.
 
 ### New Features (15 tasks active, 19 documented, 4 completed)
 
@@ -180,8 +180,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 142 tasks (61 active, 81 completed)
-**Remaining Effort**: ~245.2-361.5 hours
+**Total Tasks**: 142 tasks (60 active, 82 completed)
+**Remaining Effort**: ~242.2-357.5 hours
 **Completed Effort**: ~224.5+ hours
 
 ### By Category
@@ -190,9 +190,9 @@ Each task is assigned a priority:
 - **Security**: 0 active (14 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (13 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 10 active (11 completed), 15.25-25.5h remaining
-- **Testing**: 7 active (14 completed), 25.0-39.0h remaining
+- **Testing**: 6 active (15 completed), 22.0-35.0h remaining
   - Parent task (002): Broken into 8 sub-tasks
-  - Sub-tasks (004-011): Coverage improvement by module
+  - Sub-tasks (004-011): Coverage improvement by module (2 completed: 004, 005)
   - Independent task (001): Analytics (active)
 - **New Features**: 27 active (4 completed), 156.0-229.0h remaining
   - Parent tasks (2): i18n/l10n (016), release automation (019)
