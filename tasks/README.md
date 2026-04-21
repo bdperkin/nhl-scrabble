@@ -104,7 +104,7 @@ Each task is assigned a priority:
 **Remaining Effort**: 15.25-25.5h
 **Completed**: 11 of 21 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
-### Testing (0 tasks active, 6 documented, 6 completed)
+### Testing (5 tasks active, 21 documented, 16 completed)
 
 | ID  | Title                                   | Priority | Effort | Issue | Status      |
 | --- | --------------------------------------- | -------- | ------ | ----- | ----------- |
@@ -114,12 +114,17 @@ Each task is assigned a priority:
 | 004 | CLI Module Test Coverage                | MEDIUM   | 2.5h   | #253  | ✅ Complete |
 | 005 | Web Interface Test Coverage             | MEDIUM   | 3-4h   | #254  | ✅ Complete |
 | 006 | Interactive Mode Test Coverage          | MEDIUM   | 2-3h   | #255  | ✅ Complete |
+| 007 | Config/Logging Test Coverage            | MEDIUM   | 1-2h   | #256  | ✅ Complete |
+| 008 | Reports Module Test Coverage            | MEDIUM   | 2-3h   | #257  |             |
+| 009 | Edge Cases and Error Path Testing       | MEDIUM   | 2-3h   | #258  |             |
+| 010 | Integration and End-to-End Testing      | MEDIUM   | 2-3h   | #259  |             |
+| 011 | Coverage Audit and Finalization         | MEDIUM   | 2-3h   | #260  |             |
 
-**Documented Effort**: 25-35.5 hours
-**Remaining Effort**: 12-20h (task 002 only)
-**Completed**: 5 tasks (Task 001: Codecov Analytics 2.5h - PR #272, Task 003: Caching Layer Tests 3h - PR #284, Task 004: CLI Coverage 2.5h - PR #270, Task 005: Web Interface Coverage 6h - PR #175, #212, #174, Task 006: Interactive Mode Coverage 4h - PR #288)
+**Documented Effort**: 31-46 hours
+**Remaining Effort**: 20-32h (tasks 002, 008-011)
+**Completed**: 6 tasks + 10 additional test infrastructure tasks (Task 001: Codecov Analytics 2.5h - PR #272, Task 003: Caching Layer Tests 3h - PR #284, Task 004: CLI Coverage 2.5h - PR #270, Task 005: Web Interface Coverage 6h - PR #175, #212, #174, Task 006: Interactive Mode Coverage 4h - PR #288, Task 007: Config/Logging Coverage 1.5h - PR #271, plus pytest plugins)
 
-**Note**: Current coverage ~87% overall (up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Module improvements: CLI 50%→75.43%, Web 30%→94.30%, Interactive Shell 73.59%→91.07%.
+**Note**: Current coverage ~87% overall (up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Module improvements: CLI 50%→75.43%, Web 30%→94.30%, Interactive Shell 73.59%→91.07%, Config/Logging 85%→97%.
 
 ### New Features (15 tasks active, 19 documented, 4 completed)
 
@@ -182,9 +187,9 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 142 tasks (58 active, 84 completed)
-**Remaining Effort**: ~234.2-349.5 hours
-**Completed Effort**: ~232.5+ hours
+**Total Tasks**: 142 tasks (59 active, 83 completed)
+**Remaining Effort**: ~242.2-357.5 hours
+**Completed Effort**: ~224.5+ hours
 
 ### By Category
 
@@ -192,9 +197,9 @@ Each task is assigned a priority:
 - **Security**: 0 active (14 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (13 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 10 active (11 completed), 15.25-25.5h remaining
-- **Testing**: 1 active (5 completed), 12.0-20.0h remaining
-  - Parent task (002): Broken into 8 sub-tasks
-  - Sub-tasks (004-006): Coverage improvement by module (3 completed: 004, 005, 006)
+- **Testing**: 5 active (16 completed), 20.0-32.0h remaining
+  - Parent task (002): Broken into 8 sub-tasks (4 active: 008-011)
+  - Sub-tasks (004-007): Coverage improvement by module (4 completed: 004, 005, 006, 007)
   - Independent task (001): Codecov analytics (completed)
 - **New Features**: 27 active (4 completed), 156.0-229.0h remaining
   - Parent tasks (2): i18n/l10n (016), release automation (019)
