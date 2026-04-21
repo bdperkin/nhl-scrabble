@@ -473,3 +473,200 @@ class TestDisplayMethods:
         with patch.object(shell_with_data.console, "print"):
             shell_with_data._display_team_list(mock_team_scores, "Test Teams")
             # Should not raise
+
+
+# Additional tests for improved coverage
+
+
+class TestFetchDataCoverage:
+    """Test fetch_data method coverage."""
+
+    @patch("nhl_scrabble.api.nhl_client.NHLApiClient")
+    @patch("nhl_scrabble.processors.team_processor.TeamProcessor")
+    @patch("nhl_scrabble.processors.playoff_calculator.PlayoffCalculator")
+    @patch("nhl_scrabble.scoring.scrabble.ScrabbleScorer")
+    def test_fetch_data_populates_data_structure(
+        self,
+        mock_scorer: Mock,
+        mock_playoff: Mock,
+        mock_processor: Mock,
+        mock_api: Mock,
+        mock_team_scores: list[TeamScore],
+    ) -> None:
+        """Test fetch_data creates expected data structure."""
+        shell = InteractiveShell()
+
+        # Setup mocks
+        mock_api.return_value.__enter__.return_value = Mock()
+        processor_instance = Mock()
+        mock_processor.return_value = processor_instance
+
+        teams_dict = {t.abbrev: t for t in mock_team_scores}
+        all_players = [p for t in mock_team_scores for p in t.players]
+        processor_instance.process_all_teams.return_value = (teams_dict, all_players, [])
+
+        playoff_instance = Mock()
+        mock_playoff.return_value = playoff_instance
+        playoff_instance.calculate_playoff_standings.return_value = {
+            "Eastern": [mock_team_scores[0]],
+            "Western": [mock_team_scores[1]],
+        }
+
+        shell.fetch_data()
+
+        assert shell.data is not None
+        assert "teams" in shell.data
+        assert "eastern" in shell.data
+        assert "western" in shell.data
+
+
+class TestRunMethodCoverage:
+    """Test run() method coverage."""
+
+    def test_run_exits_on_exit_command(self) -> None:
+        """Test run exits on exit command."""
+        shell = InteractiveShell()
+        shell.data = {"teams": []}
+
+        with (
+            patch.object(shell.session, "prompt", return_value="exit"),
+            patch.object(shell.console, "print"),
+        ):
+            shell.run()
+
+    def test_run_executes_help_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes help command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["help", "exit"]),
+            patch.object(shell_with_data, "cmd_help") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_show_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes show command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["show team TOR", "exit"]),
+            patch.object(shell_with_data, "cmd_show") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_top_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes top command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["top", "exit"]),
+            patch.object(shell_with_data, "cmd_top") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_bottom_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes bottom command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["bottom", "exit"]),
+            patch.object(shell_with_data, "cmd_bottom") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_compare_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes compare command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["compare A B", "exit"]),
+            patch.object(shell_with_data, "cmd_compare") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_filter_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes filter command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["filter div A", "exit"]),
+            patch.object(shell_with_data, "cmd_filter") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_search_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes search command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["search M", "exit"]),
+            patch.object(shell_with_data, "cmd_search") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_standings_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes standings command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["standings", "exit"]),
+            patch.object(shell_with_data, "cmd_standings") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_playoff_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes playoff command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["playoff", "exit"]),
+            patch.object(shell_with_data, "cmd_playoff") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_stats_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes stats command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["stats", "exit"]),
+            patch.object(shell_with_data, "cmd_stats") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_executes_refresh_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run executes refresh command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["refresh", "exit"]),
+            patch.object(shell_with_data, "cmd_refresh") as mock_cmd,
+        ):
+            shell_with_data.run()
+            mock_cmd.assert_called()
+
+    def test_run_handles_unknown_command(self, shell_with_data: InteractiveShell) -> None:
+        """Test run handles unknown command."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["unknown", "exit"]),
+            patch.object(shell_with_data.console, "print") as mock_print,
+        ):
+            shell_with_data.run()
+            assert any("Unknown command" in str(call) for call in mock_print.call_args_list)
+
+    def test_run_handles_no_data(self) -> None:
+        """Test run handles no data loaded."""
+        shell = InteractiveShell()
+
+        with (
+            patch.object(shell.session, "prompt", side_effect=["show team TOR", "exit"]),
+            patch.object(shell.console, "print") as mock_print,
+        ):
+            shell.run()
+            assert any("No data loaded" in str(call) for call in mock_print.call_args_list)
+
+    def test_run_handles_keyboard_interrupt(self, shell_with_data: InteractiveShell) -> None:
+        """Test run continues on Ctrl+C."""
+        with (
+            patch.object(
+                shell_with_data.session, "prompt", side_effect=[KeyboardInterrupt(), "exit"]
+            ),
+            patch.object(shell_with_data.console, "print"),
+        ):
+            shell_with_data.run()
+
+    def test_run_handles_eof(self, shell_with_data: InteractiveShell) -> None:
+        """Test run exits on EOF."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=EOFError()),
+            patch.object(shell_with_data.console, "print"),
+        ):
+            shell_with_data.run()
