@@ -47,6 +47,12 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
 
 - 🏒 **Live NHL Data** - Fetches current roster data directly from the official NHL API
 - 🌐 **Web Interface** - FastAPI-powered web server with auto-generated API documentation
+  - **Interactive Dashboard** - Modern, responsive UI with real-time analysis
+  - **Data Visualizations** - Chart.js-powered graphs and charts
+  - **HTMX Integration** - Dynamic updates without page reloads
+  - **REST API** - Programmatic access with OpenAPI documentation
+  - **Mobile-Friendly** - Fully responsive design for all devices
+  - **Accessibility** - WCAG 2.1 AA compliant with keyboard navigation and screen reader support
 - 📊 **Comprehensive Reports** - Multiple report types including:
   - Conference standings with total and average scores
   - Division standings breakdown
@@ -56,10 +62,79 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
 - 📈 **Progress Tracking** - Real-time progress bars show operation status (API fetching, scoring, report generation)
 - 🎯 **Flexible Output** - Text, JSON, or HTML format output with responsive design
 - ⚙️ **Configurable** - Customize via environment variables or command-line options
-- 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules
+- 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules, including full web interface integration tests
 - 📦 **Modern Python** - Uses type hints, dataclasses, and follows best practices
 - 🛠️ **Developer-Friendly** - Self-documenting Makefile with 55 targets for all development tasks
 - ⚡ **Lightning Fast** - Optional uv support for 10-100x faster package installation
+- 🔒 **Production-Ready** - Security headers, CORS configuration, caching, and deployment guides for nginx, Docker, and cloud platforms
+
+## Screenshots
+
+### Web Interface
+
+The NHL Scrabble web interface provides a modern, interactive experience for analyzing player name scores.
+
+**Main Dashboard**
+
+- Clean, responsive design with intuitive navigation
+- One-click analysis with configurable options (top players, team players, caching)
+- Real-time loading indicators during NHL API fetching (~30 seconds)
+- Mobile-friendly hamburger menu for smaller screens
+
+**Analysis Results**
+
+- **Top Players Table** - Sortable table showing highest-scoring players across all teams with click-to-sort functionality
+- **Team Standings** - Complete team rankings with total scores, averages, and player counts
+- **Division Standings** - Teams grouped by division (Atlantic, Metropolitan, Central, Pacific)
+- **Conference Standings** - Eastern vs Western conference breakdown
+- **Playoff Bracket** - Mock playoff matchups based on Scrabble scores with seed indicators (y, x, z, p, e)
+- **Statistics Summary** - Overall stats including total players, highest/lowest scores, team leaders
+
+**Interactive Features**
+
+- **Data Visualizations** - Chart.js charts showing score distribution, team comparison, and conference breakdown
+- **Export Options** - Download results as JSON, CSV, or PDF
+- **Table Sorting** - Click any column header to sort (name, score, team)
+- **Responsive Charts** - Interactive tooltips and legends on all visualizations
+
+**API Documentation**
+
+- **Swagger UI** (`/docs`) - Interactive API explorer with try-it-now functionality
+- **ReDoc** (`/redoc`) - Clean, organized API reference documentation
+- **Health Check** (`/health`) - JSON endpoint showing service status and version
+
+### CLI Output
+
+**Text Output** (Default)
+
+```
+🏒 NHL SCRABBLE SCORE ANALYSIS 🏒
+
+TOP 20 PLAYERS BY SCRABBLE SCORE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Alexander Ovechkin (WSH)    45 points
+2. Zdeno Chara (BOS)           42 points
+...
+```
+
+**JSON Output** (Machine-Readable)
+
+```json
+{
+  "top_players": [...],
+  "team_standings": [...],
+  "division_standings": {...},
+  "conference_standings": {...},
+  "playoff_bracket": {...},
+  "stats": {...}
+}
+```
+
+**HTML Output** (Browser)
+
+- Fully styled HTML report with embedded CSS
+- Printable format for sharing
+- Same comprehensive data as text output
 
 ## Installation
 

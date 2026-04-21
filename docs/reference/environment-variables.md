@@ -4,19 +4,26 @@ Complete list of all environment variables supported by NHL Scrabble.
 
 ## Quick Reference
 
-| Variable                        | Type   | Default | Description              |
-| ------------------------------- | ------ | ------- | ------------------------ |
-| `NHL_SCRABBLE_API_TIMEOUT`      | int    | 10      | API timeout (seconds)    |
-| `NHL_SCRABBLE_API_RETRIES`      | int    | 3       | Retry attempts           |
-| `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float  | 0.3     | Request delay (seconds)  |
-| `NHL_SCRABBLE_MAX_CONCURRENT`   | int    | 5       | Concurrent API requests  |
-| `NHL_SCRABBLE_CACHE_ENABLED`    | bool   | true    | Enable caching           |
-| `NHL_SCRABBLE_CACHE_EXPIRY`     | int    | 3600    | Cache duration (seconds) |
-| `NHL_SCRABBLE_OUTPUT_FORMAT`    | string | text    | Output format            |
-| `NHL_SCRABBLE_TOP_PLAYERS`      | int    | 20      | Top players count        |
-| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int    | 5       | Per-team players         |
-| `NHL_SCRABBLE_VERBOSE`          | bool   | false   | Verbose logging          |
-| `NHL_SCRABBLE_SANITIZE_LOGS`    | bool   | true    | Sanitize secrets         |
+| Variable                        | Type   | Default                   | Description              |
+| ------------------------------- | ------ | ------------------------- | ------------------------ |
+| `NHL_SCRABBLE_API_TIMEOUT`      | int    | 10                        | API timeout (seconds)    |
+| `NHL_SCRABBLE_API_RETRIES`      | int    | 3                         | Retry attempts           |
+| `NHL_SCRABBLE_RATE_LIMIT_DELAY` | float  | 0.3                       | Request delay (seconds)  |
+| `NHL_SCRABBLE_MAX_CONCURRENT`   | int    | 5                         | Concurrent API requests  |
+| `NHL_SCRABBLE_CACHE_ENABLED`    | bool   | true                      | Enable caching           |
+| `NHL_SCRABBLE_CACHE_EXPIRY`     | int    | 3600                      | Cache duration (seconds) |
+| `NHL_SCRABBLE_OUTPUT_FORMAT`    | string | text                      | Output format            |
+| `NHL_SCRABBLE_TOP_PLAYERS`      | int    | 20                        | Top players count        |
+| `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int    | 5                         | Per-team players         |
+| `NHL_SCRABBLE_VERBOSE`          | bool   | false                     | Verbose logging          |
+| `NHL_SCRABBLE_SANITIZE_LOGS`    | bool   | true                      | Sanitize secrets         |
+| `NHL_SCRABBLE_WEB_HOST`         | string | 127.0.0.1                 | Web server host          |
+| `NHL_SCRABBLE_WEB_PORT`         | int    | 8000                      | Web server port          |
+| `NHL_SCRABBLE_WEB_WORKERS`      | int    | 4                         | Gunicorn workers         |
+| `NHL_SCRABBLE_CORS_ORIGINS`     | string | http://localhost:8000,... | Allowed CORS origins     |
+| `NHL_SCRABBLE_CACHE_TTL`        | int    | 3600                      | Web cache TTL (seconds)  |
+| `NHL_SCRABBLE_LOG_LEVEL`        | string | INFO                      | Logging level            |
+| `NHL_SCRABBLE_LOG_FORMAT`       | string | text                      | Log format (text/json)   |
 
 ## API Configuration
 
@@ -175,6 +182,123 @@ export NHL_SCRABBLE_VERBOSE=true
 
 ```bash
 export NHL_SCRABBLE_SANITIZE_LOGS=false  # Only for debugging
+```
+
+### NHL_SCRABBLE_LOG_LEVEL
+
+**Type**: String (DEBUG|INFO|WARNING|ERROR|CRITICAL)
+**Default**: INFO
+**Description**: Logging level for application logs.
+
+**Example**:
+
+```bash
+export NHL_SCRABBLE_LOG_LEVEL=DEBUG  # Verbose logging
+export NHL_SCRABBLE_LOG_LEVEL=WARNING  # Only warnings and errors
+```
+
+### NHL_SCRABBLE_LOG_FORMAT
+
+**Type**: String (text|json)
+**Default**: text
+**Description**: Log output format. Use `json` for structured logging in production.
+
+**Example**:
+
+```bash
+export NHL_SCRABBLE_LOG_FORMAT=json  # Structured logs for parsing
+```
+
+## Web Server Configuration
+
+### NHL_SCRABBLE_WEB_HOST
+
+**Type**: String
+**Default**: 127.0.0.1
+**Description**: Host address for web server. Use `0.0.0.0` to bind to all interfaces.
+
+**Security Note**: Only use `0.0.0.0` behind a reverse proxy (nginx, Caddy) with proper firewall rules.
+
+**Example**:
+
+```bash
+# Development (local only)
+export NHL_SCRABBLE_WEB_HOST=127.0.0.1
+
+# Production (behind reverse proxy)
+export NHL_SCRABBLE_WEB_HOST=0.0.0.0
+```
+
+### NHL_SCRABBLE_WEB_PORT
+
+**Type**: Integer
+**Default**: 8000
+**Description**: Port for web server to listen on.
+
+**Example**:
+
+```bash
+export NHL_SCRABBLE_WEB_PORT=5000
+```
+
+### NHL_SCRABBLE_WEB_WORKERS
+
+**Type**: Integer
+**Default**: 4
+**Description**: Number of Gunicorn worker processes for production.
+
+**Recommended Formula**: `(2 * CPU_COUNT) + 1`
+
+**Example**:
+
+```bash
+# 2 CPU cores → 5 workers
+export NHL_SCRABBLE_WEB_WORKERS=5
+
+# 4 CPU cores → 9 workers
+export NHL_SCRABBLE_WEB_WORKERS=9
+```
+
+### NHL_SCRABBLE_CORS_ORIGINS
+
+**Type**: String (comma-separated URLs)
+**Default**: `http://localhost:8000,http://127.0.0.1:8000`
+**Description**: Allowed CORS origins for cross-origin requests.
+
+**Security Note**: In production, only list your actual domain(s).
+
+**Example**:
+
+```bash
+# Development
+export NHL_SCRABBLE_CORS_ORIGINS="http://localhost:8000,http://localhost:3000"
+
+# Production
+export NHL_SCRABBLE_CORS_ORIGINS="https://yourdomain.com,https://www.yourdomain.com"
+
+# Multiple domains
+export NHL_SCRABBLE_CORS_ORIGINS="https://app.example.com,https://api.example.com"
+```
+
+### NHL_SCRABBLE_CACHE_TTL
+
+**Type**: Integer
+**Default**: 3600
+**Description**: Time-to-live for web interface analysis cache (in seconds).
+
+**Note**: This is separate from NHL API cache (`NHL_SCRABBLE_CACHE_EXPIRY`). Web cache stores complete analysis results.
+
+**Example**:
+
+```bash
+# 30 minutes
+export NHL_SCRABBLE_CACHE_TTL=1800
+
+# 2 hours
+export NHL_SCRABBLE_CACHE_TTL=7200
+
+# Disable web caching (always fetch fresh)
+export NHL_SCRABBLE_CACHE_TTL=0
 ```
 
 ## Setting Variables
