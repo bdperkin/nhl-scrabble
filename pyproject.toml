@@ -607,7 +607,7 @@ skip = '*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/
 
 # Project-specific ignore words (like ruff's ignore list)
 # Add false positives here as they are discovered
-# ignore-words-list = ''  # Add words as needed
+ignore-words-list = 'aNULL'  # aNULL is a technical term in SSL/TLS cipher configuration
 
 # Consistency settings
 count = true
