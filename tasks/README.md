@@ -74,7 +74,7 @@ Each task is assigned a priority:
 **Completed**: All tasks complete! (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 006: to_dict() methods 1.5h - PR #191, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182, Task 011: log level optimization - PR #215)
 **Expected Speedup**: 5-10x overall performance improvement achieved! (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (11 tasks active, 21 documented, 10 completed)
+### Enhancements (10 tasks active, 21 documented, 11 completed)
 
 | ID  | Title                                              | Priority | Effort   | Issue | Status      |
 | --- | -------------------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -101,8 +101,8 @@ Each task is assigned a priority:
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast | LOW      | 3-5h     | #283  |             |
 
 **Documented Effort**: 54.25-81.5 hours
-**Remaining Effort**: 15.75-28h
-**Completed**: 11 of 20 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
+**Remaining Effort**: 15.25-25.5h
+**Completed**: 11 of 21 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
 ### Testing (3 tasks active, 4 documented, 1 completed)
 
@@ -189,7 +189,7 @@ Each task is assigned a priority:
 - **Bug Fixes**: 0 active (7 completed in tasks/completed/bug-fixes/)
 - **Security**: 0 active (14 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (13 completed - 100% complete! 5-10x speedup achieved! 🎉)
-- **Enhancement**: 10 active (22 completed), 15.8-25.5h remaining
+- **Enhancement**: 10 active (11 completed), 15.25-25.5h remaining
 - **Testing**: 8 active (13 completed), 27.0-42.0h remaining
   - Parent task (002): Broken into 8 sub-tasks
   - Sub-tasks (004-011): Coverage improvement by module

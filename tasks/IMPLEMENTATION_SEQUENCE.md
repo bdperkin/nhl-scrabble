@@ -94,7 +94,7 @@ ______________________________________________________________________
 
 ## Phase 5: Development Experience (MEDIUM Priority)
 
-**Total Effort**: 2-4.5 hours
+**Total Effort**: 5-9.5 hours
 **Focus**: Improve developer workflow and tooling
 **Dependencies**: None (independent enhancements)
 
@@ -104,9 +104,10 @@ ______________________________________________________________________
 /implement-task enhancement/016-format-cli-help-examples.md          # 15-30min, Issue #230
 /implement-task enhancement/020-colorized-log-output.md              # 30-60min, Issue #234
 /implement-task enhancement/014-integrate-astral-ty-type-checker.md  # 2-3h, Issue #228
+/implement-task enhancement/021-tox-parallel-failfast.md             # 3-5h, Issue #283
 ```
 
-**Rationale**: CLI improvements enhance UX. Colorized logs aid debugging. Type checker (ty) complements mypy. Order by effort (quick wins first).
+**Rationale**: CLI improvements enhance UX. Colorized logs aid debugging. Type checker (ty) complements mypy. Tox optimization speeds up local development and CI. Order by effort (quick wins first, then larger improvements).
 
 ______________________________________________________________________
 
@@ -386,7 +387,7 @@ ______________________________________________________________________
 | ------------ | ------ | ---------------- |
 | Security     | 0      | 0h               |
 | Testing      | 8      | 27.0-42.0h       |
-| Enhancement  | 10     | 15.8-25.5h       |
+| Enhancement  | 10     | 15.25-25.5h      |
 | New Features | 27     | 156.0-229.0h     |
 | Refactoring  | 17     | 48.5-68.0h       |
 | **TOTAL**    | **62** | **247.2-364.5h** |
