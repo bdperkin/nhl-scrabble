@@ -241,13 +241,19 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
             directives[parts[0]] = parts[1]
 
     # Verify script-src directive allows both CDNs
-    # Use allowlist check (split by spaces) instead of substring check
-    # to satisfy CodeQL's URL sanitization analysis
+    # Use explicit allowlist pattern to satisfy CodeQL's URL sanitization analysis
+    # Convert to set for exact membership check (not substring matching)
     script_src = directives.get("script-src", "")
-    allowed_sources = script_src.split()
+    allowed_sources = set(script_src.split())
 
-    assert "https://unpkg.com" in allowed_sources
-    assert "https://cdn.jsdelivr.net" in allowed_sources
+    # Expected CDN sources - exact match required
+    expected_cdns = {"https://unpkg.com", "https://cdn.jsdelivr.net"}
+
+    # Verify both CDNs are in the allowlist using set intersection
+    assert expected_cdns.issubset(allowed_sources), (
+        f"Missing CDNs in CSP. Expected: {expected_cdns}, "
+        f"Found: {allowed_sources & expected_cdns}"
+    )
 
 
 def test_analyze_post_still_works(client: TestClient) -> None:
