@@ -553,6 +553,139 @@ This command automates the complete task implementation workflow from start to f
 
    - Poll every 30 seconds: `gh pr checks`
 
+   - **Retry Logic for Flaky Tests** (automatic retry up to 3 times):
+
+     When CI checks fail, automatically retry failed jobs to handle transient failures:
+
+     **1. Detect Failure**: Check if any jobs failed
+
+     ```bash
+     gh run view <run-id> --json conclusion,jobs
+     ```
+
+     **2. Identify Failed Jobs**: Extract failed job names/IDs
+
+     ```bash
+     # Get list of failed jobs
+     gh api repos/:owner/:repo/actions/runs/<run-id>/jobs \
+       --jq '.jobs[] | select(.conclusion == "failure") | .name'
+     ```
+
+     **3. Retry Failed Jobs Only** (not all jobs):
+
+     ```bash
+     # Re-run only failed jobs (not entire workflow)
+     gh run rerun <run-id> --failed
+     ```
+
+     **Important**: Always use `--failed` flag to retry only failed jobs, saving time and CI resources
+
+     **4. Retry Loop** (maximum 3 attempts):
+
+     ```python
+     retry_count = 0
+     max_retries = 3
+
+     while retry_count < max_retries:
+         wait_for_completion()
+
+         if all_checks_passed():
+             # Success! Continue to merge
+             break
+         elif has_failed_jobs():
+             retry_count += 1
+             if retry_count < max_retries:
+                 log(f"⚠️  Retry {retry_count}/{max_retries}: Re-running failed jobs...")
+                 gh_run_rerun(run_id, failed_only=True)
+                 # Continue loop to wait for retry results
+             else:
+                 # Max retries exhausted
+                 break
+
+     if retry_count >= max_retries and has_failed_jobs():
+         # Stop and ask user what to do
+         prompt_user_for_action()
+     ```
+
+     **5. User Prompt** (if still failing after 3 retries):
+
+     ```
+     ⚠️  CI Checks Failed After 3 Retries
+
+     PR #287 has persistent failures despite retrying failed jobs 3 times.
+
+     Failed Jobs:
+     - Test on Python 3.15-dev (failure)
+     - Tox tests with UV (py315) (failure)
+     - codecov/project (86.60% vs 90.00% target)
+
+     Retry History:
+     - Attempt 1: Failed (same errors)
+     - Attempt 2: Failed (same errors)
+     - Attempt 3: Failed (same errors)
+
+     Failure Logs:
+     - View full logs: gh run view <run-id> --log-failed
+     - View job details: gh run view <run-id> --job <job-id>
+
+     Options:
+     1. Investigate failures locally and push fix
+     2. Retry manually one more time: gh run rerun <run-id> --failed
+     3. Skip failing jobs if non-critical (e.g., py315-dev experimental)
+     4. Abort task and investigate thoroughly
+     5. View detailed failure analysis
+
+     What would you like to do? [1/2/3/4/5]
+     ```
+
+     **Retry Decision Tree**:
+
+     **When automatic retry HELPS** ✅:
+
+     - Network-dependent tests (API calls, external services)
+     - Rate-limited operations (GitHub API, third-party APIs)
+     - Timing-sensitive integration tests (race conditions)
+     - External service availability (transient outages)
+     - Resource contention (parallel test runners, CPU/memory spikes)
+     - Flaky tests with intermittent failures
+
+     **When automatic retry DOES NOT HELP** ❌:
+
+     - Build/compilation errors (always reproducible)
+     - Linting/formatting failures (deterministic)
+     - Type checking errors (deterministic)
+     - Missing dependencies (won't resolve without code change)
+     - Test assertion failures (logic errors)
+     - Import errors (missing modules)
+     - Syntax errors (parse failures)
+
+     **Retry Strategy**:
+
+     - **First failure**: Immediate retry (may be transient)
+     - **Second failure**: Wait 30s, then retry (service may be recovering)
+     - **Third failure**: Wait 60s, then retry (final attempt)
+     - **Fourth failure**: Stop and prompt user (likely requires intervention)
+
+     **Monitoring During Retries**:
+
+     ```bash
+     # Watch retry progress in real-time
+     gh run watch <run-id>
+
+     # Check specific job status
+     gh run view <run-id> --job <job-id>
+
+     # View failure logs immediately
+     gh run view <run-id> --log-failed
+     ```
+
+     **Time Savings**:
+
+     - Flaky test success rate: ~70% on first retry
+     - Average retry time: 2-5 minutes (vs 15-30 min manual investigation)
+     - CI resource savings: Retry only failed jobs (not all 50 checks)
+     - Developer productivity: Automatic handling of transient failures
+
    - **Common CI Failure Patterns** (with fixes):
 
      **Pattern 1: Missing External Tools**
@@ -685,24 +818,44 @@ This command automates the complete task implementation workflow from start to f
 
    - **CI Failure Response Workflow**:
 
+     **Automatic Response** (for transient failures):
+
+     1. System detects CI failure
+     1. Automatic retry initiated (up to 3 times)
+     1. Only failed jobs re-run (not entire workflow)
+     1. If retry succeeds: Continue to merge
+     1. If all retries fail: Proceed to manual response below
+
+     **Manual Response** (after automatic retries exhausted or for non-retryable errors):
+
      1. `gh run view <run-id> --log-failed` - Get failure details
      1. Match failure to pattern above (or diagnose new pattern)
-     1. Apply fix locally
-     1. Test fix locally:
-        ```bash
-        pytest                           # Verify tests pass
-        pre-commit run --all-files      # Verify hooks pass
-        make quality                    # Verify quality checks
-        ```
-     1. Commit fix with descriptive message
-     1. Push: `git push`
-     1. CI re-runs automatically
+     1. Determine if error is retryable or requires code fix
+     1. If requires fix:
+
+     - Apply fix locally
+     - Test fix locally:
+       ```bash
+       pytest                           # Verify tests pass
+       pre-commit run --all-files      # Verify hooks pass
+       make quality                    # Verify quality checks
+       ```
+     - Commit fix with descriptive message
+     - Push: `git push`
+     - CI re-runs automatically (with fresh retry budget)
+
+     1. If error appears transient but retries failed:
+
+     - Manual retry: `gh run rerun <run-id> --failed`
+     - Monitor results closely
+     - If still failing: Investigate deeper (may be environment-specific)
 
    - **When to Wait vs. Fix Immediately**:
 
-     - **Wait**: External service issues, transient network failures, rate limiting
-     - **Fix Immediately**: Test failures, linting errors, missing deps, parse errors
-     - **Maximum wait**: 30 minutes before manual intervention
+     - **Wait & Auto-Retry** (up to 3 times): External service issues, transient network failures, rate limiting, flaky tests, resource contention, timing-sensitive tests
+     - **Fix Immediately** (no retry): Test assertion failures, linting errors, type errors, missing deps, parse errors, build failures, syntax errors
+     - **Maximum wait**: 30 minutes total (including retries) before manual intervention
+     - **Retry decision**: Automatic retry beneficial for transient issues, manual fix required for reproducible errors
 
 1. **Merge Pull Request**
 
