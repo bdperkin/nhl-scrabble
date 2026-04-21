@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-21
-**Total Tasks**: 62 active tasks
-**Estimated Effort**: 247.2-364.5 hours
+**Total Tasks**: 61 active tasks
+**Estimated Effort**: 245.2-361.5 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -20,18 +20,17 @@ ______________________________________________________________________
 
 ## Phase 1: Test Coverage Foundation (MEDIUM Priority)
 
-**Total Effort**: 6-9 hours
+**Total Effort**: 4-6 hours
 **Focus**: Establish comprehensive testing for core components
 **Dependencies**: None (independent tasks)
 
 ```bash
 # Core Testing Infrastructure (No dependencies between tasks)
-/implement-task testing/004-cli-test-coverage.md                     # 2-3h, Issue #253
 /implement-task testing/007-config-logging-test-coverage.md          # 1-2h, Issue #256
 /implement-task testing/001-codecov-test-analytics.md                # 2-3h, Issue #211
 ```
 
-**Rationale**: CLI and config/logging are foundational components used everywhere. Codecov analytics provides ongoing coverage monitoring. These can be done in any order but CLI is most impactful first.
+**Rationale**: Config/logging are foundational components used everywhere. Codecov analytics provides ongoing coverage monitoring. These can be done in any order.
 
 ______________________________________________________________________
 
@@ -461,17 +460,16 @@ ______________________________________________________________________
 
 ## Quick Reference
 
-### Next 5 Tasks (Immediate Work)
+### Next 4 Tasks (Immediate Work)
 
 ```bash
-/implement-task testing/004-cli-test-coverage.md                     # 2-3h, MEDIUM
 /implement-task testing/007-config-logging-test-coverage.md          # 1-2h, MEDIUM
 /implement-task testing/001-codecov-test-analytics.md                # 2-3h, MEDIUM
 /implement-task testing/005-web-interface-test-coverage.md           # 3-4h, MEDIUM
 /implement-task testing/006-interactive-mode-test-coverage.md        # 2-3h, MEDIUM
 ```
 
-**Total**: 10-15 hours of high-value work
+**Total**: 8-12 hours of high-value work
 
 ### Quick Wins (Under 1 hour each)
 
@@ -492,9 +490,9 @@ ______________________________________________________________________
 ## Notes
 
 **Last Updated**: 2026-04-21
-**Active Tasks**: 62
-**Completed Tasks**: 80
-**Completion Rate**: 56.3% (80/142)
+**Active Tasks**: 61
+**Completed Tasks**: 81
+**Completion Rate**: 57.0% (81/142)
 
 **Phase Distribution**:
 

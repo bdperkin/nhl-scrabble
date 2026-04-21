@@ -104,20 +104,20 @@ Each task is assigned a priority:
 **Remaining Effort**: 15.25-25.5h
 **Completed**: 11 of 21 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
-### Testing (3 tasks active, 4 documented, 1 completed)
+### Testing (2 tasks active, 4 documented, 2 completed)
 
 | ID  | Title                                   | Priority | Effort | Issue | Status      |
 | --- | --------------------------------------- | -------- | ------ | ----- | ----------- |
 | 001 | Codecov Test Analytics in CI            | MEDIUM   | 2-3h   | #211  |             |
 | 002 | Comprehensive Test Coverage Improvement | MEDIUM   | 12-20h | #221  |             |
 | 003 | Add Tests for Caching Layer             | MEDIUM   | 3h     | #235  | ✅ Complete |
-| 004 | CLI Module Test Coverage                | MEDIUM   | 2-3h   | #253  |             |
+| 004 | CLI Module Test Coverage                | MEDIUM   | 2.5h   | #253  | ✅ Complete |
 
-**Documented Effort**: 18-30 hours
-**Remaining Effort**: 15-27h
-**Completed**: 1 task (Task 003: Caching Layer Tests 3h - PR #284)
+**Documented Effort**: 19-28 hours
+**Remaining Effort**: 14-23h
+**Completed**: 2 tasks (Task 003: Caching Layer Tests 3h - PR #284, Task 004: CLI Coverage 2.5h - PR #270)
 
-**Note**: Current coverage ~50% overall. Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. Tasks 001 and 004 have active PRs but need additional work before closure.
+**Note**: Current coverage ~87% overall (up from ~50%). Target: 90-100% overall coverage through comprehensive unit, integration, and edge case testing. CLI module coverage improved from 50% to 75.43%.
 
 ### New Features (15 tasks active, 19 documented, 4 completed)
 
@@ -180,8 +180,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 142 tasks (62 active, 80 completed)
-**Remaining Effort**: ~247.2-364.5 hours
+**Total Tasks**: 142 tasks (61 active, 81 completed)
+**Remaining Effort**: ~245.2-361.5 hours
 **Completed Effort**: ~224.5+ hours
 
 ### By Category
@@ -190,7 +190,7 @@ Each task is assigned a priority:
 - **Security**: 0 active (14 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (13 completed - 100% complete! 5-10x speedup achieved! 🎉)
 - **Enhancement**: 10 active (11 completed), 15.25-25.5h remaining
-- **Testing**: 8 active (13 completed), 27.0-42.0h remaining
+- **Testing**: 7 active (14 completed), 25.0-39.0h remaining
   - Parent task (002): Broken into 8 sub-tasks
   - Sub-tasks (004-011): Coverage improvement by module
   - Independent task (001): Analytics (active)
