@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
-**Generated**: 2026-04-20
-**Total Tasks**: 73 active tasks
-**Estimated Effort**: 274-409 hours
+**Generated**: 2026-04-21
+**Total Tasks**: 63 active tasks
+**Estimated Effort**: 250.2-369.5 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -18,22 +18,7 @@ Each task is listed as a `/implement-task` command ready to execute. Tasks are o
 
 ______________________________________________________________________
 
-## Phase 1: Critical Security (HIGH Priority)
-
-**Total Effort**: 2-4 hours
-**Focus**: Security scanning tools required for production readiness
-
-```bash
-# Security Scanning Tools (No dependencies, can run in parallel)
-/implement-task security/009-add-bandit-security-linting.md          # 1-2h, Issue #239
-/implement-task security/010-add-safety-vulnerability-scanning.md    # 1-2h, Issue #240
-```
-
-**Rationale**: Security tools should be in place before expanding codebase. Both are independent and can be implemented in parallel.
-
-______________________________________________________________________
-
-## Phase 2: Test Coverage Foundation (MEDIUM Priority)
+## Phase 1: Test Coverage Foundation (MEDIUM Priority)
 
 **Total Effort**: 6-9 hours
 **Focus**: Establish comprehensive testing for core components
@@ -50,24 +35,23 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 3: Test Coverage - User Interfaces (MEDIUM Priority)
+## Phase 2: Test Coverage - User Interfaces (MEDIUM Priority)
 
-**Total Effort**: 8-12 hours
+**Total Effort**: 5-7 hours
 **Focus**: Test user-facing components
-**Dependencies**: None (but benefits from Phase 2 patterns)
+**Dependencies**: None (but benefits from Phase 1 patterns)
 
 ```bash
 # User Interface Testing
 /implement-task testing/005-web-interface-test-coverage.md           # 3-4h, Issue #254
 /implement-task testing/006-interactive-mode-test-coverage.md        # 2-3h, Issue #255
-/implement-task testing/003-caching-layer-tests.md                   # 2-4h, Issue #235
 ```
 
-**Rationale**: Web interface is a major feature. Interactive mode is user-facing. Caching tests validate optimization work (Task 001 already complete). Order: web → interactive → caching.
+**Rationale**: Web interface is a major feature. Interactive mode is user-facing. Order: web → interactive.
 
 ______________________________________________________________________
 
-## Phase 4: Test Coverage - Core + Integration (MEDIUM Priority)
+## Phase 3: Test Coverage - Core + Integration (MEDIUM Priority)
 
 **Total Effort**: 20-31 hours
 **Focus**: Complete test coverage to 90-100% target
@@ -88,7 +72,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 5: Web Interface (MEDIUM Priority)
+## Phase 4: Web Interface (MEDIUM Priority)
 
 **Total Effort**: 26-39 hours
 **Focus**: Build and complete the web interface feature
@@ -108,41 +92,25 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 6: Python Version Support (MEDIUM Priority)
+## Phase 5: Development Experience (MEDIUM Priority)
 
-**Total Effort**: 3-5 hours
-**Focus**: Expand Python version compatibility
-**Dependencies**: None
-
-```bash
-# Python Version Expansion
-/implement-task enhancement/010-python-3.14-3.15-support.md          # 3-5h, Issue #217
-```
-
-**Rationale**: Python 3.14 is stable, 3.15-dev testing is valuable. Independent task, high impact for users on newer Python versions.
-
-______________________________________________________________________
-
-## Phase 7: Development Experience (MEDIUM Priority)
-
-**Total Effort**: 3.75-7.5 hours
+**Total Effort**: 2-4.5 hours
 **Focus**: Improve developer workflow and tooling
 **Dependencies**: None (independent enhancements)
 
 ```bash
 # Developer Tooling
-/implement-task enhancement/012-implement-task-pre-flight-validation.md  # 1-2h, Issue #225
 /implement-task enhancement/015-add-cli-short-options.md             # 30-60min, Issue #229
 /implement-task enhancement/016-format-cli-help-examples.md          # 15-30min, Issue #230
 /implement-task enhancement/020-colorized-log-output.md              # 30-60min, Issue #234
 /implement-task enhancement/014-integrate-astral-ty-type-checker.md  # 2-3h, Issue #228
 ```
 
-**Rationale**: Pre-flight validation improves task workflow. CLI improvements enhance UX. Colorized logs aid debugging. Type checker (ty) complements mypy. Order by effort (quick wins first).
+**Rationale**: CLI improvements enhance UX. Colorized logs aid debugging. Type checker (ty) complements mypy. Order by effort (quick wins first).
 
 ______________________________________________________________________
 
-## Phase 8: Documentation & Output (MEDIUM Priority)
+## Phase 6: Documentation & Output (MEDIUM Priority)
 
 **Total Effort**: 8-13 hours
 **Focus**: Enhanced documentation and output formats
@@ -160,7 +128,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 9: Visual Polish (MEDIUM Priority)
+## Phase 7: Visual Polish (MEDIUM Priority)
 
 **Total Effort**: 1-2 hours
 **Focus**: Refine branding and visual elements
@@ -175,10 +143,10 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 10: Repository Modernization (MEDIUM Priority)
+## Phase 8: Repository Modernization (MEDIUM Priority)
 
-**Total Effort**: 7.75-12.5 hours
-**Focus**: Code modernization and formatting tools
+**Total Effort**: 11.25-18.5 hours
+**Focus**: Code modernization, formatting tools, and CI/CD maintenance
 **Dependencies**: None (all independent tools)
 
 ```bash
@@ -189,14 +157,17 @@ ______________________________________________________________________
 /implement-task refactoring/016-add-trailing-comma-formatting.md         # 30-60min, Issue #243
 /implement-task refactoring/017-extend-jsonschema-validation.md          # 1-2h, Issue #244
 /implement-task refactoring/005-add-djlint-html-template-linting.md     # 30-60min, Issue #127
-/implement-task refactoring/009-git-branch-pruning.md                    # 30-60min, Issue #220
+/implement-task refactoring/018-add-check-wheel-contents.md              # 1-2h, Issue #245
+/implement-task refactoring/019-add-ssort-statement-sorting.md           # 2-3h, Issue #246
+/implement-task refactoring/020-migrate-codecov-test-results-action.md   # 30-60min, Issue #285
+/implement-task refactoring/021-task-documentation-sync-validation.md    # 3-5h, Issue #286
 ```
 
-**Rationale**: pyupgrade modernizes syntax. refurb finds improvements. pyproject-fmt standardizes config. Trailing-comma helps diffs. JSON schema validation catches errors. djlint improves HTML quality. Branch pruning cleans git history. Order by impact.
+**Rationale**: pyupgrade modernizes syntax. refurb finds improvements. pyproject-fmt standardizes config. Trailing-comma helps diffs. JSON schema validation catches errors. djlint improves HTML quality. Wheel validation ensures package quality. Statement sorting improves readability (requires consensus). Codecov migration from deprecated action. Task documentation sync ensures consistency. Order by impact.
 
 ______________________________________________________________________
 
-## Phase 11: Repository Cleanup (MEDIUM Priority)
+## Phase 9: Repository Cleanup (MEDIUM Priority)
 
 **Total Effort**: 13-20 hours
 **Focus**: Organizational improvements and audits
@@ -214,11 +185,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 12: Package Automation (MEDIUM Priority)
+## Phase 10: Package Automation (MEDIUM Priority)
 
 **Total Effort**: 4-6 hours
 **Focus**: Automated package building and publishing
-**Dependencies**: Repository should be clean (Phase 11)
+**Dependencies**: Repository should be clean (Phase 9)
 
 ```bash
 # Package Automation
@@ -229,12 +200,12 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 13: Release Automation (LOW Priority, Sequential)
+## Phase 11: Release Automation (LOW Priority, Sequential)
 
 **Total Effort**: 17-26 hours
 **Focus**: Complete release automation workflow
 **Dependencies**: Sequential - each task depends on previous
-**Prerequisite**: new-features/018 (package automation) from Phase 12
+**Prerequisite**: new-features/018 (package automation) from Phase 10
 **Parent Task**: #247 - Create comprehensive release automation skill
 
 ```bash
@@ -255,7 +226,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 14: Internationalization & Localization (LOW Priority)
+## Phase 10: Internationalization & Localization (LOW Priority)
 
 **Total Effort**: 36-54 hours
 **Focus**: Full internationalization and localization (i18n/l10n)
@@ -275,11 +246,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 15: Internationalization (LOW Priority, Semi-Sequential)
+## Phase 13: Internationalization (LOW Priority, Semi-Sequential)
 
 **Total Effort**: 23-33 hours
 **Focus**: Multi-language support
-**Dependencies**: Requires Phase 14 infrastructure
+**Dependencies**: Requires Phase 12 infrastructure
 **Parent Task**: new-features/016 (#218)
 
 ```bash
@@ -299,7 +270,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 16: Advanced Features - Data & Integration (LOW Priority)
+## Phase 12: Advanced Features - Data & Integration (LOW Priority)
 
 **Total Effort**: 28-40 hours
 **Focus**: Database backend, plugins, notifications
@@ -316,11 +287,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 17: Advanced Features - Infrastructure (LOW Priority)
+## Phase 15: Advanced Features - Infrastructure (LOW Priority)
 
 **Total Effort**: 19-27 hours
 **Focus**: Deployment and infrastructure
-**Dependencies**: Docker benefits from database (Phase 16)
+**Dependencies**: Docker benefits from database (Phase 14)
 
 ```bash
 # Infrastructure & Deployment
@@ -334,7 +305,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 18: Advanced Features - User Tools (LOW Priority)
+## Phase 16: Advanced Features - User Tools (LOW Priority)
 
 **Total Effort**: 8-11 hours
 **Focus**: User-facing tools and utilities
@@ -350,11 +321,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 19: Advanced Refactoring - Type Safety (LOW Priority)
+## Phase 17: Advanced Refactoring - Type Safety (LOW Priority)
 
 **Total Effort**: 13-16 hours
 **Focus**: Comprehensive type safety improvements
-**Dependencies**: Should come after modernization (Phase 10)
+**Dependencies**: Should come after modernization (Phase 8)
 
 ```bash
 # Type Safety & Config
@@ -366,11 +337,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 20: Advanced Refactoring - Architecture (LOW Priority)
+## Phase 18: Advanced Refactoring - Architecture (LOW Priority)
 
 **Total Effort**: 14-18 hours
 **Focus**: Architectural improvements
-**Dependencies**: Should come after type safety (Phase 19)
+**Dependencies**: Should come after type safety (Phase 17)
 
 ```bash
 # Architecture Improvements
@@ -382,7 +353,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 21: Final Tooling & Polish (LOW Priority)
+## Phase 19: Final Tooling & Polish (LOW Priority)
 
 **Total Effort**: 5-9 hours
 **Focus**: Final quality improvements
@@ -403,43 +374,43 @@ ______________________________________________________________________
 
 ### By Priority
 
-| Priority  | Tasks  | Effort       | Phases        |
-| --------- | ------ | ------------ | ------------- |
-| HIGH      | 2      | 2-4h         | Phase 1       |
-| MEDIUM    | 28     | 94-148h      | Phase 2-12    |
-| LOW       | 39     | 110-153h     | Phase 13-21   |
-| **TOTAL** | **69** | **206-305h** | **21 Phases** |
+| Priority  | Tasks  | Effort           | Phases        |
+| --------- | ------ | ---------------- | ------------- |
+| HIGH      | 0      | 0h               | -             |
+| MEDIUM    | 22     | 63.0-96.0h       | Phase 1-10    |
+| LOW       | 41     | 187.2-273.5h     | Phase 11-19   |
+| **TOTAL** | **63** | **250.2-369.5h** | **19 Phases** |
 
 ### By Category
 
-| Category     | Tasks  | Effort       |
-| ------------ | ------ | ------------ |
-| Security     | 2      | 2-4h         |
-| Testing      | 11     | 20-31h       |
-| Enhancement  | 11     | 16.25-27.5h  |
-| New Features | 27     | 117-168h     |
-| Refactoring  | 18     | 51-74h       |
-| **TOTAL**    | **69** | **206-305h** |
+| Category     | Tasks  | Effort           |
+| ------------ | ------ | ---------------- |
+| Security     | 0      | 0h               |
+| Testing      | 8      | 27.0-42.0h       |
+| Enhancement  | 10     | 15.8-25.5h       |
+| New Features | 27     | 156.0-229.0h     |
+| Refactoring  | 18     | 51.5-73.0h       |
+| **TOTAL**    | **63** | **250.2-369.5h** |
 
 ### Critical Path
 
-**Foundation** (Phases 1-4): 24-36h
+**Foundation** (Phases 1-3): 31-47h
 
-- Security tools → Test coverage → 90-100% coverage goal
+- Test coverage → 90-100% coverage goal
 
-**Feature Completion** (Phases 5-9): 25.75-42.5h
+**Feature Completion** (Phases 4-7): 37-58.5h
 
-- Web interface → Python versions → Developer experience → Documentation → Branding
+- Web interface → Developer experience → Documentation → Branding
 
-**Modernization** (Phases 10-12): 25.75-38.5h
+**Modernization** (Phase 8-10): 28.25-44.5h
 
 - Code modernization → Repository cleanup → Package automation
 
-**Automation** (Phase 13): 9-14h
+**Automation** (Phase 11): 17-26h
 
 - Release automation workflow (sequential)
 
-**Long-term** (Phases 14-21): 131-174h
+**Long-term** (Phases 12-19): 137-194h
 
 - i18n/l10n, advanced features, architectural refactoring
 
@@ -449,7 +420,7 @@ ______________________________________________________________________
 
 ### Phase Sequencing
 
-1. **Complete phases sequentially** where marked (especially Phase 13, 15)
+1. **Complete phases sequentially** where marked (especially Phase 11, 13)
 1. **Within phases**, tasks can often be done in parallel unless noted
 1. **Skip phases** that don't align with current goals
 1. **Revisit** this file as priorities change
@@ -493,14 +464,14 @@ ______________________________________________________________________
 ### Next 5 Tasks (Immediate Work)
 
 ```bash
-/implement-task security/009-add-bandit-security-linting.md          # 1-2h, HIGH
-/implement-task security/010-add-safety-vulnerability-scanning.md    # 1-2h, HIGH
 /implement-task testing/004-cli-test-coverage.md                     # 2-3h, MEDIUM
 /implement-task testing/007-config-logging-test-coverage.md          # 1-2h, MEDIUM
 /implement-task testing/001-codecov-test-analytics.md                # 2-3h, MEDIUM
+/implement-task testing/005-web-interface-test-coverage.md           # 3-4h, MEDIUM
+/implement-task testing/006-interactive-mode-test-coverage.md        # 2-3h, MEDIUM
 ```
 
-**Total**: 7-12 hours of high-value work
+**Total**: 10-15 hours of high-value work
 
 ### Quick Wins (Under 1 hour each)
 
@@ -520,17 +491,17 @@ ______________________________________________________________________
 
 ## Notes
 
-**Last Updated**: 2026-04-19
-**Active Tasks**: 69
-**Completed Tasks**: 70
-**Completion Rate**: 50.4%
+**Last Updated**: 2026-04-21
+**Active Tasks**: 63
+**Completed Tasks**: 79
+**Completion Rate**: 55.6% (79/142)
 
 **Phase Distribution**:
 
-- **Immediate** (Phases 1-4): 24-36h → 90-100% test coverage
+- **Immediate** (Phases 1-3): 24-36h → 90-100% test coverage
 - **Short-term** (Phases 5-12): 51.5-88h → Feature completion + modernization
 - **Mid-term** (Phase 13): 9-14h → Release automation
-- **Long-term** (Phases 14-21): 121-161h → i18n + advanced features
+- **Long-term** (Phases 12-19): 121-161h → i18n + advanced features
 
 **Velocity Assumptions**:
 
