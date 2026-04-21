@@ -54,7 +54,12 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'"
+            "default-src 'self'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+            "img-src 'self' data:; "
+            "font-src 'self'; "
+            "connect-src 'self'"
         )
 
         return response
@@ -131,18 +136,26 @@ async def health() -> dict[str, Any]:
     }
 
 
-@app.get("/")
-async def root() -> dict[str, str]:
-    """Root endpoint placeholder.
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request) -> HTMLResponse:
+    """Serve the main web interface.
+
+    Args:
+        request: FastAPI request object
 
     Returns:
-        Simple message directing to docs
+        Rendered index.html template
+
+    Raises:
+        HTTPException: If templates not available
     """
-    return {
-        "message": "NHL Scrabble Analyzer API",
-        "docs": "/docs",
-        "health": "/health",
-    }
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+    )
 
 
 @app.get("/favicon.svg")
@@ -251,8 +264,62 @@ def _group_teams_by_grouping(
     return divisions, conferences
 
 
+@app.get("/api/analyze", response_model=None)
+async def analyze_get(
+    request: Request,
+    top_players: int = 20,
+    top_team_players: int = 5,
+    use_cache: bool = True,
+) -> HTMLResponse | dict[str, Any]:
+    """Run NHL Scrabble analysis (GET endpoint for HTMX).
+
+    Args:
+        request: FastAPI request object
+        top_players: Number of top players to include
+        top_team_players: Top players per team
+        use_cache: Use cached results if available
+
+    Returns:
+        Analysis results as HTML or JSON
+
+    Raises:
+        HTTPException: If NHL API is unavailable or analysis fails
+    """
+    # Create request object
+    analysis_request = AnalysisRequest(
+        top_players=top_players,
+        top_team_players=top_team_players,
+        use_cache=use_cache,
+    )
+
+    # Get analysis data
+    data = await analyze_post(analysis_request)
+
+    # Check if this is an HTMX request
+    is_htmx = request.headers.get("HX-Request") == "true"
+
+    if is_htmx and templates is not None:
+        # Return HTML fragment for HTMX
+        return templates.TemplateResponse(
+            request=request,
+            name="results.html",
+            context={
+                "request": request,
+                "top_players": data["top_players"],
+                "team_standings": data["team_standings"],
+                "division_standings": data["division_standings"],
+                "conference_standings": data["conference_standings"],
+                "playoff_bracket": data["playoff_bracket"],
+                "stats": data["stats"],
+            },
+        )
+
+    # Return JSON for regular API calls
+    return data
+
+
 @app.post("/api/analyze", response_model=AnalysisResponse)
-async def analyze(request: AnalysisRequest) -> dict[str, Any]:
+async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
     """Run NHL Scrabble analysis.
 
     Fetches current NHL roster data, calculates Scrabble scores for all players,

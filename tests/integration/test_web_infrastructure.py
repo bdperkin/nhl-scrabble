@@ -33,17 +33,17 @@ def test_health_endpoint(client: TestClient) -> None:
 
 
 def test_root_endpoint(client: TestClient) -> None:
-    """Test root endpoint returns API information."""
+    """Test root endpoint returns web interface HTML."""
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.headers["content-type"].startswith("application/json")
+    assert response.headers["content-type"].startswith("text/html")
 
-    # Check that the JSON contains expected navigation links
-    data = response.json()
-    assert data["message"] == "NHL Scrabble Analyzer API"
-    assert data["docs"] == "/docs"
-    assert data["health"] == "/health"
+    # Check that HTML contains expected content
+    html = response.text
+    assert "NHL Scrabble Analyzer" in html
+    assert "analysisForm" in html  # Main analysis form
+    assert "Run Analysis" in html
 
 
 def test_openapi_docs_available(client: TestClient) -> None:

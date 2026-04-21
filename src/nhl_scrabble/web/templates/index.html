@@ -14,7 +14,11 @@
 <section class="analysis-form-section">
     <h3>Run Analysis</h3>
 
-    <form id="analysisForm" class="analysis-form">
+    <form id="analysisForm" class="analysis-form"
+          hx-get="/api/analyze"
+          hx-target="#results"
+          hx-indicator="#loading"
+          hx-trigger="submit">
         <div class="form-row">
             <div class="form-group">
                 <label for="topPlayers">
@@ -71,6 +75,12 @@
                     Fetching NHL data...
                 </span>
             </button>
+
+            <!-- HTMX loading indicator -->
+            <div id="loading" class="htmx-indicator" hidden>
+                <span class="spinner"></span>
+                Loading NHL data...
+            </div>
         </div>
     </form>
 </section>
