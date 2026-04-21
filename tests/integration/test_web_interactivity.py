@@ -230,8 +230,9 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
     assert response.status_code == 200
 
     csp = response.headers.get("content-security-policy", "")
-    assert "unpkg.com" in csp
-    assert "cdn.jsdelivr.net" in csp
+    # Check for complete HTTPS URLs to avoid incomplete URL substring sanitization
+    assert "https://unpkg.com" in csp
+    assert "https://cdn.jsdelivr.net" in csp
 
 
 def test_analyze_post_still_works(client: TestClient) -> None:
