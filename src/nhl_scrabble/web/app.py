@@ -264,13 +264,13 @@ def _group_teams_by_grouping(
     return divisions, conferences
 
 
-@app.get("/api/analyze")
+@app.get("/api/analyze", response_model=None)
 async def analyze_get(
     request: Request,
     top_players: int = 20,
     top_team_players: int = 5,
     use_cache: bool = True,
-) -> AnalysisResponse | HTMLResponse:
+) -> HTMLResponse | dict[str, Any]:
     """Run NHL Scrabble analysis (GET endpoint for HTMX).
 
     Args:
@@ -315,7 +315,7 @@ async def analyze_get(
         )
 
     # Return JSON for regular API calls
-    return AnalysisResponse(**data)
+    return data
 
 
 @app.post("/api/analyze", response_model=AnalysisResponse)
