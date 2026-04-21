@@ -152,7 +152,10 @@ async def root(request: Request) -> HTMLResponse:
     if templates is None:
         raise HTTPException(status_code=500, detail="Templates not configured")
 
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+    )
 
 
 @app.get("/favicon.svg")
@@ -298,8 +301,9 @@ async def analyze_get(
     if is_htmx and templates is not None:
         # Return HTML fragment for HTMX
         return templates.TemplateResponse(
-            "results.html",
-            {
+            request=request,
+            name="results.html",
+            context={
                 "request": request,
                 "top_players": data["top_players"],
                 "team_standings": data["team_standings"],
@@ -311,7 +315,7 @@ async def analyze_get(
         )
 
     # Return JSON for regular API calls
-    return data
+    return AnalysisResponse(**data)
 
 
 @app.post("/api/analyze", response_model=AnalysisResponse)
