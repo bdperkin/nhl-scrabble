@@ -70,8 +70,8 @@ This is part 5 of 5 subtasks for building the complete web interface (broken dow
 
 **Implemented**: 2026-04-21
 **Branch**: new-features/006-web-testing-polish
-**PR**: #TBD
-**Commits**: 1 commit (df7fd51)
+**PR**: #297 - https://github.com/bdperkin/nhl-scrabble/pull/297
+**Commits**: 2 commits (df7fd51, e91ee63)
 
 ### Actual Implementation
 
@@ -191,7 +191,7 @@ Successfully implemented comprehensive testing, documentation, and production po
 
 ### Related PRs
 
-- PR #TBD - Main implementation
+- PR #297 - Main implementation (web testing, documentation, production polish)
 
 ### Lessons Learned
 
