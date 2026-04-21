@@ -230,9 +230,24 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
     assert response.status_code == 200
 
     csp = response.headers.get("content-security-policy", "")
-    # Check for complete HTTPS URLs to avoid incomplete URL substring sanitization
-    assert "https://unpkg.com" in csp
-    assert "https://cdn.jsdelivr.net" in csp
+
+    # Parse CSP directives to avoid false positive URL sanitization alerts
+    # This is a test verification, not URL sanitization - we're checking
+    # that the CSP policy is correctly configured
+    directives = {}
+    for directive in csp.split(";"):
+        parts = directive.strip().split(None, 1)
+        if len(parts) == 2:
+            directives[parts[0]] = parts[1]
+
+    # Verify script-src directive allows both CDNs
+    # Use allowlist check (split by spaces) instead of substring check
+    # to satisfy CodeQL's URL sanitization analysis
+    script_src = directives.get("script-src", "")
+    allowed_sources = script_src.split()
+
+    assert "https://unpkg.com" in allowed_sources
+    assert "https://cdn.jsdelivr.net" in allowed_sources
 
 
 def test_analyze_post_still_works(client: TestClient) -> None:
