@@ -1,5 +1,5 @@
 <!-- Top Statistics -->
-<div class="stats-summary">
+<div class="stats-summary fade-on-scroll">
     <div class="stat-card">
         <h4>Total Players</h4>
         <p class="stat-value">{{ stats.total_players }}</p>
@@ -18,26 +18,56 @@
     </div>
 </div>
 
+<!-- Visualizations -->
+<section class="visualizations fade-on-scroll">
+    <h3>Score Visualizations</h3>
+
+    <div class="chart-container">
+        <h4>Team Scores</h4>
+        <div class="chart-wrapper">
+            <canvas id="teamScoresChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h4>Player Score Distribution</h4>
+        <div class="chart-wrapper">
+            <canvas id="playerDistributionChart"></canvas>
+        </div>
+    </div>
+</section>
+
 <!-- Top Players Table -->
-<section class="results-section">
+<section class="results-section fade-on-scroll">
     <h3>Top {{ top_players|length }} Players by Scrabble Score</h3>
+
+    <!-- Export buttons -->
+    <div class="export-buttons">
+        <button id="export-playersTable-csv" class="btn btn-secondary btn-sm">
+            <span class="icon">📊</span> Export CSV
+        </button>
+        <button id="export-playersTable-json" class="btn btn-secondary btn-sm">
+            <span class="icon">📄</span> Export JSON
+        </button>
+    </div>
+
     <div class="table-container">
-        <table class="results-table" role="table" aria-label="Top players by Scrabble score">
+        <table id="playersTable" class="results-table sortable" role="table" aria-label="Top players by Scrabble score">
             <thead>
                 <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Player Name</th>
-                    <th scope="col">Team</th>
-                    <th scope="col">Score</th>
+                    <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
+                    <th scope="col" data-sort="name" data-sort-type="string">Player Name</th>
+                    <th scope="col" data-sort="team" data-sort-type="string">Team</th>
+                    <th scope="col" data-sort="score" data-sort-type="number">Score</th>
                 </tr>
             </thead>
             <tbody>
                 {% for player in top_players %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td class="player-name">{{ player.first_name }} {{ player.last_name }}</td>
-                    <td class="team-abbrev">{{ player.team }}</td>
-                    <td class="score">{{ player.score }}</td>
+                <tr data-original-index="{{ loop.index }}">
+                    <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                    <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">{{ player.first_name }} {{ player.last_name }}</td>
+                    <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
+                    <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -46,31 +76,42 @@
 </section>
 
 <!-- Team Standings Table -->
-<section class="results-section">
+<section class="results-section fade-on-scroll">
     <h3>Team Standings by Total Scrabble Score</h3>
+
+    <!-- Export buttons -->
+    <div class="export-buttons">
+        <button id="export-teamsTable-csv" class="btn btn-secondary btn-sm">
+            <span class="icon">📊</span> Export CSV
+        </button>
+        <button id="export-teamsTable-json" class="btn btn-secondary btn-sm">
+            <span class="icon">📄</span> Export JSON
+        </button>
+    </div>
+
     <div class="table-container">
-        <table class="results-table standings-table" role="table" aria-label="Team standings">
+        <table id="teamsTable" class="results-table standings-table sortable" role="table" aria-label="Team standings">
             <thead>
                 <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Team</th>
-                    <th scope="col">Division</th>
-                    <th scope="col">Conference</th>
-                    <th scope="col">Total Score</th>
-                    <th scope="col">Avg Score</th>
-                    <th scope="col">Players</th>
+                    <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
+                    <th scope="col" data-sort="team" data-sort-type="string">Team</th>
+                    <th scope="col" data-sort="division" data-sort-type="string">Division</th>
+                    <th scope="col" data-sort="conference" data-sort-type="string">Conference</th>
+                    <th scope="col" data-sort="total" data-sort-type="number">Total Score</th>
+                    <th scope="col" data-sort="avg" data-sort-type="number">Avg Score</th>
+                    <th scope="col" data-sort="players" data-sort-type="number">Players</th>
                 </tr>
             </thead>
             <tbody>
                 {% for team in team_standings %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td class="team-name">{{ team.name }}</td>
-                    <td>{{ team.division }}</td>
-                    <td>{{ team.conference }}</td>
-                    <td class="score">{{ team.total_score }}</td>
-                    <td>{{ team.avg_score|round(1) }}</td>
-                    <td>{{ team.player_count }}</td>
+                <tr data-original-index="{{ loop.index }}">
+                    <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                    <td class="team-name" data-value="{{ team.name }}">{{ team.name }}</td>
+                    <td data-value="{{ team.division }}">{{ team.division }}</td>
+                    <td data-value="{{ team.conference }}">{{ team.conference }}</td>
+                    <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
+                    <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
+                    <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

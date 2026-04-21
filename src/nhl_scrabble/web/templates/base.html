@@ -30,6 +30,10 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/static/css/style.css">
     {% block extra_css %}{% endblock %}
+
+    <!-- External JavaScript Libraries -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
 </head>
 <body>
     <!-- Header -->
@@ -39,7 +43,18 @@
                 <h1 class="site-title">
                     <a href="/">🏒 NHL Scrabble Analyzer</a>
                 </h1>
-                <nav class="main-nav" aria-label="Main navigation">
+
+                <!-- Mobile navigation toggle -->
+                <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation menu">
+                    <span class="hamburger">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </span>
+                </button>
+
+                <!-- Navigation menu -->
+                <nav id="navMenu" class="main-nav" aria-label="Main navigation">
                     <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/docs">API Docs</a></li>
@@ -68,7 +83,19 @@
     </footer>
 
     <!-- Scripts -->
+    <!-- Core modules (load first) -->
+    <script src="/static/js/errors.js"></script>
+    <script src="/static/js/ui.js"></script>
+    <script src="/static/js/nav.js"></script>
+
+    <!-- Feature modules -->
+    <script src="/static/js/table-sort.js"></script>
+    <script src="/static/js/export.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+    <!-- Main application -->
     <script src="/static/js/app.js"></script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

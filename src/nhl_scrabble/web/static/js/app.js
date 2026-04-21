@@ -32,8 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
         hideResults();
 
         try {
-            // Call API
-            const response = await fetch(`/api/analyze?top_players=${topPlayers}&top_team_players=${topTeamPlayers}&use_cache=${useCache}`);
+            // Call API to get both HTML and JSON
+            const response = await fetch(`/api/analyze?top_players=${topPlayers}&top_team_players=${topTeamPlayers}&use_cache=${useCache}`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
             if (!response.ok) {
                 throw new Error(`API request failed: ${response.status} ${response.statusText}`);
@@ -41,7 +45,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
 
-            // Display results
+            // Fetch HTML version for display
+            const htmlResponse = await fetch(`/api/analyze?top_players=${topPlayers}&top_team_players=${topTeamPlayers}&use_cache=${useCache}`, {
+                headers: {
+                    'HX-Request': 'true',
+                    'Accept': 'text/html'
+                }
+            });
+
+            if (htmlResponse.ok) {
+                const html = await htmlResponse.text();
+                resultsContainer.innerHTML = html;
+            }
+
+            // Display results (initialize interactive features)
             displayResults(data);
 
         } catch (error) {
@@ -76,26 +93,82 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {Object} data - Analysis results data
      */
     function displayResults(data) {
-        // For now, just display JSON (will be enhanced in next task with proper formatting)
-        resultsContainer.innerHTML = `
-            <div class="results-section">
-                <h3>Analysis Results</h3>
-                <p class="success-message">✅ Analysis completed successfully!</p>
-                <details>
-                    <summary style="cursor: pointer; padding: 10px; background: var(--color-light); border-radius: 8px; margin: 10px 0;">
-                        <strong>View Results (JSON)</strong>
-                    </summary>
-                    <pre style="background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; margin-top: 10px;">${JSON.stringify(data, null, 2)}</pre>
-                </details>
-                <p style="margin-top: 20px; color: #666;">
-                    <em>Note: Pretty formatted results with tables and charts will be added in the next task (005-interactive-javascript).</em>
-                </p>
-            </div>
-        `;
+        // The actual HTML will be rendered server-side
+        // This function now handles initialization of interactive features
         resultsContainer.hidden = false;
+
+        // Initialize interactive features after content is loaded
+        setTimeout(() => {
+            initializeCharts(data);
+            initializeExportButtons();
+            initializeTableSorting();
+        }, 100);
 
         // Scroll to results
         resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /**
+     * Initialize Chart.js visualizations
+     * @param {Object} data - Analysis results data
+     */
+    function initializeCharts(data) {
+        // Check if chart functions are available
+        if (typeof createTeamScoresChart === 'undefined' || typeof createPlayerDistributionChart === 'undefined') {
+            console.warn('Chart functions not loaded');
+            return;
+        }
+
+        // Extract team and player data for charts
+        const teams = data.team_standings || [];
+        const players = data.top_players || [];
+
+        // Create team scores chart
+        if (teams.length > 0) {
+            createTeamScoresChart(teams);
+        }
+
+        // Create player distribution chart
+        if (players.length > 0) {
+            createPlayerDistributionChart(players);
+        }
+    }
+
+    /**
+     * Initialize export buttons for tables
+     */
+    function initializeExportButtons() {
+        // Setup export for players table
+        const playersTable = document.getElementById('playersTable');
+        if (playersTable) {
+            setupTableExport('playersTable', 'nhl-scrabble-players', {
+                csvButtonId: 'export-playersTable-csv',
+                jsonButtonId: 'export-playersTable-json'
+            });
+        }
+
+        // Setup export for teams table
+        const teamsTable = document.getElementById('teamsTable');
+        if (teamsTable) {
+            setupTableExport('teamsTable', 'nhl-scrabble-teams', {
+                csvButtonId: 'export-teamsTable-csv',
+                jsonButtonId: 'export-teamsTable-json'
+            });
+        }
+    }
+
+    /**
+     * Initialize table sorting
+     */
+    function initializeTableSorting() {
+        // Tables with class 'sortable' are auto-initialized
+        // But we can also manually initialize specific tables
+        if (document.getElementById('playersTable')) {
+            new TableSort('playersTable');
+        }
+        if (document.getElementById('teamsTable')) {
+            new TableSort('teamsTable');
+        }
     }
 
     /**

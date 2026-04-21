@@ -239,6 +239,25 @@ input[type="checkbox"] {
     to { transform: rotate(360deg); }
 }
 
+/* HTMX loading indicator */
+.htmx-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-left: var(--spacing-md);
+    color: var(--color-gray);
+    font-size: 0.875rem;
+}
+
+.htmx-indicator .spinner {
+    border-color: rgba(0, 0, 0, 0.2);
+    border-top-color: var(--color-primary);
+}
+
+.htmx-indicator.htmx-request {
+    display: inline-flex;
+}
+
 /* ===== Tables ===== */
 .table-container {
     overflow-x: auto;
@@ -436,5 +455,393 @@ input[type="checkbox"] {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ===== Toast Notifications ===== */
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: var(--color-white);
+    border-left: 4px solid;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.fade-out {
+    opacity: 0;
+    transform: translateX(400px);
+}
+
+.toast-error { border-left-color: #dc3545; }
+.toast-warning { border-left-color: #ffc107; }
+.toast-success { border-left-color: #28a745; }
+.toast-info { border-left-color: #17a2b8; }
+
+.toast-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.toast-message {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+/* ===== Mobile Navigation ===== */
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 28px;
+}
+
+.hamburger-line {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-white);
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Hamburger animation when open */
+.nav-toggle.open .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.open .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile menu styles */
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .main-nav {
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: calc(100vh - 60px);
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        transition: right 0.3s ease-in-out;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .main-nav.open {
+        right: 0;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        padding: var(--spacing-lg);
+        gap: var(--spacing-md);
+    }
+
+    .main-nav li {
+        width: 100%;
+    }
+
+    .main-nav a {
+        display: block;
+        padding: var(--spacing-sm);
+        border-radius: var(--border-radius);
+        transition: background-color 0.2s;
+    }
+
+    .main-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        opacity: 1;
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.nav-open {
+        overflow: hidden;
+    }
+}
+
+/* ===== Loading Overlay ===== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+}
+
+.loading-content {
+    text-align: center;
+    color: var(--color-white);
+}
+
+.spinner-large {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--color-white);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+}
+
+.loading-content p {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* ===== Scroll Animations ===== */
+.fade-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-on-scroll.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+.pulse {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* ===== Chart Containers ===== */
+.visualizations {
+    background: var(--color-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: var(--spacing-lg);
+}
+
+.chart-container {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    background: var(--color-light);
+    border-radius: var(--border-radius);
+}
+
+.chart-container canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure charts are responsive */
+.chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin: var(--spacing-md) 0;
+}
+
+/* ===== Table Sorting ===== */
+th[data-sort] {
+    user-select: none;
+    position: relative;
+    padding-right: 30px;
+}
+
+.sort-indicator {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    transition: opacity 0.2s;
+    font-size: 14px;
+}
+
+th[data-sort]:hover .sort-indicator {
+    opacity: 0.6;
+}
+
+th[data-sort][aria-sort] .sort-indicator {
+    opacity: 1;
+}
+
+/* ===== Export Buttons ===== */
+.export-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+    flex-wrap: wrap;
+}
+
+.btn-secondary {
+    background: var(--color-gray);
+    color: var(--color-white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--color-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-sm {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.875rem;
+}
+
+.btn .icon {
+    font-size: 1.2em;
+}
+
+/* ===== Scroll to Top Button ===== */
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 1000;
+    font-size: 24px;
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+    background: var(--color-secondary);
+    transform: translateY(-2px);
+}
+
+/* ===== Copy Button for Code Blocks ===== */
+pre[data-copyable] {
+    position: relative;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.copy-btn:hover {
+    opacity: 1;
+}
+
+/* ===== Mobile Responsiveness for New Components ===== */
+@media (max-width: 768px) {
+    .toast {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .chart-wrapper {
+        height: 300px;
+    }
+
+    .export-buttons {
+        flex-direction: column;
+    }
+
+    .export-buttons .btn {
+        width: 100%;
+    }
+
+    .scroll-to-top {
+        bottom: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
     }
 }
