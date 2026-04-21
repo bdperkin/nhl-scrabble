@@ -126,19 +126,25 @@ class StatsReporter(BaseReporter):
 
         # Highest scoring first name
         top_first = stats["top_first"]
-        parts.append(
-            f"\nHighest First Name: {top_first.first_name} "
-            f"({top_first.full_name}, {top_first.team}) = "
-            f"{self._format_score(top_first.first_score)} points"
-        )
+        if top_first is not None:
+            parts.append(
+                f"\nHighest First Name: {top_first.first_name} "
+                f"({top_first.full_name}, {top_first.team}) = "
+                f"{self._format_score(top_first.first_score)} points"
+            )
+        else:
+            parts.append("\nHighest First Name: N/A (no players)")
 
         # Highest scoring last name
         top_last = stats["top_last"]
-        parts.append(
-            f"\nHighest Last Name: {top_last.last_name} "
-            f"({top_last.full_name}, {top_last.team}) = "
-            f"{self._format_score(top_last.last_score)} points"
-        )
+        if top_last is not None:
+            parts.append(
+                f"\nHighest Last Name: {top_last.last_name} "
+                f"({top_last.full_name}, {top_last.team}) = "
+                f"{self._format_score(top_last.last_score)} points"
+            )
+        else:
+            parts.append("\nHighest Last Name: N/A (no players)")
 
         # Average scores overall
         parts.extend(

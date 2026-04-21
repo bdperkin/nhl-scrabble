@@ -18,7 +18,7 @@ def mock_team_score() -> Mock:
     """
     team = Mock()
     team.total = 1500
-    team.avg = 50.0
+    team.avg_per_player = 50.0
     team.player_count = 30
     team.division = "Atlantic"
     team.conference = "Eastern"
