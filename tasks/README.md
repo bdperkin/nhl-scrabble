@@ -147,7 +147,7 @@ Each task is assigned a priority:
 **Remaining Effort**: 119.5-180h (web interface subtasks: 10-15h remaining, standalone features: 94-144h, automation: 12-18h)
 **Completed**: 20 hours (Task 002: FastAPI Infrastructure 3.5h - PR #174, Task 003: Web API Endpoints - PR #210, Task 004: Web Frontend Templates 3.5h - PR #176, Task 007: REST API Server - PR #212)
 
-### Refactoring (12 tasks active, 15 documented, 3 completed)
+### Refactoring (11 tasks active, 15 documented, 4 completed)
 
 | ID  | Title                                     | Priority | Effort   | Issue |
 | --- | ----------------------------------------- | -------- | -------- | ----- |
@@ -168,21 +168,21 @@ Each task is assigned a priority:
 | 018 | Add check-wheel-contents Validation       | LOW      | 1-2h     | #245  |
 | 019 | Add ssort Statement Sorting               | LOW      | 2-3h     | #246  |
 | 020 | Migrate from Deprecated codecov Action    | MEDIUM   | 30-60min | #285  |
-| 021 | Task Documentation Sync and Validation    | MEDIUM   | 3-5h     | #286  |
 
-**Documented Effort**: 52-75 hours remaining
+**Documented Effort**: 49-70 hours remaining
 
-**Completed**: 5.25 hours
+**Completed**: 9.75 hours
 
 - Task 001: Consolidate Report Classes 3h - PR #184
 - Task 008: Repository Cleanup 1.5h - PR #278
 - Task 009: Git Branch Pruning 0.75h - PR #279
+- Task 021: Task Documentation Sync and Validation 4.5h - PR #287
 
 ## Total Project Roadmap
 
-**Total Tasks**: 142 tasks (63 active, 79 completed)
-**Remaining Effort**: ~250.2-369.5 hours
-**Completed Effort**: ~220+ hours
+**Total Tasks**: 142 tasks (62 active, 80 completed)
+**Remaining Effort**: ~247.2-364.5 hours
+**Completed Effort**: ~224.5+ hours
 
 ### By Category
 
@@ -199,7 +199,7 @@ Each task is assigned a priority:
   - i18n sub-tasks (020-024): 5 tasks, 23-33h
   - Release automation sub-tasks (025-031): 7 tasks, 9-14h
   - Standalone features: 15 tasks, 124-182h
-- **Refactoring**: 18 active (6 completed), 51.5-73.0h remaining
+- **Refactoring**: 17 active (7 completed), 48.5-68.0h remaining
 
 ### By Priority
 
@@ -632,7 +632,7 @@ The project follows a phased approach, organized by priority and dependencies. S
 - ✅ Web interface foundation (4 tasks)
 - ✅ Repository cleanup and modernization (6 refactoring tasks)
 
-**Active Work** (63 tasks, ~250.2-369.5h remaining):
+**Active Work** (62 tasks, ~247.2-364.5h remaining):
 
 - 🔄 Test coverage improvement (8 tasks: sub-tasks for comprehensive coverage)
 - 🔄 Web interface completion (2 tasks: interactivity, testing)
@@ -1059,10 +1059,10 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-21
 **Tasks Documented**: 142 tasks across 7 categories
-**Completion Status**: 79 completed, 63 active
+**Completion Status**: 80 completed, 62 active
 **Total Documented Effort**: ~470-590 hours
-**Completed Effort**: ~220 hours
-**Remaining Effort**: ~250.2-369.5 hours
+**Completed Effort**: ~224.5 hours
+**Remaining Effort**: ~247.2-364.5 hours
 
 ## Completed Tasks
 
