@@ -178,19 +178,13 @@ class TestCachePerformance:
 
         try:
             # Create client with caching
-            client_with_cache = NHLApiClient(cache_enabled=True, cache_expiry=3600)
-            try:
+            with NHLApiClient(cache_enabled=True, cache_expiry=3600) as client_with_cache:
                 assert client_with_cache.cache_enabled
                 assert client_with_cache.cache_expiry == 3600
-            finally:
-                client_with_cache.close()
 
             # Create client without caching
-            client_without_cache = NHLApiClient(cache_enabled=False)
-            try:
+            with NHLApiClient(cache_enabled=False) as client_without_cache:
                 assert not client_without_cache.cache_enabled
-            finally:
-                client_without_cache.close()
         finally:
             os.chdir(original_dir)
             cache_file = tmp_path / ".nhl_cache.sqlite"
