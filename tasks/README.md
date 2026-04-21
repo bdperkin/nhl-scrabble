@@ -1013,6 +1013,41 @@ As tasks are completed, track:
 - **Security**: Vulnerabilities (should be 0 critical/high)
 - **User Experience**: GitHub stars, issue resolution time, PyPI downloads
 
+## Task Documentation Validation
+
+To ensure consistency across task documentation files, use the validation script:
+
+```bash
+# Python version (recommended)
+python scripts/validate_task_docs.py
+
+# Bash version (legacy)
+./tasks/scripts/validate-task-docs.sh
+```
+
+**What it validates**:
+
+- Active task counts match between filesystem and README.md
+- Completed task counts match between filesystem and README.md
+- Total task counts are consistent
+- IMPLEMENTATION_SEQUENCE.md counts match README.md
+- All documentation files are synchronized
+
+**When to run**:
+
+- After creating new tasks
+- After completing tasks
+- After moving tasks to completed/
+- Before updating task documentation
+- In CI/CD pipelines (future)
+
+**Exit codes**:
+
+- `0`: All validation checks passed ✅
+- `1`: One or more checks failed ❌
+
+The script provides detailed output showing which checks passed/failed and recommendations for fixing inconsistencies.
+
 ## Related Documentation
 
 - **CLAUDE.md** - Project overview and development guide
