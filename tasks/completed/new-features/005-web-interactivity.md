@@ -1187,4 +1187,214 @@ Test on:
 
 ## Implementation Notes
 
-*To be filled during implementation*
+**Implemented**: 2026-04-21
+**Branch**: new-features/005-web-interactivity
+**PR**: #296 - https://github.com/bdperkin/nhl-scrabble/pull/296
+**Commits**: 8 commits (d33b54e, c2fa66c, 5807a25, ff34de1, 434ac6d, ce56a33, 3be4017, 8796d73)
+**Merged**: 2026-04-21T22:53:50Z
+
+### Actual Implementation
+
+Successfully implemented all planned features with comprehensive JavaScript interactivity:
+
+**1. HTMX Integration** ✅
+
+- Integrated HTMX 1.9.10 via unpkg.com CDN
+- Modified analyze endpoint to support both GET (for HTMX) and POST (for backward compatibility)
+- Added `response_model=None` to allow dual response types (HTML/JSON)
+- Implemented HTMX request detection via `HX-Request` header
+- Returns HTML fragment (results.html) for HTMX, JSON for regular API calls
+
+**2. Chart.js Visualizations** ✅
+
+- Integrated Chart.js 4.4.0 via cdn.jsdelivr.net CDN
+- Created comprehensive charts.js module (260 lines)
+- Implemented team scores bar chart with all 32 NHL team colors
+- Implemented player distribution histogram with dynamic buckets
+- Charts render on demand with data from API responses
+- Responsive canvas sizing for mobile devices
+
+**3. Client-Side Table Sorting** ✅
+
+- Created table-sort.js module (286 lines)
+- Implemented TableSort class with click handlers
+- Support for numeric and string sorting
+- Sort direction indicators (↑↓)
+- Accessible keyboard navigation
+- Works on both players and teams tables
+
+**4. Data Export Functionality** ✅
+
+- Created export.js module (274 lines)
+- CSV export with proper comma/quote escaping
+- JSON export with pretty-printing
+- Client-side blob download
+- Timestamp in filenames
+- Separate exports for players and teams
+
+**5. Responsive Mobile Navigation** ✅
+
+- Created nav.js module (226 lines)
+- Hamburger menu with smooth slide-in animation
+- Outside-click closing behavior
+- Escape key support
+- Focus trap for accessibility
+- CSS animations for hamburger-to-X transformation
+
+**6. Smooth Scrolling and Animations** ✅
+
+- Created ui.js module (333 lines)
+- Intersection Observer for fade-in animations
+- Smooth scroll behavior for anchor links
+- Loading overlay with spinner
+- Button hover effects with transform
+- 0.6s transition timing for all animations
+
+**7. Error Handling and Loading States** ✅
+
+- Created errors.js module (324 lines)
+- Toast notification system (error, warning, success, info)
+- Auto-dismiss after configurable duration
+- Manual close button
+- Slide-in/out animations
+- Global unhandled rejection handler
+
+### Challenges Encountered
+
+**1. FastAPI Type Checking Issues**
+
+- **Problem**: MyPy errors with TemplateResponse signature
+- **Solution**: Changed from positional to keyword arguments (`request=request, name="index.html"`)
+- **Impact**: Required fixing 2 template rendering calls
+
+**2. FastAPI Response Model Validation**
+
+- **Problem**: Cannot use Union types with Response classes in return annotations
+- **Solution**: Set `response_model=None` and return raw dict instead of Pydantic model
+- **Impact**: Endpoint supports both HTML (HTMX) and JSON (API) responses
+
+**3. CodeQL Security Alerts** (8 alerts total)
+
+- **Problem**: Static analysis flagged security concerns in test code
+- **Solutions**:
+  - Context manager usage: Changed try-finally-close to `with` statements (#42, #43)
+  - URL validation: Progressed from substring checks to set-based allowlist pattern (#47, #48, #49, #50, #51, #52)
+- **Impact**: Enhanced security best practices in test suite
+
+**4. Test Expectations After Template Changes**
+
+- **Problem**: Root endpoint changed from JSON to HTML
+- **Solution**: Updated test_root_endpoint to expect HTML content-type
+- **Impact**: Integration tests now validate actual template rendering
+
+### Deviations from Plan
+
+**1. HTMX Endpoint Design**
+
+- **Planned**: POST endpoint returning partial template
+- **Actual**: GET endpoint with dual response (HTML for HTMX, JSON for API)
+- **Reason**: Better separation of concerns, backward compatibility
+
+**2. Manual Testing Checklist**
+
+- **Not Planned**: Comprehensive manual testing document
+- **Added**: Created MANUAL_TESTING_CHECKLIST.md (451 lines)
+- **Reason**: Ensure thorough browser compatibility and feature testing
+
+**3. Security Enhancements Beyond Scope**
+
+- **Not Planned**: Extensive CSP header configuration
+- **Added**: Content Security Policy with specific CDN allowlisting
+- **Reason**: CodeQL alerts prompted more secure configuration
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 8-12 hours
+- **Actual**: ~10 hours (including security fixes and testing)
+- **Breakdown**:
+  - Core JavaScript implementation: 6h
+  - Type checking and API fixes: 1.5h
+  - CodeQL security fixes: 1.5h
+  - Testing and documentation: 1h
+
+### Files Created/Modified
+
+**New Files** (10):
+
+- `src/nhl_scrabble/web/static/js/charts.js` (260 lines)
+- `src/nhl_scrabble/web/static/js/table-sort.js` (286 lines)
+- `src/nhl_scrabble/web/static/js/export.js` (274 lines)
+- `src/nhl_scrabble/web/static/js/nav.js` (226 lines)
+- `src/nhl_scrabble/web/static/js/ui.js` (333 lines)
+- `src/nhl_scrabble/web/static/js/errors.js` (324 lines)
+- `tests/integration/test_web_interactivity.py` (318 lines)
+- `MANUAL_TESTING_CHECKLIST.md` (451 lines)
+
+**Modified Files** (8):
+
+- `src/nhl_scrabble/web/app.py` (+89 lines)
+- `src/nhl_scrabble/web/static/css/style.css` (+407 lines)
+- `src/nhl_scrabble/web/static/js/app.js` (refactored)
+- `src/nhl_scrabble/web/templates/base.html` (+29 lines)
+- `src/nhl_scrabble/web/templates/index.html` (+12 lines)
+- `src/nhl_scrabble/web/templates/results.html` (+99 lines)
+- `tests/integration/test_web_infrastructure.py` (14 lines changed)
+- `tests/unit/test_caching.py` (10 lines changed)
+
+**Total Changes**: +3,167 lines added, -76 lines removed
+
+### Test Results
+
+**Integration Tests**:
+
+- ✅ 19/19 web interactivity tests passing
+- ✅ All web infrastructure tests passing
+- ✅ Template rendering validated
+- ✅ HTMX support validated
+- ✅ JavaScript module loading validated
+
+**Code Coverage**:
+
+- **Before**: 89.46%
+- **After**: 89.74% (+0.28%)
+- **Web module coverage**: 77.33%
+
+**Security**:
+
+- ✅ 8 CodeQL alerts resolved
+- ✅ All security checks passing
+- ✅ CSP headers properly configured
+
+**CI/CD**:
+
+- ✅ All required checks passing (Python 3.10-3.14)
+- ⚠️ Python 3.15-dev fails (experimental, allowed)
+- ✅ Pre-commit hooks: 58/58 passing
+- ✅ All tox quality checks passing
+
+### Related PRs
+
+- #296 - Main implementation (merged)
+
+### Lessons Learned
+
+1. **FastAPI Response Types**: When supporting multiple response formats (HTML/JSON), use `response_model=None` and return raw dict/HTMLResponse instead of Pydantic models with Union types.
+
+1. **CodeQL Static Analysis**: URL validation in tests requires explicit allowlist patterns (set-based with `issubset()`) rather than substring matching to satisfy security analysis tools.
+
+1. **Progressive Enhancement**: HTMX enables seamless form submission without JavaScript, but graceful degradation requires careful endpoint design.
+
+1. **Test-Driven Security**: CodeQL alerts, while in test code, prompted improvements to production CSP configuration - security testing benefits the entire application.
+
+1. **Manual Testing is Essential**: Comprehensive manual testing checklist ensures JavaScript features work across browsers and devices where automated tests can't reach.
+
+### Browser Compatibility Verified
+
+- ✅ Chrome 120+ (automated + manual)
+- ✅ Firefox 120+ (automated)
+- ✅ Edge 120+ (automated)
+- ⚠️ Safari 17+ (requires manual testing)
+- ⚠️ Mobile Safari iOS 16+ (requires manual testing)
+- ⚠️ Mobile Chrome Android 12+ (requires manual testing)
+
+**Note**: Manual browser testing documented in MANUAL_TESTING_CHECKLIST.md
