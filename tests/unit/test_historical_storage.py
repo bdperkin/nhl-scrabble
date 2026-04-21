@@ -527,7 +527,8 @@ class TestClearAllEdgeCases:
 
         try:
             count = store.clear_all()
-            assert count >= 2 or count == 3
+            # Should successfully delete 2 files (one is protected)
+            assert count == 2
         finally:
             # Restore permissions for cleanup
             protected.chmod(0o644)
