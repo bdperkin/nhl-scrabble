@@ -8,11 +8,11 @@
 
 ## Estimated Effort
 
-3-4 hours
+3.5-4.5 hours
 
 ## Description
 
-Expand the `nhl-scrabble analyze` command to support multiple output formats beyond the current text and JSON options. Add support for YAML, XML, Table, Markdown, CSV, and custom templates to accommodate different use cases and integration scenarios.
+Expand the `nhl-scrabble analyze` command to support multiple output formats beyond the current text and JSON options. Add support for YAML, XML, HTML, Table, Markdown, CSV, and custom templates to accommodate different use cases and integration scenarios.
 
 ## Current State
 
@@ -66,6 +66,7 @@ Add comprehensive format support:
 
 1. **YAML** - Human-readable structured data
 1. **XML** - Widely-used markup language
+1. **HTML** - Web-ready formatted tables
 1. **Table** - Pretty-printed tabular format
 1. **Markdown** - Documentation-friendly markup
 1. **CSV** - Spreadsheet-compatible format
@@ -76,7 +77,7 @@ Add comprehensive format support:
 ```python
 @click.option(
     "-f", "--format",
-    type=click.Choice(["text", "json", "yaml", "xml", "table", "markdown", "csv", "template"]),
+    type=click.Choice(["text", "json", "yaml", "xml", "html", "table", "markdown", "csv", "template"]),
     default="text",
     help="Output format",
 )
@@ -149,7 +150,126 @@ def generate_xml_output(data: dict) -> str:
 """
 ```
 
-**3. Table Format:**
+**3. HTML Format:**
+
+```python
+# Using built-in xml.etree.ElementTree or simple string building
+def generate_html_output(data: dict) -> str:
+    """Generate HTML formatted output with styled table."""
+    html = """<!DOCTYPE html>
+<html>
+<head>
+    <title>NHL Scrabble Scores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>NHL Scrabble Scores</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Total Score</th>
+                <th>Top Player</th>
+                <th>Player Score</th>
+            </tr>
+        </thead>
+        <tbody>
+"""
+
+    for rank, team in enumerate(data['teams'], 1):
+        html += f"""            <tr>
+                <td>{rank}</td>
+                <td>{team['abbrev']}</td>
+                <td>{team['total_score']}</td>
+                <td>{team['top_player']['name']}</td>
+                <td>{team['top_player']['score']}</td>
+            </tr>
+"""
+
+    html += """        </tbody>
+    </table>
+</body>
+</html>"""
+
+    return html
+
+# Example output:
+"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NHL Scrabble Scores</title>
+    <style>
+        /* Styled CSS */
+    </style>
+</head>
+<body>
+    <h1>NHL Scrabble Scores</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Total Score</th>
+                <th>Top Player</th>
+                <th>Player Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>TOR</td>
+                <td>1234</td>
+                <td>Auston Matthews</td>
+                <td>156</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>BOS</td>
+                <td>1198</td>
+                <td>David Pastrnak</td>
+                <td>145</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+"""
+```
+
+**4. Table Format:**
 
 ```python
 # Using Rich Table or tabulate
@@ -192,7 +312,7 @@ def generate_table_output(teams: list) -> str:
 """
 ```
 
-**4. Markdown Format:**
+**5. Markdown Format:**
 
 ```python
 def generate_markdown_output(data: dict) -> str:
@@ -223,7 +343,7 @@ def generate_markdown_output(data: dict) -> str:
 """
 ```
 
-**5. CSV Format:**
+**6. CSV Format:**
 
 ```python
 import csv
@@ -257,7 +377,7 @@ Rank,Team,Total Score,Top Player,Player Score
 """
 ```
 
-**6. Template Format:**
+**7. Template Format:**
 
 ```python
 from jinja2 import Environment, FileSystemLoader, Template
@@ -302,6 +422,7 @@ from .text import TextFormatter
 from .json import JSONFormatter
 from .yaml import YAMLFormatter
 from .xml import XMLFormatter
+from .html import HTMLFormatter
 from .table import TableFormatter
 from .markdown import MarkdownFormatter
 from .csv import CSVFormatter
@@ -312,6 +433,7 @@ FORMATTERS = {
     'json': JSONFormatter,
     'yaml': YAMLFormatter,
     'xml': XMLFormatter,
+    'html': HTMLFormatter,
     'table': TableFormatter,
     'markdown': MarkdownFormatter,
     'csv': CSVFormatter,
@@ -336,7 +458,7 @@ from nhl_scrabble.formatters import get_formatter
 @click.option(
     "-f", "--format",
     type=click.Choice([
-        "text", "json", "yaml", "xml",
+        "text", "json", "yaml", "xml", "html",
         "table", "markdown", "csv", "template"
     ]),
     default="text",
@@ -360,6 +482,9 @@ def analyze(format, template, output, verbose, top_players, top_team_players):
 
       YAML format:
         $ nhl-scrabble analyze -f yaml -o scores.yaml
+
+      HTML format:
+        $ nhl-scrabble analyze -f html -o report.html
 
       CSV for Excel:
         $ nhl-scrabble analyze -f csv -o scores.csv
@@ -411,6 +536,12 @@ def analyze(format, template, output, verbose, top_players, top_team_players):
    - Install dependency: `dicttoxml`
    - Create `xml.py` formatter
    - Add tests for XML output
+
+1. **Implement HTML Formatter** (25 min)
+
+   - No external dependency needed (built-in string building)
+   - Create `html.py` formatter
+   - Add tests for HTML output
 
 1. **Implement Table Formatter** (25 min)
 
@@ -515,6 +646,7 @@ nhl-scrabble analyze -f json | jq .
 
 - [ ] YAML format implemented and working
 - [ ] XML format implemented and working
+- [ ] HTML format implemented and working
 - [ ] Table format implemented and working (using Rich)
 - [ ] Markdown format implemented and working
 - [ ] CSV format implemented and working
@@ -542,6 +674,7 @@ nhl-scrabble analyze -f json | jq .
 - `src/nhl_scrabble/formatters/json.py` - JSON formatter (moved)
 - `src/nhl_scrabble/formatters/yaml.py` - YAML formatter
 - `src/nhl_scrabble/formatters/xml.py` - XML formatter
+- `src/nhl_scrabble/formatters/html.py` - HTML formatter
 - `src/nhl_scrabble/formatters/table.py` - Table formatter
 - `src/nhl_scrabble/formatters/markdown.py` - Markdown formatter
 - `src/nhl_scrabble/formatters/csv.py` - CSV formatter
@@ -587,6 +720,13 @@ jinja2 = ">=3.1.0"       # Template support
 - SOAP APIs
 - Enterprise applications
 
+**HTML:**
+
+- Web dashboards
+- Email reports
+- Browser-based viewing
+- Styled reports
+
 **Table:**
 
 - Terminal output
@@ -613,7 +753,9 @@ jinja2 = ">=3.1.0"       # Template support
 
 ### Template Examples
 
-**Example 1: HTML Report Template**
+**Example 1: Custom HTML Report Template**
+
+Note: For basic HTML tables, use `--format html`. This template example shows how to create more complex, custom-styled HTML reports with additional features.
 
 ```jinja2
 <!-- templates/html_report.j2 -->
@@ -716,6 +858,16 @@ def validate_csv(output: str) -> bool:
         return True
     except csv.Error:
         return False
+
+def validate_html(output: str) -> bool:
+    """Validate HTML output is well-formed."""
+    try:
+        from html.parser import HTMLParser
+        parser = HTMLParser()
+        parser.feed(output)
+        return True
+    except Exception:
+        return False
 ```
 
 ### Performance Considerations
@@ -727,6 +879,7 @@ def validate_csv(output: str) -> bool:
 | Text     | Low        | Very Fast | Simple string formatting |
 | JSON     | Low        | Very Fast | Built-in serialization   |
 | YAML     | Medium     | Fast      | PyYAML is optimized      |
+| HTML     | Low        | Fast      | String building          |
 | CSV      | Low        | Very Fast | Built-in module          |
 | Markdown | Low        | Fast      | String building          |
 | Table    | Medium     | Fast      | Rich library optimized   |
@@ -826,6 +979,7 @@ After initial implementation:
 | JSON     | ✅        | ✅               | ✅                |
 | YAML     | ✅        | ✅               | ✅                |
 | XML      | ✅        | ✅               | ✅                |
+| HTML     | ✅        | ✅               | ✅                |
 | Table    | ✅        | ✅               | ✅                |
 | Markdown | ✅        | ✅               | ✅                |
 | CSV      | ✅        | ✅               | ✅                |
@@ -864,6 +1018,14 @@ nhl-scrabble analyze -f yaml
 ```
 
 Human-readable YAML format.
+
+### HTML
+
+```bash
+nhl-scrabble analyze -f html -o report.html
+```
+
+Styled HTML table format for web viewing.
 
 ### CSV
 
@@ -910,7 +1072,7 @@ Custom output using Jinja2 templates.
 ### Success Metrics
 
 **Quantitative:**
-- [ ] 8 formats supported (text, json, yaml, xml, table, markdown, csv, template)
+- [ ] 9 formats supported (text, json, yaml, xml, html, table, markdown, csv, template)
 - [ ] 100% test coverage for formatters
 - [ ] All formats validate correctly
 - [ ] <100ms format generation time
