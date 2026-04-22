@@ -8,7 +8,6 @@ This module tests the various Sphinx documentation output formats:
 - Plain text (simple text format)
 """
 
-import contextlib
 import shutil
 import subprocess
 from pathlib import Path
@@ -19,26 +18,12 @@ import pytest
 PROJECT_ROOT = Path(__file__).parent.parent
 
 
-@pytest.mark.serial
 class TestDocumentationBuilds:
     """Test suite for Sphinx documentation builds.
 
-    These tests are marked as serial to avoid parallel execution issues when multiple tests try to
-    clean the same _build directory.
+    Tests build documentation in multiple formats and verify outputs are created.
+    Uses the shared docs/_build directory - does not clean up to avoid conflicts.
     """
-
-    @pytest.fixture(autouse=True)
-    def setup_teardown(self):
-        """Set up and tear down for each test."""
-        # Clean build directory before tests (ignore errors if already being cleaned)
-        build_dir = PROJECT_ROOT / "docs" / "_build"
-        if build_dir.exists():
-            with contextlib.suppress(FileNotFoundError, OSError):
-                shutil.rmtree(build_dir)
-        # Optionally clean up after tests (commented out to allow manual inspection)
-        # if build_dir.exists():
-        #     with contextlib.suppress(FileNotFoundError, OSError):
-        #         shutil.rmtree(build_dir)  # noqa: ERA001
 
     @pytest.mark.skipif(
         shutil.which("sphinx-build") is None,
