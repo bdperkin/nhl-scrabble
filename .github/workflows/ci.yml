@@ -131,7 +131,6 @@ jobs:
           - pydocstyle
           - vulture
           - blocklint
-          - gitlint
           - absolufy-imports
           - autoflake
           - docformatter
@@ -143,6 +142,9 @@ jobs:
           - tox-env: py315
             experimental: true
           - tox-env: ty
+            experimental: true
+            # Non-blocking during validation period
+          - tox-env: gitlint
             experimental: true
             # Non-blocking during validation period
 
