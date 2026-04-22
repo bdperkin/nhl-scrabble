@@ -360,8 +360,10 @@ make uv-init         # Fast setup (uv)
 # Testing
 make test            # Run all tests
 make test-cov        # With coverage
-make tox             # Multi-Python (uses tox-uv automatically)
-make tox-parallel    # Parallel testing (10x faster)
+make tox             # Parallel execution with tier-based fail-fast (default)
+make tox-parallel    # Pure parallel (all environments)
+make tox-sequential  # Sequential (for debugging)
+make tox-quick       # Critical checks only (fast fail-fast)
 
 # Code Quality
 make ruff-check      # Ruff linting
@@ -388,10 +390,15 @@ pytest                    # Quick test run (auto-parallel with -n auto)
 pytest -n 4              # Explicit worker count
 pytest -n 0              # Sequential execution (debugging)
 
-# Tox testing
+# Tox testing (with intelligent parallel execution and fail-fast)
+make tox                 # Default: parallel with tier-based fail-fast
+make tox-parallel        # Pure parallel (all environments)
+make tox-sequential      # Sequential (for debugging)
+make tox-quick           # Critical checks only (fast fail-fast)
 tox -e py310             # Test Python 3.10 (fast with tox-uv!)
 tox -e py315             # Test Python 3.15 (fast with tox-uv!)
-tox -p auto              # All versions parallel (10x faster)
+tox -m critical          # Run only critical quality checks
+tox -m test              # Run only tests
 make ci                  # CI simulation (uses tox -e ci)
 
 # Coverage

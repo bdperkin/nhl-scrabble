@@ -250,10 +250,9 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
     expected_cdns = {"https://unpkg.com", "https://cdn.jsdelivr.net"}
 
     # Verify both CDNs are in the allowlist using set intersection
-    assert expected_cdns.issubset(allowed_sources), (
-        f"Missing CDNs in CSP. Expected: {expected_cdns}, "
-        f"Found: {allowed_sources & expected_cdns}"
-    )
+    assert expected_cdns.issubset(
+        allowed_sources
+    ), f"Missing CDNs in CSP. Expected: {expected_cdns}, Found: {allowed_sources & expected_cdns}"
 
 
 def test_analyze_post_still_works(client: TestClient) -> None:
