@@ -41,16 +41,16 @@
 
 </p>
 
-A Python application that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. Generate comprehensive reports showing team, division, and conference standings complete with playoff brackets!
+A [Python](https://www.python.org/) application that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. Generate comprehensive reports showing team, division, and conference standings complete with playoff brackets!
 
 ## Features
 
-- 🏒 **Live NHL Data** - Fetches current roster data directly from the official NHL API
-- 🌐 **Web Interface** - FastAPI-powered web server with auto-generated API documentation
+- 🏒 **Live NHL Data** - Fetches current roster data directly from the official [NHL API](https://gitlab.com/dword4/nhlapi)
+- 🌐 **Web Interface** - [FastAPI](https://fastapi.tiangolo.com/)-powered web server with auto-generated API documentation
   - **Interactive Dashboard** - Modern, responsive UI with real-time analysis
-  - **Data Visualizations** - Chart.js-powered graphs and charts
-  - **HTMX Integration** - Dynamic updates without page reloads
-  - **REST API** - Programmatic access with OpenAPI documentation
+  - **Data Visualizations** - [Chart.js](https://www.chartjs.org/)-powered graphs and charts
+  - **HTMX Integration** - [HTMX](https://htmx.org/)-powered dynamic updates without page reloads
+  - **REST API** - Programmatic access with [OpenAPI](https://www.openapis.org/) documentation
   - **Mobile-Friendly** - Fully responsive design for all devices
   - **Accessibility** - WCAG 2.1 AA compliant with keyboard navigation and screen reader support
 - 📊 **Comprehensive Reports** - Multiple report types including:
@@ -155,10 +155,10 @@ pip install -e ".[dev]"
 
 ### Requirements
 
-- **Supported**: Python 3.10, 3.11, 3.12, 3.13, 3.14
+- **Supported**: [Python](https://www.python.org/) 3.10, 3.11, 3.12, 3.13, 3.14
 - **Experimental**: Python 3.15-dev (CI testing only, may have issues)
-- Dependencies: `requests`, `click`, `pydantic`, `python-dotenv`, `rich`, `fastapi`, `uvicorn`, `jinja2`
-- Note: UV acceleration is automatic when using tox (via tox-uv plugin)
+- Dependencies: [`requests`](https://requests.readthedocs.io/), [`click`](https://click.palletsprojects.com/), [`pydantic`](https://docs.pydantic.dev/), [`python-dotenv`](https://saurabh-kumar.com/python-dotenv/), [`rich`](https://rich.readthedocs.io/), [`fastapi`](https://fastapi.tiangolo.com/), [`uvicorn`](https://www.uvicorn.org/), [`jinja2`](https://jinja.palletsprojects.com/)
+- Note: [UV](https://docs.astral.sh/uv/) acceleration is automatic when using [tox](https://tox.wiki/) (via [tox-uv](https://github.com/tox-dev/tox-uv) plugin)
 
 ## Quick Start
 
@@ -454,7 +454,7 @@ pytest tests/integration -m integration
 
 ### Multi-Environment Testing with Tox
 
-The project supports testing across multiple Python versions using [tox](https://tox.wiki/):
+The project supports testing across multiple Python versions using [tox](https://tox.wiki/) with [pytest](https://docs.pytest.org/):
 
 ```bash
 # Test across all Python versions (3.10, 3.11, 3.12, 3.13, 3.14)
@@ -512,7 +512,7 @@ See [docs/TOX.md](docs/TOX.md) for complete tox documentation and [docs/TOX-UV.m
 
 ### Fast Package Management with UV
 
-The project uses [uv](https://github.com/astral-sh/uv) via the tox-uv plugin, providing 10-100x faster package management automatically when using tox:
+The project uses [UV](https://docs.astral.sh/uv/) via the [tox-uv](https://github.com/tox-dev/tox-uv) plugin, providing 10-100x faster package management automatically when using [tox](https://tox.wiki/):
 
 ```bash
 # UV acceleration is automatic with tox
@@ -530,7 +530,7 @@ make uv-pip ARGS="list"
 
 ### Pre-commit Hooks
 
-The project uses comprehensive pre-commit hooks (55 total) for automatic code quality checks:
+The project uses comprehensive [pre-commit](https://pre-commit.com/) hooks (55 total) for automatic code quality checks:
 
 ```bash
 # Install pre-commit hooks (one-time setup)
@@ -548,18 +548,18 @@ pre-commit autoupdate
 - **Meta hooks** (3): Configuration validation (check-hooks-apply, check-useless-excludes, sync-pre-commit-deps)
 - **File quality** (18): Formatting, syntax, security (trailing-whitespace, check-yaml, detect-private-key, etc.)
 - **Python quality** (7): Code patterns (blanket-noqa, mock-methods, eval, type-annotations, etc.)
-- **Python imports** (2): Import sorting and absolute imports (isort, absolufy-imports)
-- **Project validation** (1): pyproject.toml validation against PEP standards (validate-pyproject)
-- **Python formatting** (2): Black formatting and PEP 8 auto-formatting (black, autopep8)
-- **Docstring formatting** (1): Python docstring formatting (docformatter)
-- **YAML linting** (1): YAML file validation and linting (yamllint)
-- **Spelling** (1): Code and documentation spell checking (codespell)
-- **Markdown** (2): Markdown linting (pymarkdown) and formatting (mdformat)
-- **Documentation** (2): RST style linting (doc8) and syntax checking (rstcheck)
+- **Python imports** (2): Import sorting and absolute imports ([isort](https://pycqa.github.io/isort/), absolufy-imports)
+- **Project validation** (1): pyproject.toml validation against [PEP](https://peps.python.org/) standards (validate-pyproject)
+- **Python formatting** (2): [Black](https://black.readthedocs.io/) formatting and [PEP 8](https://peps.python.org/pep-0008/) auto-formatting ([autopep8](https://github.com/hhatto/autopep8))
+- **Docstring formatting** (1): Python docstring formatting ([docformatter](https://docformatter.readthedocs.io/))
+- **YAML linting** (1): YAML file validation and linting ([yamllint](https://yamllint.readthedocs.io/))
+- **Spelling** (1): Code and documentation spell checking ([codespell](https://github.com/codespell-project/codespell))
+- **Markdown** (2): Markdown linting ([pymarkdown](https://github.com/jackdewinter/pymarkdown)) and formatting ([mdformat](https://mdformat.readthedocs.io/))
+- **Documentation** (2): RST style linting ([doc8](https://doc8.readthedocs.io/)) and syntax checking ([rstcheck](https://rstcheck.readthedocs.io/))
 - **UV** (1): Dependency lock file validation (uv-lock)
-- **Flake8** (1): Python code linting and style checking (flake8)
-- **Ruff** (2): Comprehensive linting and formatting (ruff-check, ruff-format)
-- **MyPy** (1): Strict type checking
+- **Flake8** (1): Python code linting and style checking ([flake8](https://flake8.pycqa.org/))
+- **Ruff** (2): Comprehensive linting and formatting ([ruff](https://docs.astral.sh/ruff/))
+- **MyPy** (1): Strict type checking ([mypy](https://mypy-lang.org/))
 
 All hooks run automatically on commit, ensuring code quality before changes are committed.
 
@@ -590,13 +590,13 @@ make check
 Or directly:
 
 ```bash
-# Format code
+# Format code with ruff
 ruff format .
 
-# Lint code
+# Lint code with ruff
 ruff check .
 
-# Type check
+# Type check with mypy
 mypy src
 ```
 
@@ -731,8 +731,6 @@ Complete API and configuration documentation:
 - [CLI Reference](docs/reference/cli.md) - All commands and options
 - [Configuration](docs/reference/configuration.md) - All settings explained
 - [Makefile Reference](docs/reference/makefile.md) - All 55 Makefile targets
-- [Code API](docs/reference/code-api.md) - Use NHL Scrabble as a library
-- [Scrabble Values](docs/reference/scrabble-values.md) - Letter values and scoring
 - [And more...](docs/reference/)
 
 ### 💡 [Explanation](docs/explanation/) - Conceptual understanding
@@ -747,7 +745,6 @@ Background and design philosophy:
 ### Community Documentation
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
-- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community standards
 - [SECURITY.md](SECURITY.md) - Security policy
 - [SUPPORT.md](SUPPORT.md) - Getting help
 - [CHANGELOG.md](CHANGELOG.md) - Version history
@@ -757,13 +754,13 @@ Background and design philosophy:
 
 This project takes security seriously and uses multiple tools to ensure dependencies are safe and up-to-date:
 
-- **Dependabot**: Automated dependency updates and security alerts
+- **[Dependabot](https://docs.github.com/en/code-security/dependabot)**: Automated dependency updates and security alerts
   - Runs weekly (Mondays 9:00 AM ET)
-  - Monitors Python dependencies and GitHub Actions
+  - Monitors Python dependencies and [GitHub Actions](https://docs.github.com/en/actions)
   - Creates PRs for security vulnerabilities immediately
   - Groups non-security updates to reduce noise
-- **pip-audit**: Scans dependencies for known vulnerabilities in CI
-- **Pre-commit hooks**: 55 comprehensive quality and security checks
+- **[pip-audit](https://pypi.org/project/pip-audit/)**: Scans dependencies for known vulnerabilities in CI
+- **[Pre-commit hooks](https://pre-commit.com/)**: 55 comprehensive quality and security checks
 
 ### Reporting Security Vulnerabilities
 
@@ -778,12 +775,11 @@ Dependabot automatically creates pull requests for:
 - **Production dependencies**: Weekly grouped PRs for patch updates only
 - **GitHub Actions**: Weekly updates for workflow dependencies
 
-All Dependabot PRs are automatically labeled, assigned, and follow conventional commit format (`deps(scope): description`).
+All Dependabot PRs are automatically labeled, assigned, and follow [conventional commit](https://www.conventionalcommits.org/) format (`deps(scope): description`).
 
 ## Support
 
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/bdperkin/nhl-scrabble/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/bdperkin/nhl-scrabble/discussions)
 
 ## Development Stats
 
@@ -793,9 +789,9 @@ All Dependabot PRs are automatically labeled, assigned, and follow conventional 
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
-- **Pre-commit Hooks**: 54 hooks (meta, pre-commit-hooks, pygrep-hooks, isort, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, absolufy-imports, validate-pyproject, pyroma, tox-ini-fmt, yamllint, codespell, pymarkdown, mdformat, doc8, rstcheck, uv, flake8, autoflake, black, docformatter, ruff, mypy)
-- **Dependency Lock**: uv.lock with 1,957 lines (deterministic builds)
-- **CI/CD**: GitHub Actions on Python 3.10, 3.11, 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
+- **Pre-commit Hooks**: 54 hooks ([pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks), [pygrep-hooks](https://github.com/pre-commit/pygrep-hooks), [isort](https://pycqa.github.io/isort/), [interrogate](https://interrogate.readthedocs.io/), [deptry](https://deptry.com/), [unimport](https://unimport.hakancelik.dev/), [pydocstyle](http://www.pydocstyle.org/), [vulture](https://github.com/jendrikseipp/vulture), [blocklint](https://github.com/PrincetonUniversity/blocklint), [gitlint](https://jorisroovers.com/gitlint/), absolufy-imports, [validate-pyproject](https://validate-pyproject.readthedocs.io/), [pyroma](https://github.com/regebro/pyroma), [tox-ini-fmt](https://github.com/tox-dev/tox-ini-fmt), [yamllint](https://yamllint.readthedocs.io/), [codespell](https://github.com/codespell-project/codespell), [pymarkdown](https://github.com/jackdewinter/pymarkdown), [mdformat](https://mdformat.readthedocs.io/), [doc8](https://doc8.readthedocs.io/), [rstcheck](https://rstcheck.readthedocs.io/), [uv](https://docs.astral.sh/uv/), [flake8](https://flake8.pycqa.org/), autoflake, [black](https://black.readthedocs.io/), docformatter, [ruff](https://docs.astral.sh/ruff/), [mypy](https://mypy-lang.org/))
+- **Dependency Lock**: [uv.lock](https://docs.astral.sh/uv/) with 1,957 lines (deterministic builds)
+- **CI/CD**: [GitHub Actions](https://docs.github.com/en/actions) on [Python](https://www.python.org/) 3.10, 3.11, 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
 
 ______________________________________________________________________
 

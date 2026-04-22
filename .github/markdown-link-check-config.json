@@ -1,0 +1,47 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost"
+    },
+    {
+      "pattern": "^#"
+    },
+    {
+      "pattern": "^http://127.0.0.1"
+    },
+    {
+      "pattern": "https://www.w3.org/WAI/WCAG21/quickref/"
+    },
+    {
+      "pattern": "https://validator.w3.org/"
+    },
+    {
+      "pattern": "https://inkscape.org/learn/"
+    },
+    {
+      "pattern": "https://www.youtube.com/c/Figma"
+    },
+    {
+      "pattern": "https://www.smashingmagazine.com/logo-design/"
+    },
+    {
+      "pattern": "https://github.com/bdperkin/nhl-scrabble/discussions"
+    },
+    {
+      "pattern": "https://github.com/bdperkin/nhl-scrabble/settings"
+    }
+  ],
+  "httpHeaders": [
+    {
+      "urls": ["https://github.com"],
+      "headers": {
+        "Accept": "text/html"
+      }
+    }
+  ],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206, 301, 302, 307, 308]
+}

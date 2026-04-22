@@ -27,7 +27,7 @@ make init
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-**Note:** UV acceleration is automatic when using tox (via tox-uv plugin).
+**Note:** [UV](https://docs.astral.sh/uv/) acceleration is automatic when using [tox](https://tox.wiki/) (via [tox-uv](https://github.com/tox-dev/tox-uv) plugin).
 
 3. **Manual Setup (Alternative)**
 
@@ -47,7 +47,7 @@ pre-commit install
 
 ### Python Version Support
 
-The project supports Python 3.10 through 3.14. We also test against Python 3.15-dev to ensure forward compatibility, but this version is experimental and may fail CI checks without blocking merges.
+The project supports [Python](https://www.python.org/) 3.10 through 3.14. We also test against Python 3.15-dev to ensure forward compatibility, but this version is experimental and may fail CI checks without blocking merges.
 
 **Local Development:**
 
@@ -276,7 +276,7 @@ pytest tests/unit/test_scrabble.py::TestScrabbleScorer::test_calculate_score_bas
 
 **Enhanced Test Output with pytest-sugar:**
 
-The project includes pytest-sugar for improved test output with real-time progress bars, instant failure display, and colored results:
+The project includes [pytest-sugar](https://github.com/Teemu/pytest-sugar) for improved test output with real-time progress bars, instant failure display, and colored results:
 
 ```bash
 # pytest-sugar works automatically (no configuration needed)
@@ -296,7 +296,7 @@ pytest-sugar auto-detects CI environments and falls back to plain output in non-
 
 **Enhanced Assertion Diffs with pytest-clarity:**
 
-The project includes pytest-clarity for improved assertion error output with better diff formatting and clearer visualization:
+The project includes [pytest-clarity](https://github.com/darrenburns/pytest-clarity) for improved assertion error output with better diff formatting and clearer visualization:
 
 ```bash
 # pytest-clarity works automatically (no configuration needed)
@@ -329,7 +329,7 @@ pytest-clarity works in CI environments (with or without colors) and is compatib
 
 ### Test Timeout Protection
 
-The project uses pytest-timeout to prevent tests from hanging indefinitely and wasting CI resources:
+The project uses [pytest-timeout](https://github.com/pytest-dev/pytest-timeout) to prevent tests from hanging indefinitely and wasting CI resources:
 
 ```bash
 # pytest-timeout works automatically (no configuration needed)
@@ -402,7 +402,7 @@ pytestmark = pytest.mark.timeout(300)  # 5 minutes for all tests
 
 ### Parallel Test Execution
 
-The project uses pytest-xdist to run tests in parallel across multiple CPU cores, significantly speeding up test execution:
+The project uses [pytest-xdist](https://pytest-xdist.readthedocs.io/) to run tests in parallel across multiple CPU cores, significantly speeding up test execution:
 
 ```bash
 # pytest-xdist runs automatically (configured in pyproject.toml)
@@ -504,7 +504,7 @@ Local development uses `-n auto` to maximize parallelization based on available 
 
 ### Test Randomization
 
-The project uses pytest-randomly to randomize test execution order and catch hidden test dependencies:
+The project uses [pytest-randomly](https://github.com/pytest-dev/pytest-randomly) to randomize test execution order and catch hidden test dependencies:
 
 ```bash
 # pytest-randomly works automatically (no configuration needed)
@@ -601,7 +601,7 @@ See [docs/TOX.md](docs/TOX.md) for complete tox documentation and [docs/TOX-UV.m
 
 ### Performance Benchmarking
 
-The project uses pytest-benchmark to track performance and prevent performance regressions in critical code paths:
+The project uses [pytest-benchmark](https://pytest-benchmark.readthedocs.io/) to track performance and prevent performance regressions in critical code paths:
 
 ```bash
 # Run all benchmarks
@@ -717,7 +717,7 @@ ruff check --fix .
 make mypy
 # or directly: mypy src
 
-# Type check with ty (Astral's fast checker - validation mode)
+# Type check with ty (Astral's fast type checker - validation mode)
 make ty
 # or directly: ty check src
 
@@ -746,7 +746,7 @@ The project uses two complementary security tools:
 
 #### Bandit - Code Security Scanning
 
-**Bandit** scans Python source code for security vulnerabilities:
+**[Bandit](https://bandit.readthedocs.io/)** scans Python source code for security vulnerabilities:
 
 ```bash
 # Quick security scan (MEDIUM+ severity/confidence)
@@ -782,7 +782,7 @@ subprocess.run(["ls", validated_path], check=True)  # nosec B603
 
 #### Safety - Dependency Vulnerability Scanning
 
-**Safety** scans installed packages against CVE databases for known vulnerabilities:
+**[Safety](https://pyup.io/safety/)** scans installed packages against CVE databases for known vulnerabilities:
 
 ```bash
 # Quick dependency vulnerability scan
@@ -854,11 +854,11 @@ Guidelines:
 
 ### Python Style
 
-- Follow PEP 8
-- Use type hints for all function signatures
+- Follow [PEP 8](https://peps.python.org/pep-0008/)
+- Use [type hints](https://docs.python.org/3/library/typing.html) for all function signatures
 - Maximum line length: 100 characters
 - Use descriptive variable names
-- Add docstrings to all public modules, classes, and functions
+- Add [docstrings](https://peps.python.org/pep-0257/) to all public modules, classes, and functions
 
 ### Docstring Format
 
@@ -931,7 +931,7 @@ class TestScrabbleScorer:
 
 ### Flaky Test Retry Mechanisms
 
-The project uses **pytest-rerunfailures** to automatically retry flaky tests that may fail intermittently due to external dependencies, timing issues, or resource contention.
+The project uses **[pytest-rerunfailures](https://github.com/pytest-dev/pytest-rerunfailures)** to automatically retry flaky tests that may fail intermittently due to external dependencies, timing issues, or resource contention.
 
 **When to Mark a Test as Flaky:**
 
@@ -987,7 +987,7 @@ See [Flaky Tests Tracker](docs/testing/flaky-tests.md) for current flaky tests a
 
 ### Diff Coverage (PR-Specific Coverage)
 
-The project uses **diff-cover** to enforce test coverage on changed lines only in pull requests. This ensures new code is well-tested without requiring 100% coverage on existing code.
+The project uses **[diff-cover](https://github.com/Bachmann1234/diff_cover)** to enforce test coverage on changed lines only in pull requests. This ensures new code is well-tested without requiring 100% coverage on existing code.
 
 **What is Diff Coverage?**
 
@@ -1103,7 +1103,7 @@ We follow the [Diátaxis framework](https://diataxis.fr/) with four documentatio
 
 ### Building Documentation
 
-Build and view Sphinx documentation locally:
+Build and view [Sphinx](https://www.sphinx-doc.org/) documentation locally:
 
 ```bash
 # Build HTML documentation
@@ -1195,6 +1195,73 @@ make docs-check  # Fails if you forgot to regenerate
 - Follow the Diátaxis framework (don't mix documentation types)
 - Use consistent formatting and tone
 
+### Hyperlinking Guidelines
+
+When adding documentation, follow these guidelines for hyperlinks:
+
+**DO Link:**
+
+- ✅ First mention of a tool/technology per document
+- ✅ Official documentation sites (use HTTPS only)
+- ✅ Standards and specifications ([PEPs](https://peps.python.org/), RFCs)
+- ✅ Key concepts that benefit from explanation
+- ✅ External tools users will need to install
+
+**DON'T Link:**
+
+- ❌ Every occurrence (only first or important mentions)
+- ❌ Common knowledge in developer docs (git, GitHub)
+- ❌ Internal file references (use relative paths instead)
+- ❌ Unstable or unofficial resources
+- ❌ Code blocks (keep code as plain text)
+
+**Link Format:**
+
+```markdown
+# Inline links (preferred for readability)
+[Tool Name](https://official-site.com/)
+
+# Reference-style links (for repeated or long URLs)
+[Tool Name][tool-link]
+...
+[tool-link]: https://very-long-url.com/path/to/docs
+```
+
+**Link Reference Library:**
+
+Use the centralized link reference in `docs/LINK_REFERENCE.md` for commonly referenced tools and technologies to ensure consistency across documentation.
+
+**Examples:**
+
+```markdown
+# Good:
+Learn more about [ruff's linting rules](https://docs.astral.sh/ruff/rules/)
+
+# Bad:
+Click [here](https://docs.astral.sh/ruff/rules/) to see ruff rules
+```
+
+**Accessibility:**
+
+- Use descriptive link text for screen readers
+- Don't rely on color alone to indicate links
+- Ensure sufficient contrast for link text
+
+**Link Checking:**
+
+All links are automatically checked in CI using the link-check GitHub Action. Broken links will cause CI to fail. Test your links locally before pushing:
+
+```bash
+# Install markdown-link-check
+npm install -g markdown-link-check
+
+# Check specific file
+markdown-link-check README.md
+
+# Check all markdown files
+find . -name "*.md" -not -path "./node_modules/*" -exec markdown-link-check {} \;
+```
+
 ## Pull Request Process
 
 ### Before Submitting
@@ -1244,7 +1311,7 @@ Pull requests will be reviewed for:
 
 ### Reviewing Dependabot Pull Requests
 
-This project uses GitHub Dependabot to automatically create PRs for dependency updates. When reviewing Dependabot PRs:
+This project uses [GitHub Dependabot](https://docs.github.com/en/code-security/dependabot) to automatically create PRs for dependency updates. When reviewing Dependabot PRs:
 
 #### For Security Updates (Immediate Action Required)
 
@@ -1295,7 +1362,7 @@ Dependabot groups related updates to reduce noise:
 
 **Commit message format**:
 
-Dependabot PRs use conventional commits:
+Dependabot PRs use [conventional commits](https://www.conventionalcommits.org/):
 
 - `deps(python): Bump package from X to Y`
 - `ci: Update GitHub Actions to v2`
