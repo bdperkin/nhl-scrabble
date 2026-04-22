@@ -148,7 +148,8 @@ def validate_cli_arguments(
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="nhl-scrabble")
+@click.version_option(__version__, "-V", "--version", prog_name="nhl-scrabble")
+@click.help_option("-h", "--help")
 def cli() -> None:
     """NHL Roster Scrabble Score Analyzer.
 
@@ -159,6 +160,7 @@ def cli() -> None:
 
 @cli.command()
 @click.option(
+    "-f",
     "--format",
     "output_format",
     type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
@@ -256,6 +258,7 @@ def cli() -> None:
     type=str,
     help="Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)",
 )
+@click.help_option("-h", "--help")
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
     sheets: str | None,
@@ -864,6 +867,7 @@ def generate_excel_report(
 @cli.command()
 @click.option("--no-fetch", is_flag=True, help="Skip fetching data from NHL API on startup")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
+@click.help_option("-h", "--help")
 def interactive(no_fetch: bool, verbose: bool) -> None:
     r"""Start interactive mode for exploring NHL Scrabble data.
 
@@ -982,6 +986,7 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
     type=click.Path(),
     help="Output file path (default: stdout)",
 )
+@click.help_option("-h", "--help")
 def search(  # noqa: PLR0913  # CLI function needs many parameters
     query: str | None,
     fuzzy: bool,
@@ -1227,6 +1232,7 @@ def generate_search_json(results: list[Any], query: str | None, stats: dict[str,
 @click.option("--host", default="127.0.0.1", help="Host to bind to")
 @click.option("--port", default=8000, type=int, help="Port to bind to")
 @click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
+@click.help_option("-h", "--help")
 def serve(host: str, port: int, reload: bool) -> None:
     r"""Start web interface server.
 
@@ -1307,6 +1313,7 @@ def serve(host: str, port: int, reload: bool) -> None:
     is_flag=True,
     help="Disable API response caching (always fetch fresh data)",
 )
+@click.help_option("-h", "--help")
 def dashboard(
     division: str | None,
     conference: str | None,
@@ -1508,6 +1515,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     help="Refresh interval in seconds (default: 300 = 5 minutes)",
 )
 @click.option(
+    "-f",
     "--format",
     "output_format",
     type=click.Choice(["text", "json"], case_sensitive=False),
@@ -1548,6 +1556,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
+@click.help_option("-h", "--help")
 def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     interval: int,
     output_format: str,

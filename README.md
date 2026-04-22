@@ -181,23 +181,40 @@ python -m nhl_scrabble analyze
 # Run analysis with default settings (shows progress bars)
 nhl-scrabble analyze
 
+# Show version
+nhl-scrabble -V               # Short option
+nhl-scrabble --version        # Long option
+
+# Show help
+nhl-scrabble -h               # Short option
+nhl-scrabble --help           # Long option
+nhl-scrabble analyze -h       # Command help
+
 # Enable verbose logging
-nhl-scrabble analyze --verbose
+nhl-scrabble analyze -v       # Short option
+nhl-scrabble analyze --verbose # Long option
 
 # Suppress progress bars (useful for scripting/automation)
-nhl-scrabble analyze --quiet
+nhl-scrabble analyze -q       # Short option
+nhl-scrabble analyze --quiet  # Long option
 
 # Save output to a file
-nhl-scrabble analyze --output report.txt
+nhl-scrabble analyze -o report.txt        # Short option
+nhl-scrabble analyze --output report.txt  # Long option
 
 # Generate JSON output
-nhl-scrabble analyze --format json --output report.json
+nhl-scrabble analyze -f json -o report.json           # Short options
+nhl-scrabble analyze --format json --output report.json # Long options
 
 # Generate HTML output (opens in browser)
+nhl-scrabble analyze -f html -o report.html # Short options
 nhl-scrabble analyze --format html --output report.html
 
 # Customize number of top players shown
 nhl-scrabble analyze --top-players 50 --top-team-players 10
+
+# Mix short and long options (both work!)
+nhl-scrabble analyze -f json --output report.json -v
 ```
 
 ### Web Interface

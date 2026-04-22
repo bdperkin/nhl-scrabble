@@ -33,8 +33,8 @@ Usage: nhl-scrabble [OPTIONS] COMMAND [ARGS]...
   standings.
 
 Options:
-  --version  Show the version and exit.
-  --help     Show this message and exit.
+  -V, --version  Show the version and exit.
+  -h, --help     Show this message and exit.
 
 Commands:
   analyze      Run the NHL Scrabble analysis.
@@ -114,7 +114,8 @@ Usage: nhl-scrabble analyze [OPTIONS]
     Atlantic --min-score 60 --output atlantic.txt
 
 Options:
-  --format [text|json|csv|excel]  Output format (default: text)
+  -f, --format [text|json|csv|excel]
+                                  Output format (default: text)
   --sheets TEXT                   Comma-separated list of sheets for Excel
                                   export (teams,players,divisions,conferences,
                                   playoffs)
@@ -147,7 +148,7 @@ Options:
   --max-score INTEGER             Maximum player score to include
   --season TEXT                   Analyze specific season (format: YYYYYYYY,
                                   e.g., 20222023 for 2022-23)
-  --help                          Show this message and exit.
+  -h, --help                      Show this message and exit.
 ```
 
 ### Examples
