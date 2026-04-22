@@ -461,7 +461,7 @@ make docs-linkcheck-verbose
 **What it checks:**
 
 - HTTP/HTTPS URLs are accessible
-- Anchors exist on target pages  
+- Anchors exist on target pages
 - No broken links or failed redirects
 
 **Ignore patterns:**
@@ -488,7 +488,7 @@ make docs-quality
 This runs:
 
 1. **Doctest** - Code example validation
-1. **Linkcheck** - External link validation  
+1. **Linkcheck** - External link validation
 1. **Coverage** - Documentation coverage checking
 
 **Output summary:**

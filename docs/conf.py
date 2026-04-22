@@ -182,8 +182,8 @@ linkcheck_allowed_redirects = {}
 import doctest  # noqa: E402
 
 doctest_default_flags = (
-    doctest.ELLIPSIS |  # Allow ... in output
-    doctest.NORMALIZE_WHITESPACE  # Ignore whitespace differences
+    doctest.ELLIPSIS  # Allow ... in output
+    | doctest.NORMALIZE_WHITESPACE  # Ignore whitespace differences
 )
 
 doctest_global_setup = """
