@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NHL Scrabble Score Analyzer is a professional Python package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
+NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
 
 **Current Version:** 2.0.0
-**Python:** 3.10-3.14 (supported), 3.15-dev (experimental)
-**License:** MIT
-**Pre-commit Hooks:** 59 hooks (comprehensive quality checks including Astral ty)
-**Dependency Management:** UV with deterministic lock file
+**Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
+**License:** [MIT](https://opensource.org/licenses/MIT)
+**Pre-commit Hooks:** 59 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/))
+**Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ nhl-scrabble analyze
 python -m nhl_scrabble analyze
 
 # Note: UV acceleration is automatic when using tox
-make tox              # Fast testing with UV via tox-uv
+make tox              # Fast testing with UV via [tox-uv](https://github.com/tox-dev/tox-uv)
 ```
 
 ## Package Architecture
@@ -85,7 +85,7 @@ nhl-scrabble/
 
 **Models (`models/`):**
 
-- Pydantic models for type safety
+- [Pydantic](https://docs.pydantic.dev/) models for type safety
 - PlayerScore, TeamScore, DivisionStandings, ConferenceStandings
 - Validation and serialization
 - JSON export support
@@ -107,11 +107,11 @@ nhl-scrabble/
 - Base class for all reports
 - Specialized report generators
 - Text and JSON output formats
-- Rich library for beautiful terminal output
+- [Rich](https://rich.readthedocs.io/) library for beautiful terminal output
 
 **CLI (`cli.py`):**
 
-- Click-based command-line interface
+- [Click](https://click.palletsprojects.com/)-based command-line interface
 - analyze command with options
 - --format (text/json), --output, --verbose
 - Environment variable support
@@ -144,7 +144,7 @@ The project uses 57 pre-commit hooks for automatic code quality validation:
 - `python-check-mock-methods`: Prevent mock testing mistakes
 - `python-no-eval`: Detect eval() usage (security)
 - `python-no-log-warn`: Enforce logging.warning() vs deprecated logging.warn()
-- `python-use-type-annotations`: Enforce PEP 484 annotations vs type comments
+- `python-use-type-annotations`: Enforce [PEP 484](https://peps.python.org/pep-0484/) annotations vs type comments
 - `text-unicode-replacement-char`: Detect Unicode replacement character (U+FFFD)
 
 **Python Import Hooks (2 from isort and absolufy-imports):**
@@ -154,9 +154,9 @@ The project uses 57 pre-commit hooks for automatic code quality validation:
 
 **Project Validation Hooks (3 from validate-pyproject, pyroma, and tox-ini-fmt):**
 
-- `validate-pyproject`: Validates pyproject.toml against PEP 517, 518, 621, 631 standards
+- `validate-pyproject`: Validates pyproject.toml against [PEP 517](https://peps.python.org/pep-0517/), [518](https://peps.python.org/pep-0518/), [621](https://peps.python.org/pep-0621/), [631](https://peps.python.org/pep-0631/) standards
 - `pyroma`: Rates Python package metadata quality (checks descriptions, classifiers, documentation, etc.)
-- `tox-ini-fmt`: Formats tox.ini to standard structure (enforces tox 4 best practices, auto-formats configuration)
+- `tox-ini-fmt`: Formats tox.ini to standard structure (enforces [tox](https://tox.wiki/) 4 best practices, auto-formats configuration)
 
 **YAML Linting Hooks (1 from yamllint):**
 
@@ -209,11 +209,11 @@ The project uses 57 pre-commit hooks for automatic code quality validation:
 
 **Docformatter Hooks (1 from local):**
 
-- `docformatter`: Python docstring formatting (wrap-length=100, PEP 257 style)
+- `docformatter`: Python docstring formatting (wrap-length=100, [PEP 257](https://peps.python.org/pep-0257/) style)
 
 **Autopep8 Hooks (1 from hhatto/autopep8):**
 
-- `autopep8`: PEP 8 auto-formatting (runs after black, before ruff-format, aggressive level 2)
+- `autopep8`: [PEP 8](https://peps.python.org/pep-0008/) auto-formatting (runs after black, before ruff-format, aggressive level 2)
 
 **Ruff Hooks (2 from ruff-pre-commit):**
 

@@ -1,0 +1,69 @@
+name: Link Check
+
+on:
+  # Run on PRs that modify markdown files
+  pull_request:
+    paths:
+      - '**.md'
+      - '.github/workflows/link-check.yml'
+      - '.github/markdown-link-check-config.json'
+
+  # Run on main branch pushes
+  push:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - '.github/workflows/link-check.yml'
+      - '.github/markdown-link-check-config.json'
+
+  # Run monthly to catch broken external links
+  schedule:
+    - cron: '0 0 1 * *'  # First day of every month at midnight UTC
+
+  # Allow manual runs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  link-check:
+    name: Check Documentation Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check links in documentation
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          config-file: '.github/markdown-link-check-config.json'
+          use-quiet-mode: 'no'
+          use-verbose-mode: 'yes'
+          check-modified-files-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Create issue for broken links (scheduled runs only)
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: 'Broken links detected in documentation'
+          content-filepath: '.github/workflows/broken-links-report.md'
+          labels: 'documentation,broken-links,automated'
+          assignees: ${{ github.repository_owner }}
+
+      - name: Comment on PR for broken links (PR runs only)
+        if: ${{ failure() && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              body: '⚠️ **Broken links detected**\n\n' +
+                    'Please fix the broken links in your documentation changes. ' +
+                    'Check the workflow logs for details.'
+            })
