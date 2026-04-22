@@ -1079,3 +1079,31 @@ Expected 10-100x speedup more apparent on larger codebases (>10k LOC).
 
 **Validation Complete**: No (ongoing)
 **Final Decision**: Pending (after 1-2 week validation period)
+
+### Validation Tracking
+
+**Implementation Complete**: 2026-04-22 (PR #324 merged to main)
+
+**Validation Period**: 1-2 weeks (ongoing)
+
+- **Tracking Issue**: #325 - https://github.com/bdperkin/nhl-scrabble/issues/325
+- **Start Date**: 2026-04-22
+- **Target Decision**: 2026-05-06 or later
+
+**What's Being Validated:**
+
+- Performance improvements vs mypy
+- False positive rate (27 diagnostics to assess)
+- Error message quality and actionability
+- LSP integration in IDEs
+- Developer experience and satisfaction
+- Maintenance burden vs benefits
+
+**Decision Options:**
+
+1. Replace mypy with ty (if superior)
+1. Keep both (if complementary)
+1. Remove ty (if not adding value)
+1. Extend validation (if needs more time)
+
+**Track progress at**: Issue #325
