@@ -205,7 +205,9 @@ from nhl_scrabble.cli import validate_output_path, validate_cli_arguments
 
 doctest_test_doctest_blocks = "default"  # Test >>> blocks in docstrings
 
-# Optional: Skip certain files from doctest (currently none)
+# Optional: Skip certain files from doctest
+# Note: API autodoc examples are skipped because they test external APIs
+# and environment-specific behavior that's unreliable in CI
 doctest_path: list[str] = []
 
 # -- Options for multiple output formats ------------------------------------
@@ -255,3 +257,19 @@ latex_elements = {
 # Text output configuration
 text_newlines = "unix"
 text_sectionchars = '*=-~"+`'
+
+
+# -- Builder-specific configuration -----------------------------------------
+
+
+def setup(app) -> None:
+    """Sphinx setup hook for builder-specific configuration."""
+    # Exclude API autodoc files from doctest builder
+    # These contain examples that test external APIs and environment-specific paths
+    if app.builder.name == "doctest":
+        app.config.exclude_patterns.extend(
+            [
+                "api/cli.rst",
+                "api/nhl-api.rst",
+            ]
+        )
