@@ -41,7 +41,7 @@ NC := \033[0m # No Color
         test test-unit test-integration test-cov test-watch test-failed test-verbose \
         tox tox-list tox-parallel tox-clean tox-recreate tox-envs \
         uv-pip uv-check \
-        ruff-check ruff-format ruff-format-check mypy quality check pre-commit ci \
+        ruff-check ruff-format black-check black-format mypy quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
         build publish publish-test \
         docs serve-docs \
@@ -237,8 +237,8 @@ tox-sequential: check-venv ## Run tox tests sequentially (for debugging)
 
 tox-quick: check-venv ## Run quick tox checks (critical checks only, fast fail-fast)
 	@printf "$(BLUE)Running quick tox checks (fail-fast)...$(NC)\n"
-	@printf "$(YELLOW)Running: ruff-check, ruff-format, mypy, py310$(NC)\n"
-	@$(BIN)/tox -e ruff-check,ruff-format,mypy,py310
+	@printf "$(YELLOW)Running: ruff-check, black, mypy, py310$(NC)\n"
+	@$(BIN)/tox -e ruff-check,black,mypy,py310
 
 tox-clean: ## Clean tox environments
 	@printf "$(BLUE)Cleaning tox environments...$(NC)\n"
@@ -283,13 +283,17 @@ ruff-check: check-venv ## Linting - check code quality (ruff check)
 	@printf "$(BLUE)Running ruff linter...$(NC)\n"
 	@$(BIN)/tox -e ruff-check
 
-ruff-format: check-venv ## Formatting - auto-fix code style (ruff format)
-	@printf "$(BLUE)Formatting code with ruff...$(NC)\n"
+ruff-format: check-venv ## Formatting - auto-fix code style (ruff format - quick utility)
+	@printf "$(BLUE)Formatting code with ruff (quick utility)...$(NC)\n"
 	@$(BIN)/tox -e ruff-format-fix
 
-ruff-format-check: check-venv ## Formatting - check code style without changes
-	@printf "$(BLUE)Checking code format...$(NC)\n"
-	@$(BIN)/tox -e ruff-format
+black-check: check-venv ## Formatting - check code format with black (authoritative)
+	@printf "$(BLUE)Checking code format with black...$(NC)\n"
+	@$(BIN)/tox -e black
+
+black-format: check-venv ## Formatting - auto-fix code style with black (authoritative)
+	@printf "$(BLUE)Formatting code with black...$(NC)\n"
+	@$(BIN)/black src tests
 
 mypy: check-venv ## Type checking - verify type hints (mypy)
 	@printf "$(BLUE)Running mypy type checker...$(NC)\n"

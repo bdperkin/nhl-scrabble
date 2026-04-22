@@ -200,9 +200,9 @@ def test_static_files_are_accessible(client: TestClient) -> None:
         assert response.status_code == 200, f"Failed to load {js_file}"
         assert response.headers["content-type"].startswith(
             "application/javascript"
-        ) or response.headers["content-type"].startswith("text/javascript"), (
-            f"Wrong content-type for {js_file}"
-        )
+        ) or response.headers["content-type"].startswith(
+            "text/javascript"
+        ), f"Wrong content-type for {js_file}"
 
 
 def test_css_file_is_accessible(client: TestClient) -> None:
@@ -250,9 +250,9 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
     expected_cdns = {"https://unpkg.com", "https://cdn.jsdelivr.net"}
 
     # Verify both CDNs are in the allowlist using set intersection
-    assert expected_cdns.issubset(allowed_sources), (
-        f"Missing CDNs in CSP. Expected: {expected_cdns}, Found: {allowed_sources & expected_cdns}"
-    )
+    assert expected_cdns.issubset(
+        allowed_sources
+    ), f"Missing CDNs in CSP. Expected: {expected_cdns}, Found: {allowed_sources & expected_cdns}"
 
 
 def test_analyze_post_still_works(client: TestClient) -> None:

@@ -25,12 +25,12 @@ class TestCliOutputValidation:
         # If exit code is 1, it's runtime error (which is fine for this test)
         if result.exit_code == 2:
             # Validation error occurred
-            assert "path traversal" not in result.output.lower(), (
-                "Path validation incorrectly rejected valid path"
-            )
-            assert "does not exist" not in result.output.lower(), (
-                "Path validation incorrectly rejected valid directory"
-            )
+            assert (
+                "path traversal" not in result.output.lower()
+            ), "Path validation incorrectly rejected valid path"
+            assert (
+                "does not exist" not in result.output.lower()
+            ), "Path validation incorrectly rejected valid directory"
 
     def test_path_traversal_blocked(self) -> None:
         """Test CLI rejects path traversal attempts."""
