@@ -910,6 +910,7 @@ exclude = [
     "__pycache__",
     "tests",  # Test files often have test-specific imports
     "scripts",  # Standalone scripts with their own dependencies
+    "qa",  # QA testing framework (separate package with own dependencies)
 ]
 
 # Development dependency groups (PEP 621 optional-dependencies)

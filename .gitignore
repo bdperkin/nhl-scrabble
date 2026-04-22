@@ -239,6 +239,22 @@ sync-report.md
 /safety-results.txt
 
 # ============================================================================
+# QA Testing
+# ============================================================================
+
+# QA test artifacts
+qa/web/test-results/
+qa/web/traces/
+qa/web/videos/
+qa/web/downloads/
+qa/web/reports/*.html
+qa/web/reports/*.xml
+qa/web/screenshots/*-actual.png
+qa/web/screenshots/*-diff.png
+qa/web/*.log
+qa/web/locust-*.csv
+
+# ============================================================================
 # Claude Code
 # ============================================================================
 

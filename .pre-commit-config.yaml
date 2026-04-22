@@ -234,6 +234,7 @@ repos:
         # Comprehensive dependency checker (matches ruff's ALL rules philosophy)
         # Detects: obsolete, missing, transitive, and misplaced dev dependencies
         args: [src]  # Additional config in pyproject.toml
+        exclude: ^qa/  # Exclude QA directory (separate package)
 
   - repo: https://github.com/hakancelikdev/unimport
     rev: 1.3.1

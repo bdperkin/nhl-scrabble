@@ -47,6 +47,7 @@ NC := \033[0m # No Color
         docs serve-docs \
         run run-verbose run-json \
         shell watch init info status version \
+        qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
         count tree all release
 
@@ -594,6 +595,48 @@ git-cleanup: git-prune-remote-refs git-prune-local ## Full git cleanup (prune re
 
 git-cleanup-all: git-prune-remote-refs git-prune-local git-prune-closed-prs ## Complete cleanup (remote refs + merged branches + closed PRs)
 	@printf "$(GREEN)✅ Complete git cleanup finished$(NC)\n"
+
+###################
+# QA Testing
+###################
+
+qa-install: ## Install QA web testing dependencies
+	@printf "$(BLUE)Installing QA web testing dependencies...$(NC)\n"
+	@cd qa/web && $(UV) pip install -e .
+	@cd qa/web && playwright install
+	@printf "$(GREEN)✓ QA dependencies installed$(NC)\n"
+
+qa-test: ## Run all QA web tests
+	@printf "$(BLUE)Running all QA web tests...$(NC)\n"
+	@cd qa/web && pytest
+	@printf "$(GREEN)✓ QA tests complete$(NC)\n"
+
+qa-functional: ## Run functional web tests only
+	@printf "$(BLUE)Running functional web tests...$(NC)\n"
+	@cd qa/web && pytest -m functional
+	@printf "$(GREEN)✓ Functional tests complete$(NC)\n"
+
+qa-visual: ## Run visual regression tests only
+	@printf "$(BLUE)Running visual regression tests...$(NC)\n"
+	@cd qa/web && pytest -m visual
+	@printf "$(GREEN)✓ Visual tests complete$(NC)\n"
+
+qa-performance: ## Run performance tests only
+	@printf "$(BLUE)Running performance tests...$(NC)\n"
+	@cd qa/web && pytest -m performance
+	@printf "$(GREEN)✓ Performance tests complete$(NC)\n"
+
+qa-accessibility: ## Run accessibility tests only
+	@printf "$(BLUE)Running accessibility tests...$(NC)\n"
+	@cd qa/web && pytest -m accessibility
+	@printf "$(GREEN)✓ Accessibility tests complete$(NC)\n"
+
+qa-clean: ## Clean QA test artifacts
+	@printf "$(BLUE)Cleaning QA test artifacts...$(NC)\n"
+	@cd qa/web && rm -rf test-results/ traces/ videos/ reports/*.html reports/*.xml
+	@cd qa/web && find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	@cd qa/web && find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
+	@printf "$(GREEN)✓ QA artifacts cleaned$(NC)\n"
 
 ###################
 # All-in-one

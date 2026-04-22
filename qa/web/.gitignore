@@ -1,0 +1,26 @@
+# Test artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+reports/*.html
+reports/*.xml
+
+# Playwright artifacts
+test-results/
+traces/
+videos/
+downloads/
+
+# Screenshots (except baselines)
+screenshots/*-actual.png
+screenshots/*-diff.png
+
+# Performance test results
+*.log
+locust-*.csv
+
+# Virtual environments
+.venv/
+venv/
