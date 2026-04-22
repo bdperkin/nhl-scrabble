@@ -52,7 +52,7 @@ A [Python](https://www.python.org/) application that fetches current NHL roster 
   - **HTMX Integration** - [HTMX](https://htmx.org/)-powered dynamic updates without page reloads
   - **REST API** - Programmatic access with [OpenAPI](https://www.openapis.org/) documentation
   - **Mobile-Friendly** - Fully responsive design for all devices
-  - **Accessibility** - [WCAG 2.1 AA](https://www.w3.org/WAI/WCAG21/quickref/) compliant with keyboard navigation and screen reader support
+  - **Accessibility** - WCAG 2.1 AA compliant with keyboard navigation and screen reader support
 - 📊 **Comprehensive Reports** - Multiple report types including:
   - Conference standings with total and average scores
   - Division standings breakdown
@@ -731,8 +731,6 @@ Complete API and configuration documentation:
 - [CLI Reference](docs/reference/cli.md) - All commands and options
 - [Configuration](docs/reference/configuration.md) - All settings explained
 - [Makefile Reference](docs/reference/makefile.md) - All 55 Makefile targets
-- [Code API](docs/reference/code-api.md) - Use NHL Scrabble as a library
-- [Scrabble Values](docs/reference/scrabble-values.md) - Letter values and scoring
 - [And more...](docs/reference/)
 
 ### 💡 [Explanation](docs/explanation/) - Conceptual understanding
@@ -747,7 +745,6 @@ Background and design philosophy:
 ### Community Documentation
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
-- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community standards
 - [SECURITY.md](SECURITY.md) - Security policy
 - [SUPPORT.md](SUPPORT.md) - Getting help
 - [CHANGELOG.md](CHANGELOG.md) - Version history
@@ -783,7 +780,6 @@ All Dependabot PRs are automatically labeled, assigned, and follow [conventional
 ## Support
 
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/bdperkin/nhl-scrabble/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/bdperkin/nhl-scrabble/discussions)
 
 ## Development Stats
 
@@ -793,7 +789,7 @@ All Dependabot PRs are automatically labeled, assigned, and follow [conventional
 - **Python Modules**: 15 core modules
 - **Tests**: 36 tests (100% passing)
 - **Makefile Targets**: 55 documented targets
-- **Pre-commit Hooks**: 54 hooks ([pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks), [pygrep-hooks](https://github.com/pre-commit/pygrep-hooks), [isort](https://pycqa.github.io/isort/), [interrogate](https://interrogate.readthedocs.io/), [deptry](https://deptry.com/), [unimport](https://unimport.hakancelik.dev/), [pydocstyle](http://www.pydocstyle.org/), [vulture](https://github.com/jendrikseipp/vulture), [blocklint](https://github.com/PrincetonUniversity/blocklint), [gitlint](https://jorisroovers.com/gitlint/), absolufy-imports, [validate-pyproject](https://validate-pyproject.readthedocs.io/), [pyroma](https://github.com/regebro/pyroma), [tox-ini-fmt](https://tox-ini-fmt.readthedocs.io/), [yamllint](https://yamllint.readthedocs.io/), [codespell](https://github.com/codespell-project/codespell), [pymarkdown](https://github.com/jackdewinter/pymarkdown), [mdformat](https://mdformat.readthedocs.io/), [doc8](https://doc8.readthedocs.io/), [rstcheck](https://rstcheck.readthedocs.io/), [uv](https://docs.astral.sh/uv/), [flake8](https://flake8.pycqa.org/), autoflake, [black](https://black.readthedocs.io/), docformatter, [ruff](https://docs.astral.sh/ruff/), [mypy](https://mypy-lang.org/))
+- **Pre-commit Hooks**: 54 hooks ([pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks), [pygrep-hooks](https://github.com/pre-commit/pygrep-hooks), [isort](https://pycqa.github.io/isort/), [interrogate](https://interrogate.readthedocs.io/), [deptry](https://deptry.com/), [unimport](https://unimport.hakancelik.dev/), [pydocstyle](http://www.pydocstyle.org/), [vulture](https://github.com/jendrikseipp/vulture), [blocklint](https://github.com/PrincetonUniversity/blocklint), [gitlint](https://jorisroovers.com/gitlint/), absolufy-imports, [validate-pyproject](https://validate-pyproject.readthedocs.io/), [pyroma](https://github.com/regebro/pyroma), [tox-ini-fmt](https://github.com/tox-dev/tox-ini-fmt), [yamllint](https://yamllint.readthedocs.io/), [codespell](https://github.com/codespell-project/codespell), [pymarkdown](https://github.com/jackdewinter/pymarkdown), [mdformat](https://mdformat.readthedocs.io/), [doc8](https://doc8.readthedocs.io/), [rstcheck](https://rstcheck.readthedocs.io/), [uv](https://docs.astral.sh/uv/), [flake8](https://flake8.pycqa.org/), autoflake, [black](https://black.readthedocs.io/), docformatter, [ruff](https://docs.astral.sh/ruff/), [mypy](https://mypy-lang.org/))
 - **Dependency Lock**: [uv.lock](https://docs.astral.sh/uv/) with 1,957 lines (deterministic builds)
 - **CI/CD**: [GitHub Actions](https://docs.github.com/en/actions) on [Python](https://www.python.org/) 3.10, 3.11, 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
 
