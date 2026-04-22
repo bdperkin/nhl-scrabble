@@ -119,7 +119,7 @@ Each task includes:
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast Behavior   | MEDIUM   | 3-5 hours                                                  | Active    | [#283](https://github.com/bdperkin/nhl-scrabble/issues/283) | -                                                                        |
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -                                                                        |
 
-### Testing (7 tasks active, 8 documented, 1 completed)
+### Testing (8 tasks active, 8 documented, 1 completed)
 
 | ID  | Title                                                   | Priority | Effort                                           | Status    | GitHub Issue                                                | Notes |
 | --- | ------------------------------------------------------- | -------- | ------------------------------------------------ | --------- | ----------------------------------------------------------- | ----- |
@@ -151,6 +151,7 @@ Each task includes:
 | 017 | Performance and Load Tests                              | MEDIUM   | 4-6 hours                                        | Active    | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | -     |
 | 018 | Accessibility Tests                                     | MEDIUM   | 2-4 hours                                        | Active    | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | -     |
 | 019 | QA CI/CD Integration                                    | MEDIUM   | 2-4 hours                                        | Active    | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | -     |
+| 020 | Implement Flaky Test Retry Mechanisms                   | MEDIUM   | 6-10 hours                                       | Active    | [#322](https://github.com/bdperkin/nhl-scrabble/issues/322) | -     |
 
 #### Completed Tasks
 
