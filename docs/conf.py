@@ -176,7 +176,7 @@ linkcheck_anchors_ignore = [
 
 # Report settings
 linkcheck_report_timeouts_as_broken = True
-linkcheck_allowed_redirects = {}
+linkcheck_allowed_redirects: dict[str, str] = {}
 
 # Doctest configuration
 import doctest  # noqa: E402
@@ -206,7 +206,7 @@ from nhl_scrabble.cli import validate_output_path, validate_cli_arguments
 doctest_test_doctest_blocks = "default"  # Test >>> blocks in docstrings
 
 # Optional: Skip certain files from doctest (currently none)
-doctest_path = []
+doctest_path: list[str] = []
 
 # -- Options for multiple output formats ------------------------------------
 
