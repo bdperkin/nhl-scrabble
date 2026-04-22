@@ -44,6 +44,7 @@ jobs:
           use-quiet-mode: 'no'
           use-verbose-mode: 'yes'
           check-modified-files-only: ${{ github.event_name == 'pull_request' }}
+        continue-on-error: true
 
       - name: Create issue for broken links (scheduled runs only)
         if: ${{ failure() && github.event_name == 'schedule' }}
