@@ -270,3 +270,6 @@ qa/web/locust-*.csv
 
 # Cython debug symbols
 cython_debug/
+
+# Scratch/temporary development files
+.scratch/
