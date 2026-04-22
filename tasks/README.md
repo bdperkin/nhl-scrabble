@@ -230,6 +230,7 @@ Each task includes:
 | 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Active    | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | -     |
 | 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Active    | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | -     |
 | 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -     |
+| 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Active    | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | -     |
 
 ## Statistics
 
@@ -243,8 +244,8 @@ Each task includes:
 | Enhancement  | 7      | 26        | 33      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 17     | 7         | 24      |
-| **TOTAL**    | **68** | **96**    | **164** |
+| Refactoring  | 18     | 7         | 25      |
+| **TOTAL**    | **69** | **96**    | **165** |
 
 ### Effort Estimates by Category
 
@@ -256,8 +257,8 @@ Each task includes:
 | Enhancement  | 192.5 hours      |
 | Testing      | 260.0 hours      |
 | New Features | 227.0 hours      |
-| Refactoring  | 213.0 hours      |
-| **TOTAL**    | **1019.5 hours** |
+| Refactoring  | 216.0 hours      |
+| **TOTAL**    | **1022.5 hours** |
 
 ### Completion Progress
 
@@ -269,8 +270,8 @@ Each task includes:
 | Enhancement  | 78.8%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
-| Refactoring  | 29.2%           |
-| **OVERALL**  | **58.5%**       |
+| Refactoring  | 28.0%           |
+| **OVERALL**  | **58.2%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -278,7 +279,7 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 0     |
-| MEDIUM   | 68    |
+| MEDIUM   | 69    |
 | LOW      | 0     |
 
 ## Recommended Implementation Order
@@ -293,7 +294,7 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 164 tasks (68 active, 96 completed)
+**Total Tasks**: 165 tasks (69 active, 96 completed)
 
 - **Total Estimated Effort**: 1019.5 hours
   - Active Tasks: 525.0 hours
