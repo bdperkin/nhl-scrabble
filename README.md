@@ -61,6 +61,7 @@ A Python application that fetches current NHL roster data and calculates "Scrabb
   - League-wide statistics and fun facts
 - 📈 **Progress Tracking** - Real-time progress bars show operation status (API fetching, scoring, report generation)
 - 🎯 **Flexible Output** - Text, JSON, or HTML format output with responsive design
+- 🎨 **Colorized Logging** - Color-coded log levels (DEBUG=cyan, INFO=green, WARNING=yellow, ERROR=red) with automatic TTY detection and NO_COLOR support
 - ⚙️ **Configurable** - Customize via environment variables or command-line options
 - 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules, including full web interface integration tests
 - 📦 **Modern Python** - Uses type hints, dataclasses, and follows best practices
@@ -190,9 +191,12 @@ nhl-scrabble -h               # Short option
 nhl-scrabble --help           # Long option
 nhl-scrabble analyze -h       # Command help
 
-# Enable verbose logging
+# Enable verbose logging (with colorized output in terminal)
 nhl-scrabble analyze -v       # Short option
 nhl-scrabble analyze --verbose # Long option
+
+# Disable colorized output (NO_COLOR standard)
+NO_COLOR=1 nhl-scrabble analyze -v
 
 # Suppress progress bars (useful for scripting/automation)
 nhl-scrabble analyze -q       # Short option

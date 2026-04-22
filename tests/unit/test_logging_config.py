@@ -2,6 +2,9 @@
 
 import json
 import logging
+from unittest.mock import patch
+
+import colorlog
 
 from nhl_scrabble.logging_config import JSONFormatter, setup_logging
 
@@ -102,6 +105,93 @@ class TestLoggingConfig:
         handler = logger.handlers[0]
         filter_names = [f.__class__.__name__ for f in handler.filters]
         assert "SensitiveDataFilter" in filter_names
+
+    def test_colorized_logging_in_tty(self) -> None:
+        """Test that colors are enabled for TTY output."""
+        with (
+            patch("sys.stderr.isatty", return_value=True),
+            patch.dict("os.environ", {}, clear=True),
+        ):
+            setup_logging(verbose=True)
+            logger = logging.getLogger()
+
+            # Should have a ColoredFormatter when output is a TTY
+            handler = logger.handlers[0]
+            assert isinstance(handler.formatter, colorlog.ColoredFormatter)
+
+    def test_plain_logging_in_pipe(self) -> None:
+        """Test that colors are disabled for piped output."""
+        with patch("sys.stderr.isatty", return_value=False):
+            setup_logging(verbose=True)
+            logger = logging.getLogger()
+
+            # Should use standard Formatter when not a TTY
+            handler = logger.handlers[0]
+            assert isinstance(handler.formatter, logging.Formatter)
+            assert not isinstance(handler.formatter, colorlog.ColoredFormatter)
+
+    def test_no_color_environment_variable(self) -> None:
+        """Test that NO_COLOR environment variable disables colors."""
+        with (
+            patch("sys.stderr.isatty", return_value=True),
+            patch.dict("os.environ", {"NO_COLOR": "1"}),
+        ):
+            setup_logging(verbose=True)
+            logger = logging.getLogger()
+
+            # Should be plain even though TTY
+            handler = logger.handlers[0]
+            assert isinstance(handler.formatter, logging.Formatter)
+            assert not isinstance(handler.formatter, colorlog.ColoredFormatter)
+
+    def test_dumb_terminal_disables_colors(self) -> None:
+        """Test that TERM=dumb disables colors."""
+        with (
+            patch("sys.stderr.isatty", return_value=True),
+            patch.dict("os.environ", {"TERM": "dumb"}, clear=True),
+        ):
+            setup_logging(verbose=True)
+            logger = logging.getLogger()
+
+            # Should be plain for dumb terminal
+            handler = logger.handlers[0]
+            assert isinstance(handler.formatter, logging.Formatter)
+            assert not isinstance(handler.formatter, colorlog.ColoredFormatter)
+
+    def test_json_output_disables_colors(self) -> None:
+        """Test that JSON output mode disables colors."""
+        with (
+            patch("sys.stderr.isatty", return_value=True),
+            patch.dict("os.environ", {}, clear=True),
+        ):
+            setup_logging(verbose=True, json_output=True)
+            logger = logging.getLogger()
+
+            # Should use JSONFormatter, not ColoredFormatter
+            handler = logger.handlers[0]
+            assert isinstance(handler.formatter, JSONFormatter)
+            assert not isinstance(handler.formatter, colorlog.ColoredFormatter)
+
+    def test_color_log_levels(self) -> None:
+        """Test that different log levels use correct colors."""
+        with (
+            patch("sys.stderr.isatty", return_value=True),
+            patch.dict("os.environ", {}, clear=True),
+        ):
+            setup_logging(verbose=True)
+            logger = logging.getLogger()
+
+            # Get the ColoredFormatter
+            handler = logger.handlers[0]
+            assert isinstance(handler.formatter, colorlog.ColoredFormatter)
+
+            # Verify color configuration
+            formatter = handler.formatter
+            assert formatter.log_colors["DEBUG"] == "cyan"
+            assert formatter.log_colors["INFO"] == "green"
+            assert formatter.log_colors["WARNING"] == "yellow"
+            assert formatter.log_colors["ERROR"] == "red"
+            assert formatter.log_colors["CRITICAL"] == "red,bg_white"
 
 
 class TestJSONFormatter:

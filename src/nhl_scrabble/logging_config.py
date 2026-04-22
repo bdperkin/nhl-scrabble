@@ -1,8 +1,11 @@
 """Logging configuration for NHL Scrabble."""
 
 import logging
+import os
 import sys
 from typing import Any
+
+import colorlog
 
 from nhl_scrabble.security import SensitiveDataFilter
 
@@ -44,12 +47,36 @@ def setup_logging(
     if sanitize_logs:
         handler.addFilter(SensitiveDataFilter())
 
+    # Determine if we should use colors
+    # Respect NO_COLOR standard (https://no-color.org/)
+    use_colors = (
+        sys.stderr.isatty()
+        and not json_output  # Don't colorize JSON output
+        and not os.getenv("NO_COLOR")  # Respect NO_COLOR environment variable
+        and os.getenv("TERM") != "dumb"  # Don't colorize for dumb terminals
+    )
+
     formatter: logging.Formatter
     if json_output:
         # JSON formatter for structured logging
         formatter = JSONFormatter()
+    elif use_colors:
+        # Colorized formatter for terminal output
+        formatter = colorlog.ColoredFormatter(
+            fmt="%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+            log_colors={
+                "DEBUG": "cyan",
+                "INFO": "green",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "red,bg_white",
+            },
+            secondary_log_colors={},
+            style="%",
+        )
     else:
-        # Standard formatter
+        # Plain formatter for non-terminal output (files, pipes)
         formatter = logging.Formatter(
             fmt="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
