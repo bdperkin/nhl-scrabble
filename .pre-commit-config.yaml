@@ -398,6 +398,28 @@ repos:
         args: []  # Config is in pyproject.toml
 
   # ============================================================================
+  # Astral ty - Fast Type Checker (Supplements MyPy)
+  # ============================================================================
+  # ty is an extremely fast Python type checker from Astral (creators of ruff, uv)
+  # Written in Rust for blazing speed (10-100x faster than mypy)
+  # Runs alongside mypy during validation period
+  # Uses local hook (no official pre-commit repo yet, see: github.com/astral-sh/ty/issues/269)
+  # Docs: https://docs.astral.sh/ty/
+
+  - repo: local
+    hooks:
+      - id: ty
+        name: ty - Astral type checker (validation mode - non-blocking)
+        entry: bash -c 'ty check src || true'
+        language: system
+        types: [python]
+        pass_filenames: false
+        verbose: true
+        # Non-blocking during validation period
+        # Will show errors but not prevent commits
+        # After validation, remove '|| true' to make blocking
+
+  # ============================================================================
   # Git Commit Messages - Commit Message Linting
   # ============================================================================
 
