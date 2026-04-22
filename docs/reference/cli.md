@@ -10,10 +10,10 @@ nhl-scrabble [OPTIONS] COMMAND [ARGS]...
 
 ## Global Options
 
-| Option      | Description                |
-| ----------- | -------------------------- |
-| `--version` | Show version and exit      |
-| `--help`    | Show help message and exit |
+| Option          | Description                |
+| --------------- | -------------------------- |
+| `-V, --version` | Show version and exit      |
+| `-h, --help`    | Show help message and exit |
 
 ## Commands
 
@@ -35,14 +35,15 @@ Fetches current NHL roster data from the official NHL API and calculates Scrabbl
 
 | Option                   | Type   | Default | Description                                      |
 | ------------------------ | ------ | ------- | ------------------------------------------------ |
-| `--format FORMAT`        | choice | `text`  | Output format: `text` or `json`                  |
+| `-f, --format FORMAT`    | choice | `text`  | Output format: `text`, `json`, `csv`, `excel`    |
 | `-o, --output PATH`      | path   | stdout  | Output file path (writes to stdout if not given) |
 | `-v, --verbose`          | flag   | false   | Enable verbose logging (DEBUG level)             |
+| `-q, --quiet`            | flag   | false   | Suppress progress bars                           |
 | `--no-cache`             | flag   | false   | Disable API response caching                     |
 | `--clear-cache`          | flag   | false   | Clear API cache before running                   |
 | `--top-players INT`      | int    | 20      | Number of top players to show in rankings        |
 | `--top-team-players INT` | int    | 5       | Number of top players per team to show           |
-| `--help`                 | flag   | false   | Show command help and exit                       |
+| `-h, --help`             | flag   | false   | Show command help and exit                       |
 
 **Examples**:
 
@@ -50,14 +51,26 @@ Fetches current NHL roster data from the official NHL API and calculates Scrabbl
 # Basic usage (output to stdout)
 nhl-scrabble analyze
 
-# Save to file
+# Show help (short and long options)
+nhl-scrabble analyze -h
+nhl-scrabble analyze --help
+
+# Save to file (short and long options)
+nhl-scrabble analyze -o report.txt
 nhl-scrabble analyze --output report.txt
 
-# JSON format
+# JSON format (short options)
+nhl-scrabble analyze -f json -o report.json
+
+# JSON format (long options)
 nhl-scrabble analyze --format json --output report.json
 
-# Verbose logging
+# Verbose logging (short and long)
+nhl-scrabble analyze -v
 nhl-scrabble analyze --verbose
+
+# Quiet mode - suppress progress bars
+nhl-scrabble analyze -q
 
 # Show more players
 nhl-scrabble analyze --top-players 50 --top-team-players 10
@@ -68,8 +81,11 @@ nhl-scrabble analyze --no-cache
 # Clear cache and run
 nhl-scrabble analyze --clear-cache
 
-# Combine options
-nhl-scrabble analyze --format json --output report.json --verbose --top-players 100
+# Combine options (short options for brevity)
+nhl-scrabble analyze -f json -o report.json -v --top-players 100
+
+# Mix short and long options (both work!)
+nhl-scrabble analyze -f json --output report.json -v
 ```
 
 **Output**:

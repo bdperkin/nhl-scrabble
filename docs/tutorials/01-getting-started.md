@@ -160,7 +160,11 @@ For example, "OVECHKIN":
 Instead of printing to the terminal, save the report to a file:
 
 ```bash
+# Using long option
 nhl-scrabble analyze --output report.txt
+
+# Using short option (faster to type!)
+nhl-scrabble analyze -o report.txt
 ```
 
 Now you can open `report.txt` in any text editor to view the results.
@@ -170,7 +174,11 @@ Now you can open `report.txt` in any text editor to view the results.
 For programmatic use, export data as JSON:
 
 ```bash
+# Using long options
 nhl-scrabble analyze --format json --output report.json
+
+# Using short options (recommended for faster typing)
+nhl-scrabble analyze -f json -o report.json
 ```
 
 The JSON file contains all the data in a structured format:
@@ -209,7 +217,31 @@ nhl-scrabble analyze --top-team-players 10
 Enable verbose logging to see API requests:
 
 ```bash
+# Using short option
+nhl-scrabble analyze -v
+
+# Using long option
 nhl-scrabble analyze --verbose
+```
+
+Suppress progress bars (useful for scripts):
+
+```bash
+# Using short option
+nhl-scrabble analyze -q
+
+# Using long option
+nhl-scrabble analyze --quiet
+```
+
+Combine multiple options (short options save typing!):
+
+```bash
+# Verbose JSON output to file
+nhl-scrabble analyze -f json -o report.json -v
+
+# Mix short and long options (both work!)
+nhl-scrabble analyze -f json --output report.json -v
 ```
 
 ## What you've learned
