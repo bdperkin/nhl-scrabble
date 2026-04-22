@@ -197,6 +197,10 @@ sys.path.insert(0, os.path.abspath('../src'))
 # Import common modules for doctests
 from nhl_scrabble.scoring import ScrabbleScorer
 from nhl_scrabble.models.player import PlayerScore
+
+# Import API modules for API documentation doctests
+from nhl_scrabble.api.nhl_client import NHLApiClient
+from nhl_scrabble.cli import validate_output_path, validate_cli_arguments
 """
 
 doctest_test_doctest_blocks = "default"  # Test >>> blocks in docstrings
