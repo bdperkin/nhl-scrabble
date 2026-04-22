@@ -119,6 +119,7 @@ Each task includes:
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast Behavior   | MEDIUM   | 3-5 hours                                                  | Completed | [#283](https://github.com/bdperkin/nhl-scrabble/issues/283) | PR [#326](https://github.com/bdperkin/nhl-scrabble/pull/326), 2026-04-22 |
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -                                                                        |
 | 023 | Extend Sphinx Builder Functionality                           | LOW      | 4-6 hours                                                  | Active    | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | -                                                                        |
+| 024 | Extend Sphinx Extension Functionality                         | LOW      | 3-5 hours                                                  | Active    | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | -                                                                        |
 
 ### Testing
 
@@ -242,11 +243,11 @@ Each task includes:
 | Bug Fixes    | 0      | 7         | 7       |
 | Security     | 0      | 14        | 14      |
 | Optimization | 0      | 13        | 13      |
-| Enhancement  | 8      | 26        | 34      |
+| Enhancement  | 9      | 26        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 18     | 7         | 25      |
-| **TOTAL**    | **70** | **96**    | **166** |
+| **TOTAL**    | **71** | **96**    | **167** |
 
 ### Effort Estimates by Category
 
@@ -255,11 +256,11 @@ Each task includes:
 | Bug Fixes    | 9.0 hours        |
 | Security     | 82.0 hours       |
 | Optimization | 36.0 hours       |
-| Enhancement  | 197.5 hours      |
+| Enhancement  | 201.5 hours      |
 | Testing      | 260.0 hours      |
 | New Features | 227.0 hours      |
 | Refactoring  | 216.0 hours      |
-| **TOTAL**    | **1027.5 hours** |
+| **TOTAL**    | **1031.5 hours** |
 
 ### Completion Progress
 
@@ -268,11 +269,11 @@ Each task includes:
 | Bug Fixes    | 100.0%          |
 | Security     | 100.0%          |
 | Optimization | 100.0%          |
-| Enhancement  | 76.5%           |
+| Enhancement  | 74.3%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
 | Refactoring  | 28.0%           |
-| **OVERALL**  | **57.8%**       |
+| **OVERALL**  | **57.5%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -281,7 +282,7 @@ Each task includes:
 | CRITICAL | 0     |
 | HIGH     | 0     |
 | MEDIUM   | 69    |
-| LOW      | 1     |
+| LOW      | 2     |
 
 ## Recommended Implementation Order
 
@@ -295,9 +296,9 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 166 tasks (70 active, 96 completed)
+**Total Tasks**: 167 tasks (71 active, 96 completed)
 
-- **Total Estimated Effort**: 1027.5 hours
+- **Total Estimated Effort**: 1031.5 hours
   - Active Tasks: 522.5 hours
   - Completed Tasks: 497.0 hours
 - **Overall Completion**: 58.8%
