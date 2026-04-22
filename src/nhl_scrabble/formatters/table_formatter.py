@@ -91,4 +91,4 @@ class TableFormatter:
         with console.capture() as capture:
             console.print(table)
 
-        return capture.get()
+        return capture.get()  # type: ignore[no-any-return]  # Rich Console.capture().get() returns str
