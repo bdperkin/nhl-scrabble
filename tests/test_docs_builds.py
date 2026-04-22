@@ -47,8 +47,9 @@ class TestDocumentationBuilds:
     def test_html_build(self):
         """Test HTML documentation build."""
         # Build HTML documentation
-        result = subprocess.run(
-            [
+        # Safe: sphinx-build is trusted tool from project dependencies
+        result = subprocess.run(  # noqa: S603
+            [  # noqa: S607
                 "sphinx-build",
                 "-b",
                 "html",
@@ -75,8 +76,9 @@ class TestDocumentationBuilds:
     def test_man_build(self):
         """Test man page documentation build."""
         # Build man pages
-        result = subprocess.run(
-            [
+        # Safe: sphinx-build is trusted tool from project dependencies
+        result = subprocess.run(  # noqa: S603
+            [  # noqa: S607
                 "sphinx-build",
                 "-b",
                 "man",
@@ -103,8 +105,9 @@ class TestDocumentationBuilds:
     def test_texinfo_build(self):
         """Test Texinfo documentation build."""
         # Build Texinfo documentation
-        result = subprocess.run(
-            [
+        # Safe: sphinx-build is trusted tool from project dependencies
+        result = subprocess.run(  # noqa: S603
+            [  # noqa: S607
                 "sphinx-build",
                 "-b",
                 "texinfo",
@@ -131,8 +134,9 @@ class TestDocumentationBuilds:
     def test_text_build(self):
         """Test plain text documentation build."""
         # Build text documentation
-        result = subprocess.run(
-            [
+        # Safe: sphinx-build is trusted tool from project dependencies
+        result = subprocess.run(  # noqa: S603
+            [  # noqa: S607
                 "sphinx-build",
                 "-b",
                 "text",
@@ -164,8 +168,9 @@ class TestDocumentationBuilds:
         compatibility issues (e.g., SVG images not supported by LaTeX).
         """
         # Build LaTeX documentation
-        result = subprocess.run(
-            [
+        # Safe: sphinx-build is trusted tool from project dependencies
+        result = subprocess.run(  # noqa: S603
+            [  # noqa: S607
                 "sphinx-build",
                 "-b",
                 "latex",
@@ -202,8 +207,9 @@ class TestDocumentationBuilds:
         The test is informational to track PDF build capability.
         """
         # First build LaTeX
-        subprocess.run(
-            [
+        # Safe: sphinx-build is trusted tool from project dependencies
+        subprocess.run(  # noqa: S603
+            [  # noqa: S607
                 "sphinx-build",
                 "-b",
                 "latex",
@@ -217,8 +223,9 @@ class TestDocumentationBuilds:
 
         # Try to compile PDF
         latex_dir = PROJECT_ROOT / "docs" / "_build" / "latex"
+        # Safe: make is trusted system tool, all-pdf is hardcoded target
         result = subprocess.run(
-            ["make", "all-pdf"],
+            ["make", "all-pdf"],  # noqa: S607
             cwd=latex_dir,
             capture_output=True,
             text=True,
