@@ -264,8 +264,15 @@ text_sectionchars = '*=-~"+`'
 
 def setup(app) -> None:
     """Sphinx setup hook for builder-specific configuration."""
-    # Exclude API autodoc files from doctest builder
-    # These contain examples that test external APIs and environment-specific paths
+    # Connect to builder-inited event to configure doctest exclusions
+    app.connect("builder-inited", _configure_doctest_exclusions)
+
+
+def _configure_doctest_exclusions(app) -> None:
+    """Exclude API autodoc files from doctest builder.
+
+    These contain examples that test external APIs and environment-specific paths.
+    """
     if app.builder.name == "doctest":
         app.config.exclude_patterns.extend(
             [
