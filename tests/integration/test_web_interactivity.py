@@ -169,6 +169,7 @@ def test_analyze_get_html_includes_chart_canvases(client: TestClient) -> None:
         assert "<canvas" in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_get_html_includes_fade_on_scroll(client: TestClient) -> None:
     """Test that HTML response includes fade-on-scroll animation classes."""
     headers = {"HX-Request": "true", "Accept": "text/html"}

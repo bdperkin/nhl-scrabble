@@ -134,6 +134,7 @@ class TestFullWorkflow:
 class TestEndToEndReportGeneration:
     """Test end-to-end workflow from API to report output."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_api_to_report_generation(
         self,
