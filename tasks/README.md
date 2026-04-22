@@ -74,7 +74,7 @@ Each task is assigned a priority:
 **Completed**: All tasks complete! (Task 001: string concat 1.5h - PR #214, Task 002: concurrent API 3.5h - PR #187, Task 003: heapq optimization 2.5h - PR #188, Task 004: single-pass stats 1.5h - PR #189, Task 005: module-level imports 0.33h - PR #190, Task 006: to_dict() methods 1.5h - PR #191, Task 007: lazy reports 2.5h - PR #192, Task 008: memoized scoring 1.5h - PR #193, Task 009: memory optimization 1h - PR #194, Task 010: rate limiting cache hits 2h - PR #182, Task 011: log level optimization - PR #215)
 **Expected Speedup**: 5-10x overall performance improvement achieved! (report generation: 3-5x, API fetching: 5-8x, scoring: 30-40% with caching, memory usage: 20-30% reduction)
 
-### Enhancements (10 tasks active, 21 documented, 11 completed)
+### Enhancements (11 tasks active, 22 documented, 11 completed)
 
 | ID  | Title                                              | Priority | Effort   | Issue | Status      |
 | --- | -------------------------------------------------- | -------- | -------- | ----- | ----------- |
@@ -99,10 +99,11 @@ Each task is assigned a priority:
 | 019 | Integrate Sphinx Doctest and Linkcheck             | LOW      | 1-2h     | #233  |             |
 | 020 | Enable Colorized Log Output Formatting             | LOW      | 30-60min | #234  |             |
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast | LOW      | 3-5h     | #283  |             |
+| 022 | Comprehensive GitHub Workflows Enhancement         | MEDIUM   | 24-32h   | #298  |             |
 
-**Documented Effort**: 54.25-81.5 hours
-**Remaining Effort**: 15.25-25.5h
-**Completed**: 11 of 21 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
+**Documented Effort**: 78.25-113.5 hours
+**Remaining Effort**: 39.25-57.5h
+**Completed**: 11 of 22 tasks complete (Task 001: progress bars 3h - PR #172, Task 002: Interactive Mode - PR #204, Task 003: Historical Data - PR #202, Task 004: CSV/Excel export 3.5h - PR #203, Task 005: Advanced Filtering - PR #205, Task 006: Custom Scoring Rules - PR #206, Task 007: Statistics Dashboard - PR #207, Task 008: Watch Mode - PR #208, Task 009: Player Search - PR #209, Task 010: Python 3.14/3.15 Support 2h - PR #282, Task 012: Pre-Flight Validation 1.5h - PR #281)
 
 ### Testing (0 tasks active, 21 documented, 21 completed)
 
@@ -199,8 +200,8 @@ Each task is assigned a priority:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 142 tasks (52 active, 90 completed)
-**Remaining Effort**: ~278.6-414.5 hours
+**Total Tasks**: 143 tasks (53 active, 90 completed)
+**Remaining Effort**: ~302.6-446.5 hours
 **Completed Effort**: ~227.0+ hours
 
 ### By Category
@@ -208,7 +209,7 @@ Each task is assigned a priority:
 - **Bug Fixes**: 0 active (7 completed in tasks/completed/bug-fixes/)
 - **Security**: 0 active (14 completed - 100% complete! 🎉)
 - **Optimization**: 0 active (13 completed - 100% complete! 5-10x speedup achieved! 🎉)
-- **Enhancement**: 10 active (22 completed), 15.25-25.5h remaining
+- **Enhancement**: 11 active (11 completed), 39.25-57.5h remaining
 - **Testing**: 0 active (21 completed - 100% complete! 91.49% coverage achieved! 🎉)
 - **New Features**: 27 active (4 completed), 158.5-243h remaining
   - Parent tasks (2): i18n/l10n (016), release automation (019)
@@ -221,7 +222,7 @@ Each task is assigned a priority:
 ### By Priority
 
 - **HIGH**: 0 tasks - All critical security tasks completed! ✅
-- **MEDIUM**: 10 tasks (~15.25-25.5h) - Web interface, enhancements, modernization tools, refactoring
+- **MEDIUM**: 11 tasks (~39.25-57.5h) - Web interface, enhancements, CI/CD workflows, modernization tools, refactoring
 - **LOW**: 44 tasks (~263.35-389.0h) - i18n/l10n, release automation, advanced features, major new features
 
 ### Major Achievements

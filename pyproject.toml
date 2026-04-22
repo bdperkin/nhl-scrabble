@@ -606,8 +606,8 @@ check-hidden = true
 skip = '*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*'
 
 # Project-specific ignore words (like ruff's ignore list)
-# Add false positives here as they are discovered
-ignore-words-list = 'aNULL'  # aNULL is a technical term in SSL/TLS cipher configuration
+# Add false positives here as they are discovered in .codespell-ignore-words.txt
+ignore-words = '.codespell-ignore-words.txt'
 
 # Consistency settings
 count = true
