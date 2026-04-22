@@ -16,11 +16,35 @@ Players like:
 - **Zdeno Chara** - Starts with Z (10 points!)
 - **Pavel Zacha** - Another Z player
 
+You can verify these scores programmatically:
+
+```python
+>>> from nhl_scrabble.scoring import ScrabbleScorer
+>>> scorer = ScrabbleScorer()
+>>> scorer.calculate_score("Alexander Ovechkin")
+37
+>>> scorer.calculate_score("Zdeno Chara")
+25
+>>> scorer.calculate_score("Pavel Zacha")
+29
+```
+
 Versus players with lower scores:
 
 - **Connor McDavid** - All common letters
 - **Leon Draisaitl** - No high-value letters
 - **Nathan MacKinnon** - Common letters throughout
+
+```python
+>>> scorer.calculate_score("Connor McDavid")
+24
+>>> scorer.calculate_score("Leon Draisaitl")
+14
+>>> scorer.calculate_score("Nathan MacKinnon")
+26
+```
+
+Notice how high-value letters (Z, V, K) dramatically increase the score!
 
 ## Why This Is Interesting
 

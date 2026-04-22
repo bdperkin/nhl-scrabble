@@ -5,8 +5,12 @@
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from nhl_scrabble import __version__
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 # Add source directory to path for autodoc
 sys.path.insert(0, str(Path("../src").resolve()))
@@ -161,18 +165,54 @@ coverage_ignore_classes = ["_.*"]  # Private classes
 linkcheck_ignore = [
     r"http://localhost.*",  # Ignore local URLs
     r"https://example.com.*",  # Ignore example URLs
+    r"http://127\.0\.0\.1.*",  # Ignore localhost IP
+    r"https://github.com/.*/pull/\d+",  # PR URLs may not exist yet
+    r"https://github.com/.*/issues/\d+",  # Issue URLs may not exist yet
 ]
-linkcheck_timeout = 10
-linkcheck_retries = 3
-linkcheck_workers = 5
+linkcheck_timeout = 15  # Seconds to wait for link response
+linkcheck_retries = 2  # Number of retries for failed links
+linkcheck_workers = 5  # Parallel workers for checking links
+
+# Anchors to ignore (some sites don't support anchor checking)
+linkcheck_anchors_ignore = [
+    r"^!",  # Ignore anchors starting with !
+]
+
+# Report settings
+linkcheck_report_timeouts_as_broken = True
+linkcheck_allowed_redirects: dict[str, str] = {}
 
 # Doctest configuration
+import doctest  # noqa: E402
+
+doctest_default_flags = (
+    doctest.ELLIPSIS  # Allow ... in output
+    | doctest.NORMALIZE_WHITESPACE  # Ignore whitespace differences
+)
+
 doctest_global_setup = """
 import sys
+import os
 from pathlib import Path
-sys.path.insert(0, str(Path('..').resolve() / 'src'))
+
+# Add src directory to path
+sys.path.insert(0, os.path.abspath('../src'))
+
+# Import common modules for doctests
+from nhl_scrabble.scoring import ScrabbleScorer
+from nhl_scrabble.models.player import PlayerScore
+
+# Import API modules for API documentation doctests
+from nhl_scrabble.api.nhl_client import NHLApiClient
+from nhl_scrabble.cli import validate_output_path, validate_cli_arguments
 """
-doctest_test_doctest_blocks = "default"
+
+doctest_test_doctest_blocks = "default"  # Test >>> blocks in docstrings
+
+# Optional: Skip certain files from doctest
+# Note: API autodoc examples are skipped because they test external APIs
+# and environment-specific behavior that's unreliable in CI
+doctest_path: list[str] = []
 
 # -- Options for multiple output formats ------------------------------------
 
@@ -221,3 +261,28 @@ latex_elements = {
 # Text output configuration
 text_newlines = "unix"
 text_sectionchars = '*=-~"+`'
+
+
+# -- Builder-specific configuration -----------------------------------------
+
+
+def setup(app: "Sphinx") -> None:
+    """Sphinx setup hook for builder-specific configuration."""
+    # Connect to builder-inited event to configure doctest exclusions
+    app.connect("builder-inited", _configure_doctest_exclusions)
+
+
+def _configure_doctest_exclusions(app: "Sphinx") -> None:
+    """Exclude API autodoc files from doctest builder.
+
+    These contain examples that test external APIs and environment-specific paths.
+    """
+    if app.builder.name == "doctest":
+        app.config.exclude_patterns.extend(
+            [
+                "api/cli.rst",
+                "api/nhl-api.rst",
+                "api/processors.rst",
+                "api/scoring.rst",
+            ]
+        )

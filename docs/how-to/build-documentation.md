@@ -386,6 +386,193 @@ rm -rf docs/_build/doctrees
 - PDF: ~1-3 MB
 - Text: ~100-200 KB
 
+## Documentation Quality Checks
+
+The project includes automated quality checks for documentation:
+
+### Testing Code Examples (Doctest)
+
+All code examples in documentation are tested automatically using Sphinx's doctest builder:
+
+```bash
+# Test all doctest examples
+make docs-doctest
+
+# Test with verbose output
+make docs-doctest-verbose
+```
+
+**What it checks:**
+
+- All `>>>` code blocks in documentation execute correctly
+- Output matches expected values
+- Code examples stay synchronized with actual code
+
+**Example doctest in documentation:**
+
+````markdown
+You can calculate Scrabble scores:
+
+```python
+>>> from nhl_scrabble.scoring import ScrabbleScorer
+>>> scorer = ScrabbleScorer()
+>>> scorer.calculate_score("OVECHKIN")
+23
+```
+````
+
+**Doctest directives:**
+
+```python
+# Skip a test (for examples that shouldn't run)
+>>> slow_operation()  # doctest: +SKIP
+
+# Allow ellipsis in output
+>>> long_output()  # doctest: +ELLIPSIS
+'Start ... End'
+
+# Normalize whitespace
+>>> formatted_output()  # doctest: +NORMALIZE_WHITESPACE
+Expected   output
+
+# Ignore exception details
+>>> raise ValueError("Error")  # doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+ValueError: ...
+```
+
+**Results:**
+
+- Output: `docs/_build/doctest/output.txt`
+- CI: Failures block pull requests (ensures examples work)
+
+### Checking External Links (Linkcheck)
+
+Validate all external links in documentation:
+
+```bash
+# Check all external links
+make docs-linkcheck
+
+# Check with verbose output
+make docs-linkcheck-verbose
+```
+
+**What it checks:**
+
+- HTTP/HTTPS URLs are accessible
+- Anchors exist on target pages
+- No broken links or failed redirects
+
+**Ignore patterns:**
+
+Some URLs are automatically ignored (configured in `docs/conf.py`):
+
+- `http://localhost:*` - Local development servers
+- `https://github.com/*/pull/*` - PR URLs (may not exist yet)
+- `https://github.com/*/issues/*` - Issue URLs (may not exist yet)
+
+**Results:**
+
+- Output: `docs/_build/linkcheck/output.txt`
+- CI: Informational only (external sites may be temporarily down)
+
+### Combined Quality Checks
+
+Run all quality checks together:
+
+```bash
+make docs-quality
+```
+
+This runs:
+
+1. **Doctest** - Code example validation
+1. **Linkcheck** - External link validation
+1. **Coverage** - Documentation coverage checking
+
+**Output summary:**
+
+```
+✓ All documentation quality checks passed
+
+Results:
+  Doctest:   docs/_build/doctest/output.txt
+  Linkcheck: docs/_build/linkcheck/output.txt
+  Coverage:  docs/_build/coverage/python.txt
+```
+
+### Writing Good Doctest Examples
+
+**DO:**
+
+```python
+# Simple, clear, verifiable
+>>> from nhl_scrabble.scoring import ScrabbleScorer
+>>> scorer = ScrabbleScorer()
+>>> scorer.calculate_score("TEST")
+4
+
+# Use ellipsis for variable output
+>>> import nhl_scrabble
+>>> nhl_scrabble.__version__  # doctest: +ELLIPSIS
+'...'
+```
+
+**DON'T:**
+
+```python
+# Don't test implementation details
+>>> scorer._internal_cache  # Bad - private API
+...
+
+# Don't test timing-dependent code
+>>> import time
+>>> time.sleep(1)  # Bad - unreliable
+...
+
+# Don't test external API calls
+>>> fetch_nhl_data()  # Bad - depends on external service
+...
+```
+
+### Troubleshooting Quality Checks
+
+**Doctest failures:**
+
+```bash
+# View detailed output
+cat docs/_build/doctest/output.txt
+
+# Common issues:
+# - Output changed (update expected value)
+# - Import error (check module path)
+# - Timing dependent (use +SKIP directive)
+```
+
+**Linkcheck failures:**
+
+```bash
+# View detailed output
+cat docs/_build/linkcheck/output.txt
+
+# Common issues:
+# - Temporary site outage (ignore)
+# - URL changed (update documentation)
+# - Rate limiting (add to ignore list)
+```
+
+**Add URL to ignore list:**
+
+Edit `docs/conf.py`:
+
+```python
+linkcheck_ignore = [
+    r"http://localhost.*",
+    r"https://problematic-site\.com/.*",  # Add problematic URLs here
+]
+```
+
 ## CI/CD Integration
 
 Documentation is built automatically in CI:

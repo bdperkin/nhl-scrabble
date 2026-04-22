@@ -52,15 +52,38 @@ jobs:
           cd docs
           sphinx-build -b html . _build/html --keep-going
 
-      - name: Check documentation quality
+      - name: Check documentation coverage
         run: |
           cd docs
           echo "Checking documentation coverage..."
           sphinx-build -b coverage . _build/coverage
-          echo "Checking links..."
-          sphinx-build -b linkcheck . _build/linkcheck || true
-          echo "Testing code examples..."
-          sphinx-build -b doctest . _build/doctest || true
+
+      - name: Test documentation code examples
+        run: |
+          cd docs
+          echo "Testing code examples in documentation..."
+          sphinx-build -b doctest . _build/doctest
+
+      - name: Check documentation links
+        continue-on-error: true
+        run: |
+          cd docs
+          echo "Checking external links..."
+          sphinx-build -b linkcheck . _build/linkcheck
+
+      - name: Upload doctest results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: doctest-results
+          path: docs/_build/doctest/
+
+      - name: Upload linkcheck results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linkcheck-results
+          path: docs/_build/linkcheck/
 
       - name: Verify sitemap generated
         run: |
