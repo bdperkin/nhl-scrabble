@@ -11,6 +11,7 @@ The project uses Sphinx to generate documentation in multiple formats:
 - **Texinfo** - GNU Info format for Emacs/Info readers
 - **PDF** - Portable document format via LaTeX (requires additional tools)
 - **Plain Text** - Simple text-only format
+- **AsciiDoc** - AsciiDoc format via pandoc (requires pandoc)
 
 ## Quick Start
 
@@ -19,9 +20,10 @@ The project uses Sphinx to generate documentation in multiple formats:
 make docs-all
 
 # Build specific format
-make docs-html     # HTML only
-make docs-man      # Man pages only
-make docs-pdf      # PDF only (requires LaTeX)
+make docs-html      # HTML only
+make docs-man       # Man pages only
+make docs-pdf       # PDF only (requires LaTeX)
+make docs-asciidoc  # AsciiDoc only (requires pandoc)
 ```
 
 ## Building Each Format
@@ -162,6 +164,53 @@ less docs/_build/text/how-to/build-documentation.txt
 vim docs/_build/text/index.txt
 ```
 
+### AsciiDoc
+
+Build AsciiDoc format documentation:
+
+```bash
+make docs-asciidoc
+```
+
+Output: `docs/_build/asciidoc/`
+
+**View locally:**
+
+```bash
+# View index
+less docs/_build/asciidoc/index.adoc
+
+# View specific page
+less docs/_build/asciidoc/cli.adoc
+
+# Or use any text editor
+vim docs/_build/asciidoc/index.adoc
+```
+
+**Requirements:**
+
+- `pandoc` - Universal document converter
+
+**Install pandoc:**
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install pandoc
+
+# macOS
+brew install pandoc
+
+# Fedora/RHEL
+sudo dnf install pandoc
+```
+
+**Format Details:**
+
+- Uses pandoc to convert RST source files to AsciiDoc
+- Produces `.adoc` files compatible with AsciiDoc processors
+- Supports three AsciiDoc variants: asciidoc, asciidoc_legacy, asciidoctor
+- Useful for integration with AsciiDoc-based documentation systems
+
 ## Building All Formats
 
 Build all documentation formats at once:
@@ -177,6 +226,7 @@ This runs all individual build targets in sequence:
 1. Texinfo
 1. PDF (if LaTeX available)
 1. Plain text
+1. AsciiDoc (if pandoc available)
 
 **Output locations:**
 
@@ -191,8 +241,10 @@ docs/_build/
 ├── latex/             # LaTeX source & PDF
 │   ├── nhl-scrabble.tex
 │   └── nhl-scrabble.pdf
-└── text/              # Plain text
-    └── index.txt
+├── text/              # Plain text
+│   └── index.txt
+└── asciidoc/          # AsciiDoc
+    └── *.adoc
 ```
 
 ## Advanced Usage

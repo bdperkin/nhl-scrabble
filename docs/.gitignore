@@ -24,3 +24,6 @@ _build/
 
 # Text output artifacts
 *.txt
+
+# AsciiDoc output artifacts
+*.adoc

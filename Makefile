@@ -44,7 +44,7 @@ NC := \033[0m # No Color
         ruff-check ruff-format black-check black-format mypy quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
         build publish publish-test \
-        docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-all \
+        docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-all \
         run run-verbose run-json \
         shell watch init info status version \
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
@@ -463,7 +463,13 @@ docs-text: check-venv ## Build plain text documentation
 	@cd docs && $(BIN)/sphinx-build -b text . _build/text
 	@printf "$(GREEN)✓ Text docs: docs/_build/text/$(NC)\n"
 
-docs-all: docs-html docs-man docs-texinfo docs-pdf docs-text ## Build all documentation formats
+docs-asciidoc: check-venv ## Build AsciiDoc documentation (requires pandoc)
+	@printf "$(BLUE)Building AsciiDoc documentation...$(NC)\n"
+	@mkdir -p docs/_build/asciidoc
+	@cd docs && find . -name "*.rst" -type f ! -path "./_build/*" -exec sh -c 'pandoc -f rst -t asciidoc "{}" -o "_build/asciidoc/$$(basename {} .rst).adoc"' \;
+	@printf "$(GREEN)✓ AsciiDoc: docs/_build/asciidoc/$(NC)\n"
+
+docs-all: docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc ## Build all documentation formats
 	@printf "$(GREEN)✓ All documentation formats built successfully!$(NC)\n"
 
 ###################

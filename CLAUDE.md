@@ -923,6 +923,7 @@ The project supports multiple documentation output formats via Sphinx:
 - **Texinfo** - GNU Info format for Emacs/Info readers
 - **PDF** - Portable document format via LaTeX (requires pdflatex)
 - **Plain Text** - Simple text-only format
+- **AsciiDoc** - AsciiDoc format via pandoc (requires pandoc)
 
 **Build Commands:**
 
@@ -933,6 +934,7 @@ make docs-man       # Man pages
 make docs-texinfo   # Texinfo/Info format
 make docs-pdf       # PDF via LaTeX (requires LaTeX installation)
 make docs-text      # Plain text
+make docs-asciidoc  # AsciiDoc (requires pandoc)
 
 # Build all formats
 make docs-all       # All formats at once
@@ -945,6 +947,7 @@ make docs-all       # All formats at once
 - **Texinfo** - Emacs Info mode, hierarchical browsing
 - **PDF** - Offline reading, print-friendly, downloadable manual
 - **Text** - Simplest offline format, grep-able, no dependencies
+- **AsciiDoc** - AsciiDoc-based documentation systems, lightweight markup
 
 **Distribution:**
 

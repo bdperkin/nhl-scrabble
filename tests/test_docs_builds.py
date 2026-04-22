@@ -142,6 +142,41 @@ class TestDocumentationBuilds:
         assert text_file.stat().st_size > 0, "index.txt is empty"
 
     @pytest.mark.skipif(
+        shutil.which("pandoc") is None,
+        reason="pandoc not found (required for AsciiDoc conversion)",
+    )
+    def test_asciidoc_build(self):
+        """Test AsciiDoc documentation build.
+
+        Note: This uses pandoc to convert RST files to AsciiDoc format.
+        Requires pandoc to be installed on the system.
+        """
+        # Build AsciiDoc documentation
+        # Safe: pandoc is trusted tool, find is trusted system tool
+        result = subprocess.run(
+            [  # noqa: S607
+                "make",
+                "docs-asciidoc",
+            ],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        # Check build succeeded
+        assert result.returncode == 0, f"AsciiDoc build failed: {result.stderr}"
+
+        # Verify AsciiDoc directory exists
+        asciidoc_dir = PROJECT_ROOT / "docs" / "_build" / "asciidoc"
+        assert asciidoc_dir.exists(), "asciidoc directory not created"
+
+        # Verify at least index.adoc exists
+        index_adoc = asciidoc_dir / "index.adoc"
+        assert index_adoc.exists(), "index.adoc not created"
+        assert index_adoc.stat().st_size > 0, "index.adoc is empty"
+
+    @pytest.mark.skipif(
         shutil.which("sphinx-build") is None,
         reason="sphinx-build not found (docs dependencies not installed)",
     )
@@ -242,6 +277,7 @@ class TestDocumentationBuilds:
         assert "docs-texinfo:" in makefile_content, "docs-texinfo target not found in Makefile"
         assert "docs-pdf:" in makefile_content, "docs-pdf target not found in Makefile"
         assert "docs-text:" in makefile_content, "docs-text target not found in Makefile"
+        assert "docs-asciidoc:" in makefile_content, "docs-asciidoc target not found in Makefile"
         assert "docs-all:" in makefile_content, "docs-all target not found in Makefile"
 
     def test_sphinx_config_has_format_settings(self):
@@ -272,3 +308,4 @@ class TestDocumentationBuilds:
         assert "*.tex" in gitignore_content, "*.tex not excluded"
         assert "*.aux" in gitignore_content, "*.aux not excluded"
         assert "*.log" in gitignore_content, "*.log not excluded"
+        assert "*.adoc" in gitignore_content, "*.adoc not excluded"
