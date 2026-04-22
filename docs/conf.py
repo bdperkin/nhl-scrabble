@@ -5,8 +5,12 @@
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from nhl_scrabble import __version__
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 # Add source directory to path for autodoc
 sys.path.insert(0, str(Path("../src").resolve()))
@@ -262,13 +266,13 @@ text_sectionchars = '*=-~"+`'
 # -- Builder-specific configuration -----------------------------------------
 
 
-def setup(app) -> None:
+def setup(app: "Sphinx") -> None:
     """Sphinx setup hook for builder-specific configuration."""
     # Connect to builder-inited event to configure doctest exclusions
     app.connect("builder-inited", _configure_doctest_exclusions)
 
 
-def _configure_doctest_exclusions(app) -> None:
+def _configure_doctest_exclusions(app: "Sphinx") -> None:
     """Exclude API autodoc files from doctest builder.
 
     These contain examples that test external APIs and environment-specific paths.
@@ -278,5 +282,7 @@ def _configure_doctest_exclusions(app) -> None:
             [
                 "api/cli.rst",
                 "api/nhl-api.rst",
+                "api/processors.rst",
+                "api/scoring.rst",
             ]
         )
