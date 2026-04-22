@@ -912,6 +912,72 @@ Background and design philosophy:
 - **CHANGELOG.md** - Version history
 - **CLAUDE.md** - This file
 
+### Documentation Output Formats
+
+The project supports multiple documentation output formats via Sphinx:
+
+**Available Formats:**
+
+- **HTML** (default) - Web documentation deployed to GitHub Pages
+- **Man Pages** - Unix man page format for terminal viewing
+- **Texinfo** - GNU Info format for Emacs/Info readers
+- **PDF** - Portable document format via LaTeX (requires pdflatex)
+- **Plain Text** - Simple text-only format
+
+**Build Commands:**
+
+```bash
+# Build individual formats
+make docs-html      # HTML documentation
+make docs-man       # Man pages
+make docs-texinfo   # Texinfo/Info format
+make docs-pdf       # PDF via LaTeX (requires LaTeX installation)
+make docs-text      # Plain text
+
+# Build all formats
+make docs-all       # All formats at once
+```
+
+**Use Cases:**
+
+- **HTML** - Primary web documentation, searchable, interactive
+- **Man Pages** - System documentation integration (`man nhl-scrabble`)
+- **Texinfo** - Emacs Info mode, hierarchical browsing
+- **PDF** - Offline reading, print-friendly, downloadable manual
+- **Text** - Simplest offline format, grep-able, no dependencies
+
+**Distribution:**
+
+```bash
+# Install man page system-wide
+sudo cp docs/_build/man/nhl-scrabble.1 /usr/local/share/man/man1/
+man nhl-scrabble
+
+# Install Texinfo
+cd docs/_build/texinfo
+makeinfo nhl-scrabble.texi -o nhl-scrabble.info
+sudo cp nhl-scrabble.info /usr/local/share/info/
+info nhl-scrabble
+
+# Distribute PDF
+cp docs/_build/latex/nhl-scrabble.pdf ~/Documents/
+```
+
+**LaTeX Requirements** (PDF only):
+
+- Package: `texlive-latex-base` and `texlive-latex-extra` (~500 MB)
+- Ubuntu/Debian: `sudo apt-get install texlive-latex-base texlive-latex-extra`
+- macOS: `brew install --cask mactex`
+- Fedora/RHEL: `sudo dnf install texlive-scheme-basic texlive-latex-extra`
+
+**Known Limitations:**
+
+- PDF build may fail with SVG images (LaTeX requires PNG/PDF format)
+- LaTeX installation is large (~500 MB minimum)
+- PDF compilation takes 30-60 seconds
+
+See **[Build Documentation Guide](docs/how-to/build-documentation.md)** for complete instructions.
+
 ### Documentation Badges
 
 The project uses comprehensive badges in README.md to provide at-a-glance project information organized into logical categories:

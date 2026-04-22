@@ -1,0 +1,26 @@
+# Sphinx build outputs
+_build/
+
+# LaTeX build artifacts (PDF generation)
+*.pdf
+*.tex
+*.aux
+*.log
+*.out
+*.toc
+*.idx
+*.ind
+*.ilg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Texinfo build artifacts
+*.info
+*.texi
+
+# Man page build artifacts
+*.[1-9]
+
+# Text output artifacts
+*.txt

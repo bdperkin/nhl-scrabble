@@ -44,7 +44,7 @@ NC := \033[0m # No Color
         ruff-check ruff-format black-check black-format mypy quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
         build publish publish-test \
-        docs serve-docs \
+        docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-all \
         run run-verbose run-json \
         shell watch init info status version \
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
@@ -436,6 +436,35 @@ docs-doctest: check-venv ## Test code examples in documentation
 
 docs-quality: docs-linkcheck docs-coverage docs-doctest ## Run all documentation quality checks
 	@printf "$(GREEN)✓ All documentation quality checks passed$(NC)\n"
+
+docs-html: check-venv ## Build HTML documentation
+	@printf "$(BLUE)Building HTML documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b html . _build/html
+	@printf "$(GREEN)✓ HTML docs: docs/_build/html/index.html$(NC)\n"
+
+docs-man: check-venv ## Build man pages
+	@printf "$(BLUE)Building man pages...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b man . _build/man
+	@printf "$(GREEN)✓ Man pages: docs/_build/man/$(NC)\n"
+
+docs-texinfo: check-venv ## Build Texinfo documentation
+	@printf "$(BLUE)Building Texinfo documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b texinfo . _build/texinfo
+	@printf "$(GREEN)✓ Texinfo: docs/_build/texinfo/$(NC)\n"
+
+docs-pdf: check-venv ## Build PDF documentation (requires pdflatex)
+	@printf "$(BLUE)Building PDF documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b latex . _build/latex
+	@cd docs/_build/latex && $(MAKE) all-pdf
+	@printf "$(GREEN)✓ PDF: docs/_build/latex/nhl-scrabble.pdf$(NC)\n"
+
+docs-text: check-venv ## Build plain text documentation
+	@printf "$(BLUE)Building text documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b text . _build/text
+	@printf "$(GREEN)✓ Text docs: docs/_build/text/$(NC)\n"
+
+docs-all: docs-html docs-man docs-texinfo docs-pdf docs-text ## Build all documentation formats
+	@printf "$(GREEN)✓ All documentation formats built successfully!$(NC)\n"
 
 ###################
 # Running

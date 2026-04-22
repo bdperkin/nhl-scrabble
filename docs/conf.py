@@ -173,3 +173,51 @@ from pathlib import Path
 sys.path.insert(0, str(Path('..').resolve() / 'src'))
 """
 doctest_test_doctest_blocks = "default"
+
+# -- Options for multiple output formats ------------------------------------
+
+# Man page configuration
+man_pages = [
+    (
+        "index",  # Source document
+        "nhl-scrabble",  # Man page name
+        "NHL Scrabble Documentation",  # Description
+        ["Brandon Perkins"],  # Authors
+        1,  # Section (1 = commands)
+    ),
+]
+
+# Texinfo configuration
+texinfo_documents = [
+    (
+        "index",  # Source document
+        "nhl-scrabble",  # Target name
+        "NHL Scrabble Documentation",  # Title
+        "Brandon Perkins",  # Author
+        "nhl-scrabble",  # Dir menu entry
+        "NHL player name Scrabble scoring system",  # Description
+        "Miscellaneous",  # Category
+    ),
+]
+
+# LaTeX/PDF configuration
+latex_documents = [
+    (
+        "index",  # Source document
+        "nhl-scrabble.tex",  # Target name
+        "NHL Scrabble Documentation",  # Title
+        "Brandon Perkins",  # Author
+        "manual",  # Document class (manual or howto)
+    ),
+]
+
+latex_elements = {
+    "papersize": "letterpaper",
+    "pointsize": "10pt",
+    "preamble": "",
+    "figure_align": "htbp",
+}
+
+# Text output configuration
+text_newlines = "unix"
+text_sectionchars = '*=-~"+`'
