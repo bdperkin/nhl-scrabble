@@ -1,9 +1,11 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-21 (synchronized)
-**Total Tasks**: 52 active tasks
-**Estimated Effort**: 278.6-414.5 hours
+**Total Tasks**: 73 active tasks
+**Estimated Effort**: 534.0 hours
 **Strategy**: Priority-first with dependency awareness
+
+**Note**: This file contains 52 tasks. The remaining 21 tasks (enhancement/022, new-features/032-043, testing/012-019 for GitHub workflows and QA automation) are documented separately and should be implemented based on project needs.
 
 ## How to Use This File
 

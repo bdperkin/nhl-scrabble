@@ -292,7 +292,8 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-- **Total Tasks**: 163 (73 active, 90 completed)
+**Total Tasks**: 163 tasks (73 active, 90 completed)
+
 - **Total Estimated Effort**: 1024.5 hours
   - Active Tasks: 534.0 hours
   - Completed Tasks: 490.5 hours
