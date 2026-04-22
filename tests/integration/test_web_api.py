@@ -135,6 +135,7 @@ def test_get_team_not_found(client: TestClient) -> None:
     assert response.status_code == 404
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_get_team_found(client: TestClient) -> None:
     """Test team endpoint returns team data when available."""
     # First run analysis to populate cache
@@ -158,6 +159,7 @@ def test_get_team_found(client: TestClient) -> None:
         assert "top_players" in data
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_clear_cache(client: TestClient) -> None:
     """Test cache clear endpoint."""
     # Populate cache

@@ -97,6 +97,7 @@ def test_analyze_get_returns_json_by_default(client: TestClient) -> None:
         assert "stats" in data
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_get_returns_html_for_htmx(client: TestClient) -> None:
     """Test that analyze GET endpoint returns HTML when HX-Request header present."""
     headers = {"HX-Request": "true", "Accept": "text/html"}

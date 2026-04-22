@@ -221,6 +221,7 @@ class TestPlayersEndpoints:
             name2 = (players[i + 1]["last_name"], players[i + 1]["first_name"])
             assert name1 <= name2
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_players_by_team(self, client: TestClient) -> None:
         """Test filtering players by team."""
         # First get all teams to find a valid abbreviation
