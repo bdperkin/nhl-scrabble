@@ -110,7 +110,7 @@ Each task includes:
 | 012 | Enhance Implement-Task Skill with Pre-Flight Validation       | MEDIUM   | 1-2 hours                                                  | Completed | [#225](https://github.com/bdperkin/nhl-scrabble/issues/225) | -                                                                        |
 | 013 | Refine Project Logo Tiles and Hockey Stick Overlap            | MEDIUM   | 1-2 hours                                                  | Active    | [#227](https://github.com/bdperkin/nhl-scrabble/issues/227) | -                                                                        |
 | 014 | Integrate Astral 'ty' Type Checker/LSP                        | MEDIUM   | 2-3 hours                                                  | Active    | [#228](https://github.com/bdperkin/nhl-scrabble/issues/228) | -                                                                        |
-| 015 | Add Standard Short Options to CLI Commands                    | MEDIUM   | 30-60 minutes                                              | Active    | [#229](https://github.com/bdperkin/nhl-scrabble/issues/229) | -                                                                        |
+| 015 | Add Standard Short Options to CLI Commands                    | MEDIUM   | 30-60 minutes                                              | Completed | [#229](https://github.com/bdperkin/nhl-scrabble/issues/229) | PR [#320](https://github.com/bdperkin/nhl-scrabble/pull/320), 2026-04-21 |
 | 016 | Format CLI Help Examples with Comments                        | LOW      | 15-30 minutes                                              | Completed | [#230](https://github.com/bdperkin/nhl-scrabble/issues/230) | PR #319, completed 2026-04-21                                            |
 | 017 | Expand CLI Output Formats                                     | MEDIUM   | 3-4 hours                                                  | Active    | [#231](https://github.com/bdperkin/nhl-scrabble/issues/231) | -                                                                        |
 | 018 | Support Additional Sphinx Output Formats                      | MEDIUM   | 2-3 hours                                                  | Active    | [#232](https://github.com/bdperkin/nhl-scrabble/issues/232) | -                                                                        |
@@ -119,45 +119,40 @@ Each task includes:
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast Behavior   | MEDIUM   | 3-5 hours                                                  | Active    | [#283](https://github.com/bdperkin/nhl-scrabble/issues/283) | -                                                                        |
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -                                                                        |
 
-### Testing (8 tasks active, 8 documented, 1 completed)
+### Testing
 
-| ID  | Title                                                   | Priority | Effort                                           | Status    | GitHub Issue                                                | Notes |
-| --- | ------------------------------------------------------- | -------- | ------------------------------------------------ | --------- | ----------------------------------------------------------- | ----- |
-| 001 | Increase Test Coverage from 49% to 80%+                 | MEDIUM   | 8-12 hours                                       | Completed | [#43](https://github.com/bdperkin/nhl-scrabble/issues/43)   | -     |
-| 001 | Enable Codecov Integration for Code Coverage Tracking   | MEDIUM   | 1-2 hours                                        | Completed | [#90](https://github.com/bdperkin/nhl-scrabble/issues/90)   | -     |
-| 001 | Add pytest-timeout to Prevent Hanging Tests             | MEDIUM   | 30-60 minutes                                    | Completed | [#119](https://github.com/bdperkin/nhl-scrabble/issues/119) | -     |
-| 001 | Implement Codecov Test Analytics in CI                  | MEDIUM   | 2-3 hours                                        | Completed | [#211](https://github.com/bdperkin/nhl-scrabble/issues/211) | -     |
-| 002 | Add pytest-xdist for Parallel Test Execution            | MEDIUM   | 30-60 minutes                                    | Completed | [#120](https://github.com/bdperkin/nhl-scrabble/issues/120) | -     |
-| 002 | Comprehensive Test Coverage Improvement (90-100%)       | MEDIUM   | 12-20 hours                                      | Completed | [#221](https://github.com/bdperkin/nhl-scrabble/issues/221) | -     |
-| 003 | Add pytest-randomly to Randomize Test Execution Order   | MEDIUM   | 15-30 minutes                                    | Completed | [#121](https://github.com/bdperkin/nhl-scrabble/issues/121) | -     |
-| 003 | Add Unit and Integration Tests for Caching Layer        | MEDIUM   | 2-4 hours                                        | Completed | [#235](https://github.com/bdperkin/nhl-scrabble/issues/235) | -     |
-| 004 | Add pytest-sugar for Enhanced Test Output               | MEDIUM   | 15-30 minutes                                    | Completed | [#122](https://github.com/bdperkin/nhl-scrabble/issues/122) | -     |
-| 004 | CLI Module Test Coverage (70% → 90%)                    | MEDIUM   | 2-3 hours                                        | Completed | [#253](https://github.com/bdperkin/nhl-scrabble/issues/253) | -     |
-| 005 | Add pytest-clarity for Improved Assertion Diffs         | MEDIUM   | 15-30 minutes                                    | Completed | [#123](https://github.com/bdperkin/nhl-scrabble/issues/123) | -     |
-| 005 | Web Interface Test Coverage (30% → 85%)                 | MEDIUM   | 3-4 hours                                        | Completed | [#254](https://github.com/bdperkin/nhl-scrabble/issues/254) | -     |
-| 006 | Add diff-cover for PR Coverage Reporting                | MEDIUM   | 30-60 minutes                                    | Completed | [#124](https://github.com/bdperkin/nhl-scrabble/issues/124) | -     |
-| 006 | Interactive Mode Test Coverage (73.59% → 91.07%)        | MEDIUM   | 2-3 hours                                        | Completed | [#255](https://github.com/bdperkin/nhl-scrabble/issues/255) | -     |
-| 007 | Add pytest-benchmark for Performance Regression Testing | MEDIUM   | 1-2 hours                                        | Completed | [#125](https://github.com/bdperkin/nhl-scrabble/issues/125) | -     |
-| 007 | Configuration and Logging Test Coverage (55% → 90%)     | MEDIUM   | 1-2 hours                                        | Completed | [#256](https://github.com/bdperkin/nhl-scrabble/issues/256) | -     |
-| 008 | Add check-jsonschema for JSON/YAML File Validation      | MEDIUM   | 30-60 minutes                                    | Completed | [#128](https://github.com/bdperkin/nhl-scrabble/issues/128) | -     |
-| 008 | Reports Module Test Coverage (40% → 90%)                | MEDIUM   | 2-3 hours                                        | Completed | [#257](https://github.com/bdperkin/nhl-scrabble/issues/257) | -     |
-| 009 | Edge Cases and Error Path Testing                       | MEDIUM   | 2-3 hours                                        | Completed | [#258](https://github.com/bdperkin/nhl-scrabble/issues/258) | -     |
-| 010 | Integration and End-to-End Testing                      | MEDIUM   | 2-3 hours                                        | Completed | [#259](https://github.com/bdperkin/nhl-scrabble/issues/259) | -     |
-| 011 | Coverage Audit and Finalization                         | MEDIUM   | 2-3 hours                                        | Completed | [#260](https://github.com/bdperkin/nhl-scrabble/issues/260) | -     |
-| 012 | QA Automation Framework                                 | MEDIUM   | 30-40 hours (main task coordination + sub-tasks) | Active    | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | -     |
-| 014 | Playwright Framework Setup                              | MEDIUM   | 6-8 hours                                        | Active    | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | -     |
-| 015 | Functional Web Tests                                    | MEDIUM   | 6-8 hours                                        | Active    | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | -     |
-| 016 | Visual Regression Tests                                 | MEDIUM   | 4-6 hours                                        | Active    | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | -     |
-| 017 | Performance and Load Tests                              | MEDIUM   | 4-6 hours                                        | Active    | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | -     |
-| 018 | Accessibility Tests                                     | MEDIUM   | 2-4 hours                                        | Active    | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | -     |
-| 019 | QA CI/CD Integration                                    | MEDIUM   | 2-4 hours                                        | Active    | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | -     |
-| 020 | Implement Flaky Test Retry Mechanisms                   | MEDIUM   | 6-10 hours                                       | Active    | [#322](https://github.com/bdperkin/nhl-scrabble/issues/322) | -     |
-
-#### Completed Tasks
-
-| ID  | Title                   | Priority | Estimated | Actual    | Completed  | GitHub Issue                                                | Notes                    |
-| --- | ----------------------- | -------- | --------- | --------- | ---------- | ----------------------------------------------------------- | ------------------------ |
-| 013 | QA Infrastructure Setup | MEDIUM   | 4-6 hours | 4-5 hours | 2026-04-21 | [#312](https://github.com/bdperkin/nhl-scrabble/issues/312) | Closed by commit 0a99ee5 |
+| ID  | Title                                                   | Priority | Effort                                           | Status    | GitHub Issue                                                | Notes                                |
+| --- | ------------------------------------------------------- | -------- | ------------------------------------------------ | --------- | ----------------------------------------------------------- | ------------------------------------ |
+| 001 | Increase Test Coverage from 49% to 80%+                 | MEDIUM   | 8-12 hours                                       | Completed | [#43](https://github.com/bdperkin/nhl-scrabble/issues/43)   | -                                    |
+| 001 | Enable Codecov Integration for Code Coverage Tracking   | MEDIUM   | 1-2 hours                                        | Completed | [#90](https://github.com/bdperkin/nhl-scrabble/issues/90)   | -                                    |
+| 001 | Add pytest-timeout to Prevent Hanging Tests             | MEDIUM   | 30-60 minutes                                    | Completed | [#119](https://github.com/bdperkin/nhl-scrabble/issues/119) | -                                    |
+| 001 | Implement Codecov Test Analytics in CI                  | MEDIUM   | 2-3 hours                                        | Completed | [#211](https://github.com/bdperkin/nhl-scrabble/issues/211) | -                                    |
+| 002 | Add pytest-xdist for Parallel Test Execution            | MEDIUM   | 30-60 minutes                                    | Completed | [#120](https://github.com/bdperkin/nhl-scrabble/issues/120) | -                                    |
+| 002 | Comprehensive Test Coverage Improvement (90-100%)       | MEDIUM   | 12-20 hours                                      | Completed | [#221](https://github.com/bdperkin/nhl-scrabble/issues/221) | -                                    |
+| 003 | Add pytest-randomly to Randomize Test Execution Order   | MEDIUM   | 15-30 minutes                                    | Completed | [#121](https://github.com/bdperkin/nhl-scrabble/issues/121) | -                                    |
+| 003 | Add Unit and Integration Tests for Caching Layer        | MEDIUM   | 2-4 hours                                        | Completed | [#235](https://github.com/bdperkin/nhl-scrabble/issues/235) | -                                    |
+| 004 | Add pytest-sugar for Enhanced Test Output               | MEDIUM   | 15-30 minutes                                    | Completed | [#122](https://github.com/bdperkin/nhl-scrabble/issues/122) | -                                    |
+| 004 | CLI Module Test Coverage (70% → 90%)                    | MEDIUM   | 2-3 hours                                        | Completed | [#253](https://github.com/bdperkin/nhl-scrabble/issues/253) | -                                    |
+| 005 | Add pytest-clarity for Improved Assertion Diffs         | MEDIUM   | 15-30 minutes                                    | Completed | [#123](https://github.com/bdperkin/nhl-scrabble/issues/123) | -                                    |
+| 005 | Web Interface Test Coverage (30% → 85%)                 | MEDIUM   | 3-4 hours                                        | Completed | [#254](https://github.com/bdperkin/nhl-scrabble/issues/254) | -                                    |
+| 006 | Add diff-cover for PR Coverage Reporting                | MEDIUM   | 30-60 minutes                                    | Completed | [#124](https://github.com/bdperkin/nhl-scrabble/issues/124) | -                                    |
+| 006 | Interactive Mode Test Coverage (73.59% → 91.07%)        | MEDIUM   | 2-3 hours                                        | Completed | [#255](https://github.com/bdperkin/nhl-scrabble/issues/255) | -                                    |
+| 007 | Add pytest-benchmark for Performance Regression Testing | MEDIUM   | 1-2 hours                                        | Completed | [#125](https://github.com/bdperkin/nhl-scrabble/issues/125) | -                                    |
+| 007 | Configuration and Logging Test Coverage (55% → 90%)     | MEDIUM   | 1-2 hours                                        | Completed | [#256](https://github.com/bdperkin/nhl-scrabble/issues/256) | -                                    |
+| 008 | Add check-jsonschema for JSON/YAML File Validation      | MEDIUM   | 30-60 minutes                                    | Completed | [#128](https://github.com/bdperkin/nhl-scrabble/issues/128) | -                                    |
+| 008 | Reports Module Test Coverage (40% → 90%)                | MEDIUM   | 2-3 hours                                        | Completed | [#257](https://github.com/bdperkin/nhl-scrabble/issues/257) | -                                    |
+| 009 | Edge Cases and Error Path Testing                       | MEDIUM   | 2-3 hours                                        | Completed | [#258](https://github.com/bdperkin/nhl-scrabble/issues/258) | -                                    |
+| 010 | Integration and End-to-End Testing                      | MEDIUM   | 2-3 hours                                        | Completed | [#259](https://github.com/bdperkin/nhl-scrabble/issues/259) | -                                    |
+| 011 | Coverage Audit and Finalization                         | MEDIUM   | 2-3 hours                                        | Completed | [#260](https://github.com/bdperkin/nhl-scrabble/issues/260) | -                                    |
+| 012 | QA Automation Framework                                 | MEDIUM   | 30-40 hours (main task coordination + sub-tasks) | Active    | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | -                                    |
+| 013 | QA Infrastructure Setup                                 | MEDIUM   | 4-6 hours                                        | Completed | [#312](https://github.com/bdperkin/nhl-scrabble/issues/312) | Closed by commit 0a99ee5, 2026-04-21 |
+| 014 | Playwright Framework Setup                              | MEDIUM   | 6-8 hours                                        | Active    | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | -                                    |
+| 015 | Functional Web Tests                                    | MEDIUM   | 6-8 hours                                        | Active    | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | -                                    |
+| 016 | Visual Regression Tests                                 | MEDIUM   | 4-6 hours                                        | Active    | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | -                                    |
+| 017 | Performance and Load Tests                              | MEDIUM   | 4-6 hours                                        | Active    | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | -                                    |
+| 018 | Accessibility Tests                                     | MEDIUM   | 2-4 hours                                        | Active    | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | -                                    |
+| 019 | QA CI/CD Integration                                    | MEDIUM   | 2-4 hours                                        | Active    | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | -                                    |
+| 020 | Implement Flaky Test Retry Mechanisms                   | MEDIUM   | 6-10 hours                                       | Active    | [#322](https://github.com/bdperkin/nhl-scrabble/issues/322) | -                                    |
 
 ### New Features
 
@@ -245,11 +240,11 @@ Each task includes:
 | Bug Fixes    | 0      | 7         | 7       |
 | Security     | 0      | 14        | 14      |
 | Optimization | 0      | 13        | 13      |
-| Enhancement  | 11     | 22        | 33      |
-| Testing      | 7      | 22        | 29      |
+| Enhancement  | 8      | 25        | 33      |
+| Testing      | 8      | 22        | 30      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 17     | 7         | 24      |
-| **TOTAL**    | **72** | **91**    | **163** |
+| **TOTAL**    | **70** | **94**    | **164** |
 
 ### Effort Estimates by Category
 
@@ -271,11 +266,11 @@ Each task includes:
 | Bug Fixes    | 100.0%          |
 | Security     | 100.0%          |
 | Optimization | 100.0%          |
-| Enhancement  | 66.7%           |
-| Testing      | 75.9%           |
+| Enhancement  | 75.8%           |
+| Testing      | 73.3%           |
 | New Features | 14.0%           |
 | Refactoring  | 29.2%           |
-| **OVERALL**  | **55.8%**       |
+| **OVERALL**  | **57.3%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -298,12 +293,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 163 tasks (72 active, 91 completed)
+**Total Tasks**: 164 tasks (70 active, 94 completed)
 
 - **Total Estimated Effort**: 1019.5 hours
   - Active Tasks: 529.0 hours
   - Completed Tasks: 490.5 hours
-- **Overall Completion**: 55.8%
+- **Overall Completion**: 57.3%
 
 ## Task Management Guidelines
 
@@ -346,5 +341,5 @@ tasks/
 ______________________________________________________________________
 
 **Last Updated**: 1776816275.2066202
-**Total Tasks**: 163
-**Completion Rate**: 55.2%
+**Total Tasks**: 164
+**Completion Rate**: 57.3%

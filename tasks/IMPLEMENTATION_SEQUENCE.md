@@ -1,7 +1,7 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-22 (fully synchronized)
-**Total Tasks**: 72 active tasks
+**Total Tasks**: 70 active tasks
 **Estimated Effort**: 529.0 hours
 **Strategy**: Priority-first with dependency awareness
 
