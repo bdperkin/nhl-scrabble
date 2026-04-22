@@ -119,7 +119,7 @@ Each task includes:
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast Behavior   | MEDIUM   | 3-5 hours                                                  | Active    | [#283](https://github.com/bdperkin/nhl-scrabble/issues/283) | -     |
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -     |
 
-### Testing
+### Testing (7 tasks active, 8 documented, 1 completed)
 
 | ID  | Title                                                   | Priority | Effort                                           | Status    | GitHub Issue                                                | Notes |
 | --- | ------------------------------------------------------- | -------- | ------------------------------------------------ | --------- | ----------------------------------------------------------- | ----- |
@@ -145,13 +145,18 @@ Each task includes:
 | 010 | Integration and End-to-End Testing                      | MEDIUM   | 2-3 hours                                        | Completed | [#259](https://github.com/bdperkin/nhl-scrabble/issues/259) | -     |
 | 011 | Coverage Audit and Finalization                         | MEDIUM   | 2-3 hours                                        | Completed | [#260](https://github.com/bdperkin/nhl-scrabble/issues/260) | -     |
 | 012 | QA Automation Framework                                 | MEDIUM   | 30-40 hours (main task coordination + sub-tasks) | Active    | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | -     |
-| 013 | QA Infrastructure Setup                                 | MEDIUM   | 4-6 hours                                        | Active    | [#312](https://github.com/bdperkin/nhl-scrabble/issues/312) | -     |
 | 014 | Playwright Framework Setup                              | MEDIUM   | 6-8 hours                                        | Active    | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | -     |
 | 015 | Functional Web Tests                                    | MEDIUM   | 6-8 hours                                        | Active    | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | -     |
 | 016 | Visual Regression Tests                                 | MEDIUM   | 4-6 hours                                        | Active    | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | -     |
 | 017 | Performance and Load Tests                              | MEDIUM   | 4-6 hours                                        | Active    | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | -     |
 | 018 | Accessibility Tests                                     | MEDIUM   | 2-4 hours                                        | Active    | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | -     |
 | 019 | QA CI/CD Integration                                    | MEDIUM   | 2-4 hours                                        | Active    | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | -     |
+
+#### Completed Tasks
+
+| ID  | Title                   | Priority | Estimated | Actual    | Completed  | GitHub Issue                                                | Notes                    |
+| --- | ----------------------- | -------- | --------- | --------- | ---------- | ----------------------------------------------------------- | ------------------------ |
+| 013 | QA Infrastructure Setup | MEDIUM   | 4-6 hours | 4-5 hours | 2026-04-21 | [#312](https://github.com/bdperkin/nhl-scrabble/issues/312) | Closed by commit 0a99ee5 |
 
 ### New Features
 
@@ -240,10 +245,10 @@ Each task includes:
 | Security     | 0      | 14        | 14      |
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 11     | 22        | 33      |
-| Testing      | 8      | 21        | 29      |
+| Testing      | 7      | 22        | 29      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 17     | 7         | 24      |
-| **TOTAL**    | **73** | **90**    | **163** |
+| **TOTAL**    | **72** | **91**    | **163** |
 
 ### Effort Estimates by Category
 
@@ -253,10 +258,10 @@ Each task includes:
 | Security     | 82.0 hours       |
 | Optimization | 36.0 hours       |
 | Enhancement  | 192.5 hours      |
-| Testing      | 265.0 hours      |
+| Testing      | 260.0 hours      |
 | New Features | 227.0 hours      |
 | Refactoring  | 213.0 hours      |
-| **TOTAL**    | **1024.5 hours** |
+| **TOTAL**    | **1019.5 hours** |
 
 ### Completion Progress
 
@@ -266,10 +271,10 @@ Each task includes:
 | Security     | 100.0%          |
 | Optimization | 100.0%          |
 | Enhancement  | 66.7%           |
-| Testing      | 72.4%           |
+| Testing      | 75.9%           |
 | New Features | 14.0%           |
 | Refactoring  | 29.2%           |
-| **OVERALL**  | **55.2%**       |
+| **OVERALL**  | **55.8%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -277,7 +282,7 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 0     |
-| MEDIUM   | 73    |
+| MEDIUM   | 72    |
 | LOW      | 0     |
 
 ## Recommended Implementation Order
@@ -292,12 +297,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 163 tasks (73 active, 90 completed)
+**Total Tasks**: 163 tasks (72 active, 91 completed)
 
-- **Total Estimated Effort**: 1024.5 hours
-  - Active Tasks: 534.0 hours
+- **Total Estimated Effort**: 1019.5 hours
+  - Active Tasks: 529.0 hours
   - Completed Tasks: 490.5 hours
-- **Overall Completion**: 55.2%
+- **Overall Completion**: 55.8%
 
 ## Task Management Guidelines
 
