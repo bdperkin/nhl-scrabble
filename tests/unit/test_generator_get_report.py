@@ -9,9 +9,9 @@ from nhl_scrabble.reports.generator import ReportGenerator
 
 
 @pytest.fixture
-def sample_data() -> (
-    tuple[dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]]
-):
+def sample_data() -> tuple[
+    dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+]:
     """Create sample data for testing.
 
     Returns:
