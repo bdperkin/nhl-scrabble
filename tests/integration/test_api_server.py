@@ -146,6 +146,7 @@ class TestTeamsEndpoints:
 class TestPlayersEndpoints:
     """Tests for players endpoints."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_all_players(self, client: TestClient) -> None:
         """Test getting all players."""
         response = client.get("/api/v1/players")

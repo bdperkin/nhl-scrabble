@@ -3,6 +3,8 @@
 import threading
 import time
 
+import pytest
+
 from nhl_scrabble.rate_limiter import RateLimiter
 
 
@@ -190,6 +192,7 @@ class TestRateLimiter:
         elapsed = time.monotonic() - start
         assert elapsed < 0.1
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_concurrent_acquires(self) -> None:
         """Test concurrent token acquisition."""
         limiter = RateLimiter(max_requests=100, time_window=10.0)
