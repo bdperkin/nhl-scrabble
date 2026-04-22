@@ -56,6 +56,7 @@ def test_sphinx_build_succeeds() -> None:
     assert index_file.exists(), "Index file not created"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_sphinx_linkcheck() -> None:
     """Test that all links in documentation are valid.
 
@@ -63,6 +64,10 @@ def test_sphinx_linkcheck() -> None:
     - All external links are reachable
     - All internal cross-references resolve
     - No broken links exist
+
+    Note: Marked as flaky due to external link checking - external sites
+    may be temporarily unavailable or slow. Retries up to 3 times with
+    2-second delay between attempts.
     """
     docs_dir = Path("docs")
     build_dir = docs_dir / "_build" / "linkcheck"

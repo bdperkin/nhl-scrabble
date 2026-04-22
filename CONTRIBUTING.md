@@ -899,6 +899,62 @@ class TestScrabbleScorer:
 - All new features must include tests
 - Bug fixes should include regression tests
 
+### Flaky Test Retry Mechanisms
+
+The project uses **pytest-rerunfailures** to automatically retry flaky tests that may fail intermittently due to external dependencies, timing issues, or resource contention.
+
+**When to Mark a Test as Flaky:**
+
+Use the `@pytest.mark.flaky` decorator for tests that:
+
+- Call external APIs or services
+- Check external resources (links, files)
+- Have timing-sensitive operations
+- Involve database race conditions
+- Depend on network conditions
+
+**Retry Configuration:**
+
+```python
+# High flakiness (>10% failure rate)
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
+def test_external_api_call():
+    """Test with external dependency.
+
+    Note: Marked as flaky due to external API calls.
+    Retries up to 3 times with 2-second delay between attempts.
+    """
+    pass
+
+
+# Medium flakiness (5-10% failure rate)
+@pytest.mark.flaky(reruns=2, reruns_delay=1)
+def test_timing_sensitive():
+    """Test with timing dependency."""
+    pass
+
+
+# Low flakiness (<5% failure rate)
+@pytest.mark.flaky(reruns=1)
+def test_rare_race_condition():
+    """Test with rare race condition."""
+    pass
+```
+
+**When NOT to Use Retry:**
+
+- Tests failing due to logic errors (fix the test instead)
+- Tests with wrong assertions (fix expectations)
+- Tests with import/syntax errors (fix the code)
+
+**Documentation:**
+
+- Always add a note in the test docstring explaining why it's marked flaky
+- Add entry to `docs/testing/flaky-tests.md`
+- Create issue for root cause fix if appropriate
+
+See [Flaky Tests Tracker](docs/testing/flaky-tests.md) for current flaky tests and monitoring guidelines.
+
 ### Diff Coverage (PR-Specific Coverage)
 
 The project uses **diff-cover** to enforce test coverage on changed lines only in pull requests. This ensures new code is well-tested without requiring 100% coverage on existing code.

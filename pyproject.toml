@@ -65,6 +65,7 @@ test = [
     "pytest-cov>=4.1.0",
     "pytest-mock>=3.12.0",
     "pytest-randomly>=3.15.0",
+    "pytest-rerunfailures>=14.0",  # Automatic test retries for flaky tests
     "pytest-sugar>=1.0.0",
     "pytest-clarity>=1.0.1",
     "pytest-timeout>=2.2.0",
@@ -523,6 +524,7 @@ markers = [
     "slow: Slow running tests",
     "timeout: Custom timeout for specific tests (e.g., @pytest.mark.timeout(300))",
     "no_parallel: Tests that must run sequentially (e.g., @pytest.mark.no_parallel)",
+    "flaky: Flaky test that may fail intermittently (will be retried on failure)",
 ]
 
 # Coverage configuration
