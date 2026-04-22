@@ -98,16 +98,26 @@ jobs:
     name: Tox tests with UV (${{ matrix.tox-env }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: true  # Stop all jobs if one fails
       matrix:
         tox-env:
+          # Critical checks first (Tier 1)
+          - ruff-check
+          - ruff-format
+          - flake8
+          # Type checking and linting (Tier 2)
+          - mypy
+          - isort
+          - interrogate
+          # Tests (Tier 3)
           - py310
           - py311
           - py312
           - py313
           - py314
-          - ruff-check
-          - mypy
+          # Coverage (Tier 4)
           - coverage
+          # Additional quality checks
           - licenses
           - codespell
           - pymarkdown
@@ -116,9 +126,6 @@ jobs:
           - validate-pyproject
           - tox-ini-fmt
           - yamllint
-          - flake8
-          - isort
-          - interrogate
           - deptry
           - unimport
           - pydocstyle

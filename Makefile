@@ -212,17 +212,33 @@ test-verbose: check-venv ## Run tests with verbose output
 # Tox - Multi-environment Testing
 ###################
 
-tox: check-venv ## Run tox tests across all environments
-	@printf "$(BLUE)Running tox across all environments...$(NC)\n"
-	@$(BIN)/tox
+tox: check-venv ## Run tox with parallel execution and fail-fast (default)
+	@printf "$(BLUE)Running tox with parallel execution and fail-fast...$(NC)\n"
+	@printf "$(YELLOW)Execution tiers:$(NC)\n"
+	@printf "  1. Fast quality checks (ruff, flake8)\n"
+	@printf "  2. Type checking (mypy, isort, interrogate)\n"
+	@printf "  3. Tests (py310-314) - parallel across Python versions\n"
+	@printf "  4. Coverage - only if all tests pass\n"
+	@printf "\n"
+	@$(BIN)/tox run-parallel --parallel-no-spinner
 
 tox-list: check-venv ## List all tox environments
 	@printf "$(BLUE)Available tox environments:$(NC)\n"
 	@$(BIN)/tox list
 
-tox-parallel: check-venv ## Run tox tests in parallel
+tox-parallel: check-venv ## Run tox tests in parallel (explicit, for compatibility)
 	@printf "$(BLUE)Running tox in parallel mode...$(NC)\n"
 	@$(BIN)/tox -p auto
+
+tox-sequential: check-venv ## Run tox tests sequentially (for debugging)
+	@printf "$(BLUE)Running tox sequentially (for debugging)...$(NC)\n"
+	@printf "$(YELLOW)Note: This runs all environments in sequence. Use for debugging only.$(NC)\n"
+	@$(BIN)/tox run
+
+tox-quick: check-venv ## Run quick tox checks (critical checks only, fast fail-fast)
+	@printf "$(BLUE)Running quick tox checks (fail-fast)...$(NC)\n"
+	@printf "$(YELLOW)Running: ruff-check, ruff-format, mypy, py310$(NC)\n"
+	@$(BIN)/tox -e ruff-check,ruff-format,mypy,py310
 
 tox-clean: ## Clean tox environments
 	@printf "$(BLUE)Cleaning tox environments...$(NC)\n"

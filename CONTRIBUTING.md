@@ -552,17 +552,34 @@ PYTEST_RANDOMLY_SEED=1234567890 pytest
 
 ### Multi-Environment Testing with Tox
 
-For testing across multiple Python versions before submitting a PR:
+The project uses tox with intelligent parallel execution and fail-fast behavior:
+
+#### Default Behavior
 
 ```bash
-# Test across Python 3.10, 3.11, 3.12, 3.13, 3.14, and 3.15 in parallel
-tox -p auto
+make tox  # Parallel execution with tier-based dependencies
+```
 
-# Run quality checks only (fast)
-tox -e quality
+Execution tiers:
 
-# Simulate the full CI pipeline
-tox -e ci
+1. **Fast quality checks** (ruff, flake8) - fail immediately if code quality issues
+1. **Type checking** (mypy, isort, interrogate) - only runs if tier 1 passes
+1. **Tests** (py310-314) - parallel across Python versions, only if tier 2 passes
+1. **Coverage** - only runs if all tests pass
+
+#### Execution Modes
+
+```bash
+make tox              # Default: parallel with fail-fast dependencies
+make tox-parallel     # Pure parallel (all environments)
+make tox-sequential   # Sequential (for debugging)
+make tox-quick        # Critical checks only (fast fail-fast)
+
+# Run specific tier
+tox -m critical       # Fast quality checks only
+tox -m quality        # All quality checks
+tox -m test          # Just tests
+tox -m coverage      # Coverage only
 
 # Test specific Python version
 tox -e py310
@@ -573,6 +590,12 @@ tox -e ruff-check
 tox -e mypy
 tox -e ruff-format
 ```
+
+#### Fail-Fast Behavior
+
+- **Local**: Dependencies ensure tier-based fail-fast
+- **CI**: GitHub Actions fail-fast stops all jobs if one fails
+- **Debugging**: Use `make tox-sequential` to see all failures
 
 See [docs/TOX.md](docs/TOX.md) for complete tox documentation and [docs/TOX-UV.md](docs/TOX-UV.md) for tox with UV acceleration.
 
