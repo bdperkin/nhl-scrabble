@@ -978,6 +978,7 @@ ignore = []  # Empty list means check everything
 [tool.deptry.package_module_name_map]
 # Package name -> module name mapping for packages where they differ
 python-dotenv = "dotenv"  # python-dotenv package provides 'dotenv' module
+pyyaml = "yaml"  # pyyaml package provides 'yaml' module
 
 # ============================================================================
 # Unimport - Unused Import Checker
