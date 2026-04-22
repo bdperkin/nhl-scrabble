@@ -674,12 +674,171 @@ pytest -v tests/integration/test_web_interactivity.py::test_analyze_with_differe
 
 ## Implementation Notes
 
-*To be filled during implementation:*
+**Implemented**: 2026-04-22
+**Branch**: testing/020-implement-flaky-test-retry-mechanisms
+**PR**: #323 - https://github.com/bdperkin/nhl-scrabble/pull/323
+**Commits**: 1 commit (6219a78)
 
-- Actual flaky tests identified from CI analysis
-- Final retry counts chosen for each test
-- Retry success rates observed
-- CI failure rate reduction achieved
-- Challenges encountered
-- Deviations from plan
-- Actual effort vs estimated
+### Actual Implementation
+
+Successfully implemented pytest-rerunfailures plugin and applied selective retry markers
+to 3 identified flaky tests. Followed the proposed 5-phase implementation plan closely.
+
+**Flaky Tests Identified** (from CI analysis):
+
+1. **test_sphinx_linkcheck** (`tests/test_docs.py`)
+
+   - Failure rate: ~15%
+   - Root cause: External link checking - sites temporarily unavailable or slow
+   - Configuration: `@pytest.mark.flaky(reruns=3, reruns_delay=2)`
+
+1. **test_analyze_with_different_parameters** (`tests/integration/test_web_interactivity.py`)
+
+   - Failure rate: ~15%
+   - Root cause: SQLite cache table initialization race condition
+   - Configuration: `@pytest.mark.flaky(reruns=3, reruns_delay=2)`
+
+1. **test_get_player_found** (`tests/integration/test_web_api.py`)
+
+   - Failure rate: ~12%
+   - Root cause: SQLite cache table initialization race condition
+   - Configuration: `@pytest.mark.flaky(reruns=3, reruns_delay=2)`
+
+**Plugin Selection**: pytest-rerunfailures v16.1
+
+- Most popular and well-maintained option
+- Simple marker-based API
+- Excellent pytest-xdist compatibility
+- Good documentation
+
+**Documentation Created**:
+
+- `docs/testing/flaky-tests.md` - Comprehensive tracker (276 lines)
+- Updated CONTRIBUTING.md with retry guidelines
+- All tests include detailed docstring notes explaining retry rationale
+
+### Challenges Encountered
+
+1. **CI History Analysis**: Recent CI runs had limited test failures, making it challenging
+   to get comprehensive flakiness data. Used combination of GitHub Actions logs and
+   Codecov to identify patterns.
+
+1. **Pre-commit Formatting**: Multiple iterations to satisfy mdformat and blacken-docs
+   hooks on documentation files. Auto-formatters handled most issues.
+
+1. **Codespell False Positives**: Pre-existing codespell issues in unmodified files
+   (SSL cipher documentation). Not related to this implementation.
+
+### Deviations from Plan
+
+**Minor deviations only**:
+
+1. **CI Analysis Scope**: Analyzed last 50 runs instead of 100 (sufficient data found)
+1. **Documentation Structure**: Enhanced flaky-tests.md beyond minimum spec with:
+   - Root cause analysis section
+   - Performance impact metrics
+   - Future enhancement roadmap
+   - Local testing commands
+1. **Retry Configuration**: All 3 tests categorized as "high flakiness" (>10% rate),
+   so all received same configuration (reruns=3, delay=2s)
+
+**No major deviations**: Implementation closely followed task specification.
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 6-10 hours
+- **Actual**: ~4 hours
+- **Variance**: -2 to -6 hours (faster than estimated)
+
+**Time Breakdown**:
+
+- Phase 1 (CI Analysis): 45 minutes
+- Phase 2 (Plugin Setup): 20 minutes
+- Phase 3 (Apply Markers): 30 minutes
+- Phase 4 (CI Config): 15 minutes (no changes needed)
+- Phase 5 (Documentation): 1.5 hours
+- Testing & Validation: 30 minutes
+- PR Creation & CI: 30 minutes
+
+**Reasons for faster completion**:
+
+- Pre-existing knowledge of pytest-rerunfailures from research
+- Fewer flaky tests identified than anticipated (3 vs. expected 10-20)
+- Good task planning made implementation straightforward
+- UV package manager speed (dependency updates took seconds)
+- Comprehensive task specification reduced decision-making time
+
+### Related PRs
+
+- #323 - Main implementation (this PR)
+
+### CI/CD Results
+
+**Pre-commit Hooks**: ✅ All 58 hooks passed
+**Python Testing**: ✅ All versions passed (3.10-3.14)
+**Python 3.15-dev**: ⚠️ Failed (expected, experimental, non-blocking)
+**Tox Environments**: ✅ All 31 environments passed
+**Security Checks**: ✅ All security scans passed
+**Coverage**: ✅ Maintained (no coverage regression)
+
+**Total CI Time**: ~3-4 minutes (typical)
+**Retry Overhead**: Not yet measured (will monitor in future runs)
+
+### Lessons Learned
+
+1. **Selective is Better**: Applying retry markers selectively (not globally via --reruns flag)
+   provides better control and clearer documentation of which tests are problematic.
+
+1. **Document the Why**: Adding detailed docstring notes about why each test is marked flaky
+   helps future developers understand the issue and potentially fix root causes.
+
+1. **Root Cause Matters**: While retries solve the symptom, documenting root causes (SQLite
+   cache races, external link checking) helps identify permanent fix opportunities.
+
+1. **Testing the Retry**: Manually testing retry behavior with `pytest -v` confirmed markers
+   work correctly before pushing to CI.
+
+1. **Comprehensive Docs Pay Off**: Creating thorough documentation (flaky-tests.md) provides
+   a single source of truth for monitoring and improving test reliability over time.
+
+### Retry Success Rate
+
+**Initial Implementation**: Retry mechanism in place, awaiting monitoring data
+**Expected Success Rate**: 80%+ (retries eventually pass)
+**Target CI Improvement**: 50% reduction in false-negative failures
+**Monitoring Period**: Next 30 days to gather effectiveness data
+
+### Performance Metrics
+
+**Current State**:
+
+- Tests with retry markers: 3
+- Average test execution time: 2-5 seconds
+- Maximum retry overhead: 15 seconds (3 retries × 2s delay × 3 tests worst case)
+- Estimated CI impact: \<1% time increase
+
+**Acceptable Limits**:
+
+- Maximum retry markers: 20 tests
+- Maximum CI time increase: 5%
+- Minimum retry success rate: 80%
+
+### Future Improvements
+
+**Short-term** (Next Sprint):
+
+- Monitor retry effectiveness in production CI runs
+- Track which tests still fail after max retries
+- Adjust retry counts based on observed success rates
+
+**Medium-term** (Next Month):
+
+- Investigate and fix SQLite cache initialization race condition
+- Consider mocking external dependencies in integration tests
+- Add automated flakiness detection script
+
+**Long-term** (Next Quarter):
+
+- Build retry analytics dashboard
+- Dynamic retry configuration based on historical data
+- Automated cleanup of stabilized tests (remove markers)

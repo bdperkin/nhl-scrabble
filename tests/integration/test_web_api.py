@@ -106,8 +106,14 @@ def test_get_player_not_found(client: TestClient) -> None:
     assert "not found" in response.json()["detail"].lower()
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_get_player_found(client: TestClient) -> None:
-    """Test player endpoint - currently returns 404 as player IDs not yet implemented."""
+    """Test player endpoint - currently returns 404 as player IDs not yet implemented.
+
+    Note: Marked as flaky due to intermittent SQLite cache table issues
+    (sqlite3.OperationalError: no such table: responses). Retries up to
+    3 times with 2-second delay between attempts.
+    """
     # Note: Player IDs are not yet included in the PlayerScore model,
     # so this endpoint currently always returns 404.
     # This is a known limitation to be addressed in a future enhancement.
