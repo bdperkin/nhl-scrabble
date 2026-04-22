@@ -279,6 +279,14 @@ mypy: check-venv ## Type checking - verify type hints (mypy)
 	@printf "$(BLUE)Running mypy type checker...$(NC)\n"
 	@$(BIN)/tox -e mypy
 
+ty: check-venv ## Type checking - verify type hints (Astral ty - fast)
+	@printf "$(BLUE)Running Astral ty type checker...$(NC)\n"
+	@$(BIN)/tox -e ty
+
+type-check: check-venv ## Type checking - comprehensive (ty + mypy)
+	@printf "$(BLUE)Running comprehensive type checking (ty + mypy)...$(NC)\n"
+	@$(BIN)/tox -e type-check
+
 quality: check-venv ## Quality - run all checks (ruff-check + mypy)
 	@printf "$(BLUE)Running quality checks...$(NC)\n"
 	@$(BIN)/tox -m quality

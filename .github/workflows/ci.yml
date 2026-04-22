@@ -64,6 +64,12 @@ jobs:
         run: mypy src
         continue-on-error: ${{ matrix.python-version >= '3.12' }}
 
+      - name: Run ty (Astral type checker - validation mode)
+        run: ty check src
+        continue-on-error: true
+        # Non-blocking during validation period
+        # Compare results with mypy before making blocking
+
       - name: Run tests with coverage
         run: |
           pytest -n 2 --cov --cov-report=xml --cov-report=term \
@@ -130,6 +136,9 @@ jobs:
         include:
           - tox-env: py315
             experimental: true
+          - tox-env: ty
+            experimental: true
+            # Non-blocking during validation period
 
     continue-on-error: ${{ matrix.experimental }}
 

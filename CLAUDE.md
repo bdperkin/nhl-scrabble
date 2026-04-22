@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional Python package that fetches curren
 **Current Version:** 2.0.0
 **Python:** 3.10-3.14 (supported), 3.15-dev (experimental)
 **License:** MIT
-**Pre-commit Hooks:** 58 hooks (comprehensive quality checks)
+**Pre-commit Hooks:** 59 hooks (comprehensive quality checks including Astral ty)
 **Dependency Management:** UV with deterministic lock file
 
 ## Quick Start
@@ -116,7 +116,7 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (57 Comprehensive Checks)
+## Pre-commit Hooks (59 Comprehensive Checks)
 
 The project uses 57 pre-commit hooks for automatic code quality validation:
 
@@ -220,9 +220,10 @@ The project uses 57 pre-commit hooks for automatic code quality validation:
 - `ruff-check`: Comprehensive linting with ALL rules (--fix, --exit-non-zero-on-fix)
 - `ruff-format`: Code formatting (quote-style: double, indent-style: space)
 
-**MyPy Hook (1 from mirrors-mypy):**
+**Type Checking Hooks (2 from mirrors-mypy and local):**
 
 - `mypy`: Strict type checking (strict mode with comprehensive options)
+- `ty`: Astral's fast type checker (10-100x faster than mypy, validation mode - non-blocking)
 
 ### Pre-commit Usage
 
@@ -366,6 +367,8 @@ make tox-parallel    # Parallel testing (10x faster)
 make ruff-check      # Ruff linting
 make ruff-format     # Auto-format
 make mypy            # MyPy type checking
+make ty              # Astral ty type checking (fast)
+make type-check      # All type checkers (ty + mypy)
 make quality         # All checks
 make uv-pre-commit   # Pre-commit with UV
 
@@ -424,6 +427,14 @@ tox -e diff-cover        # Check coverage on changed lines only (PR coverage)
 - Strict type checking enabled
 - Configuration in pyproject.toml
 - Type hints throughout codebase
+
+**ty** (fast type checking):
+
+- Astral's extremely fast type checker (10-100x faster than mypy)
+- Written in Rust for blazing performance
+- Supplements mypy during validation period
+- Configuration in pyproject.toml
+- Non-blocking in pre-commit and CI (validation mode)
 
 **Pre-commit** (hooks):
 
@@ -662,7 +673,7 @@ The `/implement-task` skill automatically runs pre-flight validation before push
 
 ```bash
 # Automatically runs:
-pre-commit run --all-files    # All 58 hooks (~45s)
+pre-commit run --all-files    # All 59 hooks (~45s)
 tox -p auto                    # All environments (~3-5 min)
 git status                     # Verify clean state
 ```
@@ -1070,7 +1081,7 @@ The project uses UV automatically via tox-uv:
 - **Modules:** 15 core modules
 - **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Pre-commit Hooks:** 58 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, bandit, safety)
+- **Pre-commit Hooks:** 59 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, ty, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, bandit, safety)
 - **Dependency Lock:** uv.lock with 1,957 lines
 - **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization
