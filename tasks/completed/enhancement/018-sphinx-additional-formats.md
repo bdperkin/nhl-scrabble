@@ -12,7 +12,7 @@
 
 ## Description
 
-Expand Sphinx documentation build system to support multiple output formats beyond HTML. Add support for Texinfo, man pages, PDF (via pdflatex), and plain text formats to provide comprehensive documentation distribution options for different use cases.
+Expand Sphinx documentation build system to support multiple output formats beyond HTML. Add support for Texinfo, man pages, PDF (via pdflatex), plain text, and AsciiDoc formats to provide comprehensive documentation distribution options for different use cases.
 
 ## Current State
 
@@ -60,13 +60,14 @@ serve-docs:
 
 ### Add Multiple Sphinx Builders
 
-Configure Sphinx to build documentation in 5 additional formats:
+Configure Sphinx to build documentation in 6 additional formats:
 
 1. **HTML** (existing) - Web documentation
 1. **Texinfo** (new) - GNU Info format for Emacs
 1. **Man Pages** (new) - Unix man page format
 1. **PDF** (new) - Portable document format via LaTeX
 1. **Text** (new) - Plain text documentation
+1. **AsciiDoc** (new) - AsciiDoc format via pandoc
 
 ### Implementation Approach
 
@@ -747,7 +748,7 @@ After implementation:
 
 ### Actual Implementation
 
-Successfully implemented all 5 Sphinx output formats as planned:
+Successfully implemented all 6 output formats (5 Sphinx + 1 pandoc):
 
 1. **Sphinx Configuration** (docs/conf.py):
 
@@ -764,13 +765,15 @@ Successfully implemented all 5 Sphinx output formats as planned:
    - `docs-texinfo`: Builds GNU Info format
    - `docs-pdf`: Builds PDF via LaTeX (requires pdflatex)
    - `docs-text`: Builds plain text documentation
+   - `docs-asciidoc`: Builds AsciiDoc format via pandoc (requires pandoc)
    - `docs-all`: Builds all formats in sequence
 
 1. **Documentation**:
 
-   - Created comprehensive docs/how-to/build-documentation.md (~479 lines)
+   - Created comprehensive docs/how-to/build-documentation.md (~520 lines)
    - Covers installation, usage, troubleshooting for all formats
    - Documents LaTeX requirements and limitations
+   - Documents pandoc requirements for AsciiDoc
    - Provides distribution instructions for man pages and texinfo
    - Updated CLAUDE.md with new capabilities
 
@@ -782,9 +785,10 @@ Successfully implemented all 5 Sphinx output formats as planned:
 
 1. **Test Suite** (tests/test_docs_builds.py):
 
-   - Comprehensive tests for all 5 formats
+   - Comprehensive tests for all 6 formats
    - Tests verify both build success and output file creation
    - PDF test gracefully skips if LaTeX not available
+   - AsciiDoc test gracefully skips if pandoc not available
    - Tests verify Makefile targets and Sphinx configuration exist
    - Fixed parallel execution conflicts with existing docs tests
 
