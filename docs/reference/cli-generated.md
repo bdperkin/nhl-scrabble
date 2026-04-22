@@ -72,6 +72,20 @@ Usage: nhl-scrabble analyze [OPTIONS]
     JSON format output to file:     $ nhl-scrabble analyze --format json
     --output report.json
 
+    YAML format output to file:     $ nhl-scrabble analyze --format yaml
+    --output report.yaml
+
+    XML format output to file:     $ nhl-scrabble analyze --format xml
+    --output report.xml
+
+    HTML format output to file:     $ nhl-scrabble analyze --format html
+    --output report.html
+
+    Markdown format output to file:     $ nhl-scrabble analyze --format
+    markdown --output report.md
+
+    Table format to terminal:     $ nhl-scrabble analyze --format table
+
     CSV format output to file:     $ nhl-scrabble analyze --format csv
     --output report.csv
 
@@ -80,6 +94,9 @@ Usage: nhl-scrabble analyze [OPTIONS]
 
     Excel with specific sheets only:     $ nhl-scrabble analyze --format excel
     --sheets teams,players --output report.xlsx
+
+    Custom template output:     $ nhl-scrabble analyze --format template
+    --template custom.j2 --output report.txt
 
     Disable API response caching:     $ nhl-scrabble analyze --no-cache
 
@@ -114,8 +131,10 @@ Usage: nhl-scrabble analyze [OPTIONS]
     Atlantic --min-score 60 --output atlantic.txt
 
 Options:
-  -f, --format [text|json|csv|excel]
+  -f, --format [text|json|yaml|xml|html|table|markdown|csv|excel|template]
                                   Output format (default: text)
+  --template FILE                 Custom template file path (required for
+                                  --format template)
   --sheets TEXT                   Comma-separated list of sheets for Excel
                                   export (teams,players,divisions,conferences,
                                   playoffs)

@@ -151,7 +151,7 @@ repos:
     rev: v2.4.0
     hooks:
       - id: codespell
-        args: []  # Config is in pyproject.toml
+        args: ['-L', 'aNULL']  # Ignore OpenSSL cipher suite names
         exclude: ^docs/reference/api/  # Exclude generated API docs
 
   # ============================================================================
@@ -394,7 +394,7 @@ repos:
     rev: v1.20.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, pydantic]
+        additional_dependencies: [types-requests, types-PyYAML, pydantic, rich, jinja2]
         args: []  # Config is in pyproject.toml
 
   # ============================================================================

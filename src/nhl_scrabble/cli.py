@@ -163,9 +163,17 @@ def cli() -> None:
     "-f",
     "--format",
     "output_format",
-    type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False),
+    type=click.Choice(
+        ["text", "json", "yaml", "xml", "html", "table", "markdown", "csv", "excel", "template"],
+        case_sensitive=False,
+    ),
     default="text",
     help="Output format (default: text)",
+)
+@click.option(
+    "--template",
+    type=click.Path(exists=True, dir_okay=False),
+    help="Custom template file path (required for --format template)",
 )
 @click.option(
     "--sheets",
@@ -261,6 +269,7 @@ def cli() -> None:
 @click.help_option("-h", "--help")
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
+    template: str | None,
     sheets: str | None,
     output: str | None,
     verbose: bool,
@@ -302,6 +311,21 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
       JSON format output to file:
         $ nhl-scrabble analyze --format json --output report.json
 
+      YAML format output to file:
+        $ nhl-scrabble analyze --format yaml --output report.yaml
+
+      XML format output to file:
+        $ nhl-scrabble analyze --format xml --output report.xml
+
+      HTML format output to file:
+        $ nhl-scrabble analyze --format html --output report.html
+
+      Markdown format output to file:
+        $ nhl-scrabble analyze --format markdown --output report.md
+
+      Table format to terminal:
+        $ nhl-scrabble analyze --format table
+
       CSV format output to file:
         $ nhl-scrabble analyze --format csv --output report.csv
 
@@ -310,6 +334,9 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
       Excel with specific sheets only:
         $ nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
+
+      Custom template output:
+        $ nhl-scrabble analyze --format template --template custom.j2 --output report.txt
 
       Disable API response caching:
         $ nhl-scrabble analyze --no-cache
@@ -404,6 +431,13 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
         )
 
+    # Validate template format requires --template option
+    if output_format == "template" and not template:
+        raise click.ClickException(
+            "Template format requires --template option\n"
+            "Example: nhl-scrabble analyze --format template --template custom.j2"
+        )
+
     # Validate output path BEFORE making API calls
     validate_output_path(output)
 
@@ -457,6 +491,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             scoring_values=scoring_values,
             filters=filters,
             season=season,
+            template_file=template,
         )
 
         # Output results
@@ -496,6 +531,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     scoring_values: dict[str, int] | None = None,
     filters: AnalysisFilters | None = None,
     season: str | None = None,
+    template_file: str | None = None,
 ) -> str | None:
     """Run the complete NHL Scrabble analysis.
 
@@ -512,10 +548,11 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
         filters: Optional filters to apply to analysis results
         season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023).
             If None, analyzes current season.
+        template_file: Optional path to Jinja2 template file (for template format)
 
     Returns:
-        Complete report string for text/JSON formats, or None for CSV/Excel
-        (CSV/Excel are written directly to output file)
+        Complete report string for text/JSON/YAML/XML/HTML/Table/Markdown/Template formats,
+        or None for CSV/Excel (CSV/Excel are written directly to output file)
 
     Raises:
         NHLApiError: If there are issues fetching data from NHL API
@@ -596,35 +633,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
                 f"{len(all_players)} players"
             )
 
-    # Generate reports based on format
-    if config.output_format == "json":
-        return generate_json_report(
-            team_scores,
-            all_players,
-            division_standings,
-            conference_standings,
-            playoff_standings,
-        )
-    if config.output_format == "html":
-        return generate_html_report(
-            team_scores,
-            all_players,
-            division_standings,
-            conference_standings,
-            playoff_standings,
-        )
-    if config.output_format == "csv":
-        if output_path:
-            generate_csv_report(
-                team_scores,
-                all_players,
-                division_standings,
-                conference_standings,
-                playoff_standings,
-                output_path,
-            )
-            return None
-        raise ValueError("CSV format requires output path")
+    # Excel format uses special exporter (multi-sheet workbook)
     if config.output_format == "excel":
         if output_path:
             generate_excel_report(
@@ -639,22 +648,63 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
             return None
         raise ValueError("Excel format requires output path")
 
-    # Use lazy report generator for text format
-    report_generator = ReportGenerator(
-        team_scores=team_scores,
-        all_players=all_players,
-        division_standings=division_standings,
-        conference_standings=conference_standings,
-        playoff_standings=playoff_standings,
-        top_players_count=config.top_players_count,
-        top_team_players_count=config.top_team_players_count,
-    )
+    # For text format, use the existing rich report generator
+    if config.output_format == "text":
+        report_generator = ReportGenerator(
+            team_scores=team_scores,
+            all_players=all_players,
+            division_standings=division_standings,
+            conference_standings=conference_standings,
+            playoff_standings=playoff_standings,
+            top_players_count=config.top_players_count,
+            top_team_players_count=config.top_team_players_count,
+        )
+        return report_generator.get_report(report_filter)
 
-    # Generate requested report (lazy evaluation)
-    return report_generator.get_report(report_filter)
+    # For all other formats, use the formatter factory
+    from nhl_scrabble.formatters import get_formatter
+
+    # Prepare data dictionary for formatters
+    teams_data = {
+        abbrev: {
+            "total": team.total,
+            "players": [asdict(p) for p in team.players],
+            "division": team.division,
+            "conference": team.conference,
+            "avg_per_player": team.avg_per_player,
+        }
+        for abbrev, team in team_scores.items()
+    }
+
+    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
+    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
+    playoffs_data = {
+        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
+    }
+
+    formatter_data = {
+        "teams": teams_data,
+        "divisions": divisions_data,
+        "conferences": conferences_data,
+        "playoffs": playoffs_data,
+        "summary": {
+            "total_teams": len(team_scores),
+            "total_players": len(all_players),
+        },
+    }
+
+    # Get appropriate formatter
+    formatter_kwargs = {}
+    if config.output_format == "template":
+        formatter_kwargs["template_file"] = template_file
+
+    formatter = get_formatter(config.output_format, **formatter_kwargs)
+
+    # Generate and return formatted output
+    return formatter.format(formatter_data)
 
 
-def generate_json_report(
+def generate_json_report(  # Kept for backward compatibility
     team_scores: dict[str, Any],
     all_players: list[Any],
     division_standings: dict[str, Any],
@@ -707,7 +757,7 @@ def generate_json_report(
     return json.dumps(report_data, indent=2)
 
 
-def generate_html_report(
+def generate_html_report(  # Kept for backward compatibility
     team_scores: dict[str, Any],
     all_players: list[Any],
     division_standings: dict[str, Any],

@@ -51,6 +51,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
     "jinja2>=3.1.0",
+    "pyyaml>=6.0",  # YAML format support
+    "dicttoxml>=1.7.16",  # XML format conversion
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.27.0",
     "starlette>=0.36.0",  # ASGI framework (FastAPI dependency, explicit for middleware)
@@ -84,6 +86,7 @@ lint = [
 type = [
     "mypy>=1.8.0",
     "types-requests>=2.31.0",
+    "types-PyYAML>=6.0.0",  # Type stubs for PyYAML
     "ty>=0.0.32",  # Astral's fast type checker (supplements mypy)
 ]
 
@@ -975,6 +978,7 @@ ignore = []  # Empty list means check everything
 [tool.deptry.package_module_name_map]
 # Package name -> module name mapping for packages where they differ
 python-dotenv = "dotenv"  # python-dotenv package provides 'dotenv' module
+pyyaml = "yaml"  # pyyaml package provides 'yaml' module
 
 # ============================================================================
 # Unimport - Unused Import Checker

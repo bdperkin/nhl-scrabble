@@ -29,6 +29,7 @@ team_standings  # AnalysisResponse field
 SeasonComparison  # SeasonComparison class - used in tests
 add_season_data  # SeasonComparison method - used in tests
 generate_text_report  # SeasonComparison method - used in tests
+generate_json_report  # SeasonComparison method - public API for backward compatibility
 TrendAnalysis  # TrendAnalysis class - used in tests
 HistoricalDataStore  # HistoricalDataStore class - used in tests and future CLI integration
 save_season  # HistoricalDataStore method - public API
@@ -37,3 +38,8 @@ has_season  # HistoricalDataStore method - public API
 list_seasons  # HistoricalDataStore method - public API
 delete_season  # HistoricalDataStore method - public API
 clear_all  # HistoricalDataStore method - public API
+
+# Legacy CLI report generators (kept for backward compatibility)
+generate_json_report  # cli.py - legacy JSON report generator
+generate_html_report  # cli.py - legacy HTML report generator
+generate_csv_report  # cli.py - legacy CSV report generator
