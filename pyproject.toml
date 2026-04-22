@@ -86,6 +86,7 @@ lint = [
 type = [
     "mypy>=1.8.0",
     "types-requests>=2.31.0",
+    "types-PyYAML>=6.0.0",  # Type stubs for PyYAML
     "ty>=0.0.32",  # Astral's fast type checker (supplements mypy)
 ]
 
