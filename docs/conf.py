@@ -161,18 +161,48 @@ coverage_ignore_classes = ["_.*"]  # Private classes
 linkcheck_ignore = [
     r"http://localhost.*",  # Ignore local URLs
     r"https://example.com.*",  # Ignore example URLs
+    r"http://127\.0\.0\.1.*",  # Ignore localhost IP
+    r"https://github.com/.*/pull/\d+",  # PR URLs may not exist yet
+    r"https://github.com/.*/issues/\d+",  # Issue URLs may not exist yet
 ]
-linkcheck_timeout = 10
-linkcheck_retries = 3
-linkcheck_workers = 5
+linkcheck_timeout = 15  # Seconds to wait for link response
+linkcheck_retries = 2  # Number of retries for failed links
+linkcheck_workers = 5  # Parallel workers for checking links
+
+# Anchors to ignore (some sites don't support anchor checking)
+linkcheck_anchors_ignore = [
+    r"^!",  # Ignore anchors starting with !
+]
+
+# Report settings
+linkcheck_report_timeouts_as_broken = True
+linkcheck_allowed_redirects = {}
 
 # Doctest configuration
+import doctest  # noqa: E402
+
+doctest_default_flags = (
+    doctest.ELLIPSIS |  # Allow ... in output
+    doctest.NORMALIZE_WHITESPACE  # Ignore whitespace differences
+)
+
 doctest_global_setup = """
 import sys
+import os
 from pathlib import Path
-sys.path.insert(0, str(Path('..').resolve() / 'src'))
+
+# Add src directory to path
+sys.path.insert(0, os.path.abspath('../src'))
+
+# Import common modules for doctests
+from nhl_scrabble.scoring import ScrabbleScorer
+from nhl_scrabble.models.player import PlayerScore
 """
-doctest_test_doctest_blocks = "default"
+
+doctest_test_doctest_blocks = "default"  # Test >>> blocks in docstrings
+
+# Optional: Skip certain files from doctest (currently none)
+doctest_path = []
 
 # -- Options for multiple output formats ------------------------------------
 

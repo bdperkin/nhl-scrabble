@@ -151,9 +151,34 @@ Top 20 Players by Scrabble Score:
 - J, X = 8 points
 - Q, Z = 10 points
 
-For example, "OVECHKIN":
+You can calculate scores programmatically using the ScrabbleScorer:
 
-- O(1) + V(4) + E(1) + C(3) + H(4) + K(5) + I(1) + N(1) = **20 points**
+```python
+>>> from nhl_scrabble.scoring import ScrabbleScorer
+>>> scorer = ScrabbleScorer()
+>>> scorer.calculate_score("OVECHKIN")
+20
+```
+
+The scorer handles both uppercase and lowercase automatically:
+
+```python
+>>> scorer.calculate_score("Ovechkin")
+20
+>>> scorer.calculate_score("ovechkin")
+20
+```
+
+Try calculating scores for other players:
+
+```python
+>>> scorer.calculate_score("CROSBY")
+13
+>>> scorer.calculate_score("MCDAVID")
+16
+>>> scorer.calculate_score("MATTHEWS")
+16
+```
 
 ## Step 5: Save output to a file
 

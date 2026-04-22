@@ -45,6 +45,7 @@ NC := \033[0m # No Color
         security-audit pip-audit bandit safety security-report \
         build publish publish-test \
         docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-all \
+        docs-doctest docs-doctest-verbose docs-linkcheck docs-linkcheck-verbose docs-coverage docs-quality \
         run run-verbose run-json \
         shell watch init info status version \
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
@@ -433,9 +434,23 @@ docs-doctest: check-venv ## Test code examples in documentation
 	@printf "$(BLUE)Testing code examples in documentation...$(NC)\n"
 	@cd docs && $(BIN)/sphinx-build -b doctest . _build/doctest
 	@printf "$(GREEN)✓ All doctests passed$(NC)\n"
+	@printf "$(YELLOW)Results: docs/_build/doctest/output.txt$(NC)\n"
+
+docs-doctest-verbose: check-venv ## Test code examples with verbose output
+	@printf "$(BLUE)Testing code examples in documentation (verbose)...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b doctest -v . _build/doctest
+
+docs-linkcheck-verbose: check-venv ## Check links with verbose output
+	@printf "$(BLUE)Checking documentation links (verbose)...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b linkcheck -v . _build/linkcheck
 
 docs-quality: docs-linkcheck docs-coverage docs-doctest ## Run all documentation quality checks
 	@printf "$(GREEN)✓ All documentation quality checks passed$(NC)\n"
+	@printf "\n"
+	@printf "$(BLUE)Results:$(NC)\n"
+	@printf "  Doctest:   docs/_build/doctest/output.txt\n"
+	@printf "  Linkcheck: docs/_build/linkcheck/output.txt\n"
+	@printf "  Coverage:  docs/_build/coverage/python.txt\n"
 
 docs-html: check-venv ## Build HTML documentation
 	@printf "$(BLUE)Building HTML documentation...$(NC)\n"
