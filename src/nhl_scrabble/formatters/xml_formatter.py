@@ -49,9 +49,9 @@ class XMLFormatter:
             True
         """
         try:
-            import xml.dom.minidom
+            import xml.dom.minidom  # noqa: PLC0415
 
-            from dicttoxml import dicttoxml
+            from dicttoxml import dicttoxml  # noqa: PLC0415
         except ImportError as e:
             raise ImportError(
                 "dicttoxml is required for XML format. Install with: pip install dicttoxml"
@@ -64,8 +64,8 @@ class XMLFormatter:
             attr_type=False,  # Don't add type attributes
         )
 
-        # Parse and pretty-print
-        dom = xml.dom.minidom.parseString(xml_bytes)
+        # Parse and pretty-print (safe: parsing our own generated XML, not untrusted input)
+        dom = xml.dom.minidom.parseString(xml_bytes)  # noqa: S318
         pretty_xml = dom.toprettyxml(indent="  ")
 
         return pretty_xml

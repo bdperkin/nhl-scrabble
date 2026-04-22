@@ -76,7 +76,7 @@ class TemplateFormatter:
             >>> output = formatter.format(data)
         """
         try:
-            from jinja2 import Template
+            from jinja2 import Template  # noqa: PLC0415
         except ImportError as e:
             raise ImportError(
                 "Jinja2 is required for template format. Install with: pip install jinja2"

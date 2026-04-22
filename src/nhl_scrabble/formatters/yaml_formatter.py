@@ -49,7 +49,7 @@ class YAMLFormatter:
             True
         """
         try:
-            import yaml
+            import yaml  # noqa: PLC0415
         except ImportError as e:
             raise ImportError(
                 "PyYAML is required for YAML format. Install with: pip install pyyaml"

@@ -35,18 +35,18 @@ def get_formatter(format_type: str, **kwargs: Any) -> OutputFormatter:
         >>> output = formatter.format(data)
     """
     # Lazy imports to avoid circular dependencies and reduce startup time
-    from nhl_scrabble.formatters.csv_formatter import CSVFormatter
-    from nhl_scrabble.formatters.html_formatter import HTMLFormatter
-    from nhl_scrabble.formatters.json_formatter import JSONFormatter
-    from nhl_scrabble.formatters.markdown_formatter import MarkdownFormatter
-    from nhl_scrabble.formatters.table_formatter import TableFormatter
-    from nhl_scrabble.formatters.template_formatter import TemplateFormatter
-    from nhl_scrabble.formatters.text_formatter import TextFormatter
-    from nhl_scrabble.formatters.xml_formatter import XMLFormatter
-    from nhl_scrabble.formatters.yaml_formatter import YAMLFormatter
+    from nhl_scrabble.formatters.csv_formatter import CSVFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.html_formatter import HTMLFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.json_formatter import JSONFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.markdown_formatter import MarkdownFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.table_formatter import TableFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.template_formatter import TemplateFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.text_formatter import TextFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.xml_formatter import XMLFormatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.yaml_formatter import YAMLFormatter  # noqa: PLC0415
 
-    # Formatter registry mapping format type to formatter class
-    FORMATTERS: dict[str, type[OutputFormatter]] = {
+    # Formatter registry mapping format type to formatter class (constant despite being in function)
+    FORMATTERS: dict[str, type[OutputFormatter]] = {  # noqa: N806
         "text": TextFormatter,
         "json": JSONFormatter,
         "yaml": YAMLFormatter,

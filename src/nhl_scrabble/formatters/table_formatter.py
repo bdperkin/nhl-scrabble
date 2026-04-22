@@ -45,8 +45,9 @@ class TableFormatter:
             >>> len(output) > 0
             True
         """
-        from rich.console import Console
-        from rich.table import Table
+        # Lazy import to reduce startup time (rich is heavy)
+        from rich.console import Console  # noqa: PLC0415
+        from rich.table import Table  # noqa: PLC0415
 
         # Create console to capture output
         console = Console()
