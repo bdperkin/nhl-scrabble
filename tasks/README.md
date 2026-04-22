@@ -113,7 +113,7 @@ Each task includes:
 | 015 | Add Standard Short Options to CLI Commands                    | MEDIUM   | 30-60 minutes                                              | Completed | [#229](https://github.com/bdperkin/nhl-scrabble/issues/229) | PR [#320](https://github.com/bdperkin/nhl-scrabble/pull/320), 2026-04-21 |
 | 016 | Format CLI Help Examples with Comments                        | LOW      | 15-30 minutes                                              | Completed | [#230](https://github.com/bdperkin/nhl-scrabble/issues/230) | PR #319, completed 2026-04-21                                            |
 | 017 | Expand CLI Output Formats                                     | MEDIUM   | 3-4 hours                                                  | Active    | [#231](https://github.com/bdperkin/nhl-scrabble/issues/231) | -                                                                        |
-| 018 | Support Additional Sphinx Output Formats                      | MEDIUM   | 2-3 hours                                                  | Active    | [#232](https://github.com/bdperkin/nhl-scrabble/issues/232) | -                                                                        |
+| 018 | Support Additional Sphinx Output Formats                      | MEDIUM   | 2-3 hours                                                  | Completed | [#232](https://github.com/bdperkin/nhl-scrabble/issues/232) | PR [#330](https://github.com/bdperkin/nhl-scrabble/pull/330), 2026-04-22 |
 | 019 | Integrate Sphinx Doctest and Linkcheck into Build Process     | MEDIUM   | 1-2 hours                                                  | Active    | [#233](https://github.com/bdperkin/nhl-scrabble/issues/233) | -                                                                        |
 | 020 | Enable Colorized Log Output Formatting                        | LOW      | 45 minutes                                                 | Completed | [#234](https://github.com/bdperkin/nhl-scrabble/issues/234) | PR [#321](https://github.com/bdperkin/nhl-scrabble/pull/321), 2026-04-21 |
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast Behavior   | MEDIUM   | 3-5 hours                                                  | Completed | [#283](https://github.com/bdperkin/nhl-scrabble/issues/283) | PR [#326](https://github.com/bdperkin/nhl-scrabble/pull/326), 2026-04-22 |
@@ -294,12 +294,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 165 tasks (69 active, 96 completed)
+**Total Tasks**: 165 tasks (68 active, 97 completed)
 
 - **Total Estimated Effort**: 1019.5 hours
-  - Active Tasks: 525.0 hours
-  - Completed Tasks: 494.5 hours
-- **Overall Completion**: 58.5%
+  - Active Tasks: 522.5 hours
+  - Completed Tasks: 497.0 hours
+- **Overall Completion**: 58.8%
 
 ## Task Management Guidelines
 
