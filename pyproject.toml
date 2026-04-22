@@ -47,6 +47,7 @@ dependencies = [
     "requests-cache>=1.2.0",
     "certifi>=2023.0.0",  # SSL/TLS CA bundle for certificate verification
     "click>=8.1.0",
+    "colorlog>=6.8.0",  # Colorized log output for better readability
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
     "jinja2>=3.1.0",

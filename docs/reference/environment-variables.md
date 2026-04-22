@@ -24,6 +24,8 @@ Complete list of all environment variables supported by NHL Scrabble.
 | `NHL_SCRABBLE_CACHE_TTL`        | int    | 3600                      | Web cache TTL (seconds)  |
 | `NHL_SCRABBLE_LOG_LEVEL`        | string | INFO                      | Logging level            |
 | `NHL_SCRABBLE_LOG_FORMAT`       | string | text                      | Log format (text/json)   |
+| `NO_COLOR`                      | bool   | -                         | Disable color output     |
+| `TERM`                          | string | (system)                  | Terminal type            |
 
 ## API Configuration
 
@@ -207,6 +209,69 @@ export NHL_SCRABBLE_LOG_LEVEL=WARNING  # Only warnings and errors
 
 ```bash
 export NHL_SCRABBLE_LOG_FORMAT=json  # Structured logs for parsing
+```
+
+### NO_COLOR
+
+**Type**: Boolean
+**Default**: (none)
+**Description**: Disable colorized log output. Respects the [NO_COLOR standard](https://no-color.org/).
+
+When set (to any value), disables ANSI color codes in log output even when running in a terminal.
+Useful for piping output, screen readers, or personal preference.
+
+**Color Scheme** (when colors enabled):
+
+- **DEBUG**: Cyan - Verbose diagnostic information
+- **INFO**: Green - Normal operation messages
+- **WARNING**: Yellow - Warning messages requiring attention
+- **ERROR**: Red - Error messages
+- **CRITICAL**: Red with white background - Critical failures
+
+**Automatic Detection**:
+
+Colors are automatically disabled when:
+
+- Output is redirected to a file or pipe (not a TTY)
+- `NO_COLOR` environment variable is set
+- `TERM=dumb` terminal type
+- JSON output format is enabled
+
+**Example**:
+
+```bash
+# Disable colors (NO_COLOR standard)
+NO_COLOR=1 nhl-scrabble analyze -v
+
+# Colors enabled in terminal (default)
+nhl-scrabble analyze -v
+
+# No colors when piped (automatic)
+nhl-scrabble analyze -v > output.log
+
+# View colored output with less
+nhl-scrabble analyze -v | less -R  # Requires colors enabled
+```
+
+### TERM
+
+**Type**: String
+**Default**: (system-defined)
+**Description**: Terminal type. When set to `dumb`, disables colorized output.
+
+This is a standard POSIX environment variable that indicates terminal capabilities.
+NHL Scrabble respects `TERM=dumb` to disable colors for terminals that don't support ANSI codes.
+
+**Note**: This is a system-wide variable, not specific to NHL Scrabble.
+
+**Example**:
+
+```bash
+# Disable colors for dumb terminal
+TERM=dumb nhl-scrabble analyze -v
+
+# Default terminal with colors
+TERM=xterm-256color nhl-scrabble analyze -v
 ```
 
 ## Web Server Configuration
