@@ -129,22 +129,130 @@ def calculate_score(name: str) -> int:
 - Check all callers to determine if this is legacy or intentional design
 - This may be intentional static method design, not legacy code
 
-### 3. Vulture Allowlist (`.vulture_allowlist`)
+### 3. Comprehensive Vulture Allowlist Review (`.vulture_allowlist`)
 
-Four entries for legacy functions:
+The `.vulture_allowlist` file contains 46 lines (including comments and blank lines) with entries for various "unused" code that is actually part of the public API or used dynamically at runtime. A comprehensive review is needed to determine which entries should be removed with the backward compatibility code and which should be preserved.
+
+**Current Allowlist Structure** (46 total lines):
 
 ```
+# Vulture allowlist for public API methods
+
+# API Client methods used in tests
+get_rate_limit_stats  # NHLApiClient method - used in rate limiting tests
+
+# Search methods used in tests
+get_top_players  # PlayerSearch method - used in search tests
+
+# CSV Exporter public API
+export_player_scores  # CSVExporter method for exporting player scores
+export_division_standings  # CSVExporter method for exporting division standings
+export_conference_standings  # CSVExporter method for exporting conference standings
+export_playoff_standings  # CSVExporter method for exporting playoff standings
+
+# Excel Exporter public API
+export_player_scores  # ExcelExporter method for exporting player scores
+
+# Excel Exporter internal formatting methods (used at runtime)
+fill  # openpyxl PatternFill attribute
+font  # openpyxl Font attribute
+alignment  # openpyxl Alignment attribute
+
+# Pydantic model fields in web/app.py (used by FastAPI)
+timestamp  # AnalysisResponse field
+cache_hit  # AnalysisResponse field
+team_standings  # AnalysisResponse field
+
+# Historical data classes and methods (used in tests and future CLI integration)
+SeasonComparison  # SeasonComparison class - used in tests
+add_season_data  # SeasonComparison method - used in tests
+generate_text_report  # SeasonComparison method - used in tests
+generate_json_report  # SeasonComparison method - public API for backward compatibility
+TrendAnalysis  # TrendAnalysis class - used in tests
+HistoricalDataStore  # HistoricalDataStore class - used in tests and future CLI integration
+save_season  # HistoricalDataStore method - public API
+load_season  # HistoricalDataStore method - public API
+has_season  # HistoricalDataStore method - public API
+list_seasons  # HistoricalDataStore method - public API
+delete_season  # HistoricalDataStore method - public API
+clear_all  # HistoricalDataStore method - public API
+
 # Legacy CLI report generators (kept for backward compatibility)
 generate_json_report  # cli.py - legacy JSON report generator
 generate_html_report  # cli.py - legacy HTML report generator
 generate_csv_report  # cli.py - legacy CSV report generator
+```
+
+#### Allowlist Analysis: REMOVE vs PRESERVE
+
+**REMOVE (3 entries) - Backward Compatibility Code:**
+
+| Line | Entry                  | Location | Reason to Remove                                                  | Tests Affected                         |
+| ---- | ---------------------- | -------- | ----------------------------------------------------------------- | -------------------------------------- |
+| 43   | `generate_json_report` | cli.py   | Legacy wrapper around formatter factory, explicitly marked legacy | `tests/unit/test_cli_comprehensive.py` |
+| 44   | `generate_html_report` | cli.py   | Legacy wrapper around formatter factory, explicitly marked legacy | `tests/unit/test_html_report.py` (7x)  |
+| 45   | `generate_csv_report`  | cli.py   | Legacy wrapper around formatter factory, no tests use it          | None                                   |
+
+**PRESERVE (40 entries) - Legitimate Public API:**
+
+| Lines | Category         | Entries                                                                                                                          | Reason to Preserve                                    |
+| ----- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 4     | API Client       | `get_rate_limit_stats`                                                                                                           | Public API method used in rate limiting tests         |
+| 7     | Search           | `get_top_players`                                                                                                                | Public API method used in search tests                |
+| 10-13 | CSV Exporter     | `export_player_scores`, `export_division_standings`, `export_conference_standings`, `export_playoff_standings`                   | Public API methods, tested in `test_csv_exporter.py`  |
+| 16    | Excel Exporter   | `export_player_scores`                                                                                                           | Public API method, tested in `test_excel_exporter.py` |
+| 19-21 | Excel Formatting | `fill`, `font`, `alignment`                                                                                                      | openpyxl runtime attributes (dynamic usage)           |
+| 24-26 | FastAPI          | `timestamp`, `cache_hit`, `team_standings`                                                                                       | Pydantic model fields used by FastAPI (dynamic usage) |
+| 29-32 | SeasonComparison | `SeasonComparison`, `add_season_data`, `generate_text_report`, `generate_json_report`                                            | Public API for historical data comparison             |
+| 33-40 | Historical Data  | `TrendAnalysis`, `HistoricalDataStore`, `save_season`, `load_season`, `has_season`, `list_seasons`, `delete_season`, `clear_all` | Public API for historical data storage and analysis   |
+
+**Critical Finding - Line 32 Mislabeled:**
+
+```
 generate_json_report  # SeasonComparison method - public API for backward compatibility
 ```
 
-**Issues**:
+This comment is **misleading**. The `SeasonComparison.generate_json_report()` method (in `src/nhl_scrabble/reports/comparison.py:139-171`) is:
 
-- Allowlist masks dead code that should be removed
-- Makes it harder to detect actual unused code in the future
+- **NOT backward compatibility code** - it's a legitimate public API method
+- Returns `dict[str, Any]`, not a string (different from CLI version)
+- Part of SeasonComparison's intentional public interface
+- Used to provide JSON data structure for comparison results
+- Has proper docstrings and examples
+
+**Recommendation**: Update comment to remove "for backward compatibility":
+
+```diff
+-generate_json_report  # SeasonComparison method - public API for backward compatibility
++generate_json_report  # SeasonComparison method - public API
+```
+
+#### Test Impact Analysis
+
+**Tests that will need updates when removing CLI legacy functions:**
+
+1. **`tests/unit/test_cli_comprehensive.py`** (1 import):
+
+   - Line 327: `from nhl_scrabble.cli import generate_json_report`
+   - **Action**: Remove test or update to use formatter factory pattern
+
+1. **`tests/unit/test_html_report.py`** (7 imports):
+
+   - Lines 179, 210, 247, 291, 317, 347, 363: `from nhl_scrabble.cli import generate_html_report`
+   - **Action**: Update all tests to use `get_formatter('html').format(data)` instead
+
+1. **`generate_csv_report`**: No tests import this function
+
+   - **Action**: None (safe to remove)
+
+#### Summary Statistics
+
+- **Total allowlist entries**: 46 lines (40 entries + 6 comment/blank lines)
+- **Entries to REMOVE**: 3 (7% of entries)
+- **Entries to PRESERVE**: 40 (93% of entries)
+- **Entries to UPDATE comments**: 1 (SeasonComparison.generate_json_report)
+- **Test files affected**: 2 (`test_cli_comprehensive.py`, `test_html_report.py`)
+- **Test imports to update**: 8 total (1 + 7)
 
 ### 4. Test References
 
@@ -156,14 +264,18 @@ Some tests may reference backward compatibility for validation purposes. These s
 
 1. **Delete functions from `cli.py`**:
 
-   - Remove `generate_json_report()`
-   - Remove `generate_html_report()`
-   - Remove `generate_csv_report()`
+   - Remove `generate_json_report()` (lines ~TBD)
+   - Remove `generate_html_report()` (lines ~TBD)
+   - Remove `generate_csv_report()` (lines ~TBD)
 
 1. **Update `.vulture_allowlist`**:
 
-   - Remove entries for the three deleted functions
-   - Keep SeasonComparison.generate_json_report if it's public API (needs verification)
+   - Remove line 43: `generate_json_report  # cli.py - legacy JSON report generator`
+   - Remove line 44: `generate_html_report  # cli.py - legacy HTML report generator`
+   - Remove line 45: `generate_csv_report  # cli.py - legacy CSV report generator`
+   - Remove entire comment block (lines 42-45): `# Legacy CLI report generators (kept for backward compatibility)`
+   - Update line 32: Change `generate_json_report  # SeasonComparison method - public API for backward compatibility` to `generate_json_report  # SeasonComparison method - public API`
+   - **Result**: `.vulture_allowlist` will have 43 lines (37 entries + 6 comment/blank lines)
 
 ### Phase 2: Evaluate ScrabbleScorer Static Method
 
@@ -180,14 +292,45 @@ Some tests may reference backward compatibility for validation purposes. These s
 
 ### Phase 3: Update Tests
 
-1. **Search for test references**:
+1. **Update `tests/unit/test_cli_comprehensive.py`**:
 
-   - Find tests mentioning "backward" or "backwards" compatibility
-   - Update or remove as appropriate
+   - **Current**: Line 327 imports `from nhl_scrabble.cli import generate_json_report`
+   - **Action**: Remove the `test_generate_json_report()` test entirely OR update to use formatter factory:
+     ```python
+     from nhl_scrabble.formatters import get_formatter
+     # ...
+     output = get_formatter('json').format(data)
+     ```
+
+1. **Update `tests/unit/test_html_report.py`**:
+
+   - **Current**: 7 test functions import `from nhl_scrabble.cli import generate_html_report` (lines 179, 210, 247, 291, 317, 347, 363)
+   - **Action**: Update all 7 tests to use formatter factory:
+     ```python
+     from nhl_scrabble.formatters import get_formatter
+     # Replace:
+     # output = generate_html_report(teams, divisions, conferences, playoffs, summary)
+     # With:
+     data = {
+         "teams": teams,
+         "divisions": divisions,
+         "conferences": conferences,
+         "playoffs": playoffs,
+         "summary": summary,
+     }
+     output = get_formatter('html').format(data)
+     ```
+
+1. **Search for backward compatibility references**:
+
+   - Find any remaining references to "backward" or "backwards" compatibility
+   - Update docstrings/comments that mention removed functions
+   - Verify no import errors
 
 1. **Verify removal**:
 
    - Run full test suite to ensure nothing breaks
+   - Run vulture to confirm no false positives
    - Check for any import errors or missing references
 
 ## Implementation Steps
@@ -208,11 +351,72 @@ Some tests may reference backward compatibility for validation purposes. These s
    - Delete `generate_html_report()` function (lines ~TBD)
    - Delete `generate_csv_report()` function (lines ~TBD)
 
-1. **Update vulture allowlist**:
+1. **Update `.vulture_allowlist`** (detailed changes):
 
-   - Open `.vulture_allowlist`
-   - Remove three CLI function entries
-   - Verify SeasonComparison.generate_json_report is still needed
+   **Remove 4 lines (lines 42-45):**
+
+   ```diff
+   -# Legacy CLI report generators (kept for backward compatibility)
+   -generate_json_report  # cli.py - legacy JSON report generator
+   -generate_html_report  # cli.py - legacy HTML report generator
+   -generate_csv_report  # cli.py - legacy CSV report generator
+   ```
+
+   **Update 1 line (line 32):**
+
+   ```diff
+   -generate_json_report  # SeasonComparison method - public API for backward compatibility
+   +generate_json_report  # SeasonComparison method - public API
+   ```
+
+   **Verification:**
+
+   - `.vulture_allowlist` should go from 46 lines → 42 lines
+   - All 40 legitimate public API entries remain intact
+   - No backward compatibility language remains
+   - SeasonComparison.generate_json_report is correctly labeled as public API (not legacy)
+
+1. **Update tests affected by removed CLI functions**:
+
+   **A. Update `tests/unit/test_cli_comprehensive.py`:**
+
+   - Find `test_generate_json_report()` function
+   - Option 1 (recommended): Remove test entirely (tests legacy function)
+   - Option 2: Rewrite test to use formatter factory:
+     ```python
+     from nhl_scrabble.formatters import get_formatter
+     # Replace generate_json_report() calls with:
+     data = {"teams": teams, "divisions": divisions, ...}
+     output = get_formatter('json').format(data)
+     ```
+
+   **B. Update `tests/unit/test_html_report.py`** (7 functions):
+
+   - Functions to update:
+     - `test_html_report_structure()` (line ~179)
+     - `test_html_report_contains_teams()` (line ~210)
+     - `test_html_report_contains_divisions()` (line ~247)
+     - `test_html_report_contains_conferences()` (line ~291)
+     - `test_html_report_contains_playoffs()` (line ~317)
+     - `test_html_report_contains_summary()` (line ~347)
+     - `test_html_report_empty_data()` (line ~363)
+   - For each function, replace:
+     ```python
+     # OLD:
+     from nhl_scrabble.cli import generate_html_report
+     output = generate_html_report(teams, divisions, conferences, playoffs, summary)
+
+     # NEW:
+     from nhl_scrabble.formatters import get_formatter
+     data = {
+         "teams": teams,
+         "divisions": divisions,
+         "conferences": conferences,
+         "playoffs": playoffs,
+         "summary": summary,
+     }
+     output = get_formatter('html').format(data)
+     ```
 
 1. **Analyze ScrabbleScorer.calculate_score()**:
 
@@ -226,30 +430,50 @@ Some tests may reference backward compatibility for validation purposes. These s
    - If marked legacy but widely used: Update docstring
    - If truly legacy: Remove and update callers
 
-1. **Update tests**:
+1. **Search for remaining backward compatibility references**:
 
    ```bash
-   # Find backward compatibility references
+   # Find backward compatibility references in tests
    git grep -i "backward" tests/
    git grep -i "backwards" tests/
+
+   # Find backward compatibility references in code
+   git grep -i "backward compatibility" src/
+   git grep -i "kept for backward" src/
    ```
 
-   - Update test docstrings/comments as needed
-   - Ensure all tests still pass
+   - Update any remaining test docstrings/comments
+   - Remove or update any code comments mentioning backward compatibility
+   - Verify all references are addressed
 
 1. **Run full test suite**:
 
    ```bash
-   make test           # Unit and integration tests
-   make quality        # All quality checks
-   tox -p auto         # Full tox matrix
+   pytest                # Quick test run
+   make test             # Unit and integration tests
+   make quality          # All quality checks
+   tox -e vulture        # Verify no false positives
+   tox -p auto           # Full tox matrix
    ```
+
+   Expected results:
+
+   - All tests pass (may need to update 8 test functions as noted above)
+   - Vulture reports no issues (3 legacy functions removed from allowlist)
+   - No import errors or missing references
 
 1. **Update documentation**:
 
-   - Search docs/ for backward compatibility references
-   - Update any migration guides or changelogs
-   - Remove outdated upgrade instructions
+   ```bash
+   # Search for backward compatibility references
+   git grep -i "backward" docs/
+   git grep -i "generate_json_report\|generate_html_report\|generate_csv_report" docs/
+   ```
+
+   - Update CHANGELOG.md with removed functions
+   - Remove any migration guides referencing legacy functions
+   - Update any tutorial/how-to guides that mention removed functions
+   - Verify formatter factory pattern is documented as the standard approach
 
 ## Testing Strategy
 
@@ -307,20 +531,45 @@ make quality
 
 ## Acceptance Criteria
 
+### Code Removal
+
 - [ ] `generate_json_report()` removed from `cli.py`
 - [ ] `generate_html_report()` removed from `cli.py`
 - [ ] `generate_csv_report()` removed from `cli.py`
-- [ ] Legacy function entries removed from `.vulture_allowlist`
 - [ ] ScrabbleScorer.calculate_score() evaluated and decision documented
-- [ ] No references to "backward compatibility" in code (except historical CHANGELOG)
-- [ ] No imports of removed functions anywhere in codebase
+
+### Vulture Allowlist Updates
+
+- [ ] `.vulture_allowlist` updated: 46 lines → 42 lines
+- [ ] 3 legacy CLI function entries removed (lines 43-45)
+- [ ] Comment block "Legacy CLI report generators" removed (line 42)
+- [ ] SeasonComparison.generate_json_report comment updated (line 32): removed "for backward compatibility"
+- [ ] All 40 legitimate public API entries preserved intact
+
+### Test Updates
+
+- [ ] `tests/unit/test_cli_comprehensive.py` updated (1 function using `generate_json_report`)
+- [ ] `tests/unit/test_html_report.py` updated (7 functions using `generate_html_report`)
+- [ ] All test functions updated to use formatter factory pattern instead of legacy functions
 - [ ] All unit tests pass (`make test`)
 - [ ] All integration tests pass
+
+### Code Quality
+
+- [ ] No imports of removed functions anywhere in codebase
+- [ ] No references to "backward compatibility" in code (except historical CHANGELOG and this task)
+- [ ] No "kept for backward" comments remain
 - [ ] All quality checks pass (`make quality`)
 - [ ] All tox environments pass (`tox -p auto`)
-- [ ] Vulture reports no false positives
-- [ ] Documentation updated (if needed)
+- [ ] Vulture reports no false positives (0 unused code warnings)
+- [ ] MyPy type checking passes
+- [ ] Ruff linting passes
+
+### Documentation
+
 - [ ] CHANGELOG.md updated with removed functions
+- [ ] Documentation updated to use formatter factory pattern (if any guides mention legacy functions)
+- [ ] No migration guides reference removed functions
 
 ## Related Files
 
