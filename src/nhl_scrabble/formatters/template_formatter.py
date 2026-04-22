@@ -95,4 +95,4 @@ class TemplateFormatter:
         }
 
         # Render template
-        return template.render(template_data)  # type: ignore[no-any-return]  # Jinja2 Template.render() returns str
+        return template.render(template_data)

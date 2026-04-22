@@ -394,7 +394,7 @@ repos:
     rev: v1.20.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-PyYAML, pydantic]
+        additional_dependencies: [types-requests, types-PyYAML, pydantic, rich, jinja2]
         args: []  # Config is in pyproject.toml
 
   # ============================================================================
