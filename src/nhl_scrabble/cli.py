@@ -277,34 +277,76 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     max_score: int | None,
     season: str | None,
 ) -> None:
-    """Run the NHL Scrabble analysis.
+    r"""Run the NHL Scrabble analysis.
 
     Fetches current NHL roster data and generates comprehensive reports
     with Scrabble scores for all players and teams.
 
+    \b
     Examples:
-        nhl-scrabble analyze
-        nhl-scrabble analyze --verbose
-        nhl-scrabble analyze --quiet
-        nhl-scrabble analyze --output report.txt
-        nhl-scrabble analyze --format json --output report.json
-        nhl-scrabble analyze --format csv --output report.csv
-        nhl-scrabble analyze --format excel --output report.xlsx
-        nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
-        nhl-scrabble analyze --no-cache
-        nhl-scrabble analyze --clear-cache
-        nhl-scrabble analyze --report team
-        nhl-scrabble analyze --report playoff --output playoffs.txt
-        nhl-scrabble analyze --scoring wordle
-        nhl-scrabble analyze --scoring uniform --output uniform_scores.txt
-        nhl-scrabble analyze --scoring-config custom_values.json
-        nhl-scrabble analyze --division Atlantic
-        nhl-scrabble analyze --conference Eastern
-        nhl-scrabble analyze --teams TOR,MTL,OTT
-        nhl-scrabble analyze --min-score 50 --max-score 100
-        nhl-scrabble analyze --exclude BOS,NYR
-        nhl-scrabble analyze --division Atlantic --min-score 60
-        nhl-scrabble analyze --season 20222023
+      Basic usage with text output to stdout:
+        $ nhl-scrabble analyze
+
+      Enable verbose logging for debugging:
+        $ nhl-scrabble analyze --verbose
+
+      Suppress progress bars (quiet mode):
+        $ nhl-scrabble analyze --quiet
+
+      Save text output to file:
+        $ nhl-scrabble analyze --output report.txt
+
+      JSON format output to file:
+        $ nhl-scrabble analyze --format json --output report.json
+
+      CSV format output to file:
+        $ nhl-scrabble analyze --format csv --output report.csv
+
+      Excel workbook with all sheets:
+        $ nhl-scrabble analyze --format excel --output report.xlsx
+
+      Excel with specific sheets only:
+        $ nhl-scrabble analyze --format excel --sheets teams,players --output report.xlsx
+
+      Disable API response caching:
+        $ nhl-scrabble analyze --no-cache
+
+      Clear cache before running:
+        $ nhl-scrabble analyze --clear-cache
+
+      Generate specific report only:
+        $ nhl-scrabble analyze --report team
+
+      Generate playoff report to file:
+        $ nhl-scrabble analyze --report playoff --output playoffs.txt
+
+      Use alternative scoring system (Wordle):
+        $ nhl-scrabble analyze --scoring wordle
+
+      Use custom scoring configuration:
+        $ nhl-scrabble analyze --scoring-config custom_values.json
+
+      Filter by division:
+        $ nhl-scrabble analyze --division Atlantic
+
+      Filter by conference:
+        $ nhl-scrabble analyze --conference Eastern
+
+      Filter by specific teams:
+        $ nhl-scrabble analyze --teams TOR,MTL,OTT
+
+      Filter by score range:
+        $ nhl-scrabble analyze --min-score 50 --max-score 100
+
+      Exclude specific teams:
+        $ nhl-scrabble analyze --exclude BOS,NYR
+
+      Analyze specific season:
+        $ nhl-scrabble analyze --season 20222023
+
+      Combine multiple options:
+        $ nhl-scrabble analyze --format json --output report.json --verbose
+        $ nhl-scrabble analyze --division Atlantic --min-score 60 --output atlantic.txt
     """
     # Validate CLI arguments first (before expensive operations)
     validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
@@ -823,15 +865,24 @@ def generate_excel_report(
 @click.option("--no-fetch", is_flag=True, help="Skip fetching data from NHL API on startup")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
 def interactive(no_fetch: bool, verbose: bool) -> None:
-    """Start interactive mode for exploring NHL Scrabble data.
+    r"""Start interactive mode for exploring NHL Scrabble data.
 
     Interactive mode provides a REPL (Read-Eval-Print Loop) for exploring
     NHL Scrabble scores through commands like show, top, compare, and more.
 
+    \b
     Examples:
-        nhl-scrabble interactive
-        nhl-scrabble interactive --no-fetch
-        nhl-scrabble interactive --verbose
+      Start interactive mode with data fetch:
+        $ nhl-scrabble interactive
+
+      Skip fetching data on startup:
+        $ nhl-scrabble interactive --no-fetch
+
+      Enable verbose logging for debugging:
+        $ nhl-scrabble interactive --verbose
+
+      Combine options:
+        $ nhl-scrabble interactive --no-fetch --verbose
     """
     from nhl_scrabble.interactive import InteractiveShell
 
@@ -945,36 +996,47 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
     output_format: str,
     output: str | None,
 ) -> None:
-    """Search for players by name and filter by attributes.
+    r"""Search for players by name and filter by attributes.
 
     Search the NHL player database by name with support for exact matching,
     fuzzy matching, and wildcard patterns. Filter results by score, team,
     division, or conference.
 
+    \b
     Examples:
-        # Exact search
-        nhl-scrabble search "Connor McDavid"
+      Exact search by player name:
+        $ nhl-scrabble search "Connor McDavid"
 
-        # Fuzzy search
-        nhl-scrabble search McDavid --fuzzy
+      Fuzzy search (approximate matching):
+        $ nhl-scrabble search McDavid --fuzzy
 
-        # Wildcard search
-        nhl-scrabble search "Connor*"
+      Wildcard search with pattern:
+        $ nhl-scrabble search "Connor*"
 
-        # Score filtering
-        nhl-scrabble search --min-score 50
+      Filter by minimum score:
+        $ nhl-scrabble search --min-score 50
 
-        # Team filtering
-        nhl-scrabble search --team TOR
+      Filter by team:
+        $ nhl-scrabble search --team TOR
 
-        # Combined filters
-        nhl-scrabble search "Connor*" --team EDM --min-score 40
+      Filter by division:
+        $ nhl-scrabble search --division Atlantic
 
-        # JSON output
-        nhl-scrabble search McDavid --fuzzy --format json
+      Filter by conference:
+        $ nhl-scrabble search --conference Eastern
 
-        # Save to file
-        nhl-scrabble search --min-score 60 --output high-scorers.txt
+      Limit number of results:
+        $ nhl-scrabble search --min-score 40 --limit 10
+
+      JSON format output:
+        $ nhl-scrabble search McDavid --fuzzy --format json
+
+      Save results to file:
+        $ nhl-scrabble search --min-score 60 --output high-scorers.txt
+
+      Combine multiple filters:
+        $ nhl-scrabble search "Connor*" --team EDM --min-score 40
+        $ nhl-scrabble search --division Metropolitan --min-score 50 --output metro-high.txt
     """
     # Load configuration
     try:
@@ -1166,20 +1228,24 @@ def generate_search_json(results: list[Any], query: str | None, stats: dict[str,
 @click.option("--port", default=8000, type=int, help="Port to bind to")
 @click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
 def serve(host: str, port: int, reload: bool) -> None:
-    """Start web interface server.
+    r"""Start web interface server.
 
     Starts a FastAPI web server providing browser-based access to
     NHL Scrabble analysis. Visit http://localhost:8000 after starting.
 
+    \b
     Examples:
-        # Start server on default port
-        nhl-scrabble serve
+      Start server on default port (8000):
+        $ nhl-scrabble serve
 
-        # Development mode with auto-reload
-        nhl-scrabble serve --reload
+      Development mode with auto-reload:
+        $ nhl-scrabble serve --reload
 
-        # Custom host and port
-        nhl-scrabble serve --host 0.0.0.0 --port 5000
+      Custom host and port:
+        $ nhl-scrabble serve --host 0.0.0.0 --port 5000
+
+      Bind to all interfaces on custom port:
+        $ nhl-scrabble serve --host 0.0.0.0 --port 3000 --reload
     """
     try:
         import uvicorn
@@ -1250,7 +1316,7 @@ def dashboard(
     quiet: bool,
     no_cache: bool,
 ) -> None:
-    """Launch interactive statistics dashboard.
+    r"""Launch interactive statistics dashboard.
 
     Displays live statistics with charts and visualizations using Rich library.
     Shows top teams, players, division and conference standings in an interactive
@@ -1258,24 +1324,35 @@ def dashboard(
 
     Press Ctrl+C to exit the dashboard.
 
+    \b
     Examples:
-        # Launch dashboard
-        nhl-scrabble dashboard
+      Launch live dashboard with auto-updates:
+        $ nhl-scrabble dashboard
 
-        # Filter by division
-        nhl-scrabble dashboard --division Atlantic
+      Filter dashboard by division:
+        $ nhl-scrabble dashboard --division Atlantic
 
-        # Filter by conference
-        nhl-scrabble dashboard --conference Eastern
+      Filter dashboard by conference:
+        $ nhl-scrabble dashboard --conference Eastern
 
-        # Run for 30 seconds then exit
-        nhl-scrabble dashboard --duration 30
+      Run for specific duration (30 seconds):
+        $ nhl-scrabble dashboard --duration 30
 
-        # Display static snapshot (no live updates)
-        nhl-scrabble dashboard --static
+      Display static snapshot (no live updates):
+        $ nhl-scrabble dashboard --static
 
-        # Combine filters
-        nhl-scrabble dashboard --division Metropolitan --static
+      Suppress progress bars during data fetch:
+        $ nhl-scrabble dashboard --quiet
+
+      Enable verbose logging:
+        $ nhl-scrabble dashboard --verbose
+
+      Disable API caching for fresh data:
+        $ nhl-scrabble dashboard --no-cache
+
+      Combine multiple options:
+        $ nhl-scrabble dashboard --division Metropolitan --static
+        $ nhl-scrabble dashboard --conference Western --duration 60 --quiet
     """
     # Load configuration
     try:
@@ -1481,25 +1558,42 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     top_team_players: int,
     report: str | None,
 ) -> None:
-    """Watch mode - automatically refresh data at intervals.
+    r"""Watch mode - automatically refresh data at intervals.
 
     Runs continuous analysis with auto-refresh, useful for monitoring
     roster changes during active periods.
 
     Press Ctrl+C to stop watching.
 
+    \b
     Examples:
-        # Watch with default 5-minute interval
-        nhl-scrabble watch
+      Watch with default 5-minute interval (300 seconds):
+        $ nhl-scrabble watch
 
-        # Custom 1-minute interval
-        nhl-scrabble watch --interval 60
+      Custom 1-minute interval:
+        $ nhl-scrabble watch --interval 60
 
-        # Watch specific report with 30-second interval
-        nhl-scrabble watch --report team --interval 30
+      Watch specific report with 30-second interval:
+        $ nhl-scrabble watch --report team --interval 30
 
-        # Watch with JSON output
-        nhl-scrabble watch --format json --interval 120
+      Watch with JSON output format:
+        $ nhl-scrabble watch --format json --interval 120
+
+      Watch with custom player display limits:
+        $ nhl-scrabble watch --top-players 30 --top-team-players 10
+
+      Suppress progress bars:
+        $ nhl-scrabble watch --quiet --interval 60
+
+      Enable verbose logging for debugging:
+        $ nhl-scrabble watch --verbose
+
+      Disable API caching for fresh data:
+        $ nhl-scrabble watch --no-cache
+
+      Combine multiple options:
+        $ nhl-scrabble watch --interval 120 --report playoff --quiet
+        $ nhl-scrabble watch --format json --top-players 50 --interval 300
     """
     # Validate interval
     if interval < 1:
