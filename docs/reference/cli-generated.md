@@ -60,21 +60,58 @@ Usage: nhl-scrabble analyze [OPTIONS]
   Fetches current NHL roster data and generates comprehensive reports with
   Scrabble scores for all players and teams.
 
-  Examples:     nhl-scrabble analyze     nhl-scrabble analyze --verbose
-  nhl-scrabble analyze --quiet     nhl-scrabble analyze --output report.txt
-  nhl-scrabble analyze --format json --output report.json     nhl-scrabble
-  analyze --format csv --output report.csv     nhl-scrabble analyze --format
-  excel --output report.xlsx     nhl-scrabble analyze --format excel --sheets
-  teams,players --output report.xlsx     nhl-scrabble analyze --no-cache
-  nhl-scrabble analyze --clear-cache     nhl-scrabble analyze --report team
-  nhl-scrabble analyze --report playoff --output playoffs.txt     nhl-scrabble
-  analyze --scoring wordle     nhl-scrabble analyze --scoring uniform --output
-  uniform_scores.txt     nhl-scrabble analyze --scoring-config
-  custom_values.json     nhl-scrabble analyze --division Atlantic     nhl-
-  scrabble analyze --conference Eastern     nhl-scrabble analyze --teams
-  TOR,MTL,OTT     nhl-scrabble analyze --min-score 50 --max-score 100     nhl-
-  scrabble analyze --exclude BOS,NYR     nhl-scrabble analyze --division
-  Atlantic --min-score 60     nhl-scrabble analyze --season 20222023
+  \b Examples:   Basic usage with text output to stdout:     $ nhl-scrabble
+  analyze
+
+    Enable verbose logging for debugging:     $ nhl-scrabble analyze --verbose
+
+    Suppress progress bars (quiet mode):     $ nhl-scrabble analyze --quiet
+
+    Save text output to file:     $ nhl-scrabble analyze --output report.txt
+
+    JSON format output to file:     $ nhl-scrabble analyze --format json
+    --output report.json
+
+    CSV format output to file:     $ nhl-scrabble analyze --format csv
+    --output report.csv
+
+    Excel workbook with all sheets:     $ nhl-scrabble analyze --format excel
+    --output report.xlsx
+
+    Excel with specific sheets only:     $ nhl-scrabble analyze --format excel
+    --sheets teams,players --output report.xlsx
+
+    Disable API response caching:     $ nhl-scrabble analyze --no-cache
+
+    Clear cache before running:     $ nhl-scrabble analyze --clear-cache
+
+    Generate specific report only:     $ nhl-scrabble analyze --report team
+
+    Generate playoff report to file:     $ nhl-scrabble analyze --report
+    playoff --output playoffs.txt
+
+    Use alternative scoring system (Wordle):     $ nhl-scrabble analyze
+    --scoring wordle
+
+    Use custom scoring configuration:     $ nhl-scrabble analyze --scoring-
+    config custom_values.json
+
+    Filter by division:     $ nhl-scrabble analyze --division Atlantic
+
+    Filter by conference:     $ nhl-scrabble analyze --conference Eastern
+
+    Filter by specific teams:     $ nhl-scrabble analyze --teams TOR,MTL,OTT
+
+    Filter by score range:     $ nhl-scrabble analyze --min-score 50 --max-
+    score 100
+
+    Exclude specific teams:     $ nhl-scrabble analyze --exclude BOS,NYR
+
+    Analyze specific season:     $ nhl-scrabble analyze --season 20222023
+
+    Combine multiple options:     $ nhl-scrabble analyze --format json
+    --output report.json --verbose     $ nhl-scrabble analyze --division
+    Atlantic --min-score 60 --output atlantic.txt
 
 Options:
   --format [text|json|csv|excel]  Output format (default: text)
