@@ -694,6 +694,13 @@ ruff check --fix .
 make mypy
 # or directly: mypy src
 
+# Type check with ty (Astral's fast checker - validation mode)
+make ty
+# or directly: ty check src
+
+# Comprehensive type checking (ty + mypy)
+make type-check
+
 # Validate JSON/YAML files against schemas
 tox -e check-jsonschema
 # or directly: check-jsonschema --schemafile "https://json.schemastore.org/github-workflow.json" .github/workflows/*.yml
@@ -1375,7 +1382,9 @@ make test              # Run all tests
 make test-cov          # Run tests with coverage
 make ruff-check        # Run linter
 make ruff-format       # Format code
-make mypy              # Type check
+make mypy              # Type check (mypy)
+make ty                # Type check (Astral ty - fast)
+make type-check        # Type check (ty + mypy comprehensive)
 make check             # Run all checks before commit
 
 # Cleaning
