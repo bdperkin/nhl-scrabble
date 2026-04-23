@@ -27,7 +27,7 @@ from typing import NamedTuple
 try:
     import tomllib  # Python 3.11+
 except ImportError:
-    import tomli as tomllib  # type: ignore[import-not-found,no-redef]
+    import tomli as tomllib
 
 try:
     import tomli_w
@@ -113,14 +113,15 @@ class DependencyUpdater:
             Latest version string or None if check failed
         """
         if requests is None:
-            return None
+            return None  # type: ignore[unreachable]
 
         try:
             url = f"https://pypi.org/pypi/{package_name}/json"
             response = requests.get(url, timeout=5)
             response.raise_for_status()
             data = response.json()
-            return data["info"]["version"]
+            version: str = data["info"]["version"]
+            return version
         except (requests.RequestException, KeyError, ValueError):
             # Network error, missing key, or JSON decode error
             return None
@@ -409,7 +410,7 @@ class DependencyUpdater:
 
         if python_updates:
             # Collect all packages already shown in pyproject updates
-            shown_packages = set()
+            shown_packages: set[str] = set()
             for updates in pyproject_updates.values():
                 shown_packages.update(updates.keys())
 
