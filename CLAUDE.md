@@ -177,7 +177,7 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 **Markdown Hooks (2 from pymarkdown and mdformat):**
 
 - `pymarkdown`: Markdown linting (comprehensive by default)
-- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-black, mdformat-config, mdformat-ruff, mdformat-web)
+- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-black, mdformat-ruff, mdformat-web)
 
 **Documentation Hooks (2 from PyCQA/doc8 and rstcheck/rstcheck):**
 

@@ -252,7 +252,6 @@ repos:
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
         additional_dependencies:
           - mdformat-black  # Code block formatting
-          # - mdformat-config  # YAML/TOML block formatting
           - mdformat-gfm  # GitHub Flavored Markdown support
           - mdformat-ruff  # Python code block linting integration
           - mdformat-web  # HTML/CSS/JS block formatting
