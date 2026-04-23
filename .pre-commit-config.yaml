@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 60 comprehensive hooks for code quality, security, and consistency
+# 61 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 # NOTE: Using black 24.10 as authoritative formatter (ruff-format disabled)
@@ -299,6 +299,29 @@ repos:
         description: Automatically upgrade syntax for newer Python versions
         args:
           - --py310-plus  # Target Python 3.10+ syntax (matches requires-python)
+
+  # ============================================================================
+  # Python Modernization - Semantic Code Improvements
+  # ============================================================================
+  # refurb detects Python code that can be simplified or modernized using
+  # Python 3.10+ features (pathlib, f-strings, dict merging, comprehensions)
+  # Complements pyupgrade (syntax) with semantic improvements
+  # Docs: https://github.com/dosisod/refurb
+
+  - repo: local
+    hooks:
+      - id: refurb
+        name: refurb (warning mode - non-blocking)
+        # Comprehensive code modernization (matches ruff's ALL rules philosophy)
+        # WARNING MODE: Shows suggestions but doesn't block commits during adoption phase
+        description: Python code modernization linter (pathlib, comprehensions, modern idioms)
+        entry: bash -c 'refurb src/ --enable-all || true'
+        language: system
+        types: [python]
+        pass_filenames: false
+        verbose: true
+        # Non-blocking during adoption phase (remove '|| true' after team training)
+        # Configuration is read automatically from pyproject.toml
 
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1

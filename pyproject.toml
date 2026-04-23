@@ -81,6 +81,7 @@ test = [
 # Code quality dependencies
 lint = [
     "ruff>=0.3.0",
+    "refurb>=2.0.0",  # Python code modernization linter
 ]
 
 type = [
@@ -422,6 +423,21 @@ skip_glob = [
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = false  # Use docformatter for docstring formatting
+
+# Refurb configuration - Python code modernization linter
+# Detects opportunities for pathlib, modern f-strings, dict merging,
+# list comprehensions, dataclasses, and other modern Python patterns
+# Docs: https://github.com/dosisod/refurb
+[tool.refurb]
+# Enable all checks by default (comprehensive approach like ruff's ALL rules)
+enable_all = true
+
+# Python version (match project requirements)
+python_version = "3.10"
+
+# Ignore specific checks (with justification)
+# Add patterns here as false positives are discovered
+ignore = []
 
 # MyPy configuration
 [tool.mypy]
