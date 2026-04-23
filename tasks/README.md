@@ -212,7 +212,7 @@ Each task includes:
 | 002 | Port check_docs.sh Shell Script to Python                                     | MEDIUM   | 2-3 hours           | Completed | [#100](https://github.com/bdperkin/nhl-scrabble/issues/100) | -                                                                                     |
 | 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Active    | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | -                                                                                     |
 | 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -                                                                                     |
-| 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1-2 hours           | Active    | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | -                                                                                     |
+| 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1.5 hours           | Completed | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | [PR #336](https://github.com/bdperkin/nhl-scrabble/pull/336)                          |
 | 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -                                                                                     |
 | 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Active    | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | -                                                                                     |
 | 007 | Add Dependency Injection                                                      | MEDIUM   | 8-10 hours          | Active    | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | -                                                                                     |
@@ -244,8 +244,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 17     | 8         | 25      |
-| **TOTAL**    | **64** | **103**   | **167** |
+| Refactoring  | 16     | 9         | 25      |
+| **TOTAL**    | **63** | **104**   | **167** |
 
 ### Effort Estimates by Category
 
@@ -270,8 +270,8 @@ Each task includes:
 | Enhancement  | 74.3%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
-| Refactoring  | 32.0%           |
-| **OVERALL**  | **61.7%**       |
+| Refactoring  | 36.0%           |
+| **OVERALL**  | **62.3%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -294,12 +294,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (64 active, 103 completed)
+**Total Tasks**: 167 tasks (63 active, 104 completed)
 
 - **Total Estimated Effort**: 1031.5 hours
   - Active Tasks: 519.5 hours
   - Completed Tasks: 500.0 hours
-- **Overall Completion**: 61.7%
+- **Overall Completion**: 62.3%
 
 ## Task Management Guidelines
 

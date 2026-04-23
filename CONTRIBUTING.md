@@ -85,14 +85,14 @@ git checkout -b fix/your-bug-fix
 
 **Required CI Checks:**
 
-- Pre-commit hooks (54 hooks)
+- Pre-commit hooks (60 hooks)
 - Python 3.10 tests
 - Python 3.11 tests
 - Python 3.12 tests
 - Python 3.13 tests
 - Python 3.14 tests
 - Python 3.15-dev tests (experimental, non-blocking)
-- All tox environments (31 environments)
+- All tox environments (32 environments)
 
 **Before creating a PR:**
 
@@ -100,7 +100,7 @@ git checkout -b fix/your-bug-fix
 
 Use the `/implement-task` skill which automatically validates before pushing:
 
-- ✅ Runs all 58 pre-commit hooks automatically
+- ✅ Runs all 60 pre-commit hooks automatically
 - ✅ Runs all tox environments (py3.10-3.15, ruff, mypy, coverage)
 - ✅ Only pushes if all validation passes
 - ✅ Provides clear success/failure reporting
@@ -147,7 +147,7 @@ git commit --no-verify -m "message"
 **Why this matters**:
 
 - The `check-branch-protection` hook is a workflow reminder, not a quality check
-- All 56 other hooks (ruff, mypy, black, bandit, security checks, etc.) **MUST always run**
+- All 59 other hooks (ruff, mypy, black, bandit, security checks, pyupgrade, etc.) **MUST always run**
 - Quality checks prevent bugs, security issues, and maintain code standards
 - Even admin commits must meet the same quality standards as PR commits
 
@@ -724,6 +724,10 @@ make ty
 # Comprehensive type checking (ty + mypy)
 make type-check
 
+# Modernize Python syntax with pyupgrade
+tox -e pyupgrade
+# or directly: pyupgrade --py310-plus $(find src tests -name "*.py")
+
 # Validate JSON/YAML files against schemas
 tox -e check-jsonschema
 # or directly: check-jsonschema --schemafile "https://json.schemastore.org/github-workflow.json" .github/workflows/*.yml
@@ -739,6 +743,65 @@ make bandit
 make security-report
 # Reports saved to reports/ directory
 ```
+
+### Python Syntax Modernization
+
+The project uses **[pyupgrade](https://github.com/asottile/pyupgrade)** to automatically modernize Python syntax to leverage features from Python 3.10+ (our minimum supported version):
+
+```bash
+# Check and modernize syntax (via tox)
+tox -e pyupgrade
+
+# Run directly on all Python files
+pyupgrade --py310-plus $(find src tests -name "*.py")
+
+# Pre-commit hook runs automatically
+pre-commit run pyupgrade --all-files
+```
+
+**What pyupgrade does:**
+
+- **PEP 604**: `Optional[str]` → `str | None`, `Union[int, str]` → `int | str`
+- **PEP 585**: `List[int]` → `list[int]`, `Dict[str, int]` → `dict[str, int]`
+- **String formatting**: `"{}".format(x)` → `f"{x}"`
+- **Remove unnecessary imports**: Obsolete `from typing import List, Dict, Optional, Union`
+- **Clean up**: Remove unnecessary `__future__` imports for Python 3.10+
+
+**Example transformation:**
+
+```python
+# Before
+from typing import Optional, Union, List, Dict
+
+
+def get_player(name: str) -> Optional[Dict[str, Union[int, str]]]:
+    players: List[str] = fetch_players()
+    return players.get(name)
+
+
+# After (pyupgrade --py310-plus)
+def get_player(name: str) -> dict[str, int | str] | None:
+    players: list[str] = fetch_players()
+    return players.get(name)
+```
+
+**Benefits:**
+
+- ✅ **Cleaner syntax**: Modern Python idioms are more readable
+- ✅ **Fewer imports**: No need for `typing.List`, `Dict`, `Optional`, `Union`
+- ✅ **Automatic**: Runs on every commit via pre-commit hook
+- ✅ **Safe**: Only syntax changes, no logic changes
+- ✅ **Educational**: Learn modern Python patterns automatically
+
+**Integration:**
+
+- **Pre-commit**: Runs on every commit (configured in `.pre-commit-config.yaml`)
+- **Tox**: `tox -e pyupgrade` for manual runs
+- **CI**: Runs on all PRs via GitHub Actions
+
+**Why Python 3.10+ syntax?**
+
+The project requires Python 3.10+ (`requires-python = ">=3.10"`), so we can safely use all Python 3.10+ features. pyupgrade ensures our codebase consistently uses the latest syntax patterns available in our minimum Python version.
 
 ### Security Scanning
 
