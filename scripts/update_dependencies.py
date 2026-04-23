@@ -3,7 +3,7 @@
 
 This script:
 1. Checks for outdated dependencies in pre-commit hooks
-2. Checks for outdated Python packages in pyproject.toml
+2. Checks for outdated Python packages in pyproject.toml files
 3. Updates pyproject.toml version constraints
 4. Syncs tox.ini dependencies with pyproject.toml
 5. Updates uv.lock with latest compatible versions
@@ -49,15 +49,28 @@ class UpdateInfo(NamedTuple):
 class DependencyUpdater:
     """Manage dependency updates across the project."""
 
-    def __init__(self, project_root: Path) -> None:
+    def __init__(self, project_root: Path, pyproject_files: list[Path] | None = None) -> None:
         """Initialize with project root directory.
 
         Args:
             project_root: Path to project root directory
+            pyproject_files: List of pyproject.toml files to update (default: [pyproject.toml, qa/web/pyproject.toml])
         """
         self.project_root = project_root
         self.pre_commit_config = project_root / ".pre-commit-config.yaml"
-        self.pyproject_toml = project_root / "pyproject.toml"
+
+        # Default pyproject.toml files to check
+        if pyproject_files is None:
+            self.pyproject_files = [
+                project_root / "pyproject.toml",
+                project_root / "qa" / "web" / "pyproject.toml",
+            ]
+        else:
+            self.pyproject_files = pyproject_files
+
+        # Filter to only existing files
+        self.pyproject_files = [f for f in self.pyproject_files if f.exists()]
+
         self.tox_ini = project_root / "tox.ini"
 
     def check_pre_commit_updates(self) -> dict[str, UpdateInfo]:
@@ -110,13 +123,16 @@ class DependencyUpdater:
         except Exception:
             return None
 
-    def parse_pyproject_dependencies(self) -> dict[str, str]:
-        """Parse dependencies from pyproject.toml.
+    def parse_pyproject_dependencies(self, pyproject_file: Path) -> dict[str, str]:
+        """Parse dependencies from a pyproject.toml file.
+
+        Args:
+            pyproject_file: Path to pyproject.toml file
 
         Returns:
             Dict mapping package name to version constraint
         """
-        with open(self.pyproject_toml, "rb") as f:
+        with open(pyproject_file, "rb") as f:
             data = tomllib.load(f)
 
         deps: dict[str, str] = {}
@@ -142,15 +158,16 @@ class DependencyUpdater:
 
         return deps
 
-    def check_pyproject_updates(self) -> dict[str, UpdateInfo]:
-        """Check for updates to packages in pyproject.toml.
+    def check_pyproject_updates(self, pyproject_file: Path) -> dict[str, UpdateInfo]:
+        """Check for updates to packages in a pyproject.toml file.
+
+        Args:
+            pyproject_file: Path to pyproject.toml file
 
         Returns:
             Dict mapping package name to UpdateInfo
         """
-        print("🔍 Checking pyproject.toml dependency updates...")
-
-        deps = self.parse_pyproject_dependencies()
+        deps = self.parse_pyproject_dependencies(pyproject_file)
         updates: dict[str, UpdateInfo] = {}
 
         for package, constraint in deps.items():
@@ -166,6 +183,24 @@ class DependencyUpdater:
                 updates[package] = UpdateInfo(current=current, latest=latest)
 
         return updates
+
+    def check_all_pyproject_updates(self) -> dict[Path, dict[str, UpdateInfo]]:
+        """Check for updates across all pyproject.toml files.
+
+        Returns:
+            Dict mapping pyproject.toml path to its updates
+        """
+        print("🔍 Checking pyproject.toml dependency updates...")
+
+        all_updates: dict[Path, dict[str, UpdateInfo]] = {}
+
+        for pyproject_file in self.pyproject_files:
+            print(f"   Checking {pyproject_file.relative_to(self.project_root)}...")
+            updates = self.check_pyproject_updates(pyproject_file)
+            if updates:
+                all_updates[pyproject_file] = updates
+
+        return all_updates
 
     def check_python_package_updates(self) -> dict[str, UpdateInfo]:
         """Check for Python package updates using pip.
@@ -201,11 +236,12 @@ class DependencyUpdater:
         return updates
 
     def update_pyproject_toml(
-        self, updates: dict[str, UpdateInfo]
+        self, pyproject_file: Path, updates: dict[str, UpdateInfo]
     ) -> bool:
-        """Update dependency versions in pyproject.toml.
+        """Update dependency versions in a pyproject.toml file.
 
         Args:
+            pyproject_file: Path to pyproject.toml file
             updates: Dict of package updates to apply
 
         Returns:
@@ -215,11 +251,9 @@ class DependencyUpdater:
             print("⚠️  tomli_w not available, cannot update pyproject.toml")
             return False
 
-        print("\n🔄 Updating pyproject.toml...")
-
         try:
             # Read current pyproject.toml
-            with open(self.pyproject_toml, "rb") as f:
+            with open(pyproject_file, "rb") as f:
                 data = tomllib.load(f)
 
             # Update project dependencies
@@ -264,17 +298,17 @@ class DependencyUpdater:
                     data["project"]["optional-dependencies"][group] = updated_deps
 
             # Write updated pyproject.toml
-            with open(self.pyproject_toml, "wb") as f:
+            with open(pyproject_file, "wb") as f:
                 tomli_w.dump(data, f)
 
             return True
 
         except Exception as e:
-            print(f"❌ Failed to update pyproject.toml: {e}")
+            print(f"❌ Failed to update {pyproject_file}: {e}")
             return False
 
     def sync_tox_ini(self) -> bool:
-        """Sync tox.ini dependencies with pyproject.toml.
+        """Sync tox.ini dependencies with main pyproject.toml.
 
         Returns:
             True if successful, False otherwise
@@ -282,8 +316,9 @@ class DependencyUpdater:
         print("\n🔄 Syncing tox.ini with pyproject.toml...")
 
         try:
-            # Read pyproject.toml dependencies
-            deps = self.parse_pyproject_dependencies()
+            # Read main pyproject.toml dependencies
+            main_pyproject = self.project_root / "pyproject.toml"
+            deps = self.parse_pyproject_dependencies(main_pyproject)
 
             # Read tox.ini
             config = configparser.ConfigParser()
@@ -336,14 +371,14 @@ class DependencyUpdater:
     def report_updates(
         self,
         pre_commit_updates: dict[str, UpdateInfo],
-        pyproject_updates: dict[str, UpdateInfo],
+        pyproject_updates: dict[Path, dict[str, UpdateInfo]],
         python_updates: dict[str, UpdateInfo],
     ) -> None:
         """Display available updates in formatted table.
 
         Args:
             pre_commit_updates: Pre-commit hook updates
-            pyproject_updates: pyproject.toml dependency updates
+            pyproject_updates: pyproject.toml dependency updates (per file)
             python_updates: Installed package updates
         """
         print("\n" + "=" * 80)
@@ -360,22 +395,32 @@ class DependencyUpdater:
             print("\n✅ All pre-commit hooks are up to date!")
 
         if pyproject_updates:
-            print("\n📄 pyproject.toml Dependency Updates Available:")
-            print("-" * 80)
-            for pkg, update in pyproject_updates.items():
-                old_major = update.current.split(".")[0] if "." in update.current else "0"
-                new_major = update.latest.split(".")[0] if "." in update.latest else "0"
-                breaking = "⚠️  MAJOR" if old_major != new_major else ""
+            for pyproject_file, updates in pyproject_updates.items():
+                rel_path = pyproject_file.relative_to(self.project_root)
+                print(f"\n📄 {rel_path} Dependency Updates Available:")
+                print("-" * 80)
+                for pkg, update in updates.items():
+                    old_major = update.current.split(".")[0] if "." in update.current else "0"
+                    new_major = update.latest.split(".")[0] if "." in update.latest else "0"
+                    breaking = "⚠️  MAJOR" if old_major != new_major else ""
 
-                print(f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking}")
+                    print(f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking}")
         else:
-            print("\n✅ All pyproject.toml dependencies are up to date!")
+            print("\n✅ All pyproject.toml files are up to date!")
 
         if python_updates:
-            print("\n🐍 Installed Package Updates Available:")
-            print("-" * 80)
-            for pkg, update in python_updates.items():
-                if pkg not in pyproject_updates:  # Don't duplicate
+            # Collect all packages already shown in pyproject updates
+            shown_packages = set()
+            for updates in pyproject_updates.values():
+                shown_packages.update(updates.keys())
+
+            # Only show packages not in pyproject.toml files
+            new_updates = {k: v for k, v in python_updates.items() if k not in shown_packages}
+
+            if new_updates:
+                print("\n🐍 Other Installed Package Updates Available:")
+                print("-" * 80)
+                for pkg, update in new_updates.items():
                     old_major = update.current.split(".")[0] if "." in update.current else "0"
                     new_major = update.latest.split(".")[0] if "." in update.latest else "0"
                     breaking = "⚠️  MAJOR" if old_major != new_major else ""
@@ -474,8 +519,9 @@ Examples:
 
 What gets updated:
   - .pre-commit-config.yaml: Hook versions
-  - pyproject.toml: Dependency version constraints
-  - tox.ini: Synced with pyproject.toml
+  - pyproject.toml: Dependency version constraints (main project)
+  - qa/web/pyproject.toml: Dependency version constraints (QA tests)
+  - tox.ini: Synced with main pyproject.toml
   - uv.lock: Regenerated with latest compatible versions
         """,
     )
@@ -527,7 +573,7 @@ What gets updated:
     try:
         # Check for updates
         pre_commit_updates = updater.check_pre_commit_updates()
-        pyproject_updates = updater.check_pyproject_updates()
+        pyproject_updates = updater.check_all_pyproject_updates()
         python_updates = updater.check_python_package_updates()
 
         # Report findings
@@ -535,12 +581,16 @@ What gets updated:
 
         # Apply updates if requested
         if args.apply:
-            if pre_commit_updates or pyproject_updates or python_updates:
+            has_updates = pre_commit_updates or pyproject_updates or python_updates
+
+            if has_updates:
                 print("\n⚠️  About to apply updates to:")
                 if pre_commit_updates:
                     print("   - .pre-commit-config.yaml")
                 if pyproject_updates:
-                    print("   - pyproject.toml")
+                    for pyproject_file in pyproject_updates.keys():
+                        rel_path = pyproject_file.relative_to(args.project_root)
+                        print(f"   - {rel_path}")
                     print("   - tox.ini (synced)")
                 if python_updates or pyproject_updates:
                     print("   - uv.lock")
@@ -559,11 +609,14 @@ What gets updated:
 
                 # Apply pyproject.toml updates
                 if pyproject_updates:
-                    if not updater.update_pyproject_toml(pyproject_updates):
-                        print("❌ pyproject.toml update failed!")
-                        return 1
+                    for pyproject_file, updates in pyproject_updates.items():
+                        rel_path = pyproject_file.relative_to(args.project_root)
+                        print(f"\n🔄 Updating {rel_path}...")
+                        if not updater.update_pyproject_toml(pyproject_file, updates):
+                            print(f"❌ {rel_path} update failed!")
+                            return 1
 
-                    # Sync tox.ini
+                    # Sync tox.ini (only with main pyproject.toml)
                     if not updater.sync_tox_ini():
                         print("⚠️  tox.ini sync failed (non-fatal)")
 
@@ -596,7 +649,9 @@ What gets updated:
                 if pre_commit_updates:
                     print("  - .pre-commit-config.yaml")
                 if pyproject_updates:
-                    print("  - pyproject.toml")
+                    for pyproject_file in pyproject_updates.keys():
+                        rel_path = pyproject_file.relative_to(args.project_root)
+                        print(f"  - {rel_path}")
                     print("  - tox.ini")
                 if python_updates or pyproject_updates:
                     print("  - uv.lock")
