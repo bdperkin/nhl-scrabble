@@ -50,12 +50,18 @@ class UpdateInfo(NamedTuple):
 class DependencyUpdater:
     """Manage dependency updates across the project."""
 
-    def __init__(self, project_root: Path, pyproject_files: list[Path] | None = None) -> None:
+    def __init__(
+        self,
+        project_root: Path,
+        pyproject_files: list[Path] | None = None,
+        pins: dict[str, str] | None = None,
+    ) -> None:
         """Initialize with project root directory.
 
         Args:
             project_root: Path to project root directory
             pyproject_files: List of pyproject.toml files to update (default: [pyproject.toml, qa/web/pyproject.toml])
+            pins: Dict mapping package names to pinned versions (overrides PyPI latest)
         """
         self.project_root = project_root
         self.pre_commit_config = project_root / ".pre-commit-config.yaml"
@@ -73,6 +79,7 @@ class DependencyUpdater:
         self.pyproject_files = [f for f in self.pyproject_files if f.exists()]
 
         self.tox_ini = project_root / "tox.ini"
+        self.pins = pins or {}
 
     def check_pre_commit_updates(self) -> dict[str, UpdateInfo]:
         """Check for pre-commit hook updates.
@@ -104,14 +111,18 @@ class DependencyUpdater:
         return updates
 
     def get_pypi_latest_version(self, package_name: str) -> str | None:
-        """Get latest version of a package from PyPI.
+        """Get latest version of a package from PyPI or pins.
 
         Args:
             package_name: Name of package to check
 
         Returns:
-            Latest version string or None if check failed
+            Latest version string, pinned version, or None if check failed
         """
+        # Check if package has a pinned version
+        if package_name in self.pins:
+            return self.pins[package_name]
+
         if requests is None:
             return None  # type: ignore[unreachable]
 
@@ -403,8 +414,11 @@ class DependencyUpdater:
                     old_major = update.current.split(".")[0] if "." in update.current else "0"
                     new_major = update.latest.split(".")[0] if "." in update.latest else "0"
                     breaking = "⚠️  MAJOR" if old_major != new_major else ""
+                    pinned = "📌 PINNED" if pkg in self.pins else ""
 
-                    print(f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking}")
+                    print(
+                        f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking} {pinned}".rstrip()
+                    )
         else:
             print("\n✅ All pyproject.toml files are up to date!")
 
@@ -424,8 +438,11 @@ class DependencyUpdater:
                     old_major = update.current.split(".")[0] if "." in update.current else "0"
                     new_major = update.latest.split(".")[0] if "." in update.latest else "0"
                     breaking = "⚠️  MAJOR" if old_major != new_major else ""
+                    pinned = "📌 PINNED" if pkg in self.pins else ""
 
-                    print(f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking}")
+                    print(
+                        f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking} {pinned}".rstrip()
+                    )
 
         print("\n" + "=" * 80)
 
@@ -517,12 +534,24 @@ Examples:
   # Apply updates, run tests, and full tox validation
   python scripts/update_dependencies.py --apply --test --tox
 
+  # Pin specific packages to versions (overrides PyPI latest)
+  python scripts/update_dependencies.py --apply --pin mdformat==1.0.0 --pin uv==0.11.6
+
+  # Pin with version constraints
+  python scripts/update_dependencies.py --apply --pin "ruff>=0.15.10"
+
 What gets updated:
   - .pre-commit-config.yaml: Hook versions
   - pyproject.toml: Dependency version constraints (main project)
   - qa/web/pyproject.toml: Dependency version constraints (QA tests)
   - tox.ini: Synced with main pyproject.toml
   - uv.lock: Regenerated with latest compatible versions
+
+Pinning:
+  Use --pin to override the detected latest version for specific packages.
+  This is useful when newer versions are not yet available in package registries
+  or when you need to maintain compatibility with specific versions.
+  Pinned versions are shown with a 📌 PINNED indicator in the report.
         """,
     )
 
@@ -552,12 +581,34 @@ What gets updated:
         default=Path.cwd(),
         help="Project root directory (default: current directory)",
     )
+    parser.add_argument(
+        "--pin",
+        action="append",
+        dest="pins",
+        metavar="PACKAGE==VERSION",
+        help="Pin a package to a specific version (can be specified multiple times). "
+        "Format: package==version or package>=version. Overrides PyPI latest version.",
+    )
 
     args = parser.parse_args()
 
     # Default to check mode if no action specified
     if not args.check and not args.apply:
         args.check = True
+
+    # Parse pin specifications
+    pins: dict[str, str] = {}
+    if args.pins:
+        for pin_spec in args.pins:
+            # Parse pin format: package==version, package>=version, etc.
+            match = re.match(r"^([a-zA-Z0-9_-]+)([><=!~]+)(.+)$", pin_spec.strip())
+            if match:
+                package, _operator, version = match.groups()
+                pins[package] = version
+                print(f"📌 Pinning {package} to version {version}")
+            else:
+                print(f"⚠️  Warning: Invalid pin format: {pin_spec}")
+                print("    Expected format: package==version or package>=version")
 
     # Check dependencies
     if not tomli_w:
@@ -568,7 +619,7 @@ What gets updated:
         print("⚠️  Warning: requests not installed. Install with: pip install requests")
         print("    PyPI version checking will not be available.")
 
-    updater = DependencyUpdater(args.project_root)
+    updater = DependencyUpdater(args.project_root, pins=pins)
 
     try:
         # Check for updates
