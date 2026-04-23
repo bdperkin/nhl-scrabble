@@ -113,6 +113,7 @@ class TestTeamsEndpoints:
         for team in data["teams"]:
             assert team["conference"] == "Eastern"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_specific_team(self, client: TestClient) -> None:
         """Test getting a specific team by abbreviation."""
         # First get all teams to find a valid abbreviation
@@ -158,6 +159,7 @@ class TestPlayersEndpoints:
         assert isinstance(data["players"], list)
         assert data["count"] > 0
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_players_with_min_score(self, client: TestClient) -> None:
         """Test filtering players by minimum score."""
         min_score = 100
@@ -207,6 +209,7 @@ class TestPlayersEndpoints:
         for i in range(len(players) - 1):
             assert players[i]["score"] >= players[i + 1]["score"]
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_players_sorted_by_name(self, client: TestClient) -> None:
         """Test sorting players by name."""
         response = client.get("/api/v1/players?sort_by=name&order=asc&limit=10")

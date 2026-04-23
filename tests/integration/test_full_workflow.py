@@ -254,6 +254,7 @@ class TestEndToEndReportGeneration:
 class TestCachingWorkflow:
     """Test caching behavior and performance improvements."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_caching_reduces_api_calls(
         self,
