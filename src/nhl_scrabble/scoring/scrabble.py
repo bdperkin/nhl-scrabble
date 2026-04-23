@@ -104,7 +104,7 @@ class ScrabbleScorer:
     def calculate_score(name: str) -> int:
         """Calculate the Scrabble score for a given name using standard values.
 
-        This static method maintains backward compatibility with existing code.
+        This static method provides convenient scoring with default Scrabble letter values.
         For custom scoring values, create a ScrabbleScorer instance and use
         the calculate_score_custom() method.
 

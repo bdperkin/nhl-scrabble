@@ -321,10 +321,10 @@ class TestGenerateFunctions:
     """Tests for report generation functions."""
 
     def test_generate_json_report(self) -> None:
-        """Test JSON report generation."""
-        from dataclasses import dataclass
+        """Test JSON report generation using formatter factory."""
+        from dataclasses import asdict, dataclass
 
-        from nhl_scrabble.cli import generate_json_report
+        from nhl_scrabble.formatters import get_formatter
         from nhl_scrabble.models.player import PlayerScore
 
         # Create sample data
@@ -336,29 +336,47 @@ class TestGenerateFunctions:
             conference: str
             avg_per_player: float
 
-        team_scores = {
-            "TOR": MockTeam(
-                total=100,
-                players=[
-                    PlayerScore(
-                        first_name="John",
-                        last_name="Doe",
-                        full_name="John Doe",
-                        team="TOR",
-                        division="Atlantic",
-                        conference="Eastern",
-                        first_score=10,
-                        last_score=20,
-                        full_score=30,
-                    )
-                ],
-                division="Atlantic",
-                conference="Eastern",
-                avg_per_player=30.0,
-            )
+        team = MockTeam(
+            total=100,
+            players=[
+                PlayerScore(
+                    first_name="John",
+                    last_name="Doe",
+                    full_name="John Doe",
+                    team="TOR",
+                    division="Atlantic",
+                    conference="Eastern",
+                    first_score=10,
+                    last_score=20,
+                    full_score=30,
+                )
+            ],
+            division="Atlantic",
+            conference="Eastern",
+            avg_per_player=30.0,
+        )
+
+        # Prepare data for formatter
+        data = {
+            "teams": {
+                "TOR": {
+                    "total": team.total,
+                    "players": [asdict(p) for p in team.players],
+                    "division": team.division,
+                    "conference": team.conference,
+                    "avg_per_player": team.avg_per_player,
+                }
+            },
+            "divisions": {},
+            "conferences": {},
+            "playoffs": {},
+            "summary": {"total_teams": 1, "total_players": 1},
         }
 
-        result = generate_json_report(team_scores, [], {}, {}, {})
+        # Use formatter factory
+        formatter = get_formatter("json")
+        result = formatter.format(data)
+
         assert '"teams"' in result
         assert '"TOR"' in result
 
