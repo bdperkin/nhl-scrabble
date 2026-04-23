@@ -125,7 +125,7 @@ make uv-init       # Uses uv: ~5 seconds
 make uv-venv
 
 # Direct uv command
-uv venv .venv --python python3.10
+uv venv .venv --python python3.12
 ```
 
 #### Install Packages
@@ -351,10 +351,10 @@ make uv-update
 
 ```bash
 # The project includes .python-version for version consistency
-cat .python-version  # Shows: 3.10
+cat .python-version  # Shows: 3.12, 3.13, 3.14, 3.15
 
 # UV automatically respects this file
-uv python find       # Uses Python 3.10.x
+uv python find       # Uses Python 3.12.x
 
 # Also works with pyenv and asdf
 pyenv local          # Reads .python-version

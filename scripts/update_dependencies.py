@@ -25,14 +25,14 @@ from pathlib import Path
 from typing import NamedTuple
 
 try:
-    import tomllib  # Python 3.11+
+    import tomllib  # Python 3.12+
 except ImportError:
-    import tomli as tomllib
+    import tomli as tomllib  # type: ignore[no-redef]
 
 try:
     import tomli_w
 except ImportError:
-    tomli_w = None
+    tomli_w = None  # type: ignore[assignment]
 
 try:
     import requests
@@ -517,10 +517,7 @@ def main() -> int:
     Returns:
         Exit code (0 for success, 1 for failure)
     """
-    parser = argparse.ArgumentParser(
-        description="Check and update project dependencies across all config files",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
+    epilog_text = """
 Examples:
   # Check for updates (dry run)
   python scripts/update_dependencies.py --check
@@ -552,7 +549,12 @@ Pinning:
   This is useful when newer versions are not yet available in package registries
   or when you need to maintain compatibility with specific versions.
   Pinned versions are shown with a 📌 PINNED indicator in the report.
-        """,
+"""
+
+    parser = argparse.ArgumentParser(
+        description="Check and update project dependencies across all config files",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=epilog_text,
     )
 
     parser.add_argument(

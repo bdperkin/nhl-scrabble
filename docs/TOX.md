@@ -17,7 +17,7 @@ This guide covers using [tox](https://tox.wiki/) for automated testing across mu
 
 Tox is a command-line tool that automates and standardizes testing in Python. It:
 
-- **Tests across multiple Python versions** (3.10, 3.11, 3.12, 3.13, 3.14, 3.15)
+- **Tests across multiple Python versions** (3.12, 3.13, 3.14, 3.15)
 - **Creates isolated environments** for each test run
 - **Automates quality checks** (linting, type checking, formatting)
 - **Simulates CI/CD pipelines** locally before pushing code
@@ -50,7 +50,7 @@ tox list
 tox -p auto
 
 # Run specific environment
-tox -e py310
+tox -e py312
 ```
 
 ## Available Environments
@@ -61,8 +61,6 @@ These run when you execute `tox` without arguments:
 
 | Environment   | Python Version | Description                       |
 | ------------- | -------------- | --------------------------------- |
-| `py310`       | 3.10           | Run tests with Python 3.10        |
-| `py311`       | 3.11           | Run tests with Python 3.11        |
 | `py312`       | 3.12           | Run tests with Python 3.12        |
 | `py313`       | 3.13           | Run tests with Python 3.13        |
 | `py314`       | 3.14           | Run tests with Python 3.14        |
@@ -109,7 +107,7 @@ Before committing code, verify everything works:
 
 ```bash
 # Option 1: Run quality checks and tests
-tox -e quality,py310
+tox -e quality,py312
 
 # Option 2: Use the comprehensive check environment
 tox -e check
@@ -122,13 +120,13 @@ tox -e ci
 
 ```bash
 # Test against all Python versions
-tox -e py310,py311,py312,py313,py314,py315
+tox -e py312,py313,py314,py315
 
 # Test in parallel (much faster!)
-tox -p auto -e py310,py311,py312,py313,py314,py315
+tox -p auto -e py312,py313,py314,py315
 
 # Test specific version only
-tox -e py310
+tox -e py312
 tox -e py315
 ```
 
@@ -182,7 +180,7 @@ tox -e clean
 tox -r
 
 # Recreate specific environment
-tox -e py310 -r
+tox -e py312 -r
 
 # Remove .tox directory entirely
 rm -rf .tox/
@@ -207,8 +205,6 @@ The Makefile uses a dynamic pattern rule that automatically handles any Python v
 
 ```bash
 # Via Makefile (dynamic pattern rule - automatically handled)
-make tox-py310        # Test Python 3.10
-make tox-py311        # Test Python 3.11
 make tox-py312        # Test Python 3.12
 make tox-py313        # Test Python 3.13
 make tox-py314        # Test Python 3.14
@@ -216,8 +212,6 @@ make tox-py315        # Test Python 3.15
 make tox-py316        # Future Python 3.16 (will work automatically!)
 
 # Or use tox directly:
-tox -e py310          # Test Python 3.10
-tox -e py311          # Test Python 3.11
 tox -e py312          # Test Python 3.12
 tox -e py313          # Test Python 3.13
 tox -e py314          # Test Python 3.14
@@ -275,7 +269,7 @@ The tox configuration is in `tox.ini` at the project root. Key sections:
 ```ini
 [tox]
 # Python versions to test
-envlist = py{310,311,312,313,314,315}, ruff-check, mypy, ruff-format, coverage, pip-audit
+envlist = py{312,313,314,315}, ruff-check, mypy, ruff-format, coverage, pip-audit
 
 # Shared settings
 minversion = 4.0
@@ -316,8 +310,6 @@ If you see "InterpreterNotFound":
 
 ```bash
 # Check which Python versions are installed
-python3.10 --version
-python3.11 --version
 python3.12 --version
 python3.13 --version
 python3.14 --version
@@ -327,7 +319,7 @@ python3.15 --version
 tox --skip-missing-interpreters
 
 # Or test only available versions
-tox -e py310  # If you only have 3.10
+tox -e py312  # If you only have 3.12
 tox -e py315  # If you only have 3.15
 ```
 
@@ -337,7 +329,7 @@ If you encounter dependency issues:
 
 ```bash
 # Recreate the environment
-tox -e py310 -r
+tox -e py312 -r
 
 # Or recreate all environments
 tox -r
@@ -356,7 +348,7 @@ After changing dependencies in `pyproject.toml`:
 tox -r
 
 # Or for specific environment
-tox -e py310 -r
+tox -e py312 -r
 ```
 
 ### Slow Test Runs
@@ -378,16 +370,16 @@ tox -e ruff-check,mypy  # Skip actual test runs
 
 ```bash
 # Run with verbose output
-tox -e py310 -- -v
+tox -e py312 -- -v
 
 # Run with very verbose output
-tox -e py310 -- -vv
+tox -e py312 -- -vv
 
 # Run with output capture disabled
-tox -e py310 -- -s
+tox -e py312 -- -s
 
 # Run specific test
-tox -e py310 -- tests/unit/test_scrabble.py::test_specific
+tox -e py312 -- tests/unit/test_scrabble.py::test_specific
 ```
 
 ## CI/CD Integration
@@ -406,7 +398,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15']
+        python-version: [''3.12', '3.13', '3.14', '3.15']
 
     steps:
       - uses: actions/checkout@v4
@@ -425,7 +417,7 @@ Example `.gitlab-ci.yml`:
 
 ```yaml
 test:
-  image: python:3.10
+  image: python:3.12
   script:
     - pip install tox
     - tox -p auto
@@ -451,7 +443,7 @@ Pass arguments to underlying commands:
 
 ```bash
 # Pass pytest options
-tox -e py310 -- -k test_scrabble -v
+tox -e py312 -- -k test_scrabble -v
 
 # Pass mypy options
 tox -e mypy -- --strict
@@ -466,10 +458,10 @@ Set environment variables for tox:
 
 ```bash
 # Pass to specific environment
-TOX_SKIP_ENV="py311|py312" tox
+TOX_SKIP_ENV="py312|py312" tox
 
 # Set environment variable for tests
-tox -e py310 -- --env-var=NHL_SCRABBLE_VERBOSE=true
+tox -e py312 -- --env-var=NHL_SCRABBLE_VERBOSE=true
 ```
 
 ### Combining Environments
@@ -481,7 +473,7 @@ Run multiple environments in sequence:
 tox -e quality,coverage
 
 # Run for multiple Python versions
-tox -e py310,py311,py312,py313,py314,py315
+tox -e py312,py313,py314,py315
 ```
 
 ### Parallel Execution
@@ -494,7 +486,7 @@ tox -p auto
 tox -p 4
 
 # Parallel with specific environments
-tox -p auto -e py310,py311,py312,py313,py314,py315,ruff-check,mypy
+tox -p auto -e py312,py313,py314,py315,ruff-check,mypy
 ```
 
 ## Best Practices
@@ -554,7 +546,7 @@ Key commands to remember:
 tox                   # Run all default environments
 tox -p auto           # Run in parallel (fastest)
 tox -e ci             # Simulate CI pipeline
-tox -e py310          # Test specific Python version
+tox -e py312          # Test specific Python version
 tox -e quality        # Run code quality checks
 tox -e ruff-check     # Run linter
 tox -e mypy           # Run type checker

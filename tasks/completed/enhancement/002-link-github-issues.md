@@ -353,7 +353,7 @@ All other acceptance criteria met exactly as specified.
 All 35 checks passed:
 
 - Pre-commit checks
-- Test on Python 3.10-3.13
+- Test on Python 3.12-3.13
 - 31 Tox environments with UV (all tools and tests)
 
 **Total CI time**: ~30 seconds

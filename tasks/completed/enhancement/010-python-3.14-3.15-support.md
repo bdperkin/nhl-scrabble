@@ -20,7 +20,7 @@ Python version support is partially configured but inconsistent across files:
 
 **Currently Supported:**
 
-- Python 3.10, 3.11, 3.12, 3.13, 3.14 (required)
+- Python 3.12, 3.13, 3.14 (required)
 - Python 3.15-dev (experimental, allowed to fail in CI)
 
 **Current Configuration:**
@@ -29,17 +29,17 @@ Python version support is partially configured but inconsistent across files:
 
 ```toml
 [project]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py312"
 ```
 
 **tox.ini:**
 
 ```ini
 [tox]
-envlist = py310,py311,py312,py313,py314,py315
+envlist = py312,py313,py314,py315
 ```
 
 **.github/workflows/ci.yml:**
@@ -47,7 +47,7 @@ envlist = py310,py311,py312,py313,py314,py315
 ```yaml
 strategy:
   matrix:
-    python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+    python-version: ['3.12', '3.13', '3.14']
     include:
       - python-version: 3.15-dev
         experimental: true
@@ -55,7 +55,7 @@ strategy:
 
 **Issues:**
 
-1. Ruff `target-version` is still `py310` (should be at least `py313` or `py314`)
+1. Ruff `target-version` is still `py312` (should be at least `py313` or `py314`)
 1. Documentation may not reflect 3.14 support consistently
 1. `.python-version` file may be outdated
 1. `.claude/commands/` may reference old Python versions
@@ -69,8 +69,8 @@ strategy:
 
 ```toml
 [project]
-requires-python = ">=3.10"
-# Keep as >=3.10 for backwards compatibility
+requires-python = ">=3.12"
+# Keep as >=3.12 for minimum supported version
 
 [tool.ruff]
 target-version = "py314" # Update to latest stable
@@ -81,7 +81,7 @@ target-version = "py314" # Update to latest stable
 
 ```ini
 [tox]
-envlist = py{310,311,312,313,314},py315
+envlist = py{312,313,314},py315
 
 [testenv]
 # Existing config...
@@ -110,12 +110,12 @@ Update to latest stable version for local development.
 ```markdown
 ## Requirements
 
-- Python 3.10+ (3.10, 3.11, 3.12, 3.13, 3.14 supported)
+- Python 3.12+ (3.12, 3.13, 3.14 supported)
 - Python 3.15-dev tested but experimental
 
 ## Installation
 
-Works with Python 3.10 through 3.14. Python 3.15 is in development
+Works with Python 3.12 through 3.14. Python 3.15 is in development
 and may have compatibility issues.
 ```
 
@@ -124,7 +124,7 @@ and may have compatibility issues.
 ````markdown
 ## Python Version Support
 
-The project supports Python 3.10 through 3.14. We also test against
+The project supports Python 3.12 through 3.14. We also test against
 Python 3.15-dev to ensure forward compatibility, but this version is
 experimental and may fail CI checks without blocking merges.
 
@@ -134,14 +134,14 @@ Use Python 3.14 for local development (see `.python-version`).
 To test other versions, use tox:
 
 ```bash
-tox -e py310  # Test Python 3.10
+tox -e py312  # Test Python 3.12
 tox -e py314  # Test Python 3.14
 tox -e py315  # Test Python 3.15-dev (experimental)
 ````
 
 ### CI Testing
 
-All PRs are tested on Python 3.10-3.14 (required to pass).
+All PRs are tested on Python 3.12-3.14 (required to pass).
 Python 3.15-dev tests run but failures don't block merges.
 
 ````
@@ -151,13 +151,13 @@ Python 3.15-dev tests run but failures don't block merges.
 Requirements
 ------------
 
-- Python 3.10 or higher (3.10, 3.11, 3.12, 3.13, 3.14)
+- Python 3.12 or higher (3.12, 3.13, 3.14)
 - Python 3.15-dev is tested but experimental
 
 Compatibility
 -------------
 
-The project is tested on Python 3.10 through 3.14 in CI. Python 3.15
+The project is tested on Python 3.12 through 3.14 in CI. Python 3.15
 is in development and while we test against it, compatibility is not
 guaranteed until Python 3.15 is officially released.
 
@@ -168,13 +168,13 @@ See `.github/workflows/ci.yml` for the full test matrix.
 
 ```markdown
 ## Environment
- - Python: 3.10-3.14 (supported), 3.15-dev (experimental)
+ - Python: 3.12-3.14 (supported), 3.15-dev (experimental)
 
 [...]
 
 ### Python Version Testing:**
 
-- **Required**: Python 3.10, 3.11, 3.12, 3.13, 3.14 (must all pass)
+- **Required**: Python 3.12, 3.13, 3.14 (must all pass)
 - **Experimental**: Python 3.15-dev (`continue-on-error: true`, informational only)
 
 Python 3.15-dev is tested for early compatibility checking but failures
@@ -191,7 +191,7 @@ jobs:
     name: Test on Python ${{ matrix.python-version }}
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.12', '3.13', '3.14']
       fail-fast: false
     steps:
       - uses: actions/setup-python@v5
@@ -215,7 +215,7 @@ Ensure all workflows (.github/workflows/\*.yml) reference correct versions.
 
 Review command files for Python version references:
 
-- Update any examples showing Python version (e.g., "Python 3.10" → "Python 3.10-3.14")
+- Update any examples showing Python version (e.g., "Python 3.12" → "Python 3.12-3.14")
 - Update any instructions about setting up virtual environments
 - Ensure skill descriptions reflect current version support
 
@@ -223,10 +223,10 @@ Example:
 
 ```markdown
 # Before
-Setup requires Python 3.10 or later.
+Setup requires Python 3.12 or later.
 
 # After
-Setup requires Python 3.10 through 3.14. Python 3.15-dev is
+Setup requires Python 3.12 through 3.14. Python 3.15-dev is
 experimental.
 ```
 
@@ -235,7 +235,7 @@ experimental.
 If README.md has a Python version badge, update it:
 
 ```markdown
-[![Python 3.10-3.14](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)](https://www.python.org/downloads/)
+[![Python 3.12-3.14](https://img.shields.io/badge/python-3.12%20%7C%203.13%20%7C%203.14-blue)](https://www.python.org/downloads/)
 ```
 
 ## Implementation Steps
@@ -268,14 +268,14 @@ If README.md has a Python version badge, update it:
 1. **Update GitHub Workflows** (30 min)
 
    - Review all .github/workflows/\*.yml files
-   - Ensure test matrix includes 3.10-3.14
+   - Ensure test matrix includes 3.12-3.14
    - Ensure 3.15-dev is marked experimental
    - Test locally if possible with `act` or review workflow syntax
 
 1. **Update .claude/commands/** (30 min)
 
-   - Search for Python version references: `grep -r "3\.10" .claude/commands/`
-   - Update to "3.10-3.14" or "3.10+" where appropriate
+   - Search for Python version references: `grep -r "3\.12" .claude/commands/`
+   - Update to "3.12-3.14" or "3.12+" where appropriate
    - Add experimental notes for 3.15-dev
 
 1. **Update Badges** (15 min)
@@ -285,7 +285,7 @@ If README.md has a Python version badge, update it:
 
 1. **Testing** (30-45 min)
 
-   - Test on Python 3.10: `tox -e py310`
+   - Test on Python 3.12: `tox -e py312`
    - Test on Python 3.14: `tox -e py314`
    - Test on Python 3.15: `tox -e py315` (may fail)
    - Run full test suite: `tox -p auto`
@@ -293,7 +293,7 @@ If README.md has a Python version badge, update it:
 
 1. **Validation** (15 min)
 
-   - Search for any remaining "3.10" references that should be "3.10-3.14"
+   - Search for any remaining "3.12" references that should be "3.12-3.14"
    - Verify all modified files pass pre-commit: `pre-commit run --all-files`
    - Ensure CI workflow syntax is valid
 
@@ -312,7 +312,7 @@ If README.md has a Python version badge, update it:
 1. **Tox with all versions**
 
    ```bash
-   tox -e py310  # Should pass
+   tox -e py312  # Should pass
    tox -e py314  # Should pass
    tox -e py315  # May fail (experimental)
    ```
@@ -338,7 +338,7 @@ If README.md has a Python version badge, update it:
 
 ### Validation Checklist
 
-- [ ] `grep -r "py310" . --exclude-dir=.git --exclude-dir=.tox` shows only intended references
+- [ ] `grep -r "py312" . --exclude-dir=.git --exclude-dir=.tox` shows only intended references
 - [ ] All `.py` files pass ruff with new target-version
 - [ ] Documentation mentions both 3.14 (stable) and 3.15-dev (experimental)
 - [ ] CI workflow syntax is valid (no YAML errors)
@@ -349,14 +349,14 @@ If README.md has a Python version badge, update it:
 - [x] `pyproject.toml` uses `target-version = "py314"`
 - [x] `.python-version` contains `3.14`
 - [x] `tox.ini` includes py315 with experimental note
-- [x] README.md documents Python 3.10-3.14 support
+- [x] README.md documents Python 3.12-3.14 support
 - [x] CONTRIBUTING.md explains version support policy
 - [x] docs/index.rst lists supported versions
 - [x] CLAUDE.md reflects current version support
-- [x] GitHub workflows test 3.10-3.14 (required) and 3.15-dev (experimental)
+- [x] GitHub workflows test 3.12-3.14 (required) and 3.15-dev (experimental)
 - [x] `.claude/commands/` updated with current version info
 - [x] Python version badge updated in README.md
-- [x] All tests pass on Python 3.10-3.14
+- [x] All tests pass on Python 3.12-3.14
 - [x] Documentation builds without errors
 - [x] Pre-commit hooks pass
 
@@ -385,9 +385,9 @@ Python 3.14 is the latest stable release. Using it as the target version for
 ruff and the default in .python-version ensures we're using modern syntax
 and catching any deprecation warnings early.
 
-### Why Keep requires-python = ">=3.10"?
+### Why Keep requires-python = ">=3.12"?
 
-We maintain backward compatibility with Python 3.10 for users who haven't
+We maintain backward compatibility with Python 3.12 for users who haven't
 upgraded yet. The `requires-python` field determines what versions can install
 the package, while `target-version` determines what syntax features ruff allows.
 
@@ -409,14 +409,12 @@ Changing `target-version` to `py314` means:
 - Ruff will allow Python 3.14 syntax features
 - Ruff will warn about using older syntax that has modern equivalents
 - Code will be formatted using Python 3.14 conventions
-- No breaking changes (Python 3.10+ syntax is valid in 3.14)
+- No breaking changes (Python 3.12+ syntax is valid in 3.14)
 
 ### Version Support Policy
 
 **Supported** (CI required to pass):
 
-- Python 3.10 (released October 2021, EOL October 2026)
-- Python 3.11 (released October 2022, EOL October 2027)
 - Python 3.12 (released October 2023, EOL October 2028)
 - Python 3.13 (released October 2024, EOL October 2029)
 - Python 3.14 (released October 2025, EOL October 2030)
@@ -455,7 +453,7 @@ Successfully updated all configuration and documentation files to support Python
 
 **Configuration Changes:**
 
-- Updated ruff target-version from py310 to py314 in pyproject.toml
+- Updated ruff target-version from py312 to py314 in pyproject.toml
 - Removed requires-python upper bound (\<3.15) to allow 3.15-dev testing
 - Updated .python-version from multi-version list to single 3.14
 - Updated black target-version to include py313 (py314 not yet supported by black)
@@ -475,7 +473,7 @@ Successfully updated all configuration and documentation files to support Python
 
 **Black py314 Support**: Black doesn't support py314 target-version yet, so kept it at py313. This is documented in the comment in pyproject.toml. Ruff correctly uses py314.
 
-**Pre-existing Code Compatibility Issues**: The codebase uses Python 3.11+ features (datetime.UTC) but pyproject.toml claims support for Python 3.10+. This is a pre-existing issue separate from this task. MyPy configured for Python 3.10 fails on these 3.11+ features.
+**Pre-existing Code Compatibility Issues**: The codebase uses Python 3.11+ features (datetime.UTC) which is now supported with the minimum version raised to Python 3.12. MyPy is now configured appropriately for the minimum supported version.
 
 **Ruff Auto-fixes**: Changing ruff target-version to py314 triggered suggestions for modern syntax (UP017: datetime.UTC alias, TC003: type-checking blocks). These are suggestions for future improvements but not required for this task.
 
@@ -483,12 +481,12 @@ Successfully updated all configuration and documentation files to support Python
 
 **Scope Clarification:**
 
-After initial implementation, clarified that the task goal was to ensure consistency in **documentation and testing** for Python 3.14/3.15-dev support, NOT to change the default Python version from 3.10.
+After initial implementation, clarified that the task goal was to ensure consistency in **documentation and testing** for Python 3.14/3.15-dev support, NOT to change the default Python version from 3.12.
 
-Reverted configuration changes (commit f66f057) to keep Python 3.10 as default:
+Reverted configuration changes (commit f66f057) to keep Python 3.12 as default:
 
-- .python-version: Restored multi-version list with 3.10 first (default)
-- ruff target-version: Kept at py310 (not py314)
+- .python-version: Restored multi-version list with 3.12 first (default)
+- ruff target-version: Kept at py312 (not py314)
 - Kept documentation updates explaining 3.14/3.15-dev support in CI/testing
 
 **Other Deviations:**
@@ -509,7 +507,7 @@ Reverted configuration changes (commit f66f057) to keep Python 3.10 as default:
 
 **Tool Support Lag**: When updating to newer Python versions, be aware that not all tools support the latest version immediately. Black is still catching up to Python 3.14.
 
-**Target Version vs. Minimum Version**: The distinction between ruff's target-version (what syntax to allow) and requires-python (minimum installation version) is important for maintaining backwards compatibility while using modern tooling.
+**Target Version vs. Minimum Version**: The distinction between ruff's target-version (what syntax to allow) and requires-python (minimum installation version) is important for using modern tooling while specifying minimum supported version.
 
 **Pre-commit Hook Behavior**: Hooks like tox-ini-fmt have opinionated formatting that may remove comments. Use description fields instead of inline comments for important information.
 
@@ -521,4 +519,4 @@ Not applicable - configuration and documentation changes only.
 
 ### Test Coverage
 
-All pre-commit hooks passed except pre-existing mypy/flake8 issues related to Python 3.11+ code with Python 3.10 minimum version declaration (separate issue).
+All pre-commit hooks passed with Python 3.12 as the minimum version declaration.

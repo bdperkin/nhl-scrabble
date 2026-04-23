@@ -474,6 +474,7 @@ make tox-envs       # Alternative way to list environments
 # Use dynamic pattern rule for any tox environment:
 make tox-py312      # Test Python 3.12 (handled by pattern rule)
 make tox-py313      # Test Python 3.13 (handled by pattern rule)
+make tox-py314      # Test Python 3.14 (handled by pattern rule)
 make tox-coverage   # Coverage report (handled by pattern rule)
 make tox-ruff-check # Linting (handled by pattern rule)
 make tox-mypy       # Type checking (handled by pattern rule)
@@ -482,6 +483,7 @@ make tox-ci         # Simulate full CI pipeline (handled by pattern rule)
 # Or use tox directly:
 tox -e py312        # Test Python 3.12
 tox -e py313        # Test Python 3.13
+tox -e py314        # Test Python 3.14
 tox -e coverage     # Coverage report
 tox -e ruff-check   # Linting
 tox -e mypy         # Type checking
@@ -498,8 +500,9 @@ tox
 tox -p auto
 
 # Run specific environment
-tox -e py310
+tox -e py312
 tox -e py313
+tox -e py314
 tox -e ruff-check
 tox -e mypy
 tox -e coverage

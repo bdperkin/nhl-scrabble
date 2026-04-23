@@ -3,7 +3,7 @@
 # ruff: noqa: INP001
 
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path("../src").resolve()))
 
 # -- Project information -----------------------------------------------------
 project = "NHL Scrabble"
-copyright = f"{datetime.now(tz=timezone.utc).year}, Brandon Perkins"  # noqa: A001
+copyright = f"{datetime.now(tz=UTC).year}, Brandon Perkins"  # noqa: A001
 author = "Brandon Perkins"
 
 # Get version from package

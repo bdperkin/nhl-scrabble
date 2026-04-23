@@ -112,14 +112,14 @@ Configure UV behavior via environment variables:
 
 ```bash
 # Increase UV verbosity
-UV_VERBOSE=1 tox -e py310
+UV_VERBOSE=1 tox -e py312
 
 # Use specific UV version
-UV_PYTHON=python3.11 tox -e py311
+UV_PYTHON=python3.12 tox -e py312
 UV_PYTHON=python3.15 tox -e py315
 
 # Disable UV cache
-UV_NO_CACHE=1 tox -e py310
+UV_NO_CACHE=1 tox -e py312
 
 # Use offline mode (cache only)
 UV_OFFLINE=1 tox -e coverage
@@ -136,7 +136,7 @@ All existing tox commands work the same:
 tox
 
 # Run specific environment
-tox -e py310
+tox -e py312
 
 # Run in parallel
 tox -p auto
@@ -165,7 +165,7 @@ make tox-parallel       # Even faster!
 make ci                 # Significantly faster! (runs tox -e ci)
 ```
 
-**Note:** Many individual tox-\* Makefile targets have been removed in favor of using tox directly. The remaining Makefile targets (tox, tox-parallel, tox-list, tox-clean, tox-recreate) provide the most commonly used tox operations. For specific testenvs, use tox directly (e.g., `tox -e py310`, `tox -e ruff-check`).
+**Note:** Many individual tox-\* Makefile targets have been removed in favor of using tox directly. The remaining Makefile targets (tox, tox-parallel, tox-list, tox-clean, tox-recreate) provide the most commonly used tox operations. For specific testenvs, use tox directly (e.g., `tox -e py312`, `tox -e ruff-check`).
 
 ## Performance Comparison
 
@@ -177,15 +177,15 @@ Based on this project's actual performance:
 
 ```bash
 # Without tox-uv
-time tox -e py310
+time tox -e py312
 # real: 0m58s
 
 # With tox-uv (first run)
-time tox -e py310
+time tox -e py312
 # real: 0m8s  ← 7x faster!
 
 # With tox-uv (cached)
-time tox -e py310
+time tox -e py312
 # real: 0m2s  ← 29x faster!
 ```
 
@@ -303,14 +303,14 @@ commands = pytest
 
 ```bash
 # See what UV is doing
-UV_VERBOSE=1 tox -e py310
+UV_VERBOSE=1 tox -e py312
 
 # Check UV cache usage
 uv cache dir
 du -sh ~/.cache/uv
 
 # Test without cache
-UV_NO_CACHE=1 tox -e py310 -r
+UV_NO_CACHE=1 tox -e py312 -r
 ```
 
 ## Troubleshooting
@@ -347,7 +347,7 @@ pip install uv
 
 ```bash
 # Check if UV is actually being used
-tox -e py310 -vv | grep -i uv
+tox -e py312 -vv | grep -i uv
 
 # Should see lines like:
 # using uv for package installation
@@ -371,7 +371,7 @@ tox -e debug
 
 # If it works, the issue is UV-specific
 # Check UV logs
-UV_VERBOSE=1 tox -e py310
+UV_VERBOSE=1 tox -e py312
 ```
 
 ### Package Installation Errors
@@ -441,8 +441,8 @@ tox -p 4  # Max 4 environments at once
 
 ```bash
 # Benchmark with and without cache
-time tox -e py310 -r  # First run
-time tox -e py310     # Cached run
+time tox -e py312 -r  # First run
+time tox -e py312     # Cached run
 
 # Compare with pip (disable UV)
 [testenv:benchmark-pip]
@@ -472,7 +472,7 @@ This project is already set up! But if you're migrating another project:
 1. **Test it**
 
    ```bash
-   tox -e py310
+   tox -e py312
    ```
 
 That's it! No other changes needed.
@@ -526,7 +526,7 @@ Key points about tox-uv in this project:
 
 ```bash
 tox              # Run all tests (with UV speed!)
-tox -e py310     # Single environment (fast)
+tox -e py312     # Single environment (fast)
 tox -e ruff-check # Run linter
 tox -e mypy      # Run type check
 tox -p auto      # Parallel execution (very fast)

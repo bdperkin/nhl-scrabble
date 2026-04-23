@@ -447,7 +447,7 @@ Run: nhl-scrabble
 # NHL Scrabble Score Analyzer
 
 [![PyPI](badge)](link)
-[![Python 3.10+](badge)](link)
+[![Python 3.12+](badge)](link)
 [![Tests](badge)](link)
 [![Coverage](badge)](link)
 
@@ -648,7 +648,7 @@ Issues Found:
 🟡 Outdated Documentation (8 locations):
   - README.md: Installation section references old setup.py
   - CONTRIBUTING.md: Mentions pytest-cov (not installed)
-  - docs/DEVELOPMENT.md: References Python 3.9 (now 3.10+)
+  - docs/DEVELOPMENT.md: References Python 3.9 (now 3.12+)
   ... 5 more
 
 🟠 Missing Files (5 files):

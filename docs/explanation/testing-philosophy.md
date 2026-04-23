@@ -246,13 +246,13 @@ Tests run automatically on:
 - Every commit (pre-commit hooks)
 - Every push (GitHub Actions)
 - Every PR (required to pass)
-- Multiple Python versions (3.10, 3.11, 3.12, 3.13)
+- Multiple Python versions (3.12, 3.13, 3.14, 3.15)
 
 **CI workflow**:
 
 ```yaml
   - Run pre-commit hooks
-  - Run pytest on py3.10, 3.11, 3.12, 3.13
+  - Run pytest on py3.12, 3.13, 3.14, 3.15
   - Check coverage >80%
   - Run type checking (mypy)
   - Run linting (ruff)

@@ -21,7 +21,7 @@ make uv-check
 | ------------------ | ---------------------------------- | ------------------------------------------- |
 | **Setup**          |                                    |                                             |
 | Check uv installed | `make uv-check`                    | `uv --version`                              |
-| Create venv        | `make uv-venv`                     | `uv venv .venv --python python3.10`         |
+| Create venv        | `make uv-venv`                     | `uv venv .venv --python python3.12`         |
 | Full init          | `make uv-init`                     | (multiple steps)                            |
 | **Install**        |                                    |                                             |
 | Install package    | `make uv-install`                  | `uv pip install -e .`                       |
@@ -185,7 +185,7 @@ make uv-install-dev
 | File              | Purpose                                                          |
 | ----------------- | ---------------------------------------------------------------- |
 | `pyproject.toml`  | UV config in `[tool.uv]` section, dependencies, project metadata |
-| `.python-version` | Python version (3.10) - read by UV, pyenv, and asdf              |
+| `.python-version` | Python version (3.12-3.15) - read by UV, pyenv, and asdf         |
 
 **Example [tool.uv] configuration:**
 

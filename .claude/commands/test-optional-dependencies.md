@@ -58,7 +58,7 @@ This command validates optional dependency configuration and suggests fixes.
 
 1. **Validate Fixes**
 
-   - Run tests in clean environment: `tox -e py310`
+   - Run tests in clean environment: `tox -e py312`
    - Verify tests skip appropriately
    - Confirm no failures due to missing tools
 
@@ -141,7 +141,7 @@ This command validates optional dependency configuration and suggests fixes.
 # ✅ Skip decorator added
 #
 # 🧪 Validating fix...
-# Running: tox -e py310 -- tests/test_docs.py
+# Running: tox -e py312 -- tests/test_docs.py
 #
 # ✅ Tests skip gracefully when sphinx-build not available
 #
@@ -435,7 +435,7 @@ nhl-scrabble = [
 ### Test-Only Environment
 
 ```ini
-[testenv:py310]
+[testenv:py312]
 # Only installs test dependencies
 deps =
     pytest>=7.4.0
@@ -481,7 +481,7 @@ Use this command in Pre-Flight Validation before pushing:
 /test-optional-dependencies
 
 # 3. Run tests in clean environment
-tox -e py310
+tox -e py312
 
 # 4. Verify tests skip appropriately
 # 5. Commit and push
@@ -495,7 +495,7 @@ This ensures tests won't fail in CI due to missing tools.
 
 1. ✅ Identify external dependencies
 1. ✅ Add skip decorator if needed
-1. ✅ Test in clean environment: `tox -e py310`
+1. ✅ Test in clean environment: `tox -e py312`
 1. ✅ Document tool requirements in docstring
 
 ### When Adding External Tool

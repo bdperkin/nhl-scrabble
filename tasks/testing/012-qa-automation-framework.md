@@ -402,7 +402,7 @@ Automated runs on:
 **System Dependencies:**
 
 - Modern browsers (auto-installed by Playwright)
-- Python 3.10+
+- Python 3.12+
 - UV for dependency management
 
 ## Additional Notes

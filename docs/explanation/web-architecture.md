@@ -86,7 +86,7 @@ FastAPI provides:
 - Built-in async support (crucial for I/O-bound NHL API calls)
 - Automatic API documentation
 - Type safety with Pydantic
-- Modern Python 3.10+ features (type hints, async/await)
+- Modern Python 3.12+ features (type hints, async/await)
 
 ### Middleware Stack
 
@@ -542,7 +542,7 @@ DataExport.exportPDF(data, filename)
 
 - **Performance**: Async/await for concurrent NHL API calls
 - **Type Safety**: Pydantic validates all I/O
-- **Modern**: Leverages Python 3.10+ features
+- **Modern**: Leverages Python 3.12+ features
 - **Documentation**: Auto-generated API docs
 - **Future-Proof**: Built for async, microservices, modern APIs
 

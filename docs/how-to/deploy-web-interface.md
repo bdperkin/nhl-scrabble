@@ -4,7 +4,7 @@ This guide explains how to deploy the NHL Scrabble web interface to production e
 
 ## Prerequisites
 
-- Python 3.10+ installed
+- Python 3.12+ installed
 - NHL Scrabble package installed
 - Production server or cloud platform
 - Domain name (optional but recommended)

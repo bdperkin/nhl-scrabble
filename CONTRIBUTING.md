@@ -54,7 +54,8 @@ The project supports [Python](https://www.python.org/) 3.12 through 3.14. We als
 Use Python 3.14 for local development (see `.python-version`). To test other versions, use tox:
 
 ```bash
-tox -e py312  # Test Python 3.10
+tox -e py312  # Test Python 3.12
+tox -e py313  # Test Python 3.13
 tox -e py314  # Test Python 3.14
 tox -e py315  # Test Python 3.15-dev (experimental)
 ```

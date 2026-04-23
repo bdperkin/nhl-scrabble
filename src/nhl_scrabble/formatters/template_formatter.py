@@ -6,7 +6,7 @@ customized output formats.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -91,7 +91,7 @@ class TemplateFormatter:
         # Add timestamp to data
         template_data = {
             **data,
-            "timestamp": datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+            "timestamp": datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
         }
 
         # Render template

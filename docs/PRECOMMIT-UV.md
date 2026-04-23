@@ -167,7 +167,7 @@ Configure UV behavior for pre-commit:
 
 ```bash
 # Use specific Python interpreter
-export UV_PYTHON=/usr/bin/python3.10
+export UV_PYTHON=/usr/bin/python3.12
 pre-commit run --all-files
 
 # Use system Python (don't create venv)
@@ -263,7 +263,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install UV
         uses: astral-sh/setup-uv@v4

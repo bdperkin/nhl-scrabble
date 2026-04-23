@@ -18,7 +18,7 @@ By the end of this tutorial, you'll be able to:
 
 Before starting, make sure you have:
 
-- Python 3.10 or higher installed
+- Python 3.12 or higher installed
 - Basic command-line knowledge
 - Internet connection (to fetch NHL roster data)
 
@@ -50,7 +50,7 @@ source .venv/bin/activate
 **Troubleshooting**:
 
 - If `make` is not found, install it with your package manager (`sudo apt install make` on Ubuntu/Debian)
-- If Python 3.10+ is not found, install it from [python.org](https://www.python.org/downloads/)
+- If Python 3.12+ is not found, install it from [python.org](https://www.python.org/downloads/)
 
 ## Step 3: Run your first analysis
 

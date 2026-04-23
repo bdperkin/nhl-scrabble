@@ -38,7 +38,7 @@ pytest
 
 ```
 ================================ test session starts =================================
-platform linux -- Python 3.10.19, pytest-9.0.3, pluggy-1.6.0
+platform linux -- Python 3.12.19, pytest-9.0.3, pluggy-1.6.0
 collected 131 items
 
 tests/unit/test_scrabble.py ............                                      [  9%]
@@ -145,7 +145,7 @@ pytest -m "not slow"
 tox
 
 # Run specific Python version
-tox -e py310
+tox -e py312
 
 # Run in parallel (10x faster with tox-uv)
 tox -p auto
@@ -153,7 +153,7 @@ tox -p auto
 
 **Available environments**:
 
-- `py310`, `py311`, `py312`, `py313` - Different Python versions
+- `py312`, `py313`, `py314`, `py315` - Different Python versions
 - `ruff-check` - Linting
 - `mypy` - Type checking
 - `coverage` - Coverage report
@@ -283,7 +283,7 @@ Our CI runs:
 pre-commit run --all-files
 
 # Tests on multiple Python versions
-tox -e py310,py311,py312,py313
+tox -e py312,py313,py314,py315
 
 # Coverage check
 pytest --cov --cov-fail-under=80
@@ -382,7 +382,7 @@ pip install -e .
 **Solution**: Run tox to test multiple Python versions:
 
 ```bash
-tox -e py310,py311,py312,py313
+tox -e py312,py313,py314,py315
 ```
 
 ### Issue: Slow tests

@@ -96,7 +96,7 @@ Configure these settings on GitHub to enforce PR-based workflow:
   - ✅ Require branches to be up to date before merging
   - ✅ Select required checks:
     - Pre-commit checks
-    - Test on Python 3.10, 3.11, 3.12, 3.13
+    - Test on Python 3.12, 3.13, 3.14
     - Tox tests (all environments)
 
 - ✅ **Require conversation resolution before merging**

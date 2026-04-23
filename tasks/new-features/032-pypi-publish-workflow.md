@@ -117,7 +117,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.12', '3.13', '3.14']
 
     steps:
       - name: Set up Python
@@ -358,7 +358,7 @@ python -c "import nhl_scrabble; print(nhl_scrabble.__version__)"
 ```bash
 # Automated via GitHub Actions matrix:
 # - Ubuntu, macOS, Windows
-# - Python 3.10, 3.11, 3.12, 3.13, 3.14
+# - Python 3.12, 3.13, 3.14
 
 # Manual verification (if needed):
 # Install on different OS and test:
@@ -375,7 +375,7 @@ nhl-scrabble analyze
 - [ ] Verifies package metadata with `twine check`
 - [ ] Verifies wheel contents with `check-wheel-contents`
 - [ ] Tests installation on Ubuntu, macOS, Windows
-- [ ] Tests installation on Python 3.10-3.14
+- [ ] Tests installation on Python 3.12-3.14
 - [ ] Publishes to TestPyPI successfully
 - [ ] Publishes to PyPI successfully
 - [ ] Creates GitHub Release automatically
@@ -545,7 +545,7 @@ Follow [Keep a Changelog](https://keepachangelog.com/):
 
 **Testing Time:**
 
-- Matrix: 15 combinations (3 OS × 5 Python versions)
+- Matrix: 9 combinations (3 OS × 3 Python versions)
 - Parallel execution: ~2-3 minutes
 
 **Publishing Time:**

@@ -507,7 +507,7 @@ Apply this fix? [y/N]
 
 1. ✅ Re-run hook to verify it passes
 1. ✅ Run all hooks: `pre-commit run --all-files`
-1. ✅ Test in clean environment: `tox -e py310`
+1. ✅ Test in clean environment: `tox -e py312`
 1. ✅ Commit exclusion with explanation: `git commit -m "fix(pre-commit): Exclude pseudo-code from blacken-docs"`
 
 ## Related Commands

@@ -161,7 +161,7 @@ This command automates the complete task implementation workflow from start to f
      pre-commit run --all-files      # All hooks
 
      # CI-specific checks (if available locally)
-     tox -e py310,py311,py312,py313,py314,py315  # Multi-version testing
+     tox -e py312,py313,py314,py315  # Multi-version testing
      make docs                       # Documentation build
      ```
 
@@ -174,7 +174,7 @@ This command automates the complete task implementation workflow from start to f
      git diff uv.lock                    # Review lock changes
 
      # Test in clean environment
-     uv venv --python 3.10 test-env
+     uv venv --python 3.12 test-env
      source test-env/bin/activate
      uv pip install -e ".[group-name]"
      # Verify imports work
@@ -258,7 +258,7 @@ This command automates the complete task implementation workflow from start to f
    tox -p auto
    ```
 
-   - Tests all Python versions (3.10-3.15)
+   - Tests all Python versions (3.12-3.15)
    - Runs quality checks (ruff-check, mypy, etc.)
    - Runs test suite with coverage
    - Parallel execution for speed (~3-5 min total)
@@ -296,8 +296,6 @@ This command automates the complete task implementation workflow from start to f
 
    ✅ Pre-commit hooks: All 58 hooks passed (45s)
    ✅ Tox environments: All environments passed
-      - py310: ✅ (1m 29s)
-      - py311: ✅ (1m 45s)
       - py312: ✅ (1m 33s)
       - py313: ✅ (1m 33s)
       - py314: ✅ (1m 27s)
@@ -1287,8 +1285,9 @@ PR #54 checks have been running for 30 minutes.
 
 Current status:
 - ✅ pre-commit: Passed
-- ✅ test-py310: Passed
-- ✅ test-py311: Passed
+- ✅ test-py312: Passed
+- ✅ test-py313: Passed
+- ✅ test-py314: Passed
 - 🔄 test-py312: Running (25 minutes)
 
 Options:
@@ -1425,8 +1424,9 @@ Steps:
 11. ✅ Commit and push changes
 12. ⏱️  Wait for CI/CD (estimated: 3-5 minutes)
     - ✅ pre-commit: Passed (30s)
-    - ✅ test-py310: Passed (1m 15s)
-    - ✅ test-py311: Passed (1m 20s)
+    - ✅ test-py312: Passed (1m 15s)
+    - ✅ test-py313: Passed (1m 20s)
+    - ✅ test-py314: Passed (1m 25s)
     - ✅ test-py312: Passed (1m 18s)
     - ✅ ruff-check: Passed (15s)
     - ✅ mypy: Passed (45s)

@@ -131,7 +131,7 @@ The project contains diverse file types beyond Python:
 
 **Why Valuable**:
 
-- Project supports Python 3.10-3.14 but may have legacy patterns
+- Project supports Python 3.12-3.14 but may have legacy patterns
 - Catches modernization opportunities ruff/flake8 miss
 - Complements pyupgrade (already planned in task refactoring/004)
 - Improves readability and performance

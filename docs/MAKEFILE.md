@@ -148,7 +148,7 @@ After running `make test-cov`, open `htmlcov/index.html` to view the detailed co
 
 ### Tox Multi-Environment Testing
 
-Test across Python 3.10, 3.11, 3.12, 3.13, 3.14, and 3.15 automatically with tox-uv (10x faster):
+Test across Python 3.12, 3.13, 3.14, and 3.15 automatically with tox-uv (10x faster):
 
 ```bash
 # Run all tox environments (uses UV automatically)
@@ -162,8 +162,6 @@ make tox-envs         # Alternative command
 make tox-parallel
 
 # Test specific Python versions (dynamic pattern rule)
-make tox-py310        # Python 3.10 (automatically handled by tox-% pattern)
-make tox-py311        # Python 3.11 (automatically handled by tox-% pattern)
 make tox-py312        # Python 3.12 (automatically handled by tox-% pattern)
 make tox-py313        # Python 3.13 (automatically handled by tox-% pattern)
 make tox-py314        # Python 3.14 (automatically handled by tox-% pattern)
@@ -417,11 +415,11 @@ make tree
 | `tox-parallel` | Run tox in parallel                                                                        |
 | `tox-clean`    | Clean tox environments                                                                     |
 | `tox-recreate` | Recreate tox environments                                                                  |
-| `tox-%`        | **Pattern rule** - Run any tox environment (e.g., tox-py310, tox-mypy, tox-coverage, etc.) |
+| `tox-%`        | **Pattern rule** - Run any tox environment (e.g., tox-py312, tox-mypy, tox-coverage, etc.) |
 
 **Note:** The `tox-%` pattern rule dynamically handles any tox environment:
 
-- `make tox-py310`, `make tox-py311`, ..., `make tox-py315` (current Python versions)
+- `make tox-py312`, `make tox-py312`, ..., `make tox-py315` (current Python versions)
 - `make tox-py316`, `make tox-py317` (future Python versions - automatic support!)
 - `make tox-ruff-check`, `make tox-mypy`, `make tox-coverage`, `make tox-quality`, `make tox-ci`
 - Any custom environment you add to `tox.ini`
@@ -581,7 +579,7 @@ make build          # Build packages
 The Makefile uses these variables (can be customized):
 
 ```makefile
-PYTHON := python3.10        # Python executable
+PYTHON := python3.12        # Python executable
 VENV := .venv               # Virtual environment directory
 UV := uv                    # UV executable
 ```
@@ -718,7 +716,7 @@ make help           # View all 55 targets in 16 logical groupings
 make init           # Setup development environment
 make tox-parallel   # Fast testing (30s with tox-uv)
 make tox-envs       # List all available tox environments
-make tox-py310      # Test Python 3.10 (via dynamic pattern rule)
+make tox-py312      # Test Python 3.12 (via dynamic pattern rule)
 make tox-coverage   # Coverage report (via dynamic pattern rule)
 make check          # Pre-commit verification
 make ci             # CI simulation
@@ -726,7 +724,7 @@ make ci             # CI simulation
 
 **Dynamic Pattern Rule:** The `tox-%` pattern rule automatically handles any tox environment:
 
-- Supports all current Python versions (3.10-3.15)
+- Supports all current Python versions (3.12-3.15)
 - Future-proof for new Python versions (3.16+)
 - Works with any custom tox environment
 - No maintenance needed for new environments

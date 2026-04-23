@@ -129,7 +129,7 @@ See [First Contribution Tutorial](../tutorials/03-first-contribution.md) for com
 Create a `Dockerfile`:
 
 ```dockerfile
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -219,16 +219,16 @@ pytest
 source .venv/bin/activate
 ```
 
-### Issue: "Python 3.10 or higher required"
+### Issue: "Python 3.12 or higher required"
 
 **Solution**: Upgrade Python:
 
 ```bash
 # macOS
-brew install python@3.10
+brew install python@3.12
 
 # Ubuntu/Debian
-sudo apt install python3.10
+sudo apt install python3.12
 
 # Windows
 # Download from python.org
@@ -277,12 +277,12 @@ export PATH="$HOME/.cargo/bin:$PATH"
 ### macOS
 
 - Requires Command Line Tools: `xcode-select --install`
-- Use Homebrew for Python: `brew install python@3.10`
+- Use Homebrew for Python: `brew install python@3.12`
 - May need to use `python3` instead of `python`
 
 ### Linux
 
-- Most distributions include Python 3.10+
+- Most distributions include Python 3.12+
 - May need python3-venv package: `sudo apt install python3-venv`
 - Some distros use `python3` command
 

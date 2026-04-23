@@ -85,7 +85,7 @@ WCAG 2.1 AA compliance:
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.12+
 - Node.js (for Playwright browsers)
 
 ### Installation

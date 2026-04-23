@@ -87,7 +87,7 @@ In this tutorial, you'll learn how to:
 
 ## Prerequisites
 
-- Python 3.10 or higher installed
+- Python 3.12 or higher installed
 - Basic command-line knowledge
 - Internet connection (to fetch NHL data)
 

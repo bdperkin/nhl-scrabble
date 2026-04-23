@@ -409,7 +409,7 @@ make tox                 # Default: parallel with tier-based fail-fast
 make tox-parallel        # Pure parallel (all environments)
 make tox-sequential      # Sequential (for debugging)
 make tox-quick           # Critical checks only (fast fail-fast)
-tox -e py312             # Test Python 3.10 (fast with tox-uv!)
+tox -e py312             # Test Python 3.12 (fast with tox-uv!)
 tox -e py315             # Test Python 3.15 (fast with tox-uv!)
 tox -m critical          # Run only critical quality checks
 tox -m test              # Run only tests
@@ -483,7 +483,7 @@ compile-bytecode = true
 link-mode = "copy"
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py312"
 line-length = 100
 
 [tool.mypy]
@@ -782,8 +782,8 @@ The project has comprehensive CI:
 
 ```yaml
 jobs:
-  test:        # Test on py3.10-3.14 (required), py3.15-dev (experimental)
-  tox:         # Tox with UV (matrix: py310, py311, py312, py313, py314, py315, ruff-check, mypy, coverage)
+  test:        # Test on py3.12-3.14 (required), py3.15-dev (experimental)
+  tox:         # Tox with UV (matrix: py312, py313, py314, py315, ruff-check, mypy, coverage)
   pre-commit:  # Pre-commit with UV
 ```
 

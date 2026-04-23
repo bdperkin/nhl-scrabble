@@ -166,7 +166,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.12', '3.13', '3.14']
 
     steps:
       - name: Set up Python
@@ -317,7 +317,7 @@ name = "nhl-scrabble"
 dynamic = ["version"] # Version from git tags (task #010)
 description = "Calculate Scrabble scores for NHL player names"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = { text = "MIT" }
 keywords = ["nhl", "scrabble", "hockey", "sports", "statistics"]
 authors = [
@@ -330,8 +330,6 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -612,7 +610,7 @@ python -c "import nhl_scrabble; print(nhl_scrabble.__version__)"
 ```bash
 # Automated via GitHub Actions matrix:
 # - ubuntu-latest, macos-latest, windows-latest
-# - Python 3.10, 3.11, 3.12, 3.13, 3.14
+# - Python 3.12, 3.13, 3.14
 
 # Manual verification (if needed):
 # Install on different OS and verify:
@@ -628,7 +626,7 @@ nhl-scrabble --version
 - [ ] Verifies package metadata with twine check
 - [ ] Verifies wheel contents with check-wheel-contents
 - [ ] Tests installation on Ubuntu, macOS, Windows
-- [ ] Tests installation on Python 3.10-3.14
+- [ ] Tests installation on Python 3.12-3.14
 - [ ] Publishes to TestPyPI successfully
 - [ ] Publishes to PyPI successfully
 - [ ] Creates GitHub Release automatically
