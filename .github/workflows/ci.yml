@@ -133,6 +133,7 @@ jobs:
           - blocklint
           - absolufy-imports
           - autoflake
+          - pyupgrade
           - docformatter
           - autopep8
           - doc8

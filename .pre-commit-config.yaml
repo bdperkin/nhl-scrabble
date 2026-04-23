@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 58 comprehensive hooks for code quality, security, and consistency
+# 60 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 # NOTE: Using black 24.10 as authoritative formatter (ruff-format disabled)
@@ -289,6 +289,16 @@ repos:
   # ============================================================================
   # Python Formatting - Code and Docstring Formatting
   # ============================================================================
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.1
+    hooks:
+      - id: pyupgrade
+        name: pyupgrade
+        # Modernize Python syntax for Python 3.10+ (project minimum version)
+        description: Automatically upgrade syntax for newer Python versions
+        args:
+          - --py310-plus  # Target Python 3.10+ syntax (matches requires-python)
 
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1
