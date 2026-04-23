@@ -332,6 +332,12 @@ pre-commit: ## Run pre-commit hooks on all files
 	@printf "$(BLUE)Running pre-commit hooks...$(NC)\n"
 	@SKIP=check-branch-protection $(PRE_COMMIT) run --all-files
 
+validate-json: check-venv ## Validate JSON/YAML files against schemas
+	@printf "$(BLUE)Validating JSON/YAML configuration files...$(NC)\n"
+	@$(BIN)/tox -e check-jsonschema
+
+validate-configs: validate-json ## Alias for validate-json
+
 ###################
 # Security Audits
 ###################
