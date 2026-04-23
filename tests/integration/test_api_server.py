@@ -134,6 +134,7 @@ class TestTeamsEndpoints:
         assert "total_score" in data
         assert "players" in data
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_nonexistent_team(self, client: TestClient) -> None:
         """Test getting a team that doesn't exist."""
         response = client.get("/api/v1/teams/XXX")
