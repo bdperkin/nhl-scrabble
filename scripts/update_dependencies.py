@@ -20,6 +20,7 @@ import json
 import re
 import subprocess
 import sys
+import traceback
 from pathlib import Path
 from typing import NamedTuple
 
@@ -92,7 +93,7 @@ class DependencyUpdater:
 
         updates: dict[str, UpdateInfo] = {}
         for line in result.stdout.splitlines():
-            # Parse: "updating https://... from v1.0.0 to v1.1.0"
+            # Expected output format: updating <repo> from <old> to <new>
             if "updating" in line and "from" in line and "to" in line:
                 parts = line.split()
                 repo_url = parts[1]
@@ -120,7 +121,8 @@ class DependencyUpdater:
             response.raise_for_status()
             data = response.json()
             return data["info"]["version"]
-        except Exception:
+        except (requests.RequestException, KeyError, ValueError):
+            # Network error, missing key, or JSON decode error
             return None
 
     def parse_pyproject_dependencies(self, pyproject_file: Path) -> dict[str, str]:
@@ -140,7 +142,7 @@ class DependencyUpdater:
         # Parse project dependencies
         if "project" in data and "dependencies" in data["project"]:
             for dep in data["project"]["dependencies"]:
-                # Parse: "package>=1.0.0" or "package==1.0.0"
+                # Expected dependency format: package-name with version constraint
                 match = re.match(r"^([a-zA-Z0-9_-]+)([><=!~]+)(.+)$", dep.strip())
                 if match:
                     name, operator, version = match.groups()
@@ -148,7 +150,7 @@ class DependencyUpdater:
 
         # Parse optional dependencies
         if "project" in data and "optional-dependencies" in data["project"]:
-            for group, group_deps in data["project"]["optional-dependencies"].items():
+            for _group, group_deps in data["project"]["optional-dependencies"].items():
                 for dep in group_deps:
                     match = re.match(r"^([a-zA-Z0-9_-]+)([><=!~]+)(.+)$", dep.strip())
                     if match:
@@ -301,7 +303,8 @@ class DependencyUpdater:
 
             return True
 
-        except Exception as e:
+        except (OSError, KeyError, ValueError) as e:
+            # File I/O error, missing TOML key, or invalid data
             print(f"❌ Failed to update {pyproject_file}: {e}")
             return False
 
@@ -325,32 +328,29 @@ class DependencyUpdater:
             # Update deps in relevant testenv sections
             updated = False
             for section in config.sections():
-                if section.startswith("testenv"):
-                    if "deps" in config[section]:
-                        # Parse current deps
-                        current_deps = [
-                            line.strip()
-                            for line in config[section]["deps"].split("\n")
-                            if line.strip()
-                        ]
+                if section.startswith("testenv") and "deps" in config[section]:
+                    # Parse current deps
+                    current_deps = [
+                        line.strip() for line in config[section]["deps"].split("\n") if line.strip()
+                    ]
 
-                        # Update versions based on pyproject.toml
-                        new_deps = []
-                        for dep in current_deps:
-                            match = re.match(r"^([a-zA-Z0-9_-]+)([><=!~]+)(.+)$", dep)
-                            if match:
-                                name, operator, _version = match.groups()
-                                if name in deps:
-                                    # Use version from pyproject.toml
-                                    new_deps.append(f"{name}{deps[name]}")
-                                    updated = True
-                                else:
-                                    new_deps.append(dep)
+                    # Update versions based on pyproject.toml
+                    new_deps = []
+                    for dep in current_deps:
+                        match = re.match(r"^([a-zA-Z0-9_-]+)([><=!~]+)(.+)$", dep)
+                        if match:
+                            name, _operator, _version = match.groups()
+                            if name in deps:
+                                # Use version from pyproject.toml
+                                new_deps.append(f"{name}{deps[name]}")
+                                updated = True
                             else:
                                 new_deps.append(dep)
+                        else:
+                            new_deps.append(dep)
 
-                        if updated:
-                            config[section]["deps"] = "\n" + "\n".join(new_deps)
+                    if updated:
+                        config[section]["deps"] = "\n" + "\n".join(new_deps)
 
             if updated:
                 # Write updated tox.ini
@@ -358,11 +358,12 @@ class DependencyUpdater:
                     config.write(f)
                 print("  ✅ tox.ini synced with pyproject.toml")
             else:
-                print("  ℹ️  tox.ini already in sync")
+                print("  ✓ tox.ini already in sync")
 
             return True
 
-        except Exception as e:
+        except (OSError, configparser.Error) as e:
+            # File I/O error or INI parsing error
             print(f"❌ Failed to sync tox.ini: {e}")
             return False
 
@@ -586,7 +587,7 @@ What gets updated:
                 if pre_commit_updates:
                     print("   - .pre-commit-config.yaml")
                 if pyproject_updates:
-                    for pyproject_file in pyproject_updates.keys():
+                    for pyproject_file in pyproject_updates:
                         rel_path = pyproject_file.relative_to(args.project_root)
                         print(f"   - {rel_path}")
                     print("   - tox.ini (synced)")
@@ -600,10 +601,9 @@ What gets updated:
                     return 1
 
                 # Apply pre-commit updates
-                if pre_commit_updates:
-                    if not updater.apply_pre_commit_updates():
-                        print("❌ Pre-commit update failed!")
-                        return 1
+                if pre_commit_updates and not updater.apply_pre_commit_updates():
+                    print("❌ Pre-commit update failed!")
+                    return 1
 
                 # Apply pyproject.toml updates
                 if pyproject_updates:
@@ -619,10 +619,9 @@ What gets updated:
                         print("⚠️  tox.ini sync failed (non-fatal)")
 
                 # Apply Python package updates (uv lock)
-                if pyproject_updates or python_updates:
-                    if not updater.apply_python_updates():
-                        print("❌ uv lock update failed!")
-                        return 1
+                if (pyproject_updates or python_updates) and not updater.apply_python_updates():
+                    print("❌ uv lock update failed!")
+                    return 1
 
                 print("\n✅ Updates applied successfully!")
 
@@ -647,7 +646,7 @@ What gets updated:
                 if pre_commit_updates:
                     print("  - .pre-commit-config.yaml")
                 if pyproject_updates:
-                    for pyproject_file in pyproject_updates.keys():
+                    for pyproject_file in pyproject_updates:
                         rel_path = pyproject_file.relative_to(args.project_root)
                         print(f"  - {rel_path}")
                     print("  - tox.ini")
@@ -666,10 +665,9 @@ What gets updated:
     except KeyboardInterrupt:
         print("\n\n❌ Interrupted by user")
         return 1
-    except Exception as e:
+    except (OSError, subprocess.CalledProcessError, RuntimeError) as e:
+        # File I/O, subprocess, or runtime errors
         print(f"\n❌ Error: {e}", file=sys.stderr)
-        import traceback
-
         traceback.print_exc()
         return 1
 

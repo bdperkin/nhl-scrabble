@@ -366,6 +366,7 @@ ignore = [
 "scripts/update_dependencies.py" = [
     "T201",    # print statements are fine in CLI utility script
     "C901",    # Complexity acceptable for CLI utility functions
+    "PLR0911", # Too many returns acceptable for CLI script (9 return paths)
     "PLR0912", # Too many branches acceptable for dependency update logic
     "PLR0915", # Too many statements acceptable for comprehensive CLI script
     "S607",    # Subprocess with partial paths (standard tools: pre-commit, uv, pytest, tox)
