@@ -1,0 +1,84 @@
+name: Package Validation
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  check-wheel:
+    name: Validate Wheel Contents
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install dependencies
+        run: |
+          uv pip install --system build check-wheel-contents twine
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check wheel contents
+        run: |
+          check-wheel-contents dist/*.whl
+
+      - name: Check package with twine
+        run: twine check dist/*
+
+      - name: List wheel contents
+        run: |
+          echo "::group::Wheel Contents"
+          unzip -l dist/*.whl
+          echo "::endgroup::"
+
+      - name: Verify LICENSE in wheel
+        run: |
+          unzip -l dist/*.whl | grep -E "LICENSE|licenses/LICENSE" || \
+            (echo "ERROR: LICENSE file not found in wheel" && exit 1)
+
+      - name: Verify no test files in wheel
+        run: |
+          if unzip -l dist/*.whl | grep -E "tests/|test_"; then
+            echo "ERROR: Test files found in wheel"
+            exit 1
+          fi
+          echo "✅ No test files in wheel"
+
+      - name: Verify no __pycache__ in wheel
+        run: |
+          if unzip -l dist/*.whl | grep -E "__pycache__|\.pyc"; then
+            echo "ERROR: Compiled Python files found in wheel"
+            exit 1
+          fi
+          echo "✅ No __pycache__ or .pyc files in wheel"
+
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-wheel
+          path: dist/*.whl
+          retention-days: 30
+
+      - name: Upload source distribution artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-sdist
+          path: dist/*.tar.gz
+          retention-days: 30
