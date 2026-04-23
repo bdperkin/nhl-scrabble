@@ -13,6 +13,7 @@ Exit Codes:
     0: All validation checks passed
     1: One or more validation checks failed
 """
+
 # ruff: noqa: T201
 
 import re

@@ -32,7 +32,7 @@ except ImportError:
 try:
     import tomli_w
 except ImportError:
-    tomli_w = None  # type: ignore[assignment]
+    tomli_w = None
 
 try:
     import requests
