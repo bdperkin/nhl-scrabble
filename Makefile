@@ -320,6 +320,16 @@ refurb-report: check-venv ## Modernization - generate detailed refurb modernizat
 
 modernization: refurb ## Modernization - alias for refurb
 
+ssort-check: check-venv ## Statement sorting - check Python statement ordering (dry run)
+	@printf "$(BLUE)Checking Python statement ordering...$(NC)\n"
+	@$(BIN)/tox -e ssort
+
+ssort-apply: check-venv ## Statement sorting - apply Python statement sorting
+	@printf "$(BLUE)Sorting Python statements...$(NC)\n"
+	@$(BIN)/tox -e ssort-apply
+
+ssort: ssort-check ## Statement sorting - alias for ssort-check
+
 quality: check-venv ## Quality - run all checks (ruff-check + mypy)
 	@printf "$(BLUE)Running quality checks...$(NC)\n"
 	@$(BIN)/tox -m quality

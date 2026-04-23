@@ -129,50 +129,6 @@ class ScoringConfig:
         return cls.BUILT_IN_SYSTEMS[system_lower].copy()
 
     @classmethod
-    def load_from_file(cls, config_path: Path | str) -> dict[str, int]:
-        """Load custom letter values from a JSON configuration file.
-
-        The JSON file should contain a dictionary mapping letters (A-Z) to
-        integer point values. Letters can be uppercase or lowercase in the file.
-
-        Args:
-            config_path: Path to JSON configuration file
-
-        Returns:
-            Dictionary mapping uppercase letters to point values
-
-        Raises:
-            FileNotFoundError: If the config file doesn't exist
-            json.JSONDecodeError: If the file is not valid JSON
-            ValueError: If the config is invalid (missing letters, invalid values)
-
-        Examples:
-            >>> # Given custom_values.json: {"A": 5, "B": 2, ...}
-            >>> values = ScoringConfig.load_from_file("custom_values.json")
-            >>> values["A"]
-            5
-        """
-        path = Path(config_path)
-
-        if not path.exists():
-            raise FileNotFoundError(f"Scoring config file not found: {path}")
-
-        logger.info(f"Loading custom scoring config from: {path}")
-
-        try:
-            with path.open() as f:
-                config_data = json.load(f)
-        except json.JSONDecodeError as e:
-            raise json.JSONDecodeError(
-                f"Invalid JSON in scoring config file: {path}",
-                e.doc,
-                e.pos,
-            ) from e
-
-        # Validate and normalize the config
-        return cls._validate_config(config_data, path)
-
-    @classmethod
     def _validate_config(cls, config_data: dict[str, int], source: Path | str) -> dict[str, int]:
         """Validate and normalize a scoring configuration.
 
@@ -226,6 +182,50 @@ class ScoringConfig:
 
         logger.info(f"Successfully loaded custom scoring config with {len(normalized)} letters")
         return normalized
+
+    @classmethod
+    def load_from_file(cls, config_path: Path | str) -> dict[str, int]:
+        """Load custom letter values from a JSON configuration file.
+
+        The JSON file should contain a dictionary mapping letters (A-Z) to
+        integer point values. Letters can be uppercase or lowercase in the file.
+
+        Args:
+            config_path: Path to JSON configuration file
+
+        Returns:
+            Dictionary mapping uppercase letters to point values
+
+        Raises:
+            FileNotFoundError: If the config file doesn't exist
+            json.JSONDecodeError: If the file is not valid JSON
+            ValueError: If the config is invalid (missing letters, invalid values)
+
+        Examples:
+            >>> # Given custom_values.json: {"A": 5, "B": 2, ...}
+            >>> values = ScoringConfig.load_from_file("custom_values.json")
+            >>> values["A"]
+            5
+        """
+        path = Path(config_path)
+
+        if not path.exists():
+            raise FileNotFoundError(f"Scoring config file not found: {path}")
+
+        logger.info(f"Loading custom scoring config from: {path}")
+
+        try:
+            with path.open() as f:
+                config_data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise json.JSONDecodeError(
+                f"Invalid JSON in scoring config file: {path}",
+                e.doc,
+                e.pos,
+            ) from e
+
+        # Validate and normalize the config
+        return cls._validate_config(config_data, path)
 
     @classmethod
     def list_available_systems(cls) -> list[str]:

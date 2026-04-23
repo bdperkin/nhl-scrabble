@@ -42,6 +42,88 @@ class TeamProcessor:
         self.scorer = scorer
         self.max_workers = max_workers
 
+    def _process_team_roster(
+        self, roster: dict[str, Any], team_abbrev: str, division: str, conference: str
+    ) -> list[PlayerScore]:
+        """Process a single team's roster and score all players.
+
+        Args:
+            roster: Roster data from NHL API
+            team_abbrev: Team abbreviation
+            division: Division name
+            conference: Conference name
+
+        Returns:
+            List of PlayerScore objects for all players on the team
+        """
+        team_players: list[PlayerScore] = []
+
+        # Process all position groups
+        for position in ["forwards", "defensemen", "goalies"]:
+            if position not in roster:
+                continue
+
+            for player_data in roster[position]:
+                player_score = self.scorer.score_player(
+                    player_data, team_abbrev, division, conference
+                )
+                team_players.append(player_score)
+
+        # Use level guard to avoid expensive sum() call when DEBUG disabled
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                f"Scored {len(team_players)} players for {team_abbrev} "
+                f"(total: {sum(p.full_score for p in team_players)})"
+            )
+
+        return team_players
+
+    def _fetch_and_process_team(
+        self, team_abbrev: str, team_meta: dict[str, str], season: str | None = None
+    ) -> tuple[TeamScore, list[PlayerScore]] | None:
+        """Fetch and process a single team (thread-safe).
+
+        This method is called concurrently from multiple threads. It fetches the roster
+        for a single team, calculates scores for all players, and aggregates team statistics.
+
+        Args:
+            team_abbrev: Team abbreviation (e.g., "TOR", "BOS")
+            team_meta: Team metadata containing division and conference
+            season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023)
+
+        Returns:
+            Tuple of (TeamScore, player list) if successful, None if team fetch failed
+
+        Note:
+            This method is thread-safe as it operates only on local variables and
+            thread-safe API client methods. No shared mutable state is accessed.
+        """
+        try:
+            # Fetch roster (with built-in retry and rate limiting)
+            roster = self.api_client.get_team_roster(team_abbrev, season=season)
+
+            # Process roster
+            team_players = self._process_team_roster(
+                roster, team_abbrev, team_meta["division"], team_meta["conference"]
+            )
+
+            # Calculate team score
+            team_total = sum(player.full_score for player in team_players)
+
+            team_score = TeamScore(
+                abbrev=team_abbrev,
+                total=team_total,
+                players=team_players,
+                division=team_meta["division"],
+                conference=team_meta["conference"],
+            )
+
+            return (team_score, team_players)
+
+        except NHLApiNotFoundError:
+            # Team has no roster data
+            return None
+
     def process_all_teams(
         self,
         progress_callback: Callable[[str], None] | None = None,
@@ -134,88 +216,6 @@ class TeamProcessor:
             f"{len(failed_teams)} failed (concurrent mode)"
         )
         return team_scores, all_players, failed_teams
-
-    def _fetch_and_process_team(
-        self, team_abbrev: str, team_meta: dict[str, str], season: str | None = None
-    ) -> tuple[TeamScore, list[PlayerScore]] | None:
-        """Fetch and process a single team (thread-safe).
-
-        This method is called concurrently from multiple threads. It fetches the roster
-        for a single team, calculates scores for all players, and aggregates team statistics.
-
-        Args:
-            team_abbrev: Team abbreviation (e.g., "TOR", "BOS")
-            team_meta: Team metadata containing division and conference
-            season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023)
-
-        Returns:
-            Tuple of (TeamScore, player list) if successful, None if team fetch failed
-
-        Note:
-            This method is thread-safe as it operates only on local variables and
-            thread-safe API client methods. No shared mutable state is accessed.
-        """
-        try:
-            # Fetch roster (with built-in retry and rate limiting)
-            roster = self.api_client.get_team_roster(team_abbrev, season=season)
-
-            # Process roster
-            team_players = self._process_team_roster(
-                roster, team_abbrev, team_meta["division"], team_meta["conference"]
-            )
-
-            # Calculate team score
-            team_total = sum(player.full_score for player in team_players)
-
-            team_score = TeamScore(
-                abbrev=team_abbrev,
-                total=team_total,
-                players=team_players,
-                division=team_meta["division"],
-                conference=team_meta["conference"],
-            )
-
-            return (team_score, team_players)
-
-        except NHLApiNotFoundError:
-            # Team has no roster data
-            return None
-
-    def _process_team_roster(
-        self, roster: dict[str, Any], team_abbrev: str, division: str, conference: str
-    ) -> list[PlayerScore]:
-        """Process a single team's roster and score all players.
-
-        Args:
-            roster: Roster data from NHL API
-            team_abbrev: Team abbreviation
-            division: Division name
-            conference: Conference name
-
-        Returns:
-            List of PlayerScore objects for all players on the team
-        """
-        team_players: list[PlayerScore] = []
-
-        # Process all position groups
-        for position in ["forwards", "defensemen", "goalies"]:
-            if position not in roster:
-                continue
-
-            for player_data in roster[position]:
-                player_score = self.scorer.score_player(
-                    player_data, team_abbrev, division, conference
-                )
-                team_players.append(player_score)
-
-        # Use level guard to avoid expensive sum() call when DEBUG disabled
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(
-                f"Scored {len(team_players)} players for {team_abbrev} "
-                f"(total: {sum(p.full_score for p in team_players)})"
-            )
-
-        return team_players
 
     def calculate_division_standings(
         self, team_scores: dict[str, TeamScore]

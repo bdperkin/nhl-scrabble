@@ -31,6 +31,51 @@ class PlayerSearch:
         """
         self.players = players
 
+    def _exact_search(self, query: str, players: list[PlayerScore]) -> list[PlayerScore]:
+        """Perform exact substring search (case-insensitive).
+
+        Args:
+            query: Search query
+            players: List of players to search
+
+        Returns:
+            List of matching players
+        """
+        query_lower = query.lower()
+        return [p for p in players if query_lower in p.full_name.lower()]
+
+    def _fuzzy_search(
+        self, query: str, players: list[PlayerScore], cutoff: float = 0.6
+    ) -> list[PlayerScore]:
+        """Perform fuzzy search using difflib.
+
+        Args:
+            query: Search query
+            players: List of players to search
+            cutoff: Similarity threshold (0.0-1.0, default: 0.6)
+
+        Returns:
+            List of matching players
+        """
+        names = [p.full_name for p in players]
+        matches = get_close_matches(query, names, n=len(names), cutoff=cutoff)
+        return [p for p in players if p.full_name in matches]
+
+    def _wildcard_search(self, pattern: str, players: list[PlayerScore]) -> list[PlayerScore]:
+        """Perform wildcard search using fnmatch.
+
+        Supports * (any characters) and ? (single character) wildcards.
+
+        Args:
+            pattern: Search pattern with wildcards
+            players: List of players to search
+
+        Returns:
+            List of matching players
+        """
+        pattern_lower = pattern.lower()
+        return [p for p in players if fnmatch.fnmatch(p.full_name.lower(), pattern_lower)]
+
     def search(
         self,
         query: str,
@@ -103,51 +148,6 @@ class PlayerSearch:
         logger.debug(f"Search query='{query}' fuzzy={fuzzy} returned {len(results)} results")
 
         return results
-
-    def _exact_search(self, query: str, players: list[PlayerScore]) -> list[PlayerScore]:
-        """Perform exact substring search (case-insensitive).
-
-        Args:
-            query: Search query
-            players: List of players to search
-
-        Returns:
-            List of matching players
-        """
-        query_lower = query.lower()
-        return [p for p in players if query_lower in p.full_name.lower()]
-
-    def _fuzzy_search(
-        self, query: str, players: list[PlayerScore], cutoff: float = 0.6
-    ) -> list[PlayerScore]:
-        """Perform fuzzy search using difflib.
-
-        Args:
-            query: Search query
-            players: List of players to search
-            cutoff: Similarity threshold (0.0-1.0, default: 0.6)
-
-        Returns:
-            List of matching players
-        """
-        names = [p.full_name for p in players]
-        matches = get_close_matches(query, names, n=len(names), cutoff=cutoff)
-        return [p for p in players if p.full_name in matches]
-
-    def _wildcard_search(self, pattern: str, players: list[PlayerScore]) -> list[PlayerScore]:
-        """Perform wildcard search using fnmatch.
-
-        Supports * (any characters) and ? (single character) wildcards.
-
-        Args:
-            pattern: Search pattern with wildcards
-            players: List of players to search
-
-        Returns:
-            List of matching players
-        """
-        pattern_lower = pattern.lower()
-        return [p for p in players if fnmatch.fnmatch(p.full_name.lower(), pattern_lower)]
 
     def get_top_players(self, n: int = 20) -> list[PlayerScore]:
         """Get top N players by Scrabble score.

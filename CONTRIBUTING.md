@@ -728,6 +728,11 @@ make type-check
 tox -e pyupgrade
 # or directly: pyupgrade --py310-plus $(find src tests -name "*.py")
 
+# Sort Python class members and statements
+make ssort-check
+# or via tox: tox -e ssort
+# Apply sorting: make ssort-apply or tox -e ssort-apply
+
 # Validate JSON/YAML files against schemas
 make validate-json
 # or via tox: tox -e check-jsonschema
@@ -1145,6 +1150,68 @@ def process_teams(teams: dict[str, TeamScore]) -> list[PlayerScore]:
 def process_teams(teams):
     pass
 ```
+
+### Class Member Ordering
+
+The project uses [ssort](https://github.com/bwhmather/ssort) to automatically sort class members and module-level statements for consistency:
+
+**Standard Order:**
+
+1. **Dunder methods** (special methods like `__init__`, `__repr__`)
+1. **Class methods** (`@classmethod` decorated)
+1. **Static methods** (`@staticmethod` decorated)
+1. **Properties** (`@property` decorated)
+1. **Public methods** (regular methods, alphabetically)
+1. **Private methods** (leading underscore, alphabetically)
+
+**Example:**
+
+```python
+class Example:
+    """Example class with proper member ordering."""
+
+    def __init__(self, value: int):
+        """Initialize with value."""
+        self.value = value
+
+    def __repr__(self) -> str:
+        """String representation."""
+        return f"Example({self.value})"
+
+    @classmethod
+    def from_string(cls, s: str) -> "Example":
+        """Create instance from string."""
+        return cls(int(s))
+
+    @property
+    def doubled(self) -> int:
+        """Return doubled value."""
+        return self.value * 2
+
+    def increment(self) -> None:
+        """Increment value."""
+        self.value += 1
+
+    def _internal_helper(self) -> int:
+        """Private helper method."""
+        return self.value + 1
+```
+
+**Usage:**
+
+```bash
+# Check what would change (dry run)
+make ssort-check
+
+# Apply sorting
+make ssort-apply
+
+# Or use tox
+tox -e ssort         # Check mode
+tox -e ssort-apply   # Apply sorting
+```
+
+**Note:** ssort runs automatically in pre-commit hooks. Files in `tests/fixtures/` and `migrations/` are excluded.
 
 ## Testing Guidelines
 

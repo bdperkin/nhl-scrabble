@@ -21,54 +21,6 @@ class PlayoffCalculator:
       y (Division leader), x (Playoff spot), e (Eliminated)
     """
 
-    def calculate_playoff_standings(
-        self, team_scores: dict[str, TeamScore]
-    ) -> dict[str, list[PlayoffTeam]]:
-        """Calculate complete playoff standings with all teams.
-
-        Args:
-            team_scores: Dictionary of TeamScore objects by team abbreviation
-
-        Returns:
-            Dictionary with structure:
-            {
-                'Eastern': [list of PlayoffTeam objects for Eastern Conference],
-                'Western': [list of PlayoffTeam objects for Western Conference],
-            }
-
-        Examples:
-            >>> calculator = PlayoffCalculator()
-            >>> standings = calculator.calculate_playoff_standings(team_scores)
-            >>> "Eastern" in standings
-            True
-        """
-        logger.info("Calculating playoff standings")
-
-        # Group teams by division
-        teams_by_division = self._group_teams_by_division(team_scores)
-
-        # Determine division leaders (top 3 from each division)
-        playoff_teams, all_teams = self._determine_division_leaders(teams_by_division)
-
-        # Determine wild card teams
-        _ = self._determine_wild_cards(teams_by_division, playoff_teams)
-
-        # Determine special status teams
-        presidents_trophy_team = self._get_presidents_trophy_team(all_teams)
-        conference_leaders = self._get_conference_leaders(all_teams)
-
-        # Assign status indicators
-        self._assign_status_indicators(
-            all_teams, playoff_teams, presidents_trophy_team, conference_leaders
-        )
-
-        # Group results by conference
-        result = self._group_by_conference(all_teams)
-
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(f"Playoff standings calculated for {len(all_teams)} teams")
-        return result
-
     def _group_teams_by_division(
         self, team_scores: dict[str, TeamScore]
     ) -> dict[str, list[PlayoffTeam]]:
@@ -209,33 +161,6 @@ class PlayoffCalculator:
 
         return conference_leaders
 
-    def _assign_status_indicators(
-        self,
-        all_teams: list[PlayoffTeam],
-        _playoff_teams: dict[str, PlayoffTeam],
-        presidents_trophy_team: PlayoffTeam,
-        conference_leaders: dict[str, PlayoffTeam],
-    ) -> None:
-        """Assign status indicators to all teams.
-
-        Status indicators (in order of precedence):
-        - p: Presidents' Trophy (highest points overall)
-        - z: Conference leader
-        - y: Division leader (first in division)
-        - x: Clinched playoff spot
-        - e: Eliminated from playoffs
-
-        Args:
-            all_teams: List of all teams
-            playoff_teams: Dictionary of teams in playoffs
-            presidents_trophy_team: Presidents' Trophy winner
-            conference_leaders: Dictionary of conference leaders
-        """
-        for team in all_teams:
-            team.status_indicator = self._get_status_indicator(
-                team, presidents_trophy_team, conference_leaders
-            )
-
     def _get_status_indicator(
         self,
         team: PlayoffTeam,
@@ -272,6 +197,33 @@ class PlayoffCalculator:
         # Eliminated
         return "e"
 
+    def _assign_status_indicators(
+        self,
+        all_teams: list[PlayoffTeam],
+        _playoff_teams: dict[str, PlayoffTeam],
+        presidents_trophy_team: PlayoffTeam,
+        conference_leaders: dict[str, PlayoffTeam],
+    ) -> None:
+        """Assign status indicators to all teams.
+
+        Status indicators (in order of precedence):
+        - p: Presidents' Trophy (highest points overall)
+        - z: Conference leader
+        - y: Division leader (first in division)
+        - x: Clinched playoff spot
+        - e: Eliminated from playoffs
+
+        Args:
+            all_teams: List of all teams
+            playoff_teams: Dictionary of teams in playoffs
+            presidents_trophy_team: Presidents' Trophy winner
+            conference_leaders: Dictionary of conference leaders
+        """
+        for team in all_teams:
+            team.status_indicator = self._get_status_indicator(
+                team, presidents_trophy_team, conference_leaders
+            )
+
     def _group_by_conference(self, all_teams: list[PlayoffTeam]) -> dict[str, list[PlayoffTeam]]:
         """Group teams by conference for final output.
 
@@ -290,4 +242,52 @@ class PlayoffCalculator:
         for conference in result:
             result[conference].sort(key=lambda x: (not x.in_playoffs, -x.total, -x.avg))
 
+        return result
+
+    def calculate_playoff_standings(
+        self, team_scores: dict[str, TeamScore]
+    ) -> dict[str, list[PlayoffTeam]]:
+        """Calculate complete playoff standings with all teams.
+
+        Args:
+            team_scores: Dictionary of TeamScore objects by team abbreviation
+
+        Returns:
+            Dictionary with structure:
+            {
+                'Eastern': [list of PlayoffTeam objects for Eastern Conference],
+                'Western': [list of PlayoffTeam objects for Western Conference],
+            }
+
+        Examples:
+            >>> calculator = PlayoffCalculator()
+            >>> standings = calculator.calculate_playoff_standings(team_scores)
+            >>> "Eastern" in standings
+            True
+        """
+        logger.info("Calculating playoff standings")
+
+        # Group teams by division
+        teams_by_division = self._group_teams_by_division(team_scores)
+
+        # Determine division leaders (top 3 from each division)
+        playoff_teams, all_teams = self._determine_division_leaders(teams_by_division)
+
+        # Determine wild card teams
+        _ = self._determine_wild_cards(teams_by_division, playoff_teams)
+
+        # Determine special status teams
+        presidents_trophy_team = self._get_presidents_trophy_team(all_teams)
+        conference_leaders = self._get_conference_leaders(all_teams)
+
+        # Assign status indicators
+        self._assign_status_indicators(
+            all_teams, playoff_teams, presidents_trophy_team, conference_leaders
+        )
+
+        # Group results by conference
+        result = self._group_by_conference(all_teams)
+
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f"Playoff standings calculated for {len(all_teams)} teams")
         return result
