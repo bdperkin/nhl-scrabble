@@ -204,33 +204,33 @@ Each task includes:
 
 ### Refactoring
 
-| ID  | Title                                                                         | Priority | Effort              | Status    | GitHub Issue                                                | Notes |
-| --- | ----------------------------------------------------------------------------- | -------- | ------------------- | --------- | ----------------------------------------------------------- | ----- |
-| 001 | Extract Retry Logic to Reusable Decorator                                     | MEDIUM   | 2-3 hours           | Completed | [#51](https://github.com/bdperkin/nhl-scrabble/issues/51)   | -     |
-| 001 | Consolidate Report Classes                                                    | MEDIUM   | 6-8 hours           | Completed | [#159](https://github.com/bdperkin/nhl-scrabble/issues/159) | -     |
-| 002 | Improve Type Safety                                                           | MEDIUM   | 8-10 hours          | Active    | [#160](https://github.com/bdperkin/nhl-scrabble/issues/160) | -     |
-| 002 | Port check_docs.sh Shell Script to Python                                     | MEDIUM   | 2-3 hours           | Completed | [#100](https://github.com/bdperkin/nhl-scrabble/issues/100) | -     |
-| 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Active    | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | -     |
-| 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -     |
-| 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1-2 hours           | Active    | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | -     |
-| 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -     |
-| 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Active    | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | -     |
-| 007 | Add Dependency Injection                                                      | MEDIUM   | 8-10 hours          | Active    | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | -     |
-| 008 | Repository Cleanup and Consolidation                                          | MEDIUM   | 4-6 hours           | Completed | [#216](https://github.com/bdperkin/nhl-scrabble/issues/216) | -     |
-| 009 | Git Branch Pruning Automation                                                 | MEDIUM   | 30-60 minutes       | Completed | [#220](https://github.com/bdperkin/nhl-scrabble/issues/220) | -     |
-| 010 | Dynamic Versioning from Git Tags                                              | MEDIUM   | 2-4 hours           | Active    | [#222](https://github.com/bdperkin/nhl-scrabble/issues/222) | -     |
-| 011 | Dependency Synchronization and Automation                                     | MEDIUM   | 3-4 hours           | Active    | [#226](https://github.com/bdperkin/nhl-scrabble/issues/226) | -     |
-| 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Active    | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | -     |
-| 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Active    | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | -     |
-| 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Active    | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | -     |
-| 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 30 minutes - 1 hour | Active    | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | -     |
-| 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Active    | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | -     |
-| 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Active    | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | -     |
-| 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Active    | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | -     |
-| 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Active    | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | -     |
-| 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Active    | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | -     |
-| 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -     |
-| 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Active    | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | -     |
+| ID  | Title                                                                         | Priority | Effort              | Status    | GitHub Issue                                                | Notes                                                                                 |
+| --- | ----------------------------------------------------------------------------- | -------- | ------------------- | --------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 001 | Extract Retry Logic to Reusable Decorator                                     | MEDIUM   | 2-3 hours           | Completed | [#51](https://github.com/bdperkin/nhl-scrabble/issues/51)   | -                                                                                     |
+| 001 | Consolidate Report Classes                                                    | MEDIUM   | 6-8 hours           | Completed | [#159](https://github.com/bdperkin/nhl-scrabble/issues/159) | -                                                                                     |
+| 002 | Improve Type Safety                                                           | MEDIUM   | 8-10 hours          | Active    | [#160](https://github.com/bdperkin/nhl-scrabble/issues/160) | -                                                                                     |
+| 002 | Port check_docs.sh Shell Script to Python                                     | MEDIUM   | 2-3 hours           | Completed | [#100](https://github.com/bdperkin/nhl-scrabble/issues/100) | -                                                                                     |
+| 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Active    | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | -                                                                                     |
+| 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -                                                                                     |
+| 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1-2 hours           | Active    | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | -                                                                                     |
+| 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -                                                                                     |
+| 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Active    | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | -                                                                                     |
+| 007 | Add Dependency Injection                                                      | MEDIUM   | 8-10 hours          | Active    | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | -                                                                                     |
+| 008 | Repository Cleanup and Consolidation                                          | MEDIUM   | 4-6 hours           | Completed | [#216](https://github.com/bdperkin/nhl-scrabble/issues/216) | -                                                                                     |
+| 009 | Git Branch Pruning Automation                                                 | MEDIUM   | 30-60 minutes       | Completed | [#220](https://github.com/bdperkin/nhl-scrabble/issues/220) | -                                                                                     |
+| 010 | Dynamic Versioning from Git Tags                                              | MEDIUM   | 2-4 hours           | Active    | [#222](https://github.com/bdperkin/nhl-scrabble/issues/222) | -                                                                                     |
+| 011 | Dependency Synchronization and Automation                                     | MEDIUM   | 3-4 hours           | Active    | [#226](https://github.com/bdperkin/nhl-scrabble/issues/226) | -                                                                                     |
+| 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Active    | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | -                                                                                     |
+| 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Active    | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | -                                                                                     |
+| 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Active    | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | -                                                                                     |
+| 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 30 minutes - 1 hour | Active    | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | -                                                                                     |
+| 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Active    | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | -                                                                                     |
+| 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Active    | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | -                                                                                     |
+| 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Active    | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | -                                                                                     |
+| 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Active    | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | -                                                                                     |
+| 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Active    | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | -                                                                                     |
+| 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -                                                                                     |
+| 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Completed | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | PR [#335](https://github.com/bdperkin/nhl-scrabble/pull/335), 2026-04-22, 3.5h actual |
 
 ## Statistics
 
@@ -244,8 +244,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 18     | 7         | 25      |
-| **TOTAL**    | **65** | **102**   | **167** |
+| Refactoring  | 17     | 8         | 25      |
+| **TOTAL**    | **64** | **103**   | **167** |
 
 ### Effort Estimates by Category
 
@@ -270,8 +270,8 @@ Each task includes:
 | Enhancement  | 74.3%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
-| Refactoring  | 28.0%           |
-| **OVERALL**  | **57.5%**       |
+| Refactoring  | 32.0%           |
+| **OVERALL**  | **61.7%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -294,12 +294,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (65 active, 102 completed)
+**Total Tasks**: 167 tasks (64 active, 103 completed)
 
 - **Total Estimated Effort**: 1031.5 hours
-  - Active Tasks: 522.5 hours
-  - Completed Tasks: 497.0 hours
-- **Overall Completion**: 58.8%
+  - Active Tasks: 519.5 hours
+  - Completed Tasks: 500.0 hours
+- **Overall Completion**: 61.7%
 
 ## Task Management Guidelines
 
