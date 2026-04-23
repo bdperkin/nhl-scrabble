@@ -226,8 +226,8 @@ Each task includes:
 | 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 30 minutes - 1 hour | Active    | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | -                                                                                      |
 | 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Active    | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | -                                                                                      |
 | 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Completed | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | PR [#338](https://github.com/bdperkin/nhl-scrabble/pull/338), 2026-04-23, 45min actual |
-| 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Active    | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | -                                                                                      |
-| 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Active    | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | -                                                                                      |
+| 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Completed | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | PR [#339](https://github.com/bdperkin/nhl-scrabble/pull/339), 2026-04-23, 1.5h actual  |
+| 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Completed | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | PR [#340](https://github.com/bdperkin/nhl-scrabble/pull/340), 2026-04-23, 2.5h actual  |
 | 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Active    | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | -                                                                                      |
 | 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -                                                                                      |
 | 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Completed | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | PR [#335](https://github.com/bdperkin/nhl-scrabble/pull/335), 2026-04-22, 3.5h actual  |
@@ -244,8 +244,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 15     | 10        | 25      |
-| **TOTAL**    | **62** | **105**   | **167** |
+| Refactoring  | 13     | 12        | 25      |
+| **TOTAL**    | **60** | **107**   | **167** |
 
 ### Effort Estimates by Category
 
