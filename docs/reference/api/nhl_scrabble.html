@@ -1842,7 +1842,7 @@ structure to prevent errors from malformed data.</p>
 </span><span id="ScrabbleScorer-105"><a href="#ScrabbleScorer-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_score</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="ScrabbleScorer-106"><a href="#ScrabbleScorer-106"><span class="linenos">106</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the Scrabble score for a given name using standard values.</span>
 </span><span id="ScrabbleScorer-107"><a href="#ScrabbleScorer-107"><span class="linenos">107</span></a>
-</span><span id="ScrabbleScorer-108"><a href="#ScrabbleScorer-108"><span class="linenos">108</span></a><span class="sd">        This static method maintains backward compatibility with existing code.</span>
+</span><span id="ScrabbleScorer-108"><a href="#ScrabbleScorer-108"><span class="linenos">108</span></a><span class="sd">        This static method provides convenient scoring with default Scrabble letter values.</span>
 </span><span id="ScrabbleScorer-109"><a href="#ScrabbleScorer-109"><span class="linenos">109</span></a><span class="sd">        For custom scoring values, create a ScrabbleScorer instance and use</span>
 </span><span id="ScrabbleScorer-110"><a href="#ScrabbleScorer-110"><span class="linenos">110</span></a><span class="sd">        the calculate_score_custom() method.</span>
 </span><span id="ScrabbleScorer-111"><a href="#ScrabbleScorer-111"><span class="linenos">111</span></a>
@@ -2113,7 +2113,7 @@ enabling alternative scoring methods (e.g., Wordle scoring, uniform values).</p>
 </span><span id="ScrabbleScorer.calculate_score-105"><a href="#ScrabbleScorer.calculate_score-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_score</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="ScrabbleScorer.calculate_score-106"><a href="#ScrabbleScorer.calculate_score-106"><span class="linenos">106</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the Scrabble score for a given name using standard values.</span>
 </span><span id="ScrabbleScorer.calculate_score-107"><a href="#ScrabbleScorer.calculate_score-107"><span class="linenos">107</span></a>
-</span><span id="ScrabbleScorer.calculate_score-108"><a href="#ScrabbleScorer.calculate_score-108"><span class="linenos">108</span></a><span class="sd">        This static method maintains backward compatibility with existing code.</span>
+</span><span id="ScrabbleScorer.calculate_score-108"><a href="#ScrabbleScorer.calculate_score-108"><span class="linenos">108</span></a><span class="sd">        This static method provides convenient scoring with default Scrabble letter values.</span>
 </span><span id="ScrabbleScorer.calculate_score-109"><a href="#ScrabbleScorer.calculate_score-109"><span class="linenos">109</span></a><span class="sd">        For custom scoring values, create a ScrabbleScorer instance and use</span>
 </span><span id="ScrabbleScorer.calculate_score-110"><a href="#ScrabbleScorer.calculate_score-110"><span class="linenos">110</span></a><span class="sd">        the calculate_score_custom() method.</span>
 </span><span id="ScrabbleScorer.calculate_score-111"><a href="#ScrabbleScorer.calculate_score-111"><span class="linenos">111</span></a>
@@ -2143,7 +2143,7 @@ enabling alternative scoring methods (e.g., Wordle scoring, uniform values).</p>
 
             <div class="docstring"><p>Calculate the Scrabble score for a given name using standard values.</p>
 
-<p>This static method maintains backward compatibility with existing code.
+<p>This static method provides convenient scoring with default Scrabble letter values.
 For custom scoring values, create a ScrabbleScorer instance and use
 the calculate_score_custom() method.</p>
 

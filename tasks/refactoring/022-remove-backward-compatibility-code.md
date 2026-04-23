@@ -630,22 +630,153 @@ After v2.0.0 release, any backward compatibility changes must follow:
 
 ## Implementation Notes
 
-*To be filled during implementation:*
+**Implemented**: 2026-04-23
+**Branch**: `refactoring/022-remove-backward-compatibility-code`
+**PR**: #335 - https://github.com/bdperkin/nhl-scrabble/pull/335
+**Commits**: 3 commits (f298bdf, 648cbae, e1cd5de)
 
 ### Actual Implementation
 
-*What was actually done, any deviations from plan*
+Successfully removed all backward compatibility code as planned:
+
+**Code Removal** (Commit f298bdf):
+
+- ✅ Removed `generate_json_report()` from cli.py (51 lines)
+- ✅ Removed `generate_html_report()` from cli.py (74 lines)
+- ✅ Removed `generate_csv_report()` from cli.py (31 lines)
+- ✅ Removed unused Jinja2 imports (Environment, PackageLoader, select_autoescape)
+- ✅ Removed unused CSVExporter import
+- **Total**: 156 lines of legacy code removed
+
+**Vulture Allowlist Updates** (Commit f298bdf):
+
+- ✅ Removed 4 lines (comment block + 3 legacy function entries)
+- ✅ Updated SeasonComparison.generate_json_report comment (removed "for backward compatibility")
+- ✅ Result: 46 lines → 42 lines (40 legitimate API entries preserved)
+
+**Test Updates** (Commit f298bdf):
+
+- ✅ Updated 1 test in `test_cli_comprehensive.py` to use formatter factory
+- ✅ Updated 7 tests in `test_html_report.py` to use formatter factory
+- ✅ Tests adapted to HTMLFormatter output (simpler than old Jinja2 template)
+- ✅ All 57 tests passing
+
+**Docstring Updates** (Commit f298bdf):
+
+- ✅ Updated ScrabbleScorer.calculate_score() docstring
+- ✅ Removed "maintains backward compatibility" language
+- ✅ Confirmed method is primary API, not legacy code
+
+**Vulture Fix** (Commit 648cbae):
+
+- ✅ Added missing `export_team_scores` methods to allowlist
+- ✅ Fixed vulture CI failure
+- ✅ Discovered architecture issue (CSVExporter duplication) → Created task 023
+
+**Task Documentation** (Commit e1cd5de):
+
+- ✅ Created task 023 for exporters/formatters consolidation
+- ✅ Comprehensive architectural analysis and deprecation plan
 
 ### Challenges Encountered
 
-*Any unexpected issues or complications*
+**1. Vulture CI Failure**
+
+**Issue**: After removing legacy functions, vulture flagged `export_team_scores` methods as unused.
+
+**Root Cause**: CSVExporter and ExcelExporter both have `export_team_scores()` methods that were missing from `.vulture_allowlist`. The allowlist had 4 of 5 CSVExporter methods but was missing this one.
+
+**Discovery**: This revealed a larger architectural issue - CSVExporter duplicates CSVFormatter functionality and is only used in tests, not production code.
+
+**Resolution**:
+
+- Short-term: Added missing methods to allowlist (fixes immediate vulture failure)
+- Long-term: Created task 023 to deprecate CSVExporter and consolidate architecture
+
+**2. HTML Test Assertion Updates**
+
+**Issue**: HTML tests failed after replacing `generate_html_report()` with formatter factory.
+
+**Root Cause**: The old `generate_html_report()` used a Jinja2 template (`report.html`) with rich features:
+
+- Top players section with detailed stats
+- Conference and division sections
+- Stat cards (4 cards: total players, teams, average, highest)
+- Print media queries
+
+The new `HTMLFormatter` is simpler:
+
+- Only team standings table
+- Summary section (not stat cards)
+- No top players section
+- No print media queries
+
+**Resolution**: Updated test assertions to match HTMLFormatter's actual output:
+
+- Changed stat card assertions to summary section checks
+- Changed "Top Players" heading check to "Team Standings" check
+- Changed print media query check to generic CSS check
+- Changed player-focused tests to be team-focused
+
+**Lesson**: HTMLFormatter and old template serve different purposes - may need richer formatter in future.
+
+**3. Pre-commit Hook Formatting**
+
+**Issue**: Black auto-formatted `test_html_report.py` during pre-commit, creating formatting changes.
+
+**Resolution**: Accepted formatting changes and re-committed. This is expected behavior.
 
 ### Deviations from Plan
 
-*Changes to the proposed solution and why*
+**1. Vulture Allowlist Size**
+
+**Plan**: Reduce from 46 → 42 lines (4 entries removed)
+
+**Actual**: Reduced from 46 → 42 lines initially, then increased to 44 lines after adding missing `export_team_scores` methods.
+
+**Final Result**: 44 lines (40 API entries + 4 comment/blank lines)
+
+**Reason**: Original allowlist was incomplete - missing 2 methods that are part of public API. Had to add them to fix vulture failures.
+
+**2. ScrabbleScorer.calculate_score() Analysis**
+
+**Plan**: "Analyze usage and decide if legacy or primary API"
+
+**Actual**: Determined to be **primary API**, not legacy code.
+
+**Evidence**:
+
+- Used extensively throughout codebase (70+ references)
+- Used in all test files
+- Part of core scoring functionality
+- Static method design is intentional (convenient default scoring)
+
+**Action**: Only updated docstring to remove "backward compatibility" language, kept method intact.
+
+**3. Created Additional Task**
+
+**Plan**: Only remove backward compatibility code.
+
+**Actual**: Also created task 023 for architectural refactoring.
+
+**Reason**: Vulture failure analysis revealed CSVExporter/CSVFormatter duplication - worth documenting as separate improvement task for future work.
+
+**4. HTMLFormatter Simplicity**
+
+**Observation**: HTMLFormatter is much simpler than old Jinja2 template.
+
+**Impact**: Tests needed more significant updates than expected - not just import changes but assertion logic changes.
+
+**Consideration**: May need to enhance HTMLFormatter in future to match old template richness, or keep as simple team standings formatter.
 
 ### Actual vs Estimated Effort
 
 - **Estimated**: 2-4h
-- **Actual**: TBD
-- **Reason**: TBD
+- **Actual**: ~3.5h
+- **Breakdown**:
+  - Code removal & test updates: 1.5h
+  - Vulture failure investigation: 0.5h
+  - Vulture fix & allowlist updates: 0.5h
+  - Task 023 creation: 1h
+- **Variance**: Within estimate
+- **Reason**: Vulture failure investigation added time, but creating task 023 was valuable architectural documentation for future improvement.

@@ -14,14 +14,12 @@ from pathlib import Path
 from typing import Any
 
 import click
-from jinja2 import Environment, PackageLoader, select_autoescape
 from rich.console import Console
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
 from nhl_scrabble.config import Config
 from nhl_scrabble.dashboard import StatisticsDashboard
-from nhl_scrabble.exporters.csv_exporter import CSVExporter
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
 from nhl_scrabble.logging_config import setup_logging
@@ -702,168 +700,6 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 
     # Generate and return formatted output
     return formatter.format(formatter_data)
-
-
-def generate_json_report(  # Kept for backward compatibility
-    team_scores: dict[str, Any],
-    all_players: list[Any],
-    division_standings: dict[str, Any],
-    conference_standings: dict[str, Any],
-    playoff_standings: dict[str, Any],
-) -> str:
-    """Generate JSON format report.
-
-    Args:
-        team_scores: Team scores dictionary
-        all_players: List of all players
-        division_standings: Division standings
-        conference_standings: Conference standings
-        playoff_standings: Playoff standings
-
-    Returns:
-        JSON string
-    """
-    # Convert dataclasses to dictionaries
-    teams_data = {
-        abbrev: {
-            "total": team.total,
-            "players": [asdict(p) for p in team.players],
-            "division": team.division,
-            "conference": team.conference,
-            "avg_per_player": team.avg_per_player,
-        }
-        for abbrev, team in team_scores.items()
-    }
-
-    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
-
-    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
-
-    playoffs_data = {
-        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
-    }
-
-    report_data = {
-        "teams": teams_data,
-        "divisions": divisions_data,
-        "conferences": conferences_data,
-        "playoffs": playoffs_data,
-        "summary": {
-            "total_teams": len(team_scores),
-            "total_players": len(all_players),
-        },
-    }
-
-    return json.dumps(report_data, indent=2)
-
-
-def generate_html_report(  # Kept for backward compatibility
-    team_scores: dict[str, Any],
-    all_players: list[Any],
-    division_standings: dict[str, Any],
-    conference_standings: dict[str, Any],
-    playoff_standings: dict[str, Any],
-) -> str:
-    """Generate HTML format report.
-
-    Args:
-        team_scores: Team scores dictionary
-        all_players: List of all players
-        division_standings: Division standings
-        conference_standings: Conference standings
-        playoff_standings: Playoff standings
-
-    Returns:
-        HTML string
-    """
-    # Setup Jinja2 environment
-    env = Environment(
-        loader=PackageLoader("nhl_scrabble", "templates"),
-        autoescape=select_autoescape(["html", "xml"]),
-    )
-
-    # Get top 20 players by score
-    sorted_players = sorted(all_players, key=lambda p: p.full_score, reverse=True)
-    top_players = sorted_players[:20]
-
-    # Prepare conferences data with actual team objects
-    conferences = []
-    for conf_name in sorted(conference_standings.keys()):
-        # Get all teams in this conference from playoff standings
-        conf_teams = [
-            team for team in playoff_standings.get(conf_name, []) if team.conference == conf_name
-        ]
-        conferences.append({"name": conf_name, "teams": conf_teams})
-
-    # Prepare divisions data
-    divisions = []
-    for div_name in sorted(division_standings.keys()):
-        # Get teams in this division from all playoff teams
-        div_teams = []
-        for conf_teams in playoff_standings.values():
-            div_teams.extend([team for team in conf_teams if team.division == div_name])
-        # Sort by total score descending
-        div_teams.sort(key=lambda t: (t.total, t.avg), reverse=True)
-        divisions.append({"name": div_name, "teams": div_teams})
-
-    # Calculate statistics
-    total_score = sum(p.full_score for p in all_players)
-    avg_score = total_score / len(all_players) if all_players else 0
-    highest_score = sorted_players[0].full_score if sorted_players else 0
-
-    stats = {
-        "total_players": len(all_players),
-        "total_teams": len(team_scores),
-        "average_score": avg_score,
-        "highest_score": highest_score,
-    }
-
-    # Render template
-    template = env.get_template("report.html")
-    html = template.render(
-        timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
-        version=__version__,
-        stats=stats,
-        top_n=len(top_players),
-        top_players=top_players,
-        conferences=conferences,
-        divisions=divisions,
-    )
-
-    return html
-
-
-def generate_csv_report(
-    team_scores: dict[str, Any],
-    all_players: list[Any],  # noqa: ARG001
-    division_standings: dict[str, Any],  # noqa: ARG001
-    conference_standings: dict[str, Any],  # noqa: ARG001
-    playoff_standings: dict[str, Any],  # noqa: ARG001
-    output: Path,
-) -> None:
-    """Generate CSV format report.
-
-    Creates a CSV report with team scores. For more detailed CSV exports,
-    use the CSVExporter class directly with specific export methods.
-
-    Args:
-        team_scores: Team scores dictionary
-        all_players: List of all players (not used in basic CSV export)
-        division_standings: Division standings (not used in basic CSV export)
-        conference_standings: Conference standings (not used in basic CSV export)
-        playoff_standings: Playoff standings (not used in basic CSV export)
-        output: Output file path
-
-    Returns:
-        None (writes directly to file)
-    """
-    exporter = CSVExporter()
-
-    # For CSV, we export the full team report
-    # This includes all teams with their scores
-    exporter.export_team_scores(team_scores, output)
-
-    logger.info(f"CSV report written to {output}")
 
 
 def generate_excel_report(
