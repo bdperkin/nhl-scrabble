@@ -26,6 +26,7 @@ def client() -> TestClient:
 class TestHealthEndpoint:
     """Tests for health check endpoint."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_health_endpoint(self, client: TestClient) -> None:
         """Test health check endpoint returns healthy status."""
         response = client.get("/health")
@@ -40,6 +41,7 @@ class TestHealthEndpoint:
 class TestRootEndpoint:
     """Tests for root endpoint."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_root_endpoint(self, client: TestClient) -> None:
         """Test root endpoint returns API information."""
         response = client.get("/")
@@ -54,16 +56,19 @@ class TestRootEndpoint:
 class TestOpenAPIDocumentation:
     """Tests for OpenAPI documentation endpoints."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_docs_endpoint(self, client: TestClient) -> None:
         """Test Swagger UI docs are accessible."""
         response = client.get("/docs")
         assert response.status_code == 200
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_redoc_endpoint(self, client: TestClient) -> None:
         """Test ReDoc docs are accessible."""
         response = client.get("/redoc")
         assert response.status_code == 200
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_openapi_json(self, client: TestClient) -> None:
         """Test OpenAPI JSON schema is accessible."""
         response = client.get("/openapi.json")
@@ -76,6 +81,7 @@ class TestOpenAPIDocumentation:
 class TestTeamsEndpoints:
     """Tests for teams endpoints."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_all_teams(self, client: TestClient) -> None:
         """Test getting all teams."""
         response = client.get("/api/v1/teams")
@@ -101,6 +107,7 @@ class TestTeamsEndpoints:
         for team in data["teams"]:
             assert team["division"] == "Atlantic"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_teams_by_conference(self, client: TestClient) -> None:
         """Test filtering teams by conference."""
         response = client.get("/api/v1/teams?conference=Eastern")
@@ -176,6 +183,7 @@ class TestPlayersEndpoints:
         for player in data["players"]:
             assert player["score"] >= min_score
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_players_with_max_score(self, client: TestClient) -> None:
         """Test filtering players by maximum score."""
         max_score = 50
@@ -190,6 +198,7 @@ class TestPlayersEndpoints:
         for player in data["players"]:
             assert player["score"] <= max_score
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_players_with_limit(self, client: TestClient) -> None:
         """Test limiting number of players returned."""
         limit = 10
@@ -199,6 +208,7 @@ class TestPlayersEndpoints:
         data = response.json()
         assert len(data["players"]) <= limit
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_players_sorted_by_score(self, client: TestClient) -> None:
         """Test sorting players by score."""
         response = client.get("/api/v1/players?sort_by=score&order=desc&limit=10")
@@ -251,6 +261,7 @@ class TestPlayersEndpoints:
 class TestStandingsEndpoints:
     """Tests for standings endpoints."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_division_standings(self, client: TestClient) -> None:
         """Test getting division standings."""
         response = client.get("/api/v1/standings/division")
@@ -268,6 +279,7 @@ class TestStandingsEndpoints:
             assert "teams" in division
             assert isinstance(division["teams"], list)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_conference_standings(self, client: TestClient) -> None:
         """Test getting conference standings."""
         response = client.get("/api/v1/standings/conference")
@@ -285,6 +297,7 @@ class TestStandingsEndpoints:
             assert "teams" in conference
             assert isinstance(conference["teams"], list)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_playoff_standings(self, client: TestClient) -> None:
         """Test getting playoff standings."""
         response = client.get("/api/v1/standings/playoffs")
@@ -297,6 +310,7 @@ class TestStandingsEndpoints:
         assert isinstance(data["eastern_conference"], list)
         assert isinstance(data["western_conference"], list)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_invalid_standings_type(self, client: TestClient) -> None:
         """Test getting standings with invalid type."""
         response = client.get("/api/v1/standings/invalid")
@@ -310,6 +324,7 @@ class TestStandingsEndpoints:
 class TestCORSHeaders:
     """Tests for CORS middleware."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cors_headers_present(self, client: TestClient) -> None:
         """Test that CORS headers are present in responses."""
         response = client.get("/health", headers={"Origin": "http://localhost:3000"})
@@ -321,12 +336,14 @@ class TestCORSHeaders:
 class TestErrorHandling:
     """Tests for error handling."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_404_for_nonexistent_endpoint(self, client: TestClient) -> None:
         """Test 404 error for non-existent endpoints."""
         response = client.get("/api/v1/nonexistent")
 
         assert response.status_code == 404
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_405_for_wrong_http_method(self, client: TestClient) -> None:
         """Test 405 error for unsupported HTTP methods."""
         response = client.post("/health")

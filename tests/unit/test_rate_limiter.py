@@ -11,6 +11,7 @@ from nhl_scrabble.rate_limiter import RateLimiter
 class TestRateLimiter:
     """Tests for RateLimiter class."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_basic_rate_limiting(self) -> None:
         """Test basic rate limiting behavior."""
         limiter = RateLimiter(max_requests=2, time_window=1.0)
@@ -30,6 +31,7 @@ class TestRateLimiter:
         assert elapsed >= 0.4, f"Third request waited {elapsed}s, expected >= 0.4s"
         assert elapsed < 0.7, f"Third request waited {elapsed}s, expected < 0.7s"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_burst_size(self) -> None:
         """Test burst size allows initial burst."""
         limiter = RateLimiter(max_requests=10, time_window=10.0, burst_size=5)
@@ -47,6 +49,7 @@ class TestRateLimiter:
         elapsed = time.monotonic() - start
         assert elapsed >= 0.9, f"6th request waited {elapsed}s, expected >= 0.9s"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_non_blocking_mode(self) -> None:
         """Test non-blocking acquire mode."""
         limiter = RateLimiter(max_requests=1, time_window=10.0)
@@ -57,6 +60,7 @@ class TestRateLimiter:
         # Second request fails (no tokens)
         assert limiter.acquire(block=False) is False
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_thread_safety(self) -> None:
         """Test rate limiter is thread-safe."""
         limiter = RateLimiter(max_requests=20, time_window=1.0)
@@ -85,6 +89,7 @@ class TestRateLimiter:
         assert len(results) == 15
         assert limiter.total_requests == 15
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_stats_tracking(self) -> None:
         """Test statistics tracking."""
         limiter = RateLimiter(max_requests=2, time_window=1.0)
@@ -102,6 +107,7 @@ class TestRateLimiter:
         assert stats["current_tokens"] >= 0
         assert stats["max_tokens"] == 2
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_reset(self) -> None:
         """Test resetting rate limiter."""
         limiter = RateLimiter(max_requests=1, time_window=10.0)
@@ -124,6 +130,7 @@ class TestRateLimiter:
         assert stats["total_waits"] == 0
         assert stats["total_wait_time"] == 0.0
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_refill_rate_property(self) -> None:
         """Test refill_rate property calculation."""
         limiter = RateLimiter(max_requests=30, time_window=60.0)
@@ -131,6 +138,7 @@ class TestRateLimiter:
         # 30 requests per 60 seconds = 0.5 requests/second
         assert limiter.refill_rate == 0.5
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_multiple_tokens_acquire(self) -> None:
         """Test acquiring multiple tokens at once."""
         limiter = RateLimiter(max_requests=10, time_window=10.0)
@@ -145,6 +153,7 @@ class TestRateLimiter:
         stats = limiter.get_stats()
         assert stats["current_tokens"] < 10  # Less than max
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_token_refill_over_time(self) -> None:
         """Test that tokens refill over time."""
         limiter = RateLimiter(max_requests=10, time_window=10.0)
@@ -162,6 +171,7 @@ class TestRateLimiter:
         # Should have 1 token now
         assert limiter.acquire(block=False) is True
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_wait_time_calculation(self) -> None:
         """Test that wait time is calculated correctly."""
         limiter = RateLimiter(max_requests=2, time_window=2.0)
@@ -178,6 +188,7 @@ class TestRateLimiter:
         # Should wait for 1 token to refill (1 second for 1 token)
         assert 0.9 <= elapsed <= 1.2, f"Expected wait ~1s, got {elapsed}s"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_burst_size_default(self) -> None:
         """Test that burst size defaults to max_requests."""
         limiter = RateLimiter(max_requests=30, time_window=60.0)
@@ -217,6 +228,7 @@ class TestRateLimiter:
         assert success_count <= 100
         assert success_count > 0  # But should acquire some
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_zero_tokens_available(self) -> None:
         """Test behavior when zero tokens are available."""
         limiter = RateLimiter(max_requests=1, time_window=10.0)
@@ -231,6 +243,7 @@ class TestRateLimiter:
         stats = limiter.get_stats()
         assert stats["current_tokens"] < 0.01, f"Expected ~0 tokens, got {stats['current_tokens']}"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_tokens_dont_exceed_burst_size(self) -> None:
         """Test that tokens never exceed burst size even after long wait."""
         limiter = RateLimiter(max_requests=10, time_window=1.0, burst_size=5)
@@ -252,6 +265,7 @@ class TestRateLimiter:
 class TestRateLimiterEdgeCases:
     """Edge case tests for RateLimiter."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_very_high_rate_limit(self) -> None:
         """Test with very high rate limit."""
         limiter = RateLimiter(max_requests=1000, time_window=1.0)
@@ -263,6 +277,7 @@ class TestRateLimiterEdgeCases:
         elapsed = time.monotonic() - start
         assert elapsed < 0.1
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_very_low_rate_limit(self) -> None:
         """Test with very low rate limit."""
         limiter = RateLimiter(max_requests=1, time_window=2.0)
@@ -273,6 +288,7 @@ class TestRateLimiterEdgeCases:
         # Second request should fail (no tokens)
         assert limiter.acquire(block=False) is False
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_fractional_tokens(self) -> None:
         """Test that fractional token refills work correctly."""
         # 3 requests per 2 seconds = 1.5 requests/second

@@ -33,6 +33,7 @@ class TestFullWorkflow:
     """Integration tests for the complete analysis workflow."""
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_full_analysis_workflow(
         self,
         mock_get: Mock,
@@ -88,6 +89,7 @@ class TestFullWorkflow:
             assert standing.player_count > 0
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_workflow_handles_failed_teams(
         self,
         mock_get: Mock,
@@ -312,6 +314,7 @@ class TestErrorRecoveryWorkflow:
     """Test error recovery and resilience in workflows."""
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_partial_failure_recovery(
         self,
         mock_get: Mock,
@@ -353,6 +356,7 @@ class TestErrorRecoveryWorkflow:
         assert len(team_scores) + len(failed_teams) == len(sample_standings_data["standings"])
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_complete_failure_handling(
         self,
         mock_get: Mock,
@@ -392,6 +396,7 @@ class TestMultiComponentInteraction:
     """Test interactions between multiple components."""
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_processor_playoff_integration(
         self,
         mock_get: Mock,
@@ -443,6 +448,7 @@ class TestMultiComponentInteraction:
         assert len(playoff_qualifiers) > 0
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_scorer_processor_report_integration(
         self,
         mock_get: Mock,

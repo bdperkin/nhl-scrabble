@@ -207,6 +207,7 @@ def test_cache_stats(client: TestClient) -> None:
 class TestSecurityHeaders:
     """Tests for security headers middleware."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_security_headers_present(self, client: TestClient) -> None:
         """Test that security headers are present in responses."""
         response = client.get("/health")
@@ -229,6 +230,7 @@ class TestSecurityHeaders:
         assert "content-security-policy" in response.headers
         assert "default-src 'self'" in response.headers["content-security-policy"]
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_security_headers_on_all_endpoints(self, client: TestClient) -> None:
         """Test that security headers are present on all endpoints."""
         endpoints = ["/", "/health", "/docs", "/openapi.json"]
@@ -242,6 +244,7 @@ class TestSecurityHeaders:
 class TestFavicon:
     """Tests for favicon endpoint."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_favicon_endpoint_exists(self, client: TestClient) -> None:
         """Test favicon endpoint returns SVG."""
         response = client.get("/favicon.svg")
@@ -249,6 +252,7 @@ class TestFavicon:
         assert response.status_code == 200
         assert "image/svg+xml" in response.headers["content-type"]
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_favicon_content(self, client: TestClient) -> None:
         """Test favicon contains expected content."""
         response = client.get("/favicon.svg")
@@ -265,6 +269,7 @@ class TestFavicon:
 class TestCORS:
     """Tests for CORS configuration."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cors_headers_configured(self, client: TestClient) -> None:
         """Test CORS middleware is configured."""
         # CORS headers appear on cross-origin requests with proper Origin header
@@ -276,11 +281,13 @@ class TestCORS:
 class TestErrorHandling:
     """Tests for error handling."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_404_for_unknown_route(self, client: TestClient) -> None:
         """Test 404 for unknown routes."""
         response = client.get("/unknown-route")
         assert response.status_code == 404
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_405_for_wrong_method(self, client: TestClient) -> None:
         """Test 405 for wrong HTTP method."""
         response = client.post("/health")

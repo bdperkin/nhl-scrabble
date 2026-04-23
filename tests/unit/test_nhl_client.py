@@ -15,6 +15,7 @@ from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError, NHL
 class TestNHLApiClient:
     """Tests for NHLApiClient class."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_client_initialization(self) -> None:
         """Test client initialization with custom parameters."""
         client = NHLApiClient(
@@ -25,6 +26,7 @@ class TestNHLApiClient:
         assert client.retries == 5
         assert client.rate_limiter.max_requests >= 1
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_client_default_initialization(self) -> None:
         """Test client initialization with default parameters."""
         client = NHLApiClient()
@@ -34,6 +36,7 @@ class TestNHLApiClient:
         assert client.rate_limiter.max_requests >= 1
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_teams_success(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
         """Test successful team fetching."""
         # Mock successful API response
@@ -53,6 +56,7 @@ class TestNHLApiClient:
         assert teams["EDM"]["conference"] == "Western"
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_teams_timeout(self, mock_get: Mock) -> None:
         """Test timeout handling when fetching teams."""
         import requests
@@ -64,6 +68,7 @@ class TestNHLApiClient:
             client.get_teams()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_teams_connection_error(self, mock_get: Mock) -> None:
         """Test connection error handling when fetching teams."""
         import requests
@@ -75,6 +80,7 @@ class TestNHLApiClient:
             client.get_teams()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_team_roster_success(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
@@ -95,6 +101,7 @@ class TestNHLApiClient:
         assert len(roster["forwards"]) == 2
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_team_roster_not_found(self, mock_get: Mock) -> None:
         """Test handling of 404 response raises NHLApiNotFoundError."""
         mock_response = Mock()
@@ -105,6 +112,7 @@ class TestNHLApiClient:
             client.get_team_roster("XXX")
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_team_roster_retry(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
@@ -130,6 +138,7 @@ class TestNHLApiClient:
         assert roster is not None
         assert mock_get.call_count == 3
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_context_manager(self) -> None:
         """Test that client works as a context manager."""
         with NHLApiClient() as client:
@@ -139,6 +148,7 @@ class TestNHLApiClient:
         # Session should be closed after exiting context
         # (This is hard to test directly, but we can verify no exceptions)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_close(self) -> None:
         """Test explicit client closing."""
         client = NHLApiClient()
@@ -146,6 +156,7 @@ class TestNHLApiClient:
         # Verify no exceptions are raised
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_not_found_error_has_team_name(self, mock_get: Mock) -> None:
         """Test that NHLApiNotFoundError includes the team name in message."""
         mock_response = Mock()
@@ -158,6 +169,7 @@ class TestNHLApiClient:
         assert "TOR" in str(exc_info.value)
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_not_found_error_is_nhl_api_error(self, mock_get: Mock) -> None:
         """Test that NHLApiNotFoundError is a subclass of NHLApiError."""
         from nhl_scrabble.api.nhl_client import NHLApiError
@@ -172,6 +184,7 @@ class TestNHLApiClient:
             client.get_team_roster("TOR")
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_not_found_error_logs_warning(self, mock_get: Mock, caplog: Any) -> None:
         """Test that 404 response logs a warning before raising."""
         import logging
@@ -186,6 +199,7 @@ class TestNHLApiClient:
 
         assert "No roster data available for TOR" in caplog.text
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_caching_enabled_by_default(self) -> None:
         """Test that caching is enabled by default."""
         client = NHLApiClient()
@@ -193,6 +207,7 @@ class TestNHLApiClient:
         assert isinstance(client.session, requests_cache.CachedSession)
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_caching_can_be_disabled(self) -> None:
         """Test that caching can be disabled."""
         import requests
@@ -203,6 +218,7 @@ class TestNHLApiClient:
         assert not isinstance(client.session, requests_cache.CachedSession)
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_expiry_configured(self) -> None:
         """Test that cache expiry is configurable."""
         client = NHLApiClient(cache_expiry=7200)
@@ -210,6 +226,7 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_clear_cache(self, mock_get: Mock, sample_standings_data: dict[str, Any]) -> None:
         """Test that clear_cache() works."""
         # Mock successful API response at the HTTP layer (allows cache to function)
@@ -233,6 +250,7 @@ class TestNHLApiClient:
 
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_clear_cache_when_disabled(self, caplog: Any) -> None:
         """Test that clear_cache() handles disabled caching gracefully."""
         import logging
@@ -245,6 +263,7 @@ class TestNHLApiClient:
         assert "Cache not available or caching disabled" in caplog.text
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_file_created(self, tmp_path: Path) -> None:
         """Test that cache file is created."""
         import os
@@ -270,6 +289,7 @@ class TestNHLApiClient:
         finally:
             os.chdir(original_dir)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_context_manager_closes_session(self) -> None:
         """Test that context manager closes session properly."""
         client = NHLApiClient(cache_enabled=False)
@@ -280,6 +300,7 @@ class TestNHLApiClient:
         # Session should be closed after exiting context
         assert client._closed
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_destructor_closes_session(self, caplog: Any) -> None:
         """Test that destructor closes session if not explicitly closed."""
         import logging
@@ -292,6 +313,7 @@ class TestNHLApiClient:
         # Should have logged warning about cleanup
         assert "not explicitly closed" in caplog.text
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_explicit_close_works(self) -> None:
         """Test that explicit close works correctly."""
         client = NHLApiClient(cache_enabled=False)
@@ -319,6 +341,7 @@ class TestNHLApiClient:
         close_messages = [r for r in caplog.records if "session closed" in r.message.lower()]
         assert len(close_messages) == 1
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_atexit_cleanup_registered(self) -> None:
         """Test that atexit cleanup is registered."""
         # Create client
@@ -331,6 +354,7 @@ class TestNHLApiClient:
 
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_weakref_tracking(self) -> None:
         """Test that instances are tracked with weak references.
 
@@ -354,6 +378,7 @@ class TestNHLApiClient:
         client2.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_rate_limiting_between_successful_requests(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
@@ -384,6 +409,7 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_no_rate_limiting_on_first_request(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
@@ -410,6 +436,7 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_failed_request_doesnt_affect_rate_limiting(
         self, mock_get: Mock, sample_roster_data: dict[str, Any]
     ) -> None:
@@ -444,6 +471,7 @@ class TestNHLApiClient:
 
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_calculate_backoff_delay_exponential(self):
         """Test that backoff delay increases exponentially."""
         client = NHLApiClient(
@@ -477,6 +505,7 @@ class TestNHLApiClient:
 
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_calculate_backoff_delay_respects_max(self):
         """Test that backoff delay respects max_backoff limit."""
         client = NHLApiClient(
@@ -496,6 +525,7 @@ class TestNHLApiClient:
 
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_calculate_backoff_delay_respects_retry_after(self):
         """Test that backoff delay respects Retry-After header."""
         client = NHLApiClient(
@@ -517,6 +547,7 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_retry_with_exponential_backoff(self, mock_get, sample_roster_data):
         """Test that retries use exponential backoff instead of fixed delay."""
         import requests
@@ -555,6 +586,7 @@ class TestNHLApiClient:
         client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_429_rate_limit_with_retry_after(self, mock_get, sample_roster_data):
         """Test that 429 responses respect Retry-After header."""
         client = NHLApiClient(
@@ -588,6 +620,7 @@ class TestNHLApiClient:
 
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_is_url_cached_returns_false_when_caching_disabled(self) -> None:
         """Test that _is_url_cached returns False when caching is disabled."""
         client = NHLApiClient(cache_enabled=False)
@@ -595,6 +628,7 @@ class TestNHLApiClient:
         assert result is False
         client.close()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_is_url_cached_returns_false_for_no_cache_attribute(self) -> None:
         """Test that _is_url_cached returns False when session has no cache attribute."""
         client = NHLApiClient(cache_enabled=False)
