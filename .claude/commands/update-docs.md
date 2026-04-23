@@ -369,6 +369,7 @@ from typing import Dict
 
 SCRABBLE_VALUES = {...}
 
+
 class ScrabbleScorer:
     def calculate_score(self, text: str) -> int:
         return sum(...)
@@ -393,9 +394,11 @@ Example:
 Attributes:
     SCRABBLE_VALUES (dict): Standard Scrabble letter point values.
 """
+
 from typing import Dict
 
 SCRABBLE_VALUES: Dict[str, int] = {...}
+
 
 class ScrabbleScorer:
     """Calculate Scrabble scores using standard letter values.

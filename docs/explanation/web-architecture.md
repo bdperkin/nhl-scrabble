@@ -97,11 +97,12 @@ FastAPI provides:
 **Headers Added**:
 
 ```python
-X-Content-Type-Options: nosniff          # Prevent MIME sniffing
-X-Frame-Options: DENY                    # Prevent clickjacking
-X-XSS-Protection: 1; mode=block          # XSS protection
-Referrer-Policy: strict-origin-when-cross-origin
-Content-Security-Policy: ...             # Restrict resource loading
+X - Content - Type - Options: nosniff  # Prevent MIME sniffing
+X - Frame - Options: DENY  # Prevent clickjacking
+X - XSS - Protection: 1
+mode = block  # XSS protection
+Referrer - Policy: strict - origin - when - cross - origin
+Content - Security - Policy: ...  # Restrict resource loading
 ```
 
 **Why?** Defense-in-depth security following OWASP recommendations.
@@ -249,8 +250,8 @@ allow_credentials = True
 **HTMX Usage**:
 
 ```html
-<button hx-get="/api/analyze" hx-target="#results" hx-indicator="#loading">
-  Run Analysis
+<button hx-get="/api/analyze" hx-indicator="#loading" hx-target="#results">
+ Run Analysis
 </button>
 ```
 
@@ -277,8 +278,8 @@ allow_credentials = True
 ```css
 /* 1. CSS Variables (theme colors, spacing) */
 :root {
-  --primary-color: #0066cc;
-  --spacing-unit: 8px;
+    --primary-color: #0066cc;
+    --spacing-unit: 8px;
 }
 
 /* 2. Reset and Base Styles */
@@ -290,7 +291,9 @@ allow_credentials = True
 /* 5. Utilities (text align, spacing) */
 
 /* 6. Media Queries (responsive) */
-@media (max-width: 768px) { ... }
+@media (max-width: 768px) {
+    ...
+}
 ```
 
 **Design System**:
@@ -341,9 +344,9 @@ allow_credentials = True
 **Functions**:
 
 ```javascript
-ErrorHandler.showError(message, type='error')  // Display error toast
-ErrorHandler.handleApiError(response)          // Parse and show API errors
-ErrorHandler.clearErrors()                     // Clear all error messages
+ErrorHandler.showError(message, type = 'error') // Display error toast
+ErrorHandler.handleApiError(response) // Parse and show API errors
+ErrorHandler.clearErrors() // Clear all error messages
 ```
 
 ##### ui.js
@@ -353,11 +356,11 @@ ErrorHandler.clearErrors()                     // Clear all error messages
 **Functions**:
 
 ```javascript
-UI.showLoading(element)         // Show loading spinner
-UI.hideLoading(element)         // Hide loading spinner
-UI.showToast(message, type)     // Show toast notification
-UI.scrollToElement(element)     // Smooth scroll to element
-UI.toggleElement(element)       // Show/hide toggle
+UI.showLoading(element) // Show loading spinner
+UI.hideLoading(element) // Hide loading spinner
+UI.showToast(message, type) // Show toast notification
+UI.scrollToElement(element) // Smooth scroll to element
+UI.toggleElement(element) // Show/hide toggle
 ```
 
 ##### nav.js
@@ -385,7 +388,7 @@ UI.toggleElement(element)       // Show/hide toggle
 **Usage**:
 
 ```javascript
-TableSort.init('.sortable-table')  // Initialize all sortable tables
+TableSort.init('.sortable-table') // Initialize all sortable tables
 ```
 
 ##### export.js

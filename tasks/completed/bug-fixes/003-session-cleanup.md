@@ -20,7 +20,9 @@ The `NHLClient` relies on proper use of the context manager (`with NHLClient() a
 class NHLClient:
     """Client for interacting with NHL API."""
 
-    def __init__(self, timeout: int = 10, retries: int = 3, rate_limit_delay: float = 0.3) -> None:
+    def __init__(
+        self, timeout: int = 10, retries: int = 3, rate_limit_delay: float = 0.3
+    ) -> None:
         """Initialize NHL API client."""
         self.session = requests.Session()
         # ...
@@ -55,7 +57,9 @@ class NHLClient:
 
     _instances: set[weakref.ref] = set()  # Track all instances
 
-    def __init__(self, timeout: int = 10, retries: int = 3, rate_limit_delay: float = 0.3) -> None:
+    def __init__(
+        self, timeout: int = 10, retries: int = 3, rate_limit_delay: float = 0.3
+    ) -> None:
         """Initialize NHL API client."""
         self.session = requests.Session()
         self._closed = False

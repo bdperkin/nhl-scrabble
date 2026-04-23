@@ -263,7 +263,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install UV
         uses: astral-sh/setup-uv@v4
@@ -273,7 +273,7 @@ jobs:
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.0
         env:
-          UV_SYSTEM_PYTHON: "1"  # Use UV for hook installation
+          UV_SYSTEM_PYTHON: '1'  # Use UV for hook installation
 ```
 
 #### GitLab CI
@@ -350,14 +350,14 @@ uv pip install pre-commit ruff mypy
 
 ```yaml
 # Ensure UV is available in CI
-- name: Install UV
-  run: pip install uv
+  - name: Install UV
+    run: pip install uv
 
 # Set environment variable
-- name: Run pre-commit
-  run: pre-commit run --all-files
-  env:
-    UV_PYTHON: python
+  - name: Run pre-commit
+    run: pre-commit run --all-files
+    env:
+      UV_PYTHON: python
 ```
 
 ## Best Practices
@@ -377,13 +377,13 @@ UV_PYTHON=$(which python) pre-commit run --all-files
 
 ```yaml
 # Add UV to CI for faster pre-commit checks
-- uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
+  - uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
 
-- uses: pre-commit/action@v3.0.0
-  env:
-    UV_SYSTEM_PYTHON: "1"
+  - uses: pre-commit/action@v3.0.0
+    env:
+      UV_SYSTEM_PYTHON: '1'
 ```
 
 ### 3. Regular Updates

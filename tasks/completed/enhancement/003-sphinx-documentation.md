@@ -478,15 +478,15 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/**'
-      - 'src/**'
-      - '.github/workflows/docs.yml'
-      - 'pyproject.toml'
+      - docs/**
+      - src/**
+      - .github/workflows/docs.yml
+      - pyproject.toml
   pull_request:
     branches: [main]
     paths:
-      - 'docs/**'
-      - 'src/**'
+      - docs/**
+      - src/**
   workflow_dispatch:
 
 permissions:
@@ -548,8 +548,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
           force_orphan: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
           commit_message: 'docs: Deploy documentation to GitHub Pages'
 ```
 
@@ -601,16 +601,16 @@ Add documentation dependencies:
 ```toml
 [project.optional-dependencies]
 docs = [
-    "sphinx>=7.2.6",
-    "sphinx-autobuild>=2024.2.4",
-    "sphinx-autodoc-typehints>=2.0.0",
-    "sphinx-copybutton>=0.5.2",
-    "sphinx-design>=0.5.0",
-    "sphinx-rtd-theme>=2.0.0",
-    "sphinxcontrib-programoutput>=0.17",
-    "sphinxcontrib-spelling>=8.0.0",
-    "sphinxext-opengraph>=0.9.1",
-    "myst-parser>=2.0.0",  # For markdown support
+  "sphinx>=7.2.6",
+  "sphinx-autobuild>=2024.2.4",
+  "sphinx-autodoc-typehints>=2.0.0",
+  "sphinx-copybutton>=0.5.2",
+  "sphinx-design>=0.5.0",
+  "sphinx-rtd-theme>=2.0.0",
+  "sphinxcontrib-programoutput>=0.17",
+  "sphinxcontrib-spelling>=8.0.0",
+  "sphinxext-opengraph>=0.9.1",
+  "myst-parser>=2.0.0",                # For markdown support
 ]
 ```
 
@@ -1006,9 +1006,9 @@ def calculate_score(self, text: str) -> int:
 
 ```html
 <!-- Auto-generated OpenGraph metadata -->
-<meta property="og:title" content="NHL Scrabble Documentation">
-<meta property="og:description" content="...">
-<meta property="og:image" content="...">
+<meta content="NHL Scrabble Documentation" property="og:title"/>
+<meta content="..." property="og:description"/>
+<meta content="..." property="og:image"/>
 <!-- Beautiful previews when sharing links! -->
 ```
 

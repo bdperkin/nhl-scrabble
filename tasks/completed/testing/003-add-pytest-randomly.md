@@ -42,16 +42,19 @@ tests/unit/test_b.py::test_2
 # Example: Test 2 depends on Test 1's side effect
 GLOBAL_STATE = None
 
+
 def test_1_sets_global():
     """This test sets global state."""
     global GLOBAL_STATE
     GLOBAL_STATE = "configured"
     assert True
 
+
 def test_2_uses_global():
     """This test accidentally depends on test_1 running first."""
     # BUG: This only passes because test_1 runs first alphabetically
     assert GLOBAL_STATE == "configured"
+
 
 # With pytest-randomly:
 # - Sometimes test_2 runs first → FAILURE (good! catches the bug)
@@ -76,13 +79,13 @@ Add pytest-randomly to automatically randomize test order and catch hidden depen
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",
-    "pytest-randomly>=3.15.0",  # Add randomization
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",
+  "pytest-xdist>=3.5.0",
+  "pytest-randomly>=3.15.0", # Add randomization
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 
@@ -109,7 +112,7 @@ Using --randomly-seed=1234567890  # <-- Printed automatically
 
 # Optional: Disable randomization for specific tests
 markers = [
-    "randomly_disable: Disable random order for this test",
+  "randomly_disable: Disable random order for this test",
 ]
 ```
 
@@ -216,14 +219,17 @@ import pytest
 # This test should occasionally fail, proving randomization works
 test_run_order = []
 
+
 def test_a_first():
     test_run_order.append("a")
     # If this runs second, it will fail
     assert len(test_run_order) == 1, "Test A should run first (sometimes)"
 
+
 def test_b_second():
     test_run_order.append("b")
     # This might run first randomly, which is expected
+
 
 # After verification, delete this file
 # The point is to show that order changes
@@ -316,21 +322,25 @@ $ pytest -p no:randomly
 # Before pytest-randomly: Tests always pass
 # After pytest-randomly: Tests fail randomly
 
+
 # The hidden dependency:
 def test_create_user():
     """Creates a user in database."""
     db.create_user("test@example.com")
     assert db.get_user("test@example.com") is not None
 
+
 def test_user_exists():
     """Assumes user was created by previous test."""
     # BUG: Depends on test_create_user running first
     assert db.get_user("test@example.com") is not None
 
+
 # With pytest-randomly:
 # Run 1: test_create_user → test_user_exists (PASS)
 # Run 2: test_user_exists → test_create_user (FAIL!)
 # Developer discovers the bug and fixes it:
+
 
 # Fixed version:
 @pytest.fixture
@@ -339,6 +349,7 @@ def test_user():
     db.create_user("test@example.com")
     yield
     db.delete_user("test@example.com")
+
 
 def test_user_exists(test_user):
     """Now properly isolated."""
@@ -373,10 +384,12 @@ randomly_dont_reorganise = false
 # Rarely needed, but available
 import pytest
 
+
 @pytest.mark.randomly_disable
 def test_that_must_run_first():
     """This test requires specific order (rare)."""
     pass
+
 
 # Alternative: Use proper fixtures instead
 ```
@@ -387,8 +400,8 @@ def test_that_must_run_first():
 # .github/workflows/ci.yml
 # No changes needed - pytest-randomly works automatically
 
-- name: Run tests
-  run: pytest --cov
+  - name: Run tests
+    run: pytest --cov
   # Seed is printed in logs for reproducibility
 ```
 
@@ -421,19 +434,23 @@ def test_with_fixture(tmp_path):
     file.write_text("data")
     assert file.read_text() == "data"
 
+
 # ✅ Good: Each test creates its own data
 def test_with_factory():
     user = UserFactory.create()
     assert user.email is not None
+
 
 # ❌ Bad: Test depends on previous test
 def test_step_1():
     global user_id
     user_id = create_user()
 
+
 def test_step_2():
     # BUG: Depends on test_step_1
     assert get_user(user_id) is not None
+
 
 # Fix: Use proper fixtures or combine tests
 def test_user_workflow():

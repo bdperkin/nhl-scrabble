@@ -79,13 +79,13 @@ import sys
 import os
 
 # Add project directory to path
-project_home = '/home/username/nhl-scrabble'
+project_home = "/home/username/nhl-scrabble"
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
 
 # Set environment variables
-os.environ['NHL_SCRABBLE_ENV'] = 'production'
-os.environ['NHL_SCRABBLE_API_TIMEOUT'] = '15'
+os.environ["NHL_SCRABBLE_ENV"] = "production"
+os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "15"
 
 # Import Flask app
 from src.nhl_scrabble.web.app import app as application
@@ -120,8 +120,8 @@ services:
     region: oregon
     plan: free
     branch: main
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn src.nhl_scrabble.web.app:app"
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn src.nhl_scrabble.web.app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.14
@@ -188,27 +188,27 @@ app = "nhl-scrabble"
 primary_region = "ewr"
 
 [build]
-  dockerfile = "Dockerfile"
+dockerfile = "Dockerfile"
 
 [env]
-  PORT = "8080"
-  NHL_SCRABBLE_ENV = "production"
+PORT = "8080"
+NHL_SCRABBLE_ENV = "production"
 
 [[services]]
-  http_checks = []
-  internal_port = 8080
-  processes = ["app"]
-  protocol = "tcp"
-  script_checks = []
+http_checks = []
+internal_port = 8080
+processes = ["app"]
+protocol = "tcp"
+script_checks = []
 
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = 80
+[[services.ports]]
+force_https = true
+handlers = ["http"]
+port = 80
 
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
+[[services.ports]]
+handlers = ["tls", "http"]
+port = 443
 ```
 
 ### Recommended Choice: Render
@@ -316,6 +316,7 @@ SECRET_KEY=<generate-random-secret>
 import os
 from pathlib import Path
 
+
 class ProductionConfig:
     """Production configuration."""
 
@@ -323,26 +324,27 @@ class ProductionConfig:
     TESTING = False
 
     # Load from environment
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = os.getenv("SECRET_KEY")
     if not SECRET_KEY:
         raise ValueError("SECRET_KEY environment variable not set")
 
     # NHL Scrabble settings
-    NHL_API_TIMEOUT = int(os.getenv('NHL_SCRABBLE_API_TIMEOUT', '15'))
-    NHL_API_RETRIES = int(os.getenv('NHL_SCRABBLE_API_RETRIES', '5'))
-    RATE_LIMIT_DELAY = float(os.getenv('NHL_SCRABBLE_RATE_LIMIT_DELAY', '0.5'))
+    NHL_API_TIMEOUT = int(os.getenv("NHL_SCRABBLE_API_TIMEOUT", "15"))
+    NHL_API_RETRIES = int(os.getenv("NHL_SCRABBLE_API_RETRIES", "5"))
+    RATE_LIMIT_DELAY = float(os.getenv("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.5"))
 
     # Caching
-    CACHE_ENABLED = os.getenv('NHL_SCRABBLE_CACHE_ENABLED', 'true').lower() == 'true'
-    CACHE_TTL = int(os.getenv('NHL_SCRABBLE_CACHE_TTL', '3600'))
+    CACHE_ENABLED = os.getenv("NHL_SCRABBLE_CACHE_ENABLED", "true").lower() == "true"
+    CACHE_TTL = int(os.getenv("NHL_SCRABBLE_CACHE_TTL", "3600"))
+
 
 def get_config():
     """Get configuration based on environment."""
-    env = os.getenv('NHL_SCRABBLE_ENV', 'development')
+    env = os.getenv("NHL_SCRABBLE_ENV", "development")
 
-    if env == 'production':
+    if env == "production":
         return ProductionConfig()
-    elif env == 'testing':
+    elif env == "testing":
         return TestingConfig()
     else:
         return DevelopmentConfig()
@@ -403,33 +405,35 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route('/health')
+
+@app.route("/health")
 def health_check():
     """Health check endpoint for deployment platforms."""
-    return jsonify({
-        'status': 'healthy',
-        'version': '2.0.0',
-        'environment': os.getenv('NHL_SCRABBLE_ENV', 'unknown')
-    }), 200
+    return (
+        jsonify(
+            {
+                "status": "healthy",
+                "version": "2.0.0",
+                "environment": os.getenv("NHL_SCRABBLE_ENV", "unknown"),
+            }
+        ),
+        200,
+    )
 
-@app.route('/ready')
+
+@app.route("/ready")
 def readiness_check():
     """Readiness check - verify external dependencies."""
     try:
         # Test NHL API connectivity
         from nhl_scrabble.api import NHLApiClient
+
         with NHLApiClient() as client:
             client.get_teams()  # Quick test call
 
-        return jsonify({
-            'status': 'ready',
-            'nhl_api': 'available'
-        }), 200
+        return jsonify({"status": "ready", "nhl_api": "available"}), 200
     except Exception as e:
-        return jsonify({
-            'status': 'not_ready',
-            'error': str(e)
-        }), 503
+        return jsonify({"status": "not_ready", "error": str(e)}), 503
 ```
 
 ### Deployment Documentation
@@ -672,11 +676,11 @@ curl https://nhl-scrabble.onrender.com/analyze
 ```toml
 [project.dependencies]
 # Existing dependencies...
-gunicorn = ">=21.0.0"  # Production WSGI server
+gunicorn = ">=21.0.0" # Production WSGI server
 
 [project.optional-dependencies.deploy]
 # Deployment-specific dependencies
-python-dotenv = ">=1.0.0"  # Load environment variables
+python-dotenv = ">=1.0.0" # Load environment variables
 ```
 
 ## Additional Notes

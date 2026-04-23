@@ -29,6 +29,7 @@ Currently only supports text and JSON output. Users cannot easily:
 import csv
 from pathlib import Path
 
+
 class CSVExporter:
     def export_team_scores(self, teams: list[TeamScore], output: Path):
         with output.open("w", newline="") as f:
@@ -36,18 +37,21 @@ class CSVExporter:
             writer.writerow(["Team", "Total Score", "Player Count", "Average Score"])
 
             for team in teams:
-                writer.writerow([
-                    team.abbrev,
-                    team.total_score,
-                    len(team.players),
-                    team.average_score,
-                ])
+                writer.writerow(
+                    [
+                        team.abbrev,
+                        team.total_score,
+                        len(team.players),
+                        team.average_score,
+                    ]
+                )
 ```
 
 ### 2. Excel Export
 
 ```python
 from openpyxl import Workbook
+
 
 class ExcelExporter:
     def export_full_report(self, data, output: Path):

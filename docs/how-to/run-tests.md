@@ -340,6 +340,7 @@ def scorer():
     """Reusable scorer instance."""
     return ScrabbleScorer()
 
+
 def test_with_fixture(scorer):
     """Test using fixture."""
     assert scorer.calculate_score("test") == 4
@@ -348,11 +349,14 @@ def test_with_fixture(scorer):
 **Parametrize tests**:
 
 ```python
-@pytest.mark.parametrize("name,expected", [
-    ("A", 1),
-    ("Z", 10),
-    ("TEST", 4),
-])
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("A", 1),
+        ("Z", 10),
+        ("TEST", 4),
+    ],
+)
 def test_scores(name, expected):
     """Test multiple inputs."""
     scorer = ScrabbleScorer()

@@ -244,7 +244,7 @@ If a security finding is a false positive:
 
    ```toml
    [tool.bandit]
-   skips = ["B311"]  # Document why
+   skips = ["B311"] # Document why
    ```
 
 ## Best Practices

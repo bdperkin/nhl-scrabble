@@ -38,12 +38,14 @@ Project has one HTML template with Jinja2 syntax, no automated validation:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NHL Scrabble Score Analysis - {{ timestamp }}</title>
-    <style>
-        body {
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   NHL Scrabble Score Analysis - {{ timestamp }}
+  </title>
+  <style>
+   body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
@@ -51,19 +53,24 @@ Project has one HTML template with Jinja2 syntax, no automated validation:
             background: #f5f5f5;
         }
         /* ... more CSS ... */
-    </style>
-</head>
-<body>
-    <h1>NHL Scrabble Score Analysis</h1>
-    <p>Generated: {{ timestamp }}</p>
-
-    {% for section in sections %}
-    <div class="section">
-        <h2>{{ section.title }}</h2>
-        {{ section.content | safe }}
-    </div>
-    {% endfor %}
-</body>
+  </style>
+ </head>
+ <body>
+  <h1>
+   NHL Scrabble Score Analysis
+  </h1>
+  <p>
+   Generated: {{ timestamp }}
+  </p>
+  {% for section in sections %}
+  <div class="section">
+   <h2>
+    {{ section.title }}
+   </h2>
+   {{ section.content | safe }}
+  </div>
+  {% endfor %}
+ </body>
 </html>
 ```
 
@@ -92,11 +99,11 @@ Add djlint with configuration for Jinja2 templates:
 # pyproject.toml
 [project.optional-dependencies]
 dev = [
-    "ruff>=0.3.0",
-    "mypy>=1.8.0",
-    "pre-commit>=3.6.0",
-    "djlint>=1.34.0",  # Add HTML/template linting and formatting
-    # ... other dev dependencies
+  "ruff>=0.3.0",
+  "mypy>=1.8.0",
+  "pre-commit>=3.6.0",
+  "djlint>=1.34.0",    # Add HTML/template linting and formatting
+  # ... other dev dependencies
 ]
 ```
 
@@ -120,7 +127,7 @@ preserve_blank_lines = true
 preserve_leading_space = false
 
 # Linting rules
-ignore = "H006,H021,H030,H031"  # Adjust based on project needs
+ignore = "H006,H021,H030,H031" # Adjust based on project needs
 # H006: Img tag without alt attribute (exclude if decorative images)
 # H021: Inline styles (we have inline <style> in template)
 # H030: Consider meta keywords (outdated SEO)
@@ -128,21 +135,21 @@ ignore = "H006,H021,H030,H031"  # Adjust based on project needs
 
 # Exclude patterns
 exclude = [
-    ".git",
-    ".tox",
-    ".venv",
-    "venv",
-    "node_modules",
-    "htmlcov",
-    "_build",
-    "dist",
+  ".git",
+  ".tox",
+  ".venv",
+  "venv",
+  "node_modules",
+  "htmlcov",
+  "_build",
+  "dist",
 ]
 
 # Extension matching
 extension = "html"
 
 # File patterns
-include = "H"  # HTML files
+include = "H" # HTML files
 ```
 
 **Step 3: Add pre-commit hook**:
@@ -150,19 +157,19 @@ include = "H"  # HTML files
 ```yaml
 # .pre-commit-config.yaml
 # Add after mdformat, before doc8
-- repo: https://github.com/Riverside-Healthcare/djLint
-  rev: v1.34.1
-  hooks:
-    - id: djlint-reformat-jinja
-      name: djlint (reformat Jinja2 templates)
-      description: Lint and format HTML templates with Jinja2 syntax
-      files: \.(html|jinja|jinja2)$
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.34.1
+    hooks:
+      - id: djlint-reformat-jinja
+        name: djlint (reformat Jinja2 templates)
+        description: Lint and format HTML templates with Jinja2 syntax
+        files: \.(html|jinja|jinja2)$
       # Reformat automatically
 
-    - id: djlint-jinja
-      name: djlint (check Jinja2 templates)
-      description: Lint HTML templates with Jinja2 syntax
-      files: \.(html|jinja|jinja2)$
+      - id: djlint-jinja
+        name: djlint (check Jinja2 templates)
+        description: Lint HTML templates with Jinja2 syntax
+        files: \.(html|jinja|jinja2)$
       # Check only (don't auto-fix)
 ```
 
@@ -238,14 +245,17 @@ T001 12:8 Variables should be wrapped in whitespace.
 ```html
 <!-- Before djlint -->
 <div class="section">
-<h2>{{ section.title }}</h2>
-{{ section.content | safe }}
+ <h2>
+  {{ section.title }}
+ </h2>
+ {{ section.content | safe }}
 </div>
-
 <!-- After djlint --reformat -->
 <div class="section">
-    <h2>{{ section.title }}</h2>
-    {{ section.content | safe }}
+ <h2>
+  {{ section.title }}
+ </h2>
+ {{ section.content | safe }}
 </div>
 ```
 
@@ -444,27 +454,27 @@ Template analysis:
 ```toml
 [tool.djlint]
 # Template profile
-profile = "jinja"  # or django, nunjucks, etc.
+profile = "jinja" # or django, nunjucks, etc.
 
 # Formatting
-indent = 4  # Spaces for indentation
+indent = 4                     # Spaces for indentation
 max_line_length = 120
 max_attribute_length = 80
-format_css = true  # Format <style> blocks
-format_js = true  # Format <script> blocks
+format_css = true              # Format <style> blocks
+format_js = true               # Format <script> blocks
 preserve_blank_lines = true
 preserve_leading_space = false
 
 # Linting
-ignore = "H021"  # Comma-separated rule codes to ignore
-include = "H,T"  # Include HTML and template rules
+ignore = "H021" # Comma-separated rule codes to ignore
+include = "H,T" # Include HTML and template rules
 
 # File handling
-extension = "html"  # File extension to process
-exclude = [".git", ".tox"]  # Paths to exclude
+extension = "html"         # File extension to process
+exclude = [".git", ".tox"] # Paths to exclude
 
 # Behavior
-require_pragma = false  # Require "djlint:on" comment
+require_pragma = false # Require "djlint:on" comment
 ```
 
 **Ignore Rules Rationale** (for this project):
@@ -493,18 +503,20 @@ ignore = "H006,H021,H030,H031"
 
 ```html
 <!-- djlint detects missing alt text -->
-<img src="{{ player.photo }}">
+<img src="{{ player.photo }}"/>
 <!-- Fix: -->
-<img src="{{ player.photo }}" alt="{{ player.name }} headshot">
-
+<img alt="{{ player.name }} headshot" src="{{ player.photo }}"/>
 <!-- djlint detects missing labels -->
-<input type="text" name="search">
+<input name="search" type="text"/>
 <!-- Fix: -->
-<label for="search">Search:</label>
-<input type="text" id="search" name="search">
-
+<label for="search">
+ Search:
+</label>
+<input id="search" name="search" type="text"/>
 <!-- djlint detects low contrast -->
-<span style="color: #ccc; background: #ddd;">Text</span>
+<span style="color: #ccc; background: #ddd;">
+ Text
+</span>
 <!-- Fix: Use higher contrast colors -->
 ```
 

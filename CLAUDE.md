@@ -177,7 +177,7 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 **Markdown Hooks (2 from pymarkdown and mdformat):**
 
 - `pymarkdown`: Markdown linting (comprehensive by default)
-- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-tables)
+- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-black, mdformat-config, mdformat-ruff, mdformat-web)
 
 **Documentation Hooks (2 from PyCQA/doc8 and rstcheck/rstcheck):**
 
@@ -304,24 +304,24 @@ compile-bytecode = true
 link-mode = "copy"
 
 # Comprehensive resolution (matches ruff's ALL rules philosophy)
-resolution = "highest"  # Use highest compatible versions
+resolution = "highest" # Use highest compatible versions
 
 # Dependency constraints (like ruff's base ruleset)
-constraint-dependencies = []  # Strict baseline
-override-dependencies = []    # Selective exceptions (like ruff ignores)
+constraint-dependencies = [] # Strict baseline
+override-dependencies = []   # Selective exceptions (like ruff ignores)
 
 # Deterministic resolution (like ruff's consistent checking)
-index-strategy = "first-match"  # Predictable package resolution
-keyring-provider = "disabled"   # Reproducible across environments
+index-strategy = "first-match" # Predictable package resolution
+keyring-provider = "disabled"  # Reproducible across environments
 
 # Python management
-python-preference = "managed"  # Consistent Python versions
+python-preference = "managed" # Consistent Python versions
 
 # Stability
-preview = false  # Disable experimental features (like avoiding experimental ruff rules)
+preview = false # Disable experimental features (like avoiding experimental ruff rules)
 
 # Caching
-cache-keys = []  # Strict cache control
+cache-keys = [] # Strict cache control
 ```
 
 **Philosophy Alignment:**
@@ -511,10 +511,10 @@ UV is configured via the `[tool.uv]` section in `pyproject.toml`:
 
 ```toml
 [tool.uv]
-managed = true              # Enable UV dependency management
-package = true              # This is a Python package
-compile-bytecode = true     # Compile .pyc files for faster imports
-link-mode = "copy"          # Copy files instead of linking
+managed = true          # Enable UV dependency management
+package = true          # This is a Python package
+compile-bytecode = true # Compile .pyc files for faster imports
+link-mode = "copy"      # Copy files instead of linking
 ```
 
 These settings optimize for speed and reliability. Note: `prefer-binary` is a UV command-line flag, not a config option.
@@ -1079,7 +1079,7 @@ pytest && tox -p auto
 - Checks pre-commit hook versions
 - Checks Python package versions via pip/PyPI
 - Reports available updates with version info
-- Flags major version changes (⚠️  MAJOR)
+- Flags major version changes (⚠️ MAJOR)
 - Optionally applies updates
 - Optionally runs tests to verify compatibility
 - Optionally runs full tox validation

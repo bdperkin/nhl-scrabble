@@ -291,13 +291,15 @@ Add pre-commit hook to validate badge URLs:
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: local
-  hooks:
-    - id: check-badge-urls
-      name: Check README badge URLs
-      entry: python -c "import re, sys; content = open('README.md').read(); badges = re.findall(r'\[!\[.*?\]\((.*?)\)\]', content); print(f'Found {len(badges)} badges'); sys.exit(0)"
-      language: system
-      files: README.md
+  - repo: local
+    hooks:
+      - id: check-badge-urls
+        name: Check README badge URLs
+        entry: python -c "import re, sys; content = open('README.md').read(); 
+          badges = re.findall(r'\[!\[.*?\]\((.*?)\)\]', content); print(f'Found 
+          {len(badges)} badges'); sys.exit(0)"
+        language: system
+        files: README.md
 ```
 
 ## Acceptance Criteria

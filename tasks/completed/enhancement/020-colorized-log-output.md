@@ -24,6 +24,7 @@ The project uses Python's standard logging with basic formatting:
 # src/nhl_scrabble/logging_config.py
 import logging
 
+
 def setup_logging(verbose: bool = False) -> None:
     """Configure logging for the application."""
     level = logging.DEBUG if verbose else logging.INFO
@@ -136,11 +137,11 @@ class ColoredFormatter(logging.Formatter):
 
     # ANSI color codes
     COLORS = {
-        "DEBUG": "\033[36m",      # Cyan
-        "INFO": "\033[32m",       # Green
-        "WARNING": "\033[33m",    # Yellow
-        "ERROR": "\033[31m",      # Red
-        "CRITICAL": "\033[41m",   # Red background
+        "DEBUG": "\033[36m",  # Cyan
+        "INFO": "\033[32m",  # Green
+        "WARNING": "\033[33m",  # Yellow
+        "ERROR": "\033[31m",  # Red
+        "CRITICAL": "\033[41m",  # Red background
     }
     RESET = "\033[0m"
 
@@ -237,6 +238,7 @@ def setup_logging(verbose: bool = False) -> None:
 ```python
 # Via environment variable
 import os
+
 
 def setup_logging(verbose: bool = False) -> None:
     """Configure logging with optional color output."""
@@ -502,6 +504,7 @@ TERM=dumb nhl-scrabble analyze -v  # No colors
 if sys.platform == "win32":
     try:
         import colorama
+
         colorama.init()
     except ImportError:
         pass  # Colors won't work on old Windows, that's ok
@@ -598,6 +601,7 @@ For even richer output, could use `rich` library:
 
 ```python
 from rich.logging import RichHandler
+
 
 def setup_logging(verbose: bool = False):
     level = logging.DEBUG if verbose else logging.INFO

@@ -212,10 +212,11 @@ extensions = [
     "sphinx.ext.ifconfig",
 ]
 
+
 # Define configuration values for conditional content
 def setup(app):
-    app.add_config_value('include_dev_docs', False, 'html')
-    app.add_config_value('include_internal_notes', False, 'html')
+    app.add_config_value("include_dev_docs", False, "html")
+    app.add_config_value("include_internal_notes", False, "html")
 ```
 
 **Usage in RST**:
@@ -324,15 +325,16 @@ extensions = [
     "sphinx.ext.linkcode",
 ]
 
+
 # Linkcode configuration
 def linkcode_resolve(domain, info):
     """Link to GitHub source code."""
-    if domain != 'py':
+    if domain != "py":
         return None
-    if not info['module']:
+    if not info["module"]:
         return None
 
-    filename = info['module'].replace('.', '/')
+    filename = info["module"].replace(".", "/")
     return f"https://github.com/bdperkin/nhl-scrabble/blob/main/src/{filename}.py"
 ```
 
@@ -425,8 +427,8 @@ Add graphviz dependency (optional):
 ```toml
 [project.optional-dependencies]
 docs = [
-    # ... existing dependencies ...
-    "graphviz>=0.20.1",  # Python graphviz bindings (optional)
+  # ... existing dependencies ...
+  "graphviz>=0.20.1", # Python graphviz bindings (optional)
 ]
 ```
 
@@ -535,6 +537,7 @@ def test_docs_build_with_graphviz():
     # Verify graphviz SVG files created
     svg_files = list(Path("docs/_build/html/_images").glob("graphviz-*.svg"))
     assert len(svg_files) > 0
+
 
 def test_docs_build_with_inheritance_diagrams():
     """Test documentation builds with inheritance diagrams."""

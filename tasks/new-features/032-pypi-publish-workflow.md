@@ -64,7 +64,7 @@ name: Build and Publish Python Package
 on:
   push:
     tags:
-      - 'v*'  # Trigger on version tags (v1.0.0, v2.1.0, etc.)
+      - v*    # Trigger on version tags (v1.0.0, v2.1.0, etc.)
 
 permissions:
   contents: write  # For creating GitHub releases

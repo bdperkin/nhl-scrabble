@@ -331,32 +331,38 @@ Create a test HTML file:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Logo Test</title>
-    <link rel="icon" type="image/x-icon" href="assets/branding/favicons/favicon.ico">
-    <style>
-        body { font-family: sans-serif; padding: 40px; }
+ <head>
+  <title>
+   Logo Test
+  </title>
+  <link href="assets/branding/favicons/favicon.ico" rel="icon" type="image/x-icon"/>
+  <style>
+   body { font-family: sans-serif; padding: 40px; }
         .bg-light { background: #ffffff; padding: 20px; margin: 20px 0; }
         .bg-dark { background: #1a1a1a; padding: 20px; margin: 20px 0; }
-    </style>
-</head>
-<body>
-    <h1>NHL Scrabble Logo Test</h1>
-
-    <h2>Light Background</h2>
-    <div class="bg-light">
-        <img src="assets/branding/logos/logo-64.png" alt="64px">
-        <img src="assets/branding/logos/logo-128.png" alt="128px">
-        <img src="assets/branding/logos/logo-256.png" alt="256px">
-    </div>
-
-    <h2>Dark Background</h2>
-    <div class="bg-dark">
-        <img src="assets/branding/logos/logo-64.png" alt="64px">
-        <img src="assets/branding/logos/logo-128.png" alt="128px">
-        <img src="assets/branding/logos/logo-256.png" alt="256px">
-    </div>
-</body>
+  </style>
+ </head>
+ <body>
+  <h1>
+   NHL Scrabble Logo Test
+  </h1>
+  <h2>
+   Light Background
+  </h2>
+  <div class="bg-light">
+   <img alt="64px" src="assets/branding/logos/logo-64.png"/>
+   <img alt="128px" src="assets/branding/logos/logo-128.png"/>
+   <img alt="256px" src="assets/branding/logos/logo-256.png"/>
+  </div>
+  <h2>
+   Dark Background
+  </h2>
+  <div class="bg-dark">
+   <img alt="64px" src="assets/branding/logos/logo-64.png"/>
+   <img alt="128px" src="assets/branding/logos/logo-128.png"/>
+   <img alt="256px" src="assets/branding/logos/logo-256.png"/>
+  </div>
+ </body>
 </html>
 ```
 

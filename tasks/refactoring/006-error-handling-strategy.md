@@ -20,15 +20,21 @@ Implement consistent error handling with custom exception hierarchy, proper logg
 # Custom exceptions
 class NHLScrabbleError(Exception):
     """Base exception for all NHL Scrabble errors."""
+
     pass
+
 
 class APIError(NHLScrabbleError):
     """NHL API errors."""
+
     pass
+
 
 class DataValidationError(NHLScrabbleError):
     """Data validation errors."""
+
     pass
+
 
 # Consistent error handling
 try:

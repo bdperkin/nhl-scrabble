@@ -52,6 +52,7 @@ Validate output path early, before any API calls:
 ```python
 import os
 
+
 def validate_output_path(output: str | None) -> None:
     """Validate that output path is writable.
 
@@ -93,8 +94,11 @@ def validate_output_path(output: str | None) -> None:
         # Warn if file will be overwritten
         logger.warning(f"Output file exists and will be overwritten: {output_path}")
 
+
 @click.command()
-@click.option("-o", "--output", type=click.Path(), help="Output file path (default: stdout)")
+@click.option(
+    "-o", "--output", type=click.Path(), help="Output file path (default: stdout)"
+)
 def analyze(
     format: str,
     output: str | None,
@@ -144,6 +148,7 @@ import tempfile
 from click.testing import CliRunner
 from nhl_scrabble.cli import cli
 
+
 def test_output_to_nonexistent_directory():
     """Test that output to nonexistent directory fails early."""
     runner = CliRunner()
@@ -152,6 +157,7 @@ def test_output_to_nonexistent_directory():
 
     assert result.exit_code != 0
     assert "directory does not exist" in result.output.lower()
+
 
 def test_output_to_readonly_directory(tmp_path):
     """Test that output to read-only directory fails early."""
@@ -172,6 +178,7 @@ def test_output_to_readonly_directory(tmp_path):
     # Cleanup
     readonly_dir.chmod(0o755)
 
+
 def test_output_to_readonly_file(tmp_path):
     """Test that output to read-only file fails early."""
     runner = CliRunner()
@@ -188,6 +195,7 @@ def test_output_to_readonly_file(tmp_path):
 
     # Cleanup
     readonly_file.chmod(0o644)
+
 
 def test_output_overwrites_existing_file(tmp_path, caplog):
     """Test that output to existing file shows warning."""
@@ -207,6 +215,7 @@ def test_output_overwrites_existing_file(tmp_path, caplog):
     new_content = existing_file.read_text()
     assert "old content" not in new_content
 
+
 def test_output_to_valid_path(tmp_path):
     """Test that output to valid path works."""
     runner = CliRunner()
@@ -218,6 +227,7 @@ def test_output_to_valid_path(tmp_path):
     assert result.exit_code == 0
     assert output_file.exists()
     assert output_file.stat().st_size > 0
+
 
 def test_validation_happens_before_api_calls(monkeypatch):
     """Test that validation happens before making API calls."""

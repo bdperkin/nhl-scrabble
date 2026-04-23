@@ -433,8 +433,9 @@ pytest -n 0     # Run sequentially
 # pyproject.toml
 [tool.pytest.ini_options]
 addopts = [
-    "-n", "auto",  # Auto-detect CPU cores for parallel execution
-    # ... other options
+  "-n",
+  "auto", # Auto-detect CPU cores for parallel execution
+  # ... other options
 ]
 ```
 
@@ -496,8 +497,8 @@ GitHub Actions standard runners have 2 cores, so the CI workflow uses `-n 2` exp
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Run tests with coverage
-  run: pytest -n 2 --cov --cov-report=xml --cov-report=term
+  - name: Run tests with coverage
+    run: pytest -n 2 --cov --cov-report=xml --cov-report=term
 ```
 
 Local development uses `-n auto` to maximize parallelization based on available cores.
@@ -1060,10 +1061,10 @@ If safety reports a vulnerability that is acceptable (disputed, test-only, mitig
 ```yaml
 security:
   ignore-cvs:
-    - id: "51457"
-      package: "py"
-      reason: "DISPUTED CVE - ReDoS in test-only dependency, not in production"
-      expires: "2026-07-20"  # Quarterly review
+    - id: '51457'
+      package: py
+      reason: DISPUTED CVE - ReDoS in test-only dependency, not in production
+      expires: '2026-07-20'  # Quarterly review
 ```
 
 **Vulnerability Severity Levels:**

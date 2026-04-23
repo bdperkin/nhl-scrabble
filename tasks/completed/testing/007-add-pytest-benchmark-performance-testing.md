@@ -95,17 +95,17 @@ Add pytest-benchmark with benchmark tests for critical code paths:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",
-    "pytest-randomly>=3.15.0",
-    "pytest-sugar>=1.0.0",
-    "pytest-clarity>=1.0.1",
-    "diff-cover>=8.0.0",
-    "pytest-benchmark>=4.0.0",  # Add performance benchmarking
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",
+  "pytest-xdist>=3.5.0",
+  "pytest-randomly>=3.15.0",
+  "pytest-sugar>=1.0.0",
+  "pytest-clarity>=1.0.1",
+  "diff-cover>=8.0.0",
+  "pytest-benchmark>=4.0.0", # Add performance benchmarking
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 
@@ -159,8 +159,7 @@ def test_benchmark_score_all_teams(benchmark, scorer):
     """Benchmark scoring all NHL teams (~700 players)."""
     # Simulates full NHL analysis
     fake_players = [
-        Player(firstName=f"Player{i}", lastName=f"Name{i}")
-        for i in range(700)
+        Player(firstName=f"Player{i}", lastName=f"Name{i}") for i in range(700)
     ]
 
     def score_all():
@@ -183,7 +182,7 @@ from nhl_scrabble.models.team import TeamScore
 def sample_teams():
     """Generate sample team data for benchmarking."""
     return [
-        TeamScore(team_abbrev=f"T{i}", total_score=1000+i, players=[])
+        TeamScore(team_abbrev=f"T{i}", total_score=1000 + i, players=[])
         for i in range(32)
     ]
 
@@ -212,17 +211,27 @@ save = true
 save_data = true
 
 # Automatically compare against previous runs
-compare = "0001"  # Compare against run 0001 (baseline)
+compare = "0001" # Compare against run 0001 (baseline)
 
 # Fail if performance degrades beyond threshold
 fail_on_regression = true
-regression_threshold = 0.2  # 20% slower = fail
+regression_threshold = 0.2 # 20% slower = fail
 
 # Storage location
 storage = ".benchmarks"
 
 # Columns to display
-columns = ["min", "max", "mean", "stddev", "median", "iqr", "outliers", "rounds", "iterations"]
+columns = [
+  "min",
+  "max",
+  "mean",
+  "stddev",
+  "median",
+  "iqr",
+  "outliers",
+  "rounds",
+  "iterations",
+]
 
 # Histogram display
 histogram = "normal"
@@ -232,7 +241,7 @@ warmup = true
 warmup_iterations = 5
 
 # Minimum time to run each benchmark
-min_time = 0.000005  # 5 microseconds
+min_time = 0.000005 # 5 microseconds
 ```
 
 **Step 4: Add tox environment for benchmarks**:
@@ -524,6 +533,7 @@ def test_benchmark_simple(benchmark):
     result = benchmark(my_function, arg1, arg2)
     assert result == expected
 
+
 # Pattern 2: Setup/teardown
 def test_benchmark_with_setup(benchmark):
     # Setup not measured
@@ -535,6 +545,7 @@ def test_benchmark_with_setup(benchmark):
     # Teardown not measured
     cleanup(result)
 
+
 # Pattern 3: Callable object
 def test_benchmark_callable(benchmark):
     @benchmark
@@ -542,6 +553,7 @@ def test_benchmark_callable(benchmark):
         return complex_operation()
 
     assert operation > 0
+
 
 # Pattern 4: Custom rounds
 def test_benchmark_custom_rounds(benchmark):
@@ -576,15 +588,15 @@ def test_benchmark_custom_rounds(benchmark):
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Run benchmarks
-  run: |
-    # Run benchmarks
-    pytest tests/benchmarks/ --benchmark-only --benchmark-save=ci_${GITHUB_SHA}
+  - name: Run benchmarks
+    run: |
+      # Run benchmarks
+      pytest tests/benchmarks/ --benchmark-only --benchmark-save=ci_${GITHUB_SHA}
 
-    # Compare against main branch baseline
-    git fetch origin main
-    git checkout origin/main -- .benchmarks/0001_baseline.json
-    pytest tests/benchmarks/ --benchmark-only --benchmark-compare=0001 || true
+      # Compare against main branch baseline
+      git fetch origin main
+      git checkout origin/main -- .benchmarks/0001_baseline.json
+      pytest tests/benchmarks/ --benchmark-only --benchmark-compare=0001 || true
 ```
 
 **Comparison Modes**:

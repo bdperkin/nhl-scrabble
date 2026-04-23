@@ -38,6 +38,7 @@ def test_homepage_loads(page_fixture):
     page.navigate()
     assert page.get_title() == "NHL Scrabble"
 
+
 def test_navigation_menu(page_fixture):
     page = IndexPage(page_fixture)
     page.navigate()
@@ -52,6 +53,7 @@ def test_teams_display_all_32(page_fixture):
     page = TeamsPage(page_fixture)
     page.navigate()
     assert page.get_team_count() == 32
+
 
 def test_team_data_accuracy(page_fixture):
     page = TeamsPage(page_fixture)
@@ -68,6 +70,7 @@ def test_team_search(page_fixture):
     page.navigate()
     page.search("Capitals")
     assert page.get_visible_team_count() == 1
+
 
 def test_standings_sort(page_fixture):
     page = StandingsPage(page_fixture)

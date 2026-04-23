@@ -31,40 +31,40 @@ Create `.github/dependabot.yml` with comprehensive configuration:
 version: 2
 updates:
   # Python dependencies
-  - package-ecosystem: "pip"
-    directory: "/"
+  - package-ecosystem: pip
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/New_York"
+      interval: weekly
+      day: monday
+      time: 09:00
+      timezone: America/New_York
     open-pull-requests-limit: 10
     reviewers:
-      - "bdperkin"
+      - bdperkin
     assignees:
-      - "bdperkin"
+      - bdperkin
     commit-message:
-      prefix: "deps"
-      include: "scope"
+      prefix: deps
+      include: scope
     labels:
-      - "dependencies"
-      - "python"
+      - dependencies
+      - python
     # Only auto-update patch and minor versions
     versioning-strategy: increase-if-necessary
     # Group updates to reduce PR noise
     groups:
       development-dependencies:
-        dependency-type: "development"
+        dependency-type: development
         update-types:
-          - "minor"
-          - "patch"
+          - minor
+          - patch
       production-dependencies:
-        dependency-type: "production"
+        dependency-type: production
         update-types:
-          - "patch"
+          - patch
     # Priority for security updates
     allow:
-      - dependency-type: "all"
+      - dependency-type: all
     # Ignore specific dependencies if needed
     ignore:
       # Example: ignore major version bumps for specific packages
@@ -72,21 +72,21 @@ updates:
       #   update-types: ["version-update:semver-major"]
 
   # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/New_York"
+      interval: weekly
+      day: monday
+      time: 09:00
+      timezone: America/New_York
     open-pull-requests-limit: 5
     reviewers:
-      - "bdperkin"
+      - bdperkin
     commit-message:
-      prefix: "ci"
+      prefix: ci
     labels:
-      - "dependencies"
-      - "github-actions"
+      - dependencies
+      - github-actions
 ```
 
 ## Additional Configuration

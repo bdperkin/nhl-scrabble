@@ -38,7 +38,7 @@ name: Stale Issue and PR Management
 on:
   schedule:
     # Run daily at 1 AM UTC
-    - cron: '0 1 * * *'
+    - cron: 0 1 * * *
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
@@ -84,9 +84,10 @@ jobs:
 
             Thank you! 🙏
 
-          stale-issue-label: 'stale'
-          close-issue-label: 'closed-by-bot'
-          exempt-issue-labels: 'keep-open,pinned,security,good-first-issue,help-wanted,enhancement,bug'
+          stale-issue-label: stale
+          close-issue-label: closed-by-bot
+          exempt-issue-labels: 
+            keep-open,pinned,security,good-first-issue,help-wanted,enhancement,bug
 
           # PR-specific settings (more aggressive)
           days-before-pr-stale: 30
@@ -116,9 +117,9 @@ jobs:
 
             Thank you for your contribution! 🙏
 
-          stale-pr-label: 'stale'
-          close-pr-label: 'closed-by-bot'
-          exempt-pr-labels: 'keep-open,pinned,security,work-in-progress,wip'
+          stale-pr-label: stale
+          close-pr-label: closed-by-bot
+          exempt-pr-labels: keep-open,pinned,security,work-in-progress,wip
 
           # Performance settings
           operations-per-run: 100

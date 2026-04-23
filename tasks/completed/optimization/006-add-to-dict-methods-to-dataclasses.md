@@ -342,6 +342,7 @@ from dataclasses import asdict
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 
+
 def test_player_to_dict_matches_asdict(sample_player):
     """Verify to_dict() produces same output as asdict()."""
     manual_dict = sample_player.to_dict()
@@ -349,6 +350,7 @@ def test_player_to_dict_matches_asdict(sample_player):
 
     # Should be identical
     assert manual_dict == asdict_output
+
 
 def test_team_to_dict_matches_asdict(sample_team):
     """Verify to_dict() produces same output as asdict()."""
@@ -360,6 +362,7 @@ def test_team_to_dict_matches_asdict(sample_team):
     # Should be identical
     assert manual_dict == asdict_output
 
+
 def test_to_dict_serializable_to_json(sample_player, sample_team):
     """Verify to_dict() output is JSON-serializable."""
     player_dict = sample_player.to_dict()
@@ -368,6 +371,7 @@ def test_to_dict_serializable_to_json(sample_player, sample_team):
     # Should not raise
     json.dumps(player_dict)
     json.dumps(team_dict)
+
 
 def test_to_dict_performance_vs_asdict():
     """Verify to_dict() is faster than asdict()."""
@@ -385,7 +389,7 @@ def test_to_dict_performance_vs_asdict():
             full_score=random.randint(1, 100),
             team="TOR",
             division="Atlantic",
-            conference="Eastern"
+            conference="Eastern",
         )
         for _ in range(100)
     ]
@@ -410,7 +414,10 @@ def test_to_dict_performance_vs_asdict():
     speedup = asdict_time / to_dict_time
     assert speedup > 1.5, f"Expected >1.5x speedup, got {speedup:.2f}x"
 
-    print(f"Speedup: {speedup:.2f}x (asdict: {asdict_time:.3f}s, to_dict: {to_dict_time:.3f}s)")
+    print(
+        f"Speedup: {speedup:.2f}x (asdict: {asdict_time:.3f}s, to_dict: {to_dict_time:.3f}s)"
+    )
+
 
 def test_team_to_dict_include_players_flag(sample_team):
     """Verify include_players parameter works."""
@@ -443,16 +450,18 @@ def test_json_output_unchanged_with_to_dict(baseline_json):
 
     # Generate JSON using to_dict()
     from nhl_scrabble.cli import generate_json_report
+
     json_output = generate_json_report(
         team_scores,
         all_players,
         division_standings,
         conference_standings,
-        playoff_standings
+        playoff_standings,
     )
 
     # Should match baseline
     import json
+
     assert json.loads(json_output) == json.loads(baseline_json)
 ```
 
@@ -529,6 +538,7 @@ def asdict(obj):
         for field in fields
     }
 
+
 # to_dict() implementation
 def to_dict(self):
     return {
@@ -584,6 +594,7 @@ class Player:
             # Missing new_field! ❌
         }
 
+
 # Solution: Add test
 def test_to_dict_includes_all_fields():
     from dataclasses import fields
@@ -612,6 +623,7 @@ def test_to_dict_includes_all_fields():
 # If migrating to Pydantic in future:
 from pydantic import BaseModel
 
+
 class PlayerScore(BaseModel):
     first_name: str
     last_name: str
@@ -619,6 +631,7 @@ class PlayerScore(BaseModel):
 
     # No to_dict() needed! Use model_dump()
     # player.model_dump()  # Fast, built-in
+
 
 # Even faster with Pydantic v2 (Rust core)
 ```
@@ -629,9 +642,10 @@ class PlayerScore(BaseModel):
 # Could use custom JSONEncoder instead
 class DataclassEncoder(json.JSONEncoder):
     def default(self, obj):
-        if hasattr(obj, 'to_dict'):
+        if hasattr(obj, "to_dict"):
             return obj.to_dict()
         return super().default(obj)
+
 
 # Usage
 json.dumps(data, cls=DataclassEncoder)

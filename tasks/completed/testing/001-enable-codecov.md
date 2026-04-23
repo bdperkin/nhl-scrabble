@@ -27,15 +27,15 @@ The project has partial Codecov setup but it's not working:
 **CI Workflow (.github/workflows/ci.yml, lines 60-68):**
 
 ```yaml
-- name: Run tests with coverage
-  run: pytest --cov --cov-report=xml --cov-report=term
+  - name: Run tests with coverage
+    run: pytest --cov --cov-report=xml --cov-report=term
 
-- name: Upload coverage to Codecov
-  uses: codecov/codecov-action@v3
-  with:
-    file: ./coverage.xml
-    flags: unittests
-    name: codecov-${{ matrix.python-version }}
+  - name: Upload coverage to Codecov
+    uses: codecov/codecov-action@v3
+    with:
+      file: ./coverage.xml
+      flags: unittests
+      name: codecov-${{ matrix.python-version }}
 ```
 
 **Problems:**
@@ -94,15 +94,15 @@ Complete the Codecov integration in three steps:
    Upgrade to codecov-action@v5 and add token:
 
    ```yaml
-   - name: Upload coverage to Codecov
-     uses: codecov/codecov-action@v5
-     with:
-       token: ${{ secrets.CODECOV_TOKEN }}
-       files: ./coverage.xml
-       flags: unittests
-       name: codecov-${{ matrix.python-version }}
-       fail_ci_if_error: true
-       verbose: true
+     - name: Upload coverage to Codecov
+       uses: codecov/codecov-action@v5
+       with:
+         token: ${{ secrets.CODECOV_TOKEN }}
+         files: ./coverage.xml
+         flags: unittests
+         name: codecov-${{ matrix.python-version }}
+         fail_ci_if_error: true
+         verbose: true
    ```
 
    Changes:
@@ -137,15 +137,15 @@ coverage:
   range: 70..100             # Red at 70%, green at 100%
 
 comment:
-  layout: "header, diff, files, footer"
+  layout: header, diff, files, footer
   behavior: default          # Comment on every PR
   require_changes: false     # Comment even if no coverage change
 
 ignore:
-  - "tests/**"               # Ignore test files in coverage
-  - "scripts/**"             # Ignore utility scripts
-  - "docs/**"                # Ignore documentation
-  - "**/__init__.py"         # Ignore package init files
+  - tests/**                 # Ignore test files in coverage
+  - scripts/**               # Ignore utility scripts
+  - docs/**                  # Ignore documentation
+  - '**/__init__.py'         # Ignore package init files
 
 flags:
   unittests:

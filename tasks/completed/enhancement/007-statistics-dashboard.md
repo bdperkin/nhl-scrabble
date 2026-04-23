@@ -24,6 +24,7 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.layout import Layout
 
+
 class StatisticsDashboard:
     def run(self):
         layout = Layout()

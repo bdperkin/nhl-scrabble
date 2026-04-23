@@ -63,7 +63,9 @@ Alternative: Move rate limiting into `NHLClient._make_request()`:
 
 ```python
 class NHLClient:
-    def __init__(self, timeout: int = 10, retries: int = 3, rate_limit_delay: float = 0.3) -> None:
+    def __init__(
+        self, timeout: int = 10, retries: int = 3, rate_limit_delay: float = 0.3
+    ) -> None:
         """Initialize NHL API client."""
         self.rate_limit_delay = rate_limit_delay
         self._last_request_time: float | None = None
@@ -150,7 +152,10 @@ def test_failed_request_doesnt_affect_rate_limiting():
             success_response.json.return_value = {"data": "test"}
 
             # Second request fails
-            mock_get.side_effect = [success_response, requests.RequestException("Network error")]
+            mock_get.side_effect = [
+                success_response,
+                requests.RequestException("Network error"),
+            ]
 
             start = time.time()
             client._make_request("endpoint1")

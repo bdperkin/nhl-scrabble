@@ -24,7 +24,7 @@ Implement post-release tasks including bumping to next development version, upda
 def post_release(version):
     """Phase 5: Post-Release."""
     # Bump to dev version
-    dev_version = increment_version(version, 'patch') + '-dev'
+    dev_version = increment_version(version, "patch") + "-dev"
     update_version_files(dev_version)
 
     # Update changelog

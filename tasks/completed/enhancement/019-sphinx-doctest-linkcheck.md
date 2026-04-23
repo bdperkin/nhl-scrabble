@@ -25,8 +25,8 @@ The project has Sphinx documentation with quality plugins (task 005 completed):
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
-    "sphinx.ext.doctest",      # Available but not actively used
-    "sphinx.ext.linkcheck",    # Available but not actively used
+    "sphinx.ext.doctest",  # Available but not actively used
+    "sphinx.ext.linkcheck",  # Available but not actively used
     # ... other extensions
 ]
 ```
@@ -110,8 +110,8 @@ docs-quality: docs-doctest docs-linkcheck  ## Run all documentation quality chec
 
 # Doctest configuration
 doctest_default_flags = (
-    doctest.ELLIPSIS |          # Allow ... in output
-    doctest.NORMALIZE_WHITESPACE  # Ignore whitespace differences
+    doctest.ELLIPSIS  # Allow ... in output
+    | doctest.NORMALIZE_WHITESPACE  # Ignore whitespace differences
 )
 
 doctest_global_setup = """
@@ -136,18 +136,18 @@ doctest_path = []
 
 # Linkcheck configuration
 linkcheck_timeout = 15  # Seconds to wait for link response
-linkcheck_workers = 5   # Parallel workers for checking links
-linkcheck_retries = 2   # Number of retries for failed links
+linkcheck_workers = 5  # Parallel workers for checking links
+linkcheck_retries = 2  # Number of retries for failed links
 
 # Ignore certain URLs (e.g., localhost, private URLs)
 linkcheck_ignore = [
-    r'http://localhost:\d+/',  # Local development servers
-    r'https://github.com/.*/pull/\d+',  # PR URLs (may not exist yet)
+    r"http://localhost:\d+/",  # Local development servers
+    r"https://github.com/.*/pull/\d+",  # PR URLs (may not exist yet)
 ]
 
 # Anchors to ignore (some sites don't support anchor checking)
 linkcheck_anchors_ignore = [
-    r'^!',  # Ignore anchors starting with !
+    r"^!",  # Ignore anchors starting with !
 ]
 
 # Report file
@@ -207,7 +207,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -255,7 +255,7 @@ repos:
         entry: make docs-doctest
         language: system
         pass_filenames: false
-        files: '^docs/.*\.(rst|md)$'
+        files: ^docs/.*\.(rst|md)$
         stages: [manual]  # Only run when explicitly invoked
 
       - id: docs-linkcheck
@@ -263,7 +263,7 @@ repos:
         entry: make docs-linkcheck
         language: system
         pass_filenames: false
-        files: '^docs/.*\.(rst|md)$'
+        files: ^docs/.*\.(rst|md)$
         stages: [manual]  # Only run when explicitly invoked
 ```
 
@@ -598,20 +598,20 @@ ValueError: ...
 ```python
 # Ignore localhost URLs
 linkcheck_ignore = [
-    r'http://localhost.*',
-    r'http://127\.0\.0\.1.*',
+    r"http://localhost.*",
+    r"http://127\.0\.0\.1.*",
 ]
 
 # Ignore GitHub PR/issue URLs that may not exist yet
 linkcheck_ignore = [
-    r'https://github.com/.*/issues/\d+',
-    r'https://github.com/.*/pull/\d+',
+    r"https://github.com/.*/issues/\d+",
+    r"https://github.com/.*/pull/\d+",
 ]
 
 # Ignore sites that block automated checkers
 linkcheck_ignore = [
-    r'https://linkedin\.com/.*',
-    r'https://facebook\.com/.*',
+    r"https://linkedin\.com/.*",
+    r"https://facebook\.com/.*",
 ]
 ```
 
@@ -622,7 +622,7 @@ linkcheck_ignore = [
 linkcheck_timeout = 30  # Default: 15 seconds
 
 # Reduce workers to avoid rate limiting
-linkcheck_workers = 3   # Default: 5
+linkcheck_workers = 3  # Default: 5
 ```
 
 ### CI Integration Strategy
@@ -672,7 +672,7 @@ name: Weekly Link Check
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Every Sunday at midnight
+    - cron: 0 0 * * 0    # Every Sunday at midnight
 
 jobs:
   linkcheck:
@@ -682,7 +682,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
       - name: Install dependencies
         run: pip install -e ".[docs]"
       - name: Check links

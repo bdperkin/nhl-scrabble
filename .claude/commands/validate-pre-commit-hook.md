@@ -198,32 +198,32 @@ Pre-commit hooks can fail in CI even after passing locally if they haven't been 
 
 ```yaml
 # Exclude files with pseudo-code, placeholders, or illustrative examples
-- id: blacken-docs
-  exclude: ^(tasks/|\.claude/commands/|docs/examples/|docs/tutorials/)
+  - id: blacken-docs
+    exclude: ^(tasks/|\.claude/commands/|docs/examples/|docs/tutorials/)
 ```
 
 ### Generated Files
 
 ```yaml
 # Exclude auto-generated documentation
-- id: doc8
-  exclude: ^docs/reference/api/  # Sphinx-generated API docs
+  - id: doc8
+    exclude: ^docs/reference/api/ # Sphinx-generated API docs
 ```
 
 ### Configuration Files
 
 ```yaml
 # Some hooks don't apply to config files
-- id: check-yaml
-  exclude: ^\.github/ISSUE_TEMPLATE/  # YAML with frontmatter
+  - id: check-yaml
+    exclude: ^\.github/ISSUE_TEMPLATE/ # YAML with frontmatter
 ```
 
 ### Test Files
 
 ```yaml
 # Exclude test fixtures with intentionally bad code
-- id: ruff-check
-  exclude: ^tests/fixtures/bad_code\.py$
+  - id: ruff-check
+    exclude: ^tests/fixtures/bad_code\.py$
 ```
 
 ## Hook-Specific Guidance

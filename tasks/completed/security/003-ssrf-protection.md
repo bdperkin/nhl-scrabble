@@ -100,36 +100,37 @@ import socket
 from typing import Any
 from urllib.parse import urlparse
 
+
 class SSRFProtectionError(ValueError):
     """Raised when SSRF protection blocks a request."""
+
     pass
 
 
 # Blocked IP ranges (RFC 1918 private networks + special use)
 BLOCKED_IP_RANGES = [
-    ipaddress.ip_network("0.0.0.0/8"),          # "This" network
-    ipaddress.ip_network("10.0.0.0/8"),         # Private (RFC 1918)
-    ipaddress.ip_network("100.64.0.0/10"),      # Shared address space
-    ipaddress.ip_network("127.0.0.0/8"),        # Loopback
-    ipaddress.ip_network("169.254.0.0/16"),     # Link-local (AWS/Azure metadata!)
-    ipaddress.ip_network("172.16.0.0/12"),      # Private (RFC 1918)
-    ipaddress.ip_network("192.0.0.0/24"),       # IETF protocol assignments
-    ipaddress.ip_network("192.0.2.0/24"),       # Documentation (TEST-NET-1)
-    ipaddress.ip_network("192.168.0.0/16"),     # Private (RFC 1918)
-    ipaddress.ip_network("198.18.0.0/15"),      # Benchmarking
-    ipaddress.ip_network("198.51.100.0/24"),    # Documentation (TEST-NET-2)
-    ipaddress.ip_network("203.0.113.0/24"),     # Documentation (TEST-NET-3)
-    ipaddress.ip_network("224.0.0.0/4"),        # Multicast
-    ipaddress.ip_network("240.0.0.0/4"),        # Reserved
-    ipaddress.ip_network("255.255.255.255/32"), # Broadcast
-
+    ipaddress.ip_network("0.0.0.0/8"),  # "This" network
+    ipaddress.ip_network("10.0.0.0/8"),  # Private (RFC 1918)
+    ipaddress.ip_network("100.64.0.0/10"),  # Shared address space
+    ipaddress.ip_network("127.0.0.0/8"),  # Loopback
+    ipaddress.ip_network("169.254.0.0/16"),  # Link-local (AWS/Azure metadata!)
+    ipaddress.ip_network("172.16.0.0/12"),  # Private (RFC 1918)
+    ipaddress.ip_network("192.0.0.0/24"),  # IETF protocol assignments
+    ipaddress.ip_network("192.0.2.0/24"),  # Documentation (TEST-NET-1)
+    ipaddress.ip_network("192.168.0.0/16"),  # Private (RFC 1918)
+    ipaddress.ip_network("198.18.0.0/15"),  # Benchmarking
+    ipaddress.ip_network("198.51.100.0/24"),  # Documentation (TEST-NET-2)
+    ipaddress.ip_network("203.0.113.0/24"),  # Documentation (TEST-NET-3)
+    ipaddress.ip_network("224.0.0.0/4"),  # Multicast
+    ipaddress.ip_network("240.0.0.0/4"),  # Reserved
+    ipaddress.ip_network("255.255.255.255/32"),  # Broadcast
     # IPv6 blocked ranges
-    ipaddress.ip_network("::1/128"),            # Loopback
-    ipaddress.ip_network("::/128"),             # Unspecified
-    ipaddress.ip_network("::ffff:0:0/96"),      # IPv4-mapped
-    ipaddress.ip_network("fe80::/10"),          # Link-local
-    ipaddress.ip_network("fc00::/7"),           # Unique local
-    ipaddress.ip_network("ff00::/8"),           # Multicast
+    ipaddress.ip_network("::1/128"),  # Loopback
+    ipaddress.ip_network("::/128"),  # Unspecified
+    ipaddress.ip_network("::ffff:0:0/96"),  # IPv4-mapped
+    ipaddress.ip_network("fe80::/10"),  # Link-local
+    ipaddress.ip_network("fc00::/7"),  # Unique local
+    ipaddress.ip_network("ff00::/8"),  # Multicast
 ]
 
 # Allowed domains (allowlist approach)
@@ -141,16 +142,16 @@ ALLOWED_DOMAINS = [
 
 # Blocked ports (commonly used for internal services)
 BLOCKED_PORTS = {
-    22,    # SSH
-    23,    # Telnet
-    25,    # SMTP
+    22,  # SSH
+    23,  # Telnet
+    25,  # SMTP
     3306,  # MySQL
     5432,  # PostgreSQL
     6379,  # Redis
     8080,  # Common proxy/admin
     8443,  # HTTPS alt
     9200,  # Elasticsearch
-    27017, # MongoDB
+    27017,  # MongoDB
 }
 
 
@@ -285,9 +286,7 @@ def validate_api_base_url(url: str) -> str:
     # Must be HTTPS for API
     parsed = urlparse(url)
     if parsed.scheme != "https":
-        raise SSRFProtectionError(
-            "API base URL must use HTTPS for security"
-        )
+        raise SSRFProtectionError("API base URL must use HTTPS for security")
 
     # Validate with SSRF protection
     return validate_url_for_ssrf(url, allow_private=False)
@@ -301,6 +300,7 @@ from nhl_scrabble.security.ssrf_protection import (
     validate_api_base_url,
     SSRFProtectionError,
 )
+
 
 class NHLScrabbleConfig(BaseModel):
     """Configuration for NHL Scrabble application."""
@@ -325,6 +325,7 @@ from nhl_scrabble.security.ssrf_protection import (
     validate_url_for_ssrf,
     SSRFProtectionError,
 )
+
 
 class NHLApiClient:
     def _make_request(self, method: str, url: str) -> dict[str, Any]:
@@ -351,9 +352,7 @@ class NHLApiClient:
 
         # Make request
         try:
-            response = self.session.request(
-                method, url, timeout=self.timeout
-            )
+            response = self.session.request(method, url, timeout=self.timeout)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -367,6 +366,7 @@ class NHLApiClient:
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
     """Validate URL for SSRF protection."""
@@ -447,20 +447,21 @@ from nhl_scrabble.security.ssrf_protection import (
     SSRFProtectionError,
 )
 
+
 class TestIsIpBlocked:
     """Tests for is_ip_blocked()."""
 
     def test_public_ip_not_blocked(self):
         """Test public IPs are not blocked."""
-        assert not is_ip_blocked("8.8.8.8")          # Google DNS
-        assert not is_ip_blocked("1.1.1.1")          # Cloudflare DNS
+        assert not is_ip_blocked("8.8.8.8")  # Google DNS
+        assert not is_ip_blocked("1.1.1.1")  # Cloudflare DNS
         assert not is_ip_blocked("185.199.108.153")  # GitHub
 
     def test_private_ipv4_blocked(self):
         """Test private IPv4 ranges are blocked."""
-        assert is_ip_blocked("10.0.0.1")        # RFC 1918
-        assert is_ip_blocked("192.168.1.1")     # RFC 1918
-        assert is_ip_blocked("172.16.0.1")      # RFC 1918
+        assert is_ip_blocked("10.0.0.1")  # RFC 1918
+        assert is_ip_blocked("192.168.1.1")  # RFC 1918
+        assert is_ip_blocked("172.16.0.1")  # RFC 1918
 
     def test_localhost_blocked(self):
         """Test localhost is blocked."""
@@ -578,20 +579,24 @@ import pytest
 from pydantic import ValidationError
 from nhl_scrabble.config import NHLScrabbleConfig
 
+
 def test_config_valid_api_url():
     """Test config accepts valid NHL API URL."""
     config = NHLScrabbleConfig(api_base_url="https://api-web.nhle.com")
     assert config.api_base_url == "https://api-web.nhle.com"
+
 
 def test_config_rejects_private_ip():
     """Test config rejects private IP."""
     with pytest.raises(ValidationError, match="Invalid API base URL"):
         NHLScrabbleConfig(api_base_url="https://192.168.1.1")
 
+
 def test_config_rejects_localhost():
     """Test config rejects localhost."""
     with pytest.raises(ValidationError, match="Invalid API base URL"):
         NHLScrabbleConfig(api_base_url="https://localhost")
+
 
 def test_config_rejects_metadata_endpoint():
     """Test config rejects cloud metadata endpoint."""

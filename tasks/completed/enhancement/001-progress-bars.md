@@ -88,8 +88,8 @@ Implement rich progress bars with multi-level tracking:
 ```toml
 # pyproject.toml - already has rich for HTML report
 dependencies = [
-    "rich>=13.7.0",
-    # ... other dependencies
+  "rich>=13.7.0",
+  # ... other dependencies
 ]
 ```
 
@@ -110,6 +110,7 @@ from rich.progress import (
     MofNCompleteColumn,
     TextColumn,
 )
+
 
 class ProgressManager:
     """
@@ -170,9 +171,7 @@ class ProgressManager:
                 return
 
             task = progress.add_task(
-                "Fetching team rosters",
-                total=total_teams,
-                status=""
+                "Fetching team rosters", total=total_teams, status=""
             )
 
             def update(team_abbrev: str):
@@ -198,9 +197,7 @@ class ProgressManager:
                 return
 
             task = progress.add_task(
-                "Calculating Scrabble scores",
-                total=total_players,
-                status=""
+                "Calculating Scrabble scores", total=total_players, status=""
             )
 
             def update():
@@ -226,16 +223,12 @@ class ProgressManager:
                 return
 
             task = progress.add_task(
-                "Generating reports",
-                total=total_reports,
-                status=""
+                "Generating reports", total=total_reports, status=""
             )
 
             def update(report_name: str):
                 """Update progress after generating a report."""
-                progress.update(
-                    task, advance=1, status=f"[yellow]{report_name}"
-                )
+                progress.update(task, advance=1, status=f"[yellow]{report_name}")
 
             yield update
 ```
@@ -245,6 +238,7 @@ class ProgressManager:
 ```python
 # src/nhl_scrabble/cli.py
 from nhl_scrabble.ui.progress import ProgressManager
+
 
 @click.option("--quiet", "-q", is_flag=True, help="Suppress progress bars")
 def analyze(
@@ -318,18 +312,11 @@ def track_overall_analysis(self, num_teams: int):
 
         # Main task (overall progress)
         main_task = progress.add_task(
-            "NHL Scrabble Analysis",
-            total=3,  # 3 main phases
-            status="Starting..."
+            "NHL Scrabble Analysis", total=3, status="Starting..."  # 3 main phases
         )
 
         # Sub-task for current operation
-        sub_task = progress.add_task(
-            "",
-            total=100,
-            status="",
-            visible=False
-        )
+        sub_task = progress.add_task("", total=100, status="", visible=False)
 
         def start_api_phase():
             progress.update(main_task, status="Fetching team rosters...")
@@ -397,6 +384,7 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.ui.progress import ProgressManager
 
+
 def test_progress_manager_disabled():
     """Test progress manager when disabled."""
     mgr = ProgressManager(enabled=False)
@@ -408,11 +396,12 @@ def test_progress_manager_disabled():
 
     # No errors, progress not shown
 
+
 def test_progress_manager_enabled():
     """Test progress manager when enabled."""
     mgr = ProgressManager(enabled=True)
 
-    with patch('nhl_scrabble.ui.progress.Progress') as MockProgress:
+    with patch("nhl_scrabble.ui.progress.Progress") as MockProgress:
         mock_progress = MockProgress.return_value
         mock_task = Mock()
         mock_progress.add_task.return_value = mock_task
@@ -423,6 +412,7 @@ def test_progress_manager_enabled():
 
         # Verify progress updated
         assert mock_progress.update.call_count == 2
+
 
 def test_api_fetching_progress():
     """Test API fetching progress tracking."""
@@ -444,6 +434,7 @@ def test_api_fetching_progress():
 from click.testing import CliRunner
 from nhl_scrabble.cli import cli
 
+
 def test_cli_shows_progress():
     """Test CLI shows progress bars."""
     runner = CliRunner()
@@ -451,6 +442,7 @@ def test_cli_shows_progress():
 
     # Should show progress-related output
     assert "Fetching team rosters" in result.output or result.exit_code == 0
+
 
 def test_cli_quiet_mode():
     """Test CLI --quiet suppresses progress."""

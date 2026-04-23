@@ -367,10 +367,10 @@ This ensures all developers and CI environments use the same Python version.
 
 ```yaml
 # Enable uv cache in GitHub Actions for maximum speed
-- uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
-    cache-dependency-glob: "pyproject.toml"
+  - uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
+      cache-dependency-glob: pyproject.toml
 ```
 
 ## Troubleshooting

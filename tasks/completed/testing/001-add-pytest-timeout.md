@@ -33,17 +33,17 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
-    "--strict-markers",
-    "--strict-config",
-    "--cov=nhl_scrabble",
-    "--cov-report=term-missing:skip-covered",
-    "--cov-report=html",
-    "--cov-report=xml",
+  "--strict-markers",
+  "--strict-config",
+  "--cov=nhl_scrabble",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=html",
+  "--cov-report=xml",
 ]
 markers = [
-    "unit: Unit tests",
-    "integration: Integration tests",
-    "slow: Slow running tests",
+  "unit: Unit tests",
+  "integration: Integration tests",
+  "slow: Slow running tests",
 ]
 ```
 
@@ -63,6 +63,7 @@ def test_api_call_without_timeout():
     response = requests.get("http://api.nhl.com/v1/roster/TOR")
     assert response.status_code == 200
 
+
 # Example: Infinite loop bug
 def test_with_infinite_loop_bug():
     # Bug in code causes infinite loop
@@ -81,11 +82,11 @@ Add pytest-timeout with sensible defaults for different test types:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",  # Add timeout plugin
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",  # Add timeout plugin
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 
@@ -99,24 +100,24 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 # Add timeout configuration
-timeout = 10  # Default: 10 seconds for unit tests
-timeout_method = "thread"  # Use threading for better compatibility
+timeout = 10              # Default: 10 seconds for unit tests
+timeout_method = "thread" # Use threading for better compatibility
 
 addopts = [
-    "--strict-markers",
-    "--strict-config",
-    "--cov=nhl_scrabble",
-    "--cov-report=term-missing:skip-covered",
-    "--cov-report=html",
-    "--cov-report=xml",
-    "--timeout=10",  # Enforce 10s default timeout
+  "--strict-markers",
+  "--strict-config",
+  "--cov=nhl_scrabble",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=html",
+  "--cov-report=xml",
+  "--timeout=10",                           # Enforce 10s default timeout
 ]
 
 markers = [
-    "unit: Unit tests",
-    "integration: Integration tests",
-    "slow: Slow running tests",
-    "timeout: Custom timeout for specific tests (e.g., @pytest.mark.timeout(300))",
+  "unit: Unit tests",
+  "integration: Integration tests",
+  "slow: Slow running tests",
+  "timeout: Custom timeout for specific tests (e.g., @pytest.mark.timeout(300))",
 ]
 ```
 
@@ -126,9 +127,11 @@ markers = [
 # tests/unit/test_example.py
 import pytest
 
+
 # Unit test: Use default 10s timeout
 def test_fast_unit_test():
     assert True
+
 
 # Integration test: Override with longer timeout
 @pytest.mark.timeout(300)  # 5 minutes for integration tests
@@ -137,12 +140,14 @@ def test_nhl_api_integration():
     # This test makes real API calls
     pass
 
+
 # Slow test: Explicit timeout
 @pytest.mark.timeout(60)  # 1 minute
 @pytest.mark.slow
 def test_slow_operation():
     # This test is expected to be slow
     pass
+
 
 # Test that should never timeout: Disable timeout
 @pytest.mark.timeout(0)  # Disable timeout for this test
@@ -170,9 +175,8 @@ commands =
 **Step 5: Update CI workflow** (no changes needed):
 
 ```yaml
-# .github/workflows/ci.yml
-# Timeout settings from pyproject.toml are automatically used
-# No explicit changes required
+null
+...
 ```
 
 ## Implementation Steps
@@ -361,16 +365,19 @@ timeout_method = "signal"
 def test_slow_operation():
     pass
 
+
 # Method 2: Fixture
 @pytest.fixture(scope="function")
 def long_timeout(request):
     request.node.add_marker(pytest.mark.timeout(300))
 
+
 def test_with_fixture(long_timeout):
     pass
 
+
 # Method 3: Command line
-pytest --timeout=30  # Override default for this run
+pytest - -timeout = 30  # Override default for this run
 ```
 
 **Disabling Timeout**:
@@ -432,17 +439,22 @@ def test_full_api_workflow():
     # Real API calls, may be slow
     pass
 
+
 # ✅ Good: Unit test with default timeout (10s)
 def test_scoring_calculation():
     # Fast, isolated test
     assert ScrabbleScorer().calculate_score("TEST") == 4
+
 
 # ❌ Bad: Unit test that might timeout unnecessarily
 def test_with_slow_setup():
     # 15 second setup - will timeout at 10s default
     time.sleep(15)
     assert True
+
+
 # Fix: Add @pytest.mark.timeout(30)
+
 
 # ❌ Bad: Disabling timeout without good reason
 @pytest.mark.timeout(0)
@@ -450,6 +462,8 @@ def test_that_could_hang():
     # No timeout - could hang forever
     while condition_that_might_never_be_true():
         pass
+
+
 # Fix: Keep timeout, fix the underlying issue
 ```
 
@@ -481,11 +495,10 @@ pytest --timeout=0
 ```python
 # Issue: Tests timeout on slow CI but not locally
 # Solution: Use environment-specific timeouts
-@pytest.mark.timeout(
-    10 if not os.getenv("CI") else 30  # More time in CI
-)
+@pytest.mark.timeout(10 if not os.getenv("CI") else 30)  # More time in CI
 def test_with_ci_consideration():
     pass
+
 
 # Issue: Test legitimately needs long time
 # Solution: Mark as slow and increase timeout
@@ -493,6 +506,7 @@ def test_with_ci_consideration():
 @pytest.mark.timeout(300)
 def test_comprehensive_analysis():
     pass
+
 
 # Issue: Timeout causes cleanup issues
 # Solution: Use proper fixtures with cleanup

@@ -22,12 +22,13 @@ Implement the /release command orchestration, CLI interface with options (--vers
 
 ```python
 @click.command()
-@click.option('--version', help='Explicit version number')
-@click.option('--type', type=click.Choice(['major', 'minor', 'patch']),
-              help='Version bump type')
-@click.option('--dry-run', is_flag=True, help='Preview without executing')
-@click.option('--skip-tests', is_flag=True, help='Skip test execution')
-@click.option('--skip-pypi', is_flag=True, help='Skip PyPI publishing')
+@click.option("--version", help="Explicit version number")
+@click.option(
+    "--type", type=click.Choice(["major", "minor", "patch"]), help="Version bump type"
+)
+@click.option("--dry-run", is_flag=True, help="Preview without executing")
+@click.option("--skip-tests", is_flag=True, help="Skip test execution")
+@click.option("--skip-pypi", is_flag=True, help="Skip PyPI publishing")
 def release(version, type, dry_run, skip_tests, skip_pypi):
     """Automate the complete release process."""
     try:

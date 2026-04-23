@@ -620,8 +620,8 @@ Each sub-task must meet:
 
 ```yaml
 # Add to workflows for monitoring
-- name: Workflow timing
-  run: echo "::notice::Workflow completed in ${{ github.run_duration }}"
+  - name: Workflow timing
+    run: echo "::notice::Workflow completed in ${{ github.run_duration }}"
 ```
 
 ### Maintenance Strategy

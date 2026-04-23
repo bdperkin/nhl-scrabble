@@ -324,6 +324,7 @@ Examples:
     nhl-scrabble analyze
     nhl-scrabble analyze -v
 """
+
 # Output: Reformatted, potentially rewrapped
 
 # With \b - Preserves formatting

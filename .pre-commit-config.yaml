@@ -233,13 +233,16 @@ repos:
         exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 1.0.0  # NOTE: 1.0.0 has dependency resolution issues with mdformat-gfm/mdformat-tables
+    rev: 0.7.21  # NOTE: Pinned to 0.7.21 (1.0.0 has dependency resolution issues)
     hooks:
       - id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
         additional_dependencies:
           - mdformat-gfm  # GitHub Flavored Markdown support
-          - mdformat-tables  # Table formatting
+          - mdformat-black  # Code block formatting
+          - mdformat-config  # YAML/TOML block formatting
+          - mdformat-ruff  # Python code block linting integration
+          - mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
         # Exclude GitHub issue templates (YAML frontmatter incompatible) and generated docs
         exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md)
@@ -335,7 +338,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.7  # NOTE: 0.11.7 not yet available in Red Hat Nexus
+    rev: 0.11.6  # NOTE: Pinned to 0.11.6 (0.11.7 not available in Red Hat Nexus)
     hooks:
       - id: uv-lock
 
@@ -449,7 +452,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.11  # NOTE: 0.15.11 not yet available in Red Hat Nexus
+    rev: v0.15.10  # NOTE: Pinned to v0.15.10 (0.15.11 not available in Red Hat Nexus)
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
@@ -506,7 +509,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.2
+    rev: v1.20.1  # NOTE: Pinned to v1.20.1 (1.20.2 not available in Red Hat Nexus)
     hooks:
       - id: mypy
         additional_dependencies: [types-requests, types-PyYAML, pydantic, rich, jinja2]

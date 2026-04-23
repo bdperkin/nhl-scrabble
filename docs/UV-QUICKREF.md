@@ -91,11 +91,11 @@ git commit -m "Update dependencies"
 
 ```yaml
 # GitHub Actions
-- name: Install uv
-  uses: astral-sh/setup-uv@v4
+  - name: Install uv
+    uses: astral-sh/setup-uv@v4
 
-- name: Install dependencies
-  run: uv pip install -e ".[dev]" --system
+  - name: Install dependencies
+    run: uv pip install -e ".[dev]" --system
 ```
 
 ## Tips & Tricks
@@ -191,10 +191,10 @@ make uv-install-dev
 
 ```toml
 [tool.uv]
-managed = true              # Enable UV dependency management
-package = true              # This is a Python package
-compile-bytecode = true     # Compile .pyc files for faster imports
-link-mode = "copy"          # Copy files instead of linking
+managed = true          # Enable UV dependency management
+package = true          # This is a Python package
+compile-bytecode = true # Compile .pyc files for faster imports
+link-mode = "copy"      # Copy files instead of linking
 ```
 
 ## Resources

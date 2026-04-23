@@ -450,8 +450,8 @@ grep -E "(parse error|SyntaxError|Cannot parse)" ci-logs.txt
 
 ```yaml
 # Add to .pre-commit-config.yaml for the failing hook:
-- id: blacken-docs
-  exclude: ^(tasks/|\.claude/commands/|docs/examples/)
+  - id: blacken-docs
+    exclude: ^(tasks/|\.claude/commands/|docs/examples/)
 ```
 
 **Prevention:**
@@ -515,7 +515,8 @@ grep -E "(S603|S607|subprocess.*untrusted)" ci-logs.txt
 result = subprocess.run(  # noqa: S603
     [  # noqa: S607
         "sphinx-build",
-        "-b", "html",
+        "-b",
+        "html",
         str(docs_dir),
         str(build_dir),
     ],
@@ -550,15 +551,15 @@ grep -E "(ModuleNotFoundError|ImportError|No module named)" ci-logs.txt
 ```toml
 # Update pyproject.toml [project.dependencies]:
 dependencies = [
-    "existing-package>=1.0",
-    "new-package>=2.0",  # Add missing dependency
+  "existing-package>=1.0",
+  "new-package>=2.0",      # Add missing dependency
 ]
 
 # Or for optional dependencies:
 [project.optional-dependencies]
 docs = [
-    "sphinx>=7.0",
-    "missing-sphinx-plugin>=1.0",  # Add missing doc dependency
+  "sphinx>=7.0",
+  "missing-sphinx-plugin>=1.0", # Add missing doc dependency
 ]
 ```
 

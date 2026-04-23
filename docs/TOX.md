@@ -406,17 +406,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15']
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install tox
-      run: pip install tox
-    - name: Run tests
-      run: tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install tox
+        run: pip install tox
+      - name: Run tests
+        run: tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
 ```
 
 ### GitLab CI

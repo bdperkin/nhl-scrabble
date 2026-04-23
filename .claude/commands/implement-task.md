@@ -116,13 +116,13 @@ This command automates the complete task implementation workflow from start to f
          reason="tool-name not found (optional dependencies not installed)",
      )
 
+
      # Or per-test skip
      @pytest.mark.skipif(
          shutil.which("tool-name") is None,
          reason="tool-name not found",
      )
-     def test_requiring_external_tool():
-         ...
+     def test_requiring_external_tool(): ...
      ```
 
      - Use `shutil.which()` to check tool availability
@@ -723,9 +723,9 @@ This command automates the complete task implementation workflow from start to f
      **Fix**: Add exclusion pattern to `.pre-commit-config.yaml`
 
      ```yaml
-     - id: hook-name
-       exclude: ^(tasks/|\.claude/commands/|docs/explanation/|examples/)
-       args: [...]
+       - id: hook-name
+         exclude: ^(tasks/|\.claude/commands/|docs/explanation/|examples/)
+         args: ['...']
      ```
 
      **Prevention**: Always test new hooks with `pre-commit run hook-name --all-files`
@@ -785,8 +785,8 @@ This command automates the complete task implementation workflow from start to f
      ```toml
      [project.optional-dependencies]
      docs = [
-         "sphinx>=7.2.6",
-         "package-name>=1.0.0",  # NEW
+       "sphinx>=7.2.6",
+       "package-name>=1.0.0", # NEW
      ]
      ```
 

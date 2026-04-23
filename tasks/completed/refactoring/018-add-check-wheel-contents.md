@@ -67,11 +67,7 @@ python -m build
       - id: check-wheel-contents
         name: check wheel contents
         description: Validate Python wheel package contents
-        args:
-          [
-            --ignore, W002,  # Ignore build number in wheel name
-            --toplevel, nhl_scrabble,  # Expected top-level package
-          ]
+        args: [--ignore, W002, --toplevel, nhl_scrabble]
         # Only run when wheel-related files change
         files: ^(pyproject\.toml|setup\.py|MANIFEST\.in|src/.*\.py)$
         # Or manually: pre-commit run check-wheel-contents --all-files
@@ -109,7 +105,7 @@ toplevel = ["nhl_scrabble"]
 
 # Ignore specific warnings
 ignore = [
-    "W002",  # Wheel contains a build number (acceptable)
+  "W002", # Wheel contains a build number (acceptable)
 ]
 ```
 
@@ -176,7 +172,7 @@ name: Package Validation
 on:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: [v*]
   pull_request:
     branches: [main]
 
@@ -189,7 +185,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -295,7 +291,7 @@ unzip -l dist/nhl_scrabble-2.0.0-py3-none-any.whl
 ```toml
 # pyproject.toml - ensure license file included
 [project]
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 ```
 
 **Missing README:**

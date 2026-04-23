@@ -431,8 +431,8 @@ git config alias.cleanup '!git branch --merged main | grep -v "^\*" | grep -v "m
 **Option 3: GitHub Action**
 
 ```yaml
-# .github/workflows/cleanup-branches.yml
-# Automated remote branch cleanup
+null
+...
 ```
 
 **Pros**: Fully automated

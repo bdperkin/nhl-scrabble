@@ -64,9 +64,12 @@ import re
 from pathlib import Path
 from typing import Any
 
+
 class ConfigValidationError(ValueError):
     """Raised when config value fails validation."""
+
     pass
+
 
 def validate_positive_int(value: str, min_val: int = 1, max_val: int = 3600) -> int:
     """Validate positive integer in range."""
@@ -76,13 +79,14 @@ def validate_positive_int(value: str, min_val: int = 1, max_val: int = 3600) -> 
         raise ConfigValidationError(f"Invalid integer: {value}")
 
     if not min_val <= num <= max_val:
-        raise ConfigValidationError(
-            f"Value {num} outside range [{min_val}, {max_val}]"
-        )
+        raise ConfigValidationError(f"Value {num} outside range [{min_val}, {max_val}]")
 
     return num
 
-def validate_positive_float(value: str, min_val: float = 0.0, max_val: float = 60.0) -> float:
+
+def validate_positive_float(
+    value: str, min_val: float = 0.0, max_val: float = 60.0
+) -> float:
     """Validate positive float in range."""
     try:
         num = float(value)
@@ -90,11 +94,10 @@ def validate_positive_float(value: str, min_val: float = 0.0, max_val: float = 6
         raise ConfigValidationError(f"Invalid float: {value}")
 
     if not min_val <= num <= max_val:
-        raise ConfigValidationError(
-            f"Value {num} outside range [{min_val}, {max_val}]"
-        )
+        raise ConfigValidationError(f"Value {num} outside range [{min_val}, {max_val}]")
 
     return num
+
 
 def validate_safe_path(value: str, must_exist: bool = False) -> Path:
     """Validate file path is safe."""
@@ -115,6 +118,7 @@ def validate_safe_path(value: str, must_exist: bool = False) -> Path:
 
     return path
 
+
 def validate_enum(value: str, allowed_values: set[str]) -> str:
     """Validate value is in allowed set."""
     if value not in allowed_values:
@@ -134,6 +138,7 @@ from nhl_scrabble.config_validators import (
     validate_safe_path,
     validate_enum,
 )
+
 
 class Config:
     """Secure configuration with validation."""
@@ -234,6 +239,7 @@ class Config:
 from pydantic import BaseSettings, Field, validator
 from pathlib import Path
 
+
 class Config(BaseSettings):
     """Type-safe config with Pydantic validation."""
 
@@ -281,13 +287,16 @@ def test_validate_int_rejects_injection():
     with pytest.raises(ConfigValidationError):
         validate_positive_int("10; rm -rf /")
 
+
 def test_validate_path_prevents_traversal():
     with pytest.raises(ConfigValidationError):
         validate_safe_path("../../etc/passwd")
 
+
 def test_validate_path_rejects_shell_chars():
     with pytest.raises(ConfigValidationError):
         validate_safe_path("file.txt; cat /etc/passwd")
+
 
 def test_config_validates_env_vars():
     os.environ["NHL_SCRABBLE_API_TIMEOUT"] = "not_a_number"

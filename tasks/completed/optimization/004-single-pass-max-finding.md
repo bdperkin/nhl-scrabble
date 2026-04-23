@@ -34,7 +34,7 @@ def generate(self, data: tuple[...]) -> str:
     top_first = max(all_players, key=lambda x: x.first_score)  # O(n)
 
     # ❌ Second pass: find highest last name
-    top_last = max(all_players, key=lambda x: x.last_score)    # O(n)
+    top_last = max(all_players, key=lambda x: x.last_score)  # O(n)
 
     # ❌ Third pass: sum all full scores
     avg_full = sum(p.full_score for p in all_players) / len(all_players)  # O(n)
@@ -70,9 +70,7 @@ def generate(self, data: tuple[...]) -> str:
     parts.append(self._format_header(f"🌟 TOP {self.top_players_count}..."))
 
     top_players = heapq.nlargest(
-        self.top_players_count,
-        all_players,
-        key=lambda x: x.full_score
+        self.top_players_count, all_players, key=lambda x: x.full_score
     )
 
     parts.extend(
@@ -89,29 +87,28 @@ def generate(self, data: tuple[...]) -> str:
     # Fun stats section
     parts.append(self._format_header("🎯 FUN STATS"))
 
-    parts.extend([
-        f"\nHighest First Name: {stats['top_first'].first_name} "
-        f"({stats['top_first'].full_name}, {stats['top_first'].team}) = "
-        f"{stats['top_first'].first_score} points",
-
-        f"\nHighest Last Name: {stats['top_last'].last_name} "
-        f"({stats['top_last'].full_name}, {stats['top_last'].team}) = "
-        f"{stats['top_last'].last_score} points",
-
-        "\n\nLeague-Wide Average Scores:",
-        f"\n  Full Name: {stats['avg_full']:.2f}",
-        f"\n  First Name: {stats['avg_first']:.2f}",
-        f"\n  Last Name: {stats['avg_last']:.2f}",
-    ])
+    parts.extend(
+        [
+            f"\nHighest First Name: {stats['top_first'].first_name} "
+            f"({stats['top_first'].full_name}, {stats['top_first'].team}) = "
+            f"{stats['top_first'].first_score} points",
+            f"\nHighest Last Name: {stats['top_last'].last_name} "
+            f"({stats['top_last'].full_name}, {stats['top_last'].team}) = "
+            f"{stats['top_last'].last_score} points",
+            "\n\nLeague-Wide Average Scores:",
+            f"\n  Full Name: {stats['avg_full']:.2f}",
+            f"\n  First Name: {stats['avg_first']:.2f}",
+            f"\n  Last Name: {stats['avg_last']:.2f}",
+        ]
+    )
 
     # Division/conference stats (unchanged)
     # ... rest of code ...
 
     return "".join(parts)
 
-def _calculate_player_statistics(
-    self, players: list[PlayerScore]
-) -> dict[str, Any]:
+
+def _calculate_player_statistics(self, players: list[PlayerScore]) -> dict[str, Any]:
     """Calculate all player statistics in a single pass.
 
     Args:
@@ -130,12 +127,12 @@ def _calculate_player_statistics(
     """
     if not players:
         return {
-            'top_first': None,
-            'top_last': None,
-            'avg_full': 0.0,
-            'avg_first': 0.0,
-            'avg_last': 0.0,
-            'total_players': 0,
+            "top_first": None,
+            "top_last": None,
+            "avg_full": 0.0,
+            "avg_first": 0.0,
+            "avg_last": 0.0,
+            "total_players": 0,
         }
 
     # Initialize with first player
@@ -162,12 +159,12 @@ def _calculate_player_statistics(
     avg_last = total_last / count
 
     return {
-        'top_first': top_first,
-        'top_last': top_last,
-        'avg_full': avg_full,
-        'avg_first': avg_first,
-        'avg_last': avg_last,
-        'total_players': count,
+        "top_first": top_first,
+        "top_last": top_last,
+        "avg_full": avg_full,
+        "avg_first": avg_first,
+        "avg_last": avg_last,
+        "total_players": count,
     }
 ```
 
@@ -176,6 +173,7 @@ def _calculate_player_statistics(
 ```python
 from dataclasses import dataclass
 from typing import Optional
+
 
 @dataclass
 class PlayerStatistics:
@@ -187,6 +185,7 @@ class PlayerStatistics:
     avg_first: float
     avg_last: float
     total_players: int
+
 
 class StatsReporter(BaseReporter):
     """Generate fun statistics and top players reports."""
@@ -286,6 +285,7 @@ import pytest
 from nhl_scrabble.reports.stats_report import StatsReporter
 from nhl_scrabble.models.player import PlayerScore
 
+
 def test_single_pass_stats_calculation(sample_players):
     """Verify single-pass statistics are correct."""
     reporter = StatsReporter()
@@ -295,29 +295,33 @@ def test_single_pass_stats_calculation(sample_players):
 
     # Verify maximums
     top_first_score = max(p.first_score for p in sample_players)
-    assert stats['top_first'].first_score == top_first_score
+    assert stats["top_first"].first_score == top_first_score
 
     top_last_score = max(p.last_score for p in sample_players)
-    assert stats['top_last'].last_score == top_last_score
+    assert stats["top_last"].last_score == top_last_score
 
     # Verify averages
     expected_avg_full = sum(p.full_score for p in sample_players) / len(sample_players)
-    assert abs(stats['avg_full'] - expected_avg_full) < 0.01
+    assert abs(stats["avg_full"] - expected_avg_full) < 0.01
 
-    expected_avg_first = sum(p.first_score for p in sample_players) / len(sample_players)
-    assert abs(stats['avg_first'] - expected_avg_first) < 0.01
+    expected_avg_first = sum(p.first_score for p in sample_players) / len(
+        sample_players
+    )
+    assert abs(stats["avg_first"] - expected_avg_first) < 0.01
 
     expected_avg_last = sum(p.last_score for p in sample_players) / len(sample_players)
-    assert abs(stats['avg_last'] - expected_avg_last) < 0.01
+    assert abs(stats["avg_last"] - expected_avg_last) < 0.01
+
 
 def test_stats_calculation_empty_list():
     """Verify handling of empty player list."""
     reporter = StatsReporter()
     stats = reporter._calculate_player_statistics([])
 
-    assert stats['top_first'] is None
-    assert stats['top_last'] is None
-    assert stats['avg_full'] == 0.0
+    assert stats["top_first"] is None
+    assert stats["top_last"] is None
+    assert stats["avg_full"] == 0.0
+
 
 def test_stats_calculation_single_player():
     """Verify handling of single player."""
@@ -330,17 +334,18 @@ def test_stats_calculation_single_player():
         full_score=32,
         team="EDM",
         division="Pacific",
-        conference="Western"
+        conference="Western",
     )
 
     reporter = StatsReporter()
     stats = reporter._calculate_player_statistics([player])
 
-    assert stats['top_first'] == player
-    assert stats['top_last'] == player
-    assert stats['avg_full'] == 32.0
-    assert stats['avg_first'] == 15.0
-    assert stats['avg_last'] == 17.0
+    assert stats["top_first"] == player
+    assert stats["top_last"] == player
+    assert stats["avg_full"] == 32.0
+    assert stats["avg_first"] == 15.0
+    assert stats["avg_last"] == 17.0
+
 
 def test_stats_performance_improvement():
     """Verify single-pass is faster than multi-pass."""
@@ -358,7 +363,7 @@ def test_stats_performance_improvement():
             full_score=random.randint(1, 100),
             team="TOR",
             division="Atlantic",
-            conference="Eastern"
+            conference="Eastern",
         )
         for _ in range(1000)
     ]
@@ -386,7 +391,9 @@ def test_stats_performance_improvement():
     speedup = multi_pass_time / single_pass_time
     assert speedup > 2.0, f"Expected >2x speedup, got {speedup:.2f}x"
 
-    print(f"Speedup: {speedup:.2f}x (multi: {multi_pass_time:.3f}s, single: {single_pass_time:.3f}s)")
+    print(
+        f"Speedup: {speedup:.2f}x (multi: {multi_pass_time:.3f}s, single: {single_pass_time:.3f}s)"
+    )
 ```
 
 **Integration Tests**:

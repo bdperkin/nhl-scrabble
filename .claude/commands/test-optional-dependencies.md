@@ -327,7 +327,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 # In pyproject.toml:
-[project.optional-dependencies.docs]
+[project.optional - dependencies.docs]
 sphinx = ">=7.0"
 ```
 
@@ -423,8 +423,8 @@ mypy = ">=1.7.0"
 [project.optional-dependencies.all]
 # Meta-dependency for installing everything
 nhl-scrabble = [
-    "nhl-scrabble[docs]",
-    "nhl-scrabble[dev]",
+  "nhl-scrabble[docs]",
+  "nhl-scrabble[dev]",
 ]
 
 # Install with: pip install -e ".[all]"

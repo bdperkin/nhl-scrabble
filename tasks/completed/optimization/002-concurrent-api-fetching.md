@@ -23,7 +23,9 @@ Current implementation fetches team rosters sequentially with 0.3s rate limiting
 **team_processor.py (lines 35-95)**:
 
 ```python
-def process_all_teams(self) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
+def process_all_teams(
+    self,
+) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
     logger.info("Starting team processing")
 
     teams_info = self.api_client.get_teams()  # Single API call
@@ -85,7 +87,7 @@ class TeamProcessor:
         self,
         api_client: NHLApiClient,
         scorer: ScrabbleScorer,
-        max_workers: int = 5  # NEW: control parallelism
+        max_workers: int = 5,  # NEW: control parallelism
     ) -> None:
         self.api_client = api_client
         self.scorer = scorer
@@ -111,9 +113,7 @@ class TeamProcessor:
             # Submit all roster fetch jobs
             future_to_team = {
                 executor.submit(
-                    self._fetch_and_process_team,
-                    team_abbrev,
-                    team_meta
+                    self._fetch_and_process_team, team_abbrev, team_meta
                 ): team_abbrev
                 for team_abbrev, team_meta in teams_info.items()
             }
@@ -153,9 +153,7 @@ class TeamProcessor:
         return team_scores, all_players, failed_teams
 
     def _fetch_and_process_team(
-        self,
-        team_abbrev: str,
-        team_meta: dict[str, str]
+        self, team_abbrev: str, team_meta: dict[str, str]
     ) -> Optional[tuple[TeamScore, list[PlayerScore]]]:
         """Fetch and process a single team (thread-safe).
 
@@ -174,10 +172,7 @@ class TeamProcessor:
 
             # Process roster
             team_players = self._process_team_roster(
-                roster,
-                team_abbrev,
-                team_meta["division"],
-                team_meta["conference"]
+                roster, team_abbrev, team_meta["division"], team_meta["conference"]
             )
 
             # Calculate team score
@@ -233,9 +228,7 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
     # ... existing code ...
 
     team_processor = TeamProcessor(
-        api_client,
-        scorer,
-        max_workers=config.max_concurrent_requests  # NEW
+        api_client, scorer, max_workers=config.max_concurrent_requests  # NEW
     )
 
     # ... rest of code ...
@@ -288,6 +281,7 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.processors.team_processor import TeamProcessor
 
+
 def test_concurrent_fetching_respects_max_workers():
     """Verify ThreadPoolExecutor uses configured max_workers."""
     api_client = Mock()
@@ -295,6 +289,7 @@ def test_concurrent_fetching_respects_max_workers():
 
     processor = TeamProcessor(api_client, scorer, max_workers=3)
     assert processor.max_workers == 3
+
 
 def test_fetch_and_process_team_success(mock_roster_data):
     """Verify single team processing works."""
@@ -304,14 +299,14 @@ def test_fetch_and_process_team_success(mock_roster_data):
 
     processor = TeamProcessor(api_client, scorer)
     result = processor._fetch_and_process_team(
-        "TOR",
-        {"division": "Atlantic", "conference": "Eastern"}
+        "TOR", {"division": "Atlantic", "conference": "Eastern"}
     )
 
     assert result is not None
     team_score, players = result
     assert team_score.abbrev == "TOR"
     assert len(players) > 0
+
 
 def test_fetch_and_process_team_not_found():
     """Verify handling of 404 errors."""
@@ -321,11 +316,11 @@ def test_fetch_and_process_team_not_found():
 
     processor = TeamProcessor(api_client, scorer)
     result = processor._fetch_and_process_team(
-        "XXX",
-        {"division": "Unknown", "conference": "Unknown"}
+        "XXX", {"division": "Unknown", "conference": "Unknown"}
     )
 
     assert result is None
+
 
 def test_concurrent_processing_all_teams(mock_teams_info):
     """Verify concurrent processing produces same results."""

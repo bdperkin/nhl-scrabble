@@ -24,20 +24,24 @@ from typing import Optional
 
 app = FastAPI(title="NHL Scrabble API")
 
+
 @app.get("/api/v1/teams")
 async def get_teams(division: Optional[str] = None):
     """Get all team scores."""
     pass
+
 
 @app.get("/api/v1/teams/{abbrev}")
 async def get_team(abbrev: str):
     """Get specific team score."""
     pass
 
+
 @app.get("/api/v1/players")
 async def get_players(min_score: Optional[int] = Query(None)):
     """Get all players with optional filtering."""
     pass
+
 
 @app.get("/api/v1/standings/{type}")
 async def get_standings(type: str):

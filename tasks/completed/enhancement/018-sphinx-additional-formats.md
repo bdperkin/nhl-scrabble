@@ -79,35 +79,35 @@ Configure Sphinx to build documentation in 6 additional formats:
 # Man page configuration
 man_pages = [
     (
-        "index",                    # Source document
-        "nhl-scrabble",            # Man page name
+        "index",  # Source document
+        "nhl-scrabble",  # Man page name
         "NHL Scrabble Documentation",  # Description
-        ["Brandon Perkins"],       # Authors
-        1,                         # Section (1 = commands)
+        ["Brandon Perkins"],  # Authors
+        1,  # Section (1 = commands)
     ),
 ]
 
 # Texinfo configuration
 texinfo_documents = [
     (
-        "index",                   # Source document
-        "nhl-scrabble",           # Target name
+        "index",  # Source document
+        "nhl-scrabble",  # Target name
         "NHL Scrabble Documentation",  # Title
-        "Brandon Perkins",        # Author
-        "nhl-scrabble",           # Dir menu entry
+        "Brandon Perkins",  # Author
+        "nhl-scrabble",  # Dir menu entry
         "NHL player name Scrabble scoring system",  # Description
-        "Miscellaneous",          # Category
+        "Miscellaneous",  # Category
     ),
 ]
 
 # LaTeX/PDF configuration
 latex_documents = [
     (
-        "index",                   # Source document
-        "nhl-scrabble.tex",       # Target name
+        "index",  # Source document
+        "nhl-scrabble.tex",  # Target name
         "NHL Scrabble Documentation",  # Title
-        "Brandon Perkins",        # Author
-        "manual",                 # Document class (manual or howto)
+        "Brandon Perkins",  # Author
+        "manual",  # Document class (manual or howto)
     ),
 ]
 
@@ -120,7 +120,7 @@ latex_elements = {
 
 # Text output configuration
 text_newlines = "unix"
-text_sectionchars = "*=-~\"+`"
+text_sectionchars = '*=-~"+`'
 ```
 
 **2. Add Makefile Targets**

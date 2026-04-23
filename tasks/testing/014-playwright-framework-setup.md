@@ -46,6 +46,7 @@ playwright install-deps  # Install system dependencies
 # qa/web/pages/base_page.py
 from playwright.sync_api import Page, expect
 
+
 class BasePage:
     def __init__(self, page: Page):
         self.page = page
@@ -67,6 +68,7 @@ class BasePage:
 ```python
 # qa/web/pages/index_page.py
 from pages.base_page import BasePage
+
 
 class IndexPage(BasePage):
     def __init__(self, page):
@@ -92,12 +94,14 @@ class IndexPage(BasePage):
 import pytest
 from playwright.sync_api import Page
 
+
 @pytest.fixture(scope="session")
 def browser_context_args():
     return {
         "viewport": {"width": 1920, "height": 1080},
         "ignore_https_errors": True,
     }
+
 
 @pytest.fixture
 def page_fixture(page: Page):

@@ -21,41 +21,41 @@ The CI workflow currently uses two different Codecov actions:
 **Coverage Upload (`.github/workflows/ci.yml:73-80`):**
 
 ```yaml
-- name: Upload coverage to Codecov
-  uses: codecov/codecov-action@v6
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: ./coverage.xml
-    flags: unittests
-    name: codecov-${{ matrix.python-version }}
-    fail_ci_if_error: true
-    verbose: true
+  - name: Upload coverage to Codecov
+    uses: codecov/codecov-action@v6
+    with:
+      token: ${{ secrets.CODECOV_TOKEN }}
+      files: ./coverage.xml
+      flags: unittests
+      name: codecov-${{ matrix.python-version }}
+      fail_ci_if_error: true
+      verbose: true
 ```
 
 **Test Results Upload - Test Job (`.github/workflows/ci.yml:82-89`):**
 
 ```yaml
-- name: Upload test results to Codecov
-  if: always()
-  uses: codecov/test-results-action@v1  # DEPRECATED
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: junit-py${{ matrix.python-version }}.xml
-    fail_ci_if_error: false
-    verbose: true
+  - name: Upload test results to Codecov
+    if: always()
+    uses: codecov/test-results-action@v1 # DEPRECATED
+    with:
+      token: ${{ secrets.CODECOV_TOKEN }}
+      files: junit-py${{ matrix.python-version }}.xml
+      fail_ci_if_error: false
+      verbose: true
 ```
 
 **Test Results Upload - Tox Job (`.github/workflows/ci.yml:169-176`):**
 
 ```yaml
-- name: Upload test results to Codecov
-  if: always()
-  uses: codecov/test-results-action@v1  # DEPRECATED
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: junit*.xml
-    fail_ci_if_error: false
-    verbose: true
+  - name: Upload test results to Codecov
+    if: always()
+    uses: codecov/test-results-action@v1 # DEPRECATED
+    with:
+      token: ${{ secrets.CODECOV_TOKEN }}
+      files: junit*.xml
+      fail_ci_if_error: false
+      verbose: true
 ```
 
 **Issues:**
@@ -72,29 +72,29 @@ Migrate both test results uploads to use `codecov/codecov-action@v6` (matching t
 ### Updated Test Job (lines 82-89)
 
 ```yaml
-- name: Upload test results to Codecov
-  if: always()
-  uses: codecov/codecov-action@v6
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: junit-py${{ matrix.python-version }}.xml
-    report_type: test_results
-    fail_ci_if_error: false
-    verbose: true
+  - name: Upload test results to Codecov
+    if: always()
+    uses: codecov/codecov-action@v6
+    with:
+      token: ${{ secrets.CODECOV_TOKEN }}
+      files: junit-py${{ matrix.python-version }}.xml
+      report_type: test_results
+      fail_ci_if_error: false
+      verbose: true
 ```
 
 ### Updated Tox Job (lines 169-176)
 
 ```yaml
-- name: Upload test results to Codecov
-  if: always()
-  uses: codecov/codecov-action@v6
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: junit*.xml
-    report_type: test_results
-    fail_ci_if_error: false
-    verbose: true
+  - name: Upload test results to Codecov
+    if: always()
+    uses: codecov/codecov-action@v6
+    with:
+      token: ${{ secrets.CODECOV_TOKEN }}
+      files: junit*.xml
+      report_type: test_results
+      fail_ci_if_error: false
+      verbose: true
 ```
 
 ### Benefits

@@ -776,7 +776,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Ensures consistent absolute imports throughout the codebase
 - **Mdformat Integration** - Markdown formatting with GitHub Flavored Markdown support
   - Comprehensive configuration in pyproject.toml matching ruff's ALL rules philosophy
-  - Pre-commit hook with mdformat-gfm and mdformat-tables plugins for GitHub Flavored Markdown support
+  - Pre-commit hook with mdformat-gfm, mdformat-black, mdformat-config, mdformat-ruff, and mdformat-web plugins
   - Tox environment (mdformat) with bash wrapper for shell glob expansion
   - Added to CI/CD pipeline for continuous markdown formatting validation
   - Configuration aligned with ruff: wrap=100 (matches line-length), end_of_line="lf", number=true

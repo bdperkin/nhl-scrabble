@@ -62,6 +62,7 @@ Implement multi-layer DoS protection:
 ```python
 from requests.adapters import HTTPAdapter
 
+
 class NHLApiClient:
     def __init__(
         self,
@@ -86,10 +87,12 @@ class NHLApiClient:
 from enum import Enum
 import time
 
+
 class CircuitState(Enum):
     CLOSED = "closed"  # Normal operation
-    OPEN = "open"      # Failing, reject requests
+    OPEN = "open"  # Failing, reject requests
     HALF_OPEN = "half_open"  # Testing recovery
+
 
 class CircuitBreaker:
     def __init__(
@@ -139,6 +142,7 @@ class CircuitBreaker:
 from queue import Queue, Full
 from threading import Semaphore
 
+
 class RequestQueue:
     def __init__(self, max_size: int = 100):
         self.queue = Queue(maxsize=max_size)
@@ -158,11 +162,14 @@ class RequestQueue:
 ```python
 import signal
 
+
 class TimeoutError(Exception):
     pass
 
+
 def timeout_handler(signum, frame):
     raise TimeoutError("Request exceeded hard timeout")
+
 
 class NHLApiClient:
     def __init__(self, hard_timeout: float = 30.0):
@@ -217,18 +224,14 @@ class NHLApiClient:
     def get_team_roster(self, team_abbrev: str) -> TeamRoster:
         # Check circuit breaker
         if self.circuit_breaker.state == CircuitState.OPEN:
-            raise CircuitBreakerOpenError(
-                f"Circuit breaker open, NHL API unavailable"
-            )
+            raise CircuitBreakerOpenError(f"Circuit breaker open, NHL API unavailable")
 
         # Enqueue request
         self.request_queue.enqueue({"team": team_abbrev})
 
         # Make request with circuit breaker
         try:
-            return self.circuit_breaker.call(
-                self._fetch_roster, team_abbrev
-            )
+            return self.circuit_breaker.call(self._fetch_roster, team_abbrev)
         except CircuitBreakerOpenError:
             logger.warning(f"Circuit breaker opened for {team_abbrev}")
             raise
@@ -259,6 +262,7 @@ def test_circuit_breaker_opens_after_threshold():
             cb.call(failing_function)
 
     assert cb.state == CircuitState.OPEN
+
 
 def test_queue_rejects_when_full():
     queue = RequestQueue(max_size=5)

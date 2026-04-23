@@ -180,6 +180,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from nhl_scrabble import __version__
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
 from nhl_scrabble.config import Config
+
 # ... etc.
 ```
 
@@ -228,15 +229,15 @@ def test_json_report_generation():
 
     # ... create test data ...
 
-    json_output = generate_json_report(
-        team_scores, all_players, {}, {}, {}
-    )
+    json_output = generate_json_report(team_scores, all_players, {}, {}, {})
 
     # Should parse as valid JSON
     import json
+
     data = json.loads(json_output)
     assert "teams" in data
     assert "divisions" in data
+
 
 def test_html_report_generation():
     """Verify HTML report generation works with module-level imports."""
@@ -244,13 +245,12 @@ def test_html_report_generation():
 
     # ... create test data ...
 
-    html_output = generate_html_report(
-        team_scores, all_players, {}, {}, {}
-    )
+    html_output = generate_html_report(team_scores, all_players, {}, {}, {})
 
     # Should contain HTML tags
     assert "<html>" in html_output or "<!DOCTYPE" in html_output
     assert "</html>" in html_output
+
 
 def test_imports_at_module_level():
     """Verify all imports are at module level."""
@@ -276,8 +276,7 @@ def test_cli_analyze_json_output(tmp_path):
     output_file = tmp_path / "output.json"
 
     result = runner.invoke(
-        cli.analyze,
-        ["--format", "json", "--output", str(output_file)]
+        cli.analyze, ["--format", "json", "--output", str(output_file)]
     )
 
     assert result.exit_code == 0
@@ -285,18 +284,19 @@ def test_cli_analyze_json_output(tmp_path):
 
     # Verify valid JSON
     import json
+
     with open(output_file) as f:
         data = json.load(f)
 
     assert "teams" in data
+
 
 def test_cli_analyze_html_output(tmp_path):
     """Test HTML output format works."""
     output_file = tmp_path / "output.html"
 
     result = runner.invoke(
-        cli.analyze,
-        ["--format", "html", "--output", str(output_file)]
+        cli.analyze, ["--format", "html", "--output", str(output_file)]
     )
 
     assert result.exit_code == 0
@@ -386,13 +386,17 @@ def test_import_overhead_removed():
 # Function-level import (SLOW)
 def my_function():
     import json  # Imported every call
+
     return json.dumps({"key": "value"})
+
 
 # Module-level import (FAST)
 import json  # Imported once at module load
 
+
 def my_function():
     return json.dumps({"key": "value"})  # No import overhead
+
 
 # Benchmark:
 # Function-level: ~0.5-5ms overhead per call
@@ -453,10 +457,15 @@ def generate_html_report(...):
 ```python
 # Before (scattered)
 from datetime import datetime  # Line 8 (module level)
+
+
 def func1():
     from datetime import datetime  # Line 376 (function level)
+
+
 def func2():
     from datetime import timezone  # Line 423 (function level)
+
 
 # After (consolidated)
 from datetime import datetime, timezone  # Line 8 (module level)

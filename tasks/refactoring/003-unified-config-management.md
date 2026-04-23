@@ -19,6 +19,7 @@ Consolidate configuration sources (env vars, files, CLI args) into single unifie
 ```python
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     api_timeout: int = 10
     rate_limit_delay: float = 0.3
@@ -27,6 +28,7 @@ class Settings(BaseSettings):
         env_prefix = "NHL_SCRABBLE_"
         env_file = ".env"
         case_sensitive = False
+
 
 # Precedence: CLI args > env vars > config file > defaults
 ```

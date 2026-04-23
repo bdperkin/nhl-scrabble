@@ -77,12 +77,8 @@ $ grep bandit tox.ini
       - id: bandit
         name: bandit
         description: Security vulnerability detection for Python code
-        args:
-          [
-            --configfile, pyproject.toml,
-            --severity-level, medium,
-            --confidence-level, medium,
-          ]
+        args: [--configfile, pyproject.toml, --severity-level, medium, 
+              --confidence-level, medium]
         # Skip tests directory (test code uses assert, mock patterns)
         exclude: ^tests/
 ```
@@ -102,12 +98,12 @@ $ grep bandit tox.ini
 [tool.bandit]
 # Exclude test files and virtual environments
 exclude_dirs = [
-    "tests",
-    ".tox",
-    ".venv",
-    "venv",
-    "build",
-    "dist",
+  "tests",
+  ".tox",
+  ".venv",
+  "venv",
+  "build",
+  "dist",
 ]
 
 # Severity: low, medium, high
@@ -118,7 +114,7 @@ confidence = "medium"
 
 # Skip specific tests (with justification)
 skips = [
-    "B101",  # assert_used - Used extensively in tests (excluded above)
+  "B101", # assert_used - Used extensively in tests (excluded above)
 ]
 
 # Specific tests to run (optional - leave empty to run all)
@@ -173,7 +169,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday
+    - cron: 0 0 * * 0    # Weekly on Sunday
 
 jobs:
   bandit:
@@ -187,7 +183,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install bandit
         run: pip install bandit[toml]
@@ -292,6 +288,7 @@ bandit -r src/ --severity-level medium --confidence-level medium
 ```python
 # Example: Skip specific line (with justification)
 password = get_password_from_env()  # nosec B105 - password from env, not hardcoded
+
 
 # Example: Skip entire function
 def use_shell_command():

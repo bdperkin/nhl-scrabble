@@ -111,13 +111,13 @@ qa/
 ```toml
 [tool.qa.web]
 dependencies = [
-    "playwright>=1.40.0",
-    "pytest-playwright>=0.4.0",
-    "pytest-html>=4.1.0",
-    "pytest-xdist>=3.5.0",      # Parallel execution
-    "pillow>=10.0.0",            # Image comparison
-    "axe-playwright>=0.1.0",     # Accessibility testing
-    "locust>=2.20.0",            # Load testing
+  "playwright>=1.40.0",
+  "pytest-playwright>=0.4.0",
+  "pytest-html>=4.1.0",
+  "pytest-xdist>=3.5.0",      # Parallel execution
+  "pillow>=10.0.0",           # Image comparison
+  "axe-playwright>=0.1.0",    # Accessibility testing
+  "locust>=2.20.0",           # Load testing
 ]
 ```
 
@@ -443,6 +443,7 @@ Automated runs on:
 # qa/web/pages/teams_page.py
 from playwright.sync_api import Page
 
+
 class TeamsPage:
     def __init__(self, page: Page):
         self.page = page
@@ -466,12 +467,14 @@ class TeamsPage:
 import pytest
 from pages.teams_page import TeamsPage
 
+
 def test_teams_page_loads(page):
     teams_page = TeamsPage(page)
     teams_page.navigate()
 
     assert page.title() == "NHL Teams - NHL Scrabble"
     assert teams_page.get_team_count() == 32
+
 
 def test_team_search(page):
     teams_page = TeamsPage(page)
@@ -489,6 +492,7 @@ def test_homepage_visual(page):
     page.goto("http://localhost:5000")
     expect(page).to_have_screenshot("homepage.png")
 
+
 def test_teams_page_visual(page):
     page.goto("http://localhost:5000/teams")
     expect(page).to_have_screenshot("teams-page.png")
@@ -499,6 +503,7 @@ def test_teams_page_visual(page):
 ```python
 # qa/web/tests/performance/test_load.py
 from locust import HttpUser, task, between
+
 
 class WebsiteUser(HttpUser):
     wait_time = between(1, 3)
@@ -518,14 +523,16 @@ class WebsiteUser(HttpUser):
 # qa/web/tests/accessibility/test_a11y.py
 from axe_playwright import Axe
 
+
 def test_homepage_accessibility(page):
     page.goto("http://localhost:5000")
 
     axe = Axe(page)
     results = axe.run()
 
-    assert len(results.violations) == 0, \
-        f"Accessibility violations found: {results.violations}"
+    assert (
+        len(results.violations) == 0
+    ), f"Accessibility violations found: {results.violations}"
 ```
 
 ### CI/CD Workflow Example

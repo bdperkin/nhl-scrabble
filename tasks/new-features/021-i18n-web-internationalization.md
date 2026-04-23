@@ -24,16 +24,26 @@ Web templates are hardcoded in English:
 
 ```html
 <!-- templates/index.html -->
-<h1>NHL Scrabble Scores</h1>
-<p>Analyzing player names by Scrabble values</p>
+<h1>
+ NHL Scrabble Scores
+</h1>
+<p>
+ Analyzing player names by Scrabble values
+</p>
 <table>
-  <thead>
-    <tr>
-      <th>Team</th>
-      <th>Score</th>
-      <th>Players</th>
-    </tr>
-  </thead>
+ <thead>
+  <tr>
+   <th>
+    Team
+   </th>
+   <th>
+    Score
+   </th>
+   <th>
+    Players
+   </th>
+  </tr>
+ </thead>
 </table>
 ```
 
@@ -44,9 +54,9 @@ Web templates are hardcoded in English:
 ```toml
 [project.optional-dependencies]
 web = [
-    "fastapi>=0.104.0",
-    "jinja2>=3.1.2",
-    "flask-babel>=4.0.0",  # Add this
+  "fastapi>=0.104.0",
+  "jinja2>=3.1.2",
+  "flask-babel>=4.0.0", # Add this
 ]
 ```
 
@@ -60,11 +70,12 @@ from flask_babel import Babel
 app = Flask(__name__)
 babel = Babel(app)
 
+
 @babel.localeselector
 def get_locale():
     """Select locale from request."""
     # Try URL parameter first
-    locale = request.args.get('lang')
+    locale = request.args.get("lang")
     if locale in SUPPORTED_LOCALES:
         return locale
 
@@ -76,17 +87,26 @@ def get_locale():
 
 ```html
 <!-- templates/index.html -->
-<h1>{% trans %}NHL Scrabble Scores{% endtrans %}</h1>
-<p>{% trans %}Analyzing player names by Scrabble values{% endtrans %}</p>
-
+<h1>
+ {% trans %}NHL Scrabble Scores{% endtrans %}
+</h1>
+<p>
+ {% trans %}Analyzing player names by Scrabble values{% endtrans %}
+</p>
 <table>
-  <thead>
-    <tr>
-      <th>{% trans %}Team{% endtrans %}</th>
-      <th>{% trans %}Score{% endtrans %}</th>
-      <th>{% trans %}Players{% endtrans %}</th>
-    </tr>
-  </thead>
+ <thead>
+  <tr>
+   <th>
+    {% trans %}Team{% endtrans %}
+   </th>
+   <th>
+    {% trans %}Score{% endtrans %}
+   </th>
+   <th>
+    {% trans %}Players{% endtrans %}
+   </th>
+  </tr>
+ </thead>
 </table>
 ```
 
@@ -95,22 +115,21 @@ def get_locale():
 ```html
 <!-- templates/base.html -->
 <nav>
-  <select id="language-selector" onchange="changeLanguage(this.value)">
-    <option value="en_US" {% if get_locale() == 'en_US' %}selected{% endif %}>
-      English (US)
-    </option>
-    <option value="fr_CA" {% if get_locale() == 'fr_CA' %}selected{% endif %}>
-      Français (Canada)
-    </option>
-    <option value="sv_SE" {% if get_locale() == 'sv_SE' %}selected{% endif %}>
-      Svenska
-    </option>
-    <!-- Other locales -->
-  </select>
+ <select id="language-selector" onchange="changeLanguage(this.value)">
+  <option %}="" %}selected{%="" 'en_us'="" endif="" get_locale()="=" if="" value="en_US" {%="">
+   English (US)
+  </option>
+  <option %}="" %}selected{%="" 'fr_ca'="" endif="" get_locale()="=" if="" value="fr_CA" {%="">
+   Français (Canada)
+  </option>
+  <option %}="" %}selected{%="" 'sv_se'="" endif="" get_locale()="=" if="" value="sv_SE" {%="">
+   Svenska
+  </option>
+  <!-- Other locales -->
+ </select>
 </nav>
-
 <script>
-function changeLanguage(locale) {
+ function changeLanguage(locale) {
     const url = new URL(window.location);
     url.searchParams.set('lang', locale);
     window.location = url;

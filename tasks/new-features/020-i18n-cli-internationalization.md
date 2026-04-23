@@ -26,8 +26,13 @@ The CLI is currently hardcoded in English:
 # src/nhl_scrabble/cli.py
 @click.command()
 @click.option("--format", type=click.Choice(["text", "json"]), default="text")
-@click.option("--output", "-o", type=click.Path(), default=None,
-              help="Output file path (default: stdout)")
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    default=None,
+    help="Output file path (default: stdout)",
+)
 def analyze(format: str, output: str | None) -> None:
     """Analyze NHL rosters and calculate Scrabble scores."""
     click.echo("Analyzing NHL rosters...")
@@ -60,14 +65,27 @@ _ = get_translator(os.getenv("NHL_SCRABBLE_LANG"))
 
 ```python
 @click.command()
-@click.option("--format", type=click.Choice(["text", "json"]), default="text",
-              help=_("Output format (text or json)"))
-@click.option("--output", "-o", type=click.Path(), default=None,
-              help=_("Output file path (default: stdout)"))
-@click.option("--locale", "-l", type=click.Choice(SUPPORTED_LOCALES), default=None,
-              help=_("Display locale (e.g., fr_CA for Canadian French)"))
-@click.option("--verbose", "-v", is_flag=True,
-              help=_("Enable verbose logging"))
+@click.option(
+    "--format",
+    type=click.Choice(["text", "json"]),
+    default="text",
+    help=_("Output format (text or json)"),
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    default=None,
+    help=_("Output file path (default: stdout)"),
+)
+@click.option(
+    "--locale",
+    "-l",
+    type=click.Choice(SUPPORTED_LOCALES),
+    default=None,
+    help=_("Display locale (e.g., fr_CA for Canadian French)"),
+)
+@click.option("--verbose", "-v", is_flag=True, help=_("Enable verbose logging"))
 def analyze(format: str, output: str | None, locale: str | None, verbose: bool) -> None:
     """Analyze NHL rosters and calculate Scrabble scores."""
     # Override translator if locale specified
@@ -168,30 +186,34 @@ pybabel update -i messages.pot -d src/nhl_scrabble/locales
 from click.testing import CliRunner
 from nhl_scrabble.cli import analyze
 
+
 def test_cli_default_locale():
     """Test CLI with default (system) locale."""
     runner = CliRunner()
     result = runner.invoke(analyze)
     assert result.exit_code == 0
 
+
 def test_cli_french_locale():
     """Test CLI with French locale."""
     runner = CliRunner()
-    result = runner.invoke(analyze, ['--locale', 'fr_CA'])
+    result = runner.invoke(analyze, ["--locale", "fr_CA"])
     assert result.exit_code == 0
     # Verify French strings appear
     assert "Analyse" in result.output or result.exit_code == 0
 
+
 def test_cli_locale_env_var():
     """Test CLI with NHL_SCRABBLE_LANG environment variable."""
     runner = CliRunner()
-    result = runner.invoke(analyze, env={'NHL_SCRABBLE_LANG': 'sv_SE'})
+    result = runner.invoke(analyze, env={"NHL_SCRABBLE_LANG": "sv_SE"})
     assert result.exit_code == 0
+
 
 def test_cli_invalid_locale():
     """Test CLI with invalid locale."""
     runner = CliRunner()
-    result = runner.invoke(analyze, ['--locale', 'xx_YY'])
+    result = runner.invoke(analyze, ["--locale", "xx_YY"])
     assert result.exit_code != 0  # Should fail validation
 ```
 

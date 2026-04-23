@@ -49,55 +49,56 @@ The application has 6 main commands with various options:
 
 ```python
 # Three different formats for defaults:
-"Number of top players to show (default: 20)"    # Format 1: (default: X)
-"Output format (default: text)"                  # Format 2: (default: X)
+"Number of top players to show (default: 20)"  # Format 1: (default: X)
+
+"Output format (default: text)"  # Format 2: (default: X)
 "Refresh interval in seconds (default: 300 = 5 minutes)"  # Format 3: (default: X = Y)
-"Host to bind to"                                # Format 4: No default shown (but has default="127.0.0.1")
+"Host to bind to"  # Format 4: No default shown (but has default="127.0.0.1")
 ```
 
 3. **Short Option Inconsistencies**
 
 ```python
 # Consistent short options (good):
---verbose, -v     # All commands
---quiet, -q       # All commands
---output, -o      # All commands
+--verbose, -v  # All commands
+--quiet, -q  # All commands
+--output, -o  # All commands
 
 # Inconsistent short options (command-specific):
---fuzzy, -f       # Only in search
---team, -t        # Only in search
---division, -d    # Only in search
+--fuzzy, -f  # Only in search
+--team, -t  # Only in search
+--division, -d  # Only in search
 --conference, -c  # Only in search
---limit, -n       # Only in search
+--limit, -n  # Only in search
 
 # Missing short options for common flags:
---no-cache        # No short option (used in analyze, dashboard, watch)
---clear-cache     # No short option (used in analyze)
+--no - cache  # No short option (used in analyze, dashboard, watch)
+--clear - cache  # No short option (used in analyze)
 ```
 
 4. **Option Ordering**
 
 ```python
 # analyze command options (no clear grouping):
---format          # Output format
---sheets          # Excel-specific
---output          # Output file
---verbose         # Logging
---quiet           # UI
---no-cache        # Caching
---clear-cache     # Caching
---top-players     # Display
---top-team-players  # Display
---report          # Filtering
---scoring         # Scoring system
---scoring-config  # Scoring system
---division        # Filtering
---conference      # Filtering
---teams           # Filtering
---exclude         # Filtering
---min-score       # Filtering
---max-score       # Filtering
---season          # Data selection
+--format  # Output format
+--sheets  # Excel-specific
+--output  # Output file
+--verbose  # Logging
+--quiet  # UI
+--no - cache  # Caching
+--clear - cache  # Caching
+--top - players  # Display
+--top - team - players  # Display
+--report  # Filtering
+--scoring  # Scoring system
+--scoring - config  # Scoring system
+--division  # Filtering
+--conference  # Filtering
+--teams  # Filtering
+--exclude  # Filtering
+--min - score  # Filtering
+--max - score  # Filtering
+--season  # Data selection
 
 # No logical grouping makes help text hard to scan
 ```
@@ -124,7 +125,9 @@ The application has 6 main commands with various options:
 "Filter by conference (Eastern or Western)"  # Not exhaustive
 
 # Some rely on Click.Choice:
-type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False)  # Shows choices automatically
+type = click.Choice(
+    ["text", "json", "csv", "excel"], case_sensitive=False
+)  # Shows choices automatically
 ```
 
 **Current Option Count:**
@@ -145,23 +148,23 @@ type=click.Choice(["text", "json", "csv", "excel"], case_sensitive=False)  # Sho
 
 ```python
 # Use kebab-case for all option names (already done ✓)
---top-players
---output-format
---no-cache
+--top - players
+--output - format
+--no - cache
 
 # Use descriptive names (avoid abbreviations unless very common)
---verbose      # ✓ Common abbreviation
---output       # ✓ Common abbreviation
---config       # ✓ Common abbreviation
---num-results  # ❌ Use --limit or --max-results
+--verbose  # ✓ Common abbreviation
+--output  # ✓ Common abbreviation
+--config  # ✓ Common abbreviation
+--num - results  # ❌ Use --limit or --max-results
 
 # Use plural for multi-value options
---teams        # Accepts multiple teams
---divisions    # Accepts multiple divisions
+--teams  # Accepts multiple teams
+--divisions  # Accepts multiple divisions
 
 # Use singular for single-value options
---team         # Accepts one team
---division     # Accepts one division
+--team  # Accepts one team
+--division  # Accepts one division
 ```
 
 **Short Option Convention:**
@@ -221,13 +224,13 @@ Examples: TOR,MTL,BOS
 --quiet
 
 # 3. Data Source Options
---no-cache
---clear-cache
+--no - cache
+--clear - cache
 --season
 
 # 4. Display Options
---top-players
---top-team-players
+--top - players
+--top - team - players
 --limit
 
 # 5. Report Selection
@@ -235,20 +238,20 @@ Examples: TOR,MTL,BOS
 
 # 6. Scoring Options
 --scoring
---scoring-config
+--scoring - config
 
 # 7. Filtering Options
 --division
 --conference
 --teams
 --exclude
---min-score
---max-score
+--min - score
+--max - score
 
 # 8. Specialized Options (command-specific)
---fuzzy      # search command
---duration   # dashboard command
---interval   # watch command
+--fuzzy  # search command
+--duration  # dashboard command
+--interval  # watch command
 ```
 
 **Validation Standard:**
@@ -625,11 +628,13 @@ nhl-scrabble analyze --division Atlantic   # Should still work (deprecated)
 ```python
 # tests/unit/test_cli.py
 
+
 def test_analyze_divisions_option(cli_runner):
     """Test --divisions option (renamed from --division)."""
     result = cli_runner.invoke(cli, ["analyze", "--divisions", "Atlantic"])
     assert result.exit_code == 0
     # Verify filtering applied
+
 
 def test_analyze_top_players_validation(cli_runner):
     """Test --top-players validation."""
@@ -647,16 +652,19 @@ def test_analyze_top_players_validation(cli_runner):
     result = cli_runner.invoke(cli, ["analyze", "--top-players", "50"])
     assert result.exit_code == 0
 
+
 def test_search_limit_validation(cli_runner):
     """Test --limit validation in search command."""
     result = cli_runner.invoke(cli, ["search", "--limit", "-1"])
     assert result.exit_code != 0
+
 
 def test_serve_port_validation(cli_runner):
     """Test --port validation in serve command."""
     result = cli_runner.invoke(cli, ["serve", "--port", "70000"])
     assert result.exit_code != 0
     assert "70000 is not in the range" in result.output
+
 
 def test_help_text_consistency(cli_runner):
     """Test help text shows defaults consistently."""

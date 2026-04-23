@@ -30,10 +30,10 @@ def generate(self, data: tuple[...]) -> str:
 
     # ❌ Sorts all ~700 players to get top 20
     top_players = sorted(
-        all_players,                              # ~700 items
-        key=lambda x: x.full_score,
-        reverse=True
-    )[:self.top_players_count]                   # Take only 20
+        all_players, key=lambda x: x.full_score, reverse=True  # ~700 items
+    )[
+        : self.top_players_count
+    ]  # Take only 20
 
     # Complexity: O(700 log 700) = O(6,000) operations
     # But we only need O(700 log 20) = O(2,100) operations
@@ -44,10 +44,10 @@ def generate(self, data: tuple[...]) -> str:
 ```python
 # ❌ Sorts all team players to get top 5
 top_players = sorted(
-    team_data.players,                            # ~25 players per team
-    key=lambda x: x.full_score,
-    reverse=True
-)[:self.top_players_per_team]                    # Take only 5
+    team_data.players, key=lambda x: x.full_score, reverse=True  # ~25 players per team
+)[
+    : self.top_players_per_team
+]  # Take only 5
 
 # Called 32 times (once per team)
 # Total: 32 teams × O(25 log 25) = O(32 × 115) = O(3,680)
@@ -59,10 +59,7 @@ top_players = sorted(
 ```python
 # ❌ Sorts division teams
 for division in teams_by_division:
-    teams_by_division[division].sort(
-        key=lambda x: (x.total, x.avg),
-        reverse=True
-    )
+    teams_by_division[division].sort(key=lambda x: (x.total, x.avg), reverse=True)
     # Gets top 3 from each division later
 ```
 
@@ -71,7 +68,7 @@ for division in teams_by_division:
 ```python
 # ❌ Two max() calls - each O(n)
 top_first = max(all_players, key=lambda x: x.first_score)  # O(700)
-top_last = max(all_players, key=lambda x: x.last_score)    # O(700)
+top_last = max(all_players, key=lambda x: x.last_score)  # O(700)
 
 # Could use heapq.nlargest(1, ...) for consistency
 # Or keep max() since it's already O(n) - no benefit
@@ -86,6 +83,7 @@ Replace `sorted()[:k]` with `heapq.nlargest()` for all top-N queries:
 ```python
 import heapq  # Add to imports
 
+
 def generate(self, data: tuple[...]) -> str:
     all_players, division_standings, conference_standings = data
     parts = []
@@ -95,9 +93,9 @@ def generate(self, data: tuple[...]) -> str:
 
     # ✅ Use heapq.nlargest - O(n log k) instead of O(n log n)
     top_players = heapq.nlargest(
-        self.top_players_count,                   # k = 20
-        all_players,                              # n = 700
-        key=lambda x: x.full_score
+        self.top_players_count,  # k = 20
+        all_players,  # n = 700
+        key=lambda x: x.full_score,
     )
     # Complexity: O(700 log 20) = O(2,100) operations
     # Speedup: 6,000 / 2,100 = 2.9x faster
@@ -109,6 +107,7 @@ def generate(self, data: tuple[...]) -> str:
 
 ```python
 import heapq  # Add to imports
+
 
 def generate(self, team_scores: dict[str, TeamScore]) -> str:
     parts = [self._format_header("📊 TEAM SCRABBLE SCORES")]
@@ -123,9 +122,9 @@ def generate(self, team_scores: dict[str, TeamScore]) -> str:
 
         # ✅ Use heapq.nlargest for top players per team
         top_players = heapq.nlargest(
-            self.top_players_per_team,            # k = 5
-            team_data.players,                    # n = 25
-            key=lambda x: x.full_score
+            self.top_players_per_team,  # k = 5
+            team_data.players,  # n = 25
+            key=lambda x: x.full_score,
         )
         # Complexity per team: O(25 log 5) = O(58)
         # Total: 32 × 58 = 1,856 operations (was 3,680)
@@ -144,6 +143,7 @@ def generate(self, team_scores: dict[str, TeamScore]) -> str:
 ```python
 import heapq  # Add to imports
 
+
 def _determine_division_leaders(
     self, teams_by_division: dict[str, list[PlayoffTeam]]
 ) -> tuple[dict[str, PlayoffTeam], list[PlayoffTeam]]:
@@ -154,11 +154,7 @@ def _determine_division_leaders(
 
     for division, teams in teams_by_division.items():
         # ✅ Get top 3 without sorting all
-        top_3 = heapq.nlargest(
-            3,
-            teams,
-            key=lambda x: (x.total, x.avg)
-        )
+        top_3 = heapq.nlargest(3, teams, key=lambda x: (x.total, x.avg))
 
         # Assign ranks to top 3
         for i, team in enumerate(top_3):
@@ -176,6 +172,7 @@ def _determine_division_leaders(
         all_teams.extend(top_3 + remaining)
 
     return playoff_teams, all_teams
+
 
 def _determine_wild_cards(
     self,
@@ -196,9 +193,7 @@ def _determine_wild_cards(
 
         # ✅ Get top 2 wild cards without full sort
         conference_wild_cards = heapq.nlargest(
-            2,
-            wild_card_candidates,
-            key=lambda x: (x.total, x.avg)
+            2, wild_card_candidates, key=lambda x: (x.total, x.avg)
         )
 
         # Mark as wild cards
@@ -278,29 +273,23 @@ import heapq
 import pytest
 from nhl_scrabble.models.player import PlayerScore
 
+
 def test_heapq_nlargest_returns_same_as_sorted(sample_players):
     """Verify heapq.nlargest produces same results as sorted."""
     k = 20
 
     # Old way
-    sorted_result = sorted(
-        sample_players,
-        key=lambda x: x.full_score,
-        reverse=True
-    )[:k]
+    sorted_result = sorted(sample_players, key=lambda x: x.full_score, reverse=True)[:k]
 
     # New way
-    heapq_result = heapq.nlargest(
-        k,
-        sample_players,
-        key=lambda x: x.full_score
-    )
+    heapq_result = heapq.nlargest(k, sample_players, key=lambda x: x.full_score)
 
     # Should be identical
     assert len(sorted_result) == len(heapq_result)
     for i, player in enumerate(sorted_result):
         assert player.full_score == heapq_result[i].full_score
         assert player.full_name == heapq_result[i].full_name
+
 
 def test_heapq_performance_better_than_sorted():
     """Verify heapq.nlargest is faster than sorted for top-N."""
@@ -318,7 +307,7 @@ def test_heapq_performance_better_than_sorted():
             full_score=random.randint(1, 100),
             team="TOR",
             division="Atlantic",
-            conference="Eastern"
+            conference="Eastern",
         )
         for _ in range(1000)
     ]
@@ -342,7 +331,9 @@ def test_heapq_performance_better_than_sorted():
     speedup = sorted_time / heapq_time
     assert speedup > 1.5, f"Expected >1.5x speedup, got {speedup:.2f}x"
 
-    print(f"Speedup: {speedup:.2f}x (sorted: {sorted_time:.3f}s, heapq: {heapq_time:.3f}s)")
+    print(
+        f"Speedup: {speedup:.2f}x (sorted: {sorted_time:.3f}s, heapq: {heapq_time:.3f}s)"
+    )
 ```
 
 **Integration Tests**:

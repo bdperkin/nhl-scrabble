@@ -77,7 +77,9 @@ def test_analyze_json_output(mock_nhl_api, tmp_path):
     runner = CliRunner()
     output_file = tmp_path / "output.json"
 
-    result = runner.invoke(cli, ["analyze", "--format", "json", "--output", str(output_file)])
+    result = runner.invoke(
+        cli, ["analyze", "--format", "json", "--output", str(output_file)]
+    )
 
     assert result.exit_code == 0
     assert output_file.exists()
@@ -147,7 +149,9 @@ def test_main_module_executable():
 def test_main_module_analyze():
     """Test that python -m nhl_scrabble analyze works."""
     result = subprocess.run(
-        ["python", "-m", "nhl_scrabble", "analyze", "--help"], capture_output=True, text=True
+        ["python", "-m", "nhl_scrabble", "analyze", "--help"],
+        capture_output=True,
+        text=True,
     )
 
     assert result.returncode == 0

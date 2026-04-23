@@ -183,14 +183,9 @@ ______________________________________________________________________
 ### SVG Requirements
 
 ```xml
-<!-- Example SVG structure -->
-<svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 512 512"
-     width="512"
-     height="512">
-  <title>NHL Scrabble Logo</title>
-  <!-- All paths, shapes here -->
-</svg>
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <ns0:title>NHL Scrabble Logo</ns0:title>
+</ns0:svg>
 ```
 
 **Technical checklist**:

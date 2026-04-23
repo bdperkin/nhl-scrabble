@@ -19,14 +19,15 @@ Implement dependency injection pattern to improve testability and reduce couplin
 ```python
 from typing import Protocol
 
+
 # Define interfaces
 class APIClient(Protocol):
-    def get_standings(self) -> Standings:
-        ...
+    def get_standings(self) -> Standings: ...
+
 
 class ScoreCalculator(Protocol):
-    def calculate(self, text: str) -> int:
-        ...
+    def calculate(self, text: str) -> int: ...
+
 
 # Inject dependencies
 class Analyzer:

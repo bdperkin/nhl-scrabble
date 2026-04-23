@@ -49,7 +49,7 @@ strategy:
   matrix:
     python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     include:
-      - python-version: '3.15-dev'
+      - python-version: 3.15-dev
         experimental: true
 ```
 
@@ -73,7 +73,7 @@ requires-python = ">=3.10"
 # Keep as >=3.10 for backwards compatibility
 
 [tool.ruff]
-target-version = "py314"  # Update to latest stable
+target-version = "py314" # Update to latest stable
 # This tells Ruff to use Python 3.14 syntax rules
 ```
 
@@ -205,7 +205,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.15-dev'
+          python-version: 3.15-dev
       # ... rest of job
 ```
 

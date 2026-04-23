@@ -35,6 +35,7 @@ class PlayerScore:
 ```python
 from dataclasses import dataclass
 
+
 @dataclass(slots=True)  # Python 3.10+
 class PlayerScore:
     name: str
@@ -46,6 +47,7 @@ class PlayerScore:
 
 ```python
 from pydantic import BaseModel
+
 
 class Player(BaseModel):
     firstName: str
@@ -67,6 +69,7 @@ class Player(BaseModel):
 
 ```python
 import sys
+
 
 def test_slots_reduces_memory():
     player = PlayerScore("Test", "TOR", 100)

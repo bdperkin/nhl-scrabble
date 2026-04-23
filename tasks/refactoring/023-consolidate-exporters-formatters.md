@@ -29,7 +29,7 @@ Consolidate the confusing dual architecture of exporters and formatters by depre
 ```python
 from nhl_scrabble.formatters import get_formatter
 
-formatter = get_formatter('csv')  # or 'json', 'html', etc.
+formatter = get_formatter("csv")  # or 'json', 'html', etc.
 output = formatter.format(data)
 ```
 
@@ -84,7 +84,7 @@ exporter.export_full_report(
     conference_standings=conferences,
     playoff_standings=playoffs,
     output=Path("report.xlsx"),
-    sheets=["teams", "players", "divisions"]  # Multi-sheet workbook
+    sheets=["teams", "players", "divisions"],  # Multi-sheet workbook
 )
 ```
 
@@ -217,7 +217,7 @@ class CSVExporter:
             "summary": {},
         }
 
-        formatter = get_formatter('csv')
+        formatter = get_formatter("csv")
         output.write_text(formatter.format(data))
 
     # Similar deprecation for other methods...
@@ -277,7 +277,7 @@ data = {
 }
 
 # Format and write
-formatter = get_formatter('csv')
+formatter = get_formatter("csv")
 Path("teams.csv").write_text(formatter.format(data))
 ```
 
@@ -348,11 +348,11 @@ class CSVFormatter:
 
 ```python
 # Teams CSV (default)
-formatter = get_formatter('csv')
+formatter = get_formatter("csv")
 teams_csv = formatter.format(data)
 
 # Players CSV
-formatter = get_formatter('csv', export_type='players')
+formatter = get_formatter("csv", export_type="players")
 players_csv = formatter.format(data)
 ```
 
@@ -390,11 +390,14 @@ players_csv = formatter.format(data)
 import warnings
 import pytest
 
+
 def test_csv_exporter_deprecated():
     """Test that CSVExporter raises deprecation warning."""
     with pytest.warns(DeprecationWarning, match="CSVExporter is deprecated"):
         from nhl_scrabble.exporters.csv_exporter import CSVExporter
+
         exporter = CSVExporter()
+
 
 def test_export_team_scores_deprecated():
     """Test that export_team_scores raises deprecation warning."""
@@ -476,7 +479,7 @@ def test_csv_exporter_still_works():
         exporter.export_team_scores(teams, output)
 
         # Verify output matches formatter output
-        formatter_output = get_formatter('csv').format(data)
+        formatter_output = get_formatter("csv").format(data)
         assert output.read_text() == formatter_output
 ```
 
@@ -486,7 +489,7 @@ def test_csv_exporter_still_works():
 # Ensure CSVFormatter handles all use cases
 def test_csv_formatter_all_data_types():
     """Test CSVFormatter handles teams, players, divisions, etc."""
-    formatter = get_formatter('csv')
+    formatter = get_formatter("csv")
 
     # Test with team data
     team_csv = formatter.format(team_data)
@@ -494,7 +497,7 @@ def test_csv_formatter_all_data_types():
 
     # Test with full data
     full_csv = formatter.format(full_data)
-    assert len(full_csv.split('\n')) > 1
+    assert len(full_csv.split("\n")) > 1
 ```
 
 ## Acceptance Criteria

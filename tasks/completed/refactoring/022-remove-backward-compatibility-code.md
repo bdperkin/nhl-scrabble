@@ -120,7 +120,11 @@ def calculate_score(name: str) -> int:
         >>> ScrabbleScorer.calculate_score("Ovechkin")
         29
     """
-    return sum(ScrabbleScorer.SCRABBLE_VALUES.get(char.upper(), 0) for char in name if char.isalpha())
+    return sum(
+        ScrabbleScorer.SCRABBLE_VALUES.get(char.upper(), 0)
+        for char in name
+        if char.isalpha()
+    )
 ```
 
 **Analysis Needed**:
@@ -298,8 +302,9 @@ Some tests may reference backward compatibility for validation purposes. These s
    - **Action**: Remove the `test_generate_json_report()` test entirely OR update to use formatter factory:
      ```python
      from nhl_scrabble.formatters import get_formatter
+
      # ...
-     output = get_formatter('json').format(data)
+     output = get_formatter("json").format(data)
      ```
 
 1. **Update `tests/unit/test_html_report.py`**:
@@ -308,6 +313,7 @@ Some tests may reference backward compatibility for validation purposes. These s
    - **Action**: Update all 7 tests to use formatter factory:
      ```python
      from nhl_scrabble.formatters import get_formatter
+
      # Replace:
      # output = generate_html_report(teams, divisions, conferences, playoffs, summary)
      # With:
@@ -318,7 +324,7 @@ Some tests may reference backward compatibility for validation purposes. These s
          "playoffs": playoffs,
          "summary": summary,
      }
-     output = get_formatter('html').format(data)
+     output = get_formatter("html").format(data)
      ```
 
 1. **Search for backward compatibility references**:
@@ -404,10 +410,12 @@ Some tests may reference backward compatibility for validation purposes. These s
      ```python
      # OLD:
      from nhl_scrabble.cli import generate_html_report
+
      output = generate_html_report(teams, divisions, conferences, playoffs, summary)
 
      # NEW:
      from nhl_scrabble.formatters import get_formatter
+
      data = {
          "teams": teams,
          "divisions": divisions,
@@ -415,7 +423,7 @@ Some tests may reference backward compatibility for validation purposes. These s
          "playoffs": playoffs,
          "summary": summary,
      }
-     output = get_formatter('html').format(data)
+     output = get_formatter("html").format(data)
      ```
 
 1. **Analyze ScrabbleScorer.calculate_score()**:

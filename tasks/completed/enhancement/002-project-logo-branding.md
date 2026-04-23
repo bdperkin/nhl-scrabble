@@ -423,8 +423,8 @@ Add pre-commit hook to validate branding assets exist:
 ```toml
 # Add to pyproject.toml [project.optional-dependencies]
 branding = [
-    "Pillow>=10.0.0",      # Image processing
-    "cairosvg>=2.7.0",     # SVG to PNG conversion
+  "Pillow>=10.0.0",  # Image processing
+  "cairosvg>=2.7.0", # SVG to PNG conversion
 ]
 ```
 

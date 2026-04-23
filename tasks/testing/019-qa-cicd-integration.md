@@ -26,12 +26,12 @@ name: QA Automation Tests
 on:
   pull_request:
     paths:
-      - 'src/nhl_scrabble/web/**'
-      - 'qa/web/**'
+      - src/nhl_scrabble/web/**
+      - qa/web/**
   push:
     branches: [main]
   schedule:
-    - cron: '0 2 * * *'  # Nightly at 2 AM
+    - cron: 0 2 * * *    # Nightly at 2 AM
   workflow_dispatch:
 
 jobs:

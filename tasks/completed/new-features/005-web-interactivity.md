@@ -58,31 +58,50 @@ src/nhl_scrabble/web/static/
 ```html
 <!-- Teams table - no sorting, no interactivity -->
 <table class="teams-table">
-  <thead>
-    <tr>
-      <th>Rank</th>
-      <th>Team</th>
-      <th>Total Score</th>
-      <th>Players</th>
-      <th>Avg Score</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for team in standings.teams %}
-    <tr>
-      <td>{{ loop.index }}</td>
-      <td>{{ team.name }}</td>
-      <td>{{ team.total_score }}</td>
-      <td>{{ team.player_count }}</td>
-      <td>{{ team.average_score }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
+ <thead>
+  <tr>
+   <th>
+    Rank
+   </th>
+   <th>
+    Team
+   </th>
+   <th>
+    Total Score
+   </th>
+   <th>
+    Players
+   </th>
+   <th>
+    Avg Score
+   </th>
+  </tr>
+ </thead>
+ <tbody>
+  {% for team in standings.teams %}
+  <tr>
+   <td>
+    {{ loop.index }}
+   </td>
+   <td>
+    {{ team.name }}
+   </td>
+   <td>
+    {{ team.total_score }}
+   </td>
+   <td>
+    {{ team.player_count }}
+   </td>
+   <td>
+    {{ team.average_score }}
+   </td>
+  </tr>
+  {% endfor %}
+ </tbody>
 </table>
-
 <!-- Players table - no sorting, no interactivity -->
 <table class="players-table">
-  <!-- Similar static structure -->
+ <!-- Similar static structure -->
 </table>
 ```
 
@@ -105,21 +124,25 @@ Add HTMX for seamless dynamic content loading without full page refreshes.
 
 ```html
 <!-- base.html - add to head -->
-<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+<script src="https://unpkg.com/htmx.org@1.9.10">
+</script>
 ```
 
 **Dynamic form submission** (index.html):
 
 ```html
-<form hx-post="/api/analyze" hx-target="#results" hx-indicator="#loading">
-  <button type="submit">Refresh Analysis</button>
-  <div id="loading" class="htmx-indicator">
-    <span class="spinner"></span> Loading...
-  </div>
+<form hx-indicator="#loading" hx-post="/api/analyze" hx-target="#results">
+ <button type="submit">
+  Refresh Analysis
+ </button>
+ <div class="htmx-indicator" id="loading">
+  <span class="spinner">
+  </span>
+  Loading...
+ </div>
 </form>
-
 <div id="results">
-  <!-- Existing tables here, will be replaced on HTMX response -->
+ <!-- Existing tables here, will be replaced on HTMX response -->
 </div>
 ```
 
@@ -129,6 +152,7 @@ Add HTMX for seamless dynamic content loading without full page refreshes.
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 
+
 @app.post("/api/analyze")
 async def analyze_htmx(request: Request):
     """Handle HTMX analysis request."""
@@ -137,8 +161,7 @@ async def analyze_htmx(request: Request):
 
     # Return partial HTML fragment for HTMX
     return templates.TemplateResponse(
-        "partials/results_table.html",
-        {"request": request, "standings": standings}
+        "partials/results_table.html", {"request": request, "standings": standings}
     )
 ```
 
@@ -147,9 +170,9 @@ async def analyze_htmx(request: Request):
 ```html
 <!-- Table fragment for HTMX updates -->
 <div id="results">
-  <table class="teams-table">
-    <!-- Table content -->
-  </table>
+ <table class="teams-table">
+  <!-- Table content -->
+ </table>
 </div>
 ```
 
@@ -161,7 +184,8 @@ Add Chart.js for interactive score visualizations.
 
 ```html
 <!-- base.html -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0">
+</script>
 ```
 
 **Team Scores Bar Chart** (static/js/charts.js):
@@ -169,58 +193,58 @@ Add Chart.js for interactive score visualizations.
 ```javascript
 // Create team scores visualization
 function createTeamScoresChart(teams) {
-  const ctx = document.getElementById('teamScoresChart').getContext('2d');
+    const ctx = document.getElementById('teamScoresChart').getContext('2d');
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: teams.map(t => t.abbreviation),
-      datasets: [{
-        label: 'Team Total Score',
-        data: teams.map(t => t.total_score),
-        backgroundColor: teams.map(t => getTeamColor(t.abbreviation)),
-        borderColor: teams.map(t => getTeamBorderColor(t.abbreviation)),
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'NHL Teams by Scrabble Score'
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: teams.map(t => t.abbreviation),
+            datasets: [{
+                label: 'Team Total Score',
+                data: teams.map(t => t.total_score),
+                backgroundColor: teams.map(t => getTeamColor(t.abbreviation)),
+                borderColor: teams.map(t => getTeamBorderColor(t.abbreviation)),
+                borderWidth: 2
+            }]
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `Score: ${context.parsed.y}`;
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'NHL Teams by Scrabble Score'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Score: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Total Score'
+                    }
+                }
             }
-          }
         }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Total Score'
-          }
-        }
-      }
-    }
-  });
+    });
 }
 
 // Team color mapping (NHL team colors)
 function getTeamColor(abbrev) {
-  const colors = {
-    'TOR': 'rgba(0, 32, 91, 0.8)',      // Maple Leafs blue
-    'MTL': 'rgba(175, 30, 45, 0.8)',    // Canadiens red
-    'BOS': 'rgba(252, 181, 20, 0.8)',   // Bruins gold
-    // ... all 32 teams
-  };
-  return colors[abbrev] || 'rgba(100, 100, 100, 0.8)';
+    const colors = {
+        'TOR': 'rgba(0, 32, 91, 0.8)', // Maple Leafs blue
+        'MTL': 'rgba(175, 30, 45, 0.8)', // Canadiens red
+        'BOS': 'rgba(252, 181, 20, 0.8)', // Bruins gold
+        // ... all 32 teams
+    };
+    return colors[abbrev] || 'rgba(100, 100, 100, 0.8)';
 }
 ```
 
@@ -229,70 +253,70 @@ function getTeamColor(abbrev) {
 ```javascript
 // Create player score distribution histogram
 function createPlayerDistributionChart(players) {
-  const ctx = document.getElementById('playerDistributionChart').getContext('2d');
+    const ctx = document.getElementById('playerDistributionChart').getContext('2d');
 
-  // Create score buckets (0-10, 11-20, 21-30, etc.)
-  const buckets = createScoreBuckets(players);
+    // Create score buckets (0-10, 11-20, 21-30, etc.)
+    const buckets = createScoreBuckets(players);
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: buckets.labels,
-      datasets: [{
-        label: 'Number of Players',
-        data: buckets.counts,
-        backgroundColor: 'rgba(75, 192, 192, 0.8)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'Player Score Distribution'
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: buckets.labels,
+            datasets: [{
+                label: 'Number of Players',
+                data: buckets.counts,
+                backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `Players: ${context.parsed.y}`;
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Player Score Distribution'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Players: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Players'
+                    },
+                    ticks: {
+                        stepSize: 10
+                    }
+                }
             }
-          }
         }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Number of Players'
-          },
-          ticks: {
-            stepSize: 10
-          }
-        }
-      }
-    }
-  });
+    });
 }
 
 function createScoreBuckets(players) {
-  const bucketSize = 10;
-  const maxScore = Math.max(...players.map(p => p.score));
-  const numBuckets = Math.ceil(maxScore / bucketSize);
+    const bucketSize = 10;
+    const maxScore = Math.max(...players.map(p => p.score));
+    const numBuckets = Math.ceil(maxScore / bucketSize);
 
-  const buckets = Array(numBuckets).fill(0);
-  players.forEach(p => {
-    const bucketIndex = Math.floor(p.score / bucketSize);
-    buckets[bucketIndex]++;
-  });
+    const buckets = Array(numBuckets).fill(0);
+    players.forEach(p => {
+        const bucketIndex = Math.floor(p.score / bucketSize);
+        buckets[bucketIndex]++;
+    });
 
-  return {
-    labels: buckets.map((_, i) => `${i * bucketSize}-${(i + 1) * bucketSize - 1}`),
-    counts: buckets
-  };
+    return {
+        labels: buckets.map((_, i) => `${i * bucketSize}-${(i + 1) * bucketSize - 1}`),
+        counts: buckets
+    };
 }
 ```
 
@@ -301,22 +325,28 @@ function createScoreBuckets(players) {
 ```html
 <!-- Add visualization section -->
 <section class="visualizations">
-  <h2>Score Visualizations</h2>
-
-  <div class="chart-container">
-    <h3>Team Scores</h3>
-    <canvas id="teamScoresChart" width="800" height="400"></canvas>
-  </div>
-
-  <div class="chart-container">
-    <h3>Player Score Distribution</h3>
-    <canvas id="playerDistributionChart" width="800" height="400"></canvas>
-  </div>
+ <h2>
+  Score Visualizations
+ </h2>
+ <div class="chart-container">
+  <h3>
+   Team Scores
+  </h3>
+  <canvas height="400" id="teamScoresChart" width="800">
+  </canvas>
+ </div>
+ <div class="chart-container">
+  <h3>
+   Player Score Distribution
+  </h3>
+  <canvas height="400" id="playerDistributionChart" width="800">
+  </canvas>
+ </div>
 </section>
-
-<script src="{{ url_for('static', path='/js/charts.js') }}"></script>
+<script src="{{ url_for('static', path='/js/charts.js') }}">
+</script>
 <script>
-  // Initialize charts with data from backend
+ // Initialize charts with data from backend
   document.addEventListener('DOMContentLoaded', function() {
     const teamsData = {{ teams_json | safe }};
     const playersData = {{ players_json | safe }};
@@ -335,107 +365,120 @@ Add client-side table sorting for players and teams.
 
 ```javascript
 class TableSort {
-  constructor(tableId) {
-    this.table = document.getElementById(tableId);
-    this.tbody = this.table.querySelector('tbody');
-    this.headers = this.table.querySelectorAll('th[data-sort]');
-    this.currentSort = { column: null, direction: 'asc' };
+    constructor(tableId) {
+        this.table = document.getElementById(tableId);
+        this.tbody = this.table.querySelector('tbody');
+        this.headers = this.table.querySelectorAll('th[data-sort]');
+        this.currentSort = {
+            column: null,
+            direction: 'asc'
+        };
 
-    this.init();
-  }
-
-  init() {
-    this.headers.forEach(header => {
-      header.style.cursor = 'pointer';
-      header.addEventListener('click', () => this.handleHeaderClick(header));
-
-      // Add sort indicator
-      const indicator = document.createElement('span');
-      indicator.className = 'sort-indicator';
-      indicator.innerHTML = '↕️';
-      header.appendChild(indicator);
-    });
-  }
-
-  handleHeaderClick(header) {
-    const column = header.dataset.sort;
-    const type = header.dataset.sortType || 'string';
-
-    // Toggle direction if same column
-    if (this.currentSort.column === column) {
-      this.currentSort.direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.currentSort.column = column;
-      this.currentSort.direction = 'asc';
+        this.init();
     }
 
-    this.sortTable(column, type, this.currentSort.direction);
-    this.updateSortIndicators();
-  }
+    init() {
+        this.headers.forEach(header => {
+            header.style.cursor = 'pointer';
+            header.addEventListener('click', () => this.handleHeaderClick(header));
 
-  sortTable(column, type, direction) {
-    const rows = Array.from(this.tbody.querySelectorAll('tr'));
-    const columnIndex = this.getColumnIndex(column);
+            // Add sort indicator
+            const indicator = document.createElement('span');
+            indicator.className = 'sort-indicator';
+            indicator.innerHTML = '↕️';
+            header.appendChild(indicator);
+        });
+    }
 
-    rows.sort((a, b) => {
-      const aValue = a.cells[columnIndex].textContent.trim();
-      const bValue = b.cells[columnIndex].textContent.trim();
+    handleHeaderClick(header) {
+        const column = header.dataset.sort;
+        const type = header.dataset.sortType || 'string';
 
-      let comparison = 0;
-      if (type === 'number') {
-        comparison = parseFloat(aValue) - parseFloat(bValue);
-      } else {
-        comparison = aValue.localeCompare(bValue);
-      }
+        // Toggle direction if same column
+        if (this.currentSort.column === column) {
+            this.currentSort.direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.currentSort.column = column;
+            this.currentSort.direction = 'asc';
+        }
 
-      return direction === 'asc' ? comparison : -comparison;
-    });
+        this.sortTable(column, type, this.currentSort.direction);
+        this.updateSortIndicators();
+    }
 
-    // Re-append rows in sorted order
-    rows.forEach(row => this.tbody.appendChild(row));
-  }
+    sortTable(column, type, direction) {
+        const rows = Array.from(this.tbody.querySelectorAll('tr'));
+        const columnIndex = this.getColumnIndex(column);
 
-  getColumnIndex(column) {
-    return Array.from(this.headers).findIndex(h => h.dataset.sort === column);
-  }
+        rows.sort((a, b) => {
+            const aValue = a.cells[columnIndex].textContent.trim();
+            const bValue = b.cells[columnIndex].textContent.trim();
 
-  updateSortIndicators() {
-    this.headers.forEach(header => {
-      const indicator = header.querySelector('.sort-indicator');
-      if (header.dataset.sort === this.currentSort.column) {
-        indicator.innerHTML = this.currentSort.direction === 'asc' ? '↑' : '↓';
-        indicator.style.opacity = '1';
-      } else {
-        indicator.innerHTML = '↕️';
-        indicator.style.opacity = '0.3';
-      }
-    });
-  }
+            let comparison = 0;
+            if (type === 'number') {
+                comparison = parseFloat(aValue) - parseFloat(bValue);
+            } else {
+                comparison = aValue.localeCompare(bValue);
+            }
+
+            return direction === 'asc' ? comparison : -comparison;
+        });
+
+        // Re-append rows in sorted order
+        rows.forEach(row => this.tbody.appendChild(row));
+    }
+
+    getColumnIndex(column) {
+        return Array.from(this.headers).findIndex(h => h.dataset.sort === column);
+    }
+
+    updateSortIndicators() {
+        this.headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.sort === this.currentSort.column) {
+                indicator.innerHTML = this.currentSort.direction === 'asc' ? '↑' : '↓';
+                indicator.style.opacity = '1';
+            } else {
+                indicator.innerHTML = '↕️';
+                indicator.style.opacity = '0.3';
+            }
+        });
+    }
 }
 
 // Initialize sortable tables
 document.addEventListener('DOMContentLoaded', function() {
-  new TableSort('teamsTable');
-  new TableSort('playersTable');
+    new TableSort('teamsTable');
+    new TableSort('playersTable');
 });
 ```
 
 **Update table headers** (index.html):
 
 ```html
-<table id="teamsTable" class="teams-table">
-  <thead>
-    <tr>
-      <th data-sort="rank" data-sort-type="number">Rank</th>
-      <th data-sort="team" data-sort-type="string">Team</th>
-      <th data-sort="score" data-sort-type="number">Total Score</th>
-      <th data-sort="players" data-sort-type="number">Players</th>
-      <th data-sort="avg" data-sort-type="number">Avg Score</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Table rows -->
-  </tbody>
+<table class="teams-table" id="teamsTable">
+ <thead>
+  <tr>
+   <th data-sort="rank" data-sort-type="number">
+    Rank
+   </th>
+   <th data-sort="team" data-sort-type="string">
+    Team
+   </th>
+   <th data-sort="score" data-sort-type="number">
+    Total Score
+   </th>
+   <th data-sort="players" data-sort-type="number">
+    Players
+   </th>
+   <th data-sort="avg" data-sort-type="number">
+    Avg Score
+   </th>
+  </tr>
+ </thead>
+ <tbody>
+  <!-- Table rows -->
+ </tbody>
 </table>
 ```
 
@@ -447,76 +490,78 @@ Add CSV and JSON export with client-side download.
 
 ```javascript
 class DataExporter {
-  static exportToCSV(data, filename) {
-    const csv = this.convertToCSV(data);
-    this.downloadFile(csv, filename, 'text/csv');
-  }
+    static exportToCSV(data, filename) {
+        const csv = this.convertToCSV(data);
+        this.downloadFile(csv, filename, 'text/csv');
+    }
 
-  static exportToJSON(data, filename) {
-    const json = JSON.stringify(data, null, 2);
-    this.downloadFile(json, filename, 'application/json');
-  }
+    static exportToJSON(data, filename) {
+        const json = JSON.stringify(data, null, 2);
+        this.downloadFile(json, filename, 'application/json');
+    }
 
-  static convertToCSV(data) {
-    if (data.length === 0) return '';
+    static convertToCSV(data) {
+        if (data.length === 0) return '';
 
-    const headers = Object.keys(data[0]);
-    const csvRows = [];
+        const headers = Object.keys(data[0]);
+        const csvRows = [];
 
-    // Add header row
-    csvRows.push(headers.join(','));
+        // Add header row
+        csvRows.push(headers.join(','));
 
-    // Add data rows
-    data.forEach(row => {
-      const values = headers.map(header => {
-        const value = row[header];
-        // Escape quotes and wrap in quotes if contains comma
-        return typeof value === 'string' && value.includes(',')
-          ? `"${value.replace(/"/g, '""')}"`
-          : value;
-      });
-      csvRows.push(values.join(','));
-    });
+        // Add data rows
+        data.forEach(row => {
+            const values = headers.map(header => {
+                const value = row[header];
+                // Escape quotes and wrap in quotes if contains comma
+                return typeof value === 'string' && value.includes(',') ?
+                    `"${value.replace(/"/g, '""')}"` :
+                    value;
+            });
+            csvRows.push(values.join(','));
+        });
 
-    return csvRows.join('\n');
-  }
+        return csvRows.join('\n');
+    }
 
-  static downloadFile(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }
+    static downloadFile(content, filename, mimeType) {
+        const blob = new Blob([content], {
+            type: mimeType
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
 }
 
 // Export button handlers
 document.getElementById('exportTeamsCSV').addEventListener('click', function() {
-  const teamsData = getTeamsTableData();
-  DataExporter.exportToCSV(teamsData, 'nhl-scrabble-teams.csv');
+    const teamsData = getTeamsTableData();
+    DataExporter.exportToCSV(teamsData, 'nhl-scrabble-teams.csv');
 });
 
 document.getElementById('exportTeamsJSON').addEventListener('click', function() {
-  const teamsData = getTeamsTableData();
-  DataExporter.exportToJSON(teamsData, 'nhl-scrabble-teams.json');
+    const teamsData = getTeamsTableData();
+    DataExporter.exportToJSON(teamsData, 'nhl-scrabble-teams.json');
 });
 
 // Extract data from table
 function getTeamsTableData() {
-  const table = document.getElementById('teamsTable');
-  const rows = table.querySelectorAll('tbody tr');
+    const table = document.getElementById('teamsTable');
+    const rows = table.querySelectorAll('tbody tr');
 
-  return Array.from(rows).map(row => ({
-    rank: row.cells[0].textContent.trim(),
-    team: row.cells[1].textContent.trim(),
-    total_score: parseInt(row.cells[2].textContent.trim()),
-    players: parseInt(row.cells[3].textContent.trim()),
-    avg_score: parseFloat(row.cells[4].textContent.trim())
-  }));
+    return Array.from(rows).map(row => ({
+        rank: row.cells[0].textContent.trim(),
+        team: row.cells[1].textContent.trim(),
+        total_score: parseInt(row.cells[2].textContent.trim()),
+        players: parseInt(row.cells[3].textContent.trim()),
+        avg_score: parseFloat(row.cells[4].textContent.trim())
+    }));
 }
 ```
 
@@ -524,19 +569,33 @@ function getTeamsTableData() {
 
 ```html
 <div class="export-buttons">
-  <h3>Export Data</h3>
-  <button id="exportTeamsCSV" class="btn btn-secondary">
-    <span class="icon">📊</span> Export Teams (CSV)
-  </button>
-  <button id="exportTeamsJSON" class="btn btn-secondary">
-    <span class="icon">📄</span> Export Teams (JSON)
-  </button>
-  <button id="exportPlayersCSV" class="btn btn-secondary">
-    <span class="icon">📊</span> Export Players (CSV)
-  </button>
-  <button id="exportPlayersJSON" class="btn btn-secondary">
-    <span class="icon">📄</span> Export Players (JSON)
-  </button>
+ <h3>
+  Export Data
+ </h3>
+ <button class="btn btn-secondary" id="exportTeamsCSV">
+  <span class="icon">
+   📊
+  </span>
+  Export Teams (CSV)
+ </button>
+ <button class="btn btn-secondary" id="exportTeamsJSON">
+  <span class="icon">
+   📄
+  </span>
+  Export Teams (JSON)
+ </button>
+ <button class="btn btn-secondary" id="exportPlayersCSV">
+  <span class="icon">
+   📊
+  </span>
+  Export Players (CSV)
+ </button>
+ <button class="btn btn-secondary" id="exportPlayersJSON">
+  <span class="icon">
+   📄
+  </span>
+  Export Players (JSON)
+ </button>
 </div>
 ```
 
@@ -548,45 +607,45 @@ Add hamburger menu for mobile devices.
 
 ```javascript
 class MobileNav {
-  constructor() {
-    this.navToggle = document.getElementById('navToggle');
-    this.navMenu = document.getElementById('navMenu');
-    this.body = document.body;
+    constructor() {
+        this.navToggle = document.getElementById('navToggle');
+        this.navMenu = document.getElementById('navMenu');
+        this.body = document.body;
 
-    this.init();
-  }
+        this.init();
+    }
 
-  init() {
-    this.navToggle.addEventListener('click', () => this.toggle());
+    init() {
+        this.navToggle.addEventListener('click', () => this.toggle());
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!this.navToggle.contains(e.target) && !this.navMenu.contains(e.target)) {
-        this.close();
-      }
-    });
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.navToggle.contains(e.target) && !this.navMenu.contains(e.target)) {
+                this.close();
+            }
+        });
 
-    // Close menu when clicking a link
-    this.navMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => this.close());
-    });
-  }
+        // Close menu when clicking a link
+        this.navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => this.close());
+        });
+    }
 
-  toggle() {
-    this.navMenu.classList.toggle('open');
-    this.navToggle.classList.toggle('open');
-    this.body.classList.toggle('nav-open');
-  }
+    toggle() {
+        this.navMenu.classList.toggle('open');
+        this.navToggle.classList.toggle('open');
+        this.body.classList.toggle('nav-open');
+    }
 
-  close() {
-    this.navMenu.classList.remove('open');
-    this.navToggle.classList.remove('open');
-    this.body.classList.remove('nav-open');
-  }
+    close() {
+        this.navMenu.classList.remove('open');
+        this.navToggle.classList.remove('open');
+        this.body.classList.remove('nav-open');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  new MobileNav();
+    new MobileNav();
 });
 ```
 
@@ -594,22 +653,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ```html
 <nav class="navbar">
-  <div class="container">
-    <a href="/" class="logo">NHL Scrabble</a>
-
-    <!-- Hamburger button (mobile) -->
-    <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
-      <span class="hamburger"></span>
-    </button>
-
-    <!-- Navigation menu -->
-    <ul id="navMenu" class="nav-menu">
-      <li><a href="/">Home</a></li>
-      <li><a href="/teams">Teams</a></li>
-      <li><a href="/players">Players</a></li>
-      <li><a href="/about">About</a></li>
-    </ul>
-  </div>
+ <div class="container">
+  <a class="logo" href="/">
+   NHL Scrabble
+  </a>
+  <!-- Hamburger button (mobile) -->
+  <button aria-label="Toggle navigation" class="nav-toggle" id="navToggle">
+   <span class="hamburger">
+   </span>
+  </button>
+  <!-- Navigation menu -->
+  <ul class="nav-menu" id="navMenu">
+   <li>
+    <a href="/">
+     Home
+    </a>
+   </li>
+   <li>
+    <a href="/teams">
+     Teams
+    </a>
+   </li>
+   <li>
+    <a href="/players">
+     Players
+    </a>
+   </li>
+   <li>
+    <a href="/about">
+     About
+    </a>
+   </li>
+  </ul>
+ </div>
 </nav>
 ```
 
@@ -617,76 +693,76 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ```css
 .nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
 }
 
 .hamburger {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background-color: #fff;
-  position: relative;
-  transition: background-color 0.3s;
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    position: relative;
+    transition: background-color 0.3s;
 }
 
 .hamburger::before,
 .hamburger::after {
-  content: '';
-  position: absolute;
-  width: 25px;
-  height: 3px;
-  background-color: #fff;
-  transition: transform 0.3s;
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    transition: transform 0.3s;
 }
 
 .hamburger::before {
-  top: -8px;
+    top: -8px;
 }
 
 .hamburger::after {
-  top: 8px;
+    top: 8px;
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
-  .nav-toggle {
-    display: block;
-  }
+    .nav-toggle {
+        display: block;
+    }
 
-  .nav-menu {
-    position: fixed;
-    top: 60px;
-    right: -100%;
-    width: 80%;
-    max-width: 300px;
-    height: calc(100vh - 60px);
-    background-color: #003366;
-    flex-direction: column;
-    padding: 20px;
-    transition: right 0.3s;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-  }
+    .nav-menu {
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: calc(100vh - 60px);
+        background-color: #003366;
+        flex-direction: column;
+        padding: 20px;
+        transition: right 0.3s;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    }
 
-  .nav-menu.open {
-    right: 0;
-  }
+    .nav-menu.open {
+        right: 0;
+    }
 
-  /* Hamburger animation when open */
-  .nav-toggle.open .hamburger {
-    background-color: transparent;
-  }
+    /* Hamburger animation when open */
+    .nav-toggle.open .hamburger {
+        background-color: transparent;
+    }
 
-  .nav-toggle.open .hamburger::before {
-    transform: rotate(45deg) translate(6px, 6px);
-  }
+    .nav-toggle.open .hamburger::before {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
 
-  .nav-toggle.open .hamburger::after {
-    transform: rotate(-45deg) translate(6px, -6px);
-  }
+    .nav-toggle.open .hamburger::after {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
 }
 ```
 
@@ -699,35 +775,35 @@ Add smooth scrolling and UI animations for better UX.
 ```javascript
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  });
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
 });
 
 // Fade-in animation for elements as they scroll into view
 const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
 };
 
 const fadeInObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('fade-in');
-      fadeInObserver.unobserve(entry.target);
-    }
-  });
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            fadeInObserver.unobserve(entry.target);
+        }
+    });
 }, observerOptions);
 
 document.querySelectorAll('.fade-on-scroll').forEach(el => {
-  fadeInObserver.observe(el);
+    fadeInObserver.observe(el);
 });
 ```
 
@@ -736,48 +812,50 @@ document.querySelectorAll('.fade-on-scroll').forEach(el => {
 ```css
 /* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 /* Fade-in animation */
 .fade-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .fade-on-scroll.fade-in {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Loading spinner */
 .spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Button hover animations */
 .btn {
-  transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn:active {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 ```
 
@@ -789,11 +867,14 @@ Add graceful loading states and error messages.
 
 ```html
 <!-- Global loading overlay -->
-<div id="loadingOverlay" class="loading-overlay">
-  <div class="loading-content">
-    <div class="spinner-large"></div>
-    <p>Loading NHL data...</p>
+<div class="loading-overlay" id="loadingOverlay">
+ <div class="loading-content">
+  <div class="spinner-large">
   </div>
+  <p>
+   Loading NHL data...
+  </p>
+ </div>
 </div>
 ```
 
@@ -801,51 +882,51 @@ Add graceful loading states and error messages.
 
 ```javascript
 class ErrorHandler {
-  static show(message, type = 'error') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
+    static show(message, type = 'error') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
       <span class="toast-icon">${this.getIcon(type)}</span>
       <span class="toast-message">${message}</span>
       <button class="toast-close" onclick="this.parentElement.remove()">×</button>
     `;
 
-    document.body.appendChild(toast);
+        document.body.appendChild(toast);
 
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      toast.classList.add('fade-out');
-      setTimeout(() => toast.remove(), 300);
-    }, 5000);
-  }
-
-  static getIcon(type) {
-    const icons = {
-      error: '❌',
-      warning: '⚠️',
-      success: '✅',
-      info: 'ℹ️'
-    };
-    return icons[type] || icons.info;
-  }
-
-  static handleApiError(error) {
-    console.error('API Error:', error);
-
-    let message = 'An error occurred. Please try again.';
-    if (error.response) {
-      message = `Error ${error.response.status}: ${error.response.statusText}`;
-    } else if (error.message) {
-      message = error.message;
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
     }
 
-    this.show(message, 'error');
-  }
+    static getIcon(type) {
+        const icons = {
+            error: '❌',
+            warning: '⚠️',
+            success: '✅',
+            info: 'ℹ️'
+        };
+        return icons[type] || icons.info;
+    }
+
+    static handleApiError(error) {
+        console.error('API Error:', error);
+
+        let message = 'An error occurred. Please try again.';
+        if (error.response) {
+            message = `Error ${error.response.status}: ${error.response.statusText}`;
+        } else if (error.message) {
+            message = error.message;
+        }
+
+        this.show(message, 'error');
+    }
 }
 
 // Global error handler for fetch requests
 window.addEventListener('unhandledrejection', event => {
-  ErrorHandler.handleApiError(event.reason);
+    ErrorHandler.handleApiError(event.reason);
 });
 ```
 
@@ -853,72 +934,85 @@ window.addEventListener('unhandledrejection', event => {
 
 ```css
 .toast {
-  position: fixed;
-  top: 80px;
-  right: 20px;
-  background-color: #fff;
-  border-left: 4px solid;
-  padding: 15px 20px;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 10000;
-  animation: slideIn 0.3s ease-out;
-  max-width: 400px;
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: #fff;
+    border-left: 4px solid;
+    padding: 15px 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    animation: slideIn 0.3s ease-out;
+    max-width: 400px;
 }
 
-.toast-error { border-left-color: #dc3545; }
-.toast-warning { border-left-color: #ffc107; }
-.toast-success { border-left-color: #28a745; }
-.toast-info { border-left-color: #17a2b8; }
+.toast-error {
+    border-left-color: #dc3545;
+}
+
+.toast-warning {
+    border-left-color: #ffc107;
+}
+
+.toast-success {
+    border-left-color: #28a745;
+}
+
+.toast-info {
+    border-left-color: #17a2b8;
+}
 
 .toast-icon {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .toast-message {
-  flex: 1;
-  font-size: 14px;
+    flex: 1;
+    font-size: 14px;
 }
 
 .toast-close {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: 0.5;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.5;
 }
 
 .toast-close:hover {
-  opacity: 1;
+    opacity: 1;
 }
 
 .toast.fade-out {
-  animation: slideOut 0.3s ease-in forwards;
+    animation: slideOut 0.3s ease-in forwards;
 }
 
 @keyframes slideIn {
-  from {
-    transform: translateX(400px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes slideOut {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(400px);
-    opacity: 0;
-  }
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
 }
 ```
 

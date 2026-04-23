@@ -127,9 +127,9 @@ keep_full_version = true
 
    # After:
    dependencies = [
-       "click",
-       "pydantic",
-       "requests",
+     "click",
+     "pydantic",
+     "requests",
    ]
    ```
 
@@ -196,7 +196,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install pyproject-fmt
         run: pip install pyproject-fmt
@@ -410,16 +410,16 @@ mypy src/
 ```toml
 # Before:
 dependencies = [
-    "click>=8.0",
-    "requests>=2.31.0",
-    "pydantic>=2.0",
+  "click>=8.0",
+  "requests>=2.31.0",
+  "pydantic>=2.0",
 ]
 
 # After (alphabetically sorted):
 dependencies = [
-    "click>=8.0",
-    "pydantic>=2.0",
-    "requests>=2.31.0",
+  "click>=8.0",
+  "pydantic>=2.0",
+  "requests>=2.31.0",
 ]
 ```
 
@@ -437,12 +437,12 @@ Follows PEP 621 standard order:
 ```toml
 # Classifiers sorted by category then alphabetically
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
 ]
 ```
 

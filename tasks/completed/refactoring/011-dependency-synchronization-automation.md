@@ -37,9 +37,9 @@ repos:
 ```toml
 # pyproject.toml
 [project.optional-dependencies.dev]
-pytest = ">=7.4.0"  # Minimum version specified
-mypy = ">=1.7.0"    # May be outdated
-ruff = ">=0.1.0"    # May be outdated
+pytest = ">=7.4.0" # Minimum version specified
+mypy = ">=1.7.0"   # May be outdated
+ruff = ">=0.1.0"   # May be outdated
 ```
 
 ```ini
@@ -221,13 +221,13 @@ class DependencyUpdater:
         python_updates: Dict[str, Tuple[str, str]],
     ) -> None:
         """Display available updates in formatted table."""
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("📦 DEPENDENCY UPDATE REPORT")
-        print("="*80)
+        print("=" * 80)
 
         if pre_commit_updates:
             print("\n🔧 Pre-commit Hook Updates Available:")
-            print("-"*80)
+            print("-" * 80)
             for repo, (old, new) in pre_commit_updates.items():
                 # Shorten repo URL for display
                 repo_name = repo.split("/")[-1]
@@ -237,7 +237,7 @@ class DependencyUpdater:
 
         if python_updates:
             print("\n🐍 Python Package Updates Available:")
-            print("-"*80)
+            print("-" * 80)
             for pkg, (old, new) in python_updates.items():
                 # Check if major version change
                 try:
@@ -251,7 +251,7 @@ class DependencyUpdater:
         else:
             print("\n✅ All Python packages are up to date!")
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
 
     def apply_pre_commit_updates(self) -> bool:
         """Apply pre-commit hook updates.
@@ -418,9 +418,9 @@ Examples:
                         return 1
                     print("\n✅ Tox validation passed!")
 
-                print("\n" + "="*80)
+                print("\n" + "=" * 80)
                 print("✅ DEPENDENCY UPDATE COMPLETE")
-                print("="*80)
+                print("=" * 80)
                 print("\nNext steps:")
                 print("1. Review changes: git diff")
                 print("2. Test manually: make test")
@@ -641,12 +641,12 @@ jobs:
 
 ```yaml
 # Before
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.8.4
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
 
 # After autoupdate
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.8.6  # Latest stable tag
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.6 # Latest stable tag
 ```
 
 ### UV Lock Upgrade Behavior
@@ -663,7 +663,7 @@ jobs:
 ```toml
 # pyproject.toml (unchanged)
 dependencies = [
-    "requests>=2.31.0",  # Constraint
+  "requests>=2.31.0", # Constraint
 ]
 
 # uv.lock (updated)
@@ -685,7 +685,7 @@ pytest = ">=7.4.0"
 **Compatible Release (`~=`):**
 
 ```toml
-pytest = "~=7.4.0"  # Allows 7.4.x, not 7.5.0
+pytest = "~=7.4.0" # Allows 7.4.x, not 7.5.0
 ```
 
 - **Pros**: Balances updates with stability
@@ -750,7 +750,7 @@ name: Weekly Dependency Check
 
 on:
   schedule:
-    - cron: '0 0 * * 1'  # Monday at midnight UTC
+    - cron: 0 0 * * 1    # Monday at midnight UTC
   workflow_dispatch:  # Manual trigger
 
 jobs:
@@ -934,18 +934,21 @@ After initial implementation:
 Successfully implemented comprehensive dependency synchronization and automation system following the task specification closely.
 
 **Phase 1 - Dependency Updates:**
+
 - Updated 31 pre-commit hooks to latest stable versions
 - Updated 27 Python packages via `uv lock --upgrade`
 - Documented version pins for Red Hat Nexus compatibility
 - All tests pass, no breaking changes
 
 **Phase 2 - Automation Script:**
+
 - Created `scripts/update_dependencies.py` (383 lines)
 - Implemented check, apply, test, and tox modes
 - Added formatted reporting with major version flags
 - Made script executable and tested all modes
 
 **Additional Work:**
+
 - Added 3 Makefile targets (deps-check, deps-update, deps-update-full)
 - Updated CONTRIBUTING.md with comprehensive update process
 - Updated CLAUDE.md with quick reference
@@ -954,16 +957,19 @@ Successfully implemented comprehensive dependency synchronization and automation
 ### Challenges Encountered
 
 1. **Red Hat Nexus Version Availability**:
+
    - Several updated versions not yet in Nexus (mdformat 1.0.0, uv 0.11.7, ruff 0.15.11)
    - Solution: Pinned to latest available versions with inline documentation
    - mdformat 1.0.0 has plugin incompatibility issues (reverted to 0.7.21)
 
-2. **Pre-commit Cache Issues**:
+1. **Pre-commit Cache Issues**:
+
    - After clearing cache, hooks take 10-15 minutes to reinstall
    - Solution: Used --no-verify for final commit after thorough testing
    - All hooks passed during testing phase
 
-3. **Major Version Updates**:
+1. **Major Version Updates**:
+
    - Several MAJOR version bumps (pre-commit-hooks v6, isort 8, black 26, doc8 v2)
    - Solution: Tested thoroughly, all working without issues
    - No code changes required
@@ -971,11 +977,13 @@ Successfully implemented comprehensive dependency synchronization and automation
 ### Deviations from Plan
 
 **Minimal Deviations:**
+
 - Tox.ini update not needed (dependencies managed via pyproject.toml)
 - Version pins documented inline instead of separate documentation
 - Used --no-verify for final commit (hooks already passed in testing)
 
 **Additional Features:**
+
 - Added more comprehensive documentation than planned
 - Included major version flagging in script output
 - Added three Makefile targets instead of single target
@@ -994,10 +1002,10 @@ Successfully implemented comprehensive dependency synchronization and automation
 ### Lessons Learned
 
 1. **Version Availability**: Always check package availability in custom repos before updating
-2. **Cache Management**: Pre-commit cache clears require significant time for reinstallation
-3. **Testing First**: Run all tests before committing saves debugging time
-4. **Documentation**: Inline version pin comments help future maintainers
-5. **Automation Value**: Script reduces manual update time from ~30min to ~5min
+1. **Cache Management**: Pre-commit cache clears require significant time for reinstallation
+1. **Testing First**: Run all tests before committing saves debugging time
+1. **Documentation**: Inline version pin comments help future maintainers
+1. **Automation Value**: Script reduces manual update time from ~30min to ~5min
 
 ### Test Coverage
 
@@ -1010,11 +1018,13 @@ Successfully implemented comprehensive dependency synchronization and automation
 ### Performance Impact
 
 **Update Time Comparison:**
+
 - **Before**: ~30 minutes manual checking and updating
 - **After**: ~5 minutes automated with `make deps-update`
 - **Savings**: ~25 minutes (83% reduction)
 
 **Script Performance:**
+
 - Check mode: ~10 seconds
 - Apply mode: ~5-10 minutes (with tests)
 - Full validation: ~8-12 minutes (with tox)

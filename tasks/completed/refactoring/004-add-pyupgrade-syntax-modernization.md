@@ -34,8 +34,10 @@ requires-python = ">=3.10,<3.15"
 # Old-style type hints
 from typing import Optional, Union, List, Dict
 
+
 def process_data(items: Optional[List[str]]) -> Dict[str, Union[int, str]]:
     pass
+
 
 # Could be modernized to:
 def process_data(items: list[str] | None) -> dict[str, int | str]:
@@ -67,16 +69,16 @@ Add pyupgrade as a comprehensive syntax modernization tool across all quality fr
 
 ```yaml
 # Add after ruff-format, before ruff-check
-- repo: https://github.com/asottile/pyupgrade
-  rev: v3.15.1  # Latest version
-  hooks:
-    - id: pyupgrade
-      name: pyupgrade
-      description: Automatically upgrade syntax for newer Python versions
-      args:
-        - --py310-plus  # Target Python 3.10+ syntax
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.1 # Latest version
+    hooks:
+      - id: pyupgrade
+        name: pyupgrade
+        description: Automatically upgrade syntax for newer Python versions
+        args:
+          - --py310-plus # Target Python 3.10+ syntax
       # Align with ruff's file exclusions
-      exclude: ^(\.git|\.tox|\.venv|venv|build|dist|.*\.egg-info)
+        exclude: ^(\.git|\.tox|\.venv|venv|build|dist|.*\.egg-info)
 ```
 
 **Step 2: Add to tox.ini**:
@@ -113,8 +115,8 @@ strategy:
 ```toml
 [project.optional-dependencies]
 lint = [
-    "ruff>=0.3.0",
-    "pyupgrade>=3.15.0",  # Add syntax modernization
+  "ruff>=0.3.0",
+  "pyupgrade>=3.15.0", # Add syntax modernization
 ]
 ```
 
@@ -346,13 +348,16 @@ git commit -m "refactor: Modernize Python syntax with pyupgrade"
 from typing import Optional, Union, List, Dict
 from nhl_scrabble.models.player import PlayerScore
 
+
 def get_player(name: str) -> Optional[PlayerScore]:
     players: List[PlayerScore] = fetch_players()
     mapping: Dict[str, PlayerScore] = {p.full_name: p for p in players}
     return mapping.get(name)
 
+
 # After
 from nhl_scrabble.models.player import PlayerScore
+
 
 def get_player(name: str) -> PlayerScore | None:
     players: list[PlayerScore] = fetch_players()

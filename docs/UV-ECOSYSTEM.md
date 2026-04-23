@@ -186,15 +186,15 @@ make tox-coverage          # Coverage report
 
 ```toml
 [tool.uv]
-managed = true              # Enable UV dependency management
-package = true              # This is a Python package
-compile-bytecode = true     # Compile .pyc files for faster imports
-link-mode = "copy"          # Copy files instead of linking
+managed = true          # Enable UV dependency management
+package = true          # This is a Python package
+compile-bytecode = true # Compile .pyc files for faster imports
+link-mode = "copy"      # Copy files instead of linking
 
 [project.optional-dependencies]
 dev = [
-    "tox-uv>=1.0.0",  # Tox with UV
-    # ... other deps
+  "tox-uv>=1.0.0", # Tox with UV
+  # ... other deps
 ]
 ```
 
@@ -270,16 +270,16 @@ make uv-pre-commit
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Install UV
-  uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
+  - name: Install UV
+    uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
 
-- name: Install dependencies
-  run: uv pip install -e ".[dev]" --system
+  - name: Install dependencies
+    run: uv pip install -e ".[dev]" --system
 
-- name: Run tests
-  run: tox -p auto
+  - name: Run tests
+    run: tox -p auto
 ```
 
 ## Environment Variables
@@ -372,9 +372,9 @@ python -m venv .venv
 
 ```yaml
 # Always use UV in CI for speed
-- uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
+  - uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
 ```
 
 ### 4. Use Makefile Targets

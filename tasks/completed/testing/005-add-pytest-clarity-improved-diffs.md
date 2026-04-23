@@ -106,15 +106,15 @@ Add pytest-clarity for automatically enhanced assertion error output:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",
-    "pytest-randomly>=3.15.0",
-    "pytest-sugar>=1.0.0",
-    "pytest-clarity>=1.0.1",  # Add improved assertion diffs
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",
+  "pytest-xdist>=3.5.0",
+  "pytest-randomly>=3.15.0",
+  "pytest-sugar>=1.0.0",
+  "pytest-clarity>=1.0.1",   # Add improved assertion diffs
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 
@@ -250,13 +250,16 @@ def test_clarity_dict_diff():
     }
     assert actual == expected  # This will fail, showing enhanced diff
 
+
 def test_clarity_string_diff():
     """Verify pytest-clarity enhances string diffs."""
     assert "Hello World" == "Hello Wurld"  # Character-level diff
 
+
 def test_clarity_list_diff():
     """Verify pytest-clarity enhances list diffs."""
     assert [1, 2, 3, 4] == [1, 2, 5, 4]  # Index-level diff
+
 
 # Run and verify output:
 # pytest tests/test_clarity_verification.py -v

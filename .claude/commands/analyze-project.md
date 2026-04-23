@@ -377,9 +377,11 @@ try:
 except Exception:  # Too broad!
     pass  # Silent failure!
 
+
 # Missing validation
 def process(data: str):  # No validation!
     return data.upper()
+
 
 # Race conditions
 # Unclosed resources
@@ -404,10 +406,12 @@ def process(data: str):  # No validation!
 for team in teams:
     roster = fetch_roster(team)  # Sequential!
 
+
 # Missing caching
 def expensive_operation():
     # No @lru_cache or Redis
     return compute_for_minutes()
+
 
 # Inefficient algorithms
 for i in range(len(items)):  # O(n²)
@@ -529,11 +533,14 @@ def monolithic(data):  # 200 lines
 ```python
 # Vulnerabilities
 import subprocess
+
 subprocess.call(user_input)  # Command injection!
+
 
 # Missing validation
 def api_call(url):  # SSRF risk!
     return requests.get(url)
+
 
 # Secret exposure
 API_KEY = "hardcoded-secret"  # In code!
