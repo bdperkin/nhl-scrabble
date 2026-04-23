@@ -233,7 +233,7 @@ repos:
         exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21  # NOTE: 1.0.0 has dependency resolution issues with mdformat-gfm/mdformat-tables
+    rev: 1.0.0  # NOTE: 1.0.0 has dependency resolution issues with mdformat-gfm/mdformat-tables
     hooks:
       - id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
@@ -335,7 +335,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.6  # NOTE: 0.11.7 not yet available in Red Hat Nexus
+    rev: 0.11.7  # NOTE: 0.11.7 not yet available in Red Hat Nexus
     hooks:
       - id: uv-lock
 

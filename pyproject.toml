@@ -159,6 +159,8 @@ dev = [
     "nhl-scrabble[test,lint,type,security,docs,export,watch,build,publish,tox]",
     "pre-commit>=3.6.0",
     "check-jsonschema>=0.28.0",  # JSON/YAML schema validation
+    "tomli>=2.0.0; python_version < '3.11'",  # TOML reading for Python <3.11
+    "tomli-w>=1.0.0",  # TOML writing for dependency script
 ]
 
 
