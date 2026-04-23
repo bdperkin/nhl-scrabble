@@ -321,7 +321,7 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 keywords = ["nhl", "scrabble", "hockey", "sports", "statistics"]
 authors = [
-  { name = "Brandon Perkins", email = "bperkins@example.com" },
+  { name = "Brandon Perkins", email = "bdperkin@example.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
