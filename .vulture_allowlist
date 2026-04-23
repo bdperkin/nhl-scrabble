@@ -7,12 +7,14 @@ get_rate_limit_stats  # NHLApiClient method - used in rate limiting tests
 get_top_players  # PlayerSearch method - used in search tests
 
 # CSV Exporter public API
+export_team_scores  # CSVExporter method for exporting team scores
 export_player_scores  # CSVExporter method for exporting player scores
 export_division_standings  # CSVExporter method for exporting division standings
 export_conference_standings  # CSVExporter method for exporting conference standings
 export_playoff_standings  # CSVExporter method for exporting playoff standings
 
 # Excel Exporter public API
+export_team_scores  # ExcelExporter method for exporting team scores
 export_player_scores  # ExcelExporter method for exporting player scores
 
 # Excel Exporter internal formatting methods (used at runtime)
