@@ -222,7 +222,7 @@ Each task includes:
 | 011 | Dependency Synchronization and Automation                                     | MEDIUM   | 3-4 hours           | Active    | [#226](https://github.com/bdperkin/nhl-scrabble/issues/226) | -                                                                                     |
 | 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Active    | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | -                                                                                     |
 | 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Active    | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | -                                                                                     |
-| 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Active    | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | -                                                                                     |
+| 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Completed | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | PR [#337](https://github.com/bdperkin/nhl-scrabble/pull/337), 2026-04-22, 2.5h actual |
 | 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 30 minutes - 1 hour | Active    | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | -                                                                                     |
 | 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Active    | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | -                                                                                     |
 | 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Active    | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | -                                                                                     |
@@ -294,12 +294,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (63 active, 104 completed)
+**Total Tasks**: 167 tasks (62 active, 105 completed)
 
 - **Total Estimated Effort**: 1031.5 hours
-  - Active Tasks: 519.5 hours
-  - Completed Tasks: 500.0 hours
-- **Overall Completion**: 62.3%
+  - Active Tasks: 517.0 hours
+  - Completed Tasks: 502.5 hours (actual: 502.5 hours)
+- **Overall Completion**: 62.9%
 
 ## Task Management Guidelines
 

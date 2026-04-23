@@ -148,6 +148,9 @@ jobs:
           - tox-env: gitlint
             experimental: true
             # Non-blocking during validation period
+          - tox-env: refurb
+            experimental: true
+            # Non-blocking during adoption phase - provides modernization suggestions
 
     continue-on-error: ${{ matrix.experimental }}
 
@@ -228,9 +231,9 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "pyproject.toml"
 
-      - name: Install docformatter, pyroma, deptry, pydocstyle, and safety for pre-commit
+      - name: Install docformatter, pyroma, deptry, pydocstyle, refurb, and safety for pre-commit
         run: |
-          uv pip install docformatter pyroma deptry pydocstyle safety --system
+          uv pip install docformatter pyroma deptry pydocstyle refurb safety --system
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.1

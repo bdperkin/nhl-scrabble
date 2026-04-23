@@ -803,6 +803,116 @@ def get_player(name: str) -> dict[str, int | str] | None:
 
 The project requires Python 3.10+ (`requires-python = ">=3.10"`), so we can safely use all Python 3.10+ features. pyupgrade ensures our codebase consistently uses the latest syntax patterns available in our minimum Python version.
 
+### Python Code Modernization
+
+The project uses **[refurb](https://github.com/dosisod/refurb)** to detect Python code that can be simplified or modernized using Python 3.10+ features. While pyupgrade handles **syntax** modernization, refurb handles **semantic** modernization - suggesting better ways to structure code:
+
+```bash
+# Run refurb to see modernization suggestions
+make refurb
+
+# Generate detailed modernization reports
+make refurb-report
+
+# Pre-commit hook runs automatically (warning mode - non-blocking)
+pre-commit run refurb --all-files
+
+# Via tox
+tox -e refurb
+```
+
+**What refurb detects:**
+
+- **pathlib usage**: `os.path.join()` → `Path() / ...`, `open().read()` → `Path().read_text()`
+- **Modern f-strings**: More readable string formatting patterns
+- **Dictionary merging**: `{**a, **b}` → `a | b` (Python 3.9+)
+- **List comprehensions**: Replace append loops with comprehensions
+- **contextlib.suppress()**: Replace empty try-except with `with suppress(...)`
+- **operator.itemgetter()**: Replace lambda with itemgetter for sorting
+- **Tuple vs list in membership tests**: `in [x, y]` → `in (x, y)` (faster)
+- **Chained assignments**: Simplify repeated assignments
+- **Dataclass opportunities**: Suggest @dataclass for simple data containers
+
+**Example transformations:**
+
+```python
+# Before
+import os
+
+path = os.path.join("dir", "file.txt")
+with open(path) as f:
+    content = f.read()
+
+# After (refurb suggestion)
+from pathlib import Path
+
+path = Path("dir") / "file.txt"
+content = path.read_text()
+
+# ---
+
+# Before
+result = []
+for item in items:
+    if condition(item):
+        result.append(transform(item))
+
+# After (refurb suggestion)
+result = [transform(item) for item in items if condition(item)]
+
+# ---
+
+# Before
+try:
+    do_something()
+except ValueError:
+    pass
+
+# After (refurb suggestion)
+from contextlib import suppress
+
+with suppress(ValueError):
+    do_something()
+```
+
+**Benefits:**
+
+- ✅ **Better patterns**: Learn modern Python idioms
+- ✅ **More readable**: pathlib and comprehensions are clearer
+- ✅ **Better performance**: Tuples in membership tests are faster than lists
+- ✅ **Educational**: See suggestions on every commit (warning mode)
+- ✅ **Non-blocking**: Currently in warning mode - doesn't prevent commits
+
+**Integration:**
+
+- **Pre-commit**: Shows suggestions on every commit (warning mode, non-blocking)
+- **Tox**: `tox -e refurb` for detailed scanning
+- **CI**: Runs on all PRs (experimental, non-blocking)
+- **Makefile**: `make refurb` and `make refurb-report` for reports
+
+**Warning Mode:**
+
+refurb is currently in **warning mode** - it shows modernization suggestions but doesn't block commits. This allows the team to learn modern patterns without pressure. Use suggestions as learning opportunities.
+
+**When to ignore refurb suggestions:**
+
+- **Performance-critical code**: pathlib has slight overhead vs os.path
+- **External API requirements**: Some APIs require string paths, not Path objects
+- **Complex logic**: Some patterns are clearer without comprehensions
+- **Intentional patterns**: Sometimes explicit is better than implicit
+
+**Complementary to pyupgrade:**
+
+| Tool      | Focus                      | Example                                           |
+| --------- | -------------------------- | ------------------------------------------------- |
+| pyupgrade | **Syntax** modernization   | `Optional[str]` → `str \| None`                   |
+| refurb    | **Semantic** modernization | `os.path.join()` → `Path() / ...`                 |
+| ruff      | **Linting** & style        | Code quality, PEP 8, best practices               |
+| mypy      | **Type checking**          | Verify type hints are correct                     |
+| ty        | **Fast type checking**     | Same as mypy but 10-100x faster (validation mode) |
+
+All tools work together to maintain high code quality!
+
 ### Security Scanning
 
 The project uses two complementary security tools:

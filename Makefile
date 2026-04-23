@@ -41,7 +41,7 @@ NC := \033[0m # No Color
         test test-unit test-integration test-cov test-watch test-failed test-verbose \
         tox tox-list tox-parallel tox-clean tox-recreate tox-envs \
         uv-pip uv-check \
-        ruff-check ruff-format black-check black-format mypy quality check pre-commit ci \
+        ruff-check ruff-format black-check black-format mypy ty type-check refurb refurb-report modernization quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
         build publish publish-test \
         docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-all \
@@ -307,6 +307,18 @@ ty: check-venv ## Type checking - verify type hints (Astral ty - fast)
 type-check: check-venv ## Type checking - comprehensive (ty + mypy)
 	@printf "$(BLUE)Running comprehensive type checking (ty + mypy)...$(NC)\n"
 	@$(BIN)/tox -e type-check
+
+refurb: check-venv ## Modernization - run refurb Python modernization linter
+	@printf "$(BLUE)Running refurb modernization linter...$(NC)\n"
+	@$(BIN)/tox -e refurb
+
+refurb-report: check-venv ## Modernization - generate detailed refurb modernization report
+	@printf "$(BLUE)Generating refurb modernization report...$(NC)\n"
+	@$(BIN)/refurb src/ --enable-all > refurb-report.txt 2>&1 || true
+	@printf "$(GREEN)Report saved to: refurb-report.txt$(NC)\n"
+	@printf "$(YELLOW)View report: cat refurb-report.txt$(NC)\n"
+
+modernization: refurb ## Modernization - alias for refurb
 
 quality: check-venv ## Quality - run all checks (ruff-check + mypy)
 	@printf "$(BLUE)Running quality checks...$(NC)\n"

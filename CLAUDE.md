@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) 
 **Current Version:** 2.0.0
 **Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
-**Pre-commit Hooks:** 59 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/))
+**Pre-commit Hooks:** 61 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/) and [refurb](https://github.com/dosisod/refurb))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (59 Comprehensive Checks)
+## Pre-commit Hooks (61 Comprehensive Checks)
 
-The project uses 57 pre-commit hooks for automatic code quality validation:
+The project uses 61 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -215,6 +215,11 @@ The project uses 57 pre-commit hooks for automatic code quality validation:
 
 - `autopep8`: [PEP 8](https://peps.python.org/pep-0008/) auto-formatting (runs after black, before ruff-format, aggressive level 2)
 
+**Python Modernization Hooks (2 from asottile/pyupgrade and local):**
+
+- `pyupgrade`: Modernize Python syntax for Python 3.10+ (f-strings, type hints, removes deprecated imports)
+- `refurb`: Python code modernization linter (pathlib, comprehensions, modern idioms) - **warning mode, non-blocking**
+
 **Ruff Hooks (2 from ruff-pre-commit):**
 
 - `ruff-check`: Comprehensive linting with ALL rules (--fix, --exit-non-zero-on-fix)
@@ -272,7 +277,7 @@ git commit --no-verify -m "message"
 - Task tracking updates
 - Emergency hotfixes (still run quality checks!)
 
-**Never skip quality checks** - The 56 other hooks exist to protect code quality and security.
+**Never skip quality checks** - The 60 other hooks exist to protect code quality and security.
 
 ## Development Tools
 
@@ -680,7 +685,7 @@ The `/implement-task` skill automatically runs pre-flight validation before push
 
 ```bash
 # Automatically runs:
-pre-commit run --all-files    # All 59 hooks (~45s)
+pre-commit run --all-files    # All 61 hooks (~45s)
 tox -p auto                    # All environments (~3-5 min)
 git status                     # Verify clean state
 ```
@@ -1157,7 +1162,7 @@ The project uses UV automatically via tox-uv:
 - **Modules:** 15 core modules
 - **Tests:** 36 tests (100% passing)
 - **Makefile Targets:** 55 documented targets (16 logical groupings)
-- **Pre-commit Hooks:** 59 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, ruff, mypy, ty, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, bandit, safety)
+- **Pre-commit Hooks:** 61 hooks (meta, file quality, Python quality, Python imports, project validation, YAML linting, JSON/YAML schema validation, spelling, markdown, documentation, UV, flake8, autoflake, black, docformatter, pyupgrade, refurb, ruff, mypy, ty, interrogate, deptry, unimport, pydocstyle, vulture, blocklint, gitlint, bandit, safety)
 - **Dependency Lock:** uv.lock with 1,957 lines
 - **Documentation:** 12 comprehensive guides
 - **CI/CD:** GitHub Actions with UV optimization
