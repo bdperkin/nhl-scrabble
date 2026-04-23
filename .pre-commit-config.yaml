@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 61 comprehensive hooks for code quality, security, and consistency
+# 65 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 # NOTE: Using black 24.10 as authoritative formatter (ruff-format disabled)
@@ -142,6 +142,49 @@ repos:
       - id: yamllint
         # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
         args: []  # Config is in .yamllint
+
+  # ============================================================================
+  # JSON/YAML Schema Validation - Schema Compliance Checks
+  # ============================================================================
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.29.1
+    hooks:
+      # GitHub Actions workflows
+      - id: check-github-workflows
+        name: check GitHub Actions workflows
+        description: Validate GitHub workflow files against official schema
+        args: [--verbose]
+
+      # Dependabot configuration
+      - id: check-dependabot
+        name: check Dependabot config
+        description: Validate Dependabot config against official schema
+        args: [--verbose]
+
+      # Codecov configuration
+      - id: check-jsonschema
+        name: check Codecov config
+        description: Validate .codecov.yml against Codecov schema
+        files: ^\.codecov\.ya?ml$
+        args:
+          [
+            --schemafile,
+            https://json.schemastore.org/codecov.json,
+            --verbose,
+          ]
+
+      # Pre-commit configuration
+      - id: check-jsonschema
+        name: check pre-commit config
+        description: Validate .pre-commit-config.yaml against schema
+        files: ^\.pre-commit-config\.ya?ml$
+        args:
+          [
+            --schemafile,
+            https://json.schemastore.org/pre-commit-config.json,
+            --verbose,
+          ]
 
   # ============================================================================
   # Spelling - Code and Documentation Spell Checking

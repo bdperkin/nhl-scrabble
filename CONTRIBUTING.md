@@ -100,7 +100,7 @@ git checkout -b fix/your-bug-fix
 
 Use the `/implement-task` skill which automatically validates before pushing:
 
-- ✅ Runs all 60 pre-commit hooks automatically
+- ✅ Runs all 65 pre-commit hooks automatically
 - ✅ Runs all tox environments (py3.10-3.15, ruff, mypy, coverage)
 - ✅ Only pushes if all validation passes
 - ✅ Provides clear success/failure reporting
@@ -729,7 +729,8 @@ tox -e pyupgrade
 # or directly: pyupgrade --py310-plus $(find src tests -name "*.py")
 
 # Validate JSON/YAML files against schemas
-tox -e check-jsonschema
+make validate-json
+# or via tox: tox -e check-jsonschema
 # or directly: check-jsonschema --schemafile "https://json.schemastore.org/github-workflow.json" .github/workflows/*.yml
 
 # Run pre-commit hooks manually
@@ -912,6 +913,78 @@ refurb is currently in **warning mode** - it shows modernization suggestions but
 | ty        | **Fast type checking**     | Same as mypy but 10-100x faster (validation mode) |
 
 All tools work together to maintain high code quality!
+
+### JSON/YAML Schema Validation
+
+The project uses **[check-jsonschema](https://github.com/python-jsonschema/check-jsonschema)** to validate configuration files against official JSON schemas, ensuring all configs are syntactically correct and follow best practices:
+
+```bash
+# Validate all JSON/YAML configuration files
+make validate-json
+
+# Or via tox
+tox -e check-jsonschema
+
+# Validate specific files directly
+check-jsonschema --schemafile https://json.schemastore.org/codecov.json .codecov.yml
+check-jsonschema --schemafile https://json.schemastore.org/pre-commit-config.json .pre-commit-config.yaml
+```
+
+**Files Validated:**
+
+| File                      | Schema                   | Purpose                        |
+| ------------------------- | ------------------------ | ------------------------------ |
+| `.github/workflows/*.yml` | `github-workflow.json`   | GitHub Actions workflows       |
+| `.github/dependabot.yml`  | `dependabot-2.0.json`    | Dependabot configuration       |
+| `.codecov.yml`            | `codecov.json`           | Codecov coverage configuration |
+| `.pre-commit-config.yaml` | `pre-commit-config.json` | Pre-commit hooks configuration |
+
+**Benefits:**
+
+- ✅ **Early Error Detection**: Catch config errors before they cause CI failures
+- ✅ **IDE Support**: Many IDEs use schemas for autocomplete and inline validation
+- ✅ **Documentation**: Schema provides authoritative reference for valid config options
+- ✅ **Type Checking**: Validates field types (string vs number, required vs optional)
+- ✅ **Prevents Typos**: Field names validated against schema
+
+**Common Schema Errors:**
+
+```yaml
+# Error: Missing required field
+repos: []  # Required for .pre-commit-config.yaml
+
+# Error: Invalid field type
+coverage:
+  minimum_coverage: "90%"  # Should be number, not string
+# Fix:
+coverage:
+  minimum_coverage: 90
+
+# Error: Unknown field
+unknown_field: value  # Not in schema
+# Fix: Remove unknown field or check schema documentation
+```
+
+**Integration:**
+
+- **Pre-commit**: Validates on every commit (4 hooks in `.pre-commit-config.yaml`)
+- **Tox**: `tox -e check-jsonschema` for manual validation
+- **Makefile**: `make validate-json` for quick validation
+- **CI**: Runs on all PRs via GitHub Actions
+
+**Troubleshooting:**
+
+If schema validation fails:
+
+1. Read the error message carefully - it shows the field and issue
+1. Check the schema documentation at [schemastore.org](https://schemastore.org/json/)
+1. Validate locally: `make validate-json` to see detailed errors
+1. Fix the config file based on schema requirements
+1. Re-run validation to confirm fix
+
+**Schema Sources:**
+
+All schemas from [SchemaStore.org](https://schemastore.org/json/) - community-maintained JSON schemas for 700+ configuration file formats.
 
 ### Security Scanning
 

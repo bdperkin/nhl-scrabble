@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) 
 **Current Version:** 2.0.0
 **Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
-**Pre-commit Hooks:** 61 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/) and [refurb](https://github.com/dosisod/refurb))
+**Pre-commit Hooks:** 65 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/) and [refurb](https://github.com/dosisod/refurb))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (61 Comprehensive Checks)
+## Pre-commit Hooks (65 Comprehensive Checks)
 
-The project uses 61 pre-commit hooks for automatic code quality validation:
+The project uses 65 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -162,10 +162,12 @@ The project uses 61 pre-commit hooks for automatic code quality validation:
 
 - `yamllint`: YAML file validation and linting (comprehensive by default)
 
-**JSON/YAML Schema Validation Hooks (2 from check-jsonschema):**
+**JSON/YAML Schema Validation Hooks (4 from check-jsonschema):**
 
 - `check-github-workflows`: Validates GitHub workflow files against official schema
 - `check-dependabot`: Validates Dependabot config against official schema
+- `check-codecov`: Validates .codecov.yml against Codecov schema
+- `check-pre-commit`: Validates .pre-commit-config.yaml against schema
 
 **Spelling Hooks (1 from codespell):**
 
@@ -351,7 +353,7 @@ make uv-pip ARGS="list"
 uv lock
 ```
 
-### Makefile (55 Targets)
+### Makefile (57 Targets)
 
 Self-documenting Makefile with comprehensive automation organized in 16 logical groupings:
 
@@ -378,6 +380,8 @@ make ty              # Astral ty type checking (fast)
 make type-check      # All type checkers (ty + mypy)
 make quality         # All checks
 make uv-pre-commit   # Pre-commit with UV
+make validate-json   # Validate JSON/YAML configs against schemas
+make validate-configs # Alias for validate-json
 
 # Running
 make run             # Run analyzer (via tox)
