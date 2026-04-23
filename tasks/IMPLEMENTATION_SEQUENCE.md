@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
-**Generated**: 2026-04-22 (fully synchronized)
-**Total Tasks**: 65 active tasks
-**Estimated Effort**: 529.0 hours
+**Generated**: 2026-04-22 (updated with missing tasks)
+**Total Tasks**: 68 active tasks (65 original + 3 missing from IMPLEMENTATION_SEQUENCE.md)
+**Estimated Effort**: 538-744 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -187,7 +187,23 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 10: Visual Polish (MEDIUM Priority)
+## Phase 10: Documentation Extensions (LOW Priority)
+
+**Total Effort**: 7-11 hours
+**Focus**: Advanced Sphinx builders and extensions
+**Dependencies**: Enhancement/018 (Sphinx additional formats) should be complete
+
+```bash
+# Advanced Sphinx Features
+/implement-task enhancement/023-extend-sphinx-builders.md         # 4-6h, Issue #331
+/implement-task enhancement/024-extend-sphinx-extensions.md       # 3-5h, Issue #332
+```
+
+**Rationale**: Task 023 adds 6 additional Sphinx builders (EPUB, singlehtml, dirhtml, JSON, XML, gettext) beyond the 6 formats already implemented. Task 024 adds 9 Sphinx extensions (autosummary, graphviz, inheritance diagrams, math, etc.) for enhanced documentation capabilities. Both are nice-to-have improvements building on the existing Sphinx foundation.
+
+______________________________________________________________________
+
+## Phase 11: Visual Polish (MEDIUM Priority)
 
 **Total Effort**: 1-2 hours
 **Focus**: Refine branding and visual elements
@@ -201,13 +217,16 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 11: Repository Modernization (MEDIUM Priority)
+## Phase 12: Repository Modernization (MEDIUM Priority)
 
-**Total Effort**: 8.25-13.5 hours
+**Total Effort**: 10.25-17.5 hours
 **Focus**: Code modernization, formatting tools, and CI/CD maintenance
 **Dependencies**: None (all independent tools)
 
 ```bash
+# Code Cleanup (Before v2.0.0 Release)
+/implement-task refactoring/022-remove-backward-compatibility-code.md    # 2-4h, Issue #329
+
 # Modernization & Formatting Tools
 /implement-task refactoring/004-add-pyupgrade-syntax-modernization.md    # 1-2h, Issue #118
 /implement-task refactoring/014-add-refurb-modernization-linting.md      # 2-3h, Issue #241
@@ -220,11 +239,11 @@ ______________________________________________________________________
 /implement-task refactoring/020-migrate-codecov-test-results-action.md   # 30-60min, Issue #285
 ```
 
-**Rationale**: pyupgrade modernizes syntax. refurb finds improvements. pyproject-fmt standardizes config. Trailing-comma helps diffs. JSON schema validation catches errors. djlint improves HTML quality. Wheel validation ensures package quality. Statement sorting improves readability (requires consensus). Codecov migration from deprecated action. Order by impact.
+**Rationale**: Task 022 removes legacy CLI functions and backward compatibility code before v2.0.0 release - clean codebase without technical debt. Should be completed early in modernization phase. pyupgrade modernizes syntax. refurb finds improvements. pyproject-fmt standardizes config. Trailing-comma helps diffs. JSON schema validation catches errors. djlint improves HTML quality. Wheel validation ensures package quality. Statement sorting improves readability (requires consensus). Codecov migration from deprecated action. Order by impact.
 
 ______________________________________________________________________
 
-## Phase 12: Repository Cleanup (MEDIUM Priority)
+## Phase 13: Repository Cleanup (MEDIUM Priority)
 
 **Total Effort**: 13-20 hours
 **Focus**: Organizational improvements and audits
@@ -241,11 +260,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 13: Package Automation (MEDIUM Priority)
+## Phase 14: Package Automation (MEDIUM Priority)
 
 **Total Effort**: 4-6 hours
 **Focus**: Automated package building and publishing
-**Dependencies**: Repository should be clean (Phase 12)
+**Dependencies**: Repository should be clean (Phase 13)
 
 ```bash
 # Package Automation
@@ -256,12 +275,12 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 14: Release Automation (MEDIUM Priority, Sequential)
+## Phase 15: Release Automation (MEDIUM Priority, Sequential)
 
 **Total Effort**: 17-26 hours
 **Focus**: Complete release automation workflow
 **Dependencies**: Sequential - each task depends on previous
-**Prerequisite**: new-features/018 (package automation) from Phase 13
+**Prerequisite**: new-features/018 (package automation) from Phase 14
 **Parent Task**: #247 - Create comprehensive release automation skill
 
 ```bash
@@ -282,7 +301,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 15: Internationalization Infrastructure (MEDIUM Priority)
+## Phase 16: Internationalization Infrastructure (MEDIUM Priority)
 
 **Total Effort**: 36-54 hours
 **Focus**: Full internationalization and localization (i18n/l10n) infrastructure
@@ -294,15 +313,15 @@ ______________________________________________________________________
 /implement-task new-features/016-internationalization-localization.md  # 32-48h, Issue #218
 ```
 
-**Rationale**: Task 016 is the comprehensive parent task covering i18n infrastructure setup and overall l10n strategy. Infrastructure must be in place before internationalizing components (Phase 16).
+**Rationale**: Task 016 is the comprehensive parent task covering i18n infrastructure setup and overall l10n strategy. Infrastructure must be in place before internationalizing components (Phase 17).
 
 ______________________________________________________________________
 
-## Phase 16: Internationalization Components (MEDIUM Priority, Semi-Sequential)
+## Phase 17: Internationalization Components (MEDIUM Priority, Semi-Sequential)
 
 **Total Effort**: 23-33 hours
 **Focus**: Multi-language support
-**Dependencies**: Requires Phase 15 infrastructure
+**Dependencies**: Requires Phase 16 infrastructure
 **Parent Task**: new-features/016 (#218)
 
 ```bash
@@ -322,7 +341,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 17: Advanced Features - Data & Integration (MEDIUM Priority)
+## Phase 18: Advanced Features - Data & Integration (MEDIUM Priority)
 
 **Total Effort**: 28-40 hours
 **Focus**: Database backend, plugins, notifications
@@ -339,11 +358,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 18: Advanced Features - Infrastructure (MEDIUM Priority)
+## Phase 19: Advanced Features - Infrastructure (MEDIUM Priority)
 
 **Total Effort**: 19-27 hours
 **Focus**: Deployment and infrastructure
-**Dependencies**: Docker benefits from database (Phase 17)
+**Dependencies**: Docker benefits from database (Phase 18)
 
 ```bash
 # Infrastructure & Deployment
@@ -357,7 +376,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 19: Advanced Features - User Tools (MEDIUM Priority)
+## Phase 20: Advanced Features - User Tools (MEDIUM Priority)
 
 **Total Effort**: 8-11 hours
 **Focus**: User-facing tools and utilities
@@ -373,7 +392,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 20: Advanced Refactoring - Type Safety (MEDIUM Priority)
+## Phase 21: Advanced Refactoring - Type Safety (MEDIUM Priority)
 
 **Total Effort**: 13-16 hours
 **Focus**: Comprehensive type safety improvements
@@ -389,11 +408,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 21: Advanced Refactoring - Architecture (MEDIUM Priority)
+## Phase 22: Advanced Refactoring - Architecture (MEDIUM Priority)
 
 **Total Effort**: 16-20 hours
 **Focus**: Architectural improvements
-**Dependencies**: Should come after type safety (Phase 20)
+**Dependencies**: Should come after type safety (Phase 21)
 
 ```bash
 # Architecture Improvements
@@ -410,22 +429,22 @@ ______________________________________________________________________
 
 ### By Priority
 
-| Priority  | Tasks  | Effort       | Phases        |
-| --------- | ------ | ------------ | ------------- |
-| HIGH      | 1      | 4-6h         | Phase 1       |
-| MEDIUM    | 71     | 525-723h     | Phase 2-21    |
-| LOW       | 0      | 0h           | -             |
-| **TOTAL** | **72** | **529-729h** | **21 Phases** |
+| Priority  | Tasks  | Effort       | Phases           |
+| --------- | ------ | ------------ | ---------------- |
+| HIGH      | 1      | 4-6h         | Phase 1          |
+| MEDIUM    | 72     | 527-727h     | Phase 2-9, 11-22 |
+| LOW       | 2      | 7-11h        | Phase 6, 10      |
+| **TOTAL** | **75** | **538-744h** | **22 Phases**    |
 
 ### By Category
 
 | Category     | Tasks  | Effort       |
 | ------------ | ------ | ------------ |
-| Enhancement  | 11     | 39.25-59.5h  |
+| Enhancement  | 13     | 46.25-70.5h  |
 | New Features | 44     | 420-585h     |
-| Refactoring  | 10     | 21.75-32.5h  |
+| Refactoring  | 11     | 23.75-36.5h  |
 | Testing      | 7      | 48-52h       |
-| **TOTAL**    | **72** | **529-729h** |
+| **TOTAL**    | **75** | **538-744h** |
 
 ### Critical Path
 
@@ -433,23 +452,23 @@ ______________________________________________________________________
 
 - GitHub workflows → QA framework → Test implementation
 
-**Feature Completion** (Phases 7-10): 40-63.5h
+**Feature Completion** (Phases 7-11): 48-74.5h
 
-- Web interface → Developer experience → Documentation → Branding
+- Web interface → Developer experience → Documentation → Documentation extensions → Branding
 
-**Modernization** (Phases 11-13): 25.25-39.5h
+**Modernization** (Phases 12-14): 27.25-43.5h
 
-- Code modernization → Repository cleanup → Package automation
+- Code cleanup → Repository cleanup → Package automation
 
-**Automation** (Phase 14): 17-26h
+**Automation** (Phase 15): 17-26h
 
 - Release automation workflow (sequential)
 
-**Internationalization** (Phases 15-16): 59-87h
+**Internationalization** (Phases 16-17): 59-87h
 
 - i18n infrastructure → Component translation
 
-**Long-term** (Phases 17-21): 84-114h
+**Long-term** (Phases 18-22): 84-114h
 
 - Advanced features, architectural refactoring
 
@@ -533,16 +552,16 @@ ______________________________________________________________________
 ## Notes
 
 **Last Updated**: 2026-04-22
-**Active Tasks**: 72
-**Completed Tasks**: 82
-**Completion Rate**: 53.2% (82/154)
+**Active Tasks**: 68 (65 in task directories + 3 added to IMPLEMENTATION_SEQUENCE.md)
+**Completed Tasks**: 102
+**Completion Rate**: 60.0% (102/170)
 
 **Phase Distribution**:
 
 - **Immediate** (Phases 1-5): 88-117h → Workflows + QA framework
-- **Short-term** (Phases 7-13): 65.5-103h → Features + modernization + package automation
-- **Mid-term** (Phase 14-16): 76-113h → Release automation + i18n
-- **Long-term** (Phases 17-21): 84-114h → Advanced features + architecture
+- **Short-term** (Phases 7-14): 75.5-118h → Features + documentation + modernization + package automation
+- **Mid-term** (Phases 15-17): 76-113h → Release automation + i18n
+- **Long-term** (Phases 18-22): 84-114h → Advanced features + architecture
 
 **Velocity Assumptions**:
 
