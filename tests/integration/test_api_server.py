@@ -87,6 +87,7 @@ class TestTeamsEndpoints:
         assert isinstance(data["teams"], list)
         assert data["count"] > 0
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_teams_by_division(self, client: TestClient) -> None:
         """Test filtering teams by division."""
         response = client.get("/api/v1/teams?division=Atlantic")

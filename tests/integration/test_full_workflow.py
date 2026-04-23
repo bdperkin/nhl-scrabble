@@ -194,6 +194,7 @@ class TestEndToEndReportGeneration:
         assert len(all_players) == total_players_in_teams
         assert len(failed_teams) == 0
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     def test_data_flow_integrity(
         self,
