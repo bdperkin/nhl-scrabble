@@ -9,7 +9,7 @@ import signal
 import sys
 import time
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -1534,7 +1534,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     try:
         while not shutdown_flag[0]:
             iteration += 1
-            timestamp = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+            timestamp = datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
 
             console.print(f"\n[bold cyan]Update #{iteration}[/bold cyan] - {timestamp}")
             console.print("-" * 80)

@@ -62,9 +62,7 @@ class ReportGenerator:
     def playoff_report(self) -> str:
         """Generate playoff report lazily."""
         if self._playoff_report is None:
-            self._playoff_report = PlayoffReport(
-                self.data.playoff_bracket
-            ).generate()
+            self._playoff_report = PlayoffReport(self.data.playoff_bracket).generate()
         return self._playoff_report
 ```
 
@@ -72,6 +70,7 @@ class ReportGenerator:
 
 ```python
 from typing import Iterator
+
 
 class TeamReport:
     def generate_lazy(self) -> Iterator[str]:

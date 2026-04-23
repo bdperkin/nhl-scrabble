@@ -208,6 +208,7 @@ class BaseReport(ABC):
         """Subclasses implement specific formatting."""
         pass
 
+
 class ConferenceReporter(BaseReport):
     def generate(self, standings) -> str:
         # Conference-specific formatting
@@ -243,8 +244,10 @@ class ConferenceReporter(BaseReport):
 ```python
 from pydantic import BaseModel, Field
 
+
 class Player(BaseModel):
     """NHL player from API."""
+
     firstName: str = Field(..., min_length=1)
     lastName: str = Field(..., min_length=1)
     sweaterNumber: int | None = None
@@ -281,7 +284,7 @@ class Player(BaseModel):
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
-    retry=retry_if_exception_type((RequestException, Timeout))
+    retry=retry_if_exception_type((RequestException, Timeout)),
 )
 def _fetch_with_retry(self, url: str) -> dict:
     response = self.session.get(url, timeout=self.timeout)
@@ -338,7 +341,7 @@ Components receive dependencies rather than creating them:
 class TeamProcessor:
     def __init__(self, api_client: NHLApiClient, scorer: ScrabbleScorer):
         self.api_client = api_client  # Injected
-        self.scorer = scorer            # Injected
+        self.scorer = scorer  # Injected
 ```
 
 **Benefit**: Easy to mock for testing.
@@ -475,11 +478,9 @@ Implement API client interface:
 
 ```python
 class NBAApiClient:
-    def fetch_standings(self) -> list[Team]:
-        ...
+    def fetch_standings(self) -> list[Team]: ...
 
-    def fetch_roster(self, team_abbrev: str) -> list[Player]:
-        ...
+    def fetch_roster(self, team_abbrev: str) -> list[Player]: ...
 ```
 
 Use dependency injection:
@@ -585,8 +586,8 @@ Allow third-party reports:
 
 ```python
 # plugins/custom_report.py
-class CustomReport(BaseReport):
-    ...
+class CustomReport(BaseReport): ...
+
 
 # Auto-discovered via entry points
 ```

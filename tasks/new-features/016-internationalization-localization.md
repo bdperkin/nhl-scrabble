@@ -25,8 +25,13 @@ The project is currently English-only:
 ```python
 @click.command()
 @click.option("--format", type=click.Choice(["text", "json"]), default="text")
-@click.option("--output", "-o", type=click.Path(), default=None,
-              help="Output file path (default: stdout)")
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    default=None,
+    help="Output file path (default: stdout)",
+)
 def analyze(format: str, output: str | None) -> None:
     """Analyze NHL rosters and calculate Scrabble scores."""
     # All strings hardcoded in English
@@ -35,8 +40,12 @@ def analyze(format: str, output: str | None) -> None:
 **Web Interface (src/nhl_scrabble/web/):**
 
 ```html
-<h1>NHL Scrabble Scores</h1>
-<p>Analyzing player names by Scrabble values</p>
+<h1>
+ NHL Scrabble Scores
+</h1>
+<p>
+ Analyzing player names by Scrabble values
+</p>
 ```
 
 **TUI (src/nhl_scrabble/interactive/):**
@@ -65,8 +74,8 @@ Use **Babel** and **gettext** for Python internationalization:
 # pyproject.toml
 [project.optional-dependencies]
 i18n = [
-    "babel>=2.14.0",
-    "python-gettext>=5.0",
+  "babel>=2.14.0",
+  "python-gettext>=5.0",
 ]
 ```
 
@@ -233,13 +242,28 @@ from nhl_scrabble.i18n import get_translator
 # Get translator (uses system locale or NHL_SCRABBLE_LANG env var)
 _ = get_translator(os.getenv("NHL_SCRABBLE_LANG"))
 
+
 @click.command()
-@click.option("--format", type=click.Choice(["text", "json"]), default="text",
-              help=_("Output format (text or json)"))
-@click.option("--output", "-o", type=click.Path(), default=None,
-              help=_("Output file path (default: stdout)"))
-@click.option("--locale", "-l", type=click.Choice(SUPPORTED_LOCALES), default=None,
-              help=_("Display locale (e.g., fr_CA for Canadian French)"))
+@click.option(
+    "--format",
+    type=click.Choice(["text", "json"]),
+    default="text",
+    help=_("Output format (text or json)"),
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    default=None,
+    help=_("Output file path (default: stdout)"),
+)
+@click.option(
+    "--locale",
+    "-l",
+    type=click.Choice(SUPPORTED_LOCALES),
+    default=None,
+    help=_("Display locale (e.g., fr_CA for Canadian French)"),
+)
 def analyze(format: str, output: str | None, locale: str | None) -> None:
     """Analyze NHL rosters and calculate Scrabble scores."""
     if locale:
@@ -262,11 +286,12 @@ from flask_babel import Babel
 app = Flask(__name__)
 babel = Babel(app)
 
+
 @babel.localeselector
 def get_locale():
     """Select locale from request."""
     # Try URL parameter first
-    locale = request.args.get('lang')
+    locale = request.args.get("lang")
     if locale in SUPPORTED_LOCALES:
         return locale
 
@@ -278,15 +303,24 @@ Templates use `{% trans %}` tags:
 
 ```html
 <!-- templates/index.html -->
-<h1>{% trans %}NHL Scrabble Scores{% endtrans %}</h1>
-<p>{% trans %}Analyzing player names by Scrabble values{% endtrans %}</p>
-
+<h1>
+ {% trans %}NHL Scrabble Scores{% endtrans %}
+</h1>
+<p>
+ {% trans %}Analyzing player names by Scrabble values{% endtrans %}
+</p>
 <!-- Language selector -->
 <select id="language">
-  <option value="en_US">English (US)</option>
-  <option value="fr_CA">Français (Canada)</option>
-  <option value="sv_SE">Svenska</option>
-  <!-- ... other locales -->
+ <option value="en_US">
+  English (US)
+ </option>
+ <option value="fr_CA">
+  Français (Canada)
+ </option>
+ <option value="sv_SE">
+  Svenska
+ </option>
+ <!-- ... other locales -->
 </select>
 ```
 
@@ -300,11 +334,13 @@ from nhl_scrabble.i18n import get_translator
 
 _ = get_translator()
 
+
 def welcome():
     """Display welcome message."""
     print(_("Welcome to NHL Scrabble Interactive Mode"))
     print(_("Commands: analyze, filter, export, quit"))
     print(_("Type 'help' for more information"))
+
 
 def help_text():
     """Display help text."""
@@ -387,18 +423,18 @@ Add locale configuration:
 ```python
 # src/nhl_scrabble/config.py
 
+
 @dataclass
 class Config:
     # ... existing config ...
 
-    locale: str = field(
-        default_factory=lambda: os.getenv("NHL_SCRABBLE_LANG", "en_US")
-    )
+    locale: str = field(default_factory=lambda: os.getenv("NHL_SCRABBLE_LANG", "en_US"))
 
     @validator("locale")
     def validate_locale(cls, v: str) -> str:
         """Validate locale is supported."""
         from nhl_scrabble.i18n import SUPPORTED_LOCALES, DEFAULT_LOCALE
+
         if v not in SUPPORTED_LOCALES:
             return DEFAULT_LOCALE
         return v
@@ -496,10 +532,12 @@ class Config:
 # tests/unit/test_i18n.py
 from nhl_scrabble.i18n import get_translator, format_number
 
+
 def test_get_translator_default():
     """Test default translator (English)."""
     _ = get_translator("en_US")
     assert _("Hello") == "Hello"
+
 
 def test_get_translator_french():
     """Test French translator."""
@@ -507,13 +545,16 @@ def test_get_translator_french():
     assert _("Team") == "Équipe"
     assert _("Score") == "Score"
 
+
 def test_format_number_us():
     """Test US number formatting."""
     assert format_number(1234.56, "en_US") == "1,234.56"
 
+
 def test_format_number_german():
     """Test German number formatting."""
     assert format_number(1234.56, "de_DE") == "1.234,56"
+
 
 def test_unsupported_locale_fallback():
     """Test fallback to English for unsupported locale."""
@@ -528,11 +569,13 @@ def test_unsupported_locale_fallback():
 from click.testing import CliRunner
 from nhl_scrabble.cli import analyze
 
+
 def test_cli_english():
     """Test CLI in English."""
     runner = CliRunner()
     result = runner.invoke(analyze, ["--locale", "en_US"])
     assert "Analyzing NHL rosters" in result.output
+
 
 def test_cli_french():
     """Test CLI in French."""

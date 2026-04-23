@@ -75,15 +75,15 @@ exit 0
 **Pre-commit hook** (.pre-commit-config.yaml):
 
 ```yaml
-- repo: local
-  hooks:
-    - id: check-branch-protection
-      name: Check Branch Protection
-      entry: .git-hooks/check-branch-protection.sh
-      language: script
-      always_run: true
-      pass_filenames: false
-      stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: check-branch-protection
+        name: Check Branch Protection
+        entry: .git-hooks/check-branch-protection.sh
+        language: script
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
 ```
 
 **Issues**:
@@ -127,7 +127,6 @@ import os
 import re
 import subprocess
 import sys
-
 
 # Protected branch pattern (main or master)
 PROTECTED_BRANCHES = re.compile(r"^(main|master)$")
@@ -273,7 +272,9 @@ def main() -> int:
         print_abort_help()
         return 1
 
-    print(f"✅ Proceeding with commit to '{branch}' (you chose to bypass protection)...")
+    print(
+        f"✅ Proceeding with commit to '{branch}' (you chose to bypass protection)..."
+    )
     print()
     return 0
 
@@ -285,15 +286,15 @@ if __name__ == "__main__":
 **Update .pre-commit-config.yaml**:
 
 ```yaml
-- repo: local
-  hooks:
-    - id: check-branch-protection
-      name: Check Branch Protection
-      entry: python .git-hooks/check-branch-protection.py  # Changed from script to python
-      language: system
-      always_run: true
-      pass_filenames: false
-      stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: check-branch-protection
+        name: Check Branch Protection
+        entry: python .git-hooks/check-branch-protection.py # Changed from script to python
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
 ```
 
 ## Implementation Steps

@@ -67,14 +67,14 @@ exit 0
 **Pre-commit hook** (.pre-commit-config.yaml):
 
 ```yaml
-- repo: local
-  hooks:
-    - id: check-generated-docs
-      name: Check generated documentation is up-to-date
-      entry: bash tools/check_docs.sh
-      language: system
-      pass_filenames: false
-      files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
+  - repo: local
+    hooks:
+      - id: check-generated-docs
+        name: Check generated documentation is up-to-date
+        entry: bash tools/check_docs.sh
+        language: system
+        pass_filenames: false
+        files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
 ```
 
 **Issues**:
@@ -298,14 +298,14 @@ if __name__ == "__main__":
 **Update .pre-commit-config.yaml**:
 
 ```yaml
-- repo: local
-  hooks:
-    - id: check-generated-docs
-      name: Check generated documentation is up-to-date
-      entry: python tools/check_docs.py  # Changed from bash to python
-      language: system
-      pass_filenames: false
-      files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
+  - repo: local
+    hooks:
+      - id: check-generated-docs
+        name: Check generated documentation is up-to-date
+        entry: python tools/check_docs.py # Changed from bash to python
+        language: system
+        pass_filenames: false
+        files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
 ```
 
 ## Implementation Steps

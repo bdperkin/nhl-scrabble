@@ -1,10 +1,9 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 65 comprehensive hooks for code quality, security, and consistency
+# 66 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
-# NOTE: Using black 24.10 as authoritative formatter (ruff-format disabled)
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
@@ -21,7 +20,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
-    rev: v0.0.1
+    rev: v0.0.3
     hooks:
       - id: sync-pre-commit-deps
 
@@ -30,7 +29,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       # Whitespace and file formatting
       - id: trailing-whitespace
@@ -84,11 +83,25 @@ repos:
       - id: text-unicode-replacement-char
 
   # ============================================================================
+  # Sensitive Information Prevention - Custom Content Checks
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-sensitive-strings
+        name: Check for sensitive strings
+        description: Prevent commits containing sensitive corporate/personal identifiers
+        entry: '(?i)(red\s*hat|bperkins)'
+        language: pygrep
+        types: [text]
+        exclude: '^(\.pre-commit-config\.yaml)$'
+
+  # ============================================================================
   # Python Imports - Import Organization
   # ============================================================================
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 8.0.1
     hooks:
       - id: isort
         # Comprehensive import sorting (matches ruff's ALL rules philosophy)
@@ -107,26 +120,21 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.23
+    rev: v0.25
     hooks:
       - id: validate-pyproject
         # Comprehensive validation (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
-  - repo: local
+  - repo: https://github.com/regebro/pyroma
+    rev: "5.0.1"
     hooks:
       - id: pyroma
-        name: pyroma
         # Comprehensive Python package metadata quality check (matches ruff's ALL rules philosophy)
-        description: Rate the quality of Python package metadata
-        entry: pyroma
-        args: ['.']
-        language: system
-        pass_filenames: false
-        files: pyproject.toml
+        args: ['-d', '.']
 
   - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.5.0
+    rev: 1.7.1
     hooks:
       # Comprehensive tox.ini formatting (matches ruff's ALL rules philosophy)
       # Formats tox.ini to a standard, consistent structure
@@ -159,7 +167,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
@@ -170,7 +178,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.1
+    rev: 0.37.1
     hooks:
       # GitHub Actions workflows
       - id: check-github-workflows
@@ -213,7 +221,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.0
+    rev: v2.4.2
     hooks:
       - id: codespell
         args: ['-L', 'aNULL']  # Ignore OpenSSL cipher suite names
@@ -224,7 +232,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.25
+    rev: v0.9.36
     hooks:
       - id: pymarkdown
         args: [scan]  # Config is in pyproject.toml
@@ -233,13 +241,15 @@ repos:
         exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21
+    rev: 1.0.0
     hooks:
       - id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
         additional_dependencies:
+          - mdformat-black  # Code block formatting
           - mdformat-gfm  # GitHub Flavored Markdown support
-          - mdformat-tables  # Table formatting
+          - mdformat-ruff  # Python code block linting integration
+          - mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
         # Exclude GitHub issue templates (YAML frontmatter incompatible) and generated docs
         exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md)
@@ -249,7 +259,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/PyCQA/doc8
-    rev: v1.1.1
+    rev: v2.0.0
     hooks:
       - id: doc8
         # Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)
@@ -257,7 +267,7 @@ repos:
         files: \.(rst|txt)$
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.0
+    rev: v6.2.5
     hooks:
       - id: rstcheck
         # Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
@@ -265,13 +275,13 @@ repos:
         additional_dependencies: [sphinx]
 
   - repo: https://github.com/asottile/blacken-docs
-    rev: 1.18.0
+    rev: 1.20.0
     hooks:
       - id: blacken-docs
         # Format code blocks in documentation (RST, Markdown)
         # Exclude files with pseudo-code and doctest examples (>>> prompts)
         args: [--line-length=100]
-        additional_dependencies: [black==24.10.0]
+        additional_dependencies: [black==26.3.1]
         exclude: ^(tasks/|\.claude/commands/|docs/(how-to/(run-tests|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/))
 
   - repo: https://github.com/econchick/interrogate
@@ -292,14 +302,15 @@ repos:
         args: []  # Config is in pyproject.toml
         additional_dependencies: [tomli]  # Required to read pyproject.toml
 
-  - repo: https://github.com/fpgmaas/deptry
-    rev: 0.25.1
+  - repo: https://github.com/osprey-oss/deptry
+    rev: 0.24.0
     hooks:
       - id: deptry
         # Comprehensive dependency checker (matches ruff's ALL rules philosophy)
         # Detects: obsolete, missing, transitive, and misplaced dev dependencies
-        args: [src]  # Additional config in pyproject.toml
+        args: [.]  # Additional config in pyproject.toml
         exclude: ^qa/  # Exclude QA directory (separate package)
+        language: python
 
   - repo: https://github.com/hakancelikdev/unimport
     rev: 1.3.1
@@ -335,7 +346,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.5.18
+    rev: 0.11.6
     hooks:
       - id: uv-lock
 
@@ -344,7 +355,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
+    rev: 7.3.0
     hooks:
       - id: flake8
         # Comprehensive linting (matches ruff's ALL rules philosophy)
@@ -356,20 +367,20 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.1
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         name: pyupgrade
-        # Modernize Python syntax for Python 3.10+ (project minimum version)
+        # Modernize Python syntax for Python 3.12+ (project minimum version)
         description: Automatically upgrade syntax for newer Python versions
         args:
-          - --py310-plus  # Target Python 3.10+ syntax (matches requires-python)
+          - --py312-plus  # Target Python 3.12+ syntax (matches requires-python)
 
   # ============================================================================
   # Python Modernization - Semantic Code Improvements
   # ============================================================================
   # refurb detects Python code that can be simplified or modernized using
-  # Python 3.10+ features (pathlib, f-strings, dict merging, comprehensions)
+  # Python 3.12+ features (pathlib, f-strings, dict merging, comprehensions)
   # Complements pyupgrade (syntax) with semantic improvements
   # Docs: https://github.com/dosisod/refurb
 
@@ -406,7 +417,7 @@ repos:
         exclude: ^(tests/fixtures/|migrations/)
 
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
+    rev: v2.3.3
     hooks:
       - id: autoflake
         # Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
@@ -421,7 +432,7 @@ repos:
           ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
+    rev: 26.3.1
     hooks:
       - id: black
         # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
@@ -439,21 +450,20 @@ repos:
         pass_filenames: false
         stages: [pre-commit]
 
+  - repo: https://github.com/PyCQA/docformatter
+    rev: v1.7.8
+    hooks:
       - id: docformatter
-        name: docformatter
         # Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
-        description: Format Python docstrings
-        entry: docformatter
         args: [--in-place, --wrap-summaries, "100", --wrap-descriptions, "100"]
-        language: system
-        types: [python]
+        exclude: ^src/nhl_scrabble/formatters/html_formatter\.py$  # Contains HTML template strings
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
-        # NOTE: ruff-format disabled - using black 24.10 as authoritative formatter
+        # NOTE: ruff-format disabled - using black as authoritative formatter
         # to avoid formatting conflicts between black and ruff on assert statements
         # - id: ruff-format
 
@@ -558,7 +568,8 @@ repos:
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
         entry: python scripts/check_docs.py
-        language: system
+        language: python
         pass_filenames: false
         # Only run if docstrings or CLI code changed
-        files: ^(src/nhl_scrabble/.*\.py|tools/generate_cli_docs\.py)$
+        files: ^(src/nhl_scrabble/.*\.py|scripts/generate_cli_docs\.py)$
+        additional_dependencies: [".[docs-gen]"]

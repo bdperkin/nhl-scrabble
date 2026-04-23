@@ -684,7 +684,12 @@ elif task_timestamp > github_timestamp + threshold:
 else:
     # Timestamps too close, manual review needed
     conflicts.append(
-        {"task": task, "issue": issue, "github_time": github_timestamp, "task_time": task_timestamp}
+        {
+            "task": task,
+            "issue": issue,
+            "github_time": github_timestamp,
+            "task_time": task_timestamp,
+        }
     )
     # Report to user
 ```

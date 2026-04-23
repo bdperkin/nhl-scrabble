@@ -80,8 +80,8 @@ Added optional branding dependencies:
 ```toml
 [project.optional-dependencies]
 branding = [
-    "Pillow>=10.0.0",      # Image processing
-    "cairosvg>=2.7.0",     # SVG to PNG conversion
+  "Pillow>=10.0.0",  # Image processing
+  "cairosvg>=2.7.0", # SVG to PNG conversion
 ]
 ```
 

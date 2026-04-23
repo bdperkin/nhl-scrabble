@@ -56,7 +56,7 @@ For general Python or programming questions, [Stack Overflow](https://stackoverf
 
 **Solutions**:
 
-- Ensure you have Python 3.10+ installed: `python --version`
+- Ensure you have Python 3.12+ installed: `python --version`
 - Upgrade pip: `pip install --upgrade pip`
 - Try using uv for faster installation: `uv pip install -e .`
 - Check [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup instructions

@@ -131,7 +131,7 @@ The project contains diverse file types beyond Python:
 
 **Why Valuable**:
 
-- Project supports Python 3.10-3.14 but may have legacy patterns
+- Project supports Python 3.12-3.14 but may have legacy patterns
 - Catches modernization opportunities ruff/flake8 miss
 - Complements pyupgrade (already planned in task refactoring/004)
 - Improves readability and performance
@@ -423,20 +423,20 @@ Each tool should be integrated across ALL applicable frameworks:
 
 ```yaml
 # Security Tools
-- repo: https://github.com/PyCQA/bandit
-  rev: 1.7.x
-  hooks:
-    - id: bandit
-      args: [--severity-level, high]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.x
+    hooks:
+      - id: bandit
+        args: [--severity-level, high]
 
-- repo: local
-  hooks:
-    - id: safety
-      name: safety check
-      entry: safety
-      args: [check, --json]
-      language: system
-      pass_filenames: false
+  - repo: local
+    hooks:
+      - id: safety
+        name: safety check
+        entry: safety
+        args: [check, --json]
+        language: system
+        pass_filenames: false
 ```
 
 ### 2. Tox Environments (`tox.ini`)
@@ -475,7 +475,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
       - name: Install dependencies
         run: |
           pip install bandit[toml] safety
@@ -497,13 +497,13 @@ jobs:
 
 ```toml
 [tool.bandit]
-skips = ["B101"]  # Skip assert_used (used in tests)
+skips = ["B101"]                             # Skip assert_used (used in tests)
 exclude_dirs = ["tests/", ".tox/", ".venv/"]
 
 [tool.refurb]
 enable_all = true
 ignore = [
-    "FURB101",  # Example: ignore specific rule if needed
+  "FURB101", # Example: ignore specific rule if needed
 ]
 
 [tool.pyproject-fmt]

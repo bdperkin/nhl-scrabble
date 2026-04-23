@@ -76,8 +76,11 @@ Add comprehensive format support:
 
 ```python
 @click.option(
-    "-f", "--format",
-    type=click.Choice(["text", "json", "yaml", "xml", "html", "table", "markdown", "csv", "template"]),
+    "-f",
+    "--format",
+    type=click.Choice(
+        ["text", "json", "yaml", "xml", "html", "table", "markdown", "csv", "template"]
+    ),
     default="text",
     help="Output format",
 )
@@ -99,9 +102,11 @@ def analyze(format, template, output, verbose, top_players, top_team_players):
 # Using PyYAML
 import yaml
 
+
 def generate_yaml_output(data: dict) -> str:
     """Generate YAML formatted output."""
     return yaml.dump(data, default_flow_style=False, sort_keys=False)
+
 
 # Example output:
 """
@@ -126,11 +131,13 @@ teams:
 from dicttoxml import dicttoxml
 import xml.dom.minidom
 
+
 def generate_xml_output(data: dict) -> str:
     """Generate XML formatted output."""
-    xml = dicttoxml(data, custom_root='nhl_scrabble', attr_type=False)
+    xml = dicttoxml(data, custom_root="nhl_scrabble", attr_type=False)
     dom = xml.dom.minidom.parseString(xml)
     return dom.toprettyxml()
+
 
 # Example output:
 """
@@ -208,13 +215,13 @@ def generate_html_output(data: dict) -> str:
         <tbody>
 """
 
-    for rank, team in enumerate(data['teams'], 1):
+    for rank, team in enumerate(data["teams"], 1):
         html += f"""            <tr>
                 <td>{rank}</td>
-                <td>{team['abbrev']}</td>
-                <td>{team['total_score']}</td>
-                <td>{team['top_player']['name']}</td>
-                <td>{team['top_player']['score']}</td>
+                <td>{team["abbrev"]}</td>
+                <td>{team["total_score"]}</td>
+                <td>{team["top_player"]["name"]}</td>
+                <td>{team["top_player"]["score"]}</td>
             </tr>
 """
 
@@ -224,6 +231,7 @@ def generate_html_output(data: dict) -> str:
 </html>"""
 
     return html
+
 
 # Example output:
 """
@@ -276,6 +284,7 @@ def generate_html_output(data: dict) -> str:
 from rich.console import Console
 from rich.table import Table
 
+
 def generate_table_output(teams: list) -> str:
     """Generate pretty-printed table output."""
     table = Table(title="NHL Scrabble Scores")
@@ -292,13 +301,14 @@ def generate_table_output(teams: list) -> str:
             team.abbrev,
             str(team.total_score),
             team.top_player.name,
-            str(team.top_player.score)
+            str(team.top_player.score),
         )
 
     console = Console()
     with console.capture() as capture:
         console.print(table)
     return capture.get()
+
 
 # Example output:
 """
@@ -324,11 +334,12 @@ def generate_markdown_output(data: dict) -> str:
     md += "| Rank | Team | Total Score | Top Player | Player Score |\n"
     md += "|------|------|-------------|------------|-------------|\n"
 
-    for rank, team in enumerate(data['teams'], 1):
+    for rank, team in enumerate(data["teams"], 1):
         md += f"| {rank} | {team['abbrev']} | {team['total_score']} | "
         md += f"{team['top_player']['name']} | {team['top_player']['score']} |\n"
 
     return md
+
 
 # Example output:
 """
@@ -349,25 +360,29 @@ def generate_markdown_output(data: dict) -> str:
 import csv
 from io import StringIO
 
+
 def generate_csv_output(teams: list) -> str:
     """Generate CSV formatted output."""
     output = StringIO()
     writer = csv.writer(output)
 
     # Header
-    writer.writerow(['Rank', 'Team', 'Total Score', 'Top Player', 'Player Score'])
+    writer.writerow(["Rank", "Team", "Total Score", "Top Player", "Player Score"])
 
     # Data
     for rank, team in enumerate(teams, 1):
-        writer.writerow([
-            rank,
-            team.abbrev,
-            team.total_score,
-            team.top_player.name,
-            team.top_player.score
-        ])
+        writer.writerow(
+            [
+                rank,
+                team.abbrev,
+                team.total_score,
+                team.top_player.name,
+                team.top_player.score,
+            ]
+        )
 
     return output.getvalue()
+
 
 # Example output:
 """
@@ -382,13 +397,15 @@ Rank,Team,Total Score,Top Player,Player Score
 ```python
 from jinja2 import Environment, FileSystemLoader, Template
 
+
 def generate_template_output(data: dict, template_file: str) -> str:
     """Generate output from custom Jinja2 template."""
-    with open(template_file, 'r') as f:
+    with open(template_file, "r") as f:
         template_content = f.read()
 
     template = Template(template_content)
     return template.render(data)
+
 
 # Example template (custom.j2):
 """
@@ -410,12 +427,14 @@ Generated: {{ timestamp }}
 # src/nhl_scrabble/formatters/__init__.py
 from typing import Protocol
 
+
 class OutputFormatter(Protocol):
     """Protocol for output formatters."""
 
     def format(self, data: dict) -> str:
         """Format data to string output."""
         ...
+
 
 # src/nhl_scrabble/formatters/factory.py
 from .text import TextFormatter
@@ -429,16 +448,17 @@ from .csv import CSVFormatter
 from .template import TemplateFormatter
 
 FORMATTERS = {
-    'text': TextFormatter,
-    'json': JSONFormatter,
-    'yaml': YAMLFormatter,
-    'xml': XMLFormatter,
-    'html': HTMLFormatter,
-    'table': TableFormatter,
-    'markdown': MarkdownFormatter,
-    'csv': CSVFormatter,
-    'template': TemplateFormatter,
+    "text": TextFormatter,
+    "json": JSONFormatter,
+    "yaml": YAMLFormatter,
+    "xml": XMLFormatter,
+    "html": HTMLFormatter,
+    "table": TableFormatter,
+    "markdown": MarkdownFormatter,
+    "csv": CSVFormatter,
+    "template": TemplateFormatter,
 }
+
 
 def get_formatter(format: str, **kwargs) -> OutputFormatter:
     """Get formatter instance for specified format."""
@@ -454,13 +474,14 @@ def get_formatter(format: str, **kwargs) -> OutputFormatter:
 # src/nhl_scrabble/cli.py
 from nhl_scrabble.formatters import get_formatter
 
+
 @cli.command()
 @click.option(
-    "-f", "--format",
-    type=click.Choice([
-        "text", "json", "yaml", "xml", "html",
-        "table", "markdown", "csv", "template"
-    ]),
+    "-f",
+    "--format",
+    type=click.Choice(
+        ["text", "json", "yaml", "xml", "html", "table", "markdown", "csv", "template"]
+    ),
     default="text",
     help="Output format",
 )
@@ -500,10 +521,10 @@ def analyze(format, template, output, verbose, top_players, top_team_players):
 
     # Get formatter
     formatter_kwargs = {}
-    if format == 'template':
+    if format == "template":
         if not template:
             raise click.UsageError("--template required when using --format template")
-        formatter_kwargs['template_file'] = template
+        formatter_kwargs["template_file"] = template
 
     formatter = get_formatter(format, **formatter_kwargs)
 
@@ -604,21 +625,23 @@ def analyze(format, template, output, verbose, top_players, top_team_players):
 import pytest
 from nhl_scrabble.formatters.yaml import YAMLFormatter
 
+
 def test_yaml_formatter():
     """Test YAML output format."""
     data = {
-        'teams': [
-            {'abbrev': 'TOR', 'total_score': 1234},
-            {'abbrev': 'BOS', 'total_score': 1198},
+        "teams": [
+            {"abbrev": "TOR", "total_score": 1234},
+            {"abbrev": "BOS", "total_score": 1198},
         ]
     }
 
     formatter = YAMLFormatter()
     result = formatter.format(data)
 
-    assert 'teams:' in result
-    assert 'TOR' in result
-    assert '1234' in result
+    assert "teams:" in result
+    assert "TOR" in result
+    assert "1234" in result
+
 
 # Similar tests for each formatter
 ```
@@ -695,9 +718,9 @@ nhl-scrabble analyze -f json | jq .
 
 ```toml
 [project.dependencies]
-pyyaml = ">=6.0"         # YAML support
-dicttoxml = ">=1.7.16"   # XML conversion
-jinja2 = ">=3.1.0"       # Template support
+pyyaml = ">=6.0"       # YAML support
+dicttoxml = ">=1.7.16" # XML conversion
+jinja2 = ">=3.1.0"     # Template support
 # rich already installed (for table format)
 # csv built-in (no dependency)
 ```
@@ -843,6 +866,7 @@ def validate_yaml(output: str) -> bool:
     except yaml.YAMLError:
         return False
 
+
 def validate_xml(output: str) -> bool:
     """Validate XML output is well-formed."""
     try:
@@ -850,6 +874,7 @@ def validate_xml(output: str) -> bool:
         return True
     except ET.ParseError:
         return False
+
 
 def validate_csv(output: str) -> bool:
     """Validate CSV output is parseable."""
@@ -859,10 +884,12 @@ def validate_csv(output: str) -> bool:
     except csv.Error:
         return False
 
+
 def validate_html(output: str) -> bool:
     """Validate HTML output is well-formed."""
     try:
         from html.parser import HTMLParser
+
         parser = HTMLParser()
         parser.feed(output)
         return True
@@ -921,7 +948,7 @@ If extending formatters:
 
 ```python
 # Old way (still works)
-if format == 'json':
+if format == "json":
     output = json.dumps(data)
 
 # New way (recommended)

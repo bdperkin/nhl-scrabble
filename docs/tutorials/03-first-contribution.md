@@ -98,7 +98,7 @@ You should see:
 
 ```
 ================================ test session starts =================================
-platform linux -- Python 3.10.19, pytest-9.0.3, pluggy-1.6.0
+platform linux -- Python 3.12.19, pytest-9.0.3, pluggy-1.6.0
 collected 131 items
 
 tests/unit/test_scrabble.py ............                                      [  9%]
@@ -328,7 +328,7 @@ Useful for debugging player scores and building custom scoring logic.
 
 GitHub Actions will automatically run:
 
-- Tests on Python 3.10, 3.11, 3.12, 3.13
+- Tests on Python 3.12, 3.13, 3.14, 3.15
 - All pre-commit hooks
 - Code coverage checks
 - Security scans
@@ -423,8 +423,10 @@ git commit
 **Solution**: Ensure you're testing with the same Python version:
 
 ```bash
-tox -e py310  # Test with Python 3.10
+tox -e py312  # Test with Python 3.12
 tox -e py313  # Test with Python 3.13
+tox -e py314  # Test with Python 3.14
+tox -e py315  # Test with Python 3.15
 ```
 
 ### Issue: Merge conflicts

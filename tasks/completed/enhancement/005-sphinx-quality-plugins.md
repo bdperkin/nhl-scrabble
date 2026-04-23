@@ -132,7 +132,7 @@ extensions = [..., 'sphinx_a11y']
 
 ```python
 # conf.py
-extensions = [..., 'sphinx.ext.htmlhelp']
+extensions = [..., "sphinx.ext.htmlhelp"]
 
 # Improves HTML accessibility
 ```
@@ -240,7 +240,7 @@ extensions = [..., 'sphinx_github_changelog']
 
 ```python
 # conf.py
-extensions = [..., 'sphinx.ext.epub']
+extensions = [..., "sphinx.ext.epub"]
 
 # Generate EPUB format for offline reading
 # cd docs && make epub
@@ -297,7 +297,7 @@ uv pip install rst2pdf sphinxcontrib-pdf
 
    ```python
    # conf.py
-   linkcheck_ignore = [r'http://localhost.*']
+   linkcheck_ignore = [r"http://localhost.*"]
    linkcheck_timeout = 10
    ```
 
@@ -322,8 +322,8 @@ uv pip install rst2pdf sphinxcontrib-pdf
 
    ```python
    # conf.py
-   extensions = [..., 'sphinx_sitemap']
-   html_baseurl = 'https://bdperkin.github.io/nhl-scrabble/'
+   extensions = [..., "sphinx_sitemap"]
+   html_baseurl = "https://bdperkin.github.io/nhl-scrabble/"
    ```
 
 1. **Test sitemap generation**
@@ -355,11 +355,11 @@ uv pip install rst2pdf sphinxcontrib-pdf
 
    ```yaml
    # .pre-commit-config.yaml
-   - repo: https://github.com/asottile/blacken-docs
-     rev: v1.16.0
-     hooks:
-       - id: blacken-docs
-         args: [--line-length=100]
+     - repo: https://github.com/asottile/blacken-docs
+       rev: v1.16.0
+       hooks:
+         - id: blacken-docs
+           args: [--line-length=100]
    ```
 
 ### Phase 4: Accessibility (30min)
@@ -374,7 +374,7 @@ uv pip install rst2pdf sphinxcontrib-pdf
 
    ```python
    # conf.py
-   extensions = [..., 'sphinx_a11y']
+   extensions = [..., "sphinx_a11y"]
    ```
 
 1. **Run accessibility audit**
@@ -428,20 +428,20 @@ uv pip install rst2pdf sphinxcontrib-pdf
 Add to `.github/workflows/docs.yml`:
 
 ```yaml
-- name: Check documentation quality
-  run: |
-    cd docs
-    make coverage
-    make linkcheck
-    make doctest
+  - name: Check documentation quality
+    run: |
+      cd docs
+      make coverage
+      make linkcheck
+      make doctest
 
-- name: Test documentation build
-  run: |
-    pytest tests/test_docs.py
+  - name: Test documentation build
+    run: |
+      pytest tests/test_docs.py
 
-- name: Check sitemap
-  run: |
-    test -f docs/_build/html/sitemap.xml
+  - name: Check sitemap
+    run: |
+      test -f docs/_build/html/sitemap.xml
 ```
 
 ## Acceptance Criteria

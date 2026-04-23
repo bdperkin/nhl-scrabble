@@ -34,6 +34,7 @@ class ScrabbleScorer:
 ```python
 from functools import lru_cache
 
+
 class ScrabbleScorer:
     @staticmethod
     @lru_cache(maxsize=2048)

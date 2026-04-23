@@ -108,7 +108,9 @@ def test_make_request_404_raises_not_found_error():
 def test_get_standings_propagates_not_found_error():
     """Test that get_standings() propagates NHLApiNotFoundError."""
     with NHLClient() as client:
-        with patch.object(client, "_make_request", side_effect=NHLApiNotFoundError("Not found")):
+        with patch.object(
+            client, "_make_request", side_effect=NHLApiNotFoundError("Not found")
+        ):
             with pytest.raises(NHLApiNotFoundError):
                 client.get_standings()
 
@@ -116,7 +118,9 @@ def test_get_standings_propagates_not_found_error():
 def test_get_team_roster_propagates_not_found_error():
     """Test that get_team_roster() propagates NHLApiNotFoundError."""
     with NHLClient() as client:
-        with patch.object(client, "_make_request", side_effect=NHLApiNotFoundError("Not found")):
+        with patch.object(
+            client, "_make_request", side_effect=NHLApiNotFoundError("Not found")
+        ):
             with pytest.raises(NHLApiNotFoundError):
                 client.get_team_roster("TOR")
 ```
@@ -127,7 +131,8 @@ Add integration test to verify error handling in CLI:
 def test_cli_handles_not_found_error(monkeypatch):
     """Test that CLI handles NHLApiNotFoundError gracefully."""
     with patch(
-        "nhl_scrabble.api.NHLClient.get_standings", side_effect=NHLApiNotFoundError("Not found")
+        "nhl_scrabble.api.NHLClient.get_standings",
+        side_effect=NHLApiNotFoundError("Not found"),
     ):
         result = runner.invoke(cli, ["analyze"])
         assert result.exit_code != 0

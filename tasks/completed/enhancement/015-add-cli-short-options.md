@@ -24,16 +24,22 @@ The project uses Click for CLI implementation with only long options:
 # src/nhl_scrabble/cli.py
 import click
 
+
 @click.group()
 @click.version_option(version=__version__)
 def cli():
     """NHL Scrabble Score Analyzer."""
     pass
 
+
 @cli.command()
 @click.option("--format", type=click.Choice(["text", "json"]), default="text")
-@click.option("--output", "-o", type=click.Path(), help="Output file")  # Has short option!
-@click.option("--verbose", is_flag=True, help="Enable verbose logging")  # No short option
+@click.option(
+    "--output", "-o", type=click.Path(), help="Output file"
+)  # Has short option!
+@click.option(
+    "--verbose", is_flag=True, help="Enable verbose logging"
+)  # No short option
 @click.option("--top-players", type=int, default=20)  # No short option
 def analyze(format, output, verbose, top_players):
     """Analyze NHL teams and calculate Scrabble scores."""
@@ -102,6 +108,7 @@ Add short options following common CLI conventions:
 import click
 from nhl_scrabble import __version__
 
+
 @click.group()
 @click.version_option(version=__version__, prog_name="nhl-scrabble")
 @click.help_option("-h", "--help")  # Add explicit -h
@@ -113,20 +120,24 @@ def cli():
     """
     pass
 
+
 @cli.command()
 @click.option(
-    "-f", "--format",
+    "-f",
+    "--format",
     type=click.Choice(["text", "json"]),
     default="text",
     help="Output format",
 )
 @click.option(
-    "-o", "--output",
+    "-o",
+    "--output",
     type=click.Path(),
     help="Output file path",
 )
 @click.option(
-    "-v", "--verbose",
+    "-v",
+    "--verbose",
     is_flag=True,
     help="Enable verbose logging",
 )
@@ -351,12 +362,14 @@ import pytest
 from click.testing import CliRunner
 from nhl_scrabble.cli import cli
 
+
 def test_version_short_option():
     """Test -V shows version."""
     runner = CliRunner()
     result = runner.invoke(cli, ["-V"])
     assert result.exit_code == 0
     assert "2.0.0" in result.output
+
 
 def test_version_long_option():
     """Test --version shows version (backwards compatibility)."""
@@ -365,6 +378,7 @@ def test_version_long_option():
     assert result.exit_code == 0
     assert "2.0.0" in result.output
 
+
 def test_help_short_option():
     """Test -h shows help."""
     runner = CliRunner()
@@ -372,17 +386,20 @@ def test_help_short_option():
     assert result.exit_code == 0
     assert "NHL Scrabble Score Analyzer" in result.output
 
+
 def test_analyze_format_short_option():
     """Test analyze -f works."""
     runner = CliRunner()
     result = runner.invoke(cli, ["analyze", "-f", "json"])
     # Verify JSON output format
 
+
 def test_analyze_verbose_short_option():
     """Test analyze -v works."""
     runner = CliRunner()
     result = runner.invoke(cli, ["analyze", "-v"])
     # Verify verbose logging enabled
+
 
 def test_analyze_output_short_option():
     """Test analyze -o works."""
@@ -391,24 +408,24 @@ def test_analyze_output_short_option():
         result = runner.invoke(cli, ["analyze", "-o", "test.txt"])
         assert Path("test.txt").exists()
 
+
 def test_analyze_combined_short_options():
     """Test multiple short options together."""
     runner = CliRunner()
     with runner.isolated_filesystem():
         result = runner.invoke(
-            cli,
-            ["analyze", "-f", "json", "-o", "report.json", "-v"]
+            cli, ["analyze", "-f", "json", "-o", "report.json", "-v"]
         )
         assert result.exit_code == 0
         assert Path("report.json").exists()
+
 
 def test_backwards_compatibility():
     """Test long options still work."""
     runner = CliRunner()
     with runner.isolated_filesystem():
         result = runner.invoke(
-            cli,
-            ["analyze", "--format", "json", "--output", "report.json", "--verbose"]
+            cli, ["analyze", "--format", "json", "--output", "report.json", "--verbose"]
         )
         assert result.exit_code == 0
         assert Path("report.json").exists()

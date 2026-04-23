@@ -82,18 +82,18 @@ jobs:
         uses: codelytv/pr-size-labeler@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          xs_label: 'size/XS'
+          xs_label: size/XS
           xs_max_size: 10
-          s_label: 'size/S'
+          s_label: size/S
           s_max_size: 100
-          m_label: 'size/M'
+          m_label: size/M
           m_max_size: 500
-          l_label: 'size/L'
+          l_label: size/L
           l_max_size: 1000
-          xl_label: 'size/XL'
+          xl_label: size/XL
           fail_if_xl: false
           message_if_xl: ''
-          github_api_url: 'https://api.github.com'
+          github_api_url: https://api.github.com
 
       - name: Label based on PR title
         uses: actions/github-script@v7
@@ -150,70 +150,70 @@ Create `.github/labeler.yml`:
 # Auto-label based on changed files
 
 # Source code changes
-'python':
+python:
   - '**/*.py'
 
 # Documentation changes
-'documentation':
-  - 'docs/**/*'
+documentation:
+  - docs/**/*
   - '**/*.md'
-  - 'README.md'
-  - 'CONTRIBUTING.md'
+  - README.md
+  - CONTRIBUTING.md
 
 # Testing changes
-'testing':
-  - 'tests/**/*'
+testing:
+  - tests/**/*
   - '**/*test*.py'
-  - 'pytest.ini'
-  - 'conftest.py'
+  - pytest.ini
+  - conftest.py
 
 # CI/CD changes
-'ci/cd':
-  - '.github/workflows/**'
-  - '.github/**/*.yml'
-  - 'tox.ini'
-  - '.pre-commit-config.yaml'
+ci/cd:
+  - .github/workflows/**
+  - .github/**/*.yml
+  - tox.ini
+  - .pre-commit-config.yaml
 
 # Configuration changes
-'configuration':
-  - 'pyproject.toml'
-  - 'setup.py'
-  - 'setup.cfg'
+configuration:
+  - pyproject.toml
+  - setup.py
+  - setup.cfg
   - '*.ini'
   - '*.cfg'
   - '*.toml'
 
 # Dependencies
-'dependencies':
-  - 'pyproject.toml'
-  - 'requirements*.txt'
-  - 'uv.lock'
+dependencies:
+  - pyproject.toml
+  - requirements*.txt
+  - uv.lock
 
 # Web interface
-'web':
-  - 'src/nhl_scrabble/web/**'
+web:
+  - src/nhl_scrabble/web/**
   - '**/*.html'
   - '**/*.css'
   - '**/*.js'
 
 # API changes
-'api':
-  - 'src/nhl_scrabble/api/**'
+api:
+  - src/nhl_scrabble/api/**
 
 # CLI changes
-'cli':
-  - 'src/nhl_scrabble/cli.py'
-  - 'src/nhl_scrabble/__main__.py'
+cli:
+  - src/nhl_scrabble/cli.py
+  - src/nhl_scrabble/__main__.py
 
 # Security
-'security':
-  - 'SECURITY.md'
-  - '.github/workflows/security.yml'
-  - '.github/workflows/codeql.yml'
+security:
+  - SECURITY.md
+  - .github/workflows/security.yml
+  - .github/workflows/codeql.yml
 
 # Tasks
-'tasks':
-  - 'tasks/**/*'
+tasks:
+  - tasks/**/*
 ```
 
 ## Implementation Steps

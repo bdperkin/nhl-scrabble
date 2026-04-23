@@ -77,11 +77,7 @@ requires-python = ">=3.10"
       - id: refurb
         name: refurb
         description: Python code modernization linter
-        args:
-          [
-            --config, pyproject.toml,
-            --enable-all,  # Start comprehensive, ignore false positives
-          ]
+        args: [--config, pyproject.toml, --enable-all]
         # Exclude test files initially (may have intentional patterns)
         exclude: ^tests/
         # WARNING mode initially - don't block commits
@@ -116,10 +112,10 @@ python_version = "3.10"
 
 # Ignore specific checks (with justification)
 ignore = [
-    # Example: FURB101 - read_whole_file
-    #   Reason: Streaming reads preferred for large files
-    # Example: FURB105 - use_pathlib
-    #   Reason: Some functions require string paths (subprocess)
+  # Example: FURB101 - read_whole_file
+  #   Reason: Streaming reads preferred for large files
+  # Example: FURB105 - use_pathlib
+  #   Reason: Some functions require string paths (subprocess)
 ]
 
 # Disable specific checks (more permanent than ignore)
@@ -130,11 +126,11 @@ include = ["src/nhl_scrabble/**/*.py"]
 
 # Paths to exclude
 exclude = [
-    "tests/",
-    ".tox/",
-    ".venv/",
-    "build/",
-    "dist/",
+  "tests/",
+  ".tox/",
+  ".venv/",
+  "build/",
+  "dist/",
 ]
 
 # Explanation mode (show why check triggers)
@@ -206,7 +202,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install refurb
         run: pip install refurb
@@ -389,13 +385,16 @@ class Player:
         self.name = name
         self.score = score
 
+
 # After (refurb suggestion):
 from dataclasses import dataclass
+
 
 @dataclass
 class Player:
     name: str
     score: int
+
 
 # When to accept:
 # - Simpler, more maintainable

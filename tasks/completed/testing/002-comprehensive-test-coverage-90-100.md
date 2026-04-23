@@ -102,13 +102,14 @@ coverage report --show-missing
 from click.testing import CliRunner
 from nhl_scrabble.cli import cli
 
+
 class TestCLI:
     """Test CLI command interface."""
 
     def test_analyze_command_default_options(self):
         """Test analyze command with default options."""
         runner = CliRunner()
-        result = runner.invoke(cli, ['analyze'])
+        result = runner.invoke(cli, ["analyze"])
         assert result.exit_code == 0
         assert "NHL Scrabble Score Analyzer" in result.output
 
@@ -116,24 +117,23 @@ class TestCLI:
         """Test analyze command with JSON output."""
         output_file = tmp_path / "output.json"
         runner = CliRunner()
-        result = runner.invoke(cli, [
-            'analyze',
-            '--format', 'json',
-            '--output', str(output_file)
-        ])
+        result = runner.invoke(
+            cli, ["analyze", "--format", "json", "--output", str(output_file)]
+        )
         assert result.exit_code == 0
         assert output_file.exists()
 
         # Verify JSON is valid
         import json
+
         with open(output_file) as f:
             data = json.load(f)
-        assert 'teams' in data
+        assert "teams" in data
 
     def test_analyze_command_verbose_mode(self):
         """Test analyze command with verbose logging."""
         runner = CliRunner()
-        result = runner.invoke(cli, ['analyze', '--verbose'])
+        result = runner.invoke(cli, ["analyze", "--verbose"])
         assert result.exit_code == 0
         # Should see DEBUG level logs
         assert "DEBUG" in result.output or result.exit_code == 0
@@ -141,31 +141,29 @@ class TestCLI:
     def test_analyze_command_custom_top_players(self):
         """Test analyze command with custom player counts."""
         runner = CliRunner()
-        result = runner.invoke(cli, [
-            'analyze',
-            '--top-players', '50',
-            '--top-team-players', '10'
-        ])
+        result = runner.invoke(
+            cli, ["analyze", "--top-players", "50", "--top-team-players", "10"]
+        )
         assert result.exit_code == 0
 
     def test_analyze_command_invalid_format(self):
         """Test analyze command with invalid format."""
         runner = CliRunner()
-        result = runner.invoke(cli, ['analyze', '--format', 'invalid'])
+        result = runner.invoke(cli, ["analyze", "--format", "invalid"])
         assert result.exit_code != 0
         assert "Invalid value for '--format'" in result.output
 
     def test_version_command(self):
         """Test version command."""
         runner = CliRunner()
-        result = runner.invoke(cli, ['--version'])
+        result = runner.invoke(cli, ["--version"])
         assert result.exit_code == 0
         assert "2.0.0" in result.output
 
     def test_help_command(self):
         """Test help command."""
         runner = CliRunner()
-        result = runner.invoke(cli, ['--help'])
+        result = runner.invoke(cli, ["--help"])
         assert result.exit_code == 0
         assert "analyze" in result.output
 ```
@@ -184,71 +182,70 @@ import pytest
 from flask import Flask
 from nhl_scrabble.web.app import app
 
+
 class TestWebInterface:
     """Test web interface routes and handlers."""
 
     @pytest.fixture
     def client(self):
         """Flask test client."""
-        app.config['TESTING'] = True
+        app.config["TESTING"] = True
         with app.test_client() as client:
             yield client
 
     def test_homepage_loads(self, client):
         """Test homepage renders correctly."""
-        response = client.get('/')
+        response = client.get("/")
         assert response.status_code == 200
         assert b"NHL Scrabble" in response.data
 
     def test_analyze_route_get(self, client):
         """Test analyze route with GET request."""
-        response = client.get('/analyze')
+        response = client.get("/analyze")
         assert response.status_code == 200
         assert b"Analyze" in response.data
 
     def test_analyze_route_post(self, client):
         """Test analyze route with POST request."""
-        response = client.post('/analyze', data={
-            'format': 'json',
-            'top_players': 20
-        })
+        response = client.post("/analyze", data={"format": "json", "top_players": 20})
         assert response.status_code == 200
         # Verify JSON response
-        assert response.content_type == 'application/json'
+        assert response.content_type == "application/json"
 
     def test_api_teams_endpoint(self, client):
         """Test /api/teams endpoint."""
-        response = client.get('/api/teams')
+        response = client.get("/api/teams")
         assert response.status_code == 200
         data = response.get_json()
-        assert 'teams' in data
-        assert len(data['teams']) > 0
+        assert "teams" in data
+        assert len(data["teams"]) > 0
 
     def test_api_player_search(self, client):
         """Test /api/players/search endpoint."""
-        response = client.get('/api/players/search?q=Ovechkin')
+        response = client.get("/api/players/search?q=Ovechkin")
         assert response.status_code == 200
         data = response.get_json()
-        assert 'players' in data
+        assert "players" in data
 
     def test_static_files_served(self, client):
         """Test static files are served."""
-        response = client.get('/static/css/style.css')
+        response = client.get("/static/css/style.css")
         assert response.status_code == 200 or response.status_code == 304
 
     def test_404_error_handling(self, client):
         """Test 404 error handler."""
-        response = client.get('/nonexistent')
+        response = client.get("/nonexistent")
         assert response.status_code == 404
         assert b"Not Found" in response.data
 
     def test_500_error_handling(self, client, monkeypatch):
         """Test 500 error handler."""
+
         def raise_error():
             raise Exception("Test error")
 
-        monkeypatch.setattr('nhl_scrabble.web.routes.some_function', raise_error)
-        response = client.get('/error-trigger')
+        monkeypatch.setattr("nhl_scrabble.web.routes.some_function", raise_error)
+        response = client.get("/error-trigger")
         assert response.status_code == 500
 ```
 
@@ -266,6 +263,7 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.interactive.shell import InteractiveShell
 
+
 class TestInteractiveShell:
     """Test interactive shell functionality."""
 
@@ -277,39 +275,39 @@ class TestInteractiveShell:
     def test_shell_initialization(self, shell):
         """Test shell initializes correctly."""
         assert shell is not None
-        assert hasattr(shell, 'run')
-        assert hasattr(shell, 'handle_command')
+        assert hasattr(shell, "run")
+        assert hasattr(shell, "handle_command")
 
     def test_command_analyze(self, shell):
         """Test 'analyze' command in interactive mode."""
-        with patch('nhl_scrabble.interactive.shell.TeamProcessor') as mock_processor:
-            result = shell.handle_command('analyze')
+        with patch("nhl_scrabble.interactive.shell.TeamProcessor") as mock_processor:
+            result = shell.handle_command("analyze")
             assert mock_processor.called
 
     def test_command_search(self, shell):
         """Test 'search' command in interactive mode."""
-        result = shell.handle_command('search Ovechkin')
-        assert 'Ovechkin' in result or result is not None
+        result = shell.handle_command("search Ovechkin")
+        assert "Ovechkin" in result or result is not None
 
     def test_command_help(self, shell):
         """Test 'help' command in interactive mode."""
-        result = shell.handle_command('help')
-        assert 'Available commands' in result
+        result = shell.handle_command("help")
+        assert "Available commands" in result
 
     def test_command_exit(self, shell):
         """Test 'exit' command in interactive mode."""
         with pytest.raises(SystemExit):
-            shell.handle_command('exit')
+            shell.handle_command("exit")
 
     def test_invalid_command(self, shell):
         """Test invalid command handling."""
-        result = shell.handle_command('invalid_command')
-        assert 'Unknown command' in result or 'not found' in result.lower()
+        result = shell.handle_command("invalid_command")
+        assert "Unknown command" in result or "not found" in result.lower()
 
     def test_command_history(self, shell):
         """Test command history tracking."""
-        shell.handle_command('analyze')
-        shell.handle_command('search Player')
+        shell.handle_command("analyze")
+        shell.handle_command("search Player")
         assert len(shell.history) == 2
 ```
 
@@ -327,6 +325,7 @@ import os
 import pytest
 from nhl_scrabble.config import Config, get_config
 
+
 class TestConfiguration:
     """Test configuration management."""
 
@@ -339,8 +338,8 @@ class TestConfiguration:
 
     def test_config_from_env_vars(self, monkeypatch):
         """Test configuration from environment variables."""
-        monkeypatch.setenv('NHL_SCRABBLE_API_TIMEOUT', '15')
-        monkeypatch.setenv('NHL_SCRABBLE_API_RETRIES', '5')
+        monkeypatch.setenv("NHL_SCRABBLE_API_TIMEOUT", "15")
+        monkeypatch.setenv("NHL_SCRABBLE_API_RETRIES", "5")
 
         config = Config()
         assert config.API_TIMEOUT == 15
@@ -357,8 +356,10 @@ class TestConfiguration:
         config2 = get_config()
         assert config1 is config2
 
+
 # tests/unit/test_logging_config.py
 from nhl_scrabble.logging_config import setup_logging, get_logger
+
 
 class TestLoggingConfiguration:
     """Test logging configuration."""
@@ -398,8 +399,9 @@ from nhl_scrabble.reports import (
     DivisionReport,
     ConferenceReport,
     PlayoffReport,
-    StatsReport
+    StatsReport,
 )
+
 
 class TestReports:
     """Test report generation."""
@@ -407,11 +409,7 @@ class TestReports:
     @pytest.fixture
     def sample_data(self):
         """Sample data for report testing."""
-        return {
-            'teams': [...],
-            'divisions': [...],
-            'conferences': [...]
-        }
+        return {"teams": [...], "divisions": [...], "conferences": [...]}
 
     def test_team_report_generation(self, sample_data):
         """Test team report generates correctly."""
@@ -422,7 +420,7 @@ class TestReports:
 
     def test_team_report_empty_data(self):
         """Test team report with empty data."""
-        report = TeamReport({'teams': []})
+        report = TeamReport({"teams": []})
         output = report.generate()
         assert "No data" in output or len(output) == 0
 
@@ -460,8 +458,9 @@ class TestReports:
         json_output = report.to_json()
         assert json_output is not None
         import json
+
         data = json.loads(json_output)
-        assert 'teams' in data
+        assert "teams" in data
 ```
 
 **Target**: 85%+ coverage on `reports/` modules
@@ -474,27 +473,26 @@ class TestReports:
 # tests/unit/test_error_handling.py
 import pytest
 from nhl_scrabble.api import NHLApiClient
-from nhl_scrabble.exceptions import (
-    NHLApiError,
-    NHLApiNotFoundError,
-    NHLApiTimeoutError
-)
+from nhl_scrabble.exceptions import NHLApiError, NHLApiNotFoundError, NHLApiTimeoutError
+
 
 class TestErrorHandling:
     """Test error handling across modules."""
 
     def test_api_timeout_error(self, monkeypatch):
         """Test API timeout handling."""
+
         def timeout_request(*args, **kwargs):
             raise TimeoutError()
 
         with pytest.raises(NHLApiTimeoutError):
             client = NHLApiClient()
-            monkeypatch.setattr('requests.Session.get', timeout_request)
+            monkeypatch.setattr("requests.Session.get", timeout_request)
             client.get_teams()
 
     def test_api_404_error(self, monkeypatch):
         """Test API 404 handling."""
+
         def not_found_request(*args, **kwargs):
             response = Mock()
             response.status_code = 404
@@ -502,12 +500,13 @@ class TestErrorHandling:
 
         with pytest.raises(NHLApiNotFoundError):
             client = NHLApiClient()
-            monkeypatch.setattr('requests.Session.get', not_found_request)
-            client.get_team('INVALID')
+            monkeypatch.setattr("requests.Session.get", not_found_request)
+            client.get_team("INVALID")
 
     def test_invalid_player_name(self):
         """Test scoring with invalid player name."""
         from nhl_scrabble.scoring import ScrabbleScorer
+
         scorer = ScrabbleScorer()
 
         # Empty name
@@ -660,10 +659,10 @@ diff-cover coverage.xml --compare-branch=origin/main --fail-under=80
 [tool.coverage.run]
 source = ["src/nhl_scrabble"]
 omit = [
-    "*/tests/*",
-    "*/test_*.py",
-    "*/__pycache__/*",
-    "*/site-packages/*",
+  "*/tests/*",
+  "*/test_*.py",
+  "*/__pycache__/*",
+  "*/site-packages/*",
 ]
 
 [tool.coverage.report]
@@ -673,13 +672,13 @@ skip_covered = false
 fail_under = 90.0
 
 exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
-    "@abstractmethod",
+  "pragma: no cover",
+  "def __repr__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "@abstractmethod",
 ]
 
 [tool.coverage.html]
@@ -691,19 +690,19 @@ directory = "htmlcov"
 Update `.github/workflows/ci.yml`:
 
 ```yaml
-- name: Run tests with coverage
-  run: |
-    pytest --cov --cov-report=xml --cov-report=term
+  - name: Run tests with coverage
+    run: |
+      pytest --cov --cov-report=xml --cov-report=term
 
-- name: Check coverage threshold
-  run: |
-    coverage report --fail-under=90
+  - name: Check coverage threshold
+    run: |
+      coverage report --fail-under=90
 
-- name: Upload to Codecov
-  uses: codecov/codecov-action@v4
-  with:
-    file: ./coverage.xml
-    fail_ci_if_error: true
+  - name: Upload to Codecov
+    uses: codecov/codecov-action@v4
+    with:
+      file: ./coverage.xml
+      fail_ci_if_error: true
 ```
 
 ## Acceptance Criteria

@@ -25,26 +25,27 @@ Improve test coverage for web interface modules (`src/nhl_scrabble/web/`) from ~
 import pytest
 from nhl_scrabble.web.app import app
 
+
 class TestWebInterface:
     @pytest.fixture
     def client(self):
-        app.config['TESTING'] = True
+        app.config["TESTING"] = True
         with app.test_client() as client:
             yield client
 
     def test_homepage_loads(self, client):
-        response = client.get('/')
+        response = client.get("/")
         assert response.status_code == 200
         assert b"NHL Scrabble" in response.data
 
     def test_api_teams_endpoint(self, client):
-        response = client.get('/api/teams')
+        response = client.get("/api/teams")
         assert response.status_code == 200
         data = response.get_json()
-        assert 'teams' in data
+        assert "teams" in data
 
     def test_404_error_handling(self, client):
-        response = client.get('/nonexistent')
+        response = client.get("/nonexistent")
         assert response.status_code == 404
 ```
 

@@ -20,6 +20,7 @@ The configuration includes `output_format: html` but HTML output is not actually
 @dataclass
 class Config:
     """Application configuration."""
+
     output_format: Literal["text", "json", "html"] = "text"  # html not implemented
 ```
 
@@ -36,12 +37,14 @@ Implement HTML report generator using Jinja2 templates:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NHL Scrabble Score Analysis - {{ timestamp }}</title>
-    <style>
-        body {
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   NHL Scrabble Score Analysis - {{ timestamp }}
+  </title>
+  <style>
+   body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
@@ -139,91 +142,162 @@ Implement HTML report generator using Jinja2 templates:
                 box-shadow: none;
             }
         }
-    </style>
-</head>
-<body>
-    <h1>🏒 NHL Scrabble Score Analysis</h1>
-    <p><strong>Generated:</strong> {{ timestamp }}</p>
-
-    <div class="stats">
-        <div class="stat-card">
-            <div class="stat-label">Total Players</div>
-            <div class="stat-value">{{ stats.total_players }}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Total Teams</div>
-            <div class="stat-value">{{ stats.total_teams }}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Average Score</div>
-            <div class="stat-value">{{ stats.average_score | round(1) }}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Highest Score</div>
-            <div class="stat-value">{{ stats.highest_score }}</div>
-        </div>
+  </style>
+ </head>
+ <body>
+  <h1>
+   🏒 NHL Scrabble Score Analysis
+  </h1>
+  <p>
+   <strong>
+    Generated:
+   </strong>
+   {{ timestamp }}
+  </p>
+  <div class="stats">
+   <div class="stat-card">
+    <div class="stat-label">
+     Total Players
     </div>
-
-    <h2>Top {{ top_n }} Players by Scrabble Score</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Team</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player in top_players %}
-            <tr>
-                <td class="rank">{{ loop.index }}</td>
-                <td>{{ player.first_name }} {{ player.last_name }}</td>
-                <td>{{ player.team }}</td>
-                <td>{{ player.score }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <h2>Conference Standings</h2>
-    {% for conference in conferences %}
-    <h3>{{ conference.name }}</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Team</th>
-                <th>Total Score</th>
-                <th>Avg Score</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for team in conference.teams %}
-            <tr>
-                <td class="rank">{{ loop.index }}</td>
-                <td>{{ team.name }} ({{ team.abbrev }})</td>
-                <td>{{ team.total_score }}</td>
-                <td>{{ team.avg_score | round(2) }}</td>
-                <td>
-                    {% if team.playoff %}
-                    <span class="indicator playoff" title="Playoff team">✓</span>
-                    {% else %}
-                    <span class="indicator eliminated" title="Eliminated">✗</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="stat-value">
+     {{ stats.total_players }}
+    </div>
+   </div>
+   <div class="stat-card">
+    <div class="stat-label">
+     Total Teams
+    </div>
+    <div class="stat-value">
+     {{ stats.total_teams }}
+    </div>
+   </div>
+   <div class="stat-card">
+    <div class="stat-label">
+     Average Score
+    </div>
+    <div class="stat-value">
+     {{ stats.average_score | round(1) }}
+    </div>
+   </div>
+   <div class="stat-card">
+    <div class="stat-label">
+     Highest Score
+    </div>
+    <div class="stat-value">
+     {{ stats.highest_score }}
+    </div>
+   </div>
+  </div>
+  <h2>
+   Top {{ top_n }} Players by Scrabble Score
+  </h2>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      Rank
+     </th>
+     <th>
+      Player
+     </th>
+     <th>
+      Team
+     </th>
+     <th>
+      Score
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    {% for player in top_players %}
+    <tr>
+     <td class="rank">
+      {{ loop.index }}
+     </td>
+     <td>
+      {{ player.first_name }} {{ player.last_name }}
+     </td>
+     <td>
+      {{ player.team }}
+     </td>
+     <td>
+      {{ player.score }}
+     </td>
+    </tr>
     {% endfor %}
-
-    <div class="footer">
-        <p>Generated by <a href="https://github.com/bdperkin/nhl-scrabble">nhl-scrabble</a> v{{ version }}</p>
-        <p>Data source: NHL API • Scoring: Standard Scrabble letter values</p>
-    </div>
-</body>
+   </tbody>
+  </table>
+  <h2>
+   Conference Standings
+  </h2>
+  {% for conference in conferences %}
+  <h3>
+   {{ conference.name }}
+  </h3>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      Rank
+     </th>
+     <th>
+      Team
+     </th>
+     <th>
+      Total Score
+     </th>
+     <th>
+      Avg Score
+     </th>
+     <th>
+      Status
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    {% for team in conference.teams %}
+    <tr>
+     <td class="rank">
+      {{ loop.index }}
+     </td>
+     <td>
+      {{ team.name }} ({{ team.abbrev }})
+     </td>
+     <td>
+      {{ team.total_score }}
+     </td>
+     <td>
+      {{ team.avg_score | round(2) }}
+     </td>
+     <td>
+      {% if team.playoff %}
+      <span class="indicator playoff" title="Playoff team">
+       ✓
+      </span>
+      {% else %}
+      <span class="indicator eliminated" title="Eliminated">
+       ✗
+      </span>
+      {% endif %}
+     </td>
+    </tr>
+    {% endfor %}
+   </tbody>
+  </table>
+  {% endfor %}
+  <div class="footer">
+   <p>
+    Generated by
+    <a href="https://github.com/bdperkin/nhl-scrabble">
+     nhl-scrabble
+    </a>
+    v{{ version }}
+   </p>
+   <p>
+    Data source: NHL API • Scoring: Standard Scrabble letter values
+   </p>
+  </div>
+ </body>
 </html>
 ```
 
@@ -238,6 +312,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from nhl_scrabble.reports.base import BaseReport
 from nhl_scrabble import __version__
 
+
 class HTMLReport(BaseReport):
     """Generate HTML format reports."""
 
@@ -247,8 +322,8 @@ class HTMLReport(BaseReport):
 
         # Setup Jinja2 environment
         self.env = Environment(
-            loader=PackageLoader('nhl_scrabble', 'templates'),
-            autoescape=select_autoescape(['html', 'xml'])
+            loader=PackageLoader("nhl_scrabble", "templates"),
+            autoescape=select_autoescape(["html", "xml"]),
         )
 
     def generate(
@@ -261,15 +336,12 @@ class HTMLReport(BaseReport):
         stats: dict[str, Any],
     ) -> str:
         """Generate HTML report."""
-        template = self.env.get_template('report.html')
+        template = self.env.get_template("report.html")
 
         # Prepare data
         conferences = []
         for conf_name, standings in conference_standings.items():
-            conferences.append({
-                'name': conf_name,
-                'teams': standings.teams
-            })
+            conferences.append({"name": conf_name, "teams": standings.teams})
 
         # Render template
         html = template.render(
@@ -325,6 +397,7 @@ import pytest
 from bs4 import BeautifulSoup
 from nhl_scrabble.reports.html_report import HTMLReport
 
+
 def test_html_report_generates_valid_html():
     """Test that HTML report generates valid HTML."""
     report = HTMLReport()
@@ -340,28 +413,30 @@ def test_html_report_generates_valid_html():
     )
 
     # Parse HTML
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html, "html.parser")
 
     # Verify structure
-    assert soup.find('html') is not None
-    assert soup.find('head') is not None
-    assert soup.find('body') is not None
-    assert soup.find('title') is not None
+    assert soup.find("html") is not None
+    assert soup.find("head") is not None
+    assert soup.find("body") is not None
+    assert soup.find("title") is not None
+
 
 def test_html_report_includes_all_sections():
     """Test that HTML report includes all required sections."""
     report = HTMLReport()
     html = report.generate(...)
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html, "html.parser")
 
     # Check for key sections
-    assert soup.find('h1', string='NHL Scrabble Score Analysis') is not None
-    assert soup.find('h2', string='Top Players by Scrabble Score') is not None
-    assert soup.find('h2', string='Conference Standings') is not None
+    assert soup.find("h1", string="NHL Scrabble Score Analysis") is not None
+    assert soup.find("h2", string="Top Players by Scrabble Score") is not None
+    assert soup.find("h2", string="Conference Standings") is not None
 
     # Check for tables
-    tables = soup.find_all('table')
+    tables = soup.find_all("table")
     assert len(tables) >= 3  # Top players + 2 conferences
+
 
 def test_html_report_escapes_dangerous_content():
     """Test that HTML report escapes XSS attempts."""
@@ -372,7 +447,7 @@ def test_html_report_escapes_dangerous_content():
         first_name="<script>alert('xss')</script>",
         last_name="Test",
         team="TOR",
-        score=50
+        score=50,
     )
 
     html = report.generate(top_players=[player], ...)
@@ -381,15 +456,16 @@ def test_html_report_escapes_dangerous_content():
     assert "<script>" not in html
     assert "alert('xss')" not in html or "&lt;script&gt;" in html
 
+
 def test_html_report_responsive_design():
     """Test that HTML includes responsive meta tag."""
     report = HTMLReport()
     html = report.generate(...)
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html, "html.parser")
 
-    meta = soup.find('meta', attrs={'name': 'viewport'})
+    meta = soup.find("meta", attrs={"name": "viewport"})
     assert meta is not None
-    assert 'width=device-width' in meta['content']
+    assert "width=device-width" in meta["content"]
 ```
 
 ## Acceptance Criteria

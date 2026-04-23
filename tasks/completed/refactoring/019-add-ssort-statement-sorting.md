@@ -31,6 +31,7 @@ The project currently has:
 ```python
 # Example: Inconsistent ordering across classes
 
+
 # Class A: Random order
 class ClassA:
     def public_method(self):
@@ -45,6 +46,7 @@ class ClassA:
 
     def _private_method(self):
         pass
+
 
 # Class B: Different order
 class ClassB:
@@ -124,8 +126,8 @@ class ClassB:
 
 # Skip sorting in these files
 skip = [
-    "tests/fixtures/",
-    "migrations/",
+  "tests/fixtures/",
+  "migrations/",
 ]
 
 # Files to sort (glob patterns)
@@ -315,13 +317,13 @@ git commit -m "style: Sort Python class members with ssort"
 
 ```yaml
 # .pre-commit-config.yaml
-- id: ssort
-  exclude: |
-    (?x)^(
-        tests/fixtures/|
-        migrations/|
-        src/nhl_scrabble/special_order.py
-    )$
+  - id: ssort
+    exclude: |
+      (?x)^(
+          tests/fixtures/|
+          migrations/|
+          src/nhl_scrabble/special_order.py
+      )$
 ```
 
 **Mark specific sections to preserve order:**
@@ -596,18 +598,23 @@ class StandardClass:
 def step_1_fetch_data(self):
     pass
 
+
 def step_2_process_data(self):
     pass
 
+
 def step_3_save_data(self):
     pass
+
 
 # After ssort: Alphabetical order (loses flow context)
 def step_1_fetch_data(self):
     pass
 
+
 def step_3_save_data(self):  # Now before step 2!
     pass
+
 
 def step_2_process_data(self):
     pass

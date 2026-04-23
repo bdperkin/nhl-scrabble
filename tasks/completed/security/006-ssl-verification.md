@@ -74,6 +74,7 @@ class NHLApiClient:
 import ssl
 import certifi
 
+
 class NHLApiClient:
     def __init__(self):
         # Use certifi CA bundle
@@ -99,15 +100,14 @@ class NHLApiClient:
 ```python
 import requests.exceptions
 
+
 class NHLApiClient:
     def get_team_roster(self, team_abbrev: str):
         try:
             response = self.session.get(url, verify=True)
         except requests.exceptions.SSLError as e:
             logger.error(f"SSL verification failed: {e}")
-            raise SecurityError(
-                f"SSL certificate verification failed for {url}"
-            ) from e
+            raise SecurityError(f"SSL certificate verification failed for {url}") from e
 ```
 
 ## Implementation Steps
@@ -134,6 +134,7 @@ def test_ssl_verification_enforced():
 
         call_args = mock_get.call_args
         assert call_args.kwargs["verify"] is True
+
 
 def test_ssl_verification_cannot_be_disabled():
     with pytest.raises(SecurityError):

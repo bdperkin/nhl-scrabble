@@ -1,7 +1,7 @@
 """Tests for lazy report generation.
 
-Note: These tests access private members (_*_report) to verify lazy evaluation behavior.
-This is intentional and necessary for testing the caching mechanism.
+Note: These tests access private members (_*_report) to verify lazy evaluation behavior. This is
+intentional and necessary for testing the caching mechanism.
 """
 
 # Private member access required for lazy evaluation testing

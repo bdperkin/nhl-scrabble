@@ -427,7 +427,7 @@ pytestmark = pytest.mark.skipif(
 
 **Prevention:**
 
-- Test optional dependencies locally: `tox -e py310 -- -k test_optional_feature`
+- Test optional dependencies locally: `tox -e py312 -- -k test_optional_feature`
 - Document optional dependencies in README
 - Use Pre-Flight Validation before pushing
 
@@ -450,8 +450,8 @@ grep -E "(parse error|SyntaxError|Cannot parse)" ci-logs.txt
 
 ```yaml
 # Add to .pre-commit-config.yaml for the failing hook:
-- id: blacken-docs
-  exclude: ^(tasks/|\.claude/commands/|docs/examples/)
+  - id: blacken-docs
+    exclude: ^(tasks/|\.claude/commands/|docs/examples/)
 ```
 
 **Prevention:**
@@ -515,7 +515,8 @@ grep -E "(S603|S607|subprocess.*untrusted)" ci-logs.txt
 result = subprocess.run(  # noqa: S603
     [  # noqa: S607
         "sphinx-build",
-        "-b", "html",
+        "-b",
+        "html",
         str(docs_dir),
         str(build_dir),
     ],
@@ -550,22 +551,22 @@ grep -E "(ModuleNotFoundError|ImportError|No module named)" ci-logs.txt
 ```toml
 # Update pyproject.toml [project.dependencies]:
 dependencies = [
-    "existing-package>=1.0",
-    "new-package>=2.0",  # Add missing dependency
+  "existing-package>=1.0",
+  "new-package>=2.0",      # Add missing dependency
 ]
 
 # Or for optional dependencies:
 [project.optional-dependencies]
 docs = [
-    "sphinx>=7.0",
-    "missing-sphinx-plugin>=1.0",  # Add missing doc dependency
+  "sphinx>=7.0",
+  "missing-sphinx-plugin>=1.0", # Add missing doc dependency
 ]
 ```
 
 **Prevention:**
 
 - Run `uv lock` after adding dependencies
-- Test in clean environment: `tox -e py310`
+- Test in clean environment: `tox -e py312`
 - Check pyproject.toml includes all imports
 
 ### Pattern 6: Test Failures
@@ -593,7 +594,7 @@ pytest tests/path/to/test_file.py::test_name -vv
 pytest tests/path/to/test_file.py -vv --timeout=30
 
 # If environment-related:
-tox -e py310 -- tests/path/to/test_file.py -vv
+tox -e py312 -- tests/path/to/test_file.py -vv
 ```
 
 **Prevention:**
@@ -615,7 +616,7 @@ When CI fails, the wait-for-ci workflow automatically:
 Example automated output:
 
 ```
-🔴 CI Check Failed: test (py310)
+🔴 CI Check Failed: test (py312)
 
 Pattern Detected: Missing External Tools (Pattern 1)
 
@@ -636,7 +637,7 @@ Add pytest.mark.skipif to tests/test_docs.py:
   )
 
 Prevention:
-- Test optional features locally: tox -e py310
+- Test optional features locally: tox -e py312
 - Use Pre-Flight Validation before pushing
 - Document optional dependencies in README
 

@@ -12,8 +12,6 @@ updates:
       time: "09:00"
       timezone: "America/New_York"
     open-pull-requests-limit: 10
-    reviewers:
-      - "bdperkin"
     assignees:
       - "bdperkin"
     commit-message:
@@ -48,8 +46,6 @@ updates:
       time: "09:00"
       timezone: "America/New_York"
     open-pull-requests-limit: 5
-    reviewers:
-      - "bdperkin"
     commit-message:
       prefix: "ci"
     labels:

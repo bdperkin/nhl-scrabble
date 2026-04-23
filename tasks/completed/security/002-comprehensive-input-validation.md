@@ -61,8 +61,8 @@ def validate_timeout(cls, v: int) -> int:
 
    ```python
    # .env file can contain arbitrary values
-   NHL_SCRABBLE_API_TIMEOUT=99999  # No upper bound check
-   NHL_SCRABBLE_TOP_PLAYERS=abc    # Not validated as integer
+   NHL_SCRABBLE_API_TIMEOUT = 99999  # No upper bound check
+   NHL_SCRABBLE_TOP_PLAYERS = abc  # Not validated as integer
    ```
 
 1. **Player/team names** - No sanitization:
@@ -107,9 +107,12 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+
 class ValidationError(ValueError):
     """Raised when input validation fails."""
+
     pass
+
 
 def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     """
@@ -151,7 +154,7 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
         )
 
     # Check filename is safe (alphanumeric, dash, underscore, dot only)
-    if not re.match(r'^[\w\-\.]+$', file_path.name):
+    if not re.match(r"^[\w\-\.]+$", file_path.name):
         raise ValidationError(
             f"Filename {file_path.name} contains invalid characters. "
             f"Use only letters, numbers, dash, underscore, and dot."
@@ -161,7 +164,10 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
 
 
 def validate_integer_range(
-    value: Any, min_val: int | None = None, max_val: int | None = None, name: str = "value"
+    value: Any,
+    min_val: int | None = None,
+    max_val: int | None = None,
+    name: str = "value",
 ) -> int:
     """
     Validate integer is within specified range.
@@ -252,9 +258,7 @@ def validate_player_name(name: str) -> str:
     # Allow letters, spaces, hyphens, apostrophes, periods (for international names)
     # Examples: "Connor McDavid", "Jean-Gabriel Pageau", "P.K. Subban"
     if not re.match(r"^[a-zA-Z\s\-'\.]+$", clean_name):
-        raise ValidationError(
-            f"Player name contains invalid characters: '{name}'"
-        )
+        raise ValidationError(f"Player name contains invalid characters: '{name}'")
 
     return clean_name
 
@@ -316,8 +320,7 @@ def validate_api_response_structure(
 
     if missing_keys:
         raise ValidationError(
-            f"{context} missing required keys: {missing_keys}. "
-            f"Available keys: {list(data.keys())}"
+            f"{context} missing required keys: {missing_keys}. Available keys: {list(data.keys())}"
         )
 
     return data
@@ -327,7 +330,12 @@ def validate_api_response_structure(
 
 ```python
 # src/nhl_scrabble/cli.py
-from nhl_scrabble.validators import validate_file_path, validate_integer_range, ValidationError
+from nhl_scrabble.validators import (
+    validate_file_path,
+    validate_integer_range,
+    ValidationError,
+)
+
 
 @click.option("--output", "-o", type=str, help="Output file")
 @click.option("--top-players", type=int, default=20, help="Number of top players")
@@ -360,6 +368,7 @@ def analyze(
 ```python
 # src/nhl_scrabble/config.py
 from nhl_scrabble.validators import validate_integer_range, validate_url
+
 
 class NHLScrabbleConfig(BaseModel):
     """Configuration for NHL Scrabble application."""
@@ -397,6 +406,7 @@ from nhl_scrabble.validators import (
     validate_team_abbreviation,
 )
 
+
 class NHLApiClient:
     def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
         """
@@ -422,7 +432,7 @@ class NHLApiClient:
         validate_api_response_structure(
             response,
             required_keys=["forwards", "defensemen", "goalies"],
-            context=f"Team roster response for {validated_abbrev}"
+            context=f"Team roster response for {validated_abbrev}",
         )
 
         # Validate player names in response
@@ -458,9 +468,7 @@ def from_env(cls) -> "NHLScrabbleConfig":
         # Pydantic will validate using field_validators
         return cls(**config_data)
     except ValidationError as e:
-        raise ConfigurationError(
-            f"Invalid environment variable configuration: {e}"
-        )
+        raise ConfigurationError(f"Invalid environment variable configuration: {e}")
 ```
 
 ## Implementation Steps
@@ -525,6 +533,7 @@ from nhl_scrabble.validators import (
     validate_api_response_structure,
     ValidationError,
 )
+
 
 class TestValidateFilePath:
     """Tests for validate_file_path()."""
@@ -731,6 +740,7 @@ class TestValidateApiResponseStructure:
 from click.testing import CliRunner
 from nhl_scrabble.cli import cli
 
+
 def test_cli_invalid_output_path():
     """Test CLI rejects invalid output paths."""
     runner = CliRunner()
@@ -738,6 +748,7 @@ def test_cli_invalid_output_path():
 
     assert result.exit_code != 0
     assert "path traversal" in result.output.lower()
+
 
 def test_cli_invalid_top_players():
     """Test CLI rejects invalid top_players value."""
@@ -838,9 +849,7 @@ nhl-scrabble analyze --output output.txt --top-players 30
 raise ValidationError("Validation failed: type mismatch")
 
 # ✅ Good: Clear, actionable
-raise ValidationError(
-    "top_players must be an integer between 1 and 100, got 'abc'"
-)
+raise ValidationError("top_players must be an integer between 1 and 100, got 'abc'")
 ```
 
 **Future Enhancements**:

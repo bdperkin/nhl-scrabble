@@ -45,7 +45,7 @@ Currently, package releases require manual intervention:
 # pyproject.toml
 [project]
 name = "nhl-scrabble"
-version = "2.0.0"  # Manual version management
+version = "2.0.0"     # Manual version management
 
 [build-system]
 requires = ["hatchling"]
@@ -111,7 +111,7 @@ name: Build and Publish Python Package
 on:
   push:
     tags:
-      - 'v*'  # Trigger on version tags (v1.0.0, v2.1.0, etc.)
+      - v*    # Trigger on version tags (v1.0.0, v2.1.0, etc.)
 
 permissions:
   contents: write  # For creating GitHub releases
@@ -166,7 +166,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.12', '3.13', '3.14']
 
     steps:
       - name: Set up Python
@@ -314,29 +314,27 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nhl-scrabble"
-dynamic = ["version"]  # Version from git tags (task #010)
+dynamic = ["version"] # Version from git tags (task #010)
 description = "Calculate Scrabble scores for NHL player names"
 readme = "README.md"
-requires-python = ">=3.10"
-license = {text = "MIT"}
+requires-python = ">=3.12"
+license = { text = "MIT" }
 keywords = ["nhl", "scrabble", "hockey", "sports", "statistics"]
 authors = [
-    {name = "Brandon Perkins", email = "bperkins@example.com"}
+  { name = "Brandon Perkins", email = "bdperkin@example.com" },
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Topic :: Games/Entertainment",
-    "Topic :: Software Development :: Libraries :: Python Modules",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Games/Entertainment",
+  "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [project.urls]
@@ -347,17 +345,17 @@ Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
 Changelog = "https://github.com/bdperkin/nhl-scrabble/blob/main/CHANGELOG.md"
 
 [tool.hatch.version]
-source = "vcs"  # Dynamic versioning from git tags
+source = "vcs" # Dynamic versioning from git tags
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "/src",
-    "/tests",
-    "/docs",
-    "/README.md",
-    "/LICENSE",
-    "/CHANGELOG.md",
-    "/pyproject.toml",
+  "/src",
+  "/tests",
+  "/docs",
+  "/README.md",
+  "/LICENSE",
+  "/CHANGELOG.md",
+  "/pyproject.toml",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -612,7 +610,7 @@ python -c "import nhl_scrabble; print(nhl_scrabble.__version__)"
 ```bash
 # Automated via GitHub Actions matrix:
 # - ubuntu-latest, macos-latest, windows-latest
-# - Python 3.10, 3.11, 3.12, 3.13, 3.14
+# - Python 3.12, 3.13, 3.14
 
 # Manual verification (if needed):
 # Install on different OS and verify:
@@ -628,7 +626,7 @@ nhl-scrabble --version
 - [ ] Verifies package metadata with twine check
 - [ ] Verifies wheel contents with check-wheel-contents
 - [ ] Tests installation on Ubuntu, macOS, Windows
-- [ ] Tests installation on Python 3.10-3.14
+- [ ] Tests installation on Python 3.12-3.14
 - [ ] Publishes to TestPyPI successfully
 - [ ] Publishes to PyPI successfully
 - [ ] Creates GitHub Release automatically

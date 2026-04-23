@@ -52,31 +52,31 @@ copies of the Software...
 ```toml
 [project.dependencies]
 dependencies = [
-    "beautifulsoup4>=4.12.0",
-    "click>=8.1.0",
-    "pydantic>=2.0.0",
-    "requests>=2.31.0",
-    "rich>=13.0.0",
+  "beautifulsoup4>=4.12.0",
+  "click>=8.1.0",
+  "pydantic>=2.0.0",
+  "requests>=2.31.0",
+  "rich>=13.0.0",
 ]
 
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    # ... ~10 more test dependencies
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  # ... ~10 more test dependencies
 ]
 
 dev = [
-    "ruff>=0.3.0",
-    "mypy>=1.8.0",
-    "pre-commit>=3.6.0",
-    # ... ~15 more dev dependencies
+  "ruff>=0.3.0",
+  "mypy>=1.8.0",
+  "pre-commit>=3.6.0",
+  # ... ~15 more dev dependencies
 ]
 
 docs = [
-    "sphinx>=7.2.0",
-    # ... ~10 more docs dependencies
+  "sphinx>=7.2.0",
+  # ... ~10 more docs dependencies
 ]
 ```
 
@@ -107,11 +107,11 @@ Add pip-licenses with policy enforcement to automatically check license compatib
 # pyproject.toml
 [project.optional-dependencies]
 dev = [
-    "ruff>=0.3.0",
-    "mypy>=1.8.0",
-    "pre-commit>=3.6.0",
-    "pip-licenses>=4.3.0",  # Add license compliance checking
-    # ... other dev dependencies
+  "ruff>=0.3.0",
+  "mypy>=1.8.0",
+  "pre-commit>=3.6.0",
+  "pip-licenses>=4.3.0", # Add license compliance checking
+  # ... other dev dependencies
 ]
 ```
 
@@ -125,42 +125,42 @@ format = "table"
 
 # Allowed licenses (permissive licenses compatible with MIT)
 allow-only = [
-    "MIT License",
-    "MIT",
-    "Apache Software License",
-    "Apache 2.0",
-    "Apache License 2.0",
-    "BSD License",
-    "BSD",
-    "3-Clause BSD License",
-    "2-Clause BSD License",
-    "ISC License",
-    "ISC",
-    "Python Software Foundation License",
-    "PSF",
-    "Mozilla Public License 2.0 (MPL 2.0)",
-    "MPL-2.0",
-    "Unlicense",
-    "Public Domain",
-    "CC0 1.0 Universal",
+  "MIT License",
+  "MIT",
+  "Apache Software License",
+  "Apache 2.0",
+  "Apache License 2.0",
+  "BSD License",
+  "BSD",
+  "3-Clause BSD License",
+  "2-Clause BSD License",
+  "ISC License",
+  "ISC",
+  "Python Software Foundation License",
+  "PSF",
+  "Mozilla Public License 2.0 (MPL 2.0)",
+  "MPL-2.0",
+  "Unlicense",
+  "Public Domain",
+  "CC0 1.0 Universal",
 ]
 
 # Explicitly disallowed licenses (copyleft, proprietary)
 deny-only = [
-    "GNU General Public License",
-    "GPL",
-    "GPLv2",
-    "GPLv3",
-    "GNU Lesser General Public License",
-    "LGPL",
-    "LGPLv2",
-    "LGPLv3",
-    "GNU Affero General Public License",
-    "AGPL",
-    "AGPLv3",
-    "Proprietary",
-    "Commercial",
-    "UNKNOWN",  # Flag packages with unknown licenses
+  "GNU General Public License",
+  "GPL",
+  "GPLv2",
+  "GPLv3",
+  "GNU Lesser General Public License",
+  "LGPL",
+  "LGPLv2",
+  "LGPLv3",
+  "GNU Affero General Public License",
+  "AGPL",
+  "AGPLv3",
+  "Proprietary",
+  "Commercial",
+  "UNKNOWN",                           # Flag packages with unknown licenses
 ]
 
 # Ignore specific packages (with justification)
@@ -208,18 +208,18 @@ labels = quality, compliance
 ```yaml
 # .pre-commit-config.yaml
 # Add to end of file
-- repo: local
-  hooks:
-    - id: pip-licenses
-      name: Check dependency licenses
-      entry: pip-licenses
-      args:
-        - --fail-on=GPL;LGPL;AGPL;Proprietary;UNKNOWN
-        - --format=table
-      language: system
-      pass_filenames: false
+  - repo: local
+    hooks:
+      - id: pip-licenses
+        name: Check dependency licenses
+        entry: pip-licenses
+        args:
+          - --fail-on=GPL;LGPL;AGPL;Proprietary;UNKNOWN
+          - --format=table
+        language: system
+        pass_filenames: false
       # Only run when dependencies change
-      files: ^(pyproject\.toml|uv\.lock)$
+        files: ^(pyproject\.toml|uv\.lock)$
 ```
 
 **Step 5: Add to CI workflow**:
@@ -472,21 +472,21 @@ MIT is a permissive license compatible with most other licenses:
 ```toml
 # Allow: Permissive licenses
 allow-only = [
-    "MIT",
-    "Apache 2.0",
-    "BSD",
-    "ISC",
-    "PSF",
-    "MPL-2.0",  # Weak copyleft, usually OK for dependencies
+  "MIT",
+  "Apache 2.0",
+  "BSD",
+  "ISC",
+  "PSF",
+  "MPL-2.0",    # Weak copyleft, usually OK for dependencies
 ]
 
 # Deny: Copyleft and proprietary
 deny-only = [
-    "GPL",
-    "LGPL",
-    "AGPL",
-    "Proprietary",
-    "UNKNOWN",  # Always investigate
+  "GPL",
+  "LGPL",
+  "AGPL",
+  "Proprietary",
+  "UNKNOWN",     # Always investigate
 ]
 ```
 
@@ -630,7 +630,7 @@ See CONTRIBUTING.md for license policy.
 # If you must include a package with non-standard license
 [tool.pip-licenses]
 ignore-packages = [
-    "questionable-package",  # Justification: [explain why exception is needed]
+  "questionable-package", # Justification: [explain why exception is needed]
 ]
 
 # Document in CONTRIBUTING.md:

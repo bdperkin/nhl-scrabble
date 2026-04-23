@@ -53,7 +53,7 @@ After completing these tutorials:
 
 All tutorials assume you have:
 
-- **Python 3.10 or higher** installed on your system
+- **Python 3.12 or higher** installed on your system
 - **Basic command-line knowledge** (navigating directories, running commands)
 - **Internet connection** to fetch NHL roster data
 - **Text editor** for viewing output files

@@ -18,7 +18,7 @@ This guide covers development workflows, best practices, and conventions for the
 
 ### Prerequisites
 
-- **Python 3.10-3.15** - Required
+- **Python 3.12-3.15** - Required
 - **Git** - Version control
 - **Make** - For using the Makefile
 - **UV** - Optional but recommended for 10-100x speedup
@@ -78,15 +78,15 @@ The initialization commands will:
 
 ### Python Version
 
-The project supports Python 3.10-3.15 as specified in `.python-version`:
+The project supports Python 3.12-3.15 as specified in `.python-version`:
 
 ```bash
 # View the supported Python versions
-cat .python-version  # Shows: 3.10, 3.11, 3.12, 3.13, 3.14, 3.15
+cat .python-version  # Shows: 3.12, 3.13, 3.14, 3.15
 
 # UV, pyenv, and asdf will automatically use these versions
 # Ensure you have a supported Python version installed
-python --version  # Should show 3.10.x - 3.15.x
+python --version  # Should show 3.12.x - 3.15.x
 ```
 
 ### Verify Setup
@@ -135,7 +135,7 @@ tox --version  # Should show tox-uv plugin
    make test
 
    # Or test across all Python versions (fast with tox-uv!)
-   tox -e py310
+   tox -e py312
    ```
 
 1. **Before committing**
@@ -234,7 +234,7 @@ make test-failed
 
 #### Multi-Environment Testing with Tox
 
-Test across Python 3.10, 3.11, 3.12, 3.13, 3.14, and 3.15 automatically with tox-uv (10x faster):
+Test across Python 3.12, 3.13, 3.14, and 3.15 automatically with tox-uv (10x faster):
 
 ```bash
 # Test all environments (uses UV automatically via tox-uv!)
@@ -246,8 +246,6 @@ make tox-parallel
 tox -p auto
 
 # Test specific Python versions (using dynamic pattern rule)
-make tox-py310        # Python 3.10 (automatically handled)
-make tox-py311        # Python 3.11 (automatically handled)
 make tox-py312        # Python 3.12 (automatically handled)
 make tox-py313        # Python 3.13 (automatically handled)
 make tox-py314        # Python 3.14 (automatically handled)
@@ -327,9 +325,9 @@ make tox-coverage
 
 The project uses GitHub Actions for continuous integration with three main jobs:
 
-1. **Test Job**: Runs tests across Python 3.10, 3.11, 3.12, 3.13
-1. **Tox Job**: Runs comprehensive quality checks in 31 tox environments
-1. **Pre-commit Job**: Validates all 55 pre-commit hooks
+1. **Test Job**: Runs tests across Python 3.12, 3.13, 3.14
+1. **Tox Job**: Runs comprehensive quality checks in tox environments
+1. **Pre-commit Job**: Validates all pre-commit hooks
 
 All workflows are defined in `.github/workflows/ci.yml`.
 
@@ -782,7 +780,7 @@ pytest tests/unit/test_specific.py -v
 pytest tests/unit/test_specific.py -vv -s
 
 # Via tox
-tox -e py310 -- -vv
+tox -e py312 -- -vv
 ```
 
 ### Import Errors
@@ -998,7 +996,7 @@ This project features:
 - ✅ **Comprehensive tests** - >80% coverage
 - ✅ **Modern tooling** - Ruff, MyPy, Pytest
 - ✅ **Professional structure** - Best practices throughout
-- ✅ **Python 3.10-3.15** - Support for latest Python versions
+- ✅ **Python 3.12-3.15** - Support for latest Python versions
 - ✅ **Tool-based naming** - Clear targets using actual tool names (ruff-check, mypy, ruff-format, pip-audit)
 
 **Quick start:**

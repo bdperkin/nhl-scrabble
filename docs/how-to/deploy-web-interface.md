@@ -4,7 +4,7 @@ This guide explains how to deploy the NHL Scrabble web interface to production e
 
 ## Prerequisites
 
-- Python 3.10+ installed
+- Python 3.12+ installed
 - NHL Scrabble package installed
 - Production server or cloud platform
 - Domain name (optional but recommended)
@@ -466,7 +466,8 @@ services:
     github:
       repo: yourusername/nhl-scrabble
       branch: main
-    run_command: gunicorn nhl_scrabble.web.app:app -k uvicorn.workers.UvicornWorker
+    run_command: gunicorn nhl_scrabble.web.app:app -k
+      uvicorn.workers.UvicornWorker
     http_port: 8000
     instance_count: 2
     instance_size_slug: basic-xs
@@ -494,19 +495,19 @@ Create `fly.toml`:
 app = "nhl-scrabble"
 
 [build]
-  builder = "paketobuildpacks/builder:base"
+builder = "paketobuildpacks/builder:base"
 
 [[services]]
-  internal_port = 8000
-  protocol = "tcp"
+internal_port = 8000
+protocol = "tcp"
 
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
+[[services.ports]]
+port = 80
+handlers = ["http"]
 
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
+[[services.ports]]
+port = 443
+handlers = ["tls", "http"]
 ```
 
 Deploy:
@@ -551,12 +552,12 @@ services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - 8000:8000
     environment:
       - NHL_SCRABBLE_LOG_LEVEL=INFO
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: [CMD, curl, -f, http://localhost:8000/health]
       interval: 30s
       timeout: 10s
       retries: 3

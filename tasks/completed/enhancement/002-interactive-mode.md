@@ -75,6 +75,7 @@ exit                        Exit interactive mode
 import click
 from nhl_scrabble.interactive import InteractiveShell
 
+
 @cli.command()
 @click.option("--no-fetch", is_flag=True, help="Use cached data")
 def interactive(no_fetch: bool):
@@ -99,28 +100,39 @@ from prompt_toolkit.styles import Style
 from pathlib import Path
 import shlex
 
+
 class InteractiveShell:
     """Interactive REPL for NHL Scrabble data exploration."""
 
     def __init__(self):
         self.data = None
         self.history_file = Path.home() / ".nhl_scrabble_history"
-        self.session = PromptSession(
-            history=FileHistory(str(self.history_file))
-        )
+        self.session = PromptSession(history=FileHistory(str(self.history_file)))
 
         # Command completer
         self.commands = [
-            "show", "top", "bottom", "compare", "filter",
-            "search", "standings", "playoff", "stats",
-            "refresh", "help", "exit", "quit"
+            "show",
+            "top",
+            "bottom",
+            "compare",
+            "filter",
+            "search",
+            "standings",
+            "playoff",
+            "stats",
+            "refresh",
+            "help",
+            "exit",
+            "quit",
         ]
 
         # Style
-        self.style = Style.from_dict({
-            'prompt': '#00aa00 bold',
-            'command': '#0000ff',
-        })
+        self.style = Style.from_dict(
+            {
+                "prompt": "#00aa00 bold",
+                "command": "#0000ff",
+            }
+        )
 
     def fetch_data(self):
         """Fetch NHL data."""
@@ -137,8 +149,8 @@ class InteractiveShell:
             team_scores.append(score)
 
         self.data = {
-            'teams': team_scores,
-            'standings': standings,
+            "teams": team_scores,
+            "standings": standings,
         }
 
     def get_completer(self):
@@ -147,11 +159,11 @@ class InteractiveShell:
             return WordCompleter(self.commands)
 
         # Add team abbreviations
-        teams = [team.abbrev for team in self.data['teams']]
+        teams = [team.abbrev for team in self.data["teams"]]
 
         # Add player names (first 100 for performance)
         players = []
-        for team in self.data['teams']:
+        for team in self.data["teams"]:
             players.extend([p.name for p in team.players[:10]])
 
         words = self.commands + teams + players[:100]
@@ -187,29 +199,29 @@ class InteractiveShell:
                 args = parts[1:]
 
                 # Execute command
-                if command in ['exit', 'quit']:
+                if command in ["exit", "quit"]:
                     break
-                elif command == 'help':
+                elif command == "help":
                     self.cmd_help(args)
-                elif command == 'show':
+                elif command == "show":
                     self.cmd_show(args)
-                elif command == 'top':
+                elif command == "top":
                     self.cmd_top(args)
-                elif command == 'bottom':
+                elif command == "bottom":
                     self.cmd_bottom(args)
-                elif command == 'compare':
+                elif command == "compare":
                     self.cmd_compare(args)
-                elif command == 'filter':
+                elif command == "filter":
                     self.cmd_filter(args)
-                elif command == 'search':
+                elif command == "search":
                     self.cmd_search(args)
-                elif command == 'standings':
+                elif command == "standings":
                     self.cmd_standings(args)
-                elif command == 'playoff':
+                elif command == "playoff":
                     self.cmd_playoff(args)
-                elif command == 'stats':
+                elif command == "stats":
                     self.cmd_stats(args)
-                elif command == 'refresh':
+                elif command == "refresh":
                     self.cmd_refresh(args)
                 else:
                     print(f"Unknown command: {command}")
@@ -228,7 +240,7 @@ class InteractiveShell:
             print("Usage: show team <abbrev> | show player <name>")
             return
 
-        if args[0] == 'team':
+        if args[0] == "team":
             if len(args) < 2:
                 print("Usage: show team <abbrev>")
                 return
@@ -240,12 +252,12 @@ class InteractiveShell:
             else:
                 print(f"Team not found: {abbrev}")
 
-        elif args[0] == 'player':
+        elif args[0] == "player":
             if len(args) < 2:
                 print("Usage: show player <name>")
                 return
 
-            name = ' '.join(args[1:])
+            name = " ".join(args[1:])
             player = self._find_player(name)
             if player:
                 self._display_player(player)
@@ -260,13 +272,11 @@ class InteractiveShell:
 
         # Collect all players
         all_players = []
-        for team in self.data['teams']:
+        for team in self.data["teams"]:
             all_players.extend(team.players)
 
         # Sort by score
-        top_players = sorted(
-            all_players, key=lambda p: p.score, reverse=True
-        )[:n]
+        top_players = sorted(all_players, key=lambda p: p.score, reverse=True)[:n]
 
         print(f"\nTop {n} Players:")
         print(f"{'Rank':<6} {'Player':<25} {'Team':<6} {'Score':<8}")
@@ -284,7 +294,7 @@ class InteractiveShell:
         # Find players (name might have spaces)
         # Simple: take first arg as player1, rest as player2
         name1 = args[0]
-        name2 = ' '.join(args[1:])
+        name2 = " ".join(args[1:])
 
         player1 = self._find_player(name1)
         player2 = self._find_player(name2)
@@ -316,18 +326,18 @@ class InteractiveShell:
             # Help for specific command
             command = args[0]
             help_text = {
-                'show': 'show team <abbrev> | show player <name> - Display details',
-                'top': 'top [N] - Show top N players (default: 10)',
-                'bottom': 'bottom [N] - Show bottom N players',
-                'compare': 'compare <player1> <player2> - Compare two players',
-                'filter': 'filter division <div> | filter conference <conf>',
-                'search': 'search <query> - Search players by name',
-                'standings': 'standings [team|division|conference] - Show standings',
-                'playoff': 'playoff - Show playoff bracket',
-                'stats': 'stats - Show statistics',
-                'refresh': 'refresh - Re-fetch data from NHL API',
-                'help': 'help [command] - Show help',
-                'exit': 'exit | quit - Exit interactive mode',
+                "show": "show team <abbrev> | show player <name> - Display details",
+                "top": "top [N] - Show top N players (default: 10)",
+                "bottom": "bottom [N] - Show bottom N players",
+                "compare": "compare <player1> <player2> - Compare two players",
+                "filter": "filter division <div> | filter conference <conf>",
+                "search": "search <query> - Search players by name",
+                "standings": "standings [team|division|conference] - Show standings",
+                "playoff": "playoff - Show playoff bracket",
+                "stats": "stats - Show statistics",
+                "refresh": "refresh - Re-fetch data from NHL API",
+                "help": "help [command] - Show help",
+                "exit": "exit | quit - Exit interactive mode",
             }
 
             if command in help_text:
@@ -355,7 +365,7 @@ class InteractiveShell:
 
     def _find_team(self, abbrev):
         """Find team by abbreviation."""
-        for team in self.data['teams']:
+        for team in self.data["teams"]:
             if team.abbrev.upper() == abbrev.upper():
                 return team
         return None
@@ -365,13 +375,13 @@ class InteractiveShell:
         name_lower = name.lower()
 
         # Exact match first
-        for team in self.data['teams']:
+        for team in self.data["teams"]:
             for player in team.players:
                 if player.name.lower() == name_lower:
                     return player
 
         # Partial match
-        for team in self.data['teams']:
+        for team in self.data["teams"]:
             for player in team.players:
                 if name_lower in player.name.lower():
                     return player

@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
 
 **Current Version:** 2.0.0
-**Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
+**Python:** [3.12-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
 **Pre-commit Hooks:** 67 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/), [refurb](https://github.com/dosisod/refurb), and [ssort](https://github.com/bwhmather/ssort))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
@@ -177,7 +177,7 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 **Markdown Hooks (2 from pymarkdown and mdformat):**
 
 - `pymarkdown`: Markdown linting (comprehensive by default)
-- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-tables)
+- `mdformat`: Markdown formatting with plugins (mdformat-gfm, mdformat-black, mdformat-ruff, mdformat-web)
 
 **Documentation Hooks (2 from PyCQA/doc8 and rstcheck/rstcheck):**
 
@@ -220,7 +220,7 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 
 **Python Modernization Hooks (2 from asottile/pyupgrade and local):**
 
-- `pyupgrade`: Modernize Python syntax for Python 3.10+ (f-strings, type hints, removes deprecated imports)
+- `pyupgrade`: Modernize Python syntax for Python 3.12+ (f-strings, type hints, removes deprecated imports)
 - `refurb`: Python code modernization linter (pathlib, comprehensions, modern idioms) - **warning mode, non-blocking**
 
 **Python Statement Sorting Hooks (1 from bwhmather/ssort):**
@@ -304,24 +304,24 @@ compile-bytecode = true
 link-mode = "copy"
 
 # Comprehensive resolution (matches ruff's ALL rules philosophy)
-resolution = "highest"  # Use highest compatible versions
+resolution = "highest" # Use highest compatible versions
 
 # Dependency constraints (like ruff's base ruleset)
-constraint-dependencies = []  # Strict baseline
-override-dependencies = []    # Selective exceptions (like ruff ignores)
+constraint-dependencies = [] # Strict baseline
+override-dependencies = []   # Selective exceptions (like ruff ignores)
 
 # Deterministic resolution (like ruff's consistent checking)
-index-strategy = "first-match"  # Predictable package resolution
-keyring-provider = "disabled"   # Reproducible across environments
+index-strategy = "first-match" # Predictable package resolution
+keyring-provider = "disabled"  # Reproducible across environments
 
 # Python management
-python-preference = "managed"  # Consistent Python versions
+python-preference = "managed" # Consistent Python versions
 
 # Stability
-preview = false  # Disable experimental features (like avoiding experimental ruff rules)
+preview = false # Disable experimental features (like avoiding experimental ruff rules)
 
 # Caching
-cache-keys = []  # Strict cache control
+cache-keys = [] # Strict cache control
 ```
 
 **Philosophy Alignment:**
@@ -409,7 +409,7 @@ make tox                 # Default: parallel with tier-based fail-fast
 make tox-parallel        # Pure parallel (all environments)
 make tox-sequential      # Sequential (for debugging)
 make tox-quick           # Critical checks only (fast fail-fast)
-tox -e py310             # Test Python 3.10 (fast with tox-uv!)
+tox -e py312             # Test Python 3.12 (fast with tox-uv!)
 tox -e py315             # Test Python 3.15 (fast with tox-uv!)
 tox -m critical          # Run only critical quality checks
 tox -m test              # Run only tests
@@ -474,7 +474,7 @@ Central configuration for the entire project:
 [project]
 name = "nhl-scrabble"
 version = "2.0.0"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 
 [tool.uv]
 managed = true
@@ -483,7 +483,7 @@ compile-bytecode = true
 link-mode = "copy"
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py312"
 line-length = 100
 
 [tool.mypy]
@@ -511,10 +511,10 @@ UV is configured via the `[tool.uv]` section in `pyproject.toml`:
 
 ```toml
 [tool.uv]
-managed = true              # Enable UV dependency management
-package = true              # This is a Python package
-compile-bytecode = true     # Compile .pyc files for faster imports
-link-mode = "copy"          # Copy files instead of linking
+managed = true          # Enable UV dependency management
+package = true          # This is a Python package
+compile-bytecode = true # Compile .pyc files for faster imports
+link-mode = "copy"      # Copy files instead of linking
 ```
 
 These settings optimize for speed and reliability. Note: `prefer-binary` is a UV command-line flag, not a config option.
@@ -782,14 +782,14 @@ The project has comprehensive CI:
 
 ```yaml
 jobs:
-  test:        # Test on py3.10-3.14 (required), py3.15-dev (experimental)
-  tox:         # Tox with UV (matrix: py310, py311, py312, py313, py314, py315, ruff-check, mypy, coverage)
+  test:        # Test on py3.12-3.14 (required), py3.15-dev (experimental)
+  tox:         # Tox with UV (matrix: py312, py313, py314, py315, ruff-check, mypy, coverage)
   pre-commit:  # Pre-commit with UV
 ```
 
 **Python Version Testing:**
 
-- **Required**: Python 3.10, 3.11, 3.12, 3.13, 3.14 (must all pass)
+- **Required**: Python 3.12, 3.13, 3.14 (must all pass)
 - **Experimental**: Python 3.15-dev (`continue-on-error: true`, informational only)
 
 Python 3.15-dev is tested for early compatibility checking but failures do NOT block CI or prevent merging.
@@ -1046,6 +1046,52 @@ git add pyproject.toml
 git commit -m "Add new-package dependency"
 ```
 
+### Updating Dependencies
+
+The project includes an automated dependency update script:
+
+```bash
+# Check for available updates
+make deps-check
+
+# Apply updates (with test validation)
+make deps-update
+
+# Apply updates with full tox validation
+make deps-update-full
+```
+
+**Manual updates:**
+
+```bash
+# Update pre-commit hooks
+pre-commit autoupdate
+
+# Update Python packages
+uv lock --upgrade
+
+# Verify changes
+pytest && tox -p auto
+```
+
+**What the script does:**
+
+- Checks pre-commit hook versions
+- Checks Python package versions via pip/PyPI
+- Reports available updates with version info
+- Flags major version changes (⚠️ MAJOR)
+- Optionally applies updates
+- Optionally runs tests to verify compatibility
+- Optionally runs full tox validation
+
+**Update schedule:**
+
+- Monthly: Regular dependency updates
+- Quarterly: Major version updates (thorough testing)
+- Immediately: Security patches
+
+See [CONTRIBUTING.md](CONTRIBUTING.md#updating-dependencies) for detailed update process.
+
 ### Adding a New Test
 
 ```bash
@@ -1164,7 +1210,7 @@ The project uses UV automatically via tox-uv:
 ## Project Statistics
 
 - **Package:** nhl-scrabble 2.0.0
-- **Python:** 3.10, 3.11, 3.12, 3.13, 3.14 (supported), 3.15-dev (experimental)
+- **Python:** 3.12, 3.13, 3.14 (supported), 3.15-dev (experimental)
 - **Lines of Code:** ~1,866 (src)
 - **Lines of Tests:** ~680 (tests)
 - **Test Coverage:** 49.93% overall, >90% on core modules

@@ -126,6 +126,7 @@ import time
 import threading
 from typing import Optional
 
+
 class RateLimiter:
     """
     Token bucket rate limiter for API requests.
@@ -175,10 +176,7 @@ class RateLimiter:
         elapsed = now - self.last_update
 
         # Add tokens based on elapsed time
-        self.tokens = min(
-            self.burst_size,
-            self.tokens + (elapsed * self.refill_rate)
-        )
+        self.tokens = min(self.burst_size, self.tokens + (elapsed * self.refill_rate))
 
         self.last_update = now
 
@@ -257,6 +255,7 @@ class RateLimiter:
 from nhl_scrabble.rate_limiter import RateLimiter
 import requests
 
+
 class NHLApiClient:
     def __init__(
         self,
@@ -278,8 +277,7 @@ class NHLApiClient:
         )
 
         logger.info(
-            f"Rate limiter initialized: {rate_limit_max_requests} "
-            f"requests per {rate_limit_window}s"
+            f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s"
         )
 
     def _make_request(self, method: str, url: str) -> dict[str, Any]:
@@ -302,9 +300,7 @@ class NHLApiClient:
         # Make request with retry logic for 429
         for attempt in range(1, self.max_retries + 1):
             try:
-                response = self.session.request(
-                    method, url, timeout=self.timeout
-                )
+                response = self.session.request(method, url, timeout=self.timeout)
 
                 # Handle rate limiting (429)
                 if response.status_code == 429:
@@ -330,12 +326,12 @@ class NHLApiClient:
             except requests.exceptions.Timeout:
                 if attempt == self.max_retries:
                     raise NHLApiError(f"Request timeout after {attempt} attempts")
-                time.sleep(2 ** attempt)  # Exponential backoff
+                time.sleep(2**attempt)  # Exponential backoff
 
             except requests.exceptions.RequestException as e:
                 if attempt == self.max_retries:
                     raise NHLApiError(f"Request failed: {e}")
-                time.sleep(2 ** attempt)
+                time.sleep(2**attempt)
 
         raise NHLApiError(f"Request failed after {self.max_retries} attempts")
 
@@ -471,6 +467,7 @@ import pytest
 import threading
 from nhl_scrabble.rate_limiter import RateLimiter
 
+
 class TestRateLimiter:
     """Tests for RateLimiter class."""
 
@@ -576,16 +573,18 @@ import pytest
 from unittest.mock import Mock, patch
 from nhl_scrabble.api.nhl_client import NHLApiClient
 
+
 def test_api_client_rate_limiting():
     """Test API client enforces rate limiting."""
     client = NHLApiClient(rate_limit_max_requests=2, rate_limit_window=1.0)
 
-    with patch.object(client.session, 'request') as mock_request:
+    with patch.object(client.session, "request") as mock_request:
         mock_request.return_value.status_code = 200
         mock_request.return_value.json.return_value = {"data": "test"}
 
         # First 2 requests should be fast
         import time
+
         start = time.monotonic()
         client._make_request("GET", "http://test.com/1")
         client._make_request("GET", "http://test.com/2")
@@ -596,11 +595,12 @@ def test_api_client_rate_limiting():
         client._make_request("GET", "http://test.com/3")
         assert time.monotonic() - start >= 0.4
 
+
 def test_api_client_429_handling():
     """Test API client handles 429 responses."""
     client = NHLApiClient()
 
-    with patch.object(client.session, 'request') as mock_request:
+    with patch.object(client.session, "request") as mock_request:
         # First call returns 429, second succeeds
         response_429 = Mock()
         response_429.status_code = 429
@@ -715,13 +715,13 @@ nhl-scrabble analyze --verbose
 
 ```python
 # Conservative (safe for any API)
-max_requests=30, time_window=60.0  # 30 req/min = 0.5 req/sec
+max_requests = 30, time_window = 60.0  # 30 req/min = 0.5 req/sec
 
 # Moderate (most APIs allow this)
-max_requests=60, time_window=60.0  # 60 req/min = 1 req/sec
+max_requests = 60, time_window = 60.0  # 60 req/min = 1 req/sec
 
 # Aggressive (only if API allows)
-max_requests=120, time_window=60.0  # 120 req/min = 2 req/sec
+max_requests = 120, time_window = 60.0  # 120 req/min = 2 req/sec
 ```
 
 **Default of 30 req/min** chosen as conservative safe value.

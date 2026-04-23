@@ -1,8 +1,7 @@
 """Comprehensive CLI tests to achieve 90%+ coverage.
 
-This test module provides extensive coverage for the NHL Scrabble CLI,
-testing command-line argument parsing, option combinations, error handling,
-output formats, and environment variable integration.
+This test module provides extensive coverage for the NHL Scrabble CLI, testing command-line argument
+parsing, option combinations, error handling, output formats, and environment variable integration.
 
 Target: Improve CLI coverage from ~50% to 90%+
 """

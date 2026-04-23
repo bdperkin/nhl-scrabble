@@ -239,10 +239,10 @@ Add link validation to CI:
 
 ```yaml
 # .github/workflows/docs.yml
-- name: Check documentation links
-  uses: gaurav-nelson/github-action-markdown-link-check@v1
-  with:
-    config-file: '.github/markdown-link-check-config.json'
+  - name: Check documentation links
+    uses: gaurav-nelson/github-action-markdown-link-check@v1
+    with:
+      config-file: .github/markdown-link-check-config.json
 ```
 
 **Configuration:**
@@ -250,12 +250,19 @@ Add link validation to CI:
 ```json
 {
   "ignorePatterns": [
-    {"pattern": "^http://localhost"},
-    {"pattern": "^#"}
+    {
+      "pattern": "^http://localhost"
+    },
+    {
+      "pattern": "^#"
+    }
   ],
   "timeout": "20s",
   "retryOn429": true,
-  "aliveStatusCodes": [200, 206]
+  "aliveStatusCodes": [
+    200,
+    206
+  ]
 }
 ```
 
@@ -536,7 +543,7 @@ on:
     branches: [main]
     paths: ['**.md']
   schedule:
-    - cron: '0 0 1 * *'  # First day of every month
+    - cron: 0 0 1 * *    # First day of every month
   workflow_dispatch:
 
 jobs:
@@ -548,7 +555,7 @@ jobs:
       - name: Check links
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
-          config-file: '.github/markdown-link-check-config.json'
+          config-file: .github/markdown-link-check-config.json
 ```
 
 ## Implementation Notes

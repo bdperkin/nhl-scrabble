@@ -10,7 +10,7 @@
 # Variables
 ###################
 
-PYTHON := python3.10
+PYTHON := python3.12
 VENV := .venv
 BIN := $(VENV)/bin
 PYTHON_VENV := $(BIN)/python
@@ -50,6 +50,7 @@ NC := \033[0m # No Color
         shell watch init info status version \
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
+        deps-check deps-update deps-update-full \
         count tree all release
 
 ###################
@@ -218,7 +219,7 @@ tox: check-venv ## Run tox with parallel execution and fail-fast (default)
 	@printf "$(YELLOW)Execution tiers:$(NC)\n"
 	@printf "  1. Fast quality checks (ruff, flake8)\n"
 	@printf "  2. Type checking (mypy, isort, interrogate)\n"
-	@printf "  3. Tests (py310-314) - parallel across Python versions\n"
+	@printf "  3. Tests (py312-314) - parallel across Python versions\n"
 	@printf "  4. Coverage - only if all tests pass\n"
 	@printf "\n"
 	@$(BIN)/tox run-parallel --parallel-no-spinner
@@ -238,8 +239,8 @@ tox-sequential: check-venv ## Run tox tests sequentially (for debugging)
 
 tox-quick: check-venv ## Run quick tox checks (critical checks only, fast fail-fast)
 	@printf "$(BLUE)Running quick tox checks (fail-fast)...$(NC)\n"
-	@printf "$(YELLOW)Running: ruff-check, black, mypy, py310$(NC)\n"
-	@$(BIN)/tox -e ruff-check,black,mypy,py310
+	@printf "$(YELLOW)Running: ruff-check, black, mypy, py312$(NC)\n"
+	@$(BIN)/tox -e ruff-check,black,mypy,py312
 
 tox-clean: ## Clean tox environments
 	@printf "$(BLUE)Cleaning tox environments...$(NC)\n"
@@ -255,7 +256,7 @@ tox-envs: check-venv ## List all available tox environments
 	@$(BIN)/tox list
 
 # Dynamic pattern rule: Automatically handles any tox-* target
-# Usage: make tox-<envname> (e.g., make tox-py310, make tox-coverage, make tox-mypy)
+# Usage: make tox-<envname> (e.g., make tox-py312, make tox-coverage, make tox-mypy)
 # This provides automatic support for all tox environments without explicit targets
 tox-%: check-venv
 	@printf "$(BLUE)Running tox -e $*...$(NC)\n"
@@ -711,6 +712,25 @@ git-cleanup: git-prune-remote-refs git-prune-local ## Full git cleanup (prune re
 
 git-cleanup-all: git-prune-remote-refs git-prune-local git-prune-closed-prs ## Complete cleanup (remote refs + merged branches + closed PRs)
 	@printf "$(GREEN)✅ Complete git cleanup finished$(NC)\n"
+
+###################
+# Dependency Management
+###################
+
+deps-check: ## Check for dependency updates (dry run)
+	@printf "$(BLUE)🔍 Checking for dependency updates...$(NC)\n"
+	@$(PYTHON) scripts/update_dependencies.py --check
+	@printf "$(GREEN)✅ Dependency check complete$(NC)\n"
+
+deps-update: ## Update dependencies (interactive)
+	@printf "$(BLUE)🔄 Updating dependencies...$(NC)\n"
+	@$(PYTHON) scripts/update_dependencies.py --apply --test
+	@printf "$(GREEN)✅ Dependency update complete$(NC)\n"
+
+deps-update-full: ## Update dependencies with full tox validation
+	@printf "$(BLUE)🔄 Updating dependencies with full validation...$(NC)\n"
+	@$(PYTHON) scripts/update_dependencies.py --apply --test --tox
+	@printf "$(GREEN)✅ Full dependency update complete$(NC)\n"
 
 ###################
 # QA Testing

@@ -42,11 +42,11 @@ on:
     branches:
       - main
     paths:
-      - 'pyproject.toml'
-      - 'uv.lock'
+      - pyproject.toml
+      - uv.lock
   schedule:
     # Weekly SBOM generation (Mondays at 6 AM UTC)
-    - cron: '0 6 * * 1'
+    - cron: 0 6 * * 1
   workflow_dispatch:
 
 permissions:
@@ -287,7 +287,13 @@ gh release view v0.0.1-test
       "name": "requests",
       "version": "2.31.0",
       "type": "library",
-      "licenses": [{"license": {"id": "Apache-2.0"}}],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
       "purl": "pkg:pypi/requests@2.31.0"
     }
   ]

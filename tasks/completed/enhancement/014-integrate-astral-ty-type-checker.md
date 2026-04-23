@@ -35,13 +35,13 @@ disallow_untyped_defs = true
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.13.0
-  hooks:
-    - id: mypy
-      additional_dependencies:
-        - types-requests
-        - types-setuptools
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-requests
+          - types-setuptools
 ```
 
 **Tox Environment:**
@@ -102,17 +102,17 @@ Keep MyPy running alongside ty for validation period:
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/astral-sh/ty
-  rev: v0.1.0  # Example version
-  hooks:
-    - id: ty
-      name: ty type checker
+  - repo: https://github.com/astral-sh/ty
+    rev: v0.1.0 # Example version
+    hooks:
+      - id: ty
+        name: ty type checker
 
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.13.0
-  hooks:
-    - id: mypy
-      name: mypy type checker (validation)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        name: mypy type checker (validation)
 ```
 
 **Benefits:**
@@ -128,10 +128,10 @@ Once ty proves reliable, replace mypy completely:
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/astral-sh/ty
-  rev: v0.1.0
-  hooks:
-    - id: ty
+  - repo: https://github.com/astral-sh/ty
+    rev: v0.1.0
+    hooks:
+      - id: ty
 ```
 
 **Benefits:**
@@ -147,18 +147,18 @@ Use ty for rapid feedback, mypy for deep validation:
 
 ```yaml
 # ty: Fast checks in pre-commit
-- repo: https://github.com/astral-sh/ty
-  rev: v0.1.0
-  hooks:
-    - id: ty
-      stages: [commit]
+  - repo: https://github.com/astral-sh/ty
+    rev: v0.1.0
+    hooks:
+      - id: ty
+        stages: [commit]
 
 # mypy: Deep validation in CI only
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.13.0
-  hooks:
-    - id: mypy
-      stages: [manual]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        stages: [manual]
 ```
 
 ### Configuration
@@ -178,10 +178,10 @@ include = ["src/", "tests/"]
 
 # Paths to exclude
 exclude = [
-    "*.pyc",
-    "__pycache__",
-    "build/",
-    "dist/",
+  "*.pyc",
+  "__pycache__",
+  "build/",
+  "dist/",
 ]
 
 # LSP settings
@@ -195,13 +195,13 @@ code-actions = true
 
 ```yaml
 # .pre-commit-config.yaml
-- repo: https://github.com/astral-sh/ty
-  rev: v0.1.0
-  hooks:
-    - id: ty
-      name: ty - Astral type checker
-      args: [--strict]
-      types: [python]
+  - repo: https://github.com/astral-sh/ty
+    rev: v0.1.0
+    hooks:
+      - id: ty
+        name: ty - Astral type checker
+        args: [--strict]
+        types: [python]
 ```
 
 **Tox Environment:**
@@ -255,8 +255,12 @@ type-check:  ## Run all type checkers (ty + mypy)
       "source.organizeImports": true
     }
   },
-  "ty.path": ["/path/to/venv/bin/ty"],
-  "ty.args": ["--strict"]
+  "ty.path": [
+    "/path/to/venv/bin/ty"
+  ],
+  "ty.args": [
+    "--strict"
+  ]
 }
 ```
 
@@ -300,7 +304,7 @@ lspconfig.ty.setup({
    - Add to pyproject.toml dev dependencies:
      ```toml
      [project.optional-dependencies.dev]
-     ty = ">=0.1.0"  # Latest version
+     ty = ">=0.1.0" # Latest version
      ```
    - Install: `uv pip install -e ".[dev]"`
    - Verify installation: `ty --version`
@@ -430,12 +434,14 @@ import subprocess
 import time
 from pathlib import Path
 
+
 def run_checker(cmd: list[str]) -> tuple[str, float]:
     """Run type checker and return output + time."""
     start = time.time()
     result = subprocess.run(cmd, capture_output=True, text=True)
     duration = time.time() - start
     return result.stdout + result.stderr, duration
+
 
 def main():
     print("Running type checker comparison...\n")
@@ -457,6 +463,7 @@ def main():
 
     print(f"\nty errors:   {ty_errors}")
     print(f"mypy errors: {mypy_errors}")
+
 
 if __name__ == "__main__":
     main()
@@ -662,15 +669,21 @@ Help: Did you mean to convert 123 to string? Try str(123)
 {
   "python.languageServer": "ty",
   "python.analysis.typeCheckingMode": "strict",
-  "ty.path": ["${workspaceFolder}/.venv/bin/ty"],
-  "ty.args": ["--strict"],
+  "ty.path": [
+    "${workspaceFolder}/.venv/bin/ty"
+  ],
+  "ty.args": [
+    "--strict"
+  ],
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": true,
       "source.fixAll": true
     },
-    "editor.rulers": [100]
+    "editor.rulers": [
+      100
+    ]
   },
   "editor.inlayHints.enabled": "on",
   "ty.inlayHints.variableTypes": true,

@@ -373,7 +373,7 @@ Completed a focused subset of the originally planned repository cleanup:
 - Deleted `.benchmarks/` directory completely (3 JSON files, 2011 lines removed)
 - Updated CONTRIBUTING.md to clarify benchmarks are "auto-created, git-ignored" instead of "committed to git"
 - Verified `.benchmarks/` already in `.gitignore` (line 69)
-- Cleaned 8 coverage temp files (.coverage.bperkins_users_ipa_redhat_com.pid\*)
+- Cleaned 8 coverage temp files
 
 **What Was Skipped:**
 

@@ -28,10 +28,14 @@ class NHLClient:
                 # ... handle response ...
             except requests.RequestException as e:
                 if attempt < self.retries:
-                    logger.warning(f"Request failed (attempt {attempt + 1}/{self.retries + 1}): {e}")
+                    logger.warning(
+                        f"Request failed (attempt {attempt + 1}/{self.retries + 1}): {e}"
+                    )
                     time.sleep(1)
                     continue
-                raise NHLApiError(f"Request failed after {self.retries + 1} attempts") from e
+                raise NHLApiError(
+                    f"Request failed after {self.retries + 1} attempts"
+                ) from e
 ```
 
 **Issues**:
@@ -58,7 +62,8 @@ from typing import TypeVar, Callable, Any, Type
 
 logger = logging.getLogger(__name__)
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 def retry(
     max_attempts: int = 3,
@@ -84,6 +89,7 @@ def retry(
         def fetch_data():
             return requests.get("https://api.example.com")
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
@@ -101,10 +107,7 @@ def retry(
 
                     # Calculate backoff delay with jitter
                     base_delay = 1.0
-                    delay = min(
-                        base_delay * (backoff_factor ** attempt),
-                        max_backoff
-                    )
+                    delay = min(base_delay * (backoff_factor**attempt), max_backoff)
 
                     # Add jitter (±25%)
                     jitter = delay * 0.25
@@ -128,12 +131,12 @@ def retry(
             raise RuntimeError(f"{func.__name__} exhausted all retries")
 
         return wrapper
+
     return decorator
 
 
 def retry_with_rate_limit(
-    retry_after_header: str = "Retry-After",
-    **retry_kwargs: Any
+    retry_after_header: str = "Retry-After", **retry_kwargs: Any
 ) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Decorator to retry with support for rate limit headers.
 
@@ -153,6 +156,7 @@ def retry_with_rate_limit(
                 raise RateLimitError(response)
             return response
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @retry(**retry_kwargs)
         @wraps(func)
@@ -161,7 +165,7 @@ def retry_with_rate_limit(
                 return func(*args, **kwargs)
             except Exception as e:
                 # Check if exception has retry-after information
-                if hasattr(e, 'response') and hasattr(e.response, 'headers'):
+                if hasattr(e, "response") and hasattr(e.response, "headers"):
                     retry_after = e.response.headers.get(retry_after_header)
                     if retry_after:
                         logger.info(f"Rate limited, retry after {retry_after}s")
@@ -169,6 +173,7 @@ def retry_with_rate_limit(
                 raise
 
         return wrapper
+
     return decorator
 ```
 
@@ -224,6 +229,7 @@ However, the decorator needs access to `self.retries`. Better approach:
 class NHLClient:
     def _make_request(self, endpoint: str) -> dict[str, Any]:
         """Make request to NHL API with retry logic."""
+
         @retry(
             max_attempts=self.retries + 1,
             exceptions=(requests.RequestException,),
@@ -259,11 +265,12 @@ class RetryableClient:
         Returns:
             Result of operation
         """
+
         @retry(
             max_attempts=self.retries + 1,
             exceptions=(requests.RequestException,),
-            backoff_factor=getattr(self, 'backoff_factor', 2.0),
-            max_backoff=getattr(self, 'max_backoff', 30.0),
+            backoff_factor=getattr(self, "backoff_factor", 2.0),
+            max_backoff=getattr(self, "max_backoff", 30.0),
         )
         def _execute() -> T:
             return operation()
@@ -293,6 +300,7 @@ import pytest
 import time
 from nhl_scrabble.utils.retry import retry
 
+
 def test_retry_success_on_first_attempt():
     """Test that successful operation doesn't retry."""
     attempts = []
@@ -306,6 +314,7 @@ def test_retry_success_on_first_attempt():
 
     assert result == "success"
     assert len(attempts) == 1
+
 
 def test_retry_success_on_second_attempt():
     """Test that operation retries and succeeds."""
@@ -323,14 +332,17 @@ def test_retry_success_on_second_attempt():
     assert result == "success"
     assert len(attempts) == 2
 
+
 def test_retry_exhausts_attempts():
     """Test that operation fails after max attempts."""
+
     @retry(max_attempts=3, exceptions=(ValueError,))
     def operation():
         raise ValueError("Persistent error")
 
     with pytest.raises(ValueError, match="Persistent error"):
         operation()
+
 
 def test_retry_backoff_timing():
     """Test that retry uses exponential backoff."""
@@ -352,8 +364,10 @@ def test_retry_backoff_timing():
     assert 0.5 < delay1 < 1.5  # ~1s ±jitter
     assert 1.5 < delay2 < 2.5  # ~2s ±jitter
 
+
 def test_retry_respects_max_backoff():
     """Test that backoff is capped at max_backoff."""
+
     @retry(max_attempts=10, backoff_factor=2.0, max_backoff=5.0)
     def operation():
         raise ValueError("Error")
@@ -366,6 +380,7 @@ def test_retry_respects_max_backoff():
     # With uncapped backoff, would be 1+2+4+8+16+... > 500s
     # With 5s cap, should be ~45s (9 retries * 5s)
     assert duration < 60  # Allow some overhead
+
 
 def test_retry_on_retry_callback():
     """Test that on_retry callback is called."""

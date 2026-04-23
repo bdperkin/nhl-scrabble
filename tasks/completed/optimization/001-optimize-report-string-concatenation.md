@@ -36,7 +36,9 @@ def generate(self, team_scores: dict[str, TeamScore]) -> str:
             f"{team_data.total} points ({team_data.player_count} players)"
         )
 
-        top_players = sorted(team_data.players, key=lambda x: x.full_score, reverse=True)[:5]
+        top_players = sorted(
+            team_data.players, key=lambda x: x.full_score, reverse=True
+        )[:5]
 
         for i, player in enumerate(top_players, 1):
             output += (  # ❌ O(n²) - even worse in nested loop
@@ -75,10 +77,8 @@ def generate(self, team_scores: dict[str, TeamScore]) -> str:
         )
 
         top_players = sorted(
-            team_data.players,
-            key=lambda x: x.full_score,
-            reverse=True
-        )[:self.top_players_per_team]
+            team_data.players, key=lambda x: x.full_score, reverse=True
+        )[: self.top_players_per_team]
 
         # Use generator expression for player lines
         parts.extend(
@@ -100,16 +100,12 @@ def generate(self, data: tuple[...]) -> str:
 
     # Top players section
     parts.append(
-        self._format_header(
-            f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS"
-        )
+        self._format_header(f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS")
     )
 
-    top_players = sorted(
-        all_players,
-        key=lambda x: x.full_score,
-        reverse=True
-    )[:self.top_players_count]
+    top_players = sorted(all_players, key=lambda x: x.full_score, reverse=True)[
+        : self.top_players_count
+    ]
 
     # Use generator for player lines
     parts.extend(
@@ -127,12 +123,14 @@ def generate(self, data: tuple[...]) -> str:
     top_first = max(all_players, key=lambda x: x.first_score)
     top_last = max(all_players, key=lambda x: x.last_score)
 
-    parts.extend([
-        f"\nHighest First Name: {top_first.first_name} "
-        f"({top_first.full_name}, {top_first.team}) = {top_first.first_score} points",
-        f"\nHighest Last Name: {top_last.last_name} "
-        f"({top_last.full_name}, {top_last.team}) = {top_last.last_score} points",
-    ])
+    parts.extend(
+        [
+            f"\nHighest First Name: {top_first.first_name} "
+            f"({top_first.full_name}, {top_first.team}) = {top_first.first_score} points",
+            f"\nHighest Last Name: {top_last.last_name} "
+            f"({top_last.full_name}, {top_last.team}) = {top_last.last_score} points",
+        ]
+    )
 
     # Average calculations
     total_players = len(all_players)
@@ -140,12 +138,14 @@ def generate(self, data: tuple[...]) -> str:
     avg_first = sum(p.first_score for p in all_players) / total_players
     avg_last = sum(p.last_score for p in all_players) / total_players
 
-    parts.extend([
-        "\n\nLeague-Wide Average Scores:",
-        f"\n  Full Name: {avg_full:.2f}",
-        f"\n  First Name: {avg_first:.2f}",
-        f"\n  Last Name: {avg_last:.2f}",
-    ])
+    parts.extend(
+        [
+            "\n\nLeague-Wide Average Scores:",
+            f"\n  Full Name: {avg_full:.2f}",
+            f"\n  First Name: {avg_first:.2f}",
+            f"\n  Last Name: {avg_last:.2f}",
+        ]
+    )
 
     # Division/conference averages
     if division_standings:
@@ -217,6 +217,7 @@ import time
 import pytest
 from nhl_scrabble.reports.team_report import TeamReporter
 
+
 def test_team_report_generation_performance(sample_team_scores):
     """Verify report generation is under 1 second for 32 teams."""
     reporter = TeamReporter(top_players_per_team=5)
@@ -228,6 +229,7 @@ def test_team_report_generation_performance(sample_team_scores):
     assert elapsed < 1.0, f"Report generation too slow: {elapsed:.2f}s"
     assert len(report) > 0
     assert "TEAM SCRABBLE SCORES" in report
+
 
 def test_report_output_unchanged(sample_team_scores, baseline_report):
     """Verify optimization doesn't change output."""

@@ -24,10 +24,10 @@ The project currently supports Python 3.10-3.13:
 [project]
 requires-python = ">=3.10,<3.14"
 classifiers = [
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 ```
 
@@ -36,7 +36,7 @@ classifiers = [
 ```yaml
 strategy:
   matrix:
-    python-version: ["3.10", "3.11", "3.12", "3.13"]
+    python-version: ['3.10', '3.11', '3.12', '3.13']
 ```
 
 **Tox Configuration (tox.ini)**:
@@ -63,15 +63,15 @@ Update Python version constraint and classifiers:
 
 ```toml
 [project]
-requires-python = ">=3.10,<3.15"  # Changed from <3.14 to <3.15
+requires-python = ">=3.10,<3.15" # Changed from <3.14 to <3.15
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",  # NEW
-    # ...
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14", # NEW
+  # ...
 ]
 ```
 
@@ -86,21 +86,21 @@ jobs:
   test:
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]  # Added 3.14
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']  # Added 3.14
 ```
 
 Also update tox job if it uses Python version:
 
 ```yaml
-  tox:
-    strategy:
-      matrix:
-        tox-env:
-          - py310
-          - py311
-          - py312
-          - py313
-          - py314  # NEW
+tox:
+  strategy:
+    matrix:
+      tox-env:
+        - py310
+        - py311
+        - py312
+        - py313
+        - py314    # NEW
           # ... other envs
 ```
 

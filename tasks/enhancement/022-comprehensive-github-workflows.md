@@ -20,7 +20,7 @@ Enhance the project's CI/CD infrastructure by implementing additional useful and
 
 1. **`.github/workflows/ci.yml`** - Comprehensive CI testing
 
-   - Python 3.10-3.15 matrix testing
+   - Python 3.12-3.15 matrix testing
    - Tox environments (31 configurations)
    - Pre-commit hooks (58 hooks)
    - Codecov integration
@@ -620,8 +620,8 @@ Each sub-task must meet:
 
 ```yaml
 # Add to workflows for monitoring
-- name: Workflow timing
-  run: echo "::notice::Workflow completed in ${{ github.run_duration }}"
+  - name: Workflow timing
+    run: echo "::notice::Workflow completed in ${{ github.run_duration }}"
 ```
 
 ### Maintenance Strategy

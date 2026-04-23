@@ -83,11 +83,11 @@ Add check-jsonschema with validation for GitHub workflows and test fixtures:
 # pyproject.toml
 [project.optional-dependencies]
 dev = [
-    "ruff>=0.3.0",
-    "mypy>=1.8.0",
-    "pre-commit>=3.6.0",
-    "check-jsonschema>=0.28.0",  # Add JSON/YAML schema validation
-    # ... other dev dependencies
+  "ruff>=0.3.0",
+  "mypy>=1.8.0",
+  "pre-commit>=3.6.0",
+  "check-jsonschema>=0.28.0", # Add JSON/YAML schema validation
+  # ... other dev dependencies
 ]
 ```
 
@@ -96,31 +96,31 @@ dev = [
 ```yaml
 # .pre-commit-config.yaml
 # Add after check-json, check-yaml
-- repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.28.0
-  hooks:
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.28.0
+    hooks:
     # Validate GitHub workflows against schema
-    - id: check-github-workflows
-      name: Validate GitHub workflows
-      files: ^\.github/workflows/.*\.ya?ml$
+      - id: check-github-workflows
+        name: Validate GitHub workflows
+        files: ^\.github/workflows/.*\.ya?ml$
 
     # Validate GitHub Actions against schema
-    - id: check-github-actions
-      name: Validate GitHub actions
-      files: ^\.github/actions/.*\.ya?ml$
+      - id: check-github-actions
+        name: Validate GitHub actions
+        files: ^\.github/actions/.*\.ya?ml$
 
     # Validate Dependabot config (if exists)
-    - id: check-dependabot
-      name: Validate Dependabot config
-      files: ^\.github/dependabot\.ya?ml$
+      - id: check-dependabot
+        name: Validate Dependabot config
+        files: ^\.github/dependabot\.ya?ml$
 
     # Custom: Validate test fixtures (if schema created)
-    - id: check-jsonschema
-      name: Validate test fixture JSON
-      files: ^tests/fixtures/.*\.json$
-      args:
-        - --schemafile
-        - tests/schemas/fixture-schema.json  # Custom schema
+      - id: check-jsonschema
+        name: Validate test fixture JSON
+        files: ^tests/fixtures/.*\.json$
+        args:
+          - --schemafile
+          - tests/schemas/fixture-schema.json # Custom schema
 ```
 
 **Step 3: Add tox environment**:
@@ -420,16 +420,16 @@ See full list: https://www.schemastore.org/json/
 
 ```yaml
 # Pre-built hooks for common files
-- id: check-github-workflows    # .github/workflows/*.yml
-- id: check-github-actions       # .github/actions/*/action.yml
-- id: check-dependabot          # .github/dependabot.yml
-- id: check-renovate            # renovate.json
-- id: check-azure-pipelines     # azure-pipelines.yml
-- id: check-readthedocs         # .readthedocs.yml
-- id: check-gitlab-ci           # .gitlab-ci.yml
+  - id: check-github-workflows  # .github/workflows/*.yml
+  - id: check-github-actions     # .github/actions/*/action.yml
+  - id: check-dependabot        # .github/dependabot.yml
+  - id: check-renovate          # renovate.json
+  - id: check-azure-pipelines   # azure-pipelines.yml
+  - id: check-readthedocs       # .readthedocs.yml
+  - id: check-gitlab-ci         # .gitlab-ci.yml
 
 # Generic hook for custom schemas
-- id: check-jsonschema          # Any JSON/YAML with custom schema
+  - id: check-jsonschema        # Any JSON/YAML with custom schema
 ```
 
 **Custom Schema Example**:
@@ -439,7 +439,10 @@ See full list: https://www.schemastore.org/json/
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "My Config File",
   "type": "object",
-  "required": ["version", "settings"],
+  "required": [
+    "version",
+    "settings"
+  ],
   "properties": {
     "version": {
       "type": "string",
@@ -448,8 +451,13 @@ See full list: https://www.schemastore.org/json/
     "settings": {
       "type": "object",
       "properties": {
-        "enabled": {"type": "boolean"},
-        "count": {"type": "integer", "minimum": 0}
+        "enabled": {
+          "type": "boolean"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     }
   }
@@ -504,8 +512,8 @@ Schema validation errors were encountered.
 Already built-in! GitHub workflow files automatically validated against official schema.
 
 ```yaml
-# .github/workflows/ci.yml will be validated against:
-# https://json.schemastore.org/github-workflow.json
+null
+...
 ```
 
 Common errors caught:

@@ -54,7 +54,8 @@ class SensitiveDataFilter(logging.Filter):
         # Environment variables in error messages
         (
             re.compile(
-                r"(NHL_SCRABBLE_\w*(?:KEY|TOKEN|SECRET|PASSWORD)\s*=\s*)[^\s]+", re.IGNORECASE
+                r"(NHL_SCRABBLE_\w*(?:KEY|TOKEN|SECRET|PASSWORD)\s*=\s*)[^\s]+",
+                re.IGNORECASE,
             ),
             r"\1***",
         ),
@@ -93,7 +94,9 @@ def configure_logging_with_sanitization(verbose: bool = False) -> None:
     handler.addFilter(SensitiveDataFilter())
 
     # Configure formatter
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     handler.setFormatter(formatter)
 
     # Configure root logger

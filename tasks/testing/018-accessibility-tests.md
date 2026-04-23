@@ -23,6 +23,7 @@ Implement automated accessibility testing to ensure WCAG 2.1 compliance and usab
 ```python
 from axe_playwright import Axe
 
+
 def test_homepage_accessibility(page_fixture):
     page = IndexPage(page_fixture)
     page.navigate()
@@ -30,8 +31,7 @@ def test_homepage_accessibility(page_fixture):
     axe = Axe(page.page)
     results = axe.run()
 
-    assert len(results.violations) == 0, \
-        f"Found {len(results.violations)} violations"
+    assert len(results.violations) == 0, f"Found {len(results.violations)} violations"
 ```
 
 ### WCAG Compliance Checks

@@ -26,6 +26,7 @@ import hashlib
 import json
 from pathlib import Path
 
+
 class NHLClient:
     def __init__(self):
         self.cache_dir = Path.home() / ".cache" / "nhl-scrabble"
@@ -92,6 +93,7 @@ tests/
 
 ```python
 """Unit tests for caching layer."""
+
 import hashlib
 import json
 import time
@@ -356,6 +358,7 @@ class TestCacheEdgeCases:
 
 ```python
 """Integration tests for caching layer."""
+
 import time
 from unittest.mock import patch
 
@@ -373,7 +376,7 @@ class TestCachingIntegration:
         client = NHLClient()
         client.cache_dir = tmp_path
 
-        with patch.object(client, '_make_api_request') as mock_api:
+        with patch.object(client, "_make_api_request") as mock_api:
             mock_api.return_value = {"data": "test"}
 
             # First call - should hit API
@@ -396,7 +399,7 @@ class TestCachingIntegration:
 
         url = "https://api.example.com/data"
 
-        with patch.object(client, '_make_api_request') as mock_api:
+        with patch.object(client, "_make_api_request") as mock_api:
             # Simulate slow API (100ms)
             def slow_api(*args, **kwargs):
                 time.sleep(0.1)
@@ -426,7 +429,7 @@ class TestCachingIntegration:
 
         url = "https://api.example.com/data"
 
-        with patch.object(client, '_make_api_request') as mock_api:
+        with patch.object(client, "_make_api_request") as mock_api:
             mock_api.return_value = {"data": "test"}
 
             # First call
@@ -469,7 +472,7 @@ class TestCacheInvalidation:
         """Test client has clear_cache method."""
         client = NHLClient()
 
-        assert hasattr(client, 'clear_cache')
+        assert hasattr(client, "clear_cache")
         assert callable(client.clear_cache)
 ```
 
@@ -664,7 +667,7 @@ MOCK_TEAM_RESPONSE = {
     "roster": [
         {"id": 123, "firstName": "Jack", "lastName": "Hughes"},
         # ... more players
-    ]
+    ],
 }
 
 MOCK_STANDINGS_RESPONSE = {

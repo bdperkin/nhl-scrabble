@@ -24,12 +24,12 @@ The project currently supports Python 3.10-3.13 (official releases):
 
 ```toml
 [project]
-requires-python = ">=3.10,<3.14"  # Will be <3.15 after task #97
+requires-python = ">=3.10,<3.14" # Will be <3.15 after task #97
 classifiers = [
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 ```
 
@@ -38,7 +38,7 @@ classifiers = [
 ```yaml
 strategy:
   matrix:
-    python-version: ["3.10", "3.11", "3.12", "3.13"]
+    python-version: ['3.10', '3.11', '3.12', '3.13']
 ```
 
 **Tox Configuration (tox.ini)**:
@@ -72,10 +72,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
         experimental: [false]
         include:
-          - python-version: "3.15-dev"
+          - python-version: 3.15-dev
             experimental: true
 
     continue-on-error: ${{ matrix.experimental }}
@@ -136,13 +136,13 @@ ignore_outcome =
 
 ```toml
 # ❌ DO NOT DO THIS:
-requires-python = ">=3.10,<3.16"  # Wrong - 3.15 is not released
+requires-python = ">=3.10,<3.16" # Wrong - 3.15 is not released
 classifiers = [
-    "Programming Language :: Python :: 3.15",  # Wrong - not official
+  "Programming Language :: Python :: 3.15", # Wrong - not official
 ]
 
 # ✅ KEEP AS IS (or <3.15 after task #97):
-requires-python = ">=3.10,<3.15"  # Only released versions
+requires-python = ">=3.10,<3.15" # Only released versions
 # No 3.15 classifier until official release
 ```
 
@@ -229,9 +229,8 @@ Add separate badge for Python 3.15-dev status:
 The primary testing is automated via CI:
 
 ```yaml
-# Python 3.15-dev tests run automatically
-# Failures are logged but don't block CI
-# Check Actions tab for 3.15-dev status
+null
+...
 ```
 
 ### Local Testing (Optional)

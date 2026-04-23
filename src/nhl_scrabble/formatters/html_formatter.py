@@ -6,7 +6,7 @@ reporting.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -46,7 +46,7 @@ class HTMLFormatter:
             >>> "<table>" in output
             True
         """
-        timestamp = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        timestamp = datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
 
         # Build HTML document
         html = f"""<!DOCTYPE html>

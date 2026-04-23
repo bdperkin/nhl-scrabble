@@ -7,7 +7,7 @@ results via browser instead of CLI.
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -132,7 +132,7 @@ async def health() -> dict[str, Any]:
     return {
         "status": "healthy",
         "version": __version__,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
     }
 
 
@@ -285,7 +285,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
     # Check cache
     if request.use_cache and cache_key in _analysis_cache:
         cached = _analysis_cache[cache_key]
-        cache_age = datetime.now(timezone.utc) - datetime.fromisoformat(cached["cached_at"])
+        cache_age = datetime.now(UTC) - datetime.fromisoformat(cached["cached_at"])
 
         if cache_age < timedelta(hours=1):
             return {
@@ -353,7 +353,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 
             # Build response
             result = {
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "cache_hit": False,
                 "top_players": all_players[: request.top_players],
                 "team_standings": teams_data,
@@ -365,7 +365,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 
             # Cache result
             _analysis_cache[cache_key] = {
-                "cached_at": datetime.now(timezone.utc).isoformat(),
+                "cached_at": datetime.now(UTC).isoformat(),
                 "data": result,
             }
 
@@ -483,7 +483,7 @@ async def clear_cache() -> dict[str, str]:
     _analysis_cache.clear()
     return {
         "message": "Cache cleared successfully",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
     }
 
 
@@ -496,7 +496,7 @@ async def cache_stats() -> dict[str, Any]:
     """
     entries = []
     for key, cached in _analysis_cache.items():
-        cache_age = datetime.now(timezone.utc) - datetime.fromisoformat(cached["cached_at"])
+        cache_age = datetime.now(UTC) - datetime.fromisoformat(cached["cached_at"])
         entries.append(
             {
                 "key": key,

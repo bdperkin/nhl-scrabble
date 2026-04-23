@@ -32,7 +32,7 @@ The project currently has:
 # Missing trailing comma (causes multi-line diff):
 dependencies = [
     "click>=8.0",
-    "pydantic>=2.0"  # No comma - adding item modifies this line too!
+    "pydantic>=2.0",  # No comma - adding item modifies this line too!
 ]
 
 # With trailing comma (clean single-line diff):
@@ -79,10 +79,7 @@ dependencies = [
       - id: add-trailing-comma
         name: add-trailing-comma
         description: Add trailing commas to Python structures
-        args:
-          [
-            --py36-plus,  # Use Python 3.6+ syntax
-          ]
+        args: [--py36-plus]
         # Run after black but before ruff-format
 ```
 
@@ -106,10 +103,7 @@ dependencies = [
 No configuration needed in pyproject.toml. All settings via pre-commit hook args:
 
 ```yaml
-args:
-  [
-    --py36-plus,  # Use Python 3.6+ syntax (dict literals, f-strings)
-  ]
+args: [--py36-plus]
 ```
 
 **What --py36-plus Does:**
@@ -206,11 +200,7 @@ git commit -m "style: Add trailing commas to multi-line structures"
 
 ```python
 # Before:
-result = function_name(
-    arg1,
-    arg2,
-    arg3  # No comma
-)
+result = function_name(arg1, arg2, arg3)  # No comma
 
 # After:
 result = function_name(
@@ -224,11 +214,7 @@ result = function_name(
 
 ```python
 # Before:
-items = [
-    "item1",
-    "item2",
-    "item3"  # No comma
-]
+items = ["item1", "item2", "item3"]  # No comma
 
 # After:
 items = [
@@ -242,11 +228,7 @@ items = [
 
 ```python
 # Before:
-config = {
-    "key1": "value1",
-    "key2": "value2",
-    "key3": "value3"  # No comma
-}
+config = {"key1": "value1", "key2": "value2", "key3": "value3"}  # No comma
 
 # After:
 config = {
@@ -260,11 +242,7 @@ config = {
 
 ```python
 # Before:
-from module import (
-    Class1,
-    Class2,
-    Class3  # No comma
-)
+from module import Class1, Class2, Class3  # No comma
 
 # After:
 from module import (
@@ -500,9 +478,7 @@ def function_name(
 
 ```python
 result = [
-    process(item)
-    for item in items
-    if condition(item)  # No trailing comma (not a list)
+    process(item) for item in items if condition(item)  # No trailing comma (not a list)
 ]
 ```
 

@@ -39,13 +39,19 @@ app = FastAPI(
     version=__version__,
 )
 
+
 @app.get("/health")
 async def health():
     return {"status": "healthy", "version": __version__, "timestamp": ...}
 
+
 @app.get("/")
 async def root():
-    return {"message": "NHL Scrabble Analyzer API", "docs": "/docs", "health": "/health"}
+    return {
+        "message": "NHL Scrabble Analyzer API",
+        "docs": "/docs",
+        "health": "/health",
+    }
 ```
 
 **Existing core components** (available to integrate):
@@ -87,8 +93,12 @@ _analysis_cache: dict[str, dict[str, Any]] = {}
 class AnalysisRequest(BaseModel):
     """Request model for analysis endpoint."""
 
-    top_players: int = Field(default=20, ge=1, le=100, description="Number of top players to include")
-    top_team_players: int = Field(default=5, ge=1, le=30, description="Top players per team")
+    top_players: int = Field(
+        default=20, ge=1, le=100, description="Number of top players to include"
+    )
+    top_team_players: int = Field(
+        default=5, ge=1, le=30, description="Top players per team"
+    )
     use_cache: bool = Field(default=True, description="Use cached results if available")
 
 
@@ -158,31 +168,35 @@ async def analyze(request: AnalysisRequest) -> dict[str, Any]:
                     team_scores = []
                     for player in roster:
                         score = scorer.score_player(player)
-                        all_players.append({
-                            "id": player.id,
-                            "first_name": player.first_name,
-                            "last_name": player.last_name,
-                            "team": team.team_abbrev,
-                            "score": score.total,
-                        })
+                        all_players.append(
+                            {
+                                "id": player.id,
+                                "first_name": player.first_name,
+                                "last_name": player.last_name,
+                                "team": team.team_abbrev,
+                                "score": score.total,
+                            }
+                        )
                         team_scores.append(score)
 
                     # Calculate team total
                     team_total = sum(s.total for s in team_scores)
-                    teams_data.append({
-                        "abbrev": team.team_abbrev,
-                        "name": team.team_name,
-                        "division": team.division,
-                        "conference": team.conference,
-                        "total_score": team_total,
-                        "avg_score": team_total / len(team_scores) if team_scores else 0,
-                        "player_count": len(team_scores),
-                        "top_players": sorted(
-                            team_scores,
-                            key=lambda x: x.total,
-                            reverse=True
-                        )[:request.top_team_players],
-                    })
+                    teams_data.append(
+                        {
+                            "abbrev": team.team_abbrev,
+                            "name": team.team_name,
+                            "division": team.division,
+                            "conference": team.conference,
+                            "total_score": team_total,
+                            "avg_score": (
+                                team_total / len(team_scores) if team_scores else 0
+                            ),
+                            "player_count": len(team_scores),
+                            "top_players": sorted(
+                                team_scores, key=lambda x: x.total, reverse=True
+                            )[: request.top_team_players],
+                        }
+                    )
 
                 except Exception as e:
                     # Log error but continue with other teams
@@ -217,7 +231,11 @@ async def analyze(request: AnalysisRequest) -> dict[str, Any]:
                 "total_teams": len(teams_data),
                 "highest_score": all_players[0]["score"] if all_players else 0,
                 "lowest_score": all_players[-1]["score"] if all_players else 0,
-                "avg_score": sum(p["score"] for p in all_players) / len(all_players) if all_players else 0,
+                "avg_score": (
+                    sum(p["score"] for p in all_players) / len(all_players)
+                    if all_players
+                    else 0
+                ),
                 "highest_team": teams_data[0]["abbrev"] if teams_data else None,
                 "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
             }
@@ -226,7 +244,7 @@ async def analyze(request: AnalysisRequest) -> dict[str, Any]:
             result = {
                 "timestamp": datetime.now().isoformat(),
                 "cache_hit": False,
-                "top_players": all_players[:request.top_players],
+                "top_players": all_players[: request.top_players],
                 "team_standings": teams_data,
                 "division_standings": divisions,
                 "conference_standings": conferences,
@@ -243,10 +261,7 @@ async def analyze(request: AnalysisRequest) -> dict[str, Any]:
             return result
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Analysis failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 
 @app.get("/api/players/{player_id}")
@@ -317,12 +332,14 @@ async def cache_stats() -> dict[str, Any]:
     entries = []
     for key, cached in _analysis_cache.items():
         cache_age = datetime.now() - datetime.fromisoformat(cached["cached_at"])
-        entries.append({
-            "key": key,
-            "cached_at": cached["cached_at"],
-            "age_seconds": cache_age.total_seconds(),
-            "expires_in_seconds": max(0, 3600 - cache_age.total_seconds()),
-        })
+        entries.append(
+            {
+                "key": key,
+                "cached_at": cached["cached_at"],
+                "age_seconds": cache_age.total_seconds(),
+                "expires_in_seconds": max(0, 3600 - cache_age.total_seconds()),
+            }
+        )
 
     return {
         "size": len(_analysis_cache),
@@ -407,7 +424,7 @@ def test_analyze_endpoint_success(client: TestClient) -> None:
     """Test analysis endpoint returns valid data."""
     response = client.post(
         "/api/analyze",
-        json={"top_players": 10, "top_team_players": 3, "use_cache": False}
+        json={"top_players": 10, "top_team_players": 3, "use_cache": False},
     )
 
     assert response.status_code == 200
@@ -437,7 +454,7 @@ def test_analyze_endpoint_caching(client: TestClient) -> None:
     # First request (cache miss)
     response1 = client.post(
         "/api/analyze",
-        json={"top_players": 20, "top_team_players": 5, "use_cache": True}
+        json={"top_players": 20, "top_team_players": 5, "use_cache": True},
     )
     assert response1.status_code == 200
     data1 = response1.json()
@@ -446,7 +463,7 @@ def test_analyze_endpoint_caching(client: TestClient) -> None:
     # Second request (cache hit)
     response2 = client.post(
         "/api/analyze",
-        json={"top_players": 20, "top_team_players": 5, "use_cache": True}
+        json={"top_players": 20, "top_team_players": 5, "use_cache": True},
     )
     assert response2.status_code == 200
     data2 = response2.json()
@@ -459,17 +476,11 @@ def test_analyze_endpoint_caching(client: TestClient) -> None:
 def test_analyze_endpoint_validation(client: TestClient) -> None:
     """Test analysis endpoint validates parameters."""
     # Invalid top_players (too high)
-    response = client.post(
-        "/api/analyze",
-        json={"top_players": 200}
-    )
+    response = client.post("/api/analyze", json={"top_players": 200})
     assert response.status_code == 422  # Validation error
 
     # Invalid top_players (negative)
-    response = client.post(
-        "/api/analyze",
-        json={"top_players": -5}
-    )
+    response = client.post("/api/analyze", json={"top_players": -5})
     assert response.status_code == 422
 
 

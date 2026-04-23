@@ -54,59 +54,77 @@ Create `src/nhl_scrabble/web/templates/base.html`:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NHL Scrabble Analyzer - Analyze NHL player names by Scrabble score">
-    <title>{% block title %}NHL Scrabble Analyzer{% endblock %}</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/img/favicon.png">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="/static/css/style.css">
-    {% block extra_css %}{% endblock %}
-</head>
-<body>
-    <!-- Header -->
-    <header class="site-header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="site-title">
-                    <a href="/">🏒 NHL Scrabble Analyzer</a>
-                </h1>
-                <nav class="main-nav" aria-label="Main navigation">
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/docs">API Docs</a></li>
-                        <li><a href="https://github.com/bdperkin/nhl-scrabble" target="_blank">GitHub</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="site-main" role="main">
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 NHL Scrabble Analyzer |
-               <a href="https://github.com/bdperkin/nhl-scrabble">Open Source</a> |
-               <a href="/health">Status</a>
-            </p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="/static/js/app.js"></script>
-    {% block extra_js %}{% endblock %}
-</body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="NHL Scrabble Analyzer - Analyze NHL player names by Scrabble score" name="description"/>
+  <title>
+   {% block title %}NHL Scrabble Analyzer{% endblock %}
+  </title>
+  <!-- Favicon -->
+  <link href="/static/img/favicon.png" rel="icon" type="image/png"/>
+  <!-- Stylesheets -->
+  <link href="/static/css/style.css" rel="stylesheet"/>
+  {% block extra_css %}{% endblock %}
+ </head>
+ <body>
+  <!-- Header -->
+  <header class="site-header">
+   <div class="container">
+    <div class="header-content">
+     <h1 class="site-title">
+      <a href="/">
+       🏒 NHL Scrabble Analyzer
+      </a>
+     </h1>
+     <nav aria-label="Main navigation" class="main-nav">
+      <ul>
+       <li>
+        <a href="/">
+         Home
+        </a>
+       </li>
+       <li>
+        <a href="/docs">
+         API Docs
+        </a>
+       </li>
+       <li>
+        <a href="https://github.com/bdperkin/nhl-scrabble" target="_blank">
+         GitHub
+        </a>
+       </li>
+      </ul>
+     </nav>
+    </div>
+   </div>
+  </header>
+  <!-- Main Content -->
+  <main class="site-main" role="main">
+   <div class="container">
+    {% block content %}{% endblock %}
+   </div>
+  </main>
+  <!-- Footer -->
+  <footer class="site-footer">
+   <div class="container">
+    <p>
+     © 2026 NHL Scrabble Analyzer |
+     <a href="https://github.com/bdperkin/nhl-scrabble">
+      Open Source
+     </a>
+     |
+     <a href="/health">
+      Status
+     </a>
+    </p>
+   </div>
+  </footer>
+  <!-- Scripts -->
+  <script src="/static/js/app.js">
+  </script>
+  {% block extra_js %}{% endblock %}
+ </body>
 </html>
 ```
 
@@ -121,120 +139,124 @@ Create `src/nhl_scrabble/web/templates/index.html`:
 
 {% block content %}
 <div class="hero">
-    <h2>Analyze NHL Player Names by Scrabble Score</h2>
-    <p class="hero-subtitle">
-        Calculate Scrabble scores for NHL player names and see team standings,
+ <h2>
+  Analyze NHL Player Names by Scrabble Score
+ </h2>
+ <p class="hero-subtitle">
+  Calculate Scrabble scores for NHL player names and see team standings,
         playoff brackets, and statistics based on letter values.
-    </p>
+ </p>
 </div>
-
 <section class="analysis-form-section">
-    <h3>Run Analysis</h3>
-
-    <form id="analysisForm" class="analysis-form">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="topPlayers">
-                    Top Players to Display
-                    <span class="help-text">Number of top-scoring players (1-100)</span>
-                </label>
-                <input
-                    type="number"
-                    id="topPlayers"
-                    name="top_players"
-                    min="1"
-                    max="100"
-                    value="20"
-                    aria-describedby="topPlayersHelp"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="topTeamPlayers">
-                    Top Players per Team
-                    <span class="help-text">Players per team in results (1-30)</span>
-                </label>
-                <input
-                    type="number"
-                    id="topTeamPlayers"
-                    name="top_team_players"
-                    min="1"
-                    max="30"
-                    value="5"
-                    aria-describedby="topTeamPlayersHelp"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="useCache">
-                    <input
-                        type="checkbox"
-                        id="useCache"
-                        name="use_cache"
-                        checked
-                    >
-                    Use Cached Results (faster)
-                </label>
-            </div>
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary" id="analyzeBtn">
-                <span class="btn-text">Analyze</span>
-                <span class="btn-loading" hidden>
-                    <span class="spinner"></span>
-                    Fetching NHL data...
-                </span>
-            </button>
-        </div>
-    </form>
+ <h3>
+  Run Analysis
+ </h3>
+ <form class="analysis-form" id="analysisForm">
+  <div class="form-row">
+   <div class="form-group">
+    <label for="topPlayers">
+     Top Players to Display
+     <span class="help-text">
+      Number of top-scoring players (1-100)
+     </span>
+    </label>
+    <input aria-describedby="topPlayersHelp" id="topPlayers" max="100" min="1" name="top_players" required="" type="number" value="20"/>
+   </div>
+   <div class="form-group">
+    <label for="topTeamPlayers">
+     Top Players per Team
+     <span class="help-text">
+      Players per team in results (1-30)
+     </span>
+    </label>
+    <input aria-describedby="topTeamPlayersHelp" id="topTeamPlayers" max="30" min="1" name="top_team_players" required="" type="number" value="5"/>
+   </div>
+   <div class="form-group">
+    <label for="useCache">
+     <input checked="" id="useCache" name="use_cache" type="checkbox"/>
+     Use Cached Results (faster)
+    </label>
+   </div>
+  </div>
+  <div class="form-actions">
+   <button class="btn btn-primary" id="analyzeBtn" type="submit">
+    <span class="btn-text">
+     Analyze
+    </span>
+    <span class="btn-loading" hidden="">
+     <span class="spinner">
+     </span>
+     Fetching NHL data...
+    </span>
+   </button>
+  </div>
+ </form>
 </section>
-
 <!-- Results container (populated by JavaScript) -->
-<div id="results" class="results-container" hidden>
-    <!-- Results will be inserted here -->
+<div class="results-container" hidden="" id="results">
+ <!-- Results will be inserted here -->
 </div>
-
 <!-- Error message container -->
-<div id="error" class="error-container" hidden role="alert">
-    <!-- Error messages will be inserted here -->
+<div class="error-container" hidden="" id="error" role="alert">
+ <!-- Error messages will be inserted here -->
 </div>
-
 <section class="info-section">
-    <h3>About</h3>
-    <p>
-        NHL Scrabble Analyzer calculates Scrabble scores for all NHL players
+ <h3>
+  About
+ </h3>
+ <p>
+  NHL Scrabble Analyzer calculates Scrabble scores for all NHL players
         using standard Scrabble letter point values. Teams are ranked by their
         total roster score, creating an alternative playoff bracket based on
         alphabetical prowess rather than on-ice performance.
-    </p>
-
-    <h4>Scrabble Letter Values</h4>
-    <div class="scrabble-values">
-        <div class="value-group">
-            <strong>1 point:</strong> A, E, I, O, U, L, N, S, T, R
-        </div>
-        <div class="value-group">
-            <strong>2 points:</strong> D, G
-        </div>
-        <div class="value-group">
-            <strong>3 points:</strong> B, C, M, P
-        </div>
-        <div class="value-group">
-            <strong>4 points:</strong> F, H, V, W, Y
-        </div>
-        <div class="value-group">
-            <strong>5 points:</strong> K
-        </div>
-        <div class="value-group">
-            <strong>8 points:</strong> J, X
-        </div>
-        <div class="value-group">
-            <strong>10 points:</strong> Q, Z
-        </div>
-    </div>
+ </p>
+ <h4>
+  Scrabble Letter Values
+ </h4>
+ <div class="scrabble-values">
+  <div class="value-group">
+   <strong>
+    1 point:
+   </strong>
+   A, E, I, O, U, L, N, S, T, R
+  </div>
+  <div class="value-group">
+   <strong>
+    2 points:
+   </strong>
+   D, G
+  </div>
+  <div class="value-group">
+   <strong>
+    3 points:
+   </strong>
+   B, C, M, P
+  </div>
+  <div class="value-group">
+   <strong>
+    4 points:
+   </strong>
+   F, H, V, W, Y
+  </div>
+  <div class="value-group">
+   <strong>
+    5 points:
+   </strong>
+   K
+  </div>
+  <div class="value-group">
+   <strong>
+    8 points:
+   </strong>
+   J, X
+  </div>
+  <div class="value-group">
+   <strong>
+    10 points:
+   </strong>
+   Q, Z
+  </div>
+ </div>
 </section>
 {% endblock %}
 ```
@@ -246,99 +268,166 @@ Create `src/nhl_scrabble/web/templates/results.html`:
 ```html
 <!-- Top Statistics -->
 <div class="stats-summary">
-    <div class="stat-card">
-        <h4>Total Players</h4>
-        <p class="stat-value">{{ stats.total_players }}</p>
-    </div>
-    <div class="stat-card">
-        <h4>Highest Score</h4>
-        <p class="stat-value">{{ stats.highest_score }}</p>
-    </div>
-    <div class="stat-card">
-        <h4>Average Score</h4>
-        <p class="stat-value">{{ stats.avg_score|round(1) }}</p>
-    </div>
-    <div class="stat-card">
-        <h4>Top Team</h4>
-        <p class="stat-value">{{ stats.highest_team }}</p>
-    </div>
+ <div class="stat-card">
+  <h4>
+   Total Players
+  </h4>
+  <p class="stat-value">
+   {{ stats.total_players }}
+  </p>
+ </div>
+ <div class="stat-card">
+  <h4>
+   Highest Score
+  </h4>
+  <p class="stat-value">
+   {{ stats.highest_score }}
+  </p>
+ </div>
+ <div class="stat-card">
+  <h4>
+   Average Score
+  </h4>
+  <p class="stat-value">
+   {{ stats.avg_score|round(1) }}
+  </p>
+ </div>
+ <div class="stat-card">
+  <h4>
+   Top Team
+  </h4>
+  <p class="stat-value">
+   {{ stats.highest_team }}
+  </p>
+ </div>
 </div>
-
 <!-- Top Players Table -->
 <section class="results-section">
-    <h3>Top {{ top_players|length }} Players by Scrabble Score</h3>
-    <div class="table-container">
-        <table class="results-table" role="table" aria-label="Top players by Scrabble score">
-            <thead>
-                <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Player Name</th>
-                    <th scope="col">Team</th>
-                    <th scope="col">Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for player in top_players %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td class="player-name">{{ player.first_name }} {{ player.last_name }}</td>
-                    <td class="team-abbrev">{{ player.team }}</td>
-                    <td class="score">{{ player.score }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ <h3>
+  Top {{ top_players|length }} Players by Scrabble Score
+ </h3>
+ <div class="table-container">
+  <table aria-label="Top players by Scrabble score" class="results-table" role="table">
+   <thead>
+    <tr>
+     <th scope="col">
+      Rank
+     </th>
+     <th scope="col">
+      Player Name
+     </th>
+     <th scope="col">
+      Team
+     </th>
+     <th scope="col">
+      Score
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    {% for player in top_players %}
+    <tr>
+     <td>
+      {{ loop.index }}
+     </td>
+     <td class="player-name">
+      {{ player.first_name }} {{ player.last_name }}
+     </td>
+     <td class="team-abbrev">
+      {{ player.team }}
+     </td>
+     <td class="score">
+      {{ player.score }}
+     </td>
+    </tr>
+    {% endfor %}
+   </tbody>
+  </table>
+ </div>
 </section>
-
 <!-- Team Standings Table -->
 <section class="results-section">
-    <h3>Team Standings by Total Scrabble Score</h3>
-    <div class="table-container">
-        <table class="results-table standings-table" role="table" aria-label="Team standings">
-            <thead>
-                <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Team</th>
-                    <th scope="col">Division</th>
-                    <th scope="col">Conference</th>
-                    <th scope="col">Total Score</th>
-                    <th scope="col">Avg Score</th>
-                    <th scope="col">Players</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for team in team_standings %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td class="team-name">{{ team.name }}</td>
-                    <td>{{ team.division }}</td>
-                    <td>{{ team.conference }}</td>
-                    <td class="score">{{ team.total_score }}</td>
-                    <td>{{ team.avg_score|round(1) }}</td>
-                    <td>{{ team.player_count }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ <h3>
+  Team Standings by Total Scrabble Score
+ </h3>
+ <div class="table-container">
+  <table aria-label="Team standings" class="results-table standings-table" role="table">
+   <thead>
+    <tr>
+     <th scope="col">
+      Rank
+     </th>
+     <th scope="col">
+      Team
+     </th>
+     <th scope="col">
+      Division
+     </th>
+     <th scope="col">
+      Conference
+     </th>
+     <th scope="col">
+      Total Score
+     </th>
+     <th scope="col">
+      Avg Score
+     </th>
+     <th scope="col">
+      Players
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    {% for team in team_standings %}
+    <tr>
+     <td>
+      {{ loop.index }}
+     </td>
+     <td class="team-name">
+      {{ team.name }}
+     </td>
+     <td>
+      {{ team.division }}
+     </td>
+     <td>
+      {{ team.conference }}
+     </td>
+     <td class="score">
+      {{ team.total_score }}
+     </td>
+     <td>
+      {{ team.avg_score|round(1) }}
+     </td>
+     <td>
+      {{ team.player_count }}
+     </td>
+    </tr>
+    {% endfor %}
+   </tbody>
+  </table>
+ </div>
 </section>
-
 <!-- Division Standings (simplified for space) -->
 <section class="results-section">
-    <h3>Division Standings</h3>
-    <div class="division-grid">
-        {% for division, teams in division_standings.items() %}
-        <div class="division-card">
-            <h4>{{ division }}</h4>
-            <ol>
-                {% for team in teams[:5] %}
-                <li>{{ team.name }} ({{ team.total_score }})</li>
-                {% endfor %}
-            </ol>
-        </div>
-        {% endfor %}
-    </div>
+ <h3>
+  Division Standings
+ </h3>
+ <div class="division-grid">
+  {% for division, teams in division_standings.items() %}
+  <div class="division-card">
+   <h4>
+    {{ division }}
+   </h4>
+   <ol>
+    {% for team in teams[:5] %}
+    <li>
+     {{ team.name }} ({{ team.total_score }})
+    </li>
+    {% endfor %}
+   </ol>
+  </div>
+  {% endfor %}
+ </div>
 </section>
 ```
 
@@ -350,9 +439,12 @@ Create `src/nhl_scrabble/web/static/css/style.css`:
 /* ===== CSS Variables ===== */
 :root {
     /* NHL-inspired color palette */
-    --color-primary: #003087;      /* NHL blue */
-    --color-secondary: #C8102E;    /* NHL red */
-    --color-accent: #FFB81C;       /* NHL gold */
+    --color-primary: #003087;
+    /* NHL blue */
+    --color-secondary: #C8102E;
+    /* NHL red */
+    --color-accent: #FFB81C;
+    /* NHL gold */
     --color-dark: #1a1a1a;
     --color-light: #f5f5f5;
     --color-white: #ffffff;
@@ -399,17 +491,33 @@ body {
 }
 
 /* ===== Typography ===== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-family-heading);
     line-height: 1.2;
     margin-bottom: var(--spacing-sm);
     color: var(--color-primary);
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
 
 /* ===== Layout ===== */
 .container {
@@ -585,7 +693,9 @@ input[type="checkbox"] {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ===== Tables ===== */
@@ -677,8 +787,13 @@ input[type="checkbox"] {
         grid-template-columns: 1fr;
     }
 
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.5rem; }
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
 }
 
 /* ===== Accessibility ===== */
@@ -904,6 +1019,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):

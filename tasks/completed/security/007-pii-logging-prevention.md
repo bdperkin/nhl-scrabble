@@ -56,6 +56,7 @@ logger.debug(f"Processing player: {player.firstName} {player.lastName}")  # PII!
 import re
 import logging
 
+
 class PIISanitizer(logging.Filter):
     """Filter to sanitize PII from log records."""
 
@@ -93,10 +94,12 @@ class PIISanitizer(logging.Filter):
 import logging
 from typing import Any
 
+
 def safe_log_player(logger: logging.Logger, player: Any) -> None:
     """Log player info with PII sanitization."""
     # Log only non-PII fields
     logger.debug(f"Processing player: position={player.positionCode}")
+
 
 def safe_log_api_response(logger: logging.Logger, response: dict) -> None:
     """Log API response with sensitive fields redacted."""
@@ -113,6 +116,7 @@ def safe_log_api_response(logger: logging.Logger, response: dict) -> None:
 ```python
 # src/nhl_scrabble/logging_config.py
 from nhl_scrabble.logging_sanitizer import PIISanitizer
+
 
 def setup_logging(verbose: bool = False) -> None:
     logger = logging.getLogger("nhl_scrabble")
@@ -131,9 +135,9 @@ def setup_logging(verbose: bool = False) -> None:
 class PIISanitizer(logging.Filter):
     SAFE_FIELDS = {
         "team_abbrev",  # TOR, MTL, etc. - not PII
-        "position",     # Forward, Defense
-        "score",        # Scrabble score
-        "division",     # Division name
+        "position",  # Forward, Defense
+        "score",  # Scrabble score
+        "division",  # Division name
     }
 
     def is_safe_field(self, field_name: str) -> bool:
@@ -172,6 +176,7 @@ def test_sanitizer_redacts_player_names():
     sanitizer.filter(record)
     assert "Connor McDavid" not in record.msg
     assert "[REDACTED-PLAYER_NAME]" in record.msg
+
 
 def test_sanitizer_preserves_safe_data():
     sanitizer = PIISanitizer()

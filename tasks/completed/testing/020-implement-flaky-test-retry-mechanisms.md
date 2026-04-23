@@ -44,13 +44,13 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
-    "--verbose",
-    "--strict-markers",
-    "--strict-config",
-    "--cov=src/nhl_scrabble",
-    "--cov-report=term-missing:skip-covered",
-    "--cov-report=html",
-    "--cov-report=xml",
+  "--verbose",
+  "--strict-markers",
+  "--strict-config",
+  "--cov=src/nhl_scrabble",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=html",
+  "--cov-report=xml",
 ]
 ```
 
@@ -141,8 +141,8 @@ Rationale:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    # ... existing dependencies ...
-    "pytest-rerunfailures>=14.0",  # Automatic test retries for flaky tests
+  # ... existing dependencies ...
+  "pytest-rerunfailures>=14.0", # Automatic test retries for flaky tests
 ]
 ```
 
@@ -160,7 +160,7 @@ pip install -e ".[test]"
 [tool.pytest.ini_options]
 # ... existing options ...
 markers = [
-    "flaky: mark test as flaky (will be retried on failure)",
+  "flaky: mark test as flaky (will be retried on failure)",
 ]
 ```
 
@@ -171,6 +171,7 @@ markers = [
 ```python
 # tests/integration/test_web_interactivity.py
 import pytest
+
 
 @pytest.mark.flaky(reruns=3, reruns_delay=1)
 def test_analyze_with_different_parameters(client, top_players, top_team_players):
@@ -197,18 +198,17 @@ def test_analyze_with_different_parameters(client, top_players, top_team_players
 ```python
 # High flakiness - SQLite cache issues
 @pytest.mark.flaky(reruns=3, reruns_delay=2)
-def test_with_sqlite_cache():
-    ...
+def test_with_sqlite_cache(): ...
+
 
 # Medium flakiness - Network timeouts
 @pytest.mark.flaky(reruns=2, reruns_delay=1)
-def test_api_call_with_timeout():
-    ...
+def test_api_call_with_timeout(): ...
+
 
 # Low flakiness - Rare race conditions
 @pytest.mark.flaky(reruns=1)
-def test_with_potential_race_condition():
-    ...
+def test_with_potential_race_condition(): ...
 ```
 
 ### Phase 4: Update CI Configuration (1 hour)
@@ -217,11 +217,11 @@ def test_with_potential_race_condition():
 
 ```yaml
 # .github/workflows/test.yml
-- name: Run tests with coverage
-  run: |
-    # Flaky tests will automatically retry via @pytest.mark.flaky markers
-    # No global --reruns flag needed (selective is better)
-    pytest --verbose --cov --cov-report=xml
+  - name: Run tests with coverage
+    run: |
+      # Flaky tests will automatically retry via @pytest.mark.flaky markers
+      # No global --reruns flag needed (selective is better)
+      pytest --verbose --cov --cov-report=xml
 ```
 
 **Tox Configuration**:
@@ -243,8 +243,8 @@ Add to test output configuration to show retry information:
 # pyproject.toml
 [tool.pytest.ini_options]
 addopts = [
-    # ... existing options ...
-    "-v",  # Verbose mode shows retry attempts
+  # ... existing options ...
+  "-v", # Verbose mode shows retry attempts
 ]
 ```
 
@@ -299,6 +299,7 @@ def pytest_configure(config):
         "markers",
         "flaky: mark test as flaky (will be retried on failure)",
     )
+
 
 def pytest_runtest_makereport(item, call):
     """Track retry attempts for reporting."""
@@ -369,14 +370,17 @@ Test retry behavior in isolation:
 # tests/unit/test_retry_markers.py
 import pytest
 
+
 def test_flaky_marker_exists():
     """Verify flaky marker is registered."""
     assert "flaky" in pytest.mark._markers
+
 
 @pytest.mark.flaky(reruns=2)
 def test_retry_eventually_succeeds():
     """Test that fails first time but succeeds on retry."""
     import random
+
     if random.random() < 0.5:  # Fail ~50% of the time
         pytest.fail("Simulated flake")
     assert True

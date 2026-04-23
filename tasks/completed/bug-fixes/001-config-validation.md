@@ -51,7 +51,9 @@ def from_env(cls) -> "Config":
             return value
         except ValueError as e:
             if "invalid literal" in str(e):
-                raise ValueError(f"{key} must be a valid integer, got '{value_str}'") from e
+                raise ValueError(
+                    f"{key} must be a valid integer, got '{value_str}'"
+                ) from e
             raise
 
     def get_float(key: str, default: str, min_value: float = 0.0) -> float:
@@ -64,13 +66,17 @@ def from_env(cls) -> "Config":
             return value
         except ValueError as e:
             if "could not convert" in str(e):
-                raise ValueError(f"{key} must be a valid number, got '{value_str}'") from e
+                raise ValueError(
+                    f"{key} must be a valid number, got '{value_str}'"
+                ) from e
             raise
 
     return cls(
         api_timeout=get_int("NHL_SCRABBLE_API_TIMEOUT", "10", min_value=1),
         api_retries=get_int("NHL_SCRABBLE_API_RETRIES", "3", min_value=0),
-        rate_limit_delay=get_float("NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0),
+        rate_limit_delay=get_float(
+            "NHL_SCRABBLE_RATE_LIMIT_DELAY", "0.3", min_value=0.0
+        ),
         top_players=get_int("NHL_SCRABBLE_TOP_PLAYERS", "20", min_value=1),
         top_team_players=get_int("NHL_SCRABBLE_TOP_TEAM_PLAYERS", "5", min_value=1),
         verbose=os.getenv("NHL_SCRABBLE_VERBOSE", "false").lower() == "true",

@@ -33,12 +33,12 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
-    "--strict-markers",
-    "--strict-config",
-    "--cov=nhl_scrabble",
-    "--cov-report=term-missing:skip-covered",
-    "--cov-report=html",
-    "--cov-report=xml",
+  "--strict-markers",
+  "--strict-config",
+  "--cov=nhl_scrabble",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=html",
+  "--cov-report=xml",
 ]
 # No parallelization configured
 ```
@@ -75,12 +75,12 @@ Add pytest-xdist with auto-detection of CPU cores for optimal parallelization:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",  # Add parallel execution
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",
+  "pytest-xdist>=3.5.0",    # Add parallel execution
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 
@@ -95,20 +95,21 @@ python_functions = ["test_*"]
 
 # Enable parallel execution by default
 addopts = [
-    "--strict-markers",
-    "--strict-config",
-    "-n", "auto",  # Auto-detect CPU cores and parallelize
-    "--cov=nhl_scrabble",
-    "--cov-report=term-missing:skip-covered",
-    "--cov-report=html",
-    "--cov-report=xml",
+  "--strict-markers",
+  "--strict-config",
+  "-n",
+  "auto",                                   # Auto-detect CPU cores and parallelize
+  "--cov=nhl_scrabble",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=html",
+  "--cov-report=xml",
 ]
 
 markers = [
-    "unit: Unit tests",
-    "integration: Integration tests",
-    "slow: Slow running tests",
-    "no_parallel: Tests that must run sequentially (e.g., @pytest.mark.no_parallel)",
+  "unit: Unit tests",
+  "integration: Integration tests",
+  "slow: Slow running tests",
+  "no_parallel: Tests that must run sequentially (e.g., @pytest.mark.no_parallel)",
 ]
 ```
 
@@ -130,8 +131,8 @@ commands =
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Run tests with coverage
-  run: pytest --cov --cov-report=xml --cov-report=term -n 2
+  - name: Run tests with coverage
+    run: pytest --cov --cov-report=xml --cov-report=term -n 2
   # Explicitly use 2 workers for GitHub Actions 2-core runners
 ```
 
@@ -140,6 +141,7 @@ commands =
 ```python
 # For tests that must run sequentially (rare)
 import pytest
+
 
 @pytest.mark.no_parallel
 def test_that_must_run_alone():
@@ -358,6 +360,7 @@ def test_isolated():
     scorer = ScrabbleScorer()  # Fresh instance per test
     assert scorer.calculate_score("TEST") == 4
 
+
 # ✅ Good: Using fixtures (pytest handles isolation)
 def test_with_fixture(tmp_path):
     # tmp_path is unique per test even in parallel
@@ -365,12 +368,15 @@ def test_with_fixture(tmp_path):
     file.write_text("data")
     assert file.read_text() == "data"
 
+
 # ❌ Bad: Shared global state (will fail in parallel)
 GLOBAL_CACHE = {}
+
 
 def test_that_modifies_global():
     GLOBAL_CACHE["key"] = "value"  # Race condition!
     assert GLOBAL_CACHE["key"] == "value"
+
 
 # Fix: Use fixtures or mark as no_parallel
 @pytest.mark.no_parallel

@@ -31,11 +31,11 @@ The project currently has:
 
 ```yaml
 # .pre-commit-config.yaml (current)
-- repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.29.1
-  hooks:
-    - id: check-github-workflows
-    - id: check-dependabot
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.29.1
+    hooks:
+      - id: check-github-workflows
+      - id: check-dependabot
 ```
 
 **Configuration Files Needing Validation:**
@@ -81,23 +81,15 @@ The project currently has:
         name: check Codecov config
         description: Validate .codecov.yml against Codecov schema
         files: ^\.codecov\.ya?ml$
-        args:
-          [
-            --schemafile,
-            https://json.schemastore.org/codecov.json,
-            --verbose,
-          ]
+        args: [--schemafile, https://json.schemastore.org/codecov.json,
+              --verbose]
 
       - id: check-jsonschema
         name: check pre-commit config
         description: Validate .pre-commit-config.yaml against schema
         files: ^\.pre-commit-config\.ya?ml$
-        args:
-          [
-            --schemafile,
-            https://json.schemastore.org/pre-commit-config.json,
-            --verbose,
-          ]
+        args: [--schemafile, https://json.schemastore.org/pre-commit-config.json,
+          --verbose]
 ```
 
 **Why Pre-commit:**
@@ -222,11 +214,11 @@ coverage:
 
 ```yaml
 # Error: Invalid hook configuration
-- repo: https://github.com/example/repo
-  rev: v1.0.0
-  hooks:
-    - id: hook-name
-      invalid_key: value  # Not valid
+  - repo: https://github.com/example/repo
+    rev: v1.0.0
+    hooks:
+      - id: hook-name
+        invalid_key: value # Not valid
 
 # Fix: Remove invalid_key or check documentation
 ```

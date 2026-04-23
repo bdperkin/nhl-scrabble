@@ -64,7 +64,7 @@ make uv-init
 source .venv/bin/activate
 
 # Run tests (10x faster with tox-uv)
-tox -e py310
+tox -e py312
 
 # Run pre-commit (9x faster)
 make uv-pre-commit
@@ -124,7 +124,7 @@ make uv-run           # Run application
 
 ```bash
 tox                   # All environments (with UV!)
-tox -e py310          # Specific environment
+tox -e py312          # Specific environment
 tox -p auto           # Parallel (very fast)
 make tox-parallel     # Via Makefile
 ```
@@ -175,7 +175,7 @@ make uv-pre-commit         # Run all hooks
 ```bash
 make tox                   # All environments (UV-accelerated)
 make tox-parallel          # Parallel execution
-make tox-py310             # Python 3.10
+make tox-py312             # Python 3.12
 make tox-coverage          # Coverage report
 # ... all tox targets use UV automatically
 ```
@@ -186,22 +186,25 @@ make tox-coverage          # Coverage report
 
 ```toml
 [tool.uv]
-managed = true              # Enable UV dependency management
-package = true              # This is a Python package
-compile-bytecode = true     # Compile .pyc files for faster imports
-link-mode = "copy"          # Copy files instead of linking
+managed = true          # Enable UV dependency management
+package = true          # This is a Python package
+compile-bytecode = true # Compile .pyc files for faster imports
+link-mode = "copy"      # Copy files instead of linking
 
 [project.optional-dependencies]
 dev = [
-    "tox-uv>=1.0.0",  # Tox with UV
-    # ... other deps
+  "tox-uv>=1.0.0", # Tox with UV
+  # ... other deps
 ]
 ```
 
 ### .python-version
 
 ```
-3.10
+3.12
+3.13
+3.14
+3.15
 ```
 
 UV (and pyenv/asdf) will use this file to select the Python version for the project.
@@ -242,7 +245,7 @@ source .venv/bin/activate
 uv pip install new-package
 
 # Run tests (fast!)
-tox -e py310
+tox -e py312
 
 # Pre-commit check (fast!)
 make uv-pre-commit
@@ -270,16 +273,16 @@ make uv-pre-commit
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Install UV
-  uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
+  - name: Install UV
+    uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
 
-- name: Install dependencies
-  run: uv pip install -e ".[dev]" --system
+  - name: Install dependencies
+    run: uv pip install -e ".[dev]" --system
 
-- name: Run tests
-  run: tox -p auto
+  - name: Run tests
+    run: tox -p auto
 ```
 
 ## Environment Variables
@@ -372,9 +375,9 @@ python -m venv .venv
 
 ```yaml
 # Always use UV in CI for speed
-- uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
+  - uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
 ```
 
 ### 4. Use Makefile Targets
@@ -405,7 +408,7 @@ Moving from pip/virtualenv to UV:
 - [ ] Verify: `make uv-check`
 - [ ] Create env: `make uv-venv`
 - [ ] Install deps: `make uv-install-dev`
-- [ ] Test: `tox -e py310` (uses tox-uv automatically)
+- [ ] Test: `tox -e py312` (uses tox-uv automatically)
 - [ ] Pre-commit: `make uv-pre-commit-install`
 - [ ] Update CI: Add `astral-sh/setup-uv@v4`
 - [ ] Document: Update team docs
@@ -456,7 +459,7 @@ source .venv/bin/activate
 
 ```bash
 make uv-install-dev    # Install deps
-tox -e py310           # Run tests
+tox -e py312           # Run tests
 make uv-pre-commit     # Check code
 ```
 

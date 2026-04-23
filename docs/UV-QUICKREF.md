@@ -21,7 +21,7 @@ make uv-check
 | ------------------ | ---------------------------------- | ------------------------------------------- |
 | **Setup**          |                                    |                                             |
 | Check uv installed | `make uv-check`                    | `uv --version`                              |
-| Create venv        | `make uv-venv`                     | `uv venv .venv --python python3.10`         |
+| Create venv        | `make uv-venv`                     | `uv venv .venv --python python3.12`         |
 | Full init          | `make uv-init`                     | (multiple steps)                            |
 | **Install**        |                                    |                                             |
 | Install package    | `make uv-install`                  | `uv pip install -e .`                       |
@@ -91,11 +91,11 @@ git commit -m "Update dependencies"
 
 ```yaml
 # GitHub Actions
-- name: Install uv
-  uses: astral-sh/setup-uv@v4
+  - name: Install uv
+    uses: astral-sh/setup-uv@v4
 
-- name: Install dependencies
-  run: uv pip install -e ".[dev]" --system
+  - name: Install dependencies
+    run: uv pip install -e ".[dev]" --system
 ```
 
 ## Tips & Tricks
@@ -185,16 +185,16 @@ make uv-install-dev
 | File              | Purpose                                                          |
 | ----------------- | ---------------------------------------------------------------- |
 | `pyproject.toml`  | UV config in `[tool.uv]` section, dependencies, project metadata |
-| `.python-version` | Python version (3.10) - read by UV, pyenv, and asdf              |
+| `.python-version` | Python version (3.12-3.15) - read by UV, pyenv, and asdf         |
 
 **Example [tool.uv] configuration:**
 
 ```toml
 [tool.uv]
-managed = true              # Enable UV dependency management
-package = true              # This is a Python package
-compile-bytecode = true     # Compile .pyc files for faster imports
-link-mode = "copy"          # Copy files instead of linking
+managed = true          # Enable UV dependency management
+package = true          # This is a Python package
+compile-bytecode = true # Compile .pyc files for faster imports
+link-mode = "copy"      # Copy files instead of linking
 ```
 
 ## Resources

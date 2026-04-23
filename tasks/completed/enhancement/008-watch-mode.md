@@ -32,6 +32,7 @@ nhl-scrabble watch --teams TOR,MTL --interval 30
 ```python
 import time
 
+
 def watch_mode(interval: int = 300):
     while True:
         data = analyze()

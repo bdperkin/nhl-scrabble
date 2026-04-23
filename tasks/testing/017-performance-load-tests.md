@@ -25,6 +25,7 @@ Implement performance and load testing to measure page load times, response time
 ```python
 def test_homepage_performance(page_fixture):
     import time
+
     page = IndexPage(page_fixture)
 
     start = time.time()
@@ -41,6 +42,7 @@ def test_homepage_performance(page_fixture):
 
 ```python
 from locust import HttpUser, task, between
+
 
 class WebsiteUser(HttpUser):
     wait_time = between(1, 3)

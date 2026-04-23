@@ -58,6 +58,7 @@ nhl-scrabble trends --start 20202021 --end 20232024
 import json
 from pathlib import Path
 
+
 class HistoricalDataStore:
     def __init__(self, data_dir: Path = Path("data/historical")):
         self.data_dir = data_dir

@@ -26,6 +26,7 @@ from nhl_scrabble.i18n import get_translator
 
 _ = get_translator()
 
+
 class InteractiveShell:
     def run(self):
         print(_("Welcome to NHL Scrabble Interactive Mode"))

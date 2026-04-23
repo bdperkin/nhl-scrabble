@@ -580,13 +580,13 @@ Documentation is built automatically in CI:
 ```yaml
 # .github/workflows/docs.yml
 
-- name: Build all formats
-  run: |
-    make docs-html
-    make docs-man
-    make docs-texinfo
-    make docs-text
-    # PDF build optional (may fail on CI)
+  - name: Build all formats
+    run: |
+      make docs-html
+      make docs-man
+      make docs-texinfo
+      make docs-text
+      # PDF build optional (may fail on CI)
 ```
 
 **GitHub Pages:**
@@ -686,7 +686,13 @@ texinfo_documents = [
 
 # LaTeX/PDF configuration
 latex_documents = [
-    ("index", "nhl-scrabble.tex", "NHL Scrabble Documentation", "Brandon Perkins", "manual"),
+    (
+        "index",
+        "nhl-scrabble.tex",
+        "NHL Scrabble Documentation",
+        "Brandon Perkins",
+        "manual",
+    ),
 ]
 
 # Text output configuration

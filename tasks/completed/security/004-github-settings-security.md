@@ -196,7 +196,7 @@ gh api repos/bdperkin/nhl-scrabble/automated-security-fixes -X PUT
 **Create `.github/workflows/codeql.yml`**:
 
 ```yaml
-name: "CodeQL Security Scanning"
+name: CodeQL Security Scanning
 
 on:
   push:
@@ -205,7 +205,7 @@ on:
     branches: [main]
   schedule:
     # Weekly scan on Monday at 6 AM UTC
-    - cron: '0 6 * * 1'
+    - cron: 0 6 * * 1
 
 jobs:
   analyze:
@@ -219,7 +219,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['python']
+        language: [python]
 
     steps:
       - name: Checkout repository
@@ -238,7 +238,7 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: /language:${{matrix.language}}
 ```
 
 **Features**:
@@ -884,9 +884,14 @@ Successfully implemented all critical and high-priority security improvements:
 
    ```json
    {
-     "required_status_checks": ["Pre-commit checks", "Test on Python 3.10-3.13"],
+     "required_status_checks": [
+       "Pre-commit checks",
+       "Test on Python 3.10-3.13"
+     ],
      "strict": true,
-     "required_pull_request_reviews": {"required_approving_review_count": 0},
+     "required_pull_request_reviews": {
+       "required_approving_review_count": 0
+     },
      "allow_force_pushes": false,
      "allow_deletions": false,
      "required_conversation_resolution": true,

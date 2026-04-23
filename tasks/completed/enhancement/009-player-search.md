@@ -35,6 +35,7 @@ nhl-scrabble search --min-score 50
 ```python
 from difflib import get_close_matches
 
+
 class PlayerSearch:
     def search(self, query: str, fuzzy: bool = True):
         all_players = self.get_all_players()

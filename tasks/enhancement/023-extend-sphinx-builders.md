@@ -78,7 +78,7 @@ epub_title = project
 epub_author = author
 epub_publisher = author
 epub_copyright = copyright
-epub_exclude_files = ['search.html']
+epub_exclude_files = ["search.html"]
 epub_tocdepth = 3
 ```
 
@@ -154,10 +154,10 @@ epub_title = project
 epub_author = author
 epub_publisher = "Brandon Perkins"
 epub_copyright = copyright
-epub_exclude_files = ['search.html']
+epub_exclude_files = ["search.html"]
 epub_tocdepth = 3
 epub_tocdup = True
-epub_show_urls = 'footnote'
+epub_show_urls = "footnote"
 epub_use_index = True
 
 # Gettext configuration (for i18n)

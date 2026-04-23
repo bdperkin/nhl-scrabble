@@ -23,20 +23,20 @@ The project currently has minimal caching implemented in `.github/workflows/ci.y
 **UV Caching (Enabled in test and tox jobs):**
 
 ```yaml
-- name: Install uv
-  uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true
-    cache-dependency-glob: "pyproject.toml"
+  - name: Install uv
+    uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true
+      cache-dependency-glob: pyproject.toml
 ```
 
 **UV Caching (DISABLED in pre-commit job):**
 
 ```yaml
-- name: Install uv
-  uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: false  # ❌ Caching disabled!
+  - name: Install uv
+    uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: false # ❌ Caching disabled!
 ```
 
 ### Missing Caching Opportunities
@@ -87,11 +87,11 @@ Implement multi-level caching strategy for all CI jobs:
 **Change**:
 
 ```yaml
-- name: Install uv
-  uses: astral-sh/setup-uv@v4
-  with:
-    enable-cache: true  # ✅ Enable caching
-    cache-dependency-glob: "pyproject.toml"
+  - name: Install uv
+    uses: astral-sh/setup-uv@v4
+    with:
+      enable-cache: true # ✅ Enable caching
+      cache-dependency-glob: pyproject.toml
 ```
 
 **Benefit**: Cache UV packages for pre-commit dependencies
@@ -103,21 +103,22 @@ Implement multi-level caching strategy for all CI jobs:
 **Add after checkout step**:
 
 ```yaml
-- name: Cache pre-commit hooks
-  uses: actions/cache@v4
-  with:
-    path: ~/.cache/pre-commit
-    key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
-    restore-keys: |
-      pre-commit-${{ runner.os }}-
+  - name: Cache pre-commit hooks
+    uses: actions/cache@v4
+    with:
+      path: ~/.cache/pre-commit
+      key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml')
+        }}
+      restore-keys: |
+        pre-commit-${{ runner.os }}-
 
-- name: Cache Python dependencies
-  uses: actions/cache@v4
-  with:
-    path: ~/.cache/pip
-    key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
-    restore-keys: |
-      pip-${{ runner.os }}-
+  - name: Cache Python dependencies
+    uses: actions/cache@v4
+    with:
+      path: ~/.cache/pip
+      key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+      restore-keys: |
+        pip-${{ runner.os }}-
 ```
 
 **Cache Key Strategy**:
@@ -139,17 +140,18 @@ Implement multi-level caching strategy for all CI jobs:
 **Add after setup-python step**:
 
 ```yaml
-- name: Cache tool directories
-  uses: actions/cache@v4
-  with:
-    path: |
-      .pytest_cache
-      .mypy_cache
-      .ruff_cache
-    key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('src/**/*.py', 'tests/**/*.py') }}
-    restore-keys: |
-      tools-${{ runner.os }}-py${{ matrix.python-version }}-
-      tools-${{ runner.os }}-
+  - name: Cache tool directories
+    uses: actions/cache@v4
+    with:
+      path: |
+        .pytest_cache
+        .mypy_cache
+        .ruff_cache
+      key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{
+        hashFiles('src/**/*.py', 'tests/**/*.py') }}
+      restore-keys: |
+        tools-${{ runner.os }}-py${{ matrix.python-version }}-
+        tools-${{ runner.os }}-
 ```
 
 **Cache Key Strategy**:
@@ -172,14 +174,15 @@ Implement multi-level caching strategy for all CI jobs:
 **Add after checkout step**:
 
 ```yaml
-- name: Cache tox environments
-  uses: actions/cache@v4
-  with:
-    path: .tox
-    key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{ hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
-    restore-keys: |
-      tox-${{ runner.os }}-${{ matrix.tox-env }}-
-      tox-${{ runner.os }}-
+  - name: Cache tox environments
+    uses: actions/cache@v4
+    with:
+      path: .tox
+      key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{
+        hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
+      restore-keys: |
+        tox-${{ runner.os }}-${{ matrix.tox-env }}-
+        tox-${{ runner.os }}-
 ```
 
 **Cache Key Strategy**:
@@ -235,13 +238,14 @@ Implement multi-level caching strategy for all CI jobs:
 1. After checkout step, add cache step:
 
    ```yaml
-   - name: Cache pre-commit hooks
-     uses: actions/cache@v4
-     with:
-       path: ~/.cache/pre-commit
-       key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
-       restore-keys: |
-         pre-commit-${{ runner.os }}-
+     - name: Cache pre-commit hooks
+       uses: actions/cache@v4
+       with:
+         path: ~/.cache/pre-commit
+         key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml')
+           }}
+         restore-keys: |
+           pre-commit-${{ runner.os }}-
    ```
 
 ### Step 3: Add Python Dependency Cache
@@ -249,13 +253,13 @@ Implement multi-level caching strategy for all CI jobs:
 1. In same pre-commit job, add pip cache:
 
    ```yaml
-   - name: Cache Python dependencies
-     uses: actions/cache@v4
-     with:
-       path: ~/.cache/pip
-       key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
-       restore-keys: |
-         pip-${{ runner.os }}-
+     - name: Cache Python dependencies
+       uses: actions/cache@v4
+       with:
+         path: ~/.cache/pip
+         key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+         restore-keys: |
+           pip-${{ runner.os }}-
    ```
 
 ### Step 4: Add Tool Caches to Test Job
@@ -265,17 +269,18 @@ Implement multi-level caching strategy for all CI jobs:
 1. After setup-python step, add:
 
    ```yaml
-   - name: Cache tool directories
-     uses: actions/cache@v4
-     with:
-       path: |
-         .pytest_cache
-         .mypy_cache
-         .ruff_cache
-       key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('src/**/*.py', 'tests/**/*.py') }}
-       restore-keys: |
-         tools-${{ runner.os }}-py${{ matrix.python-version }}-
-         tools-${{ runner.os }}-
+     - name: Cache tool directories
+       uses: actions/cache@v4
+       with:
+         path: |
+           .pytest_cache
+           .mypy_cache
+           .ruff_cache
+         key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{
+           hashFiles('src/**/*.py', 'tests/**/*.py') }}
+         restore-keys: |
+           tools-${{ runner.os }}-py${{ matrix.python-version }}-
+           tools-${{ runner.os }}-
    ```
 
 ### Step 5: Add Tox Environment Cache
@@ -285,14 +290,15 @@ Implement multi-level caching strategy for all CI jobs:
 1. After checkout step, add:
 
    ```yaml
-   - name: Cache tox environments
-     uses: actions/cache@v4
-     with:
-       path: .tox
-       key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{ hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
-       restore-keys: |
-         tox-${{ runner.os }}-${{ matrix.tox-env }}-
-         tox-${{ runner.os }}-
+     - name: Cache tox environments
+       uses: actions/cache@v4
+       with:
+         path: .tox
+         key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{
+           hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
+         restore-keys: |
+           tox-${{ runner.os }}-${{ matrix.tox-env }}-
+           tox-${{ runner.os }}-
    ```
 
 ### Step 6: Update .gitignore (if needed)

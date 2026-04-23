@@ -38,7 +38,7 @@ name: Nightly Comprehensive Testing
 on:
   schedule:
     # Run every night at 2 AM UTC
-    - cron: '0 2 * * *'
+    - cron: 0 2 * * *
   workflow_dispatch:
 
 permissions:
@@ -53,7 +53,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.15-dev']
+        python-version: ['3.12', '3.13', '3.14', 3.15-dev]
 
     steps:
       - name: Checkout repository

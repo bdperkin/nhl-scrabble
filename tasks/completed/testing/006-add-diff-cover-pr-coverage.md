@@ -39,19 +39,19 @@ Coverage is tracked for the entire codebase using pytest-cov:
 source = ["src"]
 branch = true
 omit = [
-    "*/tests/*",
-    "*/__main__.py",
+  "*/tests/*",
+  "*/__main__.py",
 ]
 
 [tool.coverage.report]
 exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
-    "@abstractmethod",
+  "pragma: no cover",
+  "def __repr__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "@abstractmethod",
 ]
 precision = 2
 show_missing = true
@@ -109,16 +109,16 @@ Add diff-cover to analyze coverage on changed lines only:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",
-    "pytest-randomly>=3.15.0",
-    "pytest-sugar>=1.0.0",
-    "pytest-clarity>=1.0.1",
-    "diff-cover>=8.0.0",  # Add diff coverage reporting
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",
+  "pytest-xdist>=3.5.0",
+  "pytest-randomly>=3.15.0",
+  "pytest-sugar>=1.0.0",
+  "pytest-clarity>=1.0.1",
+  "diff-cover>=8.0.0",       # Add diff coverage reporting
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 
@@ -138,8 +138,8 @@ include_paths = ["src/"]
 
 # Exclude patterns
 exclude_paths = [
-    "tests/",
-    "*/__main__.py",
+  "tests/",
+  "*/__main__.py",
 ]
 ```
 
@@ -454,8 +454,8 @@ include_paths = ["src/"]
 
 # Patterns to exclude (default: none)
 exclude_paths = [
-    "tests/",
-    "*/__main__.py",
+  "tests/",
+  "*/__main__.py",
 ]
 
 # Ignore whitespace in diff (default: false)
@@ -497,14 +497,14 @@ diff-cover coverage.xml --exclude=tests/
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Run diff coverage
-  run: tox -e diff-cover
+  - name: Run diff coverage
+    run: tox -e diff-cover
 
-- name: Comment on PR with diff coverage
-  if: github.event_name == 'pull_request'
-  run: |
-    diff-cover coverage.xml --markdown-report=diff-cover.md
-    gh pr comment ${{ github.event.pull_request.number }} --body-file=diff-cover.md
+  - name: Comment on PR with diff coverage
+    if: github.event_name == 'pull_request'
+    run: |
+      diff-cover coverage.xml --markdown-report=diff-cover.md
+      gh pr comment ${{ github.event.pull_request.number }} --body-file=diff-cover.md
 ```
 
 **Threshold Guidelines**:

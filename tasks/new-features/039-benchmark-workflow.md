@@ -48,14 +48,14 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/*.py'
-      - 'tests/benchmark/**'
-      - 'pyproject.toml'
+      - src/**/*.py
+      - tests/benchmark/**
+      - pyproject.toml
   pull_request:
     paths:
-      - 'src/**/*.py'
-      - 'tests/benchmark/**'
-      - 'pyproject.toml'
+      - src/**/*.py
+      - tests/benchmark/**
+      - pyproject.toml
   workflow_dispatch:
 
 permissions:
@@ -386,28 +386,30 @@ import pytest
 from nhl_scrabble.scoring import ScrabbleScorer
 from nhl_scrabble.models import Player
 
+
 @pytest.fixture
 def scorer():
     return ScrabbleScorer()
 
+
 @pytest.fixture
 def sample_player():
     return Player(
-        firstName="Alexander",
-        lastName="Ovechkin",
-        sweaterNumber=8,
-        positionCode="L"
+        firstName="Alexander", lastName="Ovechkin", sweaterNumber=8, positionCode="L"
     )
+
 
 def test_score_calculation_benchmark(benchmark, scorer):
     """Benchmark basic score calculation."""
     result = benchmark(scorer.calculate_score, "Ovechkin")
     assert result > 0
 
+
 def test_score_player_benchmark(benchmark, scorer, sample_player):
     """Benchmark player scoring."""
     result = benchmark(scorer.score_player, sample_player)
     assert result.total_score > 0
+
 
 def test_large_name_benchmark(benchmark, scorer):
     """Benchmark scoring of very long names."""

@@ -138,12 +138,12 @@ Using `pytest-mock` and `unittest.mock`:
 ```python
 def test_fetch_roster(mocker):
     # Mock external API
-    mock_get = mocker.patch('requests.get')
+    mock_get = mocker.patch("requests.get")
     mock_get.return_value.json.return_value = {...}
 
     # Test our code
     client = NHLApiClient()
-    roster = client.fetch_roster('TOR')
+    roster = client.fetch_roster("TOR")
 
     # Verify
     assert len(roster) == 25
@@ -180,6 +180,7 @@ def test_<function>_<scenario>_<expected>():
 def test_calculate_score_simple_name_returns_correct_value():
     """Test that calculate_score returns correct value for simple name."""
 
+
 def test_fetch_roster_api_failure_raises_exception():
     """Test that fetch_roster raises exception on API failure."""
 ```
@@ -207,16 +208,14 @@ Reusable test data in `conftest.py`:
 def sample_player():
     """Sample player for testing."""
     return Player(
-        firstName="Alexander",
-        lastName="Ovechkin",
-        sweaterNumber=8,
-        positionCode="L"
+        firstName="Alexander", lastName="Ovechkin", sweaterNumber=8, positionCode="L"
     )
+
 
 @pytest.fixture
 def mock_nhl_api(mocker):
     """Mock NHL API responses."""
-    mock_get = mocker.patch('requests.get')
+    mock_get = mocker.patch("requests.get")
     mock_get.return_value.json.return_value = {...}
     return mock_get
 ```
@@ -226,12 +225,15 @@ def mock_nhl_api(mocker):
 Test multiple inputs efficiently:
 
 ```python
-@pytest.mark.parametrize("name,expected", [
-    ("A", 1),
-    ("Z", 10),
-    ("TEST", 4),
-    ("HELLO", 8),
-])
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("A", 1),
+        ("Z", 10),
+        ("TEST", 4),
+        ("HELLO", 8),
+    ],
+)
 def test_scores(name, expected):
     scorer = ScrabbleScorer()
     assert scorer.calculate_score(name) == expected
@@ -244,16 +246,16 @@ Tests run automatically on:
 - Every commit (pre-commit hooks)
 - Every push (GitHub Actions)
 - Every PR (required to pass)
-- Multiple Python versions (3.10, 3.11, 3.12, 3.13)
+- Multiple Python versions (3.12, 3.13, 3.14, 3.15)
 
 **CI workflow**:
 
 ```yaml
-- Run pre-commit hooks
-- Run pytest on py3.10, 3.11, 3.12, 3.13
-- Check coverage >80%
-- Run type checking (mypy)
-- Run linting (ruff)
+  - Run pre-commit hooks
+  - Run pytest on py3.12, 3.13, 3.14, 3.15
+  - Check coverage >80%
+  - Run type checking (mypy)
+  - Run linting (ruff)
 ```
 
 ## Trade-offs
@@ -297,6 +299,7 @@ Use Hypothesis for generative testing:
 ```python
 from hypothesis import given
 from hypothesis.strategies import text
+
 
 @given(text(alphabet=string.ascii_letters))
 def test_score_any_text(s):

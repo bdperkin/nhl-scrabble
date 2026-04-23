@@ -85,14 +85,14 @@ Add pytest-sugar for automatically enhanced test output with zero configuration:
 # pyproject.toml
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",
-    "pytest-randomly>=3.15.0",
-    "pytest-sugar>=1.0.0",  # Add enhanced output
-    "beautifulsoup4>=4.12.0",
+  "pytest>=8.0.0",
+  "pytest-cov>=4.1.0",
+  "pytest-mock>=3.12.0",
+  "pytest-timeout>=2.2.0",
+  "pytest-xdist>=3.5.0",
+  "pytest-randomly>=3.15.0",
+  "pytest-sugar>=1.0.0",     # Add enhanced output
+  "beautifulsoup4>=4.12.0",
 ]
 ```
 

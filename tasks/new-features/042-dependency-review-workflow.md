@@ -38,9 +38,9 @@ name: Dependency Review
 on:
   pull_request:
     paths:
-      - 'pyproject.toml'
-      - 'uv.lock'
-      - 'requirements*.txt'
+      - pyproject.toml
+      - uv.lock
+      - requirements*.txt
 
 permissions:
   contents: read

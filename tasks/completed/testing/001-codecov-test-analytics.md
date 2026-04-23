@@ -32,13 +32,13 @@ The project already has Codecov set up for coverage tracking:
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Upload coverage reports to Codecov
-  uses: codecov/codecov-action@v5
-  with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: ./coverage.xml
-    fail_ci_if_error: false
-    verbose: true
+  - name: Upload coverage reports to Codecov
+    uses: codecov/codecov-action@v5
+    with:
+      token: ${{ secrets.CODECOV_TOKEN }}
+      files: ./coverage.xml
+      fail_ci_if_error: false
+      verbose: true
 ```
 
 **Coverage Dashboard**: https://app.codecov.io/gh/bdperkin/nhl-scrabble
@@ -84,8 +84,8 @@ Enable Codecov Test Analytics by uploading test results to Codecov alongside cov
 1. **Install Codecov CLI** (in CI):
 
    ```yaml
-   - name: Install Codecov CLI
-     run: pip install codecov-cli
+     - name: Install Codecov CLI
+       run: pip install codecov-cli
    ```
 
 1. **Generate JUnit XML test results** (pytest already supports this):
@@ -153,7 +153,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
         # ...
     steps:
       # ... existing steps ...

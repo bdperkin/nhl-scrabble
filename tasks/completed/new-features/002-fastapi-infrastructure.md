@@ -50,11 +50,11 @@ if __name__ == "__main__":
 ```toml
 [project]
 dependencies = [
-    "requests>=2.31.0",
-    "rich>=13.7.0",
-    "pydantic>=2.5.0",
-    "click>=8.1.7",
-    "python-dotenv>=1.0.0",
+  "requests>=2.31.0",
+  "rich>=13.7.0",
+  "pydantic>=2.5.0",
+  "click>=8.1.7",
+  "python-dotenv>=1.0.0",
 ]
 ```
 
@@ -69,11 +69,11 @@ Update `pyproject.toml` to add web server dependencies:
 ```toml
 [project]
 dependencies = [
-    # ... existing dependencies ...
-    "fastapi>=0.110.0",
-    "uvicorn[standard]>=0.27.0",
-    "jinja2>=3.1.0",
-    "python-multipart>=0.0.9",
+  # ... existing dependencies ...
+  "fastapi>=0.110.0",
+  "uvicorn[standard]>=0.27.0",
+  "jinja2>=3.1.0",
+  "python-multipart>=0.0.9",
 ]
 ```
 
@@ -578,12 +578,15 @@ nhl-scrabble analyze    # New way
 ```python
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) == 1 or not sys.argv[1] in ["analyze", "serve"]:
         # No command specified, default to analyze for backwards compat
         from nhl_scrabble.cli import analyze
+
         analyze()
     else:
         from nhl_scrabble.cli import cli
+
         cli()
 ```
 
@@ -609,10 +612,10 @@ Consider making web dependencies optional:
 ```toml
 [project.optional-dependencies]
 web = [
-    "fastapi>=0.110.0",
-    "uvicorn[standard]>=0.27.0",
-    "jinja2>=3.1.0",
-    "python-multipart>=0.0.9",
+  "fastapi>=0.110.0",
+  "uvicorn[standard]>=0.27.0",
+  "jinja2>=3.1.0",
+  "python-multipart>=0.0.9",
 ]
 ```
 

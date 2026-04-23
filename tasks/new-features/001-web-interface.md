@@ -53,11 +53,13 @@ from nhl_scrabble.processors import TeamProcessor, PlayoffCalculator
 app = FastAPI(
     title="NHL Scrabble Analyzer",
     description="Analyze NHL player names by Scrabble score",
-    version="2.0.0"
+    version="2.0.0",
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="src/nhl_scrabble/web/static"), name="static")
+app.mount(
+    "/static", StaticFiles(directory="src/nhl_scrabble/web/static"), name="static"
+)
 
 # Templates
 templates = Jinja2Templates(directory="src/nhl_scrabble/web/templates")
@@ -65,17 +67,19 @@ templates = Jinja2Templates(directory="src/nhl_scrabble/web/templates")
 # Cache for analysis results
 analysis_cache = {}
 
+
 @app.get("/", response_class=HTMLResponse)
 async def home():
     """Home page with analysis form."""
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 @app.post("/api/analyze")
 async def analyze(
     background_tasks: BackgroundTasks,
     top_players: int = 20,
     top_team_players: int = 5,
-    use_cache: bool = True
+    use_cache: bool = True,
 ):
     """Run NHL Scrabble analysis."""
     cache_key = f"{top_players}_{top_team_players}"
@@ -88,10 +92,7 @@ async def analyze(
 
     # Run analysis
     try:
-        config = Config(
-            top_players=top_players,
-            top_team_players=top_team_players
-        )
+        config = Config(top_players=top_players, top_team_players=top_team_players)
 
         with NHLClient() as client:
             # Fetch data
@@ -108,15 +109,13 @@ async def analyze(
             }
 
             # Cache result
-            analysis_cache[cache_key] = {
-                "timestamp": datetime.now(),
-                "data": result
-            }
+            analysis_cache[cache_key] = {"timestamp": datetime.now(), "data": result}
 
             return result
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/api/players/{player_id}")
 async def get_player(player_id: int):
@@ -124,11 +123,13 @@ async def get_player(player_id: int):
     # Implementation
     pass
 
+
 @app.get("/api/teams/{team_abbrev}")
 async def get_team(team_abbrev: str):
     """Get details for a specific team."""
     # Implementation
     pass
+
 
 @app.get("/api/cache/clear")
 async def clear_cache():
@@ -136,10 +137,12 @@ async def clear_cache():
     analysis_cache.clear()
     return {"message": "Cache cleared"}
 
+
 @app.get("/health")
 async def health():
     """Health check endpoint."""
     return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
 
 def run_server(host: str = "0.0.0.0", port: int = 8000):
     """Run the FastAPI server."""
@@ -153,54 +156,67 @@ def run_server(host: str = "0.0.0.0", port: int = 8000):
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NHL Scrabble Analyzer</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🏒 NHL Scrabble Analyzer</h1>
-            <p>Analyze NHL player names by Scrabble score</p>
-        </header>
-
-        <section class="controls">
-            <form hx-post="/api/analyze" hx-target="#results" hx-indicator="#loading">
-                <div class="form-group">
-                    <label for="top_players">Top Players:</label>
-                    <input type="number" id="top_players" name="top_players" value="20" min="1" max="100">
-                </div>
-
-                <div class="form-group">
-                    <label for="top_team_players">Top Team Players:</label>
-                    <input type="number" id="top_team_players" name="top_team_players" value="5" min="1" max="30">
-                </div>
-
-                <div class="form-group">
-                    <label for="use_cache">Use Cache:</label>
-                    <input type="checkbox" id="use_cache" name="use_cache" checked>
-                </div>
-
-                <button type="submit">Analyze</button>
-            </form>
-
-            <div id="loading" class="htmx-indicator">
-                <div class="spinner"></div>
-                <p>Fetching NHL data...</p>
-            </div>
-        </section>
-
-        <section id="results">
-            <!-- Results will be loaded here via HTMX -->
-        </section>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   NHL Scrabble Analyzer
+  </title>
+  <link href="/static/css/style.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/htmx.org@1.9.10">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+  </script>
+ </head>
+ <body>
+  <div class="container">
+   <header>
+    <h1>
+     🏒 NHL Scrabble Analyzer
+    </h1>
+    <p>
+     Analyze NHL player names by Scrabble score
+    </p>
+   </header>
+   <section class="controls">
+    <form hx-indicator="#loading" hx-post="/api/analyze" hx-target="#results">
+     <div class="form-group">
+      <label for="top_players">
+       Top Players:
+      </label>
+      <input id="top_players" max="100" min="1" name="top_players" type="number" value="20"/>
+     </div>
+     <div class="form-group">
+      <label for="top_team_players">
+       Top Team Players:
+      </label>
+      <input id="top_team_players" max="30" min="1" name="top_team_players" type="number" value="5"/>
+     </div>
+     <div class="form-group">
+      <label for="use_cache">
+       Use Cache:
+      </label>
+      <input checked="" id="use_cache" name="use_cache" type="checkbox"/>
+     </div>
+     <button type="submit">
+      Analyze
+     </button>
+    </form>
+    <div class="htmx-indicator" id="loading">
+     <div class="spinner">
+     </div>
+     <p>
+      Fetching NHL data...
+     </p>
     </div>
-
-    <script src="/static/js/app.js"></script>
-</body>
+   </section>
+   <section id="results">
+    <!-- Results will be loaded here via HTMX -->
+   </section>
+  </div>
+  <script src="/static/js/app.js">
+  </script>
+ </body>
 </html>
 ```
 
@@ -264,7 +280,9 @@ function sortTable(header) {
     rows.sort((a, b) => {
         const aValue = a.cells[index].textContent;
         const bValue = b.cells[index].textContent;
-        return aValue.localeCompare(bValue, undefined, {numeric: true});
+        return aValue.localeCompare(bValue, undefined, {
+            numeric: true
+        });
     });
 
     rows.forEach(row => tbody.appendChild(row));
@@ -311,6 +329,7 @@ from nhl_scrabble.web.app import app
 
 client = TestClient(app)
 
+
 def test_home_page():
     """Test home page loads."""
     response = client.get("/")
@@ -318,18 +337,19 @@ def test_home_page():
     assert response.status_code == 200
     assert "NHL Scrabble Analyzer" in response.text
 
+
 def test_analyze_endpoint():
     """Test analyze API endpoint."""
-    response = client.post("/api/analyze", json={
-        "top_players": 20,
-        "top_team_players": 5,
-        "use_cache": False
-    })
+    response = client.post(
+        "/api/analyze",
+        json={"top_players": 20, "top_team_players": 5, "use_cache": False},
+    )
 
     assert response.status_code == 200
     data = response.json()
     assert "top_players" in data
     assert "team_standings" in data
+
 
 def test_health_endpoint():
     """Test health check endpoint."""
@@ -339,6 +359,7 @@ def test_health_endpoint():
     data = response.json()
     assert data["status"] == "healthy"
 
+
 def test_clear_cache_endpoint():
     """Test cache clear endpoint."""
     response = client.get("/api/cache/clear")
@@ -346,12 +367,13 @@ def test_clear_cache_endpoint():
     assert response.status_code == 200
     assert response.json()["message"] == "Cache cleared"
 
+
 def test_invalid_parameters():
     """Test API handles invalid parameters."""
-    response = client.post("/api/analyze", json={
-        "top_players": -5,  # Invalid
-        "top_team_players": 5
-    })
+    response = client.post(
+        "/api/analyze",
+        json={"top_players": -5, "top_team_players": 5},  # Invalid
+    )
 
     assert response.status_code == 422  # Validation error
 ```
@@ -387,11 +409,11 @@ Add to `pyproject.toml`:
 ```toml
 [project]
 dependencies = [
-    # ... existing ...
-    "fastapi>=0.110.0",
-    "uvicorn[standard]>=0.27.0",
-    "jinja2>=3.1.0",
-    "python-multipart>=0.0.9",
+  # ... existing ...
+  "fastapi>=0.110.0",
+  "uvicorn[standard]>=0.27.0",
+  "jinja2>=3.1.0",
+  "python-multipart>=0.0.9",
 ]
 ```
 

@@ -27,7 +27,9 @@ def _make_request(self, endpoint: str) -> dict[str, Any]:
             # ... handle response ...
         except requests.RequestException as e:
             if attempt < self.retries:
-                logger.warning(f"Request failed (attempt {attempt + 1}/{self.retries + 1}): {e}")
+                logger.warning(
+                    f"Request failed (attempt {attempt + 1}/{self.retries + 1}): {e}"
+                )
                 time.sleep(1)  # <-- Fixed 1 second delay
                 continue
             raise
@@ -73,7 +75,9 @@ class NHLClient:
         self.max_backoff = max_backoff
         # ...
 
-    def _calculate_backoff_delay(self, attempt: int, retry_after: int | None = None) -> float:
+    def _calculate_backoff_delay(
+        self, attempt: int, retry_after: int | None = None
+    ) -> float:
         """Calculate backoff delay with exponential backoff and jitter.
 
         Args:
@@ -119,7 +123,9 @@ class NHLClient:
                         time.sleep(delay)
                         continue
                     else:
-                        raise NHLApiError(f"Rate limited after {self.retries + 1} attempts")
+                        raise NHLApiError(
+                            f"Rate limited after {self.retries + 1} attempts"
+                        )
 
                 # ... handle other response codes ...
 
@@ -132,7 +138,9 @@ class NHLClient:
                     )
                     time.sleep(delay)
                     continue
-                raise NHLApiError(f"Request failed after {self.retries + 1} attempts") from e
+                raise NHLApiError(
+                    f"Request failed after {self.retries + 1} attempts"
+                ) from e
 ```
 
 ## Configuration
@@ -202,8 +210,9 @@ def test_calculate_backoff_delay_respects_retry_after():
 def test_retry_with_exponential_backoff():
     """Test that retries use exponential backoff."""
     with NHLClient(retries=3) as client:
-        with patch("requests.Session.get") as mock_get, patch("time.sleep") as mock_sleep:
-
+        with patch("requests.Session.get") as mock_get, patch(
+            "time.sleep"
+        ) as mock_sleep:
             # First 3 attempts fail, 4th succeeds
             mock_get.side_effect = [
                 requests.RequestException("Error 1"),
@@ -226,8 +235,9 @@ def test_retry_with_exponential_backoff():
 def test_429_rate_limit_with_retry_after():
     """Test that 429 responses with Retry-After are handled."""
     with NHLClient(retries=2) as client:
-        with patch("requests.Session.get") as mock_get, patch("time.sleep") as mock_sleep:
-
+        with patch("requests.Session.get") as mock_get, patch(
+            "time.sleep"
+        ) as mock_sleep:
             # First attempt: 429 with Retry-After, second: success
             rate_limit_response = Mock()
             rate_limit_response.status_code = 429

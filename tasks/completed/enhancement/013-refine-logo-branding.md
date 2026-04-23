@@ -94,6 +94,7 @@ import os
 from pathlib import Path
 from PIL import Image, ImageDraw
 
+
 def refine_logo_tiles():
     """Refine logo tile positioning and sizing."""
     # Load tile components
@@ -101,6 +102,7 @@ def refine_logo_tiles():
     # Ensure consistent sizing
     # Return refined tile composition
     pass
+
 
 def refine_hockey_stick_overlap():
     """Adjust hockey stick overlap with other elements."""
@@ -110,14 +112,15 @@ def refine_hockey_stick_overlap():
     # Return refined composition
     pass
 
+
 def generate_logo_variants(base_logo):
     """Generate logo in multiple sizes and formats."""
     sizes = {
-        'favicon': (32, 32),
-        'small': (128, 128),
-        'medium': (256, 256),
-        'large': (512, 512),
-        'banner': (1200, 400),
+        "favicon": (32, 32),
+        "small": (128, 128),
+        "medium": (256, 256),
+        "large": (512, 512),
+        "banner": (1200, 400),
     }
 
     variants = {}
@@ -127,17 +130,19 @@ def generate_logo_variants(base_logo):
 
     return variants
 
+
 def save_branding_assets(variants):
     """Save all branding assets to appropriate locations."""
     output_paths = {
-        'favicon': 'docs/_static/favicon.ico',
-        'logo': 'docs/_static/logo.png',
-        'banner': 'README_banner.png',
+        "favicon": "docs/_static/favicon.ico",
+        "logo": "docs/_static/logo.png",
+        "banner": "README_banner.png",
     }
 
     for name, path in output_paths.items():
         if name in variants:
             variants[name].save(path)
+
 
 def main():
     """Main branding generation workflow."""
@@ -158,6 +163,7 @@ def main():
     print("  - docs/_static/logo.png")
     print("  - docs/_static/favicon.ico")
     print("  - README_banner.png")
+
 
 if __name__ == "__main__":
     main()

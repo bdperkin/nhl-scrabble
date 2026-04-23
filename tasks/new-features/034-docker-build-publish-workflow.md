@@ -60,16 +60,16 @@ on:
     branches:
       - main
     tags:
-      - 'v*'
+      - v*
     paths:
-      - 'src/**'
-      - 'pyproject.toml'
-      - 'Dockerfile'
-      - '.github/workflows/docker.yml'
+      - src/**
+      - pyproject.toml
+      - Dockerfile
+      - .github/workflows/docker.yml
   pull_request:
     paths:
-      - 'Dockerfile'
-      - '.github/workflows/docker.yml'
+      - Dockerfile
+      - .github/workflows/docker.yml
   workflow_dispatch:
 
 env:
@@ -136,20 +136,22 @@ jobs:
       - name: Run Trivy security scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{
+            steps.meta.outputs.version }}
+          format: sarif
+          output: trivy-results.sarif
 
       - name: Upload Trivy results to GitHub Security
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: trivy-results.sarif
 
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{
+            steps.meta.outputs.version }}
           format: spdx-json
           output-file: sbom-spdx.json
 
