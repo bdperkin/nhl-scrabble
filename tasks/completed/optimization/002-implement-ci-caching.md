@@ -107,7 +107,7 @@ Implement multi-level caching strategy for all CI jobs:
     uses: actions/cache@v4
     with:
       path: ~/.cache/pre-commit
-      key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') 
+      key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml')
         }}
       restore-keys: |
         pre-commit-${{ runner.os }}-
@@ -147,7 +147,7 @@ Implement multi-level caching strategy for all CI jobs:
         .pytest_cache
         .mypy_cache
         .ruff_cache
-      key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{ 
+      key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{
         hashFiles('src/**/*.py', 'tests/**/*.py') }}
       restore-keys: |
         tools-${{ runner.os }}-py${{ matrix.python-version }}-
@@ -178,7 +178,7 @@ Implement multi-level caching strategy for all CI jobs:
     uses: actions/cache@v4
     with:
       path: .tox
-      key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{ 
+      key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{
         hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
       restore-keys: |
         tox-${{ runner.os }}-${{ matrix.tox-env }}-
@@ -242,7 +242,7 @@ Implement multi-level caching strategy for all CI jobs:
        uses: actions/cache@v4
        with:
          path: ~/.cache/pre-commit
-         key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') 
+         key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml')
            }}
          restore-keys: |
            pre-commit-${{ runner.os }}-
@@ -276,7 +276,7 @@ Implement multi-level caching strategy for all CI jobs:
            .pytest_cache
            .mypy_cache
            .ruff_cache
-         key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{ 
+         key: tools-${{ runner.os }}-py${{ matrix.python-version }}-${{
            hashFiles('src/**/*.py', 'tests/**/*.py') }}
          restore-keys: |
            tools-${{ runner.os }}-py${{ matrix.python-version }}-
@@ -294,7 +294,7 @@ Implement multi-level caching strategy for all CI jobs:
        uses: actions/cache@v4
        with:
          path: .tox
-         key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{ 
+         key: tox-${{ runner.os }}-${{ matrix.tox-env }}-${{
            hashFiles('pyproject.toml', 'tox.ini', 'uv.lock') }}
          restore-keys: |
            tox-${{ runner.os }}-${{ matrix.tox-env }}-

@@ -86,7 +86,7 @@ jobs:
 
           stale-issue-label: stale
           close-issue-label: closed-by-bot
-          exempt-issue-labels: 
+          exempt-issue-labels:
             keep-open,pinned,security,good-first-issue,help-wanted,enhancement,bug
 
           # PR-specific settings (more aggressive)

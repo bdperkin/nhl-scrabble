@@ -136,7 +136,7 @@ jobs:
       - name: Run Trivy security scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ 
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{
             steps.meta.outputs.version }}
           format: sarif
           output: trivy-results.sarif
@@ -150,7 +150,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ 
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{
             steps.meta.outputs.version }}
           format: spdx-json
           output-file: sbom-spdx.json

@@ -312,7 +312,9 @@ def track_overall_analysis(self, num_teams: int):
 
         # Main task (overall progress)
         main_task = progress.add_task(
-            "NHL Scrabble Analysis", total=3, status="Starting..."  # 3 main phases
+            "NHL Scrabble Analysis",
+            total=3,
+            status="Starting...",  # 3 main phases
         )
 
         # Sub-task for current operation

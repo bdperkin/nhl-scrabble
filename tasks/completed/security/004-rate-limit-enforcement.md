@@ -277,8 +277,7 @@ class NHLApiClient:
         )
 
         logger.info(
-            f"Rate limiter initialized: {rate_limit_max_requests} "
-            f"requests per {rate_limit_window}s"
+            f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s"
         )
 
     def _make_request(self, method: str, url: str) -> dict[str, Any]:

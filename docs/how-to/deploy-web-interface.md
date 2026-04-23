@@ -466,7 +466,7 @@ services:
     github:
       repo: yourusername/nhl-scrabble
       branch: main
-    run_command: gunicorn nhl_scrabble.web.app:app -k 
+    run_command: gunicorn nhl_scrabble.web.app:app -k
       uvicorn.workers.UvicornWorker
     http_port: 8000
     instance_count: 2

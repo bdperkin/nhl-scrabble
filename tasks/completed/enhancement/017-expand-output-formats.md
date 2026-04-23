@@ -218,10 +218,10 @@ def generate_html_output(data: dict) -> str:
     for rank, team in enumerate(data["teams"], 1):
         html += f"""            <tr>
                 <td>{rank}</td>
-                <td>{team['abbrev']}</td>
-                <td>{team['total_score']}</td>
-                <td>{team['top_player']['name']}</td>
-                <td>{team['top_player']['score']}</td>
+                <td>{team["abbrev"]}</td>
+                <td>{team["total_score"]}</td>
+                <td>{team["top_player"]["name"]}</td>
+                <td>{team["top_player"]["score"]}</td>
             </tr>
 """
 

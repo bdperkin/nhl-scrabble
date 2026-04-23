@@ -371,7 +371,8 @@ def test_clear_cache_endpoint():
 def test_invalid_parameters():
     """Test API handles invalid parameters."""
     response = client.post(
-        "/api/analyze", json={"top_players": -5, "top_team_players": 5}  # Invalid
+        "/api/analyze",
+        json={"top_players": -5, "top_team_players": 5},  # Invalid
     )
 
     assert response.status_code == 422  # Validation error

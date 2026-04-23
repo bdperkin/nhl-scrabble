@@ -213,7 +213,6 @@ def test_retry_with_exponential_backoff():
         with patch("requests.Session.get") as mock_get, patch(
             "time.sleep"
         ) as mock_sleep:
-
             # First 3 attempts fail, 4th succeeds
             mock_get.side_effect = [
                 requests.RequestException("Error 1"),
@@ -239,7 +238,6 @@ def test_429_rate_limit_with_retry_after():
         with patch("requests.Session.get") as mock_get, patch(
             "time.sleep"
         ) as mock_sleep:
-
             # First attempt: 429 with Retry-After, second: success
             rate_limit_response = Mock()
             rate_limit_response.status_code = 429

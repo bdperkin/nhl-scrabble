@@ -77,7 +77,7 @@ $ grep bandit tox.ini
       - id: bandit
         name: bandit
         description: Security vulnerability detection for Python code
-        args: [--configfile, pyproject.toml, --severity-level, medium, 
+        args: [--configfile, pyproject.toml, --severity-level, medium,
               --confidence-level, medium]
         # Skip tests directory (test code uses assert, mock patterns)
         exclude: ^tests/

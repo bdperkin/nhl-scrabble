@@ -4,7 +4,6 @@
 # 65 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
-# NOTE: Using black 24.10 as authoritative formatter (ruff-format disabled)
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
@@ -233,16 +232,16 @@ repos:
         exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21  # NOTE: Pinned to 0.7.21 (1.0.0 has dependency resolution issues)
+    rev: 1.0.0
     hooks:
       - id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
         additional_dependencies:
+          # - mdformat-black  # Code block formatting
+          # - mdformat-config  # YAML/TOML block formatting
           - mdformat-gfm  # GitHub Flavored Markdown support
-          - mdformat-black  # Code block formatting
-          - mdformat-config  # YAML/TOML block formatting
-          - mdformat-ruff  # Python code block linting integration
-          - mdformat-web  # HTML/CSS/JS block formatting
+          # - mdformat-ruff  # Python code block linting integration
+          # - mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
         # Exclude GitHub issue templates (YAML frontmatter incompatible) and generated docs
         exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md)
@@ -274,7 +273,7 @@ repos:
         # Format code blocks in documentation (RST, Markdown)
         # Exclude files with pseudo-code and doctest examples (>>> prompts)
         args: [--line-length=100]
-        additional_dependencies: [black==24.10.0]
+        additional_dependencies: [black==26.3.1]
         exclude: ^(tasks/|\.claude/commands/|docs/(how-to/(run-tests|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/))
 
   - repo: https://github.com/econchick/interrogate
@@ -456,7 +455,7 @@ repos:
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
-        # NOTE: ruff-format disabled - using black 24.10 as authoritative formatter
+        # NOTE: ruff-format disabled - using black as authoritative formatter
         # to avoid formatting conflicts between black and ruff on assert statements
         # - id: ruff-format
 

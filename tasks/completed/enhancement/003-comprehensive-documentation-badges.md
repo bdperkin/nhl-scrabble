@@ -295,8 +295,8 @@ Add pre-commit hook to validate badge URLs:
     hooks:
       - id: check-badge-urls
         name: Check README badge URLs
-        entry: python -c "import re, sys; content = open('README.md').read(); 
-          badges = re.findall(r'\[!\[.*?\]\((.*?)\)\]', content); print(f'Found 
+        entry: python -c "import re, sys; content = open('README.md').read();
+          badges = re.findall(r'\[!\[.*?\]\((.*?)\)\]', content); print(f'Found
           {len(badges)} badges'); sys.exit(0)"
         language: system
         files: README.md

@@ -81,7 +81,7 @@ The project currently has:
         name: check Codecov config
         description: Validate .codecov.yml against Codecov schema
         files: ^\.codecov\.ya?ml$
-        args: [--schemafile, https://json.schemastore.org/codecov.json, 
+        args: [--schemafile, https://json.schemastore.org/codecov.json,
               --verbose]
 
       - id: check-jsonschema

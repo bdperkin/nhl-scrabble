@@ -320,8 +320,7 @@ def validate_api_response_structure(
 
     if missing_keys:
         raise ValidationError(
-            f"{context} missing required keys: {missing_keys}. "
-            f"Available keys: {list(data.keys())}"
+            f"{context} missing required keys: {missing_keys}. Available keys: {list(data.keys())}"
         )
 
     return data

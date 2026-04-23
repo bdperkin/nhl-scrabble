@@ -202,6 +202,7 @@ per-file-ignores = [
     "src/nhl_scrabble/validators.py:C901",  # validate_file_path complexity from comprehensive security checks
     "src/nhl_scrabble/cli.py:TC003,C901",  # Path used at runtime; run_analysis complexity from error handling
     "src/nhl_scrabble/config_validators.py:C901",  # validate_safe_path complexity from path traversal checks
+    "scripts/update_dependencies.py:C901",  # Complexity acceptable for CLI utility script
 ]
 max-complexity = 10  # Match ruff's mccabe max-complexity
 exclude = [
@@ -251,7 +252,7 @@ exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info"]
 # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
 # Align with ruff's configuration for consistency
 line-length = 100  # Match ruff's line-length
-target-version = ["py310", "py311", "py312", "py313"]  # All supported versions (3.10-3.14)
+target-version = ["py310"]
 skip-string-normalization = false  # Use double quotes (matches ruff's quote-style)
 skip-magic-trailing-comma = false  # Respect magic trailing commas
 # Exclude patterns (align with other tool exclusions)
@@ -361,6 +362,13 @@ ignore = [
 "scripts/generate_branding.py" = [
     "T201",    # print statements are fine in CLI script
     "PLR0915", # Too many statements in main() (straightforward CLI script)
+]
+"scripts/update_dependencies.py" = [
+    "T201",    # print statements are fine in CLI utility script
+    "C901",    # Complexity acceptable for CLI utility functions
+    "PLR0912", # Too many branches acceptable for dependency update logic
+    "PLR0915", # Too many statements acceptable for comprehensive CLI script
+    "S607",    # Subprocess with partial paths (standard tools: pre-commit, uv, pytest, tox)
 ]
 "src/nhl_scrabble/api/nhl_client.py" = [
     "C901",    # get_team_roster complexity from retry + 429 handling

@@ -228,7 +228,9 @@ def run_analysis(config: Config, clear_cache: bool = False) -> str:
     # ... existing code ...
 
     team_processor = TeamProcessor(
-        api_client, scorer, max_workers=config.max_concurrent_requests  # NEW
+        api_client,
+        scorer,
+        max_workers=config.max_concurrent_requests,  # NEW
     )
 
     # ... rest of code ...

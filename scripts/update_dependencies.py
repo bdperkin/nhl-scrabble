@@ -21,7 +21,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import NamedTuple
 
 try:
     import tomllib  # Python 3.11+
@@ -235,9 +235,7 @@ class DependencyUpdater:
 
         return updates
 
-    def update_pyproject_toml(
-        self, pyproject_file: Path, updates: dict[str, UpdateInfo]
-    ) -> bool:
+    def update_pyproject_toml(self, pyproject_file: Path, updates: dict[str, UpdateInfo]) -> bool:
         """Update dependency versions in a pyproject.toml file.
 
         Args:
@@ -495,7 +493,7 @@ class DependencyUpdater:
 
 
 def main() -> int:
-    """Main entry point.
+    """Execute the dependency update process.
 
     Returns:
         Exit code (0 for success, 1 for failure)

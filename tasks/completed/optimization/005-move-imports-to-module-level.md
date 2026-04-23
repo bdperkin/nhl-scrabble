@@ -344,7 +344,7 @@ def test_import_overhead_removed():
     avg_time = elapsed / iterations
     assert avg_time < 0.01, f"Too slow: {avg_time:.3f}s per call"
 
-    print(f"Average time: {avg_time*1000:.2f}ms per call")
+    print(f"Average time: {avg_time * 1000:.2f}ms per call")
 ```
 
 ## Acceptance Criteria

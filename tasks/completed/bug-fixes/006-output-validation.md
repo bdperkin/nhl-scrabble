@@ -72,8 +72,7 @@ def validate_output_path(output: str | None) -> None:
     # Check if directory exists
     if not os.path.exists(output_dir):
         raise click.ClickException(
-            f"Output directory does not exist: {output_dir}\n"
-            f"Create it first: mkdir -p {output_dir}"
+            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}"
         )
 
     # Check if directory is writable

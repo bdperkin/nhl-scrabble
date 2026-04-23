@@ -155,7 +155,7 @@ jobs:
           files: dist/*
           body_path: final_release_notes.md
           draft: false
-          prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 
+          prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref,
             'beta') || contains(github.ref, 'alpha') }}
           generate_release_notes: false  # We provide our own
           fail_on_unmatched_files: true
@@ -210,7 +210,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The workflow automatically detects pre-releases:
 
 ```yaml
-prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') || 
+prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') ||
   contains(github.ref, 'alpha') }}
 ```
 

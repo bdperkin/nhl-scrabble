@@ -30,7 +30,9 @@ def generate(self, data: tuple[...]) -> str:
 
     # ❌ Sorts all ~700 players to get top 20
     top_players = sorted(
-        all_players, key=lambda x: x.full_score, reverse=True  # ~700 items
+        all_players,
+        key=lambda x: x.full_score,
+        reverse=True,  # ~700 items
     )[
         : self.top_players_count
     ]  # Take only 20
@@ -44,7 +46,9 @@ def generate(self, data: tuple[...]) -> str:
 ```python
 # ❌ Sorts all team players to get top 5
 top_players = sorted(
-    team_data.players, key=lambda x: x.full_score, reverse=True  # ~25 players per team
+    team_data.players,
+    key=lambda x: x.full_score,
+    reverse=True,  # ~25 players per team
 )[
     : self.top_players_per_team
 ]  # Take only 5
