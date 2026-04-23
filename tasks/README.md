@@ -108,7 +108,6 @@ Each task includes:
 | 010 | Python 3.14 and 3.15-dev Support                              | MEDIUM   | 3-5 hours                                                  | Completed | [#217](https://github.com/bdperkin/nhl-scrabble/issues/217) | -                                                                        |
 | 011 | Hyperlink Documentation to External Resources                 | LOW      | 2-4 hours                                                  | Completed | [#223](https://github.com/bdperkin/nhl-scrabble/issues/223) | PR [#327](https://github.com/bdperkin/nhl-scrabble/pull/327), 2026-04-22 |
 | 012 | Enhance Implement-Task Skill with Pre-Flight Validation       | MEDIUM   | 1-2 hours                                                  | Completed | [#225](https://github.com/bdperkin/nhl-scrabble/issues/225) | -                                                                        |
-| 013 | Refine Project Logo Tiles and Hockey Stick Overlap            | MEDIUM   | 1-2 hours                                                  | Active    | [#227](https://github.com/bdperkin/nhl-scrabble/issues/227) | -                                                                        |
 | 015 | Add Standard Short Options to CLI Commands                    | MEDIUM   | 30-60 minutes                                              | Completed | [#229](https://github.com/bdperkin/nhl-scrabble/issues/229) | PR [#320](https://github.com/bdperkin/nhl-scrabble/pull/320), 2026-04-21 |
 | 016 | Format CLI Help Examples with Comments                        | LOW      | 15-30 minutes                                              | Completed | [#230](https://github.com/bdperkin/nhl-scrabble/issues/230) | PR #319, completed 2026-04-21                                            |
 | 017 | Expand CLI Output Formats                                     | MEDIUM   | 3-4 hours                                                  | Active    | [#231](https://github.com/bdperkin/nhl-scrabble/issues/231) | -                                                                        |
@@ -242,11 +241,11 @@ Each task includes:
 | Bug Fixes    | 0      | 7         | 7       |
 | Security     | 0      | 14        | 14      |
 | Optimization | 0      | 13        | 13      |
-| Enhancement  | 9      | 26        | 35      |
+| Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 18     | 7         | 25      |
-| **TOTAL**    | **71** | **96**    | **167** |
+| **TOTAL**    | **65** | **102**   | **167** |
 
 ### Effort Estimates by Category
 
@@ -295,7 +294,7 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (71 active, 96 completed)
+**Total Tasks**: 167 tasks (65 active, 102 completed)
 
 - **Total Estimated Effort**: 1031.5 hours
   - Active Tasks: 522.5 hours

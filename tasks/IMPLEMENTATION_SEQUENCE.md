@@ -1,7 +1,7 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-22 (fully synchronized)
-**Total Tasks**: 70 active tasks
+**Total Tasks**: 65 active tasks
 **Estimated Effort**: 529.0 hours
 **Strategy**: Priority-first with dependency awareness
 
@@ -162,7 +162,6 @@ ______________________________________________________________________
 /implement-task enhancement/020-colorized-log-output.md           # 30-60min, Issue #234
 
 # Advanced Tooling
-/implement-task enhancement/014-integrate-astral-ty-type-checker.md  # 2-3h, Issue #228
 /implement-task enhancement/021-tox-parallel-failfast.md          # 3-5h, Issue #283
 ```
 
@@ -196,7 +195,6 @@ ______________________________________________________________________
 
 ```bash
 # Branding Refinement
-/implement-task enhancement/013-refine-logo-branding.md           # 1-2h, Issue #227
 ```
 
 **Rationale**: Logo tiles and hockey stick overlap need adjustment. Independent task, visual quality improvement.
