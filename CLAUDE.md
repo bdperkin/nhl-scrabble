@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
 
 **Current Version:** 2.0.0
-**Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
+**Python:** [3.12-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
 **Pre-commit Hooks:** 67 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/), [refurb](https://github.com/dosisod/refurb), and [ssort](https://github.com/bwhmather/ssort))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
@@ -220,7 +220,7 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 
 **Python Modernization Hooks (2 from asottile/pyupgrade and local):**
 
-- `pyupgrade`: Modernize Python syntax for Python 3.10+ (f-strings, type hints, removes deprecated imports)
+- `pyupgrade`: Modernize Python syntax for Python 3.12+ (f-strings, type hints, removes deprecated imports)
 - `refurb`: Python code modernization linter (pathlib, comprehensions, modern idioms) - **warning mode, non-blocking**
 
 **Python Statement Sorting Hooks (1 from bwhmather/ssort):**
@@ -409,7 +409,7 @@ make tox                 # Default: parallel with tier-based fail-fast
 make tox-parallel        # Pure parallel (all environments)
 make tox-sequential      # Sequential (for debugging)
 make tox-quick           # Critical checks only (fast fail-fast)
-tox -e py310             # Test Python 3.10 (fast with tox-uv!)
+tox -e py312             # Test Python 3.10 (fast with tox-uv!)
 tox -e py315             # Test Python 3.15 (fast with tox-uv!)
 tox -m critical          # Run only critical quality checks
 tox -m test              # Run only tests
@@ -474,7 +474,7 @@ Central configuration for the entire project:
 [project]
 name = "nhl-scrabble"
 version = "2.0.0"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 
 [tool.uv]
 managed = true
@@ -789,7 +789,7 @@ jobs:
 
 **Python Version Testing:**
 
-- **Required**: Python 3.10, 3.11, 3.12, 3.13, 3.14 (must all pass)
+- **Required**: Python 3.12, 3.13, 3.14 (must all pass)
 - **Experimental**: Python 3.15-dev (`continue-on-error: true`, informational only)
 
 Python 3.15-dev is tested for early compatibility checking but failures do NOT block CI or prevent merging.
@@ -1210,7 +1210,7 @@ The project uses UV automatically via tox-uv:
 ## Project Statistics
 
 - **Package:** nhl-scrabble 2.0.0
-- **Python:** 3.10, 3.11, 3.12, 3.13, 3.14 (supported), 3.15-dev (experimental)
+- **Python:** 3.12, 3.13, 3.14 (supported), 3.15-dev (experimental)
 - **Lines of Code:** ~1,866 (src)
 - **Lines of Tests:** ~680 (tests)
 - **Test Coverage:** 49.93% overall, >90% on core modules

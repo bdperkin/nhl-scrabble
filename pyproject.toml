@@ -1,172 +1,135 @@
-# ============================================================================
-# NHL Scrabble - Project Configuration
-# ============================================================================
-# Organized by category for maintainability
-# Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
-
-# ============================================================================
-# Build System
-# ============================================================================
-
 [build-system]
-requires = ["hatchling"]
+requires = [
+    "hatchling",
+]
 build-backend = "hatchling.build"
-
-# ============================================================================
-# Project Metadata
-# ============================================================================
 
 [project]
 name = "nhl-scrabble"
 version = "2.0.0"
 description = "NHL Roster Scrabble Score Analyzer - Calculate Scrabble scores for NHL player names"
 readme = "README.md"
-requires-python = ">=3.10"
-license = {text = "MIT"}
+requires-python = ">=3.12"
 authors = [
-    {name = "Brandon Perkins", email = "bdperkin@gmail.com"}
+    { name = "Brandon Perkins", email = "bdperkin@gmail.com" },
 ]
-keywords = ["nhl", "scrabble", "hockey", "analytics", "sports"]
+keywords = [
+    "nhl",
+    "scrabble",
+    "hockey",
+    "analytics",
+    "sports",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Games/Entertainment",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-
 dependencies = [
-    "requests>=2.31.0",
-    "requests-cache>=1.2.0",
-    "certifi>=2023.0.0",  # SSL/TLS CA bundle for certificate verification
-    "click>=8.1.0",
-    "colorlog>=6.8.0",  # Colorized log output for better readability
-    "python-dotenv>=1.0.0",
-    "rich>=13.0.0",
-    "jinja2>=3.1.0",
-    "pyyaml>=6.0",  # YAML format support
-    "dicttoxml>=1.7.16",  # XML format conversion
-    "fastapi>=0.110.0",
+    "requests>=2.33.1",
+    "requests-cache>=1.3.1",
+    "certifi>=2026.4.22",
+    "click>=8.3.3",
+    "colorlog>=6.10.1",
+    "python-dotenv>=1.2.2",
+    "rich>=15.0.0",
+    "jinja2>=3.1.6",
+    "pyyaml>=6.0.3",
+    "dicttoxml>=1.7.16",
+    "fastapi>=0.136.1",
     "uvicorn[standard]>=0.27.0",
-    "starlette>=0.36.0",  # ASGI framework (FastAPI dependency, explicit for middleware)
-    "prompt-toolkit>=3.0.0",
-    "pydantic>=2.0.0",
+    "starlette>=1.0.0",
+    "prompt-toolkit>=3.0.52",
+    "pydantic>=2.13.3",
 ]
+
+[project.license]
+text = "MIT"
 
 [project.optional-dependencies]
-# Testing dependencies
 test = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.12.0",
-    "pytest-randomly>=3.15.0",
-    "pytest-rerunfailures>=14.0",  # Automatic test retries for flaky tests
-    "pytest-sugar>=1.0.0",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "pytest-mock>=3.15.1",
+    "pytest-randomly>=4.1.0",
+    "pytest-rerunfailures>=16.1",
+    "pytest-sugar>=1.1.1",
     "pytest-clarity>=1.0.1",
-    "pytest-timeout>=2.2.0",
-    "pytest-xdist>=3.5.0",
-    "pytest-benchmark>=4.0.0",
-    "diff-cover>=8.0.0",
-    "beautifulsoup4>=4.12.0",
-    "httpx>=0.27.0",  # Required for FastAPI TestClient
+    "pytest-timeout>=2.4.0",
+    "pytest-xdist>=3.8.0",
+    "pytest-benchmark>=5.2.3",
+    "diff-cover>=10.2.0",
+    "beautifulsoup4>=4.14.3",
+    "httpx>=0.28.1",
 ]
-
-# Code quality dependencies
 lint = [
-    "ruff>=0.3.0",
-    "refurb>=2.0.0",  # Python code modernization linter
+    "ruff>=0.15.11",
+    "refurb>=2.3.1",
 ]
-
 type = [
-    "mypy>=1.8.0",
-    "types-requests>=2.31.0",
-    "types-PyYAML>=6.0.0",  # Type stubs for PyYAML
-    "ty>=0.0.32",  # Astral's fast type checker (supplements mypy)
+    "mypy>=1.20.2",
+    "types-requests>=2.33.0.20260408",
+    "types-PyYAML>=6.0.12.20260408",
+    "ty>=0.0.32",
 ]
-
-# Security audit dependencies
 security = [
-    "pip-audit>=2.7.0",    # Scan dependencies for known vulnerabilities
-    "bandit[toml]>=1.7.5", # Security linter for Python code
-    "safety>=3.0.0",       # Check dependencies against vulnerability database
-    "pip-licenses>=4.3.0", # License compliance checking
+    "pip-audit>=2.10.0",
+    "bandit[toml]>=1.7.5",
+    "safety>=3.7.0",
+    "pip-licenses>=5.5.5",
 ]
-
-# Branding asset generation dependencies
 branding = [
-    "Pillow>=10.0.0",      # Image processing for PNG generation
-    "cairosvg>=2.7.0",     # SVG to PNG conversion
+    "Pillow>=12.2.0",
+    "cairosvg>=2.9.0",
 ]
-
-# Export dependencies for CSV/Excel output
 export = [
-    "openpyxl>=3.1.0",     # Excel file creation and formatting
+    "openpyxl>=3.1.5",
 ]
-
-# Comprehensive Sphinx documentation dependencies (9 extensions + markdown support + quality plugins)
 docs = [
-    "sphinx>=7.2.6",  # Core documentation engine
-    "sphinx-autobuild>=2024.2.4",  # Auto-rebuild during development
-    "sphinx-autodoc-typehints>=2.0.0",  # Type hint integration
-    "sphinx-copybutton>=0.5.2",  # Copy button for code blocks
-    "sphinx-design>=0.5.0",  # Modern UI components
-    "sphinx-rtd-theme>=2.0.0",  # Read the Docs theme
-    "sphinxcontrib-programoutput>=0.17",  # CLI output in docs
-    "sphinxcontrib-spelling>=8.0.0",  # Spell checking
-    "sphinxext-opengraph>=0.9.1",  # Social sharing metadata
-    "myst-parser>=2.0.0",  # Markdown support
-    # Quality plugins (enhancement/005)
-    "sphinx-sitemap>=2.5.1",  # SEO sitemap generation
-    "pytest-sphinx>=0.6.0",  # Documentation build testing
-    "blacken-docs>=1.16.0",  # Code formatting in docs
+    "sphinx>=9.1.0",
+    "sphinx-autobuild>=2025.8.25",
+    "sphinx-autodoc-typehints>=3.10.2",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.7.0",
+    "sphinx-rtd-theme>=3.1.0",
+    "sphinxcontrib-programoutput>=0.19",
+    "sphinxcontrib-spelling>=8.0.2",
+    "sphinxext-opengraph>=0.13.0",
+    "myst-parser>=5.0.0",
+    "sphinx-sitemap>=2.9.0",
+    "pytest-sphinx>=0.7.1",
+    "blacken-docs>=1.20.0",
 ]
-
-# Lightweight documentation generation
 docs-gen = [
-    "pdoc>=14.0.0",
+    "pdoc>=16.0.0",
 ]
-
-# Watch mode dependencies
 watch = [
     "pytest-watch",
 ]
-
-# Build dependencies
 build = [
     "build",
 ]
-
-# Publish dependencies
 publish = [
-    "twine>=5.0.0",
+    "twine>=6.2.0",
 ]
-
-# Tox dependencies
 tox = [
-    "tox>=4.0.0",
-    "tox-uv>=1.0.0",
+    "tox>=4.53.0",
+    "tox-uv>=1.35.1",
 ]
-
-# Complete development environment
 dev = [
     "nhl-scrabble[test,lint,type,security,docs,export,watch,build,publish,tox]",
-    "pre-commit>=3.6.0",
-    "check-jsonschema>=0.28.0",  # JSON/YAML schema validation
-    "tomli>=2.0.0; python_version < '3.11'",  # TOML reading for Python <3.11
-    "tomli-w>=1.0.0",  # TOML writing for dependency script
+    "pre-commit>=4.6.0",
+    "check-jsonschema>=0.37.1",
+    "tomli>=2.4.1",
+    "tomli-w>=1.2.0",
 ]
-
-
-# ============================================================================
-# Entry Points
-# ============================================================================
 
 [project.scripts]
 nhl-scrabble = "nhl_scrabble.cli:cli"
@@ -176,35 +139,29 @@ Homepage = "https://github.com/bdperkin/nhl-scrabble"
 Repository = "https://github.com/bdperkin/nhl-scrabble"
 Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
 
-# Hatchling configuration
 [tool.hatch.build.targets.wheel]
-packages = ["src/nhl_scrabble"]
+packages = [
+    "src/nhl_scrabble",
+]
 
-# Flake8 configuration
-# Note: flake8 doesn't natively support pyproject.toml
-# Using flake8-pyproject plugin to enable configuration here
 [tool.flake8]
-# Comprehensive linting (matches ruff's ALL rules philosophy as closely as possible)
-# Align with ruff's configuration
 max-line-length = 100
 extend-ignore = [
-    # Align with ruff's ignores where applicable
-    "E501",  # Line too long (handled by formatter)
-    "W503",  # Line break before binary operator (conflicts with modern style)
-    "E203",  # Whitespace before ':' (conflicts with black/ruff-format)
+    "E501",
+    "W503",
+    "E203",
 ]
-# Match ruff's target version and source paths
 per-file-ignores = [
-    "__init__.py:F401,F403",  # Unused imports in __init__.py (like ruff's per-file-ignores)
-    "tests/*:S101",  # Use of assert (pytest uses assert)
-    "src/nhl_scrabble/api/nhl_client.py:C901",  # get_team_roster complexity from retry logic
-    "src/nhl_scrabble/api_server/routes/players.py:C901",  # get_players complexity from filtering logic
-    "src/nhl_scrabble/validators.py:C901",  # validate_file_path complexity from comprehensive security checks
-    "src/nhl_scrabble/cli.py:TC003,C901",  # Path used at runtime; run_analysis complexity from error handling
-    "src/nhl_scrabble/config_validators.py:C901",  # validate_safe_path complexity from path traversal checks
-    "scripts/update_dependencies.py:C901",  # Complexity acceptable for CLI utility script
+    "__init__.py:F401,F403",
+    "tests/*:S101",
+    "src/nhl_scrabble/api/nhl_client.py:C901",
+    "src/nhl_scrabble/api_server/routes/players.py:C901",
+    "src/nhl_scrabble/validators.py:C901",
+    "src/nhl_scrabble/cli.py:TC003,C901",
+    "src/nhl_scrabble/config_validators.py:C901",
+    "scripts/update_dependencies.py:C901",
 ]
-max-complexity = 10  # Match ruff's mccabe max-complexity
+max-complexity = 10
 exclude = [
     ".git",
     ".tox",
@@ -219,205 +176,196 @@ exclude = [
     ".ruff_cache",
 ]
 
-# Autoflake configuration
 [tool.autoflake]
-# Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
-# Align with ruff's F401 (unused imports) and F841 (unused variables) rules
-check = true  # Check only mode (no changes) - use --check in pre-commit/tox
-in-place = false  # Don't modify files in place (safer default)
-remove-all-unused-imports = true  # Remove all unused imports (matches ruff F401)
-remove-unused-variables = true  # Remove unused variables (matches ruff F841)
-remove-duplicate-keys = true  # Remove duplicate keys in dictionaries
-ignore-init-module-imports = true  # Don't remove imports from __init__.py (matches ruff's per-file-ignores)
-# Exclude patterns (align with other tool exclusions)
-exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info", "__pycache__"]
-
-# Docformatter configuration
-[tool.docformatter]
-# Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
-# Align with ruff's configuration
-wrap_length = 100  # Match ruff's line-length
-wrap_summaries = 100  # Match ruff's line-length
-wrap_descriptions = 100  # Match ruff's line-length
-black = false  # Don't force Black-style multi-line for short docstrings
-style = "pep257"  # Follow PEP 257 docstring conventions
-make_summary_multi_line = false  # Only make multi-line when necessary
-close_quotes_on_newline = false  # Keep closing quotes on same line for short docstrings
-pre_summary_newline = false  # Don't add newline before summary (PEP 257 default)
-# Exclude patterns (align with other tool exclusions)
-exclude = [".git", ".tox", ".venv", "venv", "build", "dist", "*.egg-info"]
-
-# Black configuration
-[tool.black]
-# Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
-# Align with ruff's configuration for consistency
-line-length = 100  # Match ruff's line-length
-target-version = ["py310"]
-skip-string-normalization = false  # Use double quotes (matches ruff's quote-style)
-skip-magic-trailing-comma = false  # Respect magic trailing commas
-# Exclude patterns (align with other tool exclusions)
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.tox
-  | \.venv
-  | venv
-  | build
-  | dist
-  | \.egg-info
-  | __pycache__
-  | \.pytest_cache
-  | \.mypy_cache
-  | \.ruff_cache
-)/
-'''
-
-# Ruff configuration
-[tool.ruff]
-target-version = "py310"
-line-length = 100
-src = ["src", "tests"]
-
-[tool.ruff.lint]
-# Enable comprehensive rule sets for strict linting
-select = [
-    "ALL",  # Enable all rules by default
+check = true
+in-place = false
+remove-all-unused-imports = true
+remove-unused-variables = true
+remove-duplicate-keys = true
+ignore-init-module-imports = true
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
 ]
 
+[tool.docformatter]
+wrap_length = 100
+wrap_summaries = 100
+wrap_descriptions = 100
+black = false
+style = "pep257"
+make_summary_multi_line = false
+close_quotes_on_newline = false
+pre_summary_newline = false
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+]
+
+[tool.black]
+line-length = 100
+target-version = [
+    "py312",
+]
+skip-string-normalization = false
+skip-magic-trailing-comma = false
+extend-exclude = "/(\n  # directories\n  \\.eggs\n  | \\.git\n  | \\.tox\n  | \\.venv\n  | venv\n  | build\n  | dist\n  | \\.egg-info\n  | __pycache__\n  | \\.pytest_cache\n  | \\.mypy_cache\n  | \\.ruff_cache\n)/\n"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = [
+    "src",
+    "tests",
+]
+
+[tool.ruff.lint]
+select = [
+    "ALL",
+]
 ignore = [
-    # Formatter conflicts
-    "E501",    # Line too long (handled by formatter)
-    "COM812",  # Trailing comma missing (conflicts with formatter)
-    "ISC001",  # Single line implicit string concatenation (conflicts with formatter)
-
-    # Docstring rules (can be overly strict for internal code)
-    "D100",    # Missing docstring in public module
-    "D101",    # Missing docstring in public class
-    "D102",    # Missing docstring in public method
-    "D103",    # Missing docstring in public function
-    "D104",    # Missing docstring in public package
-    "D105",    # Missing docstring in magic method
-    "D106",    # Missing docstring in public nested class
-    "D107",    # Missing docstring in __init__
-    "D413",    # Missing blank line after last section (conflicts with docformatter)
-
-    # Stylistic choices that may be too opinionated
-    "FBT001",  # Boolean positional arg in function definition
-    "FBT002",  # Boolean default value in function definition
-
-    # Too strict for practical use
-    "TD002",   # Missing author in TODO
-    "TD003",   # Missing issue link in TODO
-    "FIX002",  # Line contains TODO
-    "EM101",   # Exception must not use a string literal
-    "EM102",   # Exception must not use an f-string literal
-    "TRY003",  # Avoid specifying long messages outside the exception class
-    "TRY300",  # Consider moving statement to else block
-    "TRY400",  # Use logging.exception instead of logging.error
-    "G004",    # Logging statement uses f-string (f-strings in logging are fine in Python 3.10+)
-    "PLR2004", # Magic value used in comparison
-    "PERF203", # try-except within loop (acceptable tradeoff)
-    "ANN401",  # Dynamically typed Any (sometimes necessary)
-    "PLC0206", # Extracting from dict without .items()
-    "TC001",   # Move imports into type-checking block (requires refactoring)
-    "PTH123",  # Use pathlib.Path.open() (not critical for this project)
-    "PERF102", # Use dict.values() when only using values
-    "RET504",  # Unnecessary assignment before return (stylistic choice)
-
-    # Not applicable or conflicts
-    "D203",    # 1 blank line required before class docstring (conflicts with D211)
-    "D213",    # Multi-line docstring summary should start at the second line (conflicts with D212)
-    "PYI034",  # __enter__ should return self (for stub files only)
-    "PYI036",  # __exit__ type annotations (for stub files only)
+    "E501",
+    "COM812",
+    "ISC001",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "D413",
+    "FBT001",
+    "FBT002",
+    "TD002",
+    "TD003",
+    "FIX002",
+    "EM101",
+    "EM102",
+    "TRY003",
+    "TRY300",
+    "TRY400",
+    "G004",
+    "PLR2004",
+    "PERF203",
+    "ANN401",
+    "PLC0206",
+    "TC001",
+    "PTH123",
+    "PERF102",
+    "RET504",
+    "D203",
+    "D213",
+    "PYI034",
+    "PYI036",
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = [
-    "F401",    # Unused imports in __init__.py
-    "D104",    # Missing docstring in public package
+    "F401",
+    "D104",
 ]
 "tests/**/*.py" = [
-    "ARG",     # Unused arguments in tests (fixtures)
-    "S101",    # Use of assert detected (pytest uses assert)
-    "PLR2004", # Magic value used in comparison
-    "ANN",     # Type annotations not required in tests
-    "PLC0415", # Conditional imports for test exceptions
-    "SLF001",  # Private member accessed (testing private methods is intentional)
+    "ARG",
+    "S101",
+    "PLR2004",
+    "ANN",
+    "PLC0415",
+    "SLF001",
 ]
 "src/nhl_scrabble/cli.py" = [
-    "T201",    # print statements are fine in CLI code
-    "PLC0415", # Conditional imports for CLI dependencies
-    "TC003",   # Path used at runtime, not just type checking
-    "C901",    # run_analysis complexity (11) from comprehensive error handling
+    "T201",
+    "PLC0415",
+    "TC003",
+    "C901",
 ]
 "src/nhl_scrabble/logging_config.py" = [
-    "PLC0415", # Conditional imports for logging configuration
-    "PERF403", # Dict comprehension optimization (acceptable for clarity)
+    "PLC0415",
+    "PERF403",
 ]
 "src/nhl_scrabble/__main__.py" = [
-    "T201",    # print statements are fine in __main__
+    "T201",
 ]
 "scripts/generate_branding.py" = [
-    "T201",    # print statements are fine in CLI script
-    "PLR0915", # Too many statements in main() (straightforward CLI script)
+    "T201",
+    "PLR0915",
 ]
 "scripts/update_dependencies.py" = [
-    "T201",    # print statements are fine in CLI utility script
-    "C901",    # Complexity acceptable for CLI utility functions
-    "PLR0911", # Too many returns acceptable for CLI script (9 return paths)
-    "PLR0912", # Too many branches acceptable for dependency update logic
-    "PLR0915", # Too many statements acceptable for comprehensive CLI script
-    "S607",    # Subprocess with partial paths (standard tools: pre-commit, uv, pytest, tox)
+    "T201",
+    "C901",
+    "PLR0911",
+    "PLR0912",
+    "PLR0915",
+    "S607",
 ]
 "src/nhl_scrabble/api/nhl_client.py" = [
-    "C901",    # get_team_roster complexity from retry + 429 handling
-    "PLR0912", # Too many branches from retry + 429 handling
+    "C901",
+    "PLR0912",
 ]
 "src/nhl_scrabble/api_server/routes/*.py" = [
-    "FAST002",  # FastAPI Query/Path params don't need Annotated (pre-3.10 style is fine)
-    "TRY301",   # Inline raises are fine in FastAPI route handlers
-    "ERA001",   # Commented code for clarity (e.g., "# standings_type == ...")
-    "C901",     # Route complexity from filtering logic is acceptable
+    "FAST002",
+    "TRY301",
+    "ERA001",
+    "C901",
 ]
 "tests/unit/test_nhl_client.py" = [
-    "SLF001",  # Private member access for testing internal methods
+    "SLF001",
 ]
 
 [tool.ruff.lint.mccabe]
-# Set maximum cyclomatic complexity
 max-complexity = 10
 
 [tool.ruff.lint.pylint]
-# Pylint settings
 max-args = 7
 max-branches = 12
 max-returns = 6
 max-statements = 50
 
 [tool.ruff.lint.isort]
-# Import sorting configuration
-known-first-party = ["nhl_scrabble"]
+known-first-party = [
+    "nhl_scrabble",
+]
 
-# Isort configuration
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = false
+
 [tool.isort]
-# Comprehensive import sorting (matches ruff's ALL rules philosophy)
-# Align with ruff's isort configuration for consistency
-profile = "black"  # Use Black-compatible profile (matches ruff-format and black)
-line_length = 100  # Match ruff's line-length
-known_first_party = ["nhl_scrabble"]  # Match ruff's known-first-party
-src_paths = ["src", "tests"]  # Match ruff's src
-skip_gitignore = true  # Respect .gitignore
-# Import section ordering (standard Python convention)
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]  # codespell:ignore
-# Formatting preferences
-multi_line_output = 3  # Vertical hanging indent (Black-compatible)
-include_trailing_comma = true  # Match Black/ruff-format
-force_grid_wrap = 0  # Match Black behavior
-use_parentheses = true  # Use parentheses for line continuation
-ensure_newline_before_comments = true  # Consistent comment spacing
-# Skip patterns (align with other tool exclusions)
+profile = "black"
+line_length = 100
+known_first_party = [
+    "nhl_scrabble",
+]
+src_paths = [
+    "src",
+    "tests",
+]
+skip_gitignore = true
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",  # codespell:ignore THIRDPARTY
+    "FIRSTPARTY",
+    "LOCALFOLDER",
+]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
 skip_glob = [
     ".eggs/*",
     ".git/*",
@@ -430,75 +378,39 @@ skip_glob = [
     "__pycache__/*",
 ]
 
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-docstring-code-format = false  # Use docformatter for docstring formatting
-
-# Refurb configuration - Python code modernization linter
-# Detects opportunities for pathlib, modern f-strings, dict merging,
-# list comprehensions, dataclasses, and other modern Python patterns
-# Docs: https://github.com/dosisod/refurb
 [tool.refurb]
-# Enable all checks by default (comprehensive approach like ruff's ALL rules)
 enable_all = true
-
-# Python version (match project requirements)
-python_version = "3.10"
-
-# Ignore specific checks (with justification)
-# Add patterns here as false positives are discovered
+python_version = "3.12"
 ignore = []
 
-# ssort - Python statement sorting
 [tool.ssort]
-# Sections to sort (in order):
-# 1. __future__ imports
-# 2. Module docstring
-# 3. Imports
-# 4. Module-level constants
-# 5. Module-level code
-# 6. Class definitions
-# 7. Function definitions
-
-# Skip sorting in these files
 skip = [
     "tests/fixtures/",
     "migrations/",
 ]
+src_paths = [
+    "src/",
+    "tests/",
+]
 
-# Files to sort (glob patterns)
-src_paths = ["src/", "tests/"]
-
-# MyPy configuration
 [tool.mypy]
-python_version = "3.10"
-
-# Enable strict mode (equivalent to all strict flags)
+python_version = "3.12"
 strict = true
-
-# Additional strict options beyond basic strict mode
 warn_unreachable = true
 warn_no_return = true
-disallow_any_unimported = false  # Too strict for third-party libs
-disallow_any_expr = false  # Too strict for practical use
-disallow_any_decorated = false  # Too strict for decorators
-disallow_any_explicit = false  # Too strict for practical use
+disallow_any_unimported = false
+disallow_any_expr = false
+disallow_any_decorated = false
+disallow_any_explicit = false
 disallow_any_generics = true
 disallow_subclassing_any = true
-
-# Additional warnings
 warn_unused_ignores = true
 warn_return_any = true
 warn_redundant_casts = true
 warn_unused_configs = true
-
-# Strict optional handling
 strict_optional = true
 strict_equality = true
 strict_concatenate = true
-
-# Error reporting
 show_error_context = true
 show_column_numbers = true
 show_error_code_links = true
@@ -506,14 +418,10 @@ pretty = true
 color_output = true
 error_summary = true
 show_absolute_path = false
-
-# Import discovery
 namespace_packages = true
-explicit_package_bases = false  # Avoid duplicate module detection
-ignore_missing_imports = true  # Practical for third-party libs without stubs
+explicit_package_bases = false
+ignore_missing_imports = true
 mypy_path = "src"
-
-# Miscellaneous
 check_untyped_defs = true
 disallow_incomplete_defs = true
 disallow_untyped_defs = true
@@ -521,82 +429,78 @@ no_implicit_optional = true
 no_implicit_reexport = true
 
 [[tool.mypy.overrides]]
-module = ["tests.*"]
+module = [
+    "tests.*",
+]
 disallow_untyped_defs = false
 disallow_untyped_decorators = false
 warn_return_any = false
 check_untyped_defs = false
 
 [[tool.mypy.overrides]]
-module = ["nhl_scrabble.cli"]
+module = [
+    "nhl_scrabble.cli",
+]
 disallow_untyped_defs = false
 disallow_untyped_decorators = false
 warn_return_any = false
 
 [[tool.mypy.overrides]]
-module = ["nhl_scrabble.web.*"]
-disallow_untyped_decorators = false  # FastAPI decorators don't have type stubs
-disallow_subclassing_any = false  # Allow BaseHTTPMiddleware (has type Any in some mypy versions)
+module = [
+    "nhl_scrabble.web.*",
+]
+disallow_untyped_decorators = false
+disallow_subclassing_any = false
 
 [[tool.mypy.overrides]]
-module = ["nhl_scrabble.api_server.*"]
-disallow_untyped_decorators = false  # FastAPI decorators don't have type stubs
-warn_return_any = false  # FastAPI routes return Any via decorators
-check_untyped_defs = false  # FastAPI decorated functions are untyped
+module = [
+    "nhl_scrabble.api_server.*",
+]
+disallow_untyped_decorators = false
+warn_return_any = false
+check_untyped_defs = false
 
-# ============================================================================
-# Astral ty Type Checker Configuration
-# ============================================================================
-# ty is an extremely fast Python type checker from Astral (creators of ruff, uv)
-# Complements mypy with faster performance and modern type system features
-# Docs: https://docs.astral.sh/ty/configuration/
-
-[tool.ty]
-# Source paths configuration
 [tool.ty.src]
 include = [
     "src/",
     "tests/",
 ]
 
-# Environment configuration
 [tool.ty.environment]
-python-version = "3.10"
+python-version = "3.12"
 
-# Rule configuration (align with mypy strict mode)
 [tool.ty.rules]
-# ty defaults to strict type checking
-# Individual rules can be adjusted as needed
 
-# Terminal configuration
 [tool.ty.terminal]
-# Show errors with full context
 error-on-warning = false
 
-# Pytest configuration
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-
-# Timeout configuration
-timeout = 60  # Default: 60 seconds (increased for integration tests with real API calls)
-timeout_method = "thread"  # Use threading for better compatibility
-
-# JUnit XML configuration for Codecov Test Analytics
+testpaths = [
+    "tests",
+]
+python_files = [
+    "test_*.py",
+]
+python_classes = [
+    "Test*",
+]
+python_functions = [
+    "test_*",
+]
+timeout = 60
+timeout_method = "thread"
 junit_family = "xunit2"
 junit_logging = "all"
-
 addopts = [
     "--strict-markers",
     "--strict-config",
-    "-n", "auto",  # Parallel execution: auto-detect CPU cores
+    "-n",
+    "auto",
     "--cov=nhl_scrabble",
     "--cov-report=term-missing:skip-covered",
     "--cov-report=html",
     "--cov-report=xml",
-    "--timeout=60",  # Enforce 60s timeout (accommodates integration tests)
+    "--timeout=60",
 ]
 markers = [
     "unit: Unit tests",
@@ -607,9 +511,10 @@ markers = [
     "flaky: Flaky test that may fail intermittently (will be retried on failure)",
 ]
 
-# Coverage configuration
 [tool.coverage.run]
-source = ["src"]
+source = [
+    "src",
+]
 branch = true
 omit = [
     "*/tests/*",
@@ -633,117 +538,62 @@ skip_covered = false
 [tool.coverage.html]
 directory = "htmlcov"
 
-# Diff-cover configuration
 [tool.diff_cover]
-# Compare against main branch
 compare_branch = "origin/main"
-
-# Minimum coverage percentage required on diff
 fail_under = 80.0
-
-# Include only source files
-include_paths = ["src/"]
-
-# Exclude patterns
+include_paths = [
+    "src/",
+]
 exclude_paths = [
     "tests/",
     "*/__main__.py",
 ]
 
-# Benchmark configuration
 [tool.pytest_benchmark]
-# Save results for comparison
 save = true
 save_data = true
-
-# Automatically compare against previous runs
-compare = "0001"  # Compare against run 0001 (baseline)
-
-# Fail if performance degrades beyond threshold
+compare = "0001"
 fail_on_regression = true
-regression_threshold = 0.2  # 20% slower = fail
-
-# Storage location
+regression_threshold = 0.2
 storage = ".benchmarks"
-
-# Columns to display
-columns = ["min", "max", "mean", "stddev", "median", "iqr", "outliers", "rounds", "iterations"]
-
-# Histogram display
+columns = [
+    "min",
+    "max",
+    "mean",
+    "stddev",
+    "median",
+    "iqr",
+    "outliers",
+    "rounds",
+    "iterations",
+]
 histogram = "normal"
-
-# Warmup rounds (iterations before measurement)
 warmup = true
 warmup_iterations = 5
+min_time = 5e-06
 
-# Minimum time to run each benchmark
-min_time = 0.000005  # 5 microseconds
-
-# Codespell configuration
 [tool.codespell]
-# Comprehensive by default (matches ruff's ALL rules philosophy)
 check-filenames = true
 check-hidden = true
-
-# Skip patterns for non-text files and generated content
-skip = '*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*'
-
-# Project-specific ignore words (like ruff's ignore list)
-# Add false positives here as they are discovered in .codespell-ignore-words.txt
-ignore-words = '.codespell-ignore-words.txt'
-
-# Consistency settings
+skip = "*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*"
+ignore-words = ".codespell-ignore-words.txt"
 count = true
-quiet-level = 0  # Show all issues (comprehensive)
+quiet-level = 0
 
-# Validate-pyproject configuration
-# Note: validate-pyproject validates this file (pyproject.toml) against PEP standards
-# It doesn't have configuration options itself - it validates the project metadata
-# Comprehensive validation (matches ruff's ALL rules philosophy):
-# - PEP 517: Build system declaration
-# - PEP 518: Specifying build system requirements
-# - PEP 621: Project metadata in pyproject.toml
-# - PEP 631: Dependency specification
-# All validations are enabled by default, ensuring complete compliance
-
-# Yamllint configuration
-# Note: yamllint doesn't natively support pyproject.toml configuration
-# Configuration is in .yamllint file in the repository root
-# This section documents the configuration approach (matches ruff's ALL rules philosophy):
-# - Extends default configuration (comprehensive by default)
-# - Line length: 100 (aligns with ruff's line-length)
-# - Document start: disabled (not always necessary)
-# - Truthy values: disabled (yes/no are common and clear)
-# - Indentation: 2 spaces (standard for YAML)
-
-# Absolufy-imports configuration
-# Note: absolufy-imports doesn't natively support pyproject.toml configuration
-# Configuration is via command-line arguments in pre-commit and tox
-# This section documents the configuration approach (matches ruff's ALL rules philosophy):
-# - Convert all relative imports to absolute imports (comprehensive by default)
-# - Application directories: src (matches project src layout)
-# - Aligns with ruff's import handling and isort configuration
-
-# Rstcheck configuration
 [tool.rstcheck]
-# Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
-# Report levels: 1=info, 2=warning, 3=error, 4=severe
-report_level = "INFO"  # Most comprehensive (report everything)
-# Ignore paths (align with other tool exclusions)
-ignore_directives = []  # Empty for comprehensive checking
-ignore_roles = []  # Empty for comprehensive checking
-ignore_substitutions = []  # Empty for comprehensive checking
-ignore_languages = []  # Empty for comprehensive checking
-ignore_messages = ""  # Empty for comprehensive checking
+report_level = "INFO"
+ignore_directives = []
+ignore_roles = []
+ignore_substitutions = []
+ignore_languages = []
+ignore_messages = ""
 
-# Doc8 configuration
 [tool.doc8]
-# Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)
-# Align with ruff's line-length = 100 for consistency
-max-line-length = 100  # Match ruff's line-length
-# Check file extensions
-extensions = [".rst", ".txt"]  # Standard RST extensions
-# Ignore paths (align with other tool exclusions)
+max-line-length = 100
+extensions = [
+    ".rst",
+    ".txt",
+]
 ignore-path = [
     ".git",
     ".tox",
@@ -758,201 +608,146 @@ ignore-path = [
     ".ruff_cache",
     "htmlcov",
 ]
-# Ignore specific checks (none by default for comprehensive checking)
 ignore = []
-# Enable verbose output
 verbose = false
-# Check that files end with a newline (matches end-of-file-fixer)
 file-encoding = "utf-8"
 
-# Mdformat configuration
 [tool.mdformat]
-# Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
-# Align with ruff's line-length = 100 for consistency
 wrap = 100
-# Number of spaces for list indentation (align with YAML indentation)
 number = true
-# End files with a single newline (matches end-of-file-fixer)
 end_of_line = "lf"
 
-# PyMarkdown configuration
-[tool.pymarkdown]
-# Comprehensive by default (matches ruff's ALL rules philosophy)
-# Enable strict mode for maximum rule coverage
-mode.strict-config = true
+[tool.pymarkdown.mode]
+strict-config = true
 
-# Plugins configuration - enable all rules by default (like ruff's ALL)
-plugins.enabled = [
-    "md001",  # MD001 - Heading levels should only increment by one level at a time
-    "md002",  # MD002 - First heading should be a top level heading
-    "md003",  # MD003 - Heading style
-    "md004",  # MD004 - Unordered list style
-    "md005",  # MD005 - Inconsistent indentation for list items at the same level
-    "md006",  # MD006 - Consider starting bulleted lists at the beginning of the line
-    "md007",  # MD007 - Unordered list indentation
-    "md009",  # MD009 - Trailing spaces
-    "md010",  # MD010 - Hard tabs
-    "md011",  # MD011 - Reversed link syntax
-    "md012",  # MD012 - Multiple consecutive blank lines
-    "md013",  # MD013 - Line length
-    "md014",  # MD014 - Dollar signs used before commands without showing output
-    "md018",  # MD018 - No space after hash on atx style heading
-    "md019",  # MD019 - Multiple spaces after hash on atx style heading
-    "md020",  # MD020 - No space inside hashes on closed atx style heading
-    "md021",  # MD021 - Multiple spaces inside hashes on closed atx style heading
-    "md022",  # MD022 - Headings should be surrounded by blank lines
-    "md023",  # MD023 - Headings must start at the beginning of the line
-    "md024",  # MD024 - Multiple headings with the same content
-    "md025",  # MD025 - Multiple top level headings in the same document
-    "md026",  # MD026 - Trailing punctuation in heading
-    "md027",  # MD027 - Multiple spaces after blockquote symbol
-    "md028",  # MD028 - Blank line inside blockquote
-    "md029",  # MD029 - Ordered list item prefix
-    "md030",  # MD030 - Spaces after list markers
-    "md031",  # MD031 - Fenced code blocks should be surrounded by blank lines
-    "md032",  # MD032 - Lists should be surrounded by blank lines
-    "md033",  # MD033 - Inline HTML
-    "md034",  # MD034 - Bare URL used
-    "md035",  # MD035 - Horizontal rule style
-    "md036",  # MD036 - Emphasis used instead of a heading
-    "md037",  # MD037 - Spaces inside emphasis markers
-    "md038",  # MD038 - Spaces inside code span elements
-    "md039",  # MD039 - Spaces inside link text
-    "md040",  # MD040 - Fenced code blocks should have a language specified
-    "md041",  # MD041 - First line in file should be a top level heading
-    "md042",  # MD042 - No empty links
-    "md043",  # MD043 - Required heading structure
-    "md044",  # MD044 - Proper names should have the correct capitalization
-    "md045",  # MD045 - Images should have alternate text (alt text)
-    "md046",  # MD046 - Code block style
-    "md047",  # MD047 - Files should end with a single newline character
-    "md048",  # MD048 - Code fence style
-    "md049",  # MD049 - Emphasis style should be consistent
-    "md050",  # MD050 - Strong style should be consistent
-    "md051",  # MD051 - Link fragments should be valid
-    "md052",  # MD052 - Reference links and images should use a label that is defined
-    "md053",  # MD053 - Link and image reference definitions should be needed
+[tool.pymarkdown.plugins]
+enabled = [
+    "md001",
+    "md002",
+    "md003",
+    "md004",
+    "md005",
+    "md006",
+    "md007",
+    "md009",
+    "md010",
+    "md011",
+    "md012",
+    "md013",
+    "md014",
+    "md018",
+    "md019",
+    "md020",
+    "md021",
+    "md022",
+    "md023",
+    "md024",
+    "md025",
+    "md026",
+    "md027",
+    "md028",
+    "md029",
+    "md030",
+    "md031",
+    "md032",
+    "md033",
+    "md034",
+    "md035",
+    "md036",
+    "md037",
+    "md038",
+    "md039",
+    "md040",
+    "md041",
+    "md042",
+    "md043",
+    "md044",
+    "md045",
+    "md046",
+    "md047",
+    "md048",
+    "md049",
+    "md050",
+    "md051",
+    "md052",
+    "md053",
 ]
+disabled = []
 
-# Selective disables (like ruff's ignore list)
-plugins.disabled = []
+[tool.pymarkdown.plugins.md010]
+enabled = false
 
-# Rule-specific configuration (like ruff's per-file-ignores)
-# MD010 - Hard tabs
-# Disabled as it triggers false positives in code blocks (e.g., Makefile snippets)
-plugins.md010.enabled = false  # False positives in code blocks requiring tabs
+[tool.pymarkdown.plugins.md012]
+enabled = true
 
-# MD012 - Multiple consecutive blank lines
-# Keep enabled to catch actual formatting issues
-plugins.md012.enabled = true
+[tool.pymarkdown.plugins.md029]
+enabled = false
 
-# MD029 - Ordered list item prefix
-# Disabled as the current documentation style uses continuous numbering (1,2,3)
-# which pymarkdown interprets as separate lists that should each start at 1
-plugins.md029.enabled = false  # Documentation uses continuous numbering style
+[tool.pymarkdown.plugins.md013]
+enabled = false
 
-# MD013 - Line length
-# Disabled for markdown as documentation often has long lines (URLs, examples, tables)
-# Ruff's line-length = 100 applies to Python code, not necessarily markdown docs
-plugins.md013.enabled = false  # Too strict for documentation with URLs and examples
+[tool.pymarkdown.plugins.md022]
+enabled = false
 
-# MD022 - Headings should be surrounded by blank lines
-# Disabled as it's a common pattern in structured documentation
-plugins.md022.enabled = false  # Common formatting pattern, would require extensive doc changes
+[tool.pymarkdown.plugins.md024]
+enabled = false
 
-# MD024 - Multiple headings with the same content
-# Disabled as it's unavoidable in CHANGELOGs (repeated "Added", "Changed", "Fixed" sections)
-plugins.md024.enabled = false  # Common in CHANGELOG files with standard section names
+[tool.pymarkdown.plugins.md031]
+enabled = false
 
-# MD031 - Fenced code blocks should be surrounded by blank lines
-# Disabled as it's a very common pattern in existing documentation
-plugins.md031.enabled = false  # Common pattern, would require extensive doc changes
+[tool.pymarkdown.plugins.md032]
+enabled = false
 
-# MD032 - Lists should be surrounded by blank lines
-# Disabled for compatibility with existing documentation style
-plugins.md032.enabled = false  # Common pattern in documentation
+[tool.pymarkdown.plugins.md033]
+enabled = false
 
-# MD033 - Inline HTML (allow for necessary HTML in markdown)
-plugins.md033.enabled = false  # Too strict for practical documentation
+[tool.pymarkdown.plugins.md034]
+enabled = false
 
-# MD034 - Bare URL used
-# Disabled as bare URLs are common in reference sections
-plugins.md034.enabled = false  # Common in documentation reference sections
+[tool.pymarkdown.plugins.md036]
+enabled = false
 
-# MD036 - Emphasis used instead of heading
-# Disabled as it's common pattern in structured docs (CHANGELOG, CONTRIBUTING)
-plugins.md036.enabled = false  # Common formatting pattern in structured documentation
+[tool.pymarkdown.plugins.md040]
+enabled = false
 
-# MD040 - Fenced code blocks should have language
-# Disabled as many code blocks don't need language specification (examples, output, etc.)
-plugins.md040.enabled = false  # Too strict, not all code blocks need language specification
+[tool.pymarkdown.plugins.md041]
+enabled = false
 
-# MD041 - First line in file should be a top level heading
-plugins.md041.enabled = false  # Too strict, not all markdown files need h1 first
+[tool.pymarkdown.plugins.md043]
+enabled = false
 
-# MD043 - Required heading structure
-plugins.md043.enabled = false  # Too strict, overly prescriptive
-
-# UV configuration
 [tool.uv]
-# Managed by uv for faster dependency resolution
 managed = true
 package = true
-
-# Compile Python bytecode (.pyc files) for faster imports
 compile-bytecode = true
-
-# Link mode for installing packages
 link-mode = "copy"
-
-# Strict dependency resolution (like ruff's ALL rules philosophy)
-resolution = "highest"  # Use highest compatible versions
-
-# Dependency verification and constraints
-constraint-dependencies = []  # Strict dependency constraints
-override-dependencies = []    # Override specific dependencies if needed
-
-# Index configuration for strict package resolution
-index-strategy = "first-index"  # Use first matching index (deterministic)
-keyring-provider = "disabled"   # Disable keyring for reproducibility
-
-# Cache configuration for reproducibility
-cache-keys = []  # Custom cache keys for strict caching
-
-# Python preference (prefer system or managed Python)
-python-preference = "managed"  # Use managed Python installations
-
-# Enable preview features for latest capabilities
-preview = false  # Disable preview features for stability
+resolution = "highest"
+constraint-dependencies = []
+override-dependencies = []
+index-strategy = "first-index"
+keyring-provider = "disabled"
+cache-keys = []
+python-preference = "managed"
+preview = false
 
 [tool.uv.sources]
-# Optional: Configure custom package sources here if needed
-
-# ============================================================================
-# Interrogate - Docstring Coverage Checking
-# ============================================================================
 
 [tool.interrogate]
-# Comprehensive docstring coverage checking (matches ruff's ALL rules philosophy)
-fail-under = 100.0  # Require 100% docstring coverage (current coverage is 100%)
-verbose = 2  # Maximum verbosity (-vv)
-quiet = false  # Print output
-color = true  # Enable color output
-
-# What to check (comprehensive by default)
-ignore-init-method = false  # Check __init__ methods
-ignore-init-module = false  # Check __init__.py modules
-ignore-magic = false  # Check magic methods
-ignore-module = false  # Check module-level docstrings
-ignore-nested-functions = false  # Check nested functions
-ignore-nested-classes = false  # Check nested classes
-ignore-overloaded-functions = false  # Check @typing.overload functions
-ignore-private = false  # Check private methods (__)
-ignore-semiprivate = false  # Check semiprivate methods (_)
-ignore-property-decorators = false  # Check property decorators
-ignore-setters = false  # Check property setters
-
-# File patterns
+fail-under = 100.0
+verbose = 2
+quiet = false
+color = true
+ignore-init-method = false
+ignore-init-module = false
+ignore-magic = false
+ignore-module = false
+ignore-nested-functions = false
+ignore-nested-classes = false
+ignore-overloaded-functions = false
+ignore-private = false
+ignore-semiprivate = false
+ignore-property-decorators = false
+ignore-setters = false
 exclude = [
     ".git",
     ".tox",
@@ -962,27 +757,14 @@ exclude = [
     "dist",
     "*.egg-info",
     "__pycache__",
-    "tests",  # Exclude tests from docstring coverage checks
-    ".scratch",  # Exclude utility scripts from docstring coverage checks
+    "tests",
+    ".scratch",
 ]
-
-# Python file extensions
-ext = []  # Only .py files (default)
-
-# Docstring style
-style = "sphinx"  # Sphinx-style docstrings (default)
-
-# Output options
-omit-covered-files = false  # Show all files even if 100% covered
-
-# ============================================================================
-# Deptry - Dependency Checker
-# ============================================================================
+ext = []
+style = "sphinx"
+omit-covered-files = false
 
 [tool.deptry]
-# Comprehensive dependency checking (matches ruff's ALL rules philosophy)
-
-# Directories/files to exclude from scanning (regex patterns)
 exclude = [
     "\\.git",
     "\\.tox",
@@ -992,13 +774,10 @@ exclude = [
     "dist",
     ".*\\.egg-info",
     "__pycache__",
-    "tests",  # Test files often have test-specific imports
-    "scripts",  # Standalone scripts with their own dependencies
-    "qa",  # QA testing framework (separate package with own dependencies)
+    "tests",
+    "scripts",
+    "qa",
 ]
-
-# Development dependency groups (PEP 621 optional-dependencies)
-# All optional-dependencies groups are for development, not production
 optional_dependencies_dev_groups = [
     "test",
     "lint",
@@ -1011,78 +790,42 @@ optional_dependencies_dev_groups = [
     "publish",
     "tox",
     "dev",
-    "branding",  # Asset generation (scripts/generate_branding.py)
+    "branding",
 ]
+ignore = []
 
-# Ignore specific errors if needed (comprehensive by default - no ignores)
-ignore = []  # Empty list means check everything
-
-# Per-rule ignores for specific packages/modules (comprehensive by default)
 [tool.deptry.per_rule_ignores]
-# No per-rule ignores - comprehensive checking
 
-# Package to module name mapping
-# Deptry auto-detects most, but we can specify exceptions if needed
 [tool.deptry.package_module_name_map]
-# Package name -> module name mapping for packages where they differ
-python-dotenv = "dotenv"  # python-dotenv package provides 'dotenv' module
-pyyaml = "yaml"  # pyyaml package provides 'yaml' module
-
-# ============================================================================
-# Unimport - Unused Import Checker
-# ============================================================================
+python-dotenv = "dotenv"
+pyyaml = "yaml"
 
 [tool.unimport]
-# Comprehensive unused import checking (matches ruff's ALL rules philosophy)
-
-# File patterns to exclude from scanning (regex pattern)
 exclude = "\\.git|\\.tox|\\.venv|venv|build|dist|.*\\.egg-info|__pycache__"
-
-# Ignore __init__.py files (they often have intentional re-exports)
-ignore_init = true  # Match ruff's per-file-ignores for __init__.py F401
-
-# Include star imports in scanning (comprehensive checking)
-include_star_import = false  # Star imports are already flagged by ruff (F403/F405)
-
-# Use gitignore patterns
-gitignore = true  # Respect .gitignore patterns
-
-# ============================================================================
-# Pydocstyle - Docstring Style Checker
-# ============================================================================
+ignore_init = true
+include_star_import = false
+gitignore = true
 
 [tool.pydocstyle]
-# Comprehensive docstring style checking (matches ruff's ALL rules philosophy)
-convention = "pep257"  # PEP 257 convention (comprehensive)
-
-# Match patterns for files to check
-match = ".*\\.py"  # Check all .py files
-match_dir = "[^\\.].*"  # Check all non-hidden directories
-
-# Additional error codes to ignore on top of convention (align with ruff's D ignores)
+convention = "pep257"
+match = ".*\\.py"
+match_dir = "[^\\.].*"
 add-ignore = [
-    "D100",  # Missing docstring in public module (checked by interrogate)
-    "D101",  # Missing docstring in public class (checked by interrogate)
-    "D102",  # Missing docstring in public method (checked by interrogate)
-    "D103",  # Missing docstring in public function (checked by interrogate)
-    "D104",  # Missing docstring in public package (checked by interrogate)
-    "D105",  # Missing docstring in magic method (checked by interrogate)
-    "D106",  # Missing docstring in public nested class (checked by interrogate)
-    "D107",  # Missing docstring in __init__ (checked by interrogate)
-    "D202",  # No blank lines allowed after function docstring (conflicts with black)
-    "D203",  # 1 blank line required before class docstring (conflicts with D211)
-    "D213",  # Multi-line docstring summary should start at second line (conflicts with D212)
-    "D413",  # Missing blank line after last section (conflicts with docformatter)
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "D202",
+    "D203",
+    "D213",
+    "D413",
 ]
 
-# ============================================================================
-# Vulture - Dead Code Detection
-# ============================================================================
-
 [tool.vulture]
-# Comprehensive dead code detection (matches ruff's ALL rules philosophy)
-
-# Exclude patterns (align with ruff's extend-exclude and other tool exclusions)
 exclude = [
     ".git",
     ".tox",
@@ -1093,140 +836,63 @@ exclude = [
     "*.egg-info",
     "__pycache__",
 ]
-
-# Ignore decorators that mark functions/classes as used
 ignore_decorators = [
-    "@*.command",          # Click commands (e.g., @cli.command)
-    "@*.group",            # Click groups
-    "@*.option",           # Click options
-    "@*.argument",         # Click arguments
-    "@pytest.fixture",     # Pytest fixtures
-    "@pytest.mark.*",      # Pytest markers
-    "@app.route",          # Flask/FastAPI routes
-    "@app.get",            # FastAPI GET endpoints
-    "@app.post",           # FastAPI POST endpoints
-    "@app.put",            # FastAPI PUT endpoints
-    "@app.patch",          # FastAPI PATCH endpoints
-    "@app.delete",         # FastAPI DELETE endpoints
-    "@*.register",         # Registration decorators
-    "@property",           # Property decorators
-    "@*.setter",           # Property setters
-    "@*.getter",           # Property getters
-    "@staticmethod",       # Static methods
-    "@classmethod",        # Class methods
-    "@abstractmethod",     # Abstract methods
+    "@*.command",
+    "@*.group",
+    "@*.option",
+    "@*.argument",
+    "@pytest.fixture",
+    "@pytest.mark.*",
+    "@app.route",
+    "@app.get",
+    "@app.post",
+    "@app.put",
+    "@app.patch",
+    "@app.delete",
+    "@*.register",
+    "@property",
+    "@*.setter",
+    "@*.getter",
+    "@staticmethod",
+    "@classmethod",
+    "@abstractmethod",
 ]
-
-# Ignore names that match these patterns
 ignore_names = [
-    # Magic methods and protocol implementations
-    "exc_*",              # Exception info variables (exc_type, exc_val, exc_tb)
-    "format",             # Logging formatter method (called by framework)
-
-    # Public API exceptions (part of public API even if not currently used)
-    "NHLApiNotFoundError",  # Exception class reserved for future use
-    "track_score_calculation",  # ProgressManager method used via context manager (vulture can't detect)
-    "track_report_generation",  # ProgressManager method reserved for future use (lazy eval prevents current use)
-    "track_api_fetching",  # ProgressManager method used via TeamProcessor callback (vulture can't detect)
-
-    # Lazy report generation (used via CLI --report option, vulture can't detect dynamic invocation)
-    "ReportGenerator",    # ReportGenerator class used dynamically in CLI
-    "get_report",         # ReportGenerator method used via CLI --report flag
-    "validate_safe_path",   # config_validators function - public API for configuration validation
-    "validate_url",       # Validator/config_validators function part of public API (reserved for future use)
-    "validate_float_range",  # validators function - public API (legacy, replaced by config_validators)
-    "validate_output_format",  # validators function - public API (legacy, replaced by config_validators)
-    "reset",              # RateLimiter.reset() method part of public API (used for testing/manual reset)
-
-    # FastAPI framework patterns (called at runtime by framework)
-    "health",             # FastAPI endpoint function (registered via decorator)
-    "root",               # FastAPI endpoint function (registered via decorator)
-    "favicon",            # FastAPI endpoint function (registered via decorator)
-    "dispatch",           # Middleware method (called by Starlette BaseHTTPMiddleware)
-    "templates",          # Jinja2Templates instance (used by future endpoints)
-    "get_players",        # FastAPI endpoint (api_server/routes/players.py)
-    "get_standings",      # FastAPI endpoint (api_server/routes/standings.py)
-    "get_team",           # FastAPI endpoint (api_server/routes/teams.py)
-    "get_teams",          # FastAPI endpoint (api_server/routes/teams.py)
-
-    # Test-related patterns
-    "test_*",             # Test functions
-    "fixture_*",          # Test fixtures
-    "*_fixture",          # Test fixtures (alternative naming)
-
-    # Common unused but required parameters
-    "args",               # Variadic args
-    "kwargs",             # Keyword args
-    "_*",                 # Private/unused variables (convention)
+    "exc_*",
+    "format",
+    "NHLApiNotFoundError",
+    "track_score_calculation",
+    "track_report_generation",
+    "track_api_fetching",
+    "ReportGenerator",
+    "get_report",
+    "validate_safe_path",
+    "validate_url",
+    "validate_float_range",
+    "validate_output_format",
+    "reset",
+    "health",
+    "root",
+    "favicon",
+    "dispatch",
+    "templates",
+    "get_players",
+    "get_standings",
+    "get_team",
+    "get_teams",
+    "test_*",
+    "fixture_*",
+    "*_fixture",
+    "args",
+    "kwargs",
+    "_*",
 ]
-
-# Minimum confidence for reporting (60 = comprehensive detection)
-# Set to 60 for comprehensive dead code detection while being practical
-# Values: 0 (all) to 100 (only certain)
 min_confidence = 60
 
-# ============================================================================
-# Blocklint - Inclusive Language Checker
-# ============================================================================
-
-# Note: Blocklint does not support pyproject.toml configuration
-# Configuration is provided via command-line arguments in pre-commit and tox
-#
-# Command-line arguments used:
-#   --skip-files: Exclude generated and build artifacts
-#
-# Default blocklist: Non-inclusive terms related to hierarchical and access control
-# These terms are checked case-insensitively with special characters between
-#
-# Comprehensive by default (matches ruff's ALL rules philosophy):
-# - Detects non-inclusive terminology in code, comments, and documentation
-# - Promotes inclusive language in technical writing
-# - Aligns with modern best practices for respectful code
-#
-# Skip patterns (aligned with ruff's extend-exclude):
-# - .git, .tox, .venv, venv (version control and virtual environments)
-# - build, dist, *.egg-info (build artifacts)
-# - __pycache__, *.pyc (Python cache)
-# - coverage.xml, htmlcov, .coverage (coverage reports)
-# - .pytest_cache, .mypy_cache, .ruff_cache (tool caches)
-# - *.log, *.tmp (temporary files)
-
-# ============================================================================
-# Gitlint - Commit Message Linter
-# ============================================================================
-
-# Note: Gitlint configuration is in .gitlint file
-# Gitlint has issues parsing complex pyproject.toml files with duplicate sections
-# Configuration file: .gitlint
-#
-# Comprehensive commit message linting (matches ruff's ALL rules philosophy):
-# - Title max length: 100 characters (matches ruff's line-length)
-# - Title min length: 5 characters (meaningful commits)
-# - Body max line length: 100 characters (matches ruff's line-length)
-# - Body min length: 10 characters (when body is present)
-# - Verbosity: 2 (detailed output for better understanding)
-# - Ignore commits: merge, revert, fixup, fixup-amend, squash (auto-generated)
-# - Ignore rules: B6 (body-is-missing - allows commits without body)
-#
-# Comprehensive by default:
-# - Enforces consistent commit message style
-# - Ensures commits are well-documented and descriptive
-# - Aligns with conventional commits best practices
-# - Promotes clear git history for team collaboration
-# - Works harmoniously with conventional commit standards
-
-# ============================================================================
-# Bandit Security Linter Configuration
-# ============================================================================
-
 [tool.bandit]
-# Comprehensive security checking (matches ruff's ALL rules philosophy)
-# Scans Python code for common security issues and vulnerabilities
-
-# Directories to scan
-targets = ["src"]
-
-# Exclude test files and build artifacts
+targets = [
+    "src",
+]
 exclude_dirs = [
     "tests",
     ".tox",
@@ -1236,53 +902,18 @@ exclude_dirs = [
     "dist",
     "*.egg-info",
 ]
-
-# Security level: LOW, MEDIUM, HIGH
-# Comprehensive by default - report all severity levels
 severity = "LOW"
-
-# Confidence level: LOW, MEDIUM, HIGH
-# Comprehensive by default - report all confidence levels
 confidence = "LOW"
-
-# Issues to skip (with justification)
-# B311: random used for jitter in retry logic (not cryptographic purposes)
-# B101: assert_used - tests use assert statements (excluded via exclude_dirs)
-# These are explicitly documented in code with noqa comments
 skips = [
-    "B101",  # assert_used - Used in tests (excluded anyway)
-    "B311",  # random - Jitter in retry logic, not crypto
+    "B101",
+    "B311",
 ]
-
-# Specific tests to exclude (if needed)
-# Currently: run all security tests comprehensively
 exclude_tests = []
 
-# ============================================================================
-# Check-Wheel-Contents Package Validator Configuration
-# ============================================================================
-
 [tool.check-wheel-contents]
-# Validates Python wheel package contents before publishing to PyPI
-# Ensures wheels contain all required files, no unexpected files,
-# correct file placement, and proper metadata
-
-# Expected top-level modules/packages
-toplevel = ["nhl_scrabble"]
-
-# Ignore specific warnings
-# W002: Wheel contains build number (acceptable in our build process)
-ignore = [
-    "W002",  # Wheel contains a build number (acceptable)
+toplevel = [
+    "nhl_scrabble",
 ]
-
-# Common checks performed:
-# W001: Wheel contains file in unexpected location
-# W003: Wheel is empty
-# W004: Wheel contains multiple top-level packages
-# W005: Wheel missing expected .dist-info directory
-# W006: Wheel has incorrect metadata
-# W007: Wheel missing LICENSE file
-# W008: Wheel missing README
-# W009: Wheel contains __pycache__ or .pyc files
-# W010: Wheel contains .git or .svn directories
+ignore = [
+    "W002",
+]

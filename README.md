@@ -21,7 +21,7 @@
 
 <!-- Package Info -->
 
-[![Python 3.10-3.14](https://img.shields.io/badge/python-3.10--3.14-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12-3.14](https://img.shields.io/badge/python-3.12--3.14-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Powered by UV](https://img.shields.io/badge/powered%20by-uv-black?logo=astral)](https://github.com/astral-sh/uv)
 [![Latest Release](https://img.shields.io/github/v/release/bdperkin/nhl-scrabble?include_prereleases)](https://github.com/bdperkin/nhl-scrabble/releases)
@@ -155,7 +155,7 @@ pip install -e ".[dev]"
 
 ### Requirements
 
-- **Supported**: [Python](https://www.python.org/) 3.10, 3.11, 3.12, 3.13, 3.14
+- **Supported**: [Python](https://www.python.org/) 3.12, 3.13, 3.14
 - **Experimental**: Python 3.15-dev (CI testing only, may have issues)
 - Dependencies: [`requests`](https://requests.readthedocs.io/), [`click`](https://click.palletsprojects.com/), [`pydantic`](https://docs.pydantic.dev/), [`python-dotenv`](https://saurabh-kumar.com/python-dotenv/), [`rich`](https://rich.readthedocs.io/), [`fastapi`](https://fastapi.tiangolo.com/), [`uvicorn`](https://www.uvicorn.org/), [`jinja2`](https://jinja.palletsprojects.com/)
 - Note: [UV](https://docs.astral.sh/uv/) acceleration is automatic when using [tox](https://tox.wiki/) (via [tox-uv](https://github.com/tox-dev/tox-uv) plugin)
@@ -457,7 +457,7 @@ pytest tests/integration -m integration
 The project supports testing across multiple Python versions using [tox](https://tox.wiki/) with [pytest](https://docs.pytest.org/):
 
 ```bash
-# Test across all Python versions (3.10, 3.11, 3.12, 3.13, 3.14)
+# Test across all Python versions (3.12, 3.13, 3.14)
 make tox
 
 # Run in parallel for faster results
@@ -472,7 +472,7 @@ make tox-list
 make tox-envs       # Alternative way to list environments
 
 # Use dynamic pattern rule for any tox environment:
-make tox-py310      # Test Python 3.10 (handled by pattern rule)
+make tox-py312      # Test Python 3.12 (handled by pattern rule)
 make tox-py313      # Test Python 3.13 (handled by pattern rule)
 make tox-coverage   # Coverage report (handled by pattern rule)
 make tox-ruff-check # Linting (handled by pattern rule)
@@ -480,7 +480,7 @@ make tox-mypy       # Type checking (handled by pattern rule)
 make tox-ci         # Simulate full CI pipeline (handled by pattern rule)
 
 # Or use tox directly:
-tox -e py310        # Test Python 3.10
+tox -e py312        # Test Python 3.12
 tox -e py313        # Test Python 3.13
 tox -e coverage     # Coverage report
 tox -e ruff-check   # Linting
@@ -622,7 +622,7 @@ nhl-scrabble/
 ├── pyproject.toml             # Project & UV configuration
 ├── uv.lock                    # Dependency lock file (1,957 lines)
 ├── .pre-commit-config.yaml    # Pre-commit hooks (32 hooks)
-├── .python-version            # Python versions (3.10-3.14)
+├── .python-version            # Python versions (3.12-3.14)
 └── tox.ini                    # Testing automation
 ```
 
@@ -791,7 +791,7 @@ All Dependabot PRs are automatically labeled, assigned, and follow [conventional
 - **Makefile Targets**: 55 documented targets
 - **Pre-commit Hooks**: 54 hooks ([pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks), [pygrep-hooks](https://github.com/pre-commit/pygrep-hooks), [isort](https://pycqa.github.io/isort/), [interrogate](https://interrogate.readthedocs.io/), [deptry](https://deptry.com/), [unimport](https://unimport.hakancelik.dev/), [pydocstyle](http://www.pydocstyle.org/), [vulture](https://github.com/jendrikseipp/vulture), [blocklint](https://github.com/PrincetonUniversity/blocklint), [gitlint](https://jorisroovers.com/gitlint/), absolufy-imports, [validate-pyproject](https://validate-pyproject.readthedocs.io/), [pyroma](https://github.com/regebro/pyroma), [tox-ini-fmt](https://github.com/tox-dev/tox-ini-fmt), [yamllint](https://yamllint.readthedocs.io/), [codespell](https://github.com/codespell-project/codespell), [pymarkdown](https://github.com/jackdewinter/pymarkdown), [mdformat](https://mdformat.readthedocs.io/), [doc8](https://doc8.readthedocs.io/), [rstcheck](https://rstcheck.readthedocs.io/), [uv](https://docs.astral.sh/uv/), [flake8](https://flake8.pycqa.org/), autoflake, [black](https://black.readthedocs.io/), docformatter, [ruff](https://docs.astral.sh/ruff/), [mypy](https://mypy-lang.org/))
 - **Dependency Lock**: [uv.lock](https://docs.astral.sh/uv/) with 1,957 lines (deterministic builds)
-- **CI/CD**: [GitHub Actions](https://docs.github.com/en/actions) on [Python](https://www.python.org/) 3.10, 3.11, 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
+- **CI/CD**: [GitHub Actions](https://docs.github.com/en/actions) on [Python](https://www.python.org/) 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
 
 ______________________________________________________________________
 

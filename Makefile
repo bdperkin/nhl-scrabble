@@ -10,7 +10,7 @@
 # Variables
 ###################
 
-PYTHON := python3.10
+PYTHON := python3.12
 VENV := .venv
 BIN := $(VENV)/bin
 PYTHON_VENV := $(BIN)/python
@@ -219,7 +219,7 @@ tox: check-venv ## Run tox with parallel execution and fail-fast (default)
 	@printf "$(YELLOW)Execution tiers:$(NC)\n"
 	@printf "  1. Fast quality checks (ruff, flake8)\n"
 	@printf "  2. Type checking (mypy, isort, interrogate)\n"
-	@printf "  3. Tests (py310-314) - parallel across Python versions\n"
+	@printf "  3. Tests (py312-314) - parallel across Python versions\n"
 	@printf "  4. Coverage - only if all tests pass\n"
 	@printf "\n"
 	@$(BIN)/tox run-parallel --parallel-no-spinner
@@ -239,8 +239,8 @@ tox-sequential: check-venv ## Run tox tests sequentially (for debugging)
 
 tox-quick: check-venv ## Run quick tox checks (critical checks only, fast fail-fast)
 	@printf "$(BLUE)Running quick tox checks (fail-fast)...$(NC)\n"
-	@printf "$(YELLOW)Running: ruff-check, black, mypy, py310$(NC)\n"
-	@$(BIN)/tox -e ruff-check,black,mypy,py310
+	@printf "$(YELLOW)Running: ruff-check, black, mypy, py312$(NC)\n"
+	@$(BIN)/tox -e ruff-check,black,mypy,py312
 
 tox-clean: ## Clean tox environments
 	@printf "$(BLUE)Cleaning tox environments...$(NC)\n"
@@ -256,7 +256,7 @@ tox-envs: check-venv ## List all available tox environments
 	@$(BIN)/tox list
 
 # Dynamic pattern rule: Automatically handles any tox-* target
-# Usage: make tox-<envname> (e.g., make tox-py310, make tox-coverage, make tox-mypy)
+# Usage: make tox-<envname> (e.g., make tox-py312, make tox-coverage, make tox-mypy)
 # This provides automatic support for all tox environments without explicit targets
 tox-%: check-venv
 	@printf "$(BLUE)Running tox -e $*...$(NC)\n"

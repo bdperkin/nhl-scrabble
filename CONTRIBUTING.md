@@ -47,21 +47,21 @@ pre-commit install
 
 ### Python Version Support
 
-The project supports [Python](https://www.python.org/) 3.10 through 3.14. We also test against Python 3.15-dev to ensure forward compatibility, but this version is experimental and may fail CI checks without blocking merges.
+The project supports [Python](https://www.python.org/) 3.12 through 3.14. We also test against Python 3.15-dev to ensure forward compatibility, but this version is experimental and may fail CI checks without blocking merges.
 
 **Local Development:**
 
 Use Python 3.14 for local development (see `.python-version`). To test other versions, use tox:
 
 ```bash
-tox -e py310  # Test Python 3.10
+tox -e py312  # Test Python 3.10
 tox -e py314  # Test Python 3.14
 tox -e py315  # Test Python 3.15-dev (experimental)
 ```
 
 **CI Testing:**
 
-All PRs are tested on Python 3.10-3.14 (required to pass). Python 3.15-dev tests run but failures don't block merges.
+All PRs are tested on Python 3.12-3.14 (required to pass). Python 3.15-dev tests run but failures don't block merges.
 
 ## Development Workflow
 
@@ -86,8 +86,6 @@ git checkout -b fix/your-bug-fix
 **Required CI Checks:**
 
 - Pre-commit hooks (60 hooks)
-- Python 3.10 tests
-- Python 3.11 tests
 - Python 3.12 tests
 - Python 3.13 tests
 - Python 3.14 tests
@@ -101,7 +99,7 @@ git checkout -b fix/your-bug-fix
 Use the `/implement-task` skill which automatically validates before pushing:
 
 - ✅ Runs all 65 pre-commit hooks automatically
-- ✅ Runs all tox environments (py3.10-3.15, ruff, mypy, coverage)
+- ✅ Runs all tox environments (py3.12-3.15, ruff, mypy, coverage)
 - ✅ Only pushes if all validation passes
 - ✅ Provides clear success/failure reporting
 - ✅ Saves 10-15 minutes per PR by catching issues locally
@@ -565,7 +563,7 @@ Execution tiers:
 
 1. **Fast quality checks** (ruff, flake8) - fail immediately if code quality issues
 1. **Type checking** (mypy, isort, interrogate) - only runs if tier 1 passes
-1. **Tests** (py310-314) - parallel across Python versions, only if tier 2 passes
+1. **Tests** (py312-314) - parallel across Python versions, only if tier 2 passes
 1. **Coverage** - only runs if all tests pass
 
 #### Execution Modes
@@ -583,7 +581,7 @@ tox -m test          # Just tests
 tox -m coverage      # Coverage only
 
 # Test specific Python version
-tox -e py310
+tox -e py312
 tox -e py315
 
 # Run specific tools
@@ -727,7 +725,7 @@ make type-check
 
 # Modernize Python syntax with pyupgrade
 tox -e pyupgrade
-# or directly: pyupgrade --py310-plus $(find src tests -name "*.py")
+# or directly: pyupgrade --py312-plus $(find src tests -name "*.py")
 
 # Sort Python class members and statements
 make ssort-check
@@ -753,14 +751,14 @@ make security-report
 
 ### Python Syntax Modernization
 
-The project uses **[pyupgrade](https://github.com/asottile/pyupgrade)** to automatically modernize Python syntax to leverage features from Python 3.10+ (our minimum supported version):
+The project uses **[pyupgrade](https://github.com/asottile/pyupgrade)** to automatically modernize Python syntax to leverage features from Python 3.12+ (our minimum supported version):
 
 ```bash
 # Check and modernize syntax (via tox)
 tox -e pyupgrade
 
 # Run directly on all Python files
-pyupgrade --py310-plus $(find src tests -name "*.py")
+pyupgrade --py312-plus $(find src tests -name "*.py")
 
 # Pre-commit hook runs automatically
 pre-commit run pyupgrade --all-files
@@ -772,7 +770,7 @@ pre-commit run pyupgrade --all-files
 - **PEP 585**: `List[int]` → `list[int]`, `Dict[str, int]` → `dict[str, int]`
 - **String formatting**: `"{}".format(x)` → `f"{x}"`
 - **Remove unnecessary imports**: Obsolete `from typing import List, Dict, Optional, Union`
-- **Clean up**: Remove unnecessary `__future__` imports for Python 3.10+
+- **Clean up**: Remove unnecessary `__future__` imports for Python 3.12+
 
 **Example transformation:**
 
@@ -786,7 +784,7 @@ def get_player(name: str) -> Optional[Dict[str, Union[int, str]]]:
     return players.get(name)
 
 
-# After (pyupgrade --py310-plus)
+# After (pyupgrade --py312-plus)
 def get_player(name: str) -> dict[str, int | str] | None:
     players: list[str] = fetch_players()
     return players.get(name)
@@ -806,13 +804,13 @@ def get_player(name: str) -> dict[str, int | str] | None:
 - **Tox**: `tox -e pyupgrade` for manual runs
 - **CI**: Runs on all PRs via GitHub Actions
 
-**Why Python 3.10+ syntax?**
+**Why Python 3.12+ syntax?**
 
-The project requires Python 3.10+ (`requires-python = ">=3.10"`), so we can safely use all Python 3.10+ features. pyupgrade ensures our codebase consistently uses the latest syntax patterns available in our minimum Python version.
+The project requires Python 3.12+ (`requires-python = ">=3.12"`), so we can safely use all Python 3.12+ features. pyupgrade ensures our codebase consistently uses the latest syntax patterns available in our minimum Python version.
 
 ### Python Code Modernization
 
-The project uses **[refurb](https://github.com/dosisod/refurb)** to detect Python code that can be simplified or modernized using Python 3.10+ features. While pyupgrade handles **syntax** modernization, refurb handles **semantic** modernization - suggesting better ways to structure code:
+The project uses **[refurb](https://github.com/dosisod/refurb)** to detect Python code that can be simplified or modernized using Python 3.12+ features. While pyupgrade handles **syntax** modernization, refurb handles **semantic** modernization - suggesting better ways to structure code:
 
 ```bash
 # Run refurb to see modernization suggestions
