@@ -50,6 +50,7 @@ NC := \033[0m # No Color
         shell watch init info status version \
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
+        deps-check deps-update deps-update-full \
         count tree all release
 
 ###################
@@ -711,6 +712,25 @@ git-cleanup: git-prune-remote-refs git-prune-local ## Full git cleanup (prune re
 
 git-cleanup-all: git-prune-remote-refs git-prune-local git-prune-closed-prs ## Complete cleanup (remote refs + merged branches + closed PRs)
 	@printf "$(GREEN)✅ Complete git cleanup finished$(NC)\n"
+
+###################
+# Dependency Management
+###################
+
+deps-check: ## Check for dependency updates (dry run)
+	@printf "$(BLUE)🔍 Checking for dependency updates...$(NC)\n"
+	@$(PYTHON) scripts/update_dependencies.py --check
+	@printf "$(GREEN)✅ Dependency check complete$(NC)\n"
+
+deps-update: ## Update dependencies (interactive)
+	@printf "$(BLUE)🔄 Updating dependencies...$(NC)\n"
+	@$(PYTHON) scripts/update_dependencies.py --apply --test
+	@printf "$(GREEN)✅ Dependency update complete$(NC)\n"
+
+deps-update-full: ## Update dependencies with full tox validation
+	@printf "$(BLUE)🔄 Updating dependencies with full validation...$(NC)\n"
+	@$(PYTHON) scripts/update_dependencies.py --apply --test --tox
+	@printf "$(GREEN)✅ Full dependency update complete$(NC)\n"
 
 ###################
 # QA Testing

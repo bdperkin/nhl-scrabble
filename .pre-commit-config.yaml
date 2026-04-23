@@ -21,7 +21,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
-    rev: v0.0.1
+    rev: v0.0.3
     hooks:
       - id: sync-pre-commit-deps
 
@@ -30,7 +30,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       # Whitespace and file formatting
       - id: trailing-whitespace
@@ -88,7 +88,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 8.0.1
     hooks:
       - id: isort
         # Comprehensive import sorting (matches ruff's ALL rules philosophy)
@@ -107,7 +107,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.23
+    rev: v0.25
     hooks:
       - id: validate-pyproject
         # Comprehensive validation (matches ruff's ALL rules philosophy)
@@ -126,7 +126,7 @@ repos:
         files: pyproject.toml
 
   - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.5.0
+    rev: 1.7.1
     hooks:
       # Comprehensive tox.ini formatting (matches ruff's ALL rules philosophy)
       # Formats tox.ini to a standard, consistent structure
@@ -159,7 +159,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
@@ -170,7 +170,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.1
+    rev: 0.37.1
     hooks:
       # GitHub Actions workflows
       - id: check-github-workflows
@@ -213,7 +213,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.0
+    rev: v2.4.2
     hooks:
       - id: codespell
         args: ['-L', 'aNULL']  # Ignore OpenSSL cipher suite names
@@ -224,7 +224,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.25
+    rev: v0.9.36
     hooks:
       - id: pymarkdown
         args: [scan]  # Config is in pyproject.toml
@@ -233,7 +233,7 @@ repos:
         exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21
+    rev: 0.7.21  # NOTE: 1.0.0 has dependency resolution issues with mdformat-gfm/mdformat-tables
     hooks:
       - id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
@@ -249,7 +249,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/PyCQA/doc8
-    rev: v1.1.1
+    rev: v2.0.0
     hooks:
       - id: doc8
         # Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)
@@ -257,7 +257,7 @@ repos:
         files: \.(rst|txt)$
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.0
+    rev: v6.2.5
     hooks:
       - id: rstcheck
         # Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
@@ -265,7 +265,7 @@ repos:
         additional_dependencies: [sphinx]
 
   - repo: https://github.com/asottile/blacken-docs
-    rev: 1.18.0
+    rev: 1.20.0
     hooks:
       - id: blacken-docs
         # Format code blocks in documentation (RST, Markdown)
@@ -335,7 +335,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.5.18
+    rev: 0.11.6  # NOTE: 0.11.7 not yet available in Red Hat Nexus
     hooks:
       - id: uv-lock
 
@@ -344,7 +344,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
+    rev: 7.3.0
     hooks:
       - id: flake8
         # Comprehensive linting (matches ruff's ALL rules philosophy)
@@ -356,7 +356,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.1
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         name: pyupgrade
@@ -406,7 +406,7 @@ repos:
         exclude: ^(tests/fixtures/|migrations/)
 
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
+    rev: v2.3.3
     hooks:
       - id: autoflake
         # Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
@@ -421,7 +421,7 @@ repos:
           ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
+    rev: 26.3.1
     hooks:
       - id: black
         # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
@@ -449,7 +449,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.10
+    rev: v0.15.11  # NOTE: 0.15.11 not yet available in Red Hat Nexus
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
@@ -506,7 +506,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.1
+    rev: v1.20.2
     hooks:
       - id: mypy
         additional_dependencies: [types-requests, types-PyYAML, pydantic, rich, jinja2]

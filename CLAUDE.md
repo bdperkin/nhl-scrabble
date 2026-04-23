@@ -1046,6 +1046,52 @@ git add pyproject.toml
 git commit -m "Add new-package dependency"
 ```
 
+### Updating Dependencies
+
+The project includes an automated dependency update script:
+
+```bash
+# Check for available updates
+make deps-check
+
+# Apply updates (with test validation)
+make deps-update
+
+# Apply updates with full tox validation
+make deps-update-full
+```
+
+**Manual updates:**
+
+```bash
+# Update pre-commit hooks
+pre-commit autoupdate
+
+# Update Python packages
+uv lock --upgrade
+
+# Verify changes
+pytest && tox -p auto
+```
+
+**What the script does:**
+
+- Checks pre-commit hook versions
+- Checks Python package versions via pip/PyPI
+- Reports available updates with version info
+- Flags major version changes (⚠️  MAJOR)
+- Optionally applies updates
+- Optionally runs tests to verify compatibility
+- Optionally runs full tox validation
+
+**Update schedule:**
+
+- Monthly: Regular dependency updates
+- Quarterly: Major version updates (thorough testing)
+- Immediately: Security patches
+
+See [CONTRIBUTING.md](CONTRIBUTING.md#updating-dependencies) for detailed update process.
+
 ### Adding a New Test
 
 ```bash
