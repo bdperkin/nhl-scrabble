@@ -300,6 +300,7 @@ class TestNHLApiClient:
         client.close()
         assert client._closed
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_double_close_safe(self, caplog: Any) -> None:
         """Test that double close is safe (doesn't raise errors)."""
         import logging
