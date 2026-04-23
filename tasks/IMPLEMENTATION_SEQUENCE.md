@@ -1,7 +1,7 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-22 (updated with missing tasks)
-**Total Tasks**: 68 active tasks (65 original + 3 missing from IMPLEMENTATION_SEQUENCE.md)
+**Total Tasks**: 65 active tasks
 **Estimated Effort**: 538-744 hours
 **Strategy**: Priority-first with dependency awareness
 
@@ -432,19 +432,19 @@ ______________________________________________________________________
 | Priority  | Tasks  | Effort       | Phases           |
 | --------- | ------ | ------------ | ---------------- |
 | HIGH      | 1      | 4-6h         | Phase 1          |
-| MEDIUM    | 72     | 527-727h     | Phase 2-9, 11-22 |
+| MEDIUM    | 62     | 527-727h     | Phase 2-9, 11-22 |
 | LOW       | 2      | 7-11h        | Phase 6, 10      |
-| **TOTAL** | **75** | **538-744h** | **22 Phases**    |
+| **TOTAL** | **65** | **538-744h** | **22 Phases**    |
 
 ### By Category
 
 | Category     | Tasks  | Effort       |
 | ------------ | ------ | ------------ |
-| Enhancement  | 13     | 46.25-70.5h  |
-| New Features | 44     | 420-585h     |
-| Refactoring  | 11     | 23.75-36.5h  |
+| Enhancement  | 3      | 46.25-70.5h  |
+| New Features | 37     | 420-585h     |
+| Refactoring  | 18     | 23.75-36.5h  |
 | Testing      | 7      | 48-52h       |
-| **TOTAL**    | **75** | **538-744h** |
+| **TOTAL**    | **65** | **538-744h** |
 
 ### Critical Path
 
@@ -552,9 +552,9 @@ ______________________________________________________________________
 ## Notes
 
 **Last Updated**: 2026-04-22
-**Active Tasks**: 68 (65 in task directories + 3 added to IMPLEMENTATION_SEQUENCE.md)
+**Active Tasks**: 65
 **Completed Tasks**: 102
-**Completion Rate**: 60.0% (102/170)
+**Completion Rate**: 60.0% (102/167)
 
 **Phase Distribution**:
 
