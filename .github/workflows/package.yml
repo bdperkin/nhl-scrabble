@@ -70,14 +70,14 @@ jobs:
           echo "✅ No __pycache__ or .pyc files in wheel"
 
       - name: Upload wheel artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: python-wheel
           path: dist/*.whl
           retention-days: 30
 
       - name: Upload source distribution artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: python-sdist
           path: dist/*.tar.gz
