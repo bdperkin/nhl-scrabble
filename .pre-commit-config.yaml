@@ -251,11 +251,11 @@ repos:
       - id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
         additional_dependencies:
-          # - mdformat-black  # Code block formatting
+          - mdformat-black  # Code block formatting
           # - mdformat-config  # YAML/TOML block formatting
           - mdformat-gfm  # GitHub Flavored Markdown support
-          # - mdformat-ruff  # Python code block linting integration
-          # - mdformat-web  # HTML/CSS/JS block formatting
+          - mdformat-ruff  # Python code block linting integration
+          - mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
         # Exclude GitHub issue templates (YAML frontmatter incompatible) and generated docs
         exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md)
