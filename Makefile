@@ -43,7 +43,7 @@ NC := \033[0m # No Color
         uv-pip uv-check \
         ruff-check ruff-format black-check black-format mypy ty type-check refurb refurb-report modernization quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
-        build publish publish-test \
+        build check-wheel package publish publish-test \
         docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-all \
         docs-doctest docs-doctest-verbose docs-linkcheck docs-linkcheck-verbose docs-coverage docs-quality \
         run run-verbose run-json \
@@ -397,6 +397,16 @@ build: clean check-venv ## Build distribution packages
 	@$(BIN)/tox -e build
 	@printf "$(GREEN)✓ Build complete: dist/$(NC)\n"
 	@ls -lh dist/
+
+check-wheel: check-venv ## Build and check wheel contents
+	@printf "$(BLUE)Building and checking wheel contents...$(NC)\n"
+	@$(BIN)/tox -e check-wheel
+	@printf "$(GREEN)✓ Wheel validation complete$(NC)\n"
+
+package: check-venv ## Build and validate package (wheel + twine)
+	@printf "$(BLUE)Building and validating package...$(NC)\n"
+	@$(BIN)/tox -e package
+	@printf "$(GREEN)✓ Package ready for publishing$(NC)\n"
 
 publish-test: build ## Publish to TestPyPI
 	@printf "$(BLUE)Publishing to TestPyPI...$(NC)\n"

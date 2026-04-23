@@ -1646,12 +1646,109 @@ Dependabot PRs use [conventional commits](https://www.conventionalcommits.org/):
 
 (For maintainers)
 
-1. Update version in `src/nhl_scrabble/__init__.py` and `pyproject.toml`
-1. Update `CHANGELOG.md`
-1. Create git tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
-1. Push tag: `git push origin v2.0.0`
-1. Create GitHub release with notes
-1. (Optional) Publish to PyPI
+### Pre-Release Package Validation
+
+Before creating a release, validate the package:
+
+```bash
+# Build and validate package
+make package
+
+# Or run individual steps:
+make build          # Build wheel and sdist
+make check-wheel    # Validate wheel contents
+```
+
+This runs comprehensive package validation:
+
+- **Build**: Creates wheel and source distribution
+- **check-wheel-contents**: Validates wheel structure
+  - ✅ LICENSE included
+  - ✅ README metadata present
+  - ✅ No test files
+  - ✅ No `__pycache__` or `.pyc` files
+  - ✅ Correct package structure
+- **twine check**: Validates package metadata for PyPI
+
+**Common Issues:**
+
+- Missing LICENSE: Ensure `LICENSE` file exists in root
+- Test files in wheel: Check `.gitignore` and `pyproject.toml` excludes
+- `__pycache__` in wheel: Run `make clean` before building
+
+### Release Steps
+
+1. **Update Version**
+
+   - Update version in `src/nhl_scrabble/__init__.py`
+   - Update version in `pyproject.toml`
+
+1. **Update Changelog**
+
+   - Update `CHANGELOG.md` with release notes
+
+1. **Validate Package**
+
+   ```bash
+   make package  # Build and validate
+   ```
+
+1. **Create Git Tag**
+
+   ```bash
+   git tag -a v2.0.0 -m "Release v2.0.0"
+   ```
+
+1. **Push Tag**
+
+   ```bash
+   git push origin v2.0.0
+   ```
+
+1. **Create GitHub Release**
+
+   - Create release from tag with changelog notes
+
+1. **Publish to PyPI** (Optional)
+
+   ```bash
+   # Test on TestPyPI first
+   make publish-test
+
+   # Verify installation from TestPyPI
+   pip install --index-url https://test.pypi.org/simple/ nhl-scrabble
+
+   # If successful, publish to PyPI
+   make publish
+   ```
+
+### Package Validation in CI
+
+The package validation workflow runs automatically on:
+
+- All pull requests to `main`
+- All pushes to `main`
+- All release tags (`v*`)
+
+The workflow:
+
+1. Builds wheel and source distribution
+1. Validates with `check-wheel-contents`
+1. Validates with `twine check`
+1. Verifies LICENSE is included
+1. Verifies no test files in wheel
+1. Verifies no `__pycache__` in wheel
+1. Uploads artifacts (wheel and sdist)
+
+**CI Failure Troubleshooting:**
+
+If package validation fails in CI:
+
+1. Check the workflow logs for specific errors
+1. Run `make package` locally to reproduce
+1. Fix identified issues
+1. Commit and push changes
+1. CI will re-run validation
 
 ## Questions?
 
@@ -1729,6 +1826,8 @@ make clean-all         # Clean everything including venv
 
 # Building
 make build             # Build distribution packages
+make check-wheel       # Build and validate wheel contents
+make package           # Build and validate package (wheel + twine)
 make ci                # Simulate CI pipeline locally
 ```
 

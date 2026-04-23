@@ -133,6 +133,28 @@ repos:
       - id: tox-ini-fmt
 
   # ============================================================================
+  # Package Validation - Wheel Contents
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-wheel-contents
+        name: check wheel contents
+        description: Validate Python wheel package contents
+        entry: >
+          bash -c 'rm -rf build/ dist/ &&
+          python -m build --wheel &&
+          check-wheel-contents dist/*.whl --ignore W002 --toplevel nhl_scrabble'
+        language: python
+        additional_dependencies:
+          - build
+          - check-wheel-contents>=0.6.0
+        pass_filenames: false
+        # Only run when wheel-related files change
+        files: ^(pyproject\.toml|setup\.py|MANIFEST\.in|src/.*\.py)$
+        # Or manually: pre-commit run check-wheel-contents --all-files
+
+  # ============================================================================
   # YAML Linting - YAML File Validation
   # ============================================================================
 

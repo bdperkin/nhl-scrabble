@@ -1225,3 +1225,32 @@ skips = [
 # Specific tests to exclude (if needed)
 # Currently: run all security tests comprehensively
 exclude_tests = []
+
+# ============================================================================
+# Check-Wheel-Contents Package Validator Configuration
+# ============================================================================
+
+[tool.check-wheel-contents]
+# Validates Python wheel package contents before publishing to PyPI
+# Ensures wheels contain all required files, no unexpected files,
+# correct file placement, and proper metadata
+
+# Expected top-level modules/packages
+toplevel = ["nhl_scrabble"]
+
+# Ignore specific warnings
+# W002: Wheel contains build number (acceptable in our build process)
+ignore = [
+    "W002",  # Wheel contains a build number (acceptable)
+]
+
+# Common checks performed:
+# W001: Wheel contains file in unexpected location
+# W003: Wheel is empty
+# W004: Wheel contains multiple top-level packages
+# W005: Wheel missing expected .dist-info directory
+# W006: Wheel has incorrect metadata
+# W007: Wheel missing LICENSE file
+# W008: Wheel missing README
+# W009: Wheel contains __pycache__ or .pyc files
+# W010: Wheel contains .git or .svn directories

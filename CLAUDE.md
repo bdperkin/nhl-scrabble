@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) 
 **Current Version:** 2.0.0
 **Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
-**Pre-commit Hooks:** 65 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/) and [refurb](https://github.com/dosisod/refurb))
+**Pre-commit Hooks:** 66 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/) and [refurb](https://github.com/dosisod/refurb))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (65 Comprehensive Checks)
+## Pre-commit Hooks (66 Comprehensive Checks)
 
-The project uses 65 pre-commit hooks for automatic code quality validation:
+The project uses 66 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -152,11 +152,12 @@ The project uses 65 pre-commit hooks for automatic code quality validation:
 - `isort`: Sort Python imports (Black-compatible, line-length=100, matches ruff's isort configuration)
 - `absolufy-imports`: Convert relative imports to absolute imports (comprehensive by default)
 
-**Project Validation Hooks (3 from validate-pyproject, pyroma, and tox-ini-fmt):**
+**Project Validation Hooks (4 from validate-pyproject, pyroma, tox-ini-fmt, and check-wheel-contents):**
 
 - `validate-pyproject`: Validates pyproject.toml against [PEP 517](https://peps.python.org/pep-0517/), [518](https://peps.python.org/pep-0518/), [621](https://peps.python.org/pep-0621/), [631](https://peps.python.org/pep-0631/) standards
 - `pyroma`: Rates Python package metadata quality (checks descriptions, classifiers, documentation, etc.)
 - `tox-ini-fmt`: Formats tox.ini to standard structure (enforces [tox](https://tox.wiki/) 4 best practices, auto-formats configuration)
+- `check-wheel-contents`: Validates Python wheel package contents (LICENSE included, no test files, correct structure)
 
 **YAML Linting Hooks (1 from yamllint):**
 
