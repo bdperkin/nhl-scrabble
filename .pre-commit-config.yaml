@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 65 comprehensive hooks for code quality, security, and consistency
+# 66 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -81,6 +81,20 @@ repos:
 
       # Text content checks
       - id: text-unicode-replacement-char
+
+  # ============================================================================
+  # Sensitive Information Prevention - Custom Content Checks
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-sensitive-strings
+        name: Check for sensitive strings
+        description: Prevent commits containing sensitive corporate/personal identifiers
+        entry: '(?i)(red\s*hat|bperkins)'
+        language: pygrep
+        types: [text]
+        exclude: '^(\.git/.*|\.pre-commit-config\.yaml|tasks/.*\.md|\.github/.*|CHANGELOG\.md|CONTRIBUTING\.md|README\.md)$'
 
   # ============================================================================
   # Python Imports - Import Organization
