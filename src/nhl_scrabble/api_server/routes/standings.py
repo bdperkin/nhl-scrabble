@@ -28,60 +28,6 @@ from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 router = APIRouter()
 
 
-@router.get("/standings/{standings_type}")
-async def get_standings(
-    standings_type: str = Path(
-        ...,
-        description="Type of standings (division, conference, or playoffs)",
-    ),
-) -> dict[str, Any]:
-    """Get standings by type.
-
-    Args:
-        standings_type: Type of standings to retrieve (division, conference, or playoffs).
-
-    Returns:
-        dict: Standings data.
-
-    Raises:
-        HTTPException: If invalid type or fetch fails.
-
-    Example:
-        >>> response = await get_standings("division")
-        >>> assert "divisions" in response
-    """
-    if standings_type not in {"division", "conference", "playoffs"}:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                f"Invalid standings type '{standings_type}'. "
-                "Must be one of: division, conference, playoffs"
-            ),
-        )
-
-    try:
-        with NHLApiClient() as api_client:
-            scorer = ScrabbleScorer()
-            processor = TeamProcessor(api_client, scorer)
-
-            team_scores, _, _ = processor.process_all_teams()
-
-            if standings_type == "division":
-                return _get_division_standings(processor, team_scores)
-            if standings_type == "conference":
-                return _get_conference_standings(processor, team_scores)
-            # standings_type == "playoffs"
-            return _get_playoff_standings(team_scores)
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to fetch {standings_type} standings: {e!s}",
-        ) from e
-
-
 def _get_division_standings(
     processor: TeamProcessor,
     team_scores: dict[str, Any],
@@ -220,3 +166,57 @@ def _get_playoff_standings(team_scores: dict[str, Any]) -> dict[str, Any]:
         "eastern_conference": eastern_data,
         "western_conference": western_data,
     }
+
+
+@router.get("/standings/{standings_type}")
+async def get_standings(
+    standings_type: str = Path(
+        ...,
+        description="Type of standings (division, conference, or playoffs)",
+    ),
+) -> dict[str, Any]:
+    """Get standings by type.
+
+    Args:
+        standings_type: Type of standings to retrieve (division, conference, or playoffs).
+
+    Returns:
+        dict: Standings data.
+
+    Raises:
+        HTTPException: If invalid type or fetch fails.
+
+    Example:
+        >>> response = await get_standings("division")
+        >>> assert "divisions" in response
+    """
+    if standings_type not in {"division", "conference", "playoffs"}:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Invalid standings type '{standings_type}'. "
+                "Must be one of: division, conference, playoffs"
+            ),
+        )
+
+    try:
+        with NHLApiClient() as api_client:
+            scorer = ScrabbleScorer()
+            processor = TeamProcessor(api_client, scorer)
+
+            team_scores, _, _ = processor.process_all_teams()
+
+            if standings_type == "division":
+                return _get_division_standings(processor, team_scores)
+            if standings_type == "conference":
+                return _get_conference_standings(processor, team_scores)
+            # standings_type == "playoffs"
+            return _get_playoff_standings(team_scores)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch {standings_type} standings: {e!s}",
+        ) from e

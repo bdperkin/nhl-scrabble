@@ -12,6 +12,45 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")
 
 
+def _calculate_backoff_delay(
+    attempt: int,
+    backoff_factor: float = 2.0,
+    max_backoff: float = 30.0,
+    retry_after: int | None = None,
+) -> float:
+    """Calculate backoff delay with exponential backoff and jitter.
+
+    Args:
+        attempt: Current attempt number (0-indexed)
+        backoff_factor: Exponential backoff multiplier
+        max_backoff: Maximum delay in seconds
+        retry_after: Optional Retry-After header value from 429 response
+
+    Returns:
+        Delay in seconds with jitter applied
+
+    Examples:
+        >>> _calculate_backoff_delay(0)  # First retry
+        0.75  # ~1.0 * (2.0 ** 0) with ±25% jitter
+        >>> _calculate_backoff_delay(3)  # Fourth retry
+        6.5   # ~8.0 * (2.0 ** 3) with ±25% jitter, capped at max_backoff
+    """
+    if retry_after is not None:
+        # Respect Retry-After header from API (429 responses)
+        return min(float(retry_after), max_backoff)
+
+    # Exponential backoff: base_delay * (backoff_factor ** attempt)
+    base_delay = 1.0
+    delay = min(base_delay * (backoff_factor**attempt), max_backoff)
+
+    # Add jitter: randomize ±25% to prevent thundering herd
+    # Safe: Using random for jitter, not cryptography
+    jitter = delay * 0.25
+    delay = delay + random.uniform(-jitter, jitter)  # noqa: S311
+
+    return max(0, delay)
+
+
 def retry(
     max_attempts: int = 3,
     backoff_factor: float = 2.0,
@@ -101,42 +140,3 @@ def retry(
         return wrapper
 
     return decorator
-
-
-def _calculate_backoff_delay(
-    attempt: int,
-    backoff_factor: float = 2.0,
-    max_backoff: float = 30.0,
-    retry_after: int | None = None,
-) -> float:
-    """Calculate backoff delay with exponential backoff and jitter.
-
-    Args:
-        attempt: Current attempt number (0-indexed)
-        backoff_factor: Exponential backoff multiplier
-        max_backoff: Maximum delay in seconds
-        retry_after: Optional Retry-After header value from 429 response
-
-    Returns:
-        Delay in seconds with jitter applied
-
-    Examples:
-        >>> _calculate_backoff_delay(0)  # First retry
-        0.75  # ~1.0 * (2.0 ** 0) with ±25% jitter
-        >>> _calculate_backoff_delay(3)  # Fourth retry
-        6.5   # ~8.0 * (2.0 ** 3) with ±25% jitter, capped at max_backoff
-    """
-    if retry_after is not None:
-        # Respect Retry-After header from API (429 responses)
-        return min(float(retry_after), max_backoff)
-
-    # Exponential backoff: base_delay * (backoff_factor ** attempt)
-    base_delay = 1.0
-    delay = min(base_delay * (backoff_factor**attempt), max_backoff)
-
-    # Add jitter: randomize ±25% to prevent thundering herd
-    # Safe: Using random for jitter, not cryptography
-    jitter = delay * 0.25
-    delay = delay + random.uniform(-jitter, jitter)  # noqa: S311
-
-    return max(0, delay)

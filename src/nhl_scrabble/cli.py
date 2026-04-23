@@ -156,6 +156,237 @@ def cli() -> None:
     """
 
 
+def generate_excel_report(
+    team_scores: dict[str, Any],
+    all_players: list[Any],
+    division_standings: dict[str, Any],
+    conference_standings: dict[str, Any],
+    playoff_standings: dict[str, Any],
+    output: Path,
+    sheets: list[str] | None = None,
+) -> None:
+    """Generate Excel format report.
+
+    Creates a comprehensive Excel workbook with multiple sheets for different
+    aspects of the analysis.
+
+    Args:
+        team_scores: Team scores dictionary
+        all_players: List of all players
+        division_standings: Division standings
+        conference_standings: Conference standings
+        playoff_standings: Playoff standings
+        output: Output file path
+        sheets: Optional list of sheets to include (default: all)
+
+    Returns:
+        None (writes directly to file)
+
+    Raises:
+        ImportError: If openpyxl is not installed
+    """
+    try:
+        exporter = ExcelExporter()
+    except ImportError as e:
+        raise click.ClickException(str(e)) from e
+
+    # Export full report with all sheets
+    exporter.export_full_report(
+        team_scores=team_scores,
+        all_players=all_players,
+        division_standings=division_standings,
+        conference_standings=conference_standings,
+        playoff_standings=playoff_standings,
+        output=output,
+        sheets=sheets,
+    )
+
+    logger.info(f"Excel report written to {output}")
+
+
+def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function with many parameters
+    config: Config,
+    clear_cache: bool = False,
+    report_filter: str | None = None,
+    quiet: bool = False,
+    output_path: Path | None = None,
+    sheets: list[str] | None = None,
+    scoring_values: dict[str, int] | None = None,
+    filters: AnalysisFilters | None = None,
+    season: str | None = None,
+    template_file: str | None = None,
+) -> str | None:
+    """Run the complete NHL Scrabble analysis.
+
+    Args:
+        config: Configuration object
+        clear_cache: Whether to clear the API cache before running
+        report_filter: Optional filter for specific report type
+            (conference, division, playoff, team, stats)
+        quiet: Whether to suppress progress bars
+        output_path: Optional output file path for CSV/Excel exports
+        sheets: Optional list of sheets for Excel export
+        scoring_values: Optional custom letter-to-point value mapping.
+            If None, uses standard Scrabble values.
+        filters: Optional filters to apply to analysis results
+        season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023).
+            If None, analyzes current season.
+        template_file: Optional path to Jinja2 template file (for template format)
+
+    Returns:
+        Complete report string for text/JSON/YAML/XML/HTML/Table/Markdown/Template formats,
+        or None for CSV/Excel (CSV/Excel are written directly to output file)
+
+    Raises:
+        NHLApiError: If there are issues fetching data from NHL API
+    """
+    # Initialize components
+    api_client = NHLApiClient(
+        base_url=config.api_base_url,
+        timeout=config.api_timeout,
+        retries=config.api_retries,
+        rate_limit_max_requests=config.rate_limit_max_requests,
+        rate_limit_window=config.rate_limit_window,
+        backoff_factor=config.backoff_factor,
+        max_backoff=config.max_backoff,
+        cache_enabled=config.cache_enabled,
+        cache_expiry=config.cache_expiry,
+        dos_max_connections=config.dos_max_connections,
+        dos_max_per_host=config.dos_max_per_host,
+        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
+        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
+    )
+
+    # Clear cache if requested
+    if clear_cache:
+        api_client.clear_cache()
+        logger.info("API cache cleared")
+
+    # Initialize scorer with custom or default values
+    scorer = ScrabbleScorer(letter_values=scoring_values)
+    team_processor = TeamProcessor(api_client, scorer)
+    playoff_calculator = PlayoffCalculator()
+
+    # Create progress manager
+    progress_mgr = ProgressManager(enabled=not quiet)
+
+    # Get team count for progress tracking
+    teams_info = api_client.get_teams(season=season)
+    total_teams = len(teams_info)
+
+    # Process all teams with progress tracking
+    with progress_mgr.track_api_fetching(total_teams):
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
+
+    # Display summary (only if not quiet)
+    if not quiet:
+        console.print(
+            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+            f"{len(team_scores) + len(failed_teams)} teams"
+        )
+        if failed_teams:
+            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+    # Calculate standings
+    division_standings = team_processor.calculate_division_standings(team_scores)
+    conference_standings = team_processor.calculate_conference_standings(team_scores)
+    playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
+
+    # Apply filters if specified
+    if filters and filters.is_active():
+        from nhl_scrabble.filters import (
+            filter_conference_standings,
+            filter_division_standings,
+            filter_players,
+            filter_playoff_standings,
+            filter_teams,
+        )
+
+        logger.info("Applying filters to analysis results")
+        team_scores = filter_teams(team_scores, filters)
+        all_players = filter_players(all_players, filters)
+        division_standings = filter_division_standings(division_standings, filters)
+        conference_standings = filter_conference_standings(conference_standings, filters)
+        playoff_standings = filter_playoff_standings(playoff_standings, filters)
+
+        # Log filter results
+        if not quiet:
+            console.print(
+                f"\n[green]✓[/green] Filters applied: {len(team_scores)} teams, "
+                f"{len(all_players)} players"
+            )
+
+    # Excel format uses special exporter (multi-sheet workbook)
+    if config.output_format == "excel":
+        if output_path:
+            generate_excel_report(
+                team_scores,
+                all_players,
+                division_standings,
+                conference_standings,
+                playoff_standings,
+                output_path,
+                sheets,
+            )
+            return None
+        raise ValueError("Excel format requires output path")
+
+    # For text format, use the existing rich report generator
+    if config.output_format == "text":
+        report_generator = ReportGenerator(
+            team_scores=team_scores,
+            all_players=all_players,
+            division_standings=division_standings,
+            conference_standings=conference_standings,
+            playoff_standings=playoff_standings,
+            top_players_count=config.top_players_count,
+            top_team_players_count=config.top_team_players_count,
+        )
+        return report_generator.get_report(report_filter)
+
+    # For all other formats, use the formatter factory
+    from nhl_scrabble.formatters import get_formatter
+
+    # Prepare data dictionary for formatters
+    teams_data = {
+        abbrev: {
+            "total": team.total,
+            "players": [asdict(p) for p in team.players],
+            "division": team.division,
+            "conference": team.conference,
+            "avg_per_player": team.avg_per_player,
+        }
+        for abbrev, team in team_scores.items()
+    }
+
+    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
+    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
+    playoffs_data = {
+        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
+    }
+
+    formatter_data = {
+        "teams": teams_data,
+        "divisions": divisions_data,
+        "conferences": conferences_data,
+        "playoffs": playoffs_data,
+        "summary": {
+            "total_teams": len(team_scores),
+            "total_players": len(all_players),
+        },
+    }
+
+    # Get appropriate formatter
+    formatter_kwargs = {}
+    if config.output_format == "template":
+        formatter_kwargs["template_file"] = template_file
+
+    formatter = get_formatter(config.output_format, **formatter_kwargs)
+
+    # Generate and return formatted output
+    return formatter.format(formatter_data)
+
+
 @cli.command()
 @click.option(
     "-f",
@@ -519,237 +750,6 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         sys.exit(1)
 
 
-def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function with many parameters
-    config: Config,
-    clear_cache: bool = False,
-    report_filter: str | None = None,
-    quiet: bool = False,
-    output_path: Path | None = None,
-    sheets: list[str] | None = None,
-    scoring_values: dict[str, int] | None = None,
-    filters: AnalysisFilters | None = None,
-    season: str | None = None,
-    template_file: str | None = None,
-) -> str | None:
-    """Run the complete NHL Scrabble analysis.
-
-    Args:
-        config: Configuration object
-        clear_cache: Whether to clear the API cache before running
-        report_filter: Optional filter for specific report type
-            (conference, division, playoff, team, stats)
-        quiet: Whether to suppress progress bars
-        output_path: Optional output file path for CSV/Excel exports
-        sheets: Optional list of sheets for Excel export
-        scoring_values: Optional custom letter-to-point value mapping.
-            If None, uses standard Scrabble values.
-        filters: Optional filters to apply to analysis results
-        season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023).
-            If None, analyzes current season.
-        template_file: Optional path to Jinja2 template file (for template format)
-
-    Returns:
-        Complete report string for text/JSON/YAML/XML/HTML/Table/Markdown/Template formats,
-        or None for CSV/Excel (CSV/Excel are written directly to output file)
-
-    Raises:
-        NHLApiError: If there are issues fetching data from NHL API
-    """
-    # Initialize components
-    api_client = NHLApiClient(
-        base_url=config.api_base_url,
-        timeout=config.api_timeout,
-        retries=config.api_retries,
-        rate_limit_max_requests=config.rate_limit_max_requests,
-        rate_limit_window=config.rate_limit_window,
-        backoff_factor=config.backoff_factor,
-        max_backoff=config.max_backoff,
-        cache_enabled=config.cache_enabled,
-        cache_expiry=config.cache_expiry,
-        dos_max_connections=config.dos_max_connections,
-        dos_max_per_host=config.dos_max_per_host,
-        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
-        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
-    )
-
-    # Clear cache if requested
-    if clear_cache:
-        api_client.clear_cache()
-        logger.info("API cache cleared")
-
-    # Initialize scorer with custom or default values
-    scorer = ScrabbleScorer(letter_values=scoring_values)
-    team_processor = TeamProcessor(api_client, scorer)
-    playoff_calculator = PlayoffCalculator()
-
-    # Create progress manager
-    progress_mgr = ProgressManager(enabled=not quiet)
-
-    # Get team count for progress tracking
-    teams_info = api_client.get_teams(season=season)
-    total_teams = len(teams_info)
-
-    # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
-
-    # Display summary (only if not quiet)
-    if not quiet:
-        console.print(
-            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-            f"{len(team_scores) + len(failed_teams)} teams"
-        )
-        if failed_teams:
-            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
-
-    # Calculate standings
-    division_standings = team_processor.calculate_division_standings(team_scores)
-    conference_standings = team_processor.calculate_conference_standings(team_scores)
-    playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
-
-    # Apply filters if specified
-    if filters and filters.is_active():
-        from nhl_scrabble.filters import (
-            filter_conference_standings,
-            filter_division_standings,
-            filter_players,
-            filter_playoff_standings,
-            filter_teams,
-        )
-
-        logger.info("Applying filters to analysis results")
-        team_scores = filter_teams(team_scores, filters)
-        all_players = filter_players(all_players, filters)
-        division_standings = filter_division_standings(division_standings, filters)
-        conference_standings = filter_conference_standings(conference_standings, filters)
-        playoff_standings = filter_playoff_standings(playoff_standings, filters)
-
-        # Log filter results
-        if not quiet:
-            console.print(
-                f"\n[green]✓[/green] Filters applied: {len(team_scores)} teams, "
-                f"{len(all_players)} players"
-            )
-
-    # Excel format uses special exporter (multi-sheet workbook)
-    if config.output_format == "excel":
-        if output_path:
-            generate_excel_report(
-                team_scores,
-                all_players,
-                division_standings,
-                conference_standings,
-                playoff_standings,
-                output_path,
-                sheets,
-            )
-            return None
-        raise ValueError("Excel format requires output path")
-
-    # For text format, use the existing rich report generator
-    if config.output_format == "text":
-        report_generator = ReportGenerator(
-            team_scores=team_scores,
-            all_players=all_players,
-            division_standings=division_standings,
-            conference_standings=conference_standings,
-            playoff_standings=playoff_standings,
-            top_players_count=config.top_players_count,
-            top_team_players_count=config.top_team_players_count,
-        )
-        return report_generator.get_report(report_filter)
-
-    # For all other formats, use the formatter factory
-    from nhl_scrabble.formatters import get_formatter
-
-    # Prepare data dictionary for formatters
-    teams_data = {
-        abbrev: {
-            "total": team.total,
-            "players": [asdict(p) for p in team.players],
-            "division": team.division,
-            "conference": team.conference,
-            "avg_per_player": team.avg_per_player,
-        }
-        for abbrev, team in team_scores.items()
-    }
-
-    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
-    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
-    playoffs_data = {
-        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
-    }
-
-    formatter_data = {
-        "teams": teams_data,
-        "divisions": divisions_data,
-        "conferences": conferences_data,
-        "playoffs": playoffs_data,
-        "summary": {
-            "total_teams": len(team_scores),
-            "total_players": len(all_players),
-        },
-    }
-
-    # Get appropriate formatter
-    formatter_kwargs = {}
-    if config.output_format == "template":
-        formatter_kwargs["template_file"] = template_file
-
-    formatter = get_formatter(config.output_format, **formatter_kwargs)
-
-    # Generate and return formatted output
-    return formatter.format(formatter_data)
-
-
-def generate_excel_report(
-    team_scores: dict[str, Any],
-    all_players: list[Any],
-    division_standings: dict[str, Any],
-    conference_standings: dict[str, Any],
-    playoff_standings: dict[str, Any],
-    output: Path,
-    sheets: list[str] | None = None,
-) -> None:
-    """Generate Excel format report.
-
-    Creates a comprehensive Excel workbook with multiple sheets for different
-    aspects of the analysis.
-
-    Args:
-        team_scores: Team scores dictionary
-        all_players: List of all players
-        division_standings: Division standings
-        conference_standings: Conference standings
-        playoff_standings: Playoff standings
-        output: Output file path
-        sheets: Optional list of sheets to include (default: all)
-
-    Returns:
-        None (writes directly to file)
-
-    Raises:
-        ImportError: If openpyxl is not installed
-    """
-    try:
-        exporter = ExcelExporter()
-    except ImportError as e:
-        raise click.ClickException(str(e)) from e
-
-    # Export full report with all sheets
-    exporter.export_full_report(
-        team_scores=team_scores,
-        all_players=all_players,
-        division_standings=division_standings,
-        conference_standings=conference_standings,
-        playoff_standings=playoff_standings,
-        output=output,
-        sheets=sheets,
-    )
-
-    logger.info(f"Excel report written to {output}")
-
-
 @cli.command()
 @click.option("--no-fetch", is_flag=True, help="Skip fetching data from NHL API on startup")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
@@ -805,6 +805,98 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
         logger.exception("Unexpected error in interactive mode")
         console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
         sys.exit(1)
+
+
+def generate_search_text(  # noqa: PLR0913  # Need all search parameters
+    results: list[Any],
+    query: str | None,
+    fuzzy: bool,
+    min_score: int | None,
+    max_score: int | None,
+    team: str | None,
+    division: str | None,
+    conference: str | None,
+    limit: int,
+) -> str:
+    """Generate text format search results.
+
+    Args:
+        results: List of PlayerScore objects
+        query: Search query
+        fuzzy: Whether fuzzy matching was used
+        min_score: Minimum score filter
+        max_score: Maximum score filter
+        team: Team filter
+        division: Division filter
+        conference: Conference filter
+        limit: Result limit
+
+    Returns:
+        Formatted text output
+    """
+    lines = []
+    lines.append("\n🔍 PLAYER SEARCH RESULTS\n")
+    lines.append("=" * 80)
+
+    # Display search parameters
+    lines.append("\nSearch Parameters:")
+    if query:
+        match_type = "Fuzzy" if fuzzy else ("Wildcard" if "*" in query or "?" in query else "Exact")
+        lines.append(f"  Query: {query} ({match_type} matching)")
+    if min_score is not None:
+        lines.append(f"  Minimum Score: {min_score}")
+    if max_score is not None:
+        lines.append(f"  Maximum Score: {max_score}")
+    if team:
+        lines.append(f"  Team: {team}")
+    if division:
+        lines.append(f"  Division: {division}")
+    if conference:
+        lines.append(f"  Conference: {conference}")
+
+    lines.append(f"\nFound {len(results)} player(s)")
+    if limit and len(results) >= limit:
+        lines.append(f"(showing top {limit})")
+    lines.append("\n" + "-" * 80 + "\n")
+
+    # Display results
+    if results:
+        for i, player in enumerate(results, 1):
+            lines.append(
+                f"{i:3d}. {player.full_name:<30} | Score: {player.full_score:3d} | "
+                f"Team: {player.team:4s} | {player.division}"
+            )
+            lines.append(
+                f"     First: {player.first_name} ({player.first_score}) | "
+                f"Last: {player.last_name} ({player.last_score})"
+            )
+            lines.append("")
+    else:
+        lines.append("No players found matching the search criteria.\n")
+
+    lines.append("-" * 80)
+
+    return "\n".join(lines)
+
+
+def generate_search_json(results: list[Any], query: str | None, stats: dict[str, Any]) -> str:
+    """Generate JSON format search results.
+
+    Args:
+        results: List of PlayerScore objects
+        query: Search query
+        stats: Player database statistics
+
+    Returns:
+        JSON string
+    """
+    data = {
+        "query": query,
+        "result_count": len(results),
+        "stats": stats,
+        "results": [asdict(p) for p in results],
+    }
+    return json.dumps(data, indent=2)
 
 
 @cli.command()
@@ -1022,98 +1114,6 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
         sys.exit(1)
 
 
-def generate_search_text(  # noqa: PLR0913  # Need all search parameters
-    results: list[Any],
-    query: str | None,
-    fuzzy: bool,
-    min_score: int | None,
-    max_score: int | None,
-    team: str | None,
-    division: str | None,
-    conference: str | None,
-    limit: int,
-) -> str:
-    """Generate text format search results.
-
-    Args:
-        results: List of PlayerScore objects
-        query: Search query
-        fuzzy: Whether fuzzy matching was used
-        min_score: Minimum score filter
-        max_score: Maximum score filter
-        team: Team filter
-        division: Division filter
-        conference: Conference filter
-        limit: Result limit
-
-    Returns:
-        Formatted text output
-    """
-    lines = []
-    lines.append("\n🔍 PLAYER SEARCH RESULTS\n")
-    lines.append("=" * 80)
-
-    # Display search parameters
-    lines.append("\nSearch Parameters:")
-    if query:
-        match_type = "Fuzzy" if fuzzy else ("Wildcard" if "*" in query or "?" in query else "Exact")
-        lines.append(f"  Query: {query} ({match_type} matching)")
-    if min_score is not None:
-        lines.append(f"  Minimum Score: {min_score}")
-    if max_score is not None:
-        lines.append(f"  Maximum Score: {max_score}")
-    if team:
-        lines.append(f"  Team: {team}")
-    if division:
-        lines.append(f"  Division: {division}")
-    if conference:
-        lines.append(f"  Conference: {conference}")
-
-    lines.append(f"\nFound {len(results)} player(s)")
-    if limit and len(results) >= limit:
-        lines.append(f"(showing top {limit})")
-    lines.append("\n" + "-" * 80 + "\n")
-
-    # Display results
-    if results:
-        for i, player in enumerate(results, 1):
-            lines.append(
-                f"{i:3d}. {player.full_name:<30} | Score: {player.full_score:3d} | "
-                f"Team: {player.team:4s} | {player.division}"
-            )
-            lines.append(
-                f"     First: {player.first_name} ({player.first_score}) | "
-                f"Last: {player.last_name} ({player.last_score})"
-            )
-            lines.append("")
-    else:
-        lines.append("No players found matching the search criteria.\n")
-
-    lines.append("-" * 80)
-
-    return "\n".join(lines)
-
-
-def generate_search_json(results: list[Any], query: str | None, stats: dict[str, Any]) -> str:
-    """Generate JSON format search results.
-
-    Args:
-        results: List of PlayerScore objects
-        query: Search query
-        stats: Player database statistics
-
-    Returns:
-        JSON string
-    """
-    data = {
-        "query": query,
-        "result_count": len(results),
-        "stats": stats,
-        "results": [asdict(p) for p in results],
-    }
-    return json.dumps(data, indent=2)
-
-
 @cli.command()
 @click.option("--host", default="127.0.0.1", help="Host to bind to")
 @click.option("--port", default=8000, type=int, help="Port to bind to")
@@ -1161,6 +1161,74 @@ def serve(host: str, port: int, reload: bool) -> None:
         reload=reload,
         log_level="info",
     )
+
+
+def fetch_dashboard_data(
+    config: Config,
+    quiet: bool = False,
+    season: str | None = None,
+) -> dict[str, Any] | None:
+    """Fetch data needed for dashboard.
+
+    Args:
+        config: Configuration object
+        quiet: Whether to suppress progress bars
+        season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023)
+
+    Returns:
+        Dictionary with team_scores, all_players, division_standings,
+        conference_standings, or None if fetching failed
+    """
+    # Initialize components
+    api_client = NHLApiClient(
+        base_url=config.api_base_url,
+        timeout=config.api_timeout,
+        retries=config.api_retries,
+        rate_limit_max_requests=config.rate_limit_max_requests,
+        rate_limit_window=config.rate_limit_window,
+        backoff_factor=config.backoff_factor,
+        max_backoff=config.max_backoff,
+        cache_enabled=config.cache_enabled,
+        cache_expiry=config.cache_expiry,
+        dos_max_connections=config.dos_max_connections,
+        dos_max_per_host=config.dos_max_per_host,
+        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
+        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
+    )
+
+    scorer = ScrabbleScorer()
+    team_processor = TeamProcessor(api_client, scorer)
+
+    # Create progress manager
+    progress_mgr = ProgressManager(enabled=not quiet)
+
+    # Get team count for progress tracking
+    teams_info = api_client.get_teams(season=season)
+    total_teams = len(teams_info)
+
+    # Process all teams with progress tracking
+    with progress_mgr.track_api_fetching(total_teams):
+        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
+
+    # Display summary (only if not quiet)
+    if not quiet:
+        console.print(
+            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+            f"{len(team_scores) + len(failed_teams)} teams"
+        )
+        if failed_teams:
+            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+    # Calculate standings
+    division_standings = team_processor.calculate_division_standings(team_scores)
+    conference_standings = team_processor.calculate_conference_standings(team_scores)
+
+    return {
+        "team_scores": team_scores,
+        "all_players": all_players,
+        "division_standings": division_standings,
+        "conference_standings": conference_standings,
+    }
 
 
 @cli.command()
@@ -1310,74 +1378,6 @@ def dashboard(
         logger.exception("Unexpected error during dashboard")
         console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
         sys.exit(1)
-
-
-def fetch_dashboard_data(
-    config: Config,
-    quiet: bool = False,
-    season: str | None = None,
-) -> dict[str, Any] | None:
-    """Fetch data needed for dashboard.
-
-    Args:
-        config: Configuration object
-        quiet: Whether to suppress progress bars
-        season: Optional season to analyze (format: YYYYYYYY, e.g., 20222023)
-
-    Returns:
-        Dictionary with team_scores, all_players, division_standings,
-        conference_standings, or None if fetching failed
-    """
-    # Initialize components
-    api_client = NHLApiClient(
-        base_url=config.api_base_url,
-        timeout=config.api_timeout,
-        retries=config.api_retries,
-        rate_limit_max_requests=config.rate_limit_max_requests,
-        rate_limit_window=config.rate_limit_window,
-        backoff_factor=config.backoff_factor,
-        max_backoff=config.max_backoff,
-        cache_enabled=config.cache_enabled,
-        cache_expiry=config.cache_expiry,
-        dos_max_connections=config.dos_max_connections,
-        dos_max_per_host=config.dos_max_per_host,
-        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
-        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
-    )
-
-    scorer = ScrabbleScorer()
-    team_processor = TeamProcessor(api_client, scorer)
-
-    # Create progress manager
-    progress_mgr = ProgressManager(enabled=not quiet)
-
-    # Get team count for progress tracking
-    teams_info = api_client.get_teams(season=season)
-    total_teams = len(teams_info)
-
-    # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
-
-    # Display summary (only if not quiet)
-    if not quiet:
-        console.print(
-            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-            f"{len(team_scores) + len(failed_teams)} teams"
-        )
-        if failed_teams:
-            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
-
-    # Calculate standings
-    division_standings = team_processor.calculate_division_standings(team_scores)
-    conference_standings = team_processor.calculate_conference_standings(team_scores)
-
-    return {
-        "team_scores": team_scores,
-        "all_players": all_players,
-        "division_standings": division_standings,
-        "conference_standings": conference_standings,
-    }
 
 
 def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:

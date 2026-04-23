@@ -89,6 +89,35 @@ class CircuitBreaker:
         self.last_failure_time: float | None = None
         self.state = CircuitState.CLOSED
 
+    def _on_success(self) -> None:
+        """Handle successful request - reset failure count and close circuit."""
+        if self.state == CircuitState.HALF_OPEN:
+            logger.info("Circuit breaker transitioning from HALF_OPEN to CLOSED after success")
+
+        self.failure_count = 0
+        self.state = CircuitState.CLOSED
+
+    def _on_failure(self) -> None:
+        """Handle failed request - increment failure count and potentially open circuit."""
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+
+        if self.state == CircuitState.HALF_OPEN:
+            # Any failure in HALF_OPEN state immediately opens circuit
+            logger.warning(
+                f"Circuit breaker transitioning from HALF_OPEN to OPEN "
+                f"after failure (total: {self.failure_count})"
+            )
+            self.state = CircuitState.OPEN
+
+        elif self.failure_count >= self.failure_threshold:
+            # Threshold reached in CLOSED state
+            logger.warning(
+                f"Circuit breaker transitioning from CLOSED to OPEN "
+                f"after {self.failure_count} failures (threshold: {self.failure_threshold})"
+            )
+            self.state = CircuitState.OPEN
+
     def call(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> T:
         """Execute function with circuit breaker protection.
 
@@ -137,35 +166,6 @@ class CircuitBreaker:
         except self.expected_exception:
             self._on_failure()
             raise
-
-    def _on_success(self) -> None:
-        """Handle successful request - reset failure count and close circuit."""
-        if self.state == CircuitState.HALF_OPEN:
-            logger.info("Circuit breaker transitioning from HALF_OPEN to CLOSED after success")
-
-        self.failure_count = 0
-        self.state = CircuitState.CLOSED
-
-    def _on_failure(self) -> None:
-        """Handle failed request - increment failure count and potentially open circuit."""
-        self.failure_count += 1
-        self.last_failure_time = time.time()
-
-        if self.state == CircuitState.HALF_OPEN:
-            # Any failure in HALF_OPEN state immediately opens circuit
-            logger.warning(
-                f"Circuit breaker transitioning from HALF_OPEN to OPEN "
-                f"after failure (total: {self.failure_count})"
-            )
-            self.state = CircuitState.OPEN
-
-        elif self.failure_count >= self.failure_threshold:
-            # Threshold reached in CLOSED state
-            logger.warning(
-                f"Circuit breaker transitioning from CLOSED to OPEN "
-                f"after {self.failure_count} failures (threshold: {self.failure_threshold})"
-            )
-            self.state = CircuitState.OPEN
 
     def reset(self) -> None:
         """Manually reset circuit breaker to CLOSED state.

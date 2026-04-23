@@ -9,6 +9,42 @@ from nhl_scrabble.reports.base import BaseReporter
 class PlayoffReporter(BaseReporter):
     """Generate playoff standings reports in NHL wild card format."""
 
+    def _group_teams_by_division(self, teams: list[PlayoffTeam]) -> dict[str, list[PlayoffTeam]]:
+        """Group teams by division.
+
+        Args:
+            teams: List of PlayoffTeam objects
+
+        Returns:
+            Dictionary mapping division names to team lists
+        """
+        teams_by_division: dict[str, list[PlayoffTeam]] = defaultdict(list)
+        for team in teams:
+            teams_by_division[team.division].append(team)
+
+        # Sort teams within each division by rank
+        for division in teams_by_division:
+            teams_by_division[division].sort(key=lambda x: x.division_rank)
+
+        return teams_by_division
+
+    def _format_team_line(self, team: PlayoffTeam, show_seed: bool = True) -> str:
+        """Format a single team line for the playoff report.
+
+        Args:
+            team: PlayoffTeam object
+            show_seed: Whether to show the seed type
+
+        Returns:
+            Formatted team line string
+        """
+        seed_part = f"{team.seed_type:20}" if show_seed else " " * 20
+        return (
+            f"\n    {seed_part} {team.abbrev:4} {self._format_score(team.total)} pts "
+            f"({team.players:2} players, avg: {self._format_average(team.avg)}) "
+            f"{team.status_indicator}"
+        )
+
     def generate(self, standings: dict[str, list[PlayoffTeam]]) -> str:
         """Generate playoff standings report.
 
@@ -63,39 +99,3 @@ class PlayoffReporter(BaseReporter):
                 )
 
         return "".join(parts)
-
-    def _group_teams_by_division(self, teams: list[PlayoffTeam]) -> dict[str, list[PlayoffTeam]]:
-        """Group teams by division.
-
-        Args:
-            teams: List of PlayoffTeam objects
-
-        Returns:
-            Dictionary mapping division names to team lists
-        """
-        teams_by_division: dict[str, list[PlayoffTeam]] = defaultdict(list)
-        for team in teams:
-            teams_by_division[team.division].append(team)
-
-        # Sort teams within each division by rank
-        for division in teams_by_division:
-            teams_by_division[division].sort(key=lambda x: x.division_rank)
-
-        return teams_by_division
-
-    def _format_team_line(self, team: PlayoffTeam, show_seed: bool = True) -> str:
-        """Format a single team line for the playoff report.
-
-        Args:
-            team: PlayoffTeam object
-            show_seed: Whether to show the seed type
-
-        Returns:
-            Formatted team line string
-        """
-        seed_part = f"{team.seed_type:20}" if show_seed else " " * 20
-        return (
-            f"\n    {seed_part} {team.abbrev:4} {self._format_score(team.total)} pts "
-            f"({team.players:2} players, avg: {self._format_average(team.avg)}) "
-            f"{team.status_indicator}"
-        )

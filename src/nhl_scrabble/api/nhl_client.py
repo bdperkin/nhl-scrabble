@@ -72,6 +72,27 @@ class NHLApiClient:
     BASE_URL = "https://api-web.nhle.com/v1"  # Default base URL
     _instances: ClassVar[set[weakref.ref[Any]]] = set()  # Track all instances for cleanup
 
+    @classmethod
+    def _cleanup_callback(cls, ref: weakref.ref[Any]) -> None:
+        """Remove dead instance from tracking set.
+
+        Args:
+            ref: Weak reference to the instance being garbage collected.
+        """
+        cls._instances.discard(ref)
+
+    @classmethod
+    def _cleanup_all(cls) -> None:
+        """Close all remaining open sessions at program exit (safety net)."""
+        alive_instances = [ref() for ref in cls._instances if ref() is not None]
+        if alive_instances:
+            logger.warning(
+                f"Cleaning up {len(alive_instances)} unclosed NHLApiClient session(s) at exit"
+            )
+            for instance in alive_instances:
+                if instance and not instance._closed:  # noqa: SLF001
+                    instance.close()
+
     def __init__(  # noqa: PLR0913
         self,
         base_url: str | None = None,
@@ -194,6 +215,14 @@ class NHLApiClient:
         # Register instance for cleanup at exit (safety net)
         self._instances.add(weakref.ref(self, self._cleanup_callback))
         atexit.register(self._cleanup_all)
+
+    def __del__(self) -> None:
+        """Destructor - close session if not already closed (safety net)."""
+        if not self._closed:
+            logger.warning(
+                "NHLApiClient session was not explicitly closed - cleaning up in destructor"
+            )
+            self.close()
 
     def _validate_request_url(self, url: str) -> None:
         """Validate URL with SSRF protection before making request.
@@ -430,6 +459,56 @@ class NHLApiClient:
             logger.error(f"Connection error after retries: {e}")
             raise NHLApiConnectionError("Unable to connect to NHL API after retries") from e
 
+    def _sanitize_roster_player_names(self, roster_data: dict[str, Any]) -> None:
+        """Sanitize player names in roster data to prevent injection attacks.
+
+        Validates and sanitizes all player names (firstName and lastName) in the
+        roster data for all positions (forwards, defensemen, goalies).
+
+        Args:
+            roster_data: Roster data dictionary with forwards, defensemen, goalies
+
+        Raises:
+            NHLApiError: If player names contain invalid characters (potential attack)
+
+        Note:
+            Modifies roster_data in-place for efficiency
+        """
+        for position in ["forwards", "defensemen", "goalies"]:
+            if position not in roster_data:
+                continue
+
+            for player in roster_data[position]:
+                # Validate and sanitize first name
+                if (
+                    "firstName" in player
+                    and isinstance(player["firstName"], dict)
+                    and "default" in player["firstName"]
+                ):
+                    try:
+                        player["firstName"]["default"] = validate_player_name(
+                            player["firstName"]["default"]
+                        )
+                    except ValidationError as e:
+                        logger.warning(f"Invalid player first name in API response: {e}")
+                        # Use sanitized version or skip
+                        player["firstName"]["default"] = "Unknown"
+
+                # Validate and sanitize last name
+                if (
+                    "lastName" in player
+                    and isinstance(player["lastName"], dict)
+                    and "default" in player["lastName"]
+                ):
+                    try:
+                        player["lastName"]["default"] = validate_player_name(
+                            player["lastName"]["default"]
+                        )
+                    except ValidationError as e:
+                        logger.warning(f"Invalid player last name in API response: {e}")
+                        # Use sanitized version or skip
+                        player["lastName"]["default"] = "Unknown"
+
     def get_team_roster(  # noqa: PLR0915
         self, team_abbrev: str, season: str | None = None
     ) -> dict[str, Any]:
@@ -620,56 +699,6 @@ class NHLApiClient:
         # Wrap with circuit breaker for DoS prevention
         return self.circuit_breaker.call(_fetch_roster)
 
-    def _sanitize_roster_player_names(self, roster_data: dict[str, Any]) -> None:
-        """Sanitize player names in roster data to prevent injection attacks.
-
-        Validates and sanitizes all player names (firstName and lastName) in the
-        roster data for all positions (forwards, defensemen, goalies).
-
-        Args:
-            roster_data: Roster data dictionary with forwards, defensemen, goalies
-
-        Raises:
-            NHLApiError: If player names contain invalid characters (potential attack)
-
-        Note:
-            Modifies roster_data in-place for efficiency
-        """
-        for position in ["forwards", "defensemen", "goalies"]:
-            if position not in roster_data:
-                continue
-
-            for player in roster_data[position]:
-                # Validate and sanitize first name
-                if (
-                    "firstName" in player
-                    and isinstance(player["firstName"], dict)
-                    and "default" in player["firstName"]
-                ):
-                    try:
-                        player["firstName"]["default"] = validate_player_name(
-                            player["firstName"]["default"]
-                        )
-                    except ValidationError as e:
-                        logger.warning(f"Invalid player first name in API response: {e}")
-                        # Use sanitized version or skip
-                        player["firstName"]["default"] = "Unknown"
-
-                # Validate and sanitize last name
-                if (
-                    "lastName" in player
-                    and isinstance(player["lastName"], dict)
-                    and "default" in player["lastName"]
-                ):
-                    try:
-                        player["lastName"]["default"] = validate_player_name(
-                            player["lastName"]["default"]
-                        )
-                    except ValidationError as e:
-                        logger.warning(f"Invalid player last name in API response: {e}")
-                        # Use sanitized version or skip
-                        player["lastName"]["default"] = "Unknown"
-
     def get_rate_limit_stats(self) -> dict[str, Any]:
         """Get rate limiter statistics.
 
@@ -712,32 +741,3 @@ class NHLApiClient:
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Close session when exiting context manager."""
         self.close()
-
-    def __del__(self) -> None:
-        """Destructor - close session if not already closed (safety net)."""
-        if not self._closed:
-            logger.warning(
-                "NHLApiClient session was not explicitly closed - cleaning up in destructor"
-            )
-            self.close()
-
-    @classmethod
-    def _cleanup_callback(cls, ref: weakref.ref[Any]) -> None:
-        """Remove dead instance from tracking set.
-
-        Args:
-            ref: Weak reference to the instance being garbage collected.
-        """
-        cls._instances.discard(ref)
-
-    @classmethod
-    def _cleanup_all(cls) -> None:
-        """Close all remaining open sessions at program exit (safety net)."""
-        alive_instances = [ref() for ref in cls._instances if ref() is not None]
-        if alive_instances:
-            logger.warning(
-                f"Cleaning up {len(alive_instances)} unclosed NHLApiClient session(s) at exit"
-            )
-            for instance in alive_instances:
-                if instance and not instance._closed:  # noqa: SLF001
-                    instance.close()

@@ -200,6 +200,86 @@ class InteractiveShell:
 
         self.console.print("\n[cyan]Goodbye![/cyan]")
 
+    def _find_team(self, abbrev: str) -> TeamScore | None:
+        """Find team by abbreviation."""
+        if not self.data:
+            return None
+
+        teams: list[TeamScore] = self.data["teams"]
+        for team in teams:
+            if team.abbrev.upper() == abbrev.upper():
+                return team
+        return None
+
+    def _find_player(self, name: str) -> PlayerScore | None:  # noqa: C901
+        """Find player by name (fuzzy match)."""
+        if not self.data:
+            return None
+
+        name_lower = name.lower()
+        teams: list[TeamScore] = self.data["teams"]
+
+        # Exact match first
+        for team in teams:
+            for player in team.players:
+                if player.full_name.lower() == name_lower:
+                    return player
+
+        # Partial match (last name)
+        for team in teams:
+            for player in team.players:
+                if name_lower in player.last_name.lower():
+                    return player
+
+        # Partial match (any part)
+        for team in teams:
+            for player in team.players:
+                if name_lower in player.full_name.lower():
+                    return player
+
+        return None
+
+    def _display_team(self, team: TeamScore) -> None:
+        """Display team details."""
+        table = Table(title=f"{team.abbrev} ({team.abbrev})")
+        table.add_column("Attribute", style="cyan")
+        table.add_column("Value", style="green")
+
+        table.add_row("Conference", team.conference)
+        table.add_row("Division", team.division)
+        table.add_row("Total Score", str(team.total))
+        table.add_row("Players", str(len(team.players)))
+        table.add_row("Average Score", f"{team.avg_per_player:.2f}")
+
+        self.console.print(table)
+        self.console.print()
+
+        # Show top players
+        top_players = sorted(team.players, key=lambda p: p.full_score, reverse=True)[:10]
+
+        player_table = Table(title="Top 10 Players")
+        player_table.add_column("Rank", style="cyan", width=6)
+        player_table.add_column("Player", style="green", width=25)
+        player_table.add_column("Score", style="magenta", width=8)
+
+        for i, player in enumerate(top_players, 1):
+            player_table.add_row(str(i), player.full_name, str(player.full_score))
+
+        self.console.print(player_table)
+
+    def _display_player(self, player: PlayerScore) -> None:
+        """Display player details."""
+        table = Table(title=player.full_name)
+        table.add_column("Attribute", style="cyan")
+        table.add_column("Value", style="green")
+
+        table.add_row("Team", player.team)
+        table.add_row("First Name", player.first_name)
+        table.add_row("Last Name", player.last_name)
+        table.add_row("Scrabble Score", str(player.full_score))
+
+        self.console.print(table)
+
     def cmd_show(self, args: list[str]) -> None:
         """Show team or player details."""
         if not args:
@@ -336,6 +416,18 @@ class InteractiveShell:
             self.console.print(f"\n[blue]{player2.full_name}[/blue] has a higher score")
         else:
             self.console.print("\n[yellow]Tied![/yellow]")
+
+    def _display_team_list(self, teams: list[TeamScore], title: str) -> None:
+        """Display list of teams."""
+        table = Table(title=title)
+        table.add_column("Rank", style="cyan", width=6)
+        table.add_column("Team", style="green", width=25)
+        table.add_column("Score", style="magenta", width=8)
+
+        for i, team in enumerate(teams, 1):
+            table.add_row(str(i), team.abbrev, str(team.total))
+
+        self.console.print(table)
 
     def cmd_filter(self, args: list[str]) -> None:
         """Filter teams by division or conference."""
@@ -591,95 +683,3 @@ class InteractiveShell:
             self.console.print(
                 "\n[yellow]Tip: Type 'help <command>' for detailed help on a specific command[/yellow]"
             )
-
-    def _find_team(self, abbrev: str) -> TeamScore | None:
-        """Find team by abbreviation."""
-        if not self.data:
-            return None
-
-        teams: list[TeamScore] = self.data["teams"]
-        for team in teams:
-            if team.abbrev.upper() == abbrev.upper():
-                return team
-        return None
-
-    def _find_player(self, name: str) -> PlayerScore | None:  # noqa: C901
-        """Find player by name (fuzzy match)."""
-        if not self.data:
-            return None
-
-        name_lower = name.lower()
-        teams: list[TeamScore] = self.data["teams"]
-
-        # Exact match first
-        for team in teams:
-            for player in team.players:
-                if player.full_name.lower() == name_lower:
-                    return player
-
-        # Partial match (last name)
-        for team in teams:
-            for player in team.players:
-                if name_lower in player.last_name.lower():
-                    return player
-
-        # Partial match (any part)
-        for team in teams:
-            for player in team.players:
-                if name_lower in player.full_name.lower():
-                    return player
-
-        return None
-
-    def _display_team(self, team: TeamScore) -> None:
-        """Display team details."""
-        table = Table(title=f"{team.abbrev} ({team.abbrev})")
-        table.add_column("Attribute", style="cyan")
-        table.add_column("Value", style="green")
-
-        table.add_row("Conference", team.conference)
-        table.add_row("Division", team.division)
-        table.add_row("Total Score", str(team.total))
-        table.add_row("Players", str(len(team.players)))
-        table.add_row("Average Score", f"{team.avg_per_player:.2f}")
-
-        self.console.print(table)
-        self.console.print()
-
-        # Show top players
-        top_players = sorted(team.players, key=lambda p: p.full_score, reverse=True)[:10]
-
-        player_table = Table(title="Top 10 Players")
-        player_table.add_column("Rank", style="cyan", width=6)
-        player_table.add_column("Player", style="green", width=25)
-        player_table.add_column("Score", style="magenta", width=8)
-
-        for i, player in enumerate(top_players, 1):
-            player_table.add_row(str(i), player.full_name, str(player.full_score))
-
-        self.console.print(player_table)
-
-    def _display_player(self, player: PlayerScore) -> None:
-        """Display player details."""
-        table = Table(title=player.full_name)
-        table.add_column("Attribute", style="cyan")
-        table.add_column("Value", style="green")
-
-        table.add_row("Team", player.team)
-        table.add_row("First Name", player.first_name)
-        table.add_row("Last Name", player.last_name)
-        table.add_row("Scrabble Score", str(player.full_score))
-
-        self.console.print(table)
-
-    def _display_team_list(self, teams: list[TeamScore], title: str) -> None:
-        """Display list of teams."""
-        table = Table(title=title)
-        table.add_column("Rank", style="cyan", width=6)
-        table.add_column("Team", style="green", width=25)
-        table.add_column("Score", style="magenta", width=8)
-
-        for i, team in enumerate(teams, 1):
-            table.add_row(str(i), team.abbrev, str(team.total))
-
-        self.console.print(table)

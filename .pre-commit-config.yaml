@@ -388,6 +388,23 @@ repos:
         # Non-blocking during adoption phase (remove '|| true' after team training)
         # Configuration is read automatically from pyproject.toml
 
+  # ============================================================================
+  # Python Statement Sorting - Class Member Organization
+  # ============================================================================
+
+  - repo: https://github.com/bwhmather/ssort
+    rev: 0.16.0
+    hooks:
+      - id: ssort
+        name: ssort
+        # Comprehensive Python statement sorting (matches ruff's ALL rules philosophy)
+        # Automatically sorts class members (dunder, classmethod, property, public, private)
+        # and module-level statements for consistent code organization
+        description: Sort Python class members and statements
+        args: []
+        # Exclude files where order matters
+        exclude: ^(tests/fixtures/|migrations/)
+
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1
     hooks:

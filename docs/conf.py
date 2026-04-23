@@ -263,15 +263,6 @@ text_newlines = "unix"
 text_sectionchars = '*=-~"+`'
 
 
-# -- Builder-specific configuration -----------------------------------------
-
-
-def setup(app: "Sphinx") -> None:
-    """Sphinx setup hook for builder-specific configuration."""
-    # Connect to builder-inited event to configure doctest exclusions
-    app.connect("builder-inited", _configure_doctest_exclusions)
-
-
 def _configure_doctest_exclusions(app: "Sphinx") -> None:
     """Exclude API autodoc files from doctest builder.
 
@@ -286,3 +277,12 @@ def _configure_doctest_exclusions(app: "Sphinx") -> None:
                 "api/scoring.rst",
             ]
         )
+
+
+# -- Builder-specific configuration -----------------------------------------
+
+
+def setup(app: "Sphinx") -> None:
+    """Sphinx setup hook for builder-specific configuration."""
+    # Connect to builder-inited event to configure doctest exclusions
+    app.connect("builder-inited", _configure_doctest_exclusions)

@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) 
 **Current Version:** 2.0.0
 **Python:** [3.10-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
-**Pre-commit Hooks:** 66 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/) and [refurb](https://github.com/dosisod/refurb))
+**Pre-commit Hooks:** 67 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/), [refurb](https://github.com/dosisod/refurb), and [ssort](https://github.com/bwhmather/ssort))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
 
 ## Quick Start
@@ -116,9 +116,9 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
-## Pre-commit Hooks (66 Comprehensive Checks)
+## Pre-commit Hooks (67 Comprehensive Checks)
 
-The project uses 66 pre-commit hooks for automatic code quality validation:
+The project uses 67 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -223,6 +223,10 @@ The project uses 66 pre-commit hooks for automatic code quality validation:
 - `pyupgrade`: Modernize Python syntax for Python 3.10+ (f-strings, type hints, removes deprecated imports)
 - `refurb`: Python code modernization linter (pathlib, comprehensions, modern idioms) - **warning mode, non-blocking**
 
+**Python Statement Sorting Hooks (1 from bwhmather/ssort):**
+
+- `ssort`: Sort Python class members and module statements (dunder methods, classmethods, properties, public methods, private methods in consistent order)
+
 **Ruff Hooks (2 from ruff-pre-commit):**
 
 - `ruff-check`: Comprehensive linting with ALL rules (--fix, --exit-non-zero-on-fix)
@@ -280,7 +284,7 @@ git commit --no-verify -m "message"
 - Task tracking updates
 - Emergency hotfixes (still run quality checks!)
 
-**Never skip quality checks** - The 60 other hooks exist to protect code quality and security.
+**Never skip quality checks** - The 66 other hooks exist to protect code quality and security.
 
 ## Development Tools
 

@@ -264,60 +264,6 @@ def _group_teams_by_grouping(
     return divisions, conferences
 
 
-@app.get("/api/analyze", response_model=None)
-async def analyze_get(
-    request: Request,
-    top_players: int = 20,
-    top_team_players: int = 5,
-    use_cache: bool = True,
-) -> HTMLResponse | dict[str, Any]:
-    """Run NHL Scrabble analysis (GET endpoint for HTMX).
-
-    Args:
-        request: FastAPI request object
-        top_players: Number of top players to include
-        top_team_players: Top players per team
-        use_cache: Use cached results if available
-
-    Returns:
-        Analysis results as HTML or JSON
-
-    Raises:
-        HTTPException: If NHL API is unavailable or analysis fails
-    """
-    # Create request object
-    analysis_request = AnalysisRequest(
-        top_players=top_players,
-        top_team_players=top_team_players,
-        use_cache=use_cache,
-    )
-
-    # Get analysis data
-    data = await analyze_post(analysis_request)
-
-    # Check if this is an HTMX request
-    is_htmx = request.headers.get("HX-Request") == "true"
-
-    if is_htmx and templates is not None:
-        # Return HTML fragment for HTMX
-        return templates.TemplateResponse(
-            request=request,
-            name="results.html",
-            context={
-                "request": request,
-                "top_players": data["top_players"],
-                "team_standings": data["team_standings"],
-                "division_standings": data["division_standings"],
-                "conference_standings": data["conference_standings"],
-                "playoff_bracket": data["playoff_bracket"],
-                "stats": data["stats"],
-            },
-        )
-
-    # Return JSON for regular API calls
-    return data
-
-
 @app.post("/api/analyze", response_model=AnalysisResponse)
 async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
     """Run NHL Scrabble analysis.
@@ -430,6 +376,60 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
             status_code=500,
             detail=f"Analysis failed: {e!s}",
         ) from e
+
+
+@app.get("/api/analyze", response_model=None)
+async def analyze_get(
+    request: Request,
+    top_players: int = 20,
+    top_team_players: int = 5,
+    use_cache: bool = True,
+) -> HTMLResponse | dict[str, Any]:
+    """Run NHL Scrabble analysis (GET endpoint for HTMX).
+
+    Args:
+        request: FastAPI request object
+        top_players: Number of top players to include
+        top_team_players: Top players per team
+        use_cache: Use cached results if available
+
+    Returns:
+        Analysis results as HTML or JSON
+
+    Raises:
+        HTTPException: If NHL API is unavailable or analysis fails
+    """
+    # Create request object
+    analysis_request = AnalysisRequest(
+        top_players=top_players,
+        top_team_players=top_team_players,
+        use_cache=use_cache,
+    )
+
+    # Get analysis data
+    data = await analyze_post(analysis_request)
+
+    # Check if this is an HTMX request
+    is_htmx = request.headers.get("HX-Request") == "true"
+
+    if is_htmx and templates is not None:
+        # Return HTML fragment for HTMX
+        return templates.TemplateResponse(
+            request=request,
+            name="results.html",
+            context={
+                "request": request,
+                "top_players": data["top_players"],
+                "team_standings": data["team_standings"],
+                "division_standings": data["division_standings"],
+                "conference_standings": data["conference_standings"],
+                "playoff_bracket": data["playoff_bracket"],
+                "stats": data["stats"],
+            },
+        )
+
+    # Return JSON for regular API calls
+    return data
 
 
 @app.get("/api/players/{player_id}")

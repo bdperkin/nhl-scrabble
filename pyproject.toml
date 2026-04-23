@@ -439,6 +439,26 @@ python_version = "3.10"
 # Add patterns here as false positives are discovered
 ignore = []
 
+# ssort - Python statement sorting
+[tool.ssort]
+# Sections to sort (in order):
+# 1. __future__ imports
+# 2. Module docstring
+# 3. Imports
+# 4. Module-level constants
+# 5. Module-level code
+# 6. Class definitions
+# 7. Function definitions
+
+# Skip sorting in these files
+skip = [
+    "tests/fixtures/",
+    "migrations/",
+]
+
+# Files to sort (glob patterns)
+src_paths = ["src/", "tests/"]
+
 # MyPy configuration
 [tool.mypy]
 python_version = "3.10"
@@ -932,6 +952,7 @@ exclude = [
     "*.egg-info",
     "__pycache__",
     "tests",  # Exclude tests from docstring coverage checks
+    ".scratch",  # Exclude utility scripts from docstring coverage checks
 ]
 
 # Python file extensions

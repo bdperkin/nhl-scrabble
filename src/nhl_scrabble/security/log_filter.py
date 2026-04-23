@@ -152,6 +152,26 @@ class SensitiveDataFilter(logging.Filter):
         ),
     ]
 
+    def _sanitize_text(self, text: str) -> str:
+        """Sanitize a text string by applying all patterns.
+
+        Args:
+            text: Text to sanitize.
+
+        Returns:
+            Sanitized text with sensitive data replaced.
+        """
+        # Skip sanitization if text is a known safe phrase
+        if text in self.SAFE_PHRASES:
+            return text
+
+        # Apply all sanitization patterns
+        sanitized = text
+        for pattern, replacement in self.PATTERNS:
+            sanitized = pattern.sub(replacement, sanitized)
+
+        return sanitized
+
     def filter(self, record: logging.LogRecord) -> bool:
         """Sanitize sensitive data from log record.
 
@@ -182,23 +202,3 @@ class SensitiveDataFilter(logging.Filter):
             record.args = tuple(sanitized_args)
 
         return True
-
-    def _sanitize_text(self, text: str) -> str:
-        """Sanitize a text string by applying all patterns.
-
-        Args:
-            text: Text to sanitize.
-
-        Returns:
-            Sanitized text with sensitive data replaced.
-        """
-        # Skip sanitization if text is a known safe phrase
-        if text in self.SAFE_PHRASES:
-            return text
-
-        # Apply all sanitization patterns
-        sanitized = text
-        for pattern, replacement in self.PATTERNS:
-            sanitized = pattern.sub(replacement, sanitized)
-
-        return sanitized
