@@ -44,7 +44,6 @@ class OutputFormatter(Protocol):
         Raises:
             ValueError: If data is invalid or missing required fields.
         """
-        pass
 
 
 __all__ = [
