@@ -17,16 +17,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-
-class ValidationError(ValueError):
-    """Raised when input validation fails.
-
-    This exception provides clear, actionable error messages that
-    indicate what was invalid and what the expected format is.
-
-    Examples:
-        >>> raise ValidationError("top_players must be between 1 and 100, got 999")
-    """
+from nhl_scrabble.exceptions import ValidationError
 
 
 def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:

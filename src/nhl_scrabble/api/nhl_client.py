@@ -14,12 +14,19 @@ import requests
 import requests_cache
 from requests.adapters import HTTPAdapter
 
+from nhl_scrabble.exceptions import (
+    NHLApiConnectionError,
+    NHLApiError,
+    NHLApiNotFoundError,
+    NHLApiSSLError,
+    SSRFProtectionError,
+    ValidationError,
+)
 from nhl_scrabble.rate_limiter import RateLimiter
 from nhl_scrabble.security.circuit_breaker import CircuitBreaker
-from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_url_for_ssrf
+from nhl_scrabble.security.ssrf_protection import validate_url_for_ssrf
 from nhl_scrabble.utils.retry import retry
 from nhl_scrabble.validators import (
-    ValidationError,
     validate_api_response_structure,
     validate_player_name,
     validate_team_abbreviation,
@@ -27,21 +34,13 @@ from nhl_scrabble.validators import (
 
 logger = logging.getLogger(__name__)
 
-
-class NHLApiError(Exception):
-    """Base exception for NHL API errors."""
-
-
-class NHLApiConnectionError(NHLApiError):
-    """Raised when unable to connect to the NHL API."""
-
-
-class NHLApiNotFoundError(NHLApiError):
-    """Raised when the requested resource is not found."""
-
-
-class NHLApiSSLError(NHLApiError):
-    """Raised when SSL/TLS certificate verification fails."""
+__all__ = [
+    "NHLApiClient",
+    "NHLApiConnectionError",
+    "NHLApiError",
+    "NHLApiNotFoundError",
+    "NHLApiSSLError",
+]
 
 
 class NHLApiClient:
