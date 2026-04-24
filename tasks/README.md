@@ -42,7 +42,10 @@ Each task includes:
 | 004 | Fix Rate Limiting to Only Apply After Successful Requests | MEDIUM   | 1 hour    | Completed | [#47](https://github.com/bdperkin/nhl-scrabble/issues/47) | -     |
 | 005 | Implement Exponential Backoff for Retries                 | MEDIUM   | 2-3 hours | Completed | [#48](https://github.com/bdperkin/nhl-scrabble/issues/48) | -     |
 | 006 | Validate CLI Output Paths                                 | MEDIUM   | 1-2 hours | Completed | [#49](https://github.com/bdperkin/nhl-scrabble/issues/49) | -     |
-| 007 | Fix Branch Protection Hook Failures in CI                 | MEDIUM   | 1-2 hours | Completed | [#58](https://github.com/bdperkin/nhl-scrabble/issues/58) | -     |
+| 007 | Fix Branch Protection Hook Failures in CI                 | MEDIUM   | 1-2 hours | Completed | [#58](https://github.com/bdperkin/nhl-scrabble/issues/58)   | -     |
+| 008 | Fix NHLApiClient Session Cleanup Warning                  | MEDIUM   | 1-2 hours | Active    | [#362](https://github.com/bdperkin/nhl-scrabble/issues/362) | -     |
+| 009 | Verify and Validate Caching is Enabled by Default        | MEDIUM   | 2-3 hours | Active    | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | -     |
+| 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH     | 30min-1h  | Active    | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | -     |
 
 ### Security
 
@@ -121,6 +124,7 @@ Each task includes:
 | 025 | Add Automated Documentation Link Validation to CI             | MEDIUM   | 1 hour                                                     | Active    | [#351](https://github.com/bdperkin/nhl-scrabble/issues/351) | From documentation audit (task 013), gap #2                              |
 | 026 | Add Automated Code Example Testing to CI                      | MEDIUM   | 2 hours                                                    | Active    | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | From documentation audit (task 013), gap #3                              |
 | 027 | Improve Function Example Coverage in Docstrings               | MEDIUM   | 3-4 hours                                                  | Active    | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | From documentation audit (task 013), gap #4                              |
+| 028 | Add Unicode Normalization for Player Names                    | MEDIUM   | 2-3 hours                                                  | Active    | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | -                                                                        |
 
 ### Testing
 
@@ -239,6 +243,7 @@ Each task includes:
 | 024 | Make 'ty' Blocking After Validation Period                                    | LOW      | 30min-1h            | Active    | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | -                                                                                      |
 | 025 | Make 'refurb' Blocking After Validation Period                                | LOW      | 30min-1h            | Active    | [#356](https://github.com/bdperkin/nhl-scrabble/issues/356) | -                                                                                      |
 | 026 | Make 'gitlint' Blocking (Except GitHub CI Workflows) After Validation Period  | LOW      | 30min-1h            | Active    | [#357](https://github.com/bdperkin/nhl-scrabble/issues/357) | -                                                                                      |
+| 027 | Audit and Adjust Logging Levels                                               | LOW      | 2-3 hours           | Active    | [#364](https://github.com/bdperkin/nhl-scrabble/issues/364) | -                                                                                      |
 
 ## Statistics
 
@@ -246,27 +251,27 @@ Each task includes:
 
 | Category     | Active | Completed | Total   |
 | ------------ | ------ | --------- | ------- |
-| Bug Fixes    | 0      | 7         | 7       |
+| Bug Fixes    | 3      | 7         | 10      |
 | Security     | 0      | 14        | 14      |
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 13     | 16        | 29      |
-| **TOTAL**    | **61** | **111**   | **172** |
+| Refactoring  | 14     | 16        | 30      |
+| **TOTAL**    | **65** | **111**   | **176** |
 
 ### Effort Estimates by Category
 
 | Category     | Estimated Effort |
 | ------------ | ---------------- |
-| Bug Fixes    | 9.0 hours        |
+| Bug Fixes    | 12.25 hours      |
 | Security     | 82.0 hours       |
 | Optimization | 36.0 hours       |
 | Enhancement  | 201.5 hours      |
 | Testing      | 265.0 hours      |
 | New Features | 227.0 hours      |
-| Refactoring  | 217.25 hours     |
-| **TOTAL**    | **1037.75 hours** |
+| Refactoring  | 219.75 hours     |
+| **TOTAL**    | **1043.5 hours**  |
 
 ### Completion Progress
 
@@ -286,7 +291,7 @@ Each task includes:
 | Priority | Count |
 | -------- | ----- |
 | CRITICAL | 0     |
-| HIGH     | 0     |
+| HIGH     | 1     |
 | MEDIUM   | 57    |
 | LOW      | 1     |
 
@@ -298,16 +303,16 @@ _No critical priority tasks_
 
 ### High Priority (Current Sprint)
 
-_No high priority tasks_
+1. **Bug Fix**: [#010 Fix Output Format Validation Mismatch](bug-fixes/010-fix-output-format-validation-mismatch.md) - 30min-1h - CLI crashes with confusing pydantic error for valid format options like markdown
 
 ## Total Project Roadmap
 
-**Total Tasks**: 172 tasks (61 active, 111 completed)
+**Total Tasks**: 180 tasks (65 active, 115 completed)
 
-- **Total Estimated Effort**: 1036.25 hours
-  - Active Tasks: 495.75 hours
+- **Total Estimated Effort**: 1043.5 hours
+  - Active Tasks: 503 hours
   - Completed Tasks: 540.5 hours (actual: 533.5 hours)
-- **Overall Completion**: 64.5%
+- **Overall Completion**: 63.4%
 
 ## Task Management Guidelines
 
