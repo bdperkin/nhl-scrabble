@@ -18,9 +18,10 @@ import click
 from rich.console import Console
 
 from nhl_scrabble import __version__
-from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiError
+from nhl_scrabble.api.nhl_client import NHLApiError
 from nhl_scrabble.config import Config
 from nhl_scrabble.dashboard import StatisticsDashboard
+from nhl_scrabble.di import DependencyContainer
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
 from nhl_scrabble.logging_config import setup_logging
@@ -32,10 +33,8 @@ from nhl_scrabble.models.standings import (
 )
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
-from nhl_scrabble.processors.team_processor import TeamProcessor
 from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.config import ScoringConfig
-from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 from nhl_scrabble.search import PlayerSearch
 from nhl_scrabble.ui.progress import ProgressManager
 from nhl_scrabble.validators import ValidationError, validate_file_path
@@ -232,6 +231,9 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 ) -> str | None:
     """Run the complete NHL Scrabble analysis.
 
+    Uses dependency injection to create properly configured components, making
+    the function easier to test and maintain.
+
     Args:
         config: Configuration object
         clear_cache: Whether to clear the API cache before running
@@ -254,32 +256,22 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     Raises:
         NHLApiError: If there are issues fetching data from NHL API
     """
-    # Initialize components
-    api_client = NHLApiClient(
-        base_url=config.api_base_url,
-        timeout=config.api_timeout,
-        retries=config.api_retries,
-        rate_limit_max_requests=config.rate_limit_max_requests,
-        rate_limit_window=config.rate_limit_window,
-        backoff_factor=config.backoff_factor,
-        max_backoff=config.max_backoff,
-        cache_enabled=config.cache_enabled,
-        cache_expiry=config.cache_expiry,
-        dos_max_connections=config.dos_max_connections,
-        dos_max_per_host=config.dos_max_per_host,
-        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
-        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
+    # Create dependency container
+    container = DependencyContainer(config)
+
+    # Initialize components using dependency injection
+    api_client = container.create_api_client()
+    scorer = container.create_scorer(letter_values=scoring_values)
+    team_processor = container.create_team_processor(
+        api_client=api_client,
+        scorer=scorer,
     )
+    playoff_calculator = PlayoffCalculator()
 
     # Clear cache if requested
     if clear_cache:
         api_client.clear_cache()
         logger.info("API cache cleared")
-
-    # Initialize scorer with custom or default values
-    scorer = ScrabbleScorer(letter_values=scoring_values)
-    team_processor = TeamProcessor(api_client, scorer)
-    playoff_calculator = PlayoffCalculator()
 
     # Create progress manager
     progress_mgr = ProgressManager(enabled=not quiet)
@@ -1078,20 +1070,14 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
             console.print("\n[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n")
             console.print("=" * 80)
 
-        # Initialize components
-        api_client = NHLApiClient(
-            base_url=config.api_base_url,
-            timeout=config.api_timeout,
-            retries=config.api_retries,
-            rate_limit_max_requests=config.rate_limit_max_requests,
-            rate_limit_window=config.rate_limit_window,
-            backoff_factor=config.backoff_factor,
-            max_backoff=config.max_backoff,
-            cache_enabled=config.cache_enabled,
-            cache_expiry=config.cache_expiry,
+        # Initialize components using dependency injection
+        container = DependencyContainer(config)
+        api_client = container.create_api_client()
+        scorer = container.create_scorer()
+        team_processor = container.create_team_processor(
+            api_client=api_client,
+            scorer=scorer,
         )
-        scorer = ScrabbleScorer()
-        team_processor = TeamProcessor(api_client, scorer)
 
         # Process all teams (progress handled internally by TeamProcessor)
         _, all_players, failed_teams = team_processor.process_all_teams()
@@ -1217,6 +1203,8 @@ def fetch_dashboard_data(
 ) -> DashboardData | None:
     """Fetch data needed for dashboard.
 
+    Uses dependency injection to create properly configured components.
+
     Args:
         config: Configuration object
         quiet: Whether to suppress progress bars
@@ -1226,25 +1214,14 @@ def fetch_dashboard_data(
         Dictionary with team_scores, all_players, division_standings,
         conference_standings, or None if fetching failed
     """
-    # Initialize components
-    api_client = NHLApiClient(
-        base_url=config.api_base_url,
-        timeout=config.api_timeout,
-        retries=config.api_retries,
-        rate_limit_max_requests=config.rate_limit_max_requests,
-        rate_limit_window=config.rate_limit_window,
-        backoff_factor=config.backoff_factor,
-        max_backoff=config.max_backoff,
-        cache_enabled=config.cache_enabled,
-        cache_expiry=config.cache_expiry,
-        dos_max_connections=config.dos_max_connections,
-        dos_max_per_host=config.dos_max_per_host,
-        dos_circuit_breaker_threshold=config.dos_circuit_breaker_threshold,
-        dos_circuit_breaker_timeout=config.dos_circuit_breaker_timeout,
+    # Initialize components using dependency injection
+    container = DependencyContainer(config)
+    api_client = container.create_api_client()
+    scorer = container.create_scorer()
+    team_processor = container.create_team_processor(
+        api_client=api_client,
+        scorer=scorer,
     )
-
-    scorer = ScrabbleScorer()
-    team_processor = TeamProcessor(api_client, scorer)
 
     # Create progress manager
     progress_mgr = ProgressManager(enabled=not quiet)

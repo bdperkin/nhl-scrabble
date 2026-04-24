@@ -10,11 +10,12 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiNotFoundError
+    from nhl_scrabble.interfaces import APIClientProtocol, ScorerProtocol
+
+from nhl_scrabble.api.nhl_client import NHLApiNotFoundError
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings
 from nhl_scrabble.models.team import TeamScore
-from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
 logger = logging.getLogger(__name__)
 
@@ -29,13 +30,13 @@ class TeamProcessor:
     """
 
     def __init__(
-        self, api_client: NHLApiClient, scorer: ScrabbleScorer, max_workers: int = 5
+        self, api_client: APIClientProtocol, scorer: ScorerProtocol, max_workers: int = 5
     ) -> None:
         """Initialize the team processor.
 
         Args:
-            api_client: NHL API client for fetching data
-            scorer: Scrabble scorer for calculating player scores
+            api_client: NHL API client for fetching data (APIClientProtocol)
+            scorer: Scrabble scorer for calculating player scores (ScorerProtocol)
             max_workers: Maximum number of concurrent API requests (default: 5)
         """
         self.api_client = api_client

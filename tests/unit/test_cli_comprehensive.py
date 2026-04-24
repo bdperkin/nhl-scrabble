@@ -476,8 +476,8 @@ class TestOtherCommands:
         assert result.exit_code == 0
         assert "search" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_search_basic(self, mock_client: MagicMock, mock_processor: MagicMock) -> None:
         """Test basic search functionality."""
         from nhl_scrabble.models.player import PlayerScore
@@ -505,8 +505,8 @@ class TestOtherCommands:
         result = runner.invoke(cli, ["search", "Doe", "--quiet"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_search_with_filters(self, mock_client: MagicMock, mock_processor: MagicMock) -> None:
         """Test search with various filters."""
         mock_processor.return_value.process_all_teams.return_value = ({}, [], [])
@@ -533,8 +533,8 @@ class TestOtherCommands:
         )
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_search_fuzzy(self, mock_client: MagicMock, mock_processor: MagicMock) -> None:
         """Test fuzzy search."""
         from nhl_scrabble.models.player import PlayerScore
@@ -562,8 +562,8 @@ class TestOtherCommands:
         result = runner.invoke(cli, ["search", "McDavid", "--fuzzy", "--quiet"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_search_json_output(self, mock_client: MagicMock, mock_processor: MagicMock) -> None:
         """Test search with JSON output."""
         mock_processor.return_value.process_all_teams.return_value = ({}, [], [])
@@ -572,8 +572,8 @@ class TestOtherCommands:
         result = runner.invoke(cli, ["search", "--format", "json", "--quiet"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_search_to_file(
         self, mock_client: MagicMock, mock_processor: MagicMock, tmp_path: Path
     ) -> None:
@@ -594,8 +594,8 @@ class TestOtherCommands:
         assert "dashboard" in result.output.lower()
 
     @patch("nhl_scrabble.cli.StatisticsDashboard")
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_dashboard_basic(
         self,
         mock_client: MagicMock,
@@ -615,8 +615,8 @@ class TestOtherCommands:
         # May fail due to data issues, but command should be invoked
         assert result.exit_code in [0, 1]
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_dashboard_with_filters(
         self, mock_client: MagicMock, mock_processor: MagicMock
     ) -> None:

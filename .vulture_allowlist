@@ -44,3 +44,6 @@ clear_all  # HistoricalDataStore method - public API
 # Pydantic Settings configuration (used by pydantic-settings framework)
 model_config  # Config.model_config - pydantic SettingsConfigDict
 max_concurrent_requests  # Config.max_concurrent_requests - used by API client
+
+# Dependency Injection public API (used by external callers)
+create_dependencies  # di.create_dependencies - convenience function for creating all dependencies

@@ -116,6 +116,85 @@ nhl-scrabble/
 - --format (text/json), --output, --verbose
 - Environment variable support
 
+**Dependency Injection (`interfaces.py` and `di.py`):**
+
+- Protocol-based dependency injection ([PEP 544](https://peps.python.org/pep-0544/))
+- Loose coupling through Protocol interfaces
+- Centralized dependency creation via DependencyContainer
+- Easy testing with Protocol-based mocks
+- Type-safe dependency injection
+- Follows dependency inversion principle
+
+### Dependency Injection Pattern
+
+The codebase uses Protocol-based dependency injection to improve testability and reduce coupling:
+
+**Protocol Interfaces (`src/nhl_scrabble/interfaces.py`):**
+
+```python
+from nhl_scrabble.interfaces import (
+    APIClientProtocol,
+    ScorerProtocol,
+    TeamProcessorProtocol,
+)
+
+
+# Components depend on Protocol interfaces, not concrete classes
+def process_data(client: APIClientProtocol, scorer: ScorerProtocol) -> None:
+    teams = client.get_teams()
+    # ...
+```
+
+**Dependency Container (`src/nhl_scrabble/di.py`):**
+
+```python
+from nhl_scrabble.di import DependencyContainer
+from nhl_scrabble.config import Config
+
+# Create dependencies with proper configuration
+config = Config.from_env()
+container = DependencyContainer(config)
+
+# Auto-create dependencies
+api_client = container.create_api_client()
+scorer = container.create_scorer()
+processor = container.create_team_processor()
+
+# Or inject custom dependencies for testing
+mock_client = MockAPIClient()
+processor = container.create_team_processor(api_client=mock_client)
+```
+
+**Benefits:**
+
+- **Easier Testing**: Create simple mock classes that implement Protocols (no complex mocking frameworks)
+- **Reduced Coupling**: Components depend on interfaces, not concrete implementations
+- **Type Safety**: Static type checking ensures Protocols are satisfied
+- **Flexibility**: Easy to swap implementations without changing component code
+- **Testability**: Inject mock dependencies for unit tests
+
+**Testing Example:**
+
+```python
+# Simple mock implementation (no mocking framework needed!)
+class MockAPIClient:
+    def get_teams(self) -> dict[str, dict[str, str]]:
+        return {"TOR": {"division": "Atlantic", "conference": "Eastern"}}
+
+    def get_team_roster(self, team_abbrev: str) -> dict[str, Any]:
+        return {"forwards": [...], "defensemen": [...], "goalies": [...]}
+
+    def close(self) -> None:
+        pass
+
+
+# Mock satisfies APIClientProtocol without inheritance!
+from nhl_scrabble.processors.team_processor import TeamProcessor
+
+processor = TeamProcessor(MockAPIClient(), MockScorer())
+teams, players, failed = processor.process_all_teams()  # Uses mocks!
+```
+
 ## Pre-commit Hooks (67 Comprehensive Checks)
 
 The project uses 67 pre-commit hooks for automatic code quality validation:

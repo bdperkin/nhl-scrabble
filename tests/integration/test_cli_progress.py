@@ -90,7 +90,7 @@ class TestCLIProgress:
         call_kwargs = mock_run_analysis.call_args[1]
         assert call_kwargs["quiet"] is True
 
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.NHLApiClient")
     @patch("nhl_scrabble.cli.ProgressManager")
     def test_progress_manager_created_with_quiet_flag(
         self, mock_progress_manager: Mock, mock_api_client: Mock
@@ -121,8 +121,8 @@ class TestCLIProgress:
         runner.invoke(cli, ["analyze"])
         mock_progress_manager.assert_called_with(enabled=True)
 
-    @patch("nhl_scrabble.cli.NHLApiClient")
-    @patch("nhl_scrabble.cli.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
     @patch("nhl_scrabble.cli.ProgressManager")
     def test_progress_callback_passed_to_team_processor(
         self,
