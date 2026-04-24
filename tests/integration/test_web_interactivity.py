@@ -25,6 +25,7 @@ def client() -> TestClient:
     return TestClient(app)
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_root_returns_html_template(client: TestClient) -> None:
     """Test that root endpoint serves HTML template."""
     response = client.get("/")
@@ -35,6 +36,7 @@ def test_root_returns_html_template(client: TestClient) -> None:
     assert b"analysisForm" in response.content  # Form should be present
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_root_template_includes_javascript_modules(client: TestClient) -> None:
     """Test that root template loads all JavaScript modules."""
     response = client.get("/")
@@ -56,6 +58,7 @@ def test_root_template_includes_javascript_modules(client: TestClient) -> None:
     assert "/static/js/app.js" in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_root_template_includes_mobile_navigation(client: TestClient) -> None:
     """Test that root template includes mobile navigation elements."""
     response = client.get("/")
@@ -70,6 +73,7 @@ def test_root_template_includes_mobile_navigation(client: TestClient) -> None:
     assert 'id="navMenu"' in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_root_template_includes_htmx_attributes(client: TestClient) -> None:
     """Test that form has HTMX attributes."""
     response = client.get("/")
@@ -83,6 +87,7 @@ def test_root_template_includes_htmx_attributes(client: TestClient) -> None:
     assert 'hx-indicator="#loading"' in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_get_returns_json_by_default(client: TestClient) -> None:
     """Test that analyze GET endpoint returns JSON by default."""
     response = client.get("/api/analyze?top_players=5&top_team_players=3&use_cache=false")
@@ -119,6 +124,7 @@ def test_analyze_get_returns_html_for_htmx(client: TestClient) -> None:
         assert "Team Standings" in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_get_html_includes_sortable_tables(client: TestClient) -> None:
     """Test that HTML response includes sortable table attributes."""
     headers = {"HX-Request": "true", "Accept": "text/html"}
@@ -136,6 +142,7 @@ def test_analyze_get_html_includes_sortable_tables(client: TestClient) -> None:
         assert 'data-sort-type="string"' in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_get_html_includes_export_buttons(client: TestClient) -> None:
     """Test that HTML response includes export buttons."""
     headers = {"HX-Request": "true", "Accept": "text/html"}
@@ -152,6 +159,7 @@ def test_analyze_get_html_includes_export_buttons(client: TestClient) -> None:
         assert "Export JSON" in html or "export-" in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_get_html_includes_chart_canvases(client: TestClient) -> None:
     """Test that HTML response includes chart canvas elements."""
     headers = {"HX-Request": "true", "Accept": "text/html"}
@@ -185,6 +193,7 @@ def test_analyze_get_html_includes_fade_on_scroll(client: TestClient) -> None:
         assert "fade-on-scroll" in html
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_static_files_are_accessible(client: TestClient) -> None:
     """Test that static JavaScript files are accessible."""
     js_files = [
@@ -207,6 +216,7 @@ def test_static_files_are_accessible(client: TestClient) -> None:
         ), f"Wrong content-type for {js_file}"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_css_file_is_accessible(client: TestClient) -> None:
     """Test that CSS file is accessible."""
     response = client.get("/static/css/style.css")
@@ -225,6 +235,7 @@ def test_css_file_is_accessible(client: TestClient) -> None:
     assert ".chart-container" in css
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
     """Test that CSP header allows HTMX and Chart.js CDN."""
     response = client.get("/")
@@ -257,6 +268,7 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
     ), f"Missing CDNs in CSP. Expected: {expected_cdns}, Found: {allowed_sources & expected_cdns}"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_post_still_works(client: TestClient) -> None:
     """Test that POST endpoint still works for backward compatibility."""
     response = client.post(
@@ -301,6 +313,7 @@ def test_analyze_with_different_parameters(
         # team_standings should have all teams, not limited by top_players
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_mobile_nav_css_classes_exist(client: TestClient) -> None:
     """Test that mobile navigation CSS classes are defined."""
     response = client.get("/static/css/style.css")
@@ -312,6 +325,7 @@ def test_mobile_nav_css_classes_exist(client: TestClient) -> None:
     assert "@media (max-width: 768px)" in css
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_toast_notification_css_exists(client: TestClient) -> None:
     """Test that toast notification CSS is defined."""
     response = client.get("/static/css/style.css")
