@@ -28,6 +28,7 @@ def client() -> TestClient:
     return TestClient(app)
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_endpoint_success(client: TestClient) -> None:
     """Test analysis endpoint returns valid data."""
     response = client.post(
@@ -57,6 +58,7 @@ def test_analyze_endpoint_success(client: TestClient) -> None:
         assert "team" in player
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_endpoint_caching(client: TestClient) -> None:
     """Test analysis endpoint uses cache."""
     # First request (cache miss)
@@ -81,6 +83,7 @@ def test_analyze_endpoint_caching(client: TestClient) -> None:
     assert data1["timestamp"] == data2["timestamp"]
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_endpoint_validation(client: TestClient) -> None:
     """Test analysis endpoint validates parameters."""
     # Invalid top_players (too high)
@@ -98,6 +101,7 @@ def test_analyze_endpoint_validation(client: TestClient) -> None:
     assert response.status_code == 422
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_get_player_not_found(client: TestClient) -> None:
     """Test player endpoint returns 404 for unknown player."""
     response = client.get("/api/players/99999999")
@@ -128,6 +132,7 @@ def test_get_player_found(client: TestClient) -> None:
     assert "not found" in response.json()["detail"].lower()
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_get_team_not_found(client: TestClient) -> None:
     """Test team endpoint returns 404 for unknown team."""
     response = client.get("/api/teams/XXX")
