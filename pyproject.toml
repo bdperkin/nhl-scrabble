@@ -428,6 +428,7 @@ src_paths = [
 
 [tool.mypy]
 python_version = "3.12"
+plugins = ["pydantic.mypy"]
 strict = true
 warn_unreachable = true
 warn_no_return = true

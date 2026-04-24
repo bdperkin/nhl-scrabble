@@ -34,7 +34,7 @@ from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_
 logger = logging.getLogger(__name__)
 
 
-class Config(BaseSettings):  # type: ignore[misc]
+class Config(BaseSettings):
     """Application configuration with unified settings management.
 
     Uses pydantic-settings for automatic environment variable loading and validation.
@@ -446,7 +446,7 @@ class Config(BaseSettings):  # type: ignore[misc]
             >>> "api_timeout" in config_dict
             True
         """
-        return self.model_dump()  # type: ignore[no-any-return]
+        return self.model_dump()
 
     def __repr__(self) -> str:
         """Return string representation of config.
