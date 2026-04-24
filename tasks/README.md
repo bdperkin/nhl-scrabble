@@ -213,7 +213,7 @@ Each task includes:
 | 001 | Consolidate Report Classes                                                    | MEDIUM   | 6-8 hours           | Completed | [#159](https://github.com/bdperkin/nhl-scrabble/issues/159) | -                                                                                      |
 | 002 | Improve Type Safety                                                           | LOW      | 8-10 hours          | Completed | [#160](https://github.com/bdperkin/nhl-scrabble/issues/160) | PR [#354](https://github.com/bdperkin/nhl-scrabble/pull/354), 2026-04-24, 6h actual    |
 | 002 | Port check_docs.sh Shell Script to Python                                     | MEDIUM   | 2-3 hours           | Completed | [#100](https://github.com/bdperkin/nhl-scrabble/issues/100) | -                                                                                      |
-| 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Active    | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | -                                                                                      |
+| 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Completed | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | PR [#358](https://github.com/bdperkin/nhl-scrabble/pull/358), 2026-04-24, 5h actual    |
 | 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -                                                                                      |
 | 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1.5 hours           | Completed | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | [PR #336](https://github.com/bdperkin/nhl-scrabble/pull/336)                           |
 | 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -                                                                                      |
@@ -251,8 +251,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 15     | 14        | 29      |
-| **TOTAL**    | **62** | **109**   | **171** |
+| Refactoring  | 14     | 15        | 29      |
+| **TOTAL**    | **61** | **110**   | **171** |
 
 ### Effort Estimates by Category
 
@@ -264,8 +264,8 @@ Each task includes:
 | Enhancement  | 201.5 hours      |
 | Testing      | 260.0 hours      |
 | New Features | 227.0 hours      |
-| Refactoring  | 222.25 hours     |
-| **TOTAL**    | **1037.75 hours** |
+| Refactoring  | 217.25 hours     |
+| **TOTAL**    | **1032.75 hours** |
 
 ### Completion Progress
 
@@ -277,8 +277,8 @@ Each task includes:
 | Enhancement  | 91.4%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
-| Refactoring  | 48.3%           |
-| **OVERALL**  | **63.7%**       |
+| Refactoring  | 51.7%           |
+| **OVERALL**  | **64.3%**       |
 
 ### Priority Distribution (Active Tasks)
 

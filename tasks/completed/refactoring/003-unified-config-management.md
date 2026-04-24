@@ -53,7 +53,7 @@ class Settings(BaseSettings):
 **Implemented**: 2026-04-24
 **Branch**: refactoring/003-unified-config-management
 **PR**: #358 - https://github.com/bdperkin/nhl-scrabble/pull/358
-**Commits**: 5 commits (8c2b7ad, e5e1fc6, 1ecdfc5, a104979, a6dc549)
+**Commits**: 7 commits (8c2b7ad, e5e1fc6, 1ecdfc5, a104979, a6dc549, e65b6fb, 2f54bdd)
 
 ### Actual Implementation
 
@@ -72,11 +72,15 @@ Successfully refactored configuration management to use pydantic-settings while 
 
 2. **Backward Compatibility**: Needed to maintain exact error message format for existing tests. Achieved by reusing existing `config_validators` functions within the model validator.
 
-3. **Type Checking**: MyPy didn't understand pydantic's `cls()` initialization. Added `# type: ignore[call-arg]` annotation.
+3. **Type Checking**: MyPy didn't understand pydantic's `cls()` initialization. Fixed by adding `plugins = ["pydantic.mypy"]` to pyproject.toml instead of using type ignore comments.
 
 4. **Code Quality**: Ruff flagged complexity and boolean literals. Added appropriate `noqa` comments with justification.
 
 5. **Vulture False Positives**: `model_config` and field names were flagged as unused. Added to `.vulture_allowlist`.
+
+6. **Output Format Validation**: Config validation rejected csv/excel formats before CLI could check for --output flag. Fixed by adding csv/excel to output_format enum, allowing CLI layer to handle file-based format requirements.
+
+7. **MyPy Pre-commit Conflict**: Direct mypy execution worked but pre-commit hook failed because it lacked pydantic-settings dependency. Fixed by adding pydantic-settings to mypy hook's additional_dependencies in .pre-commit-config.yaml.
 
 ### Deviations from Plan
 
@@ -88,9 +92,9 @@ No significant deviations. The implementation followed the proposed solution clo
 ### Actual vs Estimated Effort
 
 - **Estimated**: 5-6h
-- **Actual**: ~4h
-- **Variance**: -1 to -2h (20-40% faster than estimated)
-- **Reason**: The pydantic-settings API was well-documented and the existing validation logic was easy to integrate. Most time was spent on testing and ensuring security features were preserved.
+- **Actual**: ~5h
+- **Variance**: Within estimate
+- **Reason**: The pydantic-settings API was well-documented and the existing validation logic was easy to integrate. Additional time was spent fixing mypy pre-commit conflict and output format validation issues.
 
 ### Test Coverage
 
@@ -125,14 +129,18 @@ config = Config(
 )
 ```
 
-###Lessons Learned
+### Lessons Learned
 
 1. **Pydantic Validators**: The `@model_validator(mode="before")` decorator is powerful for custom validation that runs before pydantic's built-in validation.
 
-2. **Test-Driven Refactoring**: Having comprehensive tests beforestarting the refactoring gave high confidence that behavior was preserved.
+2. **Test-Driven Refactoring**: Having comprehensive tests before starting the refactoring gave high confidence that behavior was preserved.
 
 3. **Security First**: Maintaining security features should be the top priority in any refactoring, even if it makes the code slightly more complex.
 
 4. **Backward Compatibility**: Supporting existing APIs (`Config.from_env()`) made the migration seamless for existing code.
 
 5. **Configuration Precedence**: Documenting and testing the precedence order ensures predictable behavior across different deployment environments.
+
+6. **MyPy Plugin Configuration**: When using pydantic, always configure the mypy plugin in pyproject.toml AND ensure pre-commit hooks have pydantic-settings in additional_dependencies. The plugin is critical for proper type checking of BaseSettings subclasses.
+
+7. **Validation Layer Separation**: Configuration validation should allow all technically valid values; business logic validation (like "csv requires --output") belongs in the CLI/API layer, not config validation.
