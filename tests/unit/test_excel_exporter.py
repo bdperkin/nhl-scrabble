@@ -7,7 +7,7 @@ import pytest
 
 from nhl_scrabble.exporters.excel_exporter import OPENPYXL_AVAILABLE, ExcelExporter
 from nhl_scrabble.models.player import PlayerScore
-from nhl_scrabble.models.standings import PlayoffTeam
+from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings, PlayoffTeam
 from nhl_scrabble.models.team import TeamScore
 
 if OPENPYXL_AVAILABLE:
@@ -213,17 +213,29 @@ def test_export_full_report_all_sheets(
     for team in sample_teams.values():
         all_players.extend(team.players)
 
-    # Create standings objects with teams attribute
-    class StandingsWithTeams:
-        def __init__(self, teams: list[TeamScore]) -> None:
-            self.teams = teams
+    # Create standings objects with team abbreviations (as per actual model)
+    team_abbrevs = list(sample_teams.keys())
+    total_score = sum(t.total for t in sample_teams.values())
+    total_players = sum(t.player_count for t in sample_teams.values())
 
     division_standings = {
-        "Atlantic": StandingsWithTeams(list(sample_teams.values())),
+        "Atlantic": DivisionStandings(
+            name="Atlantic",
+            total=total_score,
+            teams=team_abbrevs,
+            player_count=total_players,
+            avg_per_team=total_score / len(team_abbrevs),
+        ),
     }
 
     conference_standings = {
-        "Eastern": StandingsWithTeams(list(sample_teams.values())),
+        "Eastern": ConferenceStandings(
+            name="Eastern",
+            total=total_score,
+            teams=team_abbrevs,
+            player_count=total_players,
+            avg_per_team=total_score / len(team_abbrevs),
+        ),
     }
 
     # Create playoff standings using the PlayoffTeam model
