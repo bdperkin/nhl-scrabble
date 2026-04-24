@@ -1,0 +1,368 @@
+# Documentation Audit Directory
+
+This directory contains documentation audit reports for the NHL Scrabble project.
+
+## Purpose
+
+Regular documentation audits help maintain high-quality, accurate, and useful documentation by:
+
+- Identifying gaps and inconsistencies
+- Detecting broken links and outdated examples
+- Measuring documentation quality over time
+- Creating actionable improvement plans
+- Ensuring documentation scales with the codebase
+
+## Audit Schedule
+
+**Recommended Frequency**: Quarterly (every 3 months)
+
+**Last Audit**: 2026-04-23
+**Next Audit**: 2026-07-23 (Q3 2026)
+
+## Audit Reports
+
+| Date       | Report File                       | Status      | Summary                                                                                                |
+| ---------- | --------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| 2026-04-23 | documentation-audit-2026-04-23.md | ✅ Complete | Initial comprehensive audit. Overall quality: GOOD (4/5 stars). Created documentation standards guide. |
+
+## Audit Process
+
+### 1. Preparation (30 min)
+
+- [ ] Set up audit environment (tools, tracking document)
+- [ ] Review previous audit (if exists) to track progress
+- [ ] Prepare audit checklist
+- [ ] Clone fresh repository copy
+
+### 2. Internal Documentation Audit (2 hours)
+
+Python docstrings:
+
+- [ ] Scan all `src/` Python files
+- [ ] Check module-level docstrings
+- [ ] Check class docstrings
+- [ ] Check function/method docstrings
+- [ ] Verify examples work
+- [ ] Note missing type hints
+- [ ] Record findings
+
+**Tools**:
+
+```bash
+# Check docstring coverage
+interrogate src/ --verbose
+
+# Style checking (automatic via pre-commit)
+pydocstyle src/
+
+# Test examples
+pytest --doctest-modules src/
+```
+
+### 3. External Documentation Audit (1.5 hours)
+
+Markdown files:
+
+- [ ] Review README.md
+- [ ] Review CONTRIBUTING.md
+- [ ] Review CLAUDE.md
+- [ ] Review all `docs/` files
+- [ ] Check code examples
+- [ ] Validate links
+- [ ] Record findings
+
+**Tools**:
+
+```bash
+# Lint Markdown (automatic via pre-commit)
+pymarkdown scan docs/ *.md
+
+# Validate links
+linkchecker docs/
+
+# Check formatting
+mdformat --check docs/ *.md
+```
+
+### 4. Generate Report (1 hour)
+
+- [ ] Compile all findings
+- [ ] Categorize issues by severity (Critical, High, Medium, Low)
+- [ ] Create prioritized action list
+- [ ] Write executive summary
+- [ ] Include metrics and statistics
+- [ ] Save report to `documentation-audit-YYYY-MM-DD.md`
+
+### 5. Create Action Items (30 min)
+
+- [ ] Create GitHub issues for critical gaps
+- [ ] Add tasks to `tasks/` directory for medium priority
+- [ ] Document low priority items for future reference
+- [ ] Estimate effort for each item
+
+### 6. Implement Quick Wins (30 min)
+
+- [ ] Fix obvious typos
+- [ ] Update outdated version numbers
+- [ ] Fix broken internal links
+- [ ] Commit quick fixes
+- [ ] Note remaining work for follow-up tasks
+
+## Audit Checklist
+
+### Python Docstring Checklist
+
+**Module-level**:
+
+- [ ] Module purpose clearly stated
+- [ ] Module-level attributes documented
+- [ ] Usage examples provided (for complex modules)
+- [ ] Related modules referenced
+
+**Class-level**:
+
+- [ ] Class purpose and responsibility documented
+- [ ] All attributes documented
+- [ ] Inheritance relationships explained (if relevant)
+- [ ] Usage examples provided
+- [ ] Related classes referenced (if relevant)
+
+**Function/method**:
+
+- [ ] Clear one-line summary
+- [ ] All parameters documented (Args)
+- [ ] Return value documented (Returns)
+- [ ] Exceptions documented (Raises)
+- [ ] Usage examples for complex functions
+- [ ] Type hints present and accurate
+
+**Inline comments**:
+
+- [ ] Complex algorithms explained
+- [ ] Non-obvious logic documented
+- [ ] No outdated comments
+- [ ] Comments explain WHY, not WHAT
+
+### Markdown Documentation Checklist
+
+**README.md**:
+
+- [ ] Accurate project description
+- [ ] Current installation instructions
+- [ ] Working examples
+- [ ] All badges functional
+- [ ] Links to detailed docs
+
+**CONTRIBUTING.md**:
+
+- [ ] Current development setup instructions
+- [ ] Accurate code style guidelines
+- [ ] Testing instructions up-to-date
+- [ ] PR process documented
+
+**CLAUDE.md**:
+
+- [ ] Current project architecture
+- [ ] Accurate file structure
+- [ ] Current dependencies
+- [ ] Up-to-date workflows
+
+**docs/ directory**:
+
+- [ ] All tutorials work end-to-end
+- [ ] All code examples execute correctly
+- [ ] API reference matches current code
+- [ ] No broken internal links
+- [ ] No broken external links
+- [ ] Consistent formatting
+
+## Quality Metrics
+
+Track these metrics over time to measure documentation health:
+
+### Coverage Metrics
+
+| Metric                  | Target | Current (2026-04-23) |
+| ----------------------- | ------ | -------------------- |
+| Docstring coverage      | 100%   | ~90%+ (estimated)    |
+| Functions with examples | 80%    | ~60-70%              |
+| Type hint coverage      | 100%   | ~98%                 |
+
+### Quality Metrics
+
+| Metric                  | Target    | Current (2026-04-23)  |
+| ----------------------- | --------- | --------------------- |
+| Broken links            | 0         | Unknown (not checked) |
+| Outdated examples       | 0         | 0 (assumed)           |
+| Documentation freshness | \<30 days | \<1 day               |
+
+### File Metrics
+
+| Metric                    | Current (2026-04-23) |
+| ------------------------- | -------------------- |
+| Python files              | 68                   |
+| Markdown files (docs/)    | 45                   |
+| Root Markdown files       | 9                    |
+| Total documentation files | 122                  |
+
+## Audit Tools
+
+### Automated Tools
+
+**Docstring Tools**:
+
+- `interrogate` - Docstring coverage measurement
+- `pydocstyle` - Docstring style checking (PEP 257)
+- `pytest --doctest-modules` - Test examples in docstrings
+
+**Markdown Tools**:
+
+- `pymarkdown` - Markdown linting
+- `mdformat` - Markdown formatting
+- `linkchecker` - Link validation
+- `doc8` - RST linting
+
+### Installation
+
+```bash
+# Install documentation audit tools
+pip install interrogate pydocstyle linkchecker
+
+# Or use project dev dependencies (already includes most tools)
+pip install -e ".[dev]"
+```
+
+### Running Tools
+
+```bash
+# Check docstring coverage
+interrogate src/ --verbose --fail-under 100
+
+# Lint docstrings
+pydocstyle src/
+
+# Test docstring examples
+pytest --doctest-modules src/
+
+# Lint Markdown
+pymarkdown scan docs/ *.md
+
+# Validate links
+linkchecker docs/ --check-extern
+
+# Format Markdown
+mdformat --check docs/ *.md
+```
+
+## Follow-up Tasks
+
+Common follow-up tasks from audits:
+
+1. **Add Missing Examples**
+
+   - Priority: MEDIUM
+   - Effort: 3-4 hours
+   - Focus: Public APIs, complex functions
+
+1. **Fix Broken Links**
+
+   - Priority: MEDIUM-HIGH (depending on count)
+   - Effort: 30 min - 2 hours
+   - Tool: linkchecker
+
+1. **Update Outdated Information**
+
+   - Priority: HIGH
+   - Effort: Varies
+   - Examples: Version numbers, deprecated features
+
+1. **Add Documentation Tests**
+
+   - Priority: MEDIUM
+   - Effort: 2-3 hours
+   - Goal: Automated example testing
+
+1. **Improve Coverage**
+
+   - Priority: LOW-MEDIUM
+   - Effort: 2-4 hours
+   - Goal: 100% docstring coverage
+
+## Best Practices
+
+### During Audit
+
+1. **Be Systematic**: Follow checklist, don't skip files
+1. **Take Notes**: Record all findings, even minor issues
+1. **Categorize Issues**: Critical, High, Medium, Low
+1. **Include Examples**: Specific file:line references
+1. **Measure Metrics**: Track coverage, quality scores
+
+### Creating Reports
+
+1. **Executive Summary**: High-level overview for stakeholders
+1. **Detailed Findings**: Organized by category
+1. **Prioritized Actions**: Clear next steps
+1. **Metrics**: Quantitative measurements
+1. **Examples**: Specific instances of issues
+
+### After Audit
+
+1. **Create Tasks**: Turn findings into actionable items
+1. **Prioritize**: Focus on high-impact improvements
+1. **Track Progress**: Update audit report with completed items
+1. **Schedule Next Audit**: Set date for next review
+1. **Share Results**: Communicate with team
+
+## Continuous Improvement
+
+Between audits, maintain documentation quality:
+
+### Daily
+
+- [ ] Write docstrings for new code
+- [ ] Update examples when APIs change
+- [ ] Fix broken links when found
+
+### Weekly
+
+- [ ] Review new documentation in PRs
+- [ ] Update CHANGELOG for releases
+- [ ] Check CI documentation jobs
+
+### Monthly
+
+- [ ] Run link checker
+- [ ] Review documentation metrics
+- [ ] Address quick fixes
+
+### Quarterly
+
+- [ ] Full documentation audit
+- [ ] Update documentation standards
+- [ ] Measure progress on action items
+
+## Resources
+
+**Standards**:
+
+- [Documentation Standards Guide](../contributing/documentation-standards.md)
+- [PEP 257 - Docstring Conventions](https://peps.python.org/pep-0257/)
+- [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)
+
+**Tools**:
+
+- [interrogate Documentation](https://interrogate.readthedocs.io/)
+- [linkchecker](https://linkchecker.github.io/linkchecker/)
+- [Diátaxis Framework](https://diataxis.fr/)
+
+**Community**:
+
+- [Write the Docs](https://www.writethedocs.org/)
+- [Read the Docs](https://readthedocs.org/)
+
+______________________________________________________________________
+
+**Maintained by**: Documentation team
+**Questions**: Open an issue on GitHub
+**Last Updated**: 2026-04-23
