@@ -727,7 +727,9 @@ class NHLApiClient:
         Always use as a context manager to ensure proper cleanup.
     """
 
-    def __init__(self, base_url: str | None = None, timeout: int = 10, retries: int = 3) -> None:
+    def __init__(
+        self, base_url: str | None = None, timeout: int = 10, retries: int = 3
+    ) -> None:
         """Initialize the NHL API client.
 
         Args:
