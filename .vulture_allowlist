@@ -40,3 +40,7 @@ has_season  # HistoricalDataStore method - public API
 list_seasons  # HistoricalDataStore method - public API
 delete_season  # HistoricalDataStore method - public API
 clear_all  # HistoricalDataStore method - public API
+
+# Pydantic Settings configuration (used by pydantic-settings framework)
+model_config  # Config.model_config - pydantic SettingsConfigDict
+max_concurrent_requests  # Config.max_concurrent_requests - used by API client
