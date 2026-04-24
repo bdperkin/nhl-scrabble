@@ -19,22 +19,17 @@ import logging
 import socket
 from urllib.parse import urlparse
 
+from nhl_scrabble.exceptions import SSRFProtectionError
+
 logger = logging.getLogger(__name__)
 
-
-class SSRFProtectionError(ValueError):
-    """Raised when SSRF protection blocks a request.
-
-    This exception is raised when a URL fails SSRF validation,
-    indicating it targets a blocked IP range, non-allowed domain,
-    or other security-sensitive resource.
-
-    Example:
-        >>> validate_url_for_ssrf("http://localhost/api")
-        Traceback (most recent call last):
-            ...
-        SSRFProtectionError: Hostname 'localhost' not in allowed domains list
-    """
+__all__ = [
+    "SSRFProtectionError",
+    "is_ip_blocked",
+    "resolve_hostname",
+    "validate_api_base_url",
+    "validate_url_for_ssrf",
+]
 
 
 # Blocked IP ranges (RFC 1918 private networks + special use)

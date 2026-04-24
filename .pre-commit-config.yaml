@@ -6,6 +6,27 @@
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
 # ============================================================================
+# Global Configuration
+# ============================================================================
+
+# Default Python version for all hooks (ensures consistency across environments)
+# Matches project's minimum supported version (3.12)
+default_language_version:
+  python: python3.12
+
+# Default stages when hooks run (can be overridden per-hook)
+# - pre-commit: Run when executing 'git commit' (default for most hooks)
+# - pre-push: Run when executing 'git push' (for expensive checks)
+default_stages:
+  - pre-commit
+  - pre-push
+
+# Stop running hooks on first failure (fail-fast mode)
+# Saves time by not running remaining hooks after first error
+# Developers can fix issues incrementally rather than seeing all errors at once
+fail_fast: true
+
+# ============================================================================
 # Meta Hooks - Configuration Validation
 # ============================================================================
 

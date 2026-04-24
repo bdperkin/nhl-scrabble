@@ -29,7 +29,8 @@ from nhl_scrabble.config_validators import (
     validate_positive_float,
     validate_positive_int,
 )
-from nhl_scrabble.security.ssrf_protection import SSRFProtectionError, validate_api_base_url
+from nhl_scrabble.exceptions import SSRFProtectionError
+from nhl_scrabble.security.ssrf_protection import validate_api_base_url
 
 logger = logging.getLogger(__name__)
 

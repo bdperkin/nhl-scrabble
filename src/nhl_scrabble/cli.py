@@ -22,6 +22,7 @@ from nhl_scrabble.api.nhl_client import NHLApiError
 from nhl_scrabble.config import Config
 from nhl_scrabble.dashboard import StatisticsDashboard
 from nhl_scrabble.di import DependencyContainer
+from nhl_scrabble.exceptions import ValidationError
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
 from nhl_scrabble.logging_config import setup_logging
@@ -37,7 +38,7 @@ from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.scoring.config import ScoringConfig
 from nhl_scrabble.search import PlayerSearch
 from nhl_scrabble.ui.progress import ProgressManager
-from nhl_scrabble.validators import ValidationError, validate_file_path
+from nhl_scrabble.validators import validate_file_path
 
 logger = logging.getLogger(__name__)
 console = Console()

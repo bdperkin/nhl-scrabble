@@ -5,11 +5,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from nhl_scrabble.exceptions import HistoricalDataStoreError
+
 logger = logging.getLogger(__name__)
-
-
-class HistoricalDataStoreError(Exception):
-    """Base exception for historical data storage errors."""
 
 
 class HistoricalDataStore:

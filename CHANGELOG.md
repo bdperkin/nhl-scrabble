@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Consistent Error Handling Strategy** - Implemented centralized exception hierarchy for better error handling (#162)
+
+  - Created `src/nhl_scrabble/exceptions.py` with comprehensive exception hierarchy
+  - Base exception `NHLScrabbleError` for all package errors
+  - Organized exceptions into logical categories:
+    - `ValidationError` - Input validation failures
+    - `APIError` and subclasses - API communication errors
+    - `SecurityError` and subclasses - Security violations
+    - `StorageError` and subclasses - Data storage errors
+    - `DataError` and subclasses - Data processing errors
+  - Migrated all existing exceptions to centralized module:
+    - `NHLApiError`, `NHLApiConnectionError`, `NHLApiNotFoundError`, `NHLApiSSLError`
+    - `ValidationError`, `SSRFProtectionError`, `CircuitBreakerOpenError`
+    - `HistoricalDataStoreError`, `DataValidationError`
+  - Maintained backward compatibility with multiple inheritance for `ValidationError` and `SSRFProtectionError`
+  - Added utility function `format_exception_message()` for user-friendly error messages
+  - Comprehensive test coverage with 28 tests covering inheritance, catching patterns, and usage
+
 ### Changed
 
 - **Unified Configuration Management** - Refactored configuration system to use pydantic-settings for unified config management (#161)

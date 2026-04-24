@@ -14,9 +14,17 @@ from collections.abc import Callable
 from enum import Enum
 from typing import Any, TypeVar
 
+from nhl_scrabble.exceptions import CircuitBreakerOpenError
+
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
+
+__all__ = [
+    "CircuitBreaker",
+    "CircuitBreakerOpenError",
+    "CircuitState",
+]
 
 
 class CircuitState(Enum):
@@ -31,10 +39,6 @@ class CircuitState(Enum):
     CLOSED = "closed"
     OPEN = "open"
     HALF_OPEN = "half_open"
-
-
-class CircuitBreakerOpenError(Exception):
-    """Raised when circuit breaker is OPEN and rejects a request."""
 
 
 class CircuitBreaker:
