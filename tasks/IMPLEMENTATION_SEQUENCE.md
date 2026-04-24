@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
-**Generated**: 2026-04-22 (updated with missing tasks)
-**Total Tasks**: 65 active tasks
-**Estimated Effort**: 538-744 hours
+**Generated**: 2026-04-24 (updated with 13 missing tasks)
+**Total Tasks**: 78 active tasks (65 original + 13 newly added)
+**Estimated Effort**: 564.5-783 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -33,6 +33,21 @@ ______________________________________________________________________
 ```
 
 **Rationale**: Enhancement/022 is the parent coordinating task for 12 workflow sub-tasks. PyPI publishing (sub-task 1) is HIGH priority for automated releases.
+
+______________________________________________________________________
+
+## Phase 1.5: Critical Bug Fixes
+
+**Total Effort**: 30 minutes - 1 hour
+**Focus**: Fix critical bugs causing application crashes
+**Dependencies**: None
+
+```bash
+# Critical Bug Fix (Quick Win - Prevents CLI Crashes)
+/implement-task bug-fixes/010-fix-output-format-validation-mismatch.md  # 30min-1h, Issue #366
+```
+
+**Rationale**: HIGH priority bug fix. CLI crashes with pydantic ValidationError when users specify valid format options (markdown, table, template, yaml, xml) that are advertised in CLI help but not supported by Config model. Simple one-line fix adds 5 missing formats to Config allowed values. Should be fixed immediately before users encounter it.
 
 ______________________________________________________________________
 
@@ -151,8 +166,8 @@ ______________________________________________________________________
 
 ## Phase 8: Developer Experience (MEDIUM Priority)
 
-**Total Effort**: 5-9.5 hours
-**Focus**: Improve developer workflow and tooling
+**Total Effort**: 15-23.5 hours
+**Focus**: Improve developer workflow, tooling, code quality, and testing infrastructure
 **Dependencies**: None (independent enhancements)
 
 ```bash
@@ -161,29 +176,42 @@ ______________________________________________________________________
 /implement-task enhancement/015-add-cli-short-options.md          # 30-60min, Issue #229
 /implement-task enhancement/020-colorized-log-output.md           # 30-60min, Issue #234
 
+# Code Quality & Best Practices
+/implement-task bug-fixes/008-nhl-api-client-session-cleanup.md  # 1-2h, Issue #362
+/implement-task bug-fixes/009-verify-caching-enabled-by-default.md  # 2-3h, Issue #365
+/implement-task enhancement/028-unicode-normalization-player-names.md  # 2-3h, Issue #363
+
+# Testing Infrastructure
+/implement-task testing/021-test-analytics-coverage-tool.md       # 4-6h, Issue #359
+
 # Advanced Tooling
 /implement-task enhancement/021-tox-parallel-failfast.md          # 3-5h, Issue #283
 ```
 
-**Rationale**: CLI improvements enhance UX. Ordered by effort (quick wins first). Type checker (ty) complements mypy. Tox optimization speeds up local development and CI.
+**Rationale**: CLI improvements enhance UX. Ordered by effort (quick wins first). Bug fixes improve code quality: session cleanup follows Python best practices, caching verification ensures performance. Unicode normalization adds international player name support. Test analytics tool provides insights into coverage trends and test performance. Tox optimization speeds up local development and CI.
 
 ______________________________________________________________________
 
 ## Phase 9: Documentation & Output (MEDIUM Priority)
 
-**Total Effort**: 8-13 hours
-**Focus**: Enhanced documentation and output formats
-**Dependencies**: None
+**Total Effort**: 14-20 hours
+**Focus**: Enhanced documentation, output formats, and documentation quality automation
+**Dependencies**: enhancement/026 (example testing) before enhancement/027 (example coverage)
 
 ```bash
+# Documentation Quality & Automation
+/implement-task enhancement/025-add-link-validation.md            # 1h, Issue #351
+/implement-task enhancement/026-add-example-testing.md            # 2h, Issue #352
+/implement-task enhancement/027-improve-example-coverage.md       # 3-4h, Issue #353
+
 # Documentation & Output
-/implement-task enhancement/011-hyperlink-documentation.md         # 2-4h, Issue #223
+/implement-task enhancement/011-hyperlink-documentation.md        # 2-4h, Issue #223
 /implement-task enhancement/017-expand-output-formats.md          # 3-4h, Issue #231
 /implement-task enhancement/018-sphinx-additional-formats.md      # 2-3h, Issue #232
 /implement-task enhancement/019-sphinx-doctest-linkcheck.md       # 1-2h, Issue #233
 ```
 
-**Rationale**: Hyperlinks improve docs navigation. Output formats (YAML, XML) serve different use cases. Sphinx formats (PDF, EPUB) enhance documentation. Doctest/linkcheck ensure quality. Logical progression: navigation → output → formats → validation.
+**Rationale**: Documentation quality automation first: link validation catches broken links, example testing prevents doc drift. Enhancement/027 (improve example coverage) requires 026 (example testing) to be in place first. Then documentation enhancements: hyperlinks improve docs navigation, output formats (YAML, XML) serve different use cases, Sphinx formats (PDF, EPUB) enhance documentation, doctest/linkcheck ensure quality. Logical progression: quality automation → navigation → output → formats → validation.
 
 ______________________________________________________________________
 
@@ -217,11 +245,11 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 12: Repository Modernization (MEDIUM Priority)
+## Phase 12: Repository Modernization (MEDIUM/LOW Priority)
 
-**Total Effort**: 10.25-17.5 hours
-**Focus**: Code modernization, formatting tools, and CI/CD maintenance
-**Dependencies**: None (all independent tools)
+**Total Effort**: 15.25-23.5 hours
+**Focus**: Code modernization, formatting tools, CI/CD maintenance, and quality enforcement
+**Dependencies**: None (all independent tools); tasks 024-026 should wait for validation period
 
 ```bash
 # Code Cleanup (Before v2.0.0 Release)
@@ -237,9 +265,17 @@ ______________________________________________________________________
 /implement-task refactoring/018-add-check-wheel-contents.md              # 1-2h, Issue #245
 /implement-task refactoring/019-add-ssort-statement-sorting.md           # 2-3h, Issue #246
 /implement-task refactoring/020-migrate-codecov-test-results-action.md   # 30-60min, Issue #285
+
+# Code Quality & UX Improvements (LOW Priority)
+/implement-task refactoring/027-audit-logging-levels.md                  # 2-3h, Issue #364
+
+# Make Validation-Mode Tools Blocking (After Validation Period)
+/implement-task refactoring/024-make-ty-blocking.md                      # 30min-1h, Issue #355
+/implement-task refactoring/025-make-refurb-blocking.md                  # 30min-1h, Issue #356
+/implement-task refactoring/026-make-gitlint-blocking.md                 # 30min-1h, Issue #357
 ```
 
-**Rationale**: Task 022 removes legacy CLI functions and backward compatibility code before v2.0.0 release - clean codebase without technical debt. Should be completed early in modernization phase. pyupgrade modernizes syntax. refurb finds improvements. pyproject-fmt standardizes config. Trailing-comma helps diffs. JSON schema validation catches errors. djlint improves HTML quality. Wheel validation ensures package quality. Statement sorting improves readability (requires consensus). Codecov migration from deprecated action. Order by impact.
+**Rationale**: Task 022 removes legacy CLI functions and backward compatibility code before v2.0.0 release - clean codebase without technical debt. Should be completed early in modernization phase. pyupgrade modernizes syntax. refurb finds improvements. pyproject-fmt standardizes config. Trailing-comma helps diffs. JSON schema validation catches errors. djlint improves HTML quality. Wheel validation ensures package quality. Statement sorting improves readability (requires consensus). Codecov migration from deprecated action. Logging audit improves UX by reducing INFO noise. Finally, after validation periods (4-8 weeks), transition ty/refurb/gitlint from informational to blocking mode to enforce quality. Order by impact.
 
 ______________________________________________________________________
 
@@ -408,20 +444,21 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Phase 22: Advanced Refactoring - Architecture (MEDIUM Priority)
+## Phase 22: Advanced Refactoring - Architecture (MEDIUM/LOW Priority)
 
-**Total Effort**: 16-20 hours
-**Focus**: Architectural improvements
+**Total Effort**: 19-25 hours
+**Focus**: Architectural improvements and code organization
 **Dependencies**: Should come after type safety (Phase 21)
 
 ```bash
 # Architecture Improvements
 /implement-task refactoring/007-dependency-injection.md              # 8-10h, Issue #163
 /implement-task refactoring/006-error-handling-strategy.md           # 6-8h, Issue #162
+/implement-task refactoring/023-consolidate-exporters-formatters.md  # 3-5h, Issue TBD
 /implement-task refactoring/010-dynamic-versioning-from-git-tags.md  # 2-4h, Issue #222
 ```
 
-**Rationale**: Dependency injection improves testability. Error handling strategy ensures consistency. Dynamic versioning from git tags automates version management. Order: DI first (enables better error handling patterns), then versioning.
+**Rationale**: Dependency injection improves testability. Error handling strategy ensures consistency. Consolidate exporters/formatters reduces architectural duplication (LOW priority cleanup). Dynamic versioning from git tags automates version management. Order: DI first (enables better error handling patterns), then error handling, then architectural cleanup, then versioning.
 
 ______________________________________________________________________
 
@@ -429,34 +466,35 @@ ______________________________________________________________________
 
 ### By Priority
 
-| Priority  | Tasks  | Effort       | Phases           |
-| --------- | ------ | ------------ | ---------------- |
-| HIGH      | 1      | 4-6h         | Phase 1          |
-| MEDIUM    | 62     | 527-727h     | Phase 2-9, 11-22 |
-| LOW       | 2      | 7-11h        | Phase 6, 10      |
-| **TOTAL** | **65** | **538-744h** | **22 Phases**    |
+| Priority  | Tasks  | Effort       | Phases                 |
+| --------- | ------ | ------------ | ---------------------- |
+| HIGH      | 2      | 4.5-7h       | Phase 1, 1.5           |
+| MEDIUM    | 70     | 547-759h     | Phase 2-9, 11-22       |
+| LOW       | 6      | 13-17h       | Phase 6, 10, 12, 22    |
+| **TOTAL** | **78** | **564.5-783h** | **23 Phases**        |
 
 ### By Category
 
-| Category     | Tasks  | Effort       |
-| ------------ | ------ | ------------ |
-| Enhancement  | 3      | 46.25-70.5h  |
-| New Features | 37     | 420-585h     |
-| Refactoring  | 18     | 23.75-36.5h  |
-| Testing      | 7      | 48-52h       |
-| **TOTAL**    | **65** | **538-744h** |
+| Category     | Tasks  | Effort          |
+| ------------ | ------ | --------------- |
+| Bug Fixes    | 3      | 3.5-6h          |
+| Enhancement  | 16     | 58.25-84.5h     |
+| New Features | 37     | 420-585h        |
+| Refactoring  | 21     | 32.75-45.5h     |
+| Testing      | 8      | 52-58h          |
+| **TOTAL**    | **85** | **566.5-779h**  |
 
 ### Critical Path
 
-**Foundation** (Phases 1-5): 88-117h
+**Foundation** (Phases 1-1.5, 2-5): 88.5-118h
 
-- GitHub workflows → QA framework → Test implementation
+- Critical bug fix → GitHub workflows → QA framework → Test implementation
 
-**Feature Completion** (Phases 7-11): 48-74.5h
+**Feature Completion** (Phases 7-11): 58-92.5h
 
 - Web interface → Developer experience → Documentation → Documentation extensions → Branding
 
-**Modernization** (Phases 12-14): 27.25-43.5h
+**Modernization** (Phases 12-14): 32.25-49.5h
 
 - Code cleanup → Repository cleanup → Package automation
 
@@ -468,7 +506,7 @@ ______________________________________________________________________
 
 - i18n infrastructure → Component translation
 
-**Long-term** (Phases 18-22): 84-114h
+**Long-term** (Phases 18-22): 87-117h
 
 - Advanced features, architectural refactoring
 
@@ -519,21 +557,24 @@ ______________________________________________________________________
 
 ## Quick Reference
 
-### Next 5 Tasks (Immediate Work)
+### Next 6 Tasks (Immediate Work)
 
 ```bash
-/implement-task enhancement/022-comprehensive-github-workflows.md  # 24-32h, HIGH
-/implement-task new-features/032-pypi-publish-workflow.md         # 4-6h, HIGH
-/implement-task new-features/033-github-release-workflow.md       # 2-3h, MEDIUM
-/implement-task new-features/039-benchmark-workflow.md            # 3-4h, MEDIUM
-/implement-task new-features/040-sbom-workflow.md                 # 2-3h, MEDIUM
+/implement-task bug-fixes/010-fix-output-format-validation-mismatch.md  # 30min-1h, HIGH
+/implement-task enhancement/022-comprehensive-github-workflows.md       # 24-32h, HIGH
+/implement-task new-features/032-pypi-publish-workflow.md              # 4-6h, HIGH
+/implement-task new-features/033-github-release-workflow.md            # 2-3h, MEDIUM
+/implement-task new-features/039-benchmark-workflow.md                 # 3-4h, MEDIUM
+/implement-task new-features/040-sbom-workflow.md                      # 2-3h, MEDIUM
 ```
 
-**Total**: 35-48 hours of high-value workflow automation
+**Total**: 35.5-49 hours of critical bug fix + high-value workflow automation
 
 ### Quick Wins (Under 1 hour each)
 
 ```bash
+/implement-task bug-fixes/010-fix-output-format-validation-mismatch.md  # 30min-1h, HIGH
+/implement-task enhancement/025-add-link-validation.md               # 1h
 /implement-task enhancement/016-format-cli-help-examples.md          # 15-30min
 /implement-task enhancement/015-add-cli-short-options.md             # 30-60min
 /implement-task enhancement/020-colorized-log-output.md              # 30-60min
@@ -541,27 +582,30 @@ ______________________________________________________________________
 /implement-task refactoring/016-add-trailing-comma-formatting.md     # 30-60min
 /implement-task refactoring/005-add-djlint-html-template-linting.md # 30-60min
 /implement-task refactoring/020-migrate-codecov-test-results-action.md # 30-60min
+/implement-task refactoring/024-make-ty-blocking.md                  # 30min-1h
+/implement-task refactoring/025-make-refurb-blocking.md              # 30min-1h
+/implement-task refactoring/026-make-gitlint-blocking.md             # 30min-1h
 /implement-task new-features/037-stale-management-workflow.md        # 1h
 /implement-task new-features/038-welcome-contributor-workflow.md     # 30min-1h
 ```
 
-**Total**: 3.5-7 hours of quick improvements
+**Total**: 6.5-12 hours of quick improvements
 
 ______________________________________________________________________
 
 ## Notes
 
-**Last Updated**: 2026-04-22
-**Active Tasks**: 65
-**Completed Tasks**: 102
-**Completion Rate**: 60.0% (102/167)
+**Last Updated**: 2026-04-24
+**Active Tasks**: 78 (65 original + 13 newly added)
+**Completed Tasks**: 115
+**Completion Rate**: 59.6% (115/193)
 
 **Phase Distribution**:
 
-- **Immediate** (Phases 1-5): 88-117h → Workflows + QA framework
-- **Short-term** (Phases 7-14): 75.5-118h → Features + documentation + modernization + package automation
+- **Immediate** (Phases 1-1.5, 2-5): 88.5-118h → Critical bug fix + Workflows + QA framework
+- **Short-term** (Phases 7-14): 80.5-124h → Features + documentation + modernization + package automation
 - **Mid-term** (Phases 15-17): 76-113h → Release automation + i18n
-- **Long-term** (Phases 18-22): 84-114h → Advanced features + architecture
+- **Long-term** (Phases 18-22): 87-117h → Advanced features + architecture
 
 **Velocity Assumptions**:
 
