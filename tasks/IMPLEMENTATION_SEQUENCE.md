@@ -1,7 +1,7 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-24 (updated with 13 missing tasks)
-**Total Tasks**: 78 active tasks (65 original + 13 newly added)
+**Total Tasks**: 65 active tasks
 **Estimated Effort**: 564.5-783 hours
 **Strategy**: Priority-first with dependency awareness
 
@@ -466,23 +466,23 @@ ______________________________________________________________________
 
 ### By Priority
 
-| Priority  | Tasks  | Effort       | Phases                 |
-| --------- | ------ | ------------ | ---------------------- |
-| HIGH      | 2      | 4.5-7h       | Phase 1, 1.5           |
-| MEDIUM    | 70     | 547-759h     | Phase 2-9, 11-22       |
-| LOW       | 6      | 13-17h       | Phase 6, 10, 12, 22    |
-| **TOTAL** | **78** | **564.5-783h** | **23 Phases**        |
+| Priority  | Tasks  | Effort         | Phases                 |
+| --------- | ------ | -------------- | ---------------------- |
+| HIGH      | 2      | 4.5-7h         | Phase 1, 1.5           |
+| MEDIUM    | 57     | 547-759h       | Phase 2-9, 11-22       |
+| LOW       | 6      | 13-17h         | Phase 6, 10, 12, 22    |
+| **TOTAL** | **65** | **564.5-783h** | **23 Phases**          |
 
 ### By Category
 
 | Category     | Tasks  | Effort          |
 | ------------ | ------ | --------------- |
 | Bug Fixes    | 3      | 3.5-6h          |
-| Enhancement  | 16     | 58.25-84.5h     |
+| Enhancement  | 7      | 58.25-84.5h     |
 | New Features | 37     | 420-585h        |
-| Refactoring  | 21     | 32.75-45.5h     |
+| Refactoring  | 10     | 32.75-45.5h     |
 | Testing      | 8      | 52-58h          |
-| **TOTAL**    | **85** | **566.5-779h**  |
+| **TOTAL**    | **65** | **566.5-779h**  |
 
 ### Critical Path
 
@@ -596,9 +596,9 @@ ______________________________________________________________________
 ## Notes
 
 **Last Updated**: 2026-04-24
-**Active Tasks**: 78 (65 original + 13 newly added)
+**Active Tasks**: 65
 **Completed Tasks**: 115
-**Completion Rate**: 59.6% (115/193)
+**Completion Rate**: 63.9% (115/180)
 
 **Phase Distribution**:
 
