@@ -211,7 +211,7 @@ Each task includes:
 | --- | ----------------------------------------------------------------------------- | -------- | ------------------- | --------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | 001 | Extract Retry Logic to Reusable Decorator                                     | MEDIUM   | 2-3 hours           | Completed | [#51](https://github.com/bdperkin/nhl-scrabble/issues/51)   | -                                                                                      |
 | 001 | Consolidate Report Classes                                                    | MEDIUM   | 6-8 hours           | Completed | [#159](https://github.com/bdperkin/nhl-scrabble/issues/159) | -                                                                                      |
-| 002 | Improve Type Safety                                                           | MEDIUM   | 8-10 hours          | Active    | [#160](https://github.com/bdperkin/nhl-scrabble/issues/160) | -                                                                                      |
+| 002 | Improve Type Safety                                                           | LOW      | 8-10 hours          | Completed | [#160](https://github.com/bdperkin/nhl-scrabble/issues/160) | PR [#354](https://github.com/bdperkin/nhl-scrabble/pull/354), 2026-04-24, 6h actual    |
 | 002 | Port check_docs.sh Shell Script to Python                                     | MEDIUM   | 2-3 hours           | Completed | [#100](https://github.com/bdperkin/nhl-scrabble/issues/100) | -                                                                                      |
 | 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Active    | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | -                                                                                      |
 | 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -                                                                                      |
@@ -297,12 +297,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (58 active, 109 completed)
+**Total Tasks**: 167 tasks (57 active, 110 completed)
 
 - **Total Estimated Effort**: 1031.5 hours
-  - Active Tasks: 509.0 hours
-  - Completed Tasks: 522.5 hours (actual: 521.5 hours)
-- **Overall Completion**: 65.3%
+  - Active Tasks: 500.0 hours
+  - Completed Tasks: 531.5 hours (actual: 527.5 hours)
+- **Overall Completion**: 65.9%
 
 ## Task Management Guidelines
 
