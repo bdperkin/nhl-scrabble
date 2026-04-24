@@ -5,7 +5,7 @@ from typing import Any
 import pytest
 
 
-@pytest.fixture(scope="session")  # type: ignore[untyped-decorator]
+@pytest.fixture(scope="session")
 def browser_type_launch_args() -> dict[str, Any]:
     """Return browser launch arguments."""
     return {
@@ -14,7 +14,7 @@ def browser_type_launch_args() -> dict[str, Any]:
     }
 
 
-@pytest.fixture(scope="session")  # type: ignore[untyped-decorator]
+@pytest.fixture(scope="session")
 def browser_context_args() -> dict[str, Any]:
     """Return browser context arguments."""
     return {
@@ -23,7 +23,7 @@ def browser_context_args() -> dict[str, Any]:
     }
 
 
-@pytest.fixture  # type: ignore[untyped-decorator]
+@pytest.fixture
 def base_url() -> str:
     """Return the base URL for the application under test."""
     return "http://localhost:5000"

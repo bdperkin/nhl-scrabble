@@ -3,13 +3,31 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypedDict
 
 if TYPE_CHECKING:
     from nhl_scrabble.models.player import PlayerScore
     from nhl_scrabble.models.team import TeamScore
 
 logger = logging.getLogger(__name__)
+
+
+class SeasonData(TypedDict):
+    """Type definition for season data dictionary.
+
+    Attributes:
+        teams: Dictionary of team abbreviations to team scores
+        players: List of all player scores
+        total_score: Total score for all players
+        team_count: Number of teams
+        player_count: Number of players
+    """
+
+    teams: dict[str, TeamScore]
+    players: list[PlayerScore]
+    total_score: int
+    team_count: int  # Used in TypedDict
+    player_count: int  # Used in TypedDict
 
 
 class SeasonComparison:
@@ -37,7 +55,7 @@ class SeasonComparison:
             2
         """
         self.seasons = sorted(seasons)
-        self.season_data: dict[str, dict[str, dict[str, TeamScore] | list[PlayerScore]]] = {}
+        self.season_data: dict[str, SeasonData] = {}
         logger.debug(f"Initialized comparison for {len(seasons)} seasons")
 
     def add_season_data(
@@ -201,7 +219,7 @@ class TrendAnalysis:
         """
         self.start_season = start_season
         self.end_season = end_season
-        self.season_data: dict[str, dict[str, dict[str, TeamScore] | list[PlayerScore] | int]] = {}
+        self.season_data: dict[str, SeasonData] = {}
         logger.debug(f"Initialized trend analysis from {start_season} to {end_season}")
 
     def add_season_data(

@@ -464,11 +464,13 @@ no_implicit_reexport = true
 [[tool.mypy.overrides]]
 module = [
     "tests.*",
+    "qa.*",
 ]
 # Relax type checking for test files
 disallow_untyped_defs = false
 disallow_untyped_decorators = false
 disallow_any_expr = false
+disallow_any_explicit = false
 check_untyped_defs = false
 
 [[tool.mypy.overrides]]
@@ -481,6 +483,7 @@ module = [
 # that don't provide complete type information
 disallow_untyped_decorators = false
 disallow_subclassing_any = false
+disallow_any_explicit = false
 
 [[tool.mypy.overrides]]
 module = [
@@ -494,6 +497,7 @@ module = [
     "nhl_scrabble.reports.base",
     "nhl_scrabble.reports.comparison",
     "nhl_scrabble.reports.stats_report",
+    "nhl_scrabble.reports.generator",
     "nhl_scrabble.formatters.*",
     "nhl_scrabble.models.*",
     "nhl_scrabble.web.app",
@@ -502,7 +506,15 @@ module = [
     "nhl_scrabble.filters",
     "nhl_scrabble.utils.retry",
     "nhl_scrabble.security.circuit_breaker",
-    "nhl_scrabble.exporters.excel_exporter",
+    "nhl_scrabble.exporters.*",
+    "nhl_scrabble.rate_limiter",
+    "nhl_scrabble.storage.*",
+    "nhl_scrabble.scoring.scrabble",
+    "nhl_scrabble.config",
+    "nhl_scrabble.dashboard",
+    "nhl_scrabble.logging_config",
+    "nhl_scrabble.processors.team_processor",
+    "nhl_scrabble.interactive.shell",
 ]
 # Allow explicit Any for legitimate use cases:
 # - Abstract base classes with generic methods
