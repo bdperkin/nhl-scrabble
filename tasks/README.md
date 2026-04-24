@@ -237,6 +237,7 @@ Each task includes:
 | 023 | Consolidate Exporters and Formatters Architecture                             | LOW      | 3-5 hours           | Active    | TBD                                                         | -                                                                                      |
 | 024 | Make 'ty' Blocking After Validation Period                                    | LOW      | 30min-1h            | Active    | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | -                                                                                      |
 | 025 | Make 'refurb' Blocking After Validation Period                                | LOW      | 30min-1h            | Active    | [#356](https://github.com/bdperkin/nhl-scrabble/issues/356) | -                                                                                      |
+| 026 | Make 'gitlint' Blocking (Except GitHub CI Workflows) After Validation Period  | LOW      | 30min-1h            | Active    | [#357](https://github.com/bdperkin/nhl-scrabble/issues/357) | -                                                                                      |
 
 ## Statistics
 
@@ -250,8 +251,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 14     | 14        | 28      |
-| **TOTAL**    | **61** | **109**   | **170** |
+| Refactoring  | 15     | 14        | 29      |
+| **TOTAL**    | **62** | **109**   | **171** |
 
 ### Effort Estimates by Category
 
@@ -263,8 +264,8 @@ Each task includes:
 | Enhancement  | 201.5 hours      |
 | Testing      | 260.0 hours      |
 | New Features | 227.0 hours      |
-| Refactoring  | 221.5 hours      |
-| **TOTAL**    | **1037.0 hours** |
+| Refactoring  | 222.25 hours     |
+| **TOTAL**    | **1037.75 hours** |
 
 ### Completion Progress
 
@@ -276,8 +277,8 @@ Each task includes:
 | Enhancement  | 91.4%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
-| Refactoring  | 50.0%           |
-| **OVERALL**  | **64.1%**       |
+| Refactoring  | 48.3%           |
+| **OVERALL**  | **63.7%**       |
 
 ### Priority Distribution (Active Tasks)
 
