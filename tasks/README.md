@@ -156,6 +156,7 @@ Each task includes:
 | 018 | Accessibility Tests                                     | MEDIUM   | 2-4 hours                                        | Active    | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | -                                                                        |
 | 019 | QA CI/CD Integration                                    | MEDIUM   | 2-4 hours                                        | Active    | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | -                                                                        |
 | 020 | Implement Flaky Test Retry Mechanisms                   | MEDIUM   | 6-10 hours                                       | Completed | [#322](https://github.com/bdperkin/nhl-scrabble/issues/322) | PR [#323](https://github.com/bdperkin/nhl-scrabble/pull/323), 2026-04-22 |
+| 021 | Test Analytics and Coverage Analysis Tool               | MEDIUM   | 4-6 hours                                        | Active    | [#359](https://github.com/bdperkin/nhl-scrabble/issues/359) | -                                                                        |
 
 ### New Features
 
@@ -249,10 +250,10 @@ Each task includes:
 | Security     | 0      | 14        | 14      |
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 3      | 32        | 35      |
-| Testing      | 7      | 23        | 30      |
+| Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 14     | 15        | 29      |
-| **TOTAL**    | **61** | **110**   | **171** |
+| **TOTAL**    | **62** | **110**   | **172** |
 
 ### Effort Estimates by Category
 
@@ -262,10 +263,10 @@ Each task includes:
 | Security     | 82.0 hours       |
 | Optimization | 36.0 hours       |
 | Enhancement  | 201.5 hours      |
-| Testing      | 260.0 hours      |
+| Testing      | 265.0 hours      |
 | New Features | 227.0 hours      |
 | Refactoring  | 217.25 hours     |
-| **TOTAL**    | **1032.75 hours** |
+| **TOTAL**    | **1037.75 hours** |
 
 ### Completion Progress
 
@@ -275,10 +276,10 @@ Each task includes:
 | Security     | 100.0%          |
 | Optimization | 100.0%          |
 | Enhancement  | 91.4%           |
-| Testing      | 76.7%           |
+| Testing      | 74.2%           |
 | New Features | 14.0%           |
 | Refactoring  | 51.7%           |
-| **OVERALL**  | **64.3%**       |
+| **OVERALL**  | **64.0%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -286,7 +287,7 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 0     |
-| MEDIUM   | 56    |
+| MEDIUM   | 57    |
 | LOW      | 2     |
 
 ## Recommended Implementation Order
