@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Unified Configuration Management** - Refactored configuration system to use pydantic-settings for unified config management (#161)
+
+  - Consolidated configuration sources with clear precedence: CLI args (future) > env vars > .env file > defaults
+  - Maintained all existing security features (injection protection, SSRF validation)
+  - Maintained backward compatibility with `Config.from_env()` method
+  - Added comprehensive tests for configuration precedence and validation
+  - Dependencies: Added `pydantic-settings>=2.7.3`
+
 - **CLI Option Standardization** - Comprehensive audit and standardization of command-line options (#236)
 
   - **BREAKING CHANGES** - The following option names have changed for consistency:
