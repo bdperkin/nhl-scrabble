@@ -260,7 +260,6 @@ ignore = [
     "G004",
     "PLR2004",
     "PERF203",
-    "ANN401",
     "PLC0206",
     "TC001",
     "PTH123",
@@ -313,6 +312,7 @@ ignore = [
 "src/nhl_scrabble/api/nhl_client.py" = [
     "C901",
     "PLR0912",
+    "ANN401",  # API responses return dict[str, Any] for unstructured JSON
 ]
 "src/nhl_scrabble/api_server/routes/*.py" = [
     "FAST002",
@@ -322,6 +322,39 @@ ignore = [
 ]
 "tests/unit/test_nhl_client.py" = [
     "SLF001",
+]
+"src/nhl_scrabble/reports/base.py" = [
+    "ANN401",  # Abstract method intentionally uses Any for flexibility
+]
+"src/nhl_scrabble/formatters/factory.py" = [
+    "ANN401",  # Factory pattern requires flexible kwargs
+]
+"src/nhl_scrabble/formatters/__init__.py" = [
+    "ANN401",  # Factory pattern requires flexible kwargs
+]
+"src/nhl_scrabble/models/*.py" = [
+    "ANN401",  # to_dict() methods return dict[str, Any] for JSON serialization
+]
+"src/nhl_scrabble/reports/comparison.py" = [
+    "ANN401",  # JSON generation methods return dict[str, Any]
+]
+"src/nhl_scrabble/validators.py" = [
+    "ANN401",  # API response validation uses dict[str, Any]
+]
+"src/nhl_scrabble/web/app.py" = [
+    "ANN401",  # FastAPI/Pydantic response models use dict[str, Any]
+]
+"src/nhl_scrabble/exporters/excel_exporter.py" = [
+    "ANN401",  # Excel export methods accept dict[str, Any] for flexibility
+]
+"src/nhl_scrabble/formatters/*.py" = [
+    "ANN401",  # Formatters accept dict[str, Any] for unstructured data
+]
+"src/nhl_scrabble/utils/retry.py" = [
+    "ANN401",  # Decorator wrappers use *args: Any, **kwargs: Any pattern
+]
+"src/nhl_scrabble/security/circuit_breaker.py" = [
+    "ANN401",  # Generic wrapper uses *args: Any, **kwargs: Any pattern
 ]
 
 [tool.ruff.lint.mccabe]
@@ -401,7 +434,7 @@ warn_no_return = true
 disallow_any_unimported = false
 disallow_any_expr = false
 disallow_any_decorated = false
-disallow_any_explicit = false
+disallow_any_explicit = true  # Warn about explicit Any usage
 disallow_any_generics = true
 disallow_subclassing_any = true
 warn_unused_ignores = true
@@ -455,6 +488,30 @@ module = [
 ]
 # Script uses conditional imports for compatibility
 warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = [
+    "nhl_scrabble.reports.base",
+    "nhl_scrabble.reports.comparison",
+    "nhl_scrabble.reports.stats_report",
+    "nhl_scrabble.formatters.*",
+    "nhl_scrabble.models.*",
+    "nhl_scrabble.web.app",
+    "nhl_scrabble.validators",
+    "nhl_scrabble.api.nhl_client",
+    "nhl_scrabble.filters",
+    "nhl_scrabble.utils.retry",
+    "nhl_scrabble.security.circuit_breaker",
+    "nhl_scrabble.exporters.excel_exporter",
+]
+# Allow explicit Any for legitimate use cases:
+# - Abstract base classes with generic methods
+# - JSON serialization/deserialization
+# - API response handling
+# - Factory patterns
+# - Generic wrappers and decorators
+# - Pre-existing type inconsistencies
+disallow_any_explicit = false
 
 [tool.ty.src]
 include = [

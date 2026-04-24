@@ -4,6 +4,7 @@ import atexit
 import logging
 import random
 import time
+import types
 import weakref
 from datetime import timedelta
 from typing import Any, ClassVar
@@ -70,10 +71,10 @@ class NHLApiClient:
     """
 
     BASE_URL = "https://api-web.nhle.com/v1"  # Default base URL
-    _instances: ClassVar[set[weakref.ref[Any]]] = set()  # Track all instances for cleanup
+    _instances: ClassVar[set[weakref.ref["NHLApiClient"]]] = set()  # Track all instances
 
     @classmethod
-    def _cleanup_callback(cls, ref: weakref.ref[Any]) -> None:
+    def _cleanup_callback(cls, ref: weakref.ref["NHLApiClient"]) -> None:
         """Remove dead instance from tracking set.
 
         Args:
@@ -738,6 +739,11 @@ class NHLApiClient:
         """Support context manager protocol."""
         return self
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
+    ) -> None:
         """Close session when exiting context manager."""
         self.close()

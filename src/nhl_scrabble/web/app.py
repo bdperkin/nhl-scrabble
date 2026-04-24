@@ -17,10 +17,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
-from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.responses import Response
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api import NHLApiClient, NHLApiError
+from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors import PlayoffCalculator, TeamProcessor
 from nhl_scrabble.scoring import ScrabbleScorer
@@ -36,7 +38,7 @@ STATIC_DIR = WEB_DIR / "static"
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Middleware to add security headers to all responses."""
 
-    async def dispatch(self, request: Request, call_next: Any) -> Any:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         """Add security headers to response.
 
         Args:
@@ -172,8 +174,8 @@ async def favicon() -> HTMLResponse:
 
 
 def _convert_players_to_dict(
-    players: list[Any],
-) -> list[dict[str, Any]]:
+    players: list[PlayerScore],
+) -> list[dict[str, str | int | float]]:
     """Convert PlayerScore objects to dict format for response.
 
     Args:

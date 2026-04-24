@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path  # noqa: TC003
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from openpyxl.worksheet.worksheet import Worksheet
 
 try:
     from openpyxl import Workbook
@@ -15,6 +18,11 @@ except ImportError:
     OPENPYXL_AVAILABLE = False
 
 from nhl_scrabble.models.player import PlayerScore
+from nhl_scrabble.models.standings import (
+    ConferenceStandings,
+    DivisionStandings,
+    PlayoffTeam,
+)
 from nhl_scrabble.models.team import TeamScore
 
 
@@ -45,7 +53,7 @@ class ExcelExporter:
                 "Install with: pip install nhl-scrabble[export]"
             )
 
-    def _format_header_row(self, ws: Any, row: int = 1) -> None:
+    def _format_header_row(self, ws: Worksheet, row: int = 1) -> None:
         """Apply formatting to header row.
 
         Args:
@@ -62,7 +70,7 @@ class ExcelExporter:
             cell.font = header_font
             cell.alignment = header_alignment
 
-    def _auto_adjust_columns(self, ws: Any) -> None:
+    def _auto_adjust_columns(self, ws: Worksheet) -> None:
         """Auto-adjust column widths based on content.
 
         Args:
@@ -187,9 +195,9 @@ class ExcelExporter:
         self,
         team_scores: dict[str, TeamScore],
         all_players: list[PlayerScore],
-        division_standings: dict[str, Any],
-        conference_standings: dict[str, Any],
-        playoff_standings: dict[str, Any],
+        division_standings: dict[str, DivisionStandings],
+        conference_standings: dict[str, ConferenceStandings],
+        playoff_standings: dict[str, list[PlayoffTeam]],
         output: Path,
         sheets: list[str] | None = None,
     ) -> None:
