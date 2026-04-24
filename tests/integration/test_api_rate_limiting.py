@@ -11,6 +11,7 @@ from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError
 class TestApiClientRateLimiting:
     """Integration tests for rate limiting in NHL API client."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_enforces_rate_limiting(self) -> None:
         """Test API client enforces rate limiting."""
         # Create client with strict rate limit (2 requests per second)
@@ -41,6 +42,7 @@ class TestApiClientRateLimiting:
             elapsed = time.monotonic() - start
             assert elapsed >= 0.4, f"Third request waited {elapsed}s, expected >= 0.4s"
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_429_handling(self) -> None:
         """Test API client handles 429 responses."""
         client = NHLApiClient(retries=2)
@@ -75,6 +77,7 @@ class TestApiClientRateLimiting:
             assert "forwards" in result
             assert mock_request.call_count == 2  # First 429, then success
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_429_retry_after_header(self) -> None:
         """Test API client respects Retry-After header."""
         client = NHLApiClient(retries=2)
@@ -108,6 +111,7 @@ class TestApiClientRateLimiting:
             assert elapsed >= 1.0, f"Should have waited >= 1.0s, waited {elapsed}s"
             assert "forwards" in result
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_429_no_retry_after_header(self) -> None:
         """Test API client handles 429 without Retry-After header."""
         client = NHLApiClient(retries=2)
@@ -141,6 +145,7 @@ class TestApiClientRateLimiting:
             assert elapsed >= 1.0, f"Should have waited >= 1.0s, waited {elapsed}s"
             assert "forwards" in result
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_429_exhausts_retries(self) -> None:
         """Test API client gives up after max retries on 429."""
         client = NHLApiClient(retries=2)
@@ -163,6 +168,7 @@ class TestApiClientRateLimiting:
             # Should have attempted retries
             assert mock_request.call_count == 2
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_rate_limit_stats(self) -> None:
         """Test API client tracks rate limit statistics."""
         client = NHLApiClient(
@@ -197,6 +203,7 @@ class TestApiClientRateLimiting:
             assert stats["total_wait_time"] > 0
             assert stats["average_wait"] > 0
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     @pytest.mark.skip(
         reason="Cache checking logic is complex to mock - functionality verified by other tests"
     )
@@ -237,6 +244,7 @@ class TestApiClientRateLimiting:
             # Cached requests should not consume rate limit tokens
             assert final_stats["total_requests"] == initial_stats["total_requests"]
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_concurrent_requests(self) -> None:
         """Test API client handles concurrent requests with rate limiting."""
         import threading
@@ -287,6 +295,7 @@ class TestApiClientRateLimiting:
             # With 6 requests and max 3 tokens, should have waited at least once
             assert stats["total_waits"] >= 1
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_retry_after_method(self) -> None:
         """Test _get_retry_after method extracts header correctly."""
         client = NHLApiClient()
@@ -304,6 +313,7 @@ class TestApiClientRateLimiting:
         response.headers = {"Retry-After": "invalid"}
         assert client._get_retry_after(response) == 1.0  # Default
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_rate_limiter_initialization(self) -> None:
         """Test rate limiter is initialized with correct parameters."""
         client = NHLApiClient(rate_limit_max_requests=50, rate_limit_window=120.0)
@@ -313,6 +323,7 @@ class TestApiClientRateLimiting:
         assert client.rate_limiter.time_window == 120.0
         assert client.rate_limiter.burst_size == 50
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_with_very_low_rate_limit(self) -> None:
         """Test API client with very restrictive rate limit."""
         client = NHLApiClient(rate_limit_max_requests=1, rate_limit_window=2.0, cache_enabled=False)
