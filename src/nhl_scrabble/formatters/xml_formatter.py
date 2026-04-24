@@ -49,7 +49,7 @@ class XMLFormatter:
             True
         """
         try:
-            import xml.dom.minidom  # noqa: PLC0415
+            import xml.dom.minidom  # noqa: PLC0415  # nosec B408
 
             from dicttoxml import dicttoxml  # noqa: PLC0415
         except ImportError as e:
