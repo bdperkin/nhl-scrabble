@@ -161,7 +161,7 @@ class TestExceptionCatching:
         """Test exception chaining with 'from' clause."""
         try:
             try:
-                raise ValueError("Original error")
+                raise ValueError("Original error")  # noqa: TRY301
             except ValueError as e:
                 raise NHLApiError("Wrapped error") from e
         except NHLApiError as api_error:
