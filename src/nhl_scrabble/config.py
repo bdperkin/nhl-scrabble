@@ -61,7 +61,7 @@ class Config(BaseSettings):
         top_players_count: Number of top players to show in reports
         top_team_players_count: Number of top players per team to show
         verbose: Enable verbose logging
-        output_format: Output format (text, json, html)
+        output_format: Output format (text, json, html, csv, excel)
         sanitize_logs: Sanitize sensitive data from logs (disable only for debugging)
         dos_max_connections: Maximum number of connection pool connections (DoS prevention)
         dos_max_per_host: Maximum connections per host (DoS prevention)
@@ -195,7 +195,7 @@ class Config(BaseSettings):
         str,
         Field(
             default="text",
-            description="Output format (text/json/html)",
+            description="Output format (text/json/html/csv/excel)",
         ),
     ]
     sanitize_logs: Annotated[
@@ -369,7 +369,10 @@ class Config(BaseSettings):
             ),
             "verbose": get_bool("verbose", "NHL_SCRABBLE_VERBOSE", False),  # noqa: FBT003
             "output_format": get_enum(
-                "output_format", "NHL_SCRABBLE_OUTPUT_FORMAT", "text", {"text", "json", "html"}
+                "output_format",
+                "NHL_SCRABBLE_OUTPUT_FORMAT",
+                "text",
+                {"text", "json", "html", "csv", "excel"},
             ),
             "sanitize_logs": get_bool(
                 "sanitize_logs", "NHL_SCRABBLE_SANITIZE_LOGS", True  # noqa: FBT003
