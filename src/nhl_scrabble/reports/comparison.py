@@ -26,8 +26,8 @@ class SeasonData(TypedDict):
     teams: dict[str, TeamScore]
     players: list[PlayerScore]
     total_score: int
-    team_count: int  # Used in TypedDict
-    player_count: int  # Used in TypedDict
+    team_count: int  # noqa: vulture
+    player_count: int  # noqa: vulture
 
 
 class SeasonComparison:
