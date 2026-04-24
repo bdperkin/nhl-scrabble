@@ -203,8 +203,10 @@ class TestCombinedValidation:
         result = runner.invoke(cli, ["analyze", "--top-players", "999"])
 
         assert result.exit_code != 0
-        # CLI validation uses validators.validate_integer_range
-        assert "cannot exceed" in result.output.lower()
+        # CLI validation uses Click IntRange
+        assert (
+            "invalid value" in result.output.lower() or "not in the range" in result.output.lower()
+        )
 
     def test_environment_validation_before_cli(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path

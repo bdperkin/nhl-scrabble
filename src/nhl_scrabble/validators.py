@@ -120,60 +120,6 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     return file_path
 
 
-def validate_integer_range(
-    value: Any, min_val: int | None = None, max_val: int | None = None, name: str = "value"
-) -> int:
-    """Validate integer is within specified range.
-
-    Args:
-        value: Value to validate (can be int or string convertible to int)
-        min_val: Minimum allowed value inclusive (None = no minimum)
-        max_val: Maximum allowed value inclusive (None = no maximum)
-        name: Parameter name for error messages
-
-    Returns:
-        Validated integer value
-
-    Raises:
-        ValidationError: If value is not an integer or out of range with specific reason:
-            - Value is not convertible to integer
-            - Value is below minimum
-            - Value is above maximum
-
-    Security:
-        - Prevents memory exhaustion from extremely large values
-        - Prevents DoS attacks via resource consumption
-        - Ensures safe integer arithmetic
-
-    Examples:
-        >>> validate_integer_range(5, min_val=1, max_val=10)
-        5
-        >>> validate_integer_range("5", min_val=1, max_val=10)
-        5
-        >>> validate_integer_range(0, min_val=1, max_val=10, name="count")
-        Traceback (most recent call last):
-        ValidationError: count must be at least 1, got 0
-        >>> validate_integer_range("abc", name="timeout")
-        Traceback (most recent call last):
-        ValidationError: timeout must be an integer, got str
-    """
-    # Convert to int
-    try:
-        int_val = int(value)
-    except (ValueError, TypeError):
-        raise ValidationError(f"{name} must be an integer, got: {value}") from None
-
-    # Check minimum bound
-    if min_val is not None and int_val < min_val:
-        raise ValidationError(f"{name} must be at least {min_val}")
-
-    # Check maximum bound
-    if max_val is not None and int_val > max_val:
-        raise ValidationError(f"{name} cannot exceed {max_val}, got {int_val}")
-
-    return int_val
-
-
 def validate_float_range(
     value: Any, min_val: float | None = None, max_val: float | None = None, name: str = "value"
 ) -> float:

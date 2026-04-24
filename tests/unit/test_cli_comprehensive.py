@@ -150,13 +150,13 @@ class TestAnalyzeCommand:
             cli,
             [
                 "analyze",
-                "--division",
+                "--divisions",
                 "Atlantic",
-                "--conference",
+                "--conferences",
                 "Eastern",
                 "--teams",
                 "TOR,MTL",
-                "--exclude",
+                "--exclude-teams",
                 "BOS",
                 "--min-score",
                 "50",
@@ -268,29 +268,24 @@ class TestCLIArgumentValidation:
     """Tests for CLI argument validation."""
 
     def test_validate_cli_arguments_valid(self, tmp_path: Path) -> None:
-        """Test validation with valid arguments."""
+        """Test validation with valid output path.
+
+        Note: Numeric validation (top_players, top_team_players) is now handled
+        by Click's IntRange type, not by validate_cli_arguments().
+        """
         output_file = tmp_path / "output.txt"
-        output_path, top_players, top_team_players = validate_cli_arguments(str(output_file), 20, 5)
+        output_path = validate_cli_arguments(str(output_file))
         assert output_path == output_file
-        assert top_players == 20
-        assert top_team_players == 5
 
     def test_validate_cli_arguments_none_output(self) -> None:
         """Test validation with None output (stdout)."""
-        output_path, top_players, top_team_players = validate_cli_arguments(None, 20, 5)
+        output_path = validate_cli_arguments(None)
         assert output_path is None
-        assert top_players == 20
-        assert top_team_players == 5
 
-    def test_validate_cli_arguments_invalid_top_players(self) -> None:
-        """Test validation with invalid top_players."""
+    def test_validate_cli_arguments_invalid_path(self) -> None:
+        """Test validation with invalid output path."""
         with pytest.raises(click.ClickException):
-            validate_cli_arguments(None, -1, 5)
-
-    def test_validate_cli_arguments_invalid_top_team_players(self) -> None:
-        """Test validation with invalid top_team_players."""
-        with pytest.raises(click.ClickException):
-            validate_cli_arguments(None, 20, 0)
+            validate_cli_arguments("/nonexistent/directory/file.txt")
 
 
 class TestErrorHandling:
@@ -404,9 +399,9 @@ class TestGenerateFunctions:
             fuzzy=False,
             min_score=None,
             max_score=None,
-            team=None,
-            division=None,
-            conference=None,
+            teams=None,
+            divisions=None,
+            conferences=None,
             limit=20,
         )
         assert "John Doe" in result
@@ -422,9 +417,9 @@ class TestGenerateFunctions:
             fuzzy=True,
             min_score=50,
             max_score=100,
-            team="TOR",
-            division="Atlantic",
-            conference="Eastern",
+            teams="TOR",
+            divisions="Atlantic",
+            conferences="Eastern",
             limit=10,
         )
         assert "Fuzzy" in result
@@ -467,11 +462,12 @@ class TestOtherCommands:
         assert "watch" in result.output.lower()
 
     def test_watch_invalid_interval(self) -> None:
-        """Test watch with invalid interval."""
+        """Test watch with invalid interval (now validated by Click IntRange)."""
         runner = CliRunner()
         result = runner.invoke(cli, ["watch", "--interval", "0"])
         assert result.exit_code != 0
-        assert "at least 1 second" in result.output
+        # Click IntRange provides error message about range
+        assert "Invalid value" in result.output or "not in the range" in result.output
 
     def test_search_help(self) -> None:
         """Test search command help."""
@@ -524,11 +520,11 @@ class TestOtherCommands:
                 "50",
                 "--max-score",
                 "100",
-                "--team",
+                "--teams",
                 "TOR",
-                "--division",
+                "--divisions",
                 "Atlantic",
-                "--conference",
+                "--conferences",
                 "Eastern",
                 "--limit",
                 "10",
@@ -636,9 +632,9 @@ class TestOtherCommands:
             [
                 "dashboard",
                 "--static",
-                "--division",
+                "--divisions",
                 "Atlantic",
-                "--conference",
+                "--conferences",
                 "Eastern",
                 "--quiet",
             ],

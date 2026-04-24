@@ -257,10 +257,10 @@ Launch an interactive terminal dashboard with real-time statistics and visualiza
 nhl-scrabble dashboard
 
 # Filter by division
-nhl-scrabble dashboard --division Atlantic
+nhl-scrabble dashboard --divisions Atlantic
 
 # Filter by conference
-nhl-scrabble dashboard --conference Eastern
+nhl-scrabble dashboard --conferences Eastern
 
 # Run for 30 seconds then exit
 nhl-scrabble dashboard --duration 30
@@ -269,7 +269,7 @@ nhl-scrabble dashboard --duration 30
 nhl-scrabble dashboard --static
 
 # Combine filters
-nhl-scrabble dashboard --division Metropolitan --conference Eastern
+nhl-scrabble dashboard --divisions Metropolitan --conferences Eastern
 ```
 
 The dashboard displays:

@@ -220,7 +220,7 @@ Each task includes:
 | 009 | Git Branch Pruning Automation                                                 | MEDIUM   | 30-60 minutes       | Completed | [#220](https://github.com/bdperkin/nhl-scrabble/issues/220) | -                                                                                      |
 | 010 | Dynamic Versioning from Git Tags                                              | MEDIUM   | 2-4 hours           | Active    | [#222](https://github.com/bdperkin/nhl-scrabble/issues/222) | -                                                                                      |
 | 011 | Dependency Synchronization and Automation                                     | MEDIUM   | 3-4 hours           | Completed | [#226](https://github.com/bdperkin/nhl-scrabble/issues/226) | PR [#341](https://github.com/bdperkin/nhl-scrabble/pull/341), 2026-04-23, 4.5h actual  |
-| 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Active    | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | -                                                                                      |
+| 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Completed | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | PR [#349](https://github.com/bdperkin/nhl-scrabble/pull/349), 2026-04-23, 5h actual    |
 | 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Active    | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | -                                                                                      |
 | 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Completed | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | PR [#337](https://github.com/bdperkin/nhl-scrabble/pull/337), 2026-04-22, 2.5h actual  |
 | 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 30 minutes - 1 hour | Active    | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | -                                                                                      |
@@ -244,8 +244,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 13     | 12        | 25      |
-| **TOTAL**    | **60** | **107**   | **167** |
+| Refactoring  | 12     | 13        | 25      |
+| **TOTAL**    | **59** | **108**   | **167** |
 
 ### Effort Estimates by Category
 
@@ -267,11 +267,11 @@ Each task includes:
 | Bug Fixes    | 100.0%          |
 | Security     | 100.0%          |
 | Optimization | 100.0%          |
-| Enhancement  | 74.3%           |
+| Enhancement  | 91.4%           |
 | Testing      | 76.7%           |
 | New Features | 14.0%           |
-| Refactoring  | 36.0%           |
-| **OVERALL**  | **62.3%**       |
+| Refactoring  | 52.0%           |
+| **OVERALL**  | **64.7%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -294,12 +294,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (62 active, 105 completed)
+**Total Tasks**: 167 tasks (59 active, 108 completed)
 
 - **Total Estimated Effort**: 1031.5 hours
-  - Active Tasks: 517.0 hours
-  - Completed Tasks: 502.5 hours (actual: 502.5 hours)
-- **Overall Completion**: 62.9%
+  - Active Tasks: 514.0 hours
+  - Completed Tasks: 517.5 hours (actual: 517.5 hours)
+- **Overall Completion**: 64.7%
 
 ## Task Management Guidelines
 
