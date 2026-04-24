@@ -301,7 +301,8 @@ class ExcelExporter:
 
             for division_name in sorted(division_standings.keys()):
                 standing = division_standings[division_name]
-                for team in standing.teams:
+                for team_abbrev in standing.teams:
+                    team = team_scores[team_abbrev]
                     ws_divisions.append(
                         [
                             division_name,
@@ -329,8 +330,9 @@ class ExcelExporter:
             self._format_header_row(ws_conferences)
 
             for conference_name in sorted(conference_standings.keys()):
-                standing = conference_standings[conference_name]
-                for team in standing.teams:
+                conf_standing = conference_standings[conference_name]
+                for team_abbrev in conf_standing.teams:
+                    team = team_scores[team_abbrev]
                     ws_conferences.append(
                         [
                             conference_name,
@@ -361,16 +363,17 @@ class ExcelExporter:
 
             for conference_name in sorted(playoff_standings.keys()):
                 teams_list = playoff_standings[conference_name]
-                for seed, team in enumerate(teams_list, start=1):
+                playoff_team: PlayoffTeam
+                for seed, playoff_team in enumerate(teams_list, start=1):
                     ws_playoffs.append(
                         [
                             conference_name,
                             seed,
-                            team.abbrev,
-                            team.division,
-                            team.total,
-                            round(team.avg, 2),
-                            team.status_indicator,
+                            playoff_team.abbrev,
+                            playoff_team.division,
+                            playoff_team.total,
+                            round(playoff_team.avg, 2),
+                            playoff_team.status_indicator,
                         ]
                     )
             self._auto_adjust_columns(ws_playoffs)

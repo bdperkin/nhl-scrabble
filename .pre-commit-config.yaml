@@ -524,6 +524,7 @@ repos:
       - id: mypy
         additional_dependencies: [types-requests, types-PyYAML, pydantic, rich, jinja2]
         args: []  # Config is in pyproject.toml
+        exclude: ^(qa|tests)/  # Exclude web automation and test files from strict type checking
 
   # ============================================================================
   # Astral ty - Fast Type Checker (Supplements MyPy)
