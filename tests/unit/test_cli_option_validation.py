@@ -103,8 +103,8 @@ class TestTopTeamPlayersValidation:
 class TestSearchLimitValidation:
     """Tests for search --limit option validation (IntRange: 1-500)."""
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_limit_valid_min(self, mock_client, mock_processor):
         """Test --limit accepts minimum value (1)."""
         mock_processor.return_value.process_all_teams.return_value = ({}, [], [])
@@ -112,8 +112,8 @@ class TestSearchLimitValidation:
         result = runner.invoke(cli, ["search", "--limit", "1", "--quiet"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.TeamProcessor")
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.TeamProcessor")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_limit_valid_max(self, mock_client, mock_processor):
         """Test --limit accepts maximum value (500)."""
         mock_processor.return_value.process_all_teams.return_value = ({}, [], [])

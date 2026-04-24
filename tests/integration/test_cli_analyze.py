@@ -19,14 +19,14 @@ pytestmark = [
 class TestCLIAnalyze:
     """Integration tests for the analyze command."""
 
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_analyze_command_with_mocked_api(
         self,
         mock_client_class: Mock,
         sample_standings_data: dict[str, Any],
         sample_roster_data: dict[str, Any],
     ) -> None:
-        """Test analyze command with mocked API calls."""
+        """Test analyze command with mocked API calls (via dependency injection)."""
         # Setup mock client
         mock_client = Mock()
         mock_client.__enter__ = Mock(return_value=mock_client)
@@ -53,14 +53,14 @@ class TestCLIAnalyze:
         # Should have output
         assert len(result.output) > 0 or result.output == ""  # Might be empty in test mode
 
-    @patch("nhl_scrabble.cli.NHLApiClient")
+    @patch("nhl_scrabble.di.NHLApiClient")
     def test_analyze_command_json_output(
         self,
         mock_client_class: Mock,
         sample_standings_data: dict[str, Any],
         sample_roster_data: dict[str, Any],
     ) -> None:
-        """Test analyze command with JSON output."""
+        """Test analyze command with JSON output (via dependency injection)."""
         # Setup mock client
         mock_client = Mock()
         mock_client.__enter__ = Mock(return_value=mock_client)
