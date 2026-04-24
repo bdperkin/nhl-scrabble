@@ -191,20 +191,20 @@ Search the NHL player database by name with support for exact matching, fuzzy ma
 
 **Options**:
 
-| Option                  | Type   | Default | Description                                      |
-| ----------------------- | ------ | ------- | ------------------------------------------------ |
-| `-f, --fuzzy`           | flag   | false   | Enable fuzzy matching for typo tolerance         |
-| `--min-score INT`       | int    | none    | Filter players with score >= INT                 |
-| `--max-score INT`       | int    | none    | Filter players with score \<= INT                |
-| `-t, --team CODE`       | string | none    | Filter by team abbreviation (e.g., TOR, EDM)     |
-| `-d, --division NAME`   | string | none    | Filter by division name                          |
-| `-c, --conference NAME` | string | none    | Filter by conference name (Eastern/Western)      |
-| `-n, --limit INT`       | int    | 20      | Maximum number of results to show                |
-| `-v, --verbose`         | flag   | false   | Enable verbose logging (DEBUG level)             |
-| `-q, --quiet`           | flag   | false   | Suppress progress bars                           |
-| `--format FORMAT`       | choice | `text`  | Output format: `text` or `json`                  |
-| `-o, --output PATH`     | path   | stdout  | Output file path (writes to stdout if not given) |
-| `--help`                | flag   | false   | Show command help and exit                       |
+| Option                   | Type   | Default | Description                                      |
+| ------------------------ | ------ | ------- | ------------------------------------------------ |
+| `-f, --fuzzy`            | flag   | false   | Enable fuzzy matching for typo tolerance         |
+| `--min-score INT`        | int    | none    | Filter players with score >= INT                 |
+| `--max-score INT`        | int    | none    | Filter players with score \<= INT                |
+| `-t, --teams CODE`       | string | none    | Filter by team abbreviation (e.g., TOR, EDM)     |
+| `-d, --divisions NAME`   | string | none    | Filter by division name                          |
+| `-c, --conferences NAME` | string | none    | Filter by conference name (Eastern/Western)      |
+| `-n, --limit INT`        | int    | 20      | Maximum number of results to show (range: 1-500) |
+| `-v, --verbose`          | flag   | false   | Enable verbose logging (DEBUG level)             |
+| `-q, --quiet`            | flag   | false   | Suppress progress bars and status messages       |
+| `--format FORMAT`        | choice | `text`  | Output format: `text` or `json`                  |
+| `-o, --output PATH`      | path   | stdout  | Output file path (writes to stdout if not given) |
+| `--help`                 | flag   | false   | Show command help and exit                       |
 
 **Examples**:
 
@@ -222,10 +222,10 @@ nhl-scrabble search "Connor*"
 nhl-scrabble search --min-score 50
 
 # Find players on a team
-nhl-scrabble search --team TOR
+nhl-scrabble search --teams TOR
 
 # Combine filters
-nhl-scrabble search "Connor*" --team EDM --min-score 30
+nhl-scrabble search "Connor*" --teams EDM --min-score 30
 
 # Show more results
 nhl-scrabble search McDavid --fuzzy --limit 50
@@ -234,10 +234,10 @@ nhl-scrabble search McDavid --fuzzy --limit 50
 nhl-scrabble search --min-score 60 --format json --output high-scorers.json
 
 # Division search
-nhl-scrabble search --division Pacific --min-score 35
+nhl-scrabble search --divisions Pacific --min-score 35
 
 # Conference search
-nhl-scrabble search --conference Eastern --limit 100
+nhl-scrabble search --conferences Eastern --limit 100
 ```
 
 **Search Modes**:

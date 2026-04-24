@@ -7,6 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **CLI Option Standardization** - Comprehensive audit and standardization of command-line options (#236)
+
+  - **BREAKING CHANGES** - The following option names have changed for consistency:
+    - `--division` → `--divisions` (analyze, search, dashboard commands)
+    - `--conference` → `--conferences` (analyze, search, dashboard commands)
+    - `--team` → `--teams` (search command, analyze already used `--teams`)
+    - `--exclude` → `--exclude-teams` (analyze command)
+  - **Migration Guide**:
+    ```bash
+    # OLD (no longer works)
+    nhl-scrabble analyze --division Atlantic --conference Eastern
+    nhl-scrabble search --team TOR --division Atlantic
+    nhl-scrabble analyze --exclude BOS,NYR
+    nhl-scrabble dashboard --division Atlantic
+
+    # NEW (use plural forms)
+    nhl-scrabble analyze --divisions Atlantic --conferences Eastern
+    nhl-scrabble search --teams TOR --divisions Atlantic
+    nhl-scrabble analyze --exclude-teams BOS,NYR
+    nhl-scrabble dashboard --divisions Atlantic
+    ```
+  - **Validation Improvements** - All numeric options now use Click's `IntRange` for immediate validation:
+    - `--top-players`: range 1-100 (prevents memory exhaustion)
+    - `--top-team-players`: range 1-50
+    - `--limit`: range 1-500 (search command)
+    - `--port`: range 1-65535 (serve command)
+    - `--interval`: minimum 1 (watch command)
+    - `--duration`: minimum 1 (dashboard command)
+  - **Help Text Consistency** - Standardized help text format across all commands:
+    - All defaults documented: "(default: X)"
+    - All ranges documented: "(range: X-Y)"
+    - Consistent phrasing for similar options
+  - **Option Ordering** - Reorganized options into logical groups for better `--help` readability:
+    1. Output Options (--format, --output)
+    1. Behavior Flags (--verbose, --quiet)
+    1. Data Source Options (--no-cache, --clear-cache, --season)
+    1. Display Options (--top-players, --top-team-players, --limit)
+    1. Report Selection (--report)
+    1. Scoring Options (--scoring, --scoring-config)
+    1. Filtering Options (--divisions, --conferences, --teams, --min-score, --max-score)
+    1. Specialized Options (command-specific)
+  - **Benefits**:
+    - **Better UX**: Consistent option names reduce cognitive load
+    - **Immediate Validation**: Click's IntRange provides instant feedback (< 1s vs 2+ min API calls)
+    - **Security**: Prevents DoS via memory exhaustion (e.g., `--top-players 1000000`)
+    - **Maintainability**: Documented standards in `docs/contributing/cli-standards.md`
+    - **Developer Experience**: Clear guidelines for adding new options
+  - **Documentation Updates**:
+    - Created `docs/contributing/cli-standards.md` - Comprehensive CLI option standards guide
+    - Updated all documentation examples (README, tutorials, CLI reference)
+    - Updated all test files to use new option names
+    - Added 42 validation tests in `tests/unit/test_cli_option_validation.py`
+  - **Performance Impact**: Validation failures now occur in < 1 second instead of after expensive API calls (2+ minutes)
+  - Related: Refactoring task #236 - CLI options audit and standardization
+
 ### Added
 
 - **CLI Short Options** - Standard short options for common CLI flags (#229)

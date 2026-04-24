@@ -30,7 +30,7 @@ from nhl_scrabble.scoring.config import ScoringConfig
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 from nhl_scrabble.search import PlayerSearch
 from nhl_scrabble.ui.progress import ProgressManager
-from nhl_scrabble.validators import ValidationError, validate_file_path, validate_integer_range
+from nhl_scrabble.validators import ValidationError, validate_file_path
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -89,36 +89,35 @@ def validate_output_path(output: str | None) -> None:
         logger.warning(f"Output file exists and will be overwritten: {output_path}")
 
 
-def validate_cli_arguments(
-    output: str | None, top_players: int, top_team_players: int
-) -> tuple[Path | None, int, int]:
-    """Validate all CLI arguments before processing.
+def validate_cli_arguments(output: str | None) -> Path | None:
+    """Validate CLI output path before processing.
 
-    Uses comprehensive validators from validators module to check all inputs
-    for security issues and invalid values. This validation happens before
-    any API calls to provide immediate feedback.
+    Uses validators module to check output path for security issues.
+    This validation happens before any API calls to provide immediate feedback.
+
+    Note:
+        Numeric validation (top_players, top_team_players, etc.) is now handled
+        by Click's IntRange type directly in option definitions, eliminating
+        redundant validation.
 
     Args:
         output: Output file path, or None for stdout
-        top_players: Number of top players to show
-        top_team_players: Number of top players per team to show
 
     Returns:
-        Tuple of (validated_output_path, validated_top_players, validated_top_team_players)
+        Validated output path, or None for stdout
 
     Raises:
-        click.ClickException: If any argument is invalid with helpful error message
+        click.ClickException: If output path is invalid with helpful error message
 
     Security:
         - Prevents path traversal attacks via output path
-        - Validates numeric parameters to prevent DoS via memory exhaustion
         - Provides early validation before expensive operations
 
     Examples:
-        >>> validate_cli_arguments("output.txt", 20, 5)
-        (PosixPath('/current/dir/output.txt'), 20, 5)
-        >>> validate_cli_arguments(None, 20, 5)  # stdout
-        (None, 20, 5)
+        >>> validate_cli_arguments("output.txt")
+        PosixPath('/current/dir/output.txt')
+        >>> validate_cli_arguments(None)  # stdout
+        None
     """
     validated_output: Path | None = None
 
@@ -130,16 +129,7 @@ def validate_cli_arguments(
             if validated_output.exists():
                 logger.warning(f"Output file exists and will be overwritten: {validated_output}")
 
-        # Validate numeric parameters
-        validated_top_players = validate_integer_range(
-            top_players, min_val=1, max_val=100, name="top_players"
-        )
-
-        validated_top_team_players = validate_integer_range(
-            top_team_players, min_val=1, max_val=50, name="top_team_players"
-        )
-
-        return validated_output, validated_top_players, validated_top_team_players
+        return validated_output
 
     except ValidationError as e:
         raise click.ClickException(str(e)) from e
@@ -388,6 +378,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 
 
 @cli.command()
+# === Output Options ===
 @click.option(
     "-f",
     "--format",
@@ -400,6 +391,12 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     help="Output format (default: text)",
 )
 @click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    help="Output file path (default: stdout)",
+)
+@click.option(
     "--template",
     type=click.Path(exists=True, dir_okay=False),
     help="Custom template file path (required for --format template)",
@@ -408,12 +405,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     "--sheets",
     help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
 )
-@click.option(
-    "--output",
-    "-o",
-    type=click.Path(),
-    help="Output file path (default: stdout)",
-)
+# === Behavior Flags ===
 @click.option(
     "--verbose",
     "-v",
@@ -424,8 +416,9 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars",
+    help="Suppress progress bars and status messages",
 )
+# === Data Source Options ===
 @click.option(
     "--no-cache",
     is_flag=True,
@@ -437,22 +430,30 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     help="Clear API cache before running",
 )
 @click.option(
+    "--season",
+    type=str,
+    help="Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)",
+)
+# === Display Options ===
+@click.option(
     "--top-players",
-    type=int,
+    type=click.IntRange(min=1, max=100),
     default=20,
-    help="Number of top players to show (default: 20)",
+    help="Number of top players to show (default: 20, range: 1-100)",
 )
 @click.option(
     "--top-team-players",
-    type=int,
+    type=click.IntRange(min=1, max=50),
     default=5,
-    help="Number of top players per team to show (default: 5)",
+    help="Number of top players per team to show (default: 5, range: 1-50)",
 )
+# === Report Selection ===
 @click.option(
     "--report",
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
     help="Generate specific report only (default: all reports)",
 )
+# === Scoring Options ===
 @click.option(
     "--scoring",
     type=click.Choice(["scrabble", "wordle", "uniform"], case_sensitive=False),
@@ -464,20 +465,21 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
     help="Path to custom scoring configuration JSON file",
 )
+# === Filtering Options ===
 @click.option(
-    "--division",
-    help="Filter by division (comma-separated: Atlantic,Metropolitan,Central,Pacific)",
+    "--divisions",
+    help="Filter by divisions (comma-separated: Atlantic,Metropolitan,Central,Pacific)",
 )
 @click.option(
-    "--conference",
-    help="Filter by conference (comma-separated: Eastern,Western)",
+    "--conferences",
+    help="Filter by conferences (comma-separated: Eastern,Western)",
 )
 @click.option(
     "--teams",
     help="Filter by teams (comma-separated abbreviations: TOR,MTL,BOS)",
 )
 @click.option(
-    "--exclude",
+    "--exclude-teams",
     help="Exclude teams (comma-separated abbreviations: NYR,PHI)",
 )
 @click.option(
@@ -490,33 +492,28 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     type=int,
     help="Maximum player score to include",
 )
-@click.option(
-    "--season",
-    type=str,
-    help="Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)",
-)
 @click.help_option("-h", "--help")
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
+    output: str | None,
     template: str | None,
     sheets: str | None,
-    output: str | None,
     verbose: bool,
     quiet: bool,
     no_cache: bool,
     clear_cache: bool,
+    season: str | None,
     top_players: int,
     top_team_players: int,
     report: str | None,
     scoring: str,
     scoring_config: Path | None,
-    division: str | None,
-    conference: str | None,
+    divisions: str | None,
+    conferences: str | None,
     teams: str | None,
-    exclude: str | None,
+    exclude_teams: str | None,
     min_score: int | None,
     max_score: int | None,
-    season: str | None,
 ) -> None:
     r"""Run the NHL Scrabble analysis.
 
@@ -586,10 +583,10 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         $ nhl-scrabble analyze --scoring-config custom_values.json
 
       Filter by division:
-        $ nhl-scrabble analyze --division Atlantic
+        $ nhl-scrabble analyze --divisions Atlantic
 
       Filter by conference:
-        $ nhl-scrabble analyze --conference Eastern
+        $ nhl-scrabble analyze --conferences Eastern
 
       Filter by specific teams:
         $ nhl-scrabble analyze --teams TOR,MTL,OTT
@@ -598,19 +595,17 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         $ nhl-scrabble analyze --min-score 50 --max-score 100
 
       Exclude specific teams:
-        $ nhl-scrabble analyze --exclude BOS,NYR
+        $ nhl-scrabble analyze --exclude-teams BOS,NYR
 
       Analyze specific season:
         $ nhl-scrabble analyze --season 20222023
 
       Combine multiple options:
         $ nhl-scrabble analyze --format json --output report.json --verbose
-        $ nhl-scrabble analyze --division Atlantic --min-score 60 --output atlantic.txt
+        $ nhl-scrabble analyze --divisions Atlantic --min-score 60 --output atlantic.txt
     """
-    # Validate CLI arguments first (before expensive operations)
-    validated_output, validated_top_players, validated_top_team_players = validate_cli_arguments(
-        output, top_players, top_team_players
-    )
+    # Validate output path (numeric validation now handled by Click IntRange)
+    validated_output = validate_cli_arguments(output)
 
     # Load configuration (which will also validate environment variables)
     try:
@@ -621,8 +616,8 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
     config.verbose = verbose
     config.output_format = output_format
-    config.top_players_count = validated_top_players
-    config.top_team_players_count = validated_top_team_players
+    config.top_players_count = top_players
+    config.top_team_players_count = top_team_players
 
     # Override cache setting from CLI
     if no_cache:
@@ -682,10 +677,10 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
         # Create filters from CLI options
         filters = AnalysisFilters.from_options(
-            division=division,
-            conference=conference,
+            division=divisions,
+            conference=conferences,
             teams=teams,
-            exclude=exclude,
+            exclude=exclude_teams,
             min_score=min_score,
             max_score=max_score,
         )
@@ -751,8 +746,17 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
 
 @cli.command()
-@click.option("--no-fetch", is_flag=True, help="Skip fetching data from NHL API on startup")
-@click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging")
+@click.option(
+    "--no-fetch",
+    is_flag=True,
+    help="Skip fetching data from NHL API on startup",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
 @click.help_option("-h", "--help")
 def interactive(no_fetch: bool, verbose: bool) -> None:
     r"""Start interactive mode for exploring NHL Scrabble data.
@@ -813,9 +817,9 @@ def generate_search_text(  # noqa: PLR0913  # Need all search parameters
     fuzzy: bool,
     min_score: int | None,
     max_score: int | None,
-    team: str | None,
-    division: str | None,
-    conference: str | None,
+    teams: str | None,
+    divisions: str | None,
+    conferences: str | None,
     limit: int,
 ) -> str:
     """Generate text format search results.
@@ -826,9 +830,9 @@ def generate_search_text(  # noqa: PLR0913  # Need all search parameters
         fuzzy: Whether fuzzy matching was used
         min_score: Minimum score filter
         max_score: Maximum score filter
-        team: Team filter
-        division: Division filter
-        conference: Conference filter
+        teams: Team filter
+        divisions: Division filter
+        conferences: Conference filter
         limit: Result limit
 
     Returns:
@@ -847,12 +851,12 @@ def generate_search_text(  # noqa: PLR0913  # Need all search parameters
         lines.append(f"  Minimum Score: {min_score}")
     if max_score is not None:
         lines.append(f"  Maximum Score: {max_score}")
-    if team:
-        lines.append(f"  Team: {team}")
-    if division:
-        lines.append(f"  Division: {division}")
-    if conference:
-        lines.append(f"  Conference: {conference}")
+    if teams:
+        lines.append(f"  Team: {teams}")
+    if divisions:
+        lines.append(f"  Division: {divisions}")
+    if conferences:
+        lines.append(f"  Conference: {conferences}")
 
     lines.append(f"\nFound {len(results)} player(s)")
     if limit and len(results) >= limit:
@@ -901,56 +905,21 @@ def generate_search_json(results: list[Any], query: str | None, stats: dict[str,
 
 @cli.command()
 @click.argument("query", required=False)
+# === Search Options ===
 @click.option(
     "--fuzzy",
     "-f",
     is_flag=True,
-    help="Enable fuzzy matching",
-)
-@click.option(
-    "--min-score",
-    type=int,
-    help="Minimum Scrabble score",
-)
-@click.option(
-    "--max-score",
-    type=int,
-    help="Maximum Scrabble score",
-)
-@click.option(
-    "--team",
-    "-t",
-    help="Filter by team abbreviation (e.g., TOR, MTL)",
-)
-@click.option(
-    "--division",
-    "-d",
-    help="Filter by division name",
-)
-@click.option(
-    "--conference",
-    "-c",
-    help="Filter by conference name",
+    help="Enable fuzzy matching for approximate name searches",
 )
 @click.option(
     "--limit",
     "-n",
-    type=int,
+    type=click.IntRange(min=1, max=500),
     default=20,
-    help="Maximum number of results to show (default: 20)",
+    help="Maximum number of results to show (default: 20, range: 1-500)",
 )
-@click.option(
-    "--verbose",
-    "-v",
-    is_flag=True,
-    help="Enable verbose logging",
-)
-@click.option(
-    "--quiet",
-    "-q",
-    is_flag=True,
-    help="Suppress progress bars",
-)
+# === Output Options ===
 @click.option(
     "--format",
     "output_format",
@@ -964,20 +933,59 @@ def generate_search_json(results: list[Any], query: str | None, stats: dict[str,
     type=click.Path(),
     help="Output file path (default: stdout)",
 )
+# === Behavior Flags ===
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
+@click.option(
+    "--quiet",
+    "-q",
+    is_flag=True,
+    help="Suppress progress bars and status messages",
+)
+# === Filtering Options ===
+@click.option(
+    "--min-score",
+    type=int,
+    help="Minimum Scrabble score to include",
+)
+@click.option(
+    "--max-score",
+    type=int,
+    help="Maximum Scrabble score to include",
+)
+@click.option(
+    "--teams",
+    "-t",
+    help="Filter by team abbreviation (e.g., TOR, MTL)",
+)
+@click.option(
+    "--divisions",
+    "-d",
+    help="Filter by division name (e.g., Atlantic, Metropolitan)",
+)
+@click.option(
+    "--conferences",
+    "-c",
+    help="Filter by conference name (Eastern or Western)",
+)
 @click.help_option("-h", "--help")
 def search(  # noqa: PLR0913  # CLI function needs many parameters
     query: str | None,
     fuzzy: bool,
-    min_score: int | None,
-    max_score: int | None,
-    team: str | None,
-    division: str | None,
-    conference: str | None,
     limit: int,
-    verbose: bool,
-    quiet: bool,
     output_format: str,
     output: str | None,
+    verbose: bool,
+    quiet: bool,
+    min_score: int | None,
+    max_score: int | None,
+    teams: str | None,
+    divisions: str | None,
+    conferences: str | None,
 ) -> None:
     r"""Search for players by name and filter by attributes.
 
@@ -1000,13 +1008,13 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
         $ nhl-scrabble search --min-score 50
 
       Filter by team:
-        $ nhl-scrabble search --team TOR
+        $ nhl-scrabble search --teams TOR
 
       Filter by division:
-        $ nhl-scrabble search --division Atlantic
+        $ nhl-scrabble search --divisions Atlantic
 
       Filter by conference:
-        $ nhl-scrabble search --conference Eastern
+        $ nhl-scrabble search --conferences Eastern
 
       Limit number of results:
         $ nhl-scrabble search --min-score 40 --limit 10
@@ -1018,8 +1026,8 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
         $ nhl-scrabble search --min-score 60 --output high-scorers.txt
 
       Combine multiple filters:
-        $ nhl-scrabble search "Connor*" --team EDM --min-score 40
-        $ nhl-scrabble search --division Metropolitan --min-score 50 --output metro-high.txt
+        $ nhl-scrabble search "Connor*" --teams EDM --min-score 40
+        $ nhl-scrabble search --divisions Metropolitan --min-score 50 --output metro-high.txt
     """
     # Load configuration
     try:
@@ -1075,9 +1083,9 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
             fuzzy=fuzzy,
             min_score=min_score,
             max_score=max_score,
-            team=team,
-            division=division,
-            conference=conference,
+            team=teams,
+            division=divisions,
+            conference=conferences,
         )
 
         # Limit results
@@ -1089,7 +1097,7 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
             output_text = generate_search_json(results, query, searcher.get_stats())
         else:
             output_text = generate_search_text(
-                results, query, fuzzy, min_score, max_score, team, division, conference, limit
+                results, query, fuzzy, min_score, max_score, teams, divisions, conferences, limit
             )
 
         # Output results
@@ -1115,9 +1123,22 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
 
 
 @cli.command()
-@click.option("--host", default="127.0.0.1", help="Host to bind to")
-@click.option("--port", default=8000, type=int, help="Port to bind to")
-@click.option("--reload", is_flag=True, help="Enable auto-reload (development only)")
+@click.option(
+    "--host",
+    default="127.0.0.1",
+    help="Host address to bind server (default: 127.0.0.1)",
+)
+@click.option(
+    "--port",
+    type=click.IntRange(min=1, max=65535),
+    default=8000,
+    help="Port to bind to (default: 8000, range: 1-65535)",
+)
+@click.option(
+    "--reload",
+    is_flag=True,
+    help="Enable auto-reload for development (watches for file changes)",
+)
 @click.help_option("-h", "--help")
 def serve(host: str, port: int, reload: bool) -> None:
     r"""Start web interface server.
@@ -1232,24 +1253,7 @@ def fetch_dashboard_data(
 
 
 @cli.command()
-@click.option(
-    "--division",
-    help="Filter by division (e.g., Atlantic, Metropolitan, Central, Pacific)",
-)
-@click.option(
-    "--conference",
-    help="Filter by conference (Eastern or Western)",
-)
-@click.option(
-    "--duration",
-    type=int,
-    help="Run dashboard for specified seconds (default: until Ctrl+C)",
-)
-@click.option(
-    "--static",
-    is_flag=True,
-    help="Display static snapshot instead of live dashboard",
-)
+# === Behavior Flags ===
 @click.option(
     "--verbose",
     "-v",
@@ -1260,22 +1264,43 @@ def fetch_dashboard_data(
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars during data fetching",
+    help="Suppress progress bars and status messages during data fetching",
 )
+# === Data Source Options ===
 @click.option(
     "--no-cache",
     is_flag=True,
     help="Disable API response caching (always fetch fresh data)",
 )
+# === Dashboard Options ===
+@click.option(
+    "--duration",
+    type=click.IntRange(min=1),
+    help="Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)",
+)
+@click.option(
+    "--static",
+    is_flag=True,
+    help="Display static snapshot instead of live dashboard",
+)
+# === Filtering Options ===
+@click.option(
+    "--divisions",
+    help="Filter by division (e.g., Atlantic, Metropolitan, Central, Pacific)",
+)
+@click.option(
+    "--conferences",
+    help="Filter by conference (Eastern or Western)",
+)
 @click.help_option("-h", "--help")
 def dashboard(
-    division: str | None,
-    conference: str | None,
-    duration: int | None,
-    static: bool,
     verbose: bool,
     quiet: bool,
     no_cache: bool,
+    duration: int | None,
+    static: bool,
+    divisions: str | None,
+    conferences: str | None,
 ) -> None:
     r"""Launch interactive statistics dashboard.
 
@@ -1291,10 +1316,10 @@ def dashboard(
         $ nhl-scrabble dashboard
 
       Filter dashboard by division:
-        $ nhl-scrabble dashboard --division Atlantic
+        $ nhl-scrabble dashboard --divisions Atlantic
 
       Filter dashboard by conference:
-        $ nhl-scrabble dashboard --conference Eastern
+        $ nhl-scrabble dashboard --conferences Eastern
 
       Run for specific duration (30 seconds):
         $ nhl-scrabble dashboard --duration 30
@@ -1312,8 +1337,8 @@ def dashboard(
         $ nhl-scrabble dashboard --no-cache
 
       Combine multiple options:
-        $ nhl-scrabble dashboard --division Metropolitan --static
-        $ nhl-scrabble dashboard --conference Western --duration 60 --quiet
+        $ nhl-scrabble dashboard --divisions Metropolitan --static
+        $ nhl-scrabble dashboard --conferences Western --duration 60 --quiet
     """
     # Load configuration
     try:
@@ -1352,8 +1377,8 @@ def dashboard(
             all_players=result_data["all_players"],
             division_standings=result_data["division_standings"],
             conference_standings=result_data["conference_standings"],
-            division_filter=division,
-            conference_filter=conference,
+            division_filter=divisions,
+            conference_filter=conferences,
         )
 
         if static:
@@ -1394,12 +1419,14 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
 
 
 @cli.command()
+# === Watch Options ===
 @click.option(
     "--interval",
-    type=int,
+    type=click.IntRange(min=1),
     default=300,
-    help="Refresh interval in seconds (default: 300 = 5 minutes)",
+    help="Refresh interval in seconds (default: 300 = 5 minutes, range: 1+)",
 )
+# === Output Options ===
 @click.option(
     "-f",
     "--format",
@@ -1408,6 +1435,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     default="text",
     help="Output format (default: text)",
 )
+# === Behavior Flags ===
 @click.option(
     "--verbose",
     "-v",
@@ -1418,25 +1446,28 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars",
+    help="Suppress progress bars and status messages",
 )
+# === Data Source Options ===
 @click.option(
     "--no-cache",
     is_flag=True,
     help="Disable API response caching (always fetch fresh data)",
 )
+# === Display Options ===
 @click.option(
     "--top-players",
-    type=int,
+    type=click.IntRange(min=1, max=100),
     default=20,
-    help="Number of top players to show (default: 20)",
+    help="Number of top players to show (default: 20, range: 1-100)",
 )
 @click.option(
     "--top-team-players",
-    type=int,
+    type=click.IntRange(min=1, max=50),
     default=5,
-    help="Number of top players per team to show (default: 5)",
+    help="Number of top players per team to show (default: 5, range: 1-50)",
 )
+# === Report Selection ===
 @click.option(
     "--report",
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
@@ -1490,10 +1521,6 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
         $ nhl-scrabble watch --interval 120 --report playoff --quiet
         $ nhl-scrabble watch --format json --top-players 50 --interval 300
     """
-    # Validate interval
-    if interval < 1:
-        raise click.ClickException("Interval must be at least 1 second")
-
     # Load configuration
     config = Config.from_env()
     config.verbose = verbose
