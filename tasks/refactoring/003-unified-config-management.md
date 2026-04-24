@@ -52,8 +52,8 @@ class Settings(BaseSettings):
 
 **Implemented**: 2026-04-24
 **Branch**: refactoring/003-unified-config-management
-**PR**: #TBD
-**Commits**: 1 commit (8c2b7ad)
+**PR**: #358 - https://github.com/bdperkin/nhl-scrabble/pull/358
+**Commits**: 5 commits (8c2b7ad, e5e1fc6, 1ecdfc5, a104979, a6dc549)
 
 ### Actual Implementation
 
