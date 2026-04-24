@@ -354,7 +354,9 @@ class Config(BaseSettings):
                 "backoff_factor", "NHL_SCRABBLE_BACKOFF_FACTOR", 2.0, 1.0, 10.0
             ),
             "max_backoff": get_float("max_backoff", "NHL_SCRABBLE_MAX_BACKOFF", 30.0, 1.0, 300.0),
-            "cache_enabled": get_bool("cache_enabled", "NHL_SCRABBLE_CACHE_ENABLED", True),  # noqa: FBT003
+            "cache_enabled": get_bool(  # noqa: FBT003
+                "cache_enabled", "NHL_SCRABBLE_CACHE_ENABLED", True
+            ),
             "cache_expiry": get_int("cache_expiry", "NHL_SCRABBLE_CACHE_EXPIRY", 3600, 1, 86400),
             "max_concurrent_requests": get_int(
                 "max_concurrent_requests", "NHL_SCRABBLE_MAX_CONCURRENT", 5, 1, 50
@@ -369,7 +371,9 @@ class Config(BaseSettings):
             "output_format": get_enum(
                 "output_format", "NHL_SCRABBLE_OUTPUT_FORMAT", "text", {"text", "json", "html"}
             ),
-            "sanitize_logs": get_bool("sanitize_logs", "NHL_SCRABBLE_SANITIZE_LOGS", True),  # noqa: FBT003
+            "sanitize_logs": get_bool(  # noqa: FBT003
+                "sanitize_logs", "NHL_SCRABBLE_SANITIZE_LOGS", True
+            ),
             "dos_max_connections": get_int(
                 "dos_max_connections", "NHL_SCRABBLE_DOS_MAX_CONNECTIONS", 10, 1, 100
             ),
