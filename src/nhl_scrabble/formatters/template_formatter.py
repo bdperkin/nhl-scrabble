@@ -76,7 +76,7 @@ class TemplateFormatter:
             >>> output = formatter.format(data)
         """
         try:
-            from jinja2 import Template  # noqa: PLC0415
+            from jinja2 import Environment, select_autoescape  # noqa: PLC0415
         except ImportError as e:
             raise ImportError(
                 "Jinja2 is required for template format. Install with: pip install jinja2"
@@ -85,8 +85,9 @@ class TemplateFormatter:
         # Read template file
         template_content = self.template_path.read_text()
 
-        # Create template
-        template = Template(template_content)
+        # Create template environment with autoescape enabled (security: prevent XSS)
+        env = Environment(autoescape=select_autoescape(default=True))
+        template = env.from_string(template_content)
 
         # Add timestamp to data
         template_data = {
