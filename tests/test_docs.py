@@ -57,7 +57,7 @@ def test_sphinx_build_succeeds() -> None:
     assert index_file.exists(), "Index file not created"
 
 
-@pytest.mark.flaky(reruns=3, reruns_delay=2)
+@pytest.mark.flaky(reruns=6, reruns_delay=4)
 def test_sphinx_linkcheck() -> None:
     """Test that all links in documentation are valid.
 
