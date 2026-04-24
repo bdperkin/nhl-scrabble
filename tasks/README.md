@@ -219,7 +219,7 @@ Each task includes:
 | 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1.5 hours           | Completed | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | [PR #336](https://github.com/bdperkin/nhl-scrabble/pull/336)                           |
 | 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -                                                                                      |
 | 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Active    | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | -                                                                                      |
-| 007 | Add Dependency Injection                                                      | MEDIUM   | 8-10 hours          | Active    | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | -                                                                                      |
+| 007 | Add Dependency Injection                                                      | LOW      | 8-10 hours          | Completed | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | PR [#360](https://github.com/bdperkin/nhl-scrabble/pull/360), 2026-04-24, 6h actual    |
 | 008 | Repository Cleanup and Consolidation                                          | MEDIUM   | 4-6 hours           | Completed | [#216](https://github.com/bdperkin/nhl-scrabble/issues/216) | -                                                                                      |
 | 009 | Git Branch Pruning Automation                                                 | MEDIUM   | 30-60 minutes       | Completed | [#220](https://github.com/bdperkin/nhl-scrabble/issues/220) | -                                                                                      |
 | 010 | Dynamic Versioning from Git Tags                                              | MEDIUM   | 2-4 hours           | Active    | [#222](https://github.com/bdperkin/nhl-scrabble/issues/222) | -                                                                                      |
@@ -252,8 +252,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 14     | 15        | 29      |
-| **TOTAL**    | **62** | **110**   | **172** |
+| Refactoring  | 13     | 16        | 29      |
+| **TOTAL**    | **61** | **111**   | **172** |
 
 ### Effort Estimates by Category
 
@@ -278,8 +278,8 @@ Each task includes:
 | Enhancement  | 91.4%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
-| Refactoring  | 51.7%           |
-| **OVERALL**  | **64.0%**       |
+| Refactoring  | 55.2%           |
+| **OVERALL**  | **64.5%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -288,7 +288,7 @@ Each task includes:
 | CRITICAL | 0     |
 | HIGH     | 0     |
 | MEDIUM   | 57    |
-| LOW      | 2     |
+| LOW      | 1     |
 
 ## Recommended Implementation Order
 
@@ -302,11 +302,11 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 169 tasks (60 active, 109 completed)
+**Total Tasks**: 172 tasks (61 active, 111 completed)
 
 - **Total Estimated Effort**: 1036.25 hours
-  - Active Tasks: 504.75 hours
-  - Completed Tasks: 531.5 hours (actual: 527.5 hours)
+  - Active Tasks: 495.75 hours
+  - Completed Tasks: 540.5 hours (actual: 533.5 hours)
 - **Overall Completion**: 64.5%
 
 ## Task Management Guidelines
