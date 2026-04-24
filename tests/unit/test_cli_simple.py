@@ -54,7 +54,10 @@ class TestCLI:
         result = runner.invoke(cli, ["watch", "--interval", "0"])
 
         assert result.exit_code != 0
-        assert "at least 1" in result.output.lower()
+        # Click IntRange validation provides error message
+        assert (
+            "invalid value" in result.output.lower() or "not in the range" in result.output.lower()
+        )
 
     @patch("nhl_scrabble.cli.run_analysis")
     @patch("nhl_scrabble.cli.time.sleep")
