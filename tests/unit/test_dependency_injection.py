@@ -193,8 +193,8 @@ class TestDependencyContainer:
         # Verify custom scoring works
         player_data = {"firstName": {"default": "ALEX"}, "lastName": {"default": "TEST"}}
         result = scorer.score_player(player_data, "TOR", "Atlantic", "Eastern")
-        assert result.first_score == 4  # "ALEX" = 4 letters × 1 point
-        assert result.last_score == 4  # "TEST" = 4 letters × 1 point
+        assert result.first_score == 4  # "ALEX" = 4 letters x 1 point
+        assert result.last_score == 4  # "TEST" = 4 letters x 1 point
 
     def test_create_team_processor(self, container: DependencyContainer) -> None:
         """Container should create team processor with auto-created dependencies."""
@@ -218,7 +218,7 @@ class TestDependencyContainer:
         )
 
         # Process teams using mocks
-        teams, players, failed = processor.process_all_teams()
+        teams, players, _failed = processor.process_all_teams()
 
         # Verify mocks were called
         assert mock_client.teams_called
@@ -253,7 +253,7 @@ class TestCreateDependenciesHelper:
     def test_create_with_custom_scoring(self, config: Config) -> None:
         """Helper should create dependencies with custom scoring."""
         custom_values = {chr(i): 1 for i in range(65, 91)}
-        api_client, scorer, processor = create_dependencies(
+        api_client, scorer, _processor = create_dependencies(
             config,
             scoring_values=custom_values,
         )
@@ -261,15 +261,15 @@ class TestCreateDependenciesHelper:
         # Verify custom scoring
         player_data = {"firstName": {"default": "TEST"}, "lastName": {"default": "NAME"}}
         result = scorer.score_player(player_data, "TOR", "Atlantic", "Eastern")
-        assert result.first_score == 4  # 4 letters × 1 point
-        assert result.last_score == 4  # 4 letters × 1 point
+        assert result.first_score == 4  # 4 letters x 1 point
+        assert result.last_score == 4  # 4 letters x 1 point
 
         # Clean up
         api_client.close()
 
     def test_create_with_cache_disabled(self, config: Config) -> None:
         """Helper should create dependencies with cache disabled."""
-        api_client, scorer, processor = create_dependencies(
+        api_client, _scorer, _processor = create_dependencies(
             config,
             cache_enabled=False,
         )
@@ -298,12 +298,12 @@ class TestDependencyInjectionBenefits:
         processor = TeamProcessor(mock_api_client, mock_scorer)
 
         # Call the real code with mock dependencies
-        teams, players, failed = processor.process_all_teams()
+        teams, _players, _failed = processor.process_all_teams()
 
         # Verify behavior
         assert mock_api_client.teams_called
         assert len(mock_api_client.roster_calls) == 3  # TOR, MTL, BOS
-        assert len(mock_scorer.score_calls) == 12  # 4 players × 3 teams
+        assert len(mock_scorer.score_calls) == 12  # 4 players x 3 teams
 
         # Verify results
         assert len(teams) == 3
@@ -369,5 +369,5 @@ class TestDependencyInjectionBenefits:
         processor = TeamProcessor(mock_client, mock_scorer)
 
         # Processor works with any implementation that satisfies the Protocols
-        teams, players, failed = processor.process_all_teams()
+        teams, _players, _failed = processor.process_all_teams()
         assert len(teams) > 0
