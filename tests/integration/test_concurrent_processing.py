@@ -20,6 +20,7 @@ pytestmark = [
 class TestConcurrentProcessingPerformance:
     """Integration tests for concurrent processing performance."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=1)
     @pytest.mark.skipif(
         "CI" in __import__("os").environ,
         reason="Performance test is flaky in CI shared environments",

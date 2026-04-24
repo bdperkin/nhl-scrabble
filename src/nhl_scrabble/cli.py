@@ -8,10 +8,11 @@ import os
 import signal
 import sys
 import time
+import types
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TypedDict
 
 import click
 from rich.console import Console
@@ -23,6 +24,13 @@ from nhl_scrabble.dashboard import StatisticsDashboard
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
 from nhl_scrabble.logging_config import setup_logging
+from nhl_scrabble.models.player import PlayerScore
+from nhl_scrabble.models.standings import (
+    ConferenceStandings,
+    DivisionStandings,
+    PlayoffTeam,
+)
+from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.processors.team_processor import TeamProcessor
 from nhl_scrabble.reports.generator import ReportGenerator
@@ -34,6 +42,22 @@ from nhl_scrabble.validators import ValidationError, validate_file_path
 
 logger = logging.getLogger(__name__)
 console = Console()
+
+
+class DashboardData(TypedDict):
+    """Type definition for dashboard data dictionary.
+
+    Attributes:
+        team_scores: Dictionary of team abbreviations to team scores
+        all_players: List of all players with scores
+        division_standings: Division-level standings
+        conference_standings: Conference-level standings
+    """
+
+    team_scores: dict[str, TeamScore]
+    all_players: list[PlayerScore]
+    division_standings: dict[str, DivisionStandings]
+    conference_standings: dict[str, ConferenceStandings]
 
 
 def validate_output_path(output: str | None) -> None:
@@ -147,11 +171,11 @@ def cli() -> None:
 
 
 def generate_excel_report(
-    team_scores: dict[str, Any],
-    all_players: list[Any],
-    division_standings: dict[str, Any],
-    conference_standings: dict[str, Any],
-    playoff_standings: dict[str, Any],
+    team_scores: dict[str, TeamScore],
+    all_players: list[PlayerScore],
+    division_standings: dict[str, DivisionStandings],
+    conference_standings: dict[str, ConferenceStandings],
+    playoff_standings: dict[str, list[PlayoffTeam]],
     output: Path,
     sheets: list[str] | None = None,
 ) -> None:
@@ -812,7 +836,7 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
 
 
 def generate_search_text(  # noqa: PLR0913  # Need all search parameters
-    results: list[Any],
+    results: list[PlayerScore],
     query: str | None,
     fuzzy: bool,
     min_score: int | None,
@@ -883,13 +907,15 @@ def generate_search_text(  # noqa: PLR0913  # Need all search parameters
     return "\n".join(lines)
 
 
-def generate_search_json(results: list[Any], query: str | None, stats: dict[str, Any]) -> str:
+def generate_search_json(
+    results: list[PlayerScore], query: str | None, stats: dict[str, int | float]
+) -> str:
     """Generate JSON format search results.
 
     Args:
         results: List of PlayerScore objects
         query: Search query
-        stats: Player database statistics
+        stats: Player database statistics (counts and averages)
 
     Returns:
         JSON string
@@ -1188,7 +1214,7 @@ def fetch_dashboard_data(
     config: Config,
     quiet: bool = False,
     season: str | None = None,
-) -> dict[str, Any] | None:
+) -> DashboardData | None:
     """Fetch data needed for dashboard.
 
     Args:
@@ -1548,7 +1574,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     # Use list to allow modification in nested function (mutable container)
     shutdown_flag = [False]
 
-    def signal_handler(_signum: int, _frame: Any) -> None:  # Required signature
+    def signal_handler(_signum: int, _frame: types.FrameType | None) -> None:
         """Handle Ctrl+C gracefully."""
         shutdown_flag[0] = True
         console.print("\n\n[yellow]⏹  Stopping watch mode...[/yellow]")

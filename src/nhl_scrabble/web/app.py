@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,13 +17,17 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
-from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api import NHLApiClient, NHLApiError
+from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors import PlayoffCalculator, TeamProcessor
 from nhl_scrabble.scoring import ScrabbleScorer
+
+if TYPE_CHECKING:
+    from starlette.responses import Response
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +40,7 @@ STATIC_DIR = WEB_DIR / "static"
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Middleware to add security headers to all responses."""
 
-    async def dispatch(self, request: Request, call_next: Any) -> Any:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         """Add security headers to response.
 
         Args:
@@ -172,8 +176,8 @@ async def favicon() -> HTMLResponse:
 
 
 def _convert_players_to_dict(
-    players: list[Any],
-) -> list[dict[str, Any]]:
+    players: list[PlayerScore],
+) -> list[dict[str, str | int | float]]:
     """Convert PlayerScore objects to dict format for response.
 
     Args:
@@ -320,14 +324,15 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
             divisions, conferences = _group_teams_by_grouping(teams_data)
 
             # Calculate stats
+            total_score: int | float = (
+                sum(int(p["score"]) for p in all_players) if all_players else 0
+            )
             stats = {
                 "total_players": len(all_players),
                 "total_teams": len(teams_data),
                 "highest_score": all_players[0]["score"] if all_players else 0,
                 "lowest_score": all_players[-1]["score"] if all_players else 0,
-                "avg_score": (
-                    sum(p["score"] for p in all_players) / len(all_players) if all_players else 0
-                ),
+                "avg_score": total_score / len(all_players) if all_players else 0,
                 "highest_team": teams_data[0]["abbrev"] if teams_data else None,
                 "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
             }

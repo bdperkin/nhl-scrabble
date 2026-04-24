@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path  # noqa: TC003
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from openpyxl.worksheet.worksheet import Worksheet
 
 try:
     from openpyxl import Workbook
@@ -15,6 +18,11 @@ except ImportError:
     OPENPYXL_AVAILABLE = False
 
 from nhl_scrabble.models.player import PlayerScore
+from nhl_scrabble.models.standings import (
+    ConferenceStandings,
+    DivisionStandings,
+    PlayoffTeam,
+)
 from nhl_scrabble.models.team import TeamScore
 
 
@@ -45,7 +53,7 @@ class ExcelExporter:
                 "Install with: pip install nhl-scrabble[export]"
             )
 
-    def _format_header_row(self, ws: Any, row: int = 1) -> None:
+    def _format_header_row(self, ws: Worksheet, row: int = 1) -> None:
         """Apply formatting to header row.
 
         Args:
@@ -62,7 +70,7 @@ class ExcelExporter:
             cell.font = header_font
             cell.alignment = header_alignment
 
-    def _auto_adjust_columns(self, ws: Any) -> None:
+    def _auto_adjust_columns(self, ws: Worksheet) -> None:
         """Auto-adjust column widths based on content.
 
         Args:
@@ -187,9 +195,9 @@ class ExcelExporter:
         self,
         team_scores: dict[str, TeamScore],
         all_players: list[PlayerScore],
-        division_standings: dict[str, Any],
-        conference_standings: dict[str, Any],
-        playoff_standings: dict[str, Any],
+        division_standings: dict[str, DivisionStandings],
+        conference_standings: dict[str, ConferenceStandings],
+        playoff_standings: dict[str, list[PlayoffTeam]],
         output: Path,
         sheets: list[str] | None = None,
     ) -> None:
@@ -293,7 +301,8 @@ class ExcelExporter:
 
             for division_name in sorted(division_standings.keys()):
                 standing = division_standings[division_name]
-                for team in standing.teams:
+                for team_abbrev in standing.teams:
+                    team = team_scores[team_abbrev]
                     ws_divisions.append(
                         [
                             division_name,
@@ -321,8 +330,9 @@ class ExcelExporter:
             self._format_header_row(ws_conferences)
 
             for conference_name in sorted(conference_standings.keys()):
-                standing = conference_standings[conference_name]
-                for team in standing.teams:
+                conf_standing = conference_standings[conference_name]
+                for team_abbrev in conf_standing.teams:
+                    team = team_scores[team_abbrev]
                     ws_conferences.append(
                         [
                             conference_name,
@@ -353,16 +363,17 @@ class ExcelExporter:
 
             for conference_name in sorted(playoff_standings.keys()):
                 teams_list = playoff_standings[conference_name]
-                for seed, team in enumerate(teams_list, start=1):
+                playoff_team: PlayoffTeam
+                for seed, playoff_team in enumerate(teams_list, start=1):
                     ws_playoffs.append(
                         [
                             conference_name,
                             seed,
-                            team.abbrev,
-                            team.division,
-                            team.total,
-                            round(team.avg, 2),
-                            team.status_indicator,
+                            playoff_team.abbrev,
+                            playoff_team.division,
+                            playoff_team.total,
+                            round(playoff_team.avg, 2),
+                            playoff_team.status_indicator,
                         ]
                     )
             self._auto_adjust_columns(ws_playoffs)

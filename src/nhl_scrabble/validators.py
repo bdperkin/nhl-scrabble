@@ -121,7 +121,10 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
 
 
 def validate_float_range(
-    value: Any, min_val: float | None = None, max_val: float | None = None, name: str = "value"
+    value: float | str,
+    min_val: float | None = None,
+    max_val: float | None = None,
+    name: str = "value",
 ) -> float:
     """Validate float is within specified range.
 
