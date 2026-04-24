@@ -234,6 +234,8 @@ Each task includes:
 | 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Active    | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | -                                                                                      |
 | 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -                                                                                      |
 | 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Completed | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | PR [#335](https://github.com/bdperkin/nhl-scrabble/pull/335), 2026-04-22, 3.5h actual  |
+| 023 | Consolidate Exporters and Formatters Architecture                             | LOW      | 3-5 hours           | Active    | TBD                                                         | -                                                                                      |
+| 024 | Make 'ty' Blocking After Validation Period                                    | LOW      | 30min-1h            | Active    | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | -                                                                                      |
 
 ## Statistics
 
@@ -247,8 +249,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 7      | 23        | 30      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 11     | 14        | 25      |
-| **TOTAL**    | **58** | **109**   | **167** |
+| Refactoring  | 13     | 14        | 27      |
+| **TOTAL**    | **60** | **109**   | **169** |
 
 ### Effort Estimates by Category
 
@@ -260,8 +262,8 @@ Each task includes:
 | Enhancement  | 201.5 hours      |
 | Testing      | 260.0 hours      |
 | New Features | 227.0 hours      |
-| Refactoring  | 216.0 hours      |
-| **TOTAL**    | **1031.5 hours** |
+| Refactoring  | 220.75 hours     |
+| **TOTAL**    | **1036.25 hours** |
 
 ### Completion Progress
 
@@ -297,12 +299,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 167 tasks (57 active, 110 completed)
+**Total Tasks**: 169 tasks (60 active, 109 completed)
 
-- **Total Estimated Effort**: 1031.5 hours
-  - Active Tasks: 500.0 hours
+- **Total Estimated Effort**: 1036.25 hours
+  - Active Tasks: 504.75 hours
   - Completed Tasks: 531.5 hours (actual: 527.5 hours)
-- **Overall Completion**: 65.9%
+- **Overall Completion**: 64.5%
 
 ## Task Management Guidelines
 
@@ -344,6 +346,6 @@ tasks/
 
 ______________________________________________________________________
 
-**Last Updated**: 1776816275.2066202
+**Last Updated**: 1777047267.67835
 **Total Tasks**: 164
 **Completion Rate**: 57.9%
