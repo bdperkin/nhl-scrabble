@@ -30,10 +30,11 @@ Examples:
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from nhl_scrabble.models.player import PlayerScore
     from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings
     from nhl_scrabble.models.team import TeamScore
