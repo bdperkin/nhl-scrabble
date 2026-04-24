@@ -46,7 +46,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload pip-audit JSON report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: pip-audit-report-json
@@ -54,7 +54,7 @@ jobs:
           retention-days: 90
 
       - name: Upload pip-audit Markdown report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: pip-audit-report-markdown
@@ -123,7 +123,7 @@ jobs:
 
       - name: Upload bandit results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bandit-security-scan
           path: |
@@ -179,7 +179,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload safety reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: safety-vulnerability-reports
