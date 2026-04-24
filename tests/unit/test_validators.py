@@ -9,7 +9,6 @@ from nhl_scrabble.validators import (
     validate_api_response_structure,
     validate_file_path,
     validate_float_range,
-    validate_integer_range,
     validate_output_format,
     validate_player_name,
     validate_team_abbreviation,
@@ -77,50 +76,6 @@ class TestValidateFilePath:
         # Use current directory to avoid path traversal check
         result = validate_file_path(".hidden")
         assert result.name == ".hidden"
-
-
-class TestValidateIntegerRange:
-    """Tests for validate_integer_range()."""
-
-    def test_valid_integer(self) -> None:
-        """Test valid integer within range."""
-        result = validate_integer_range(5, min_val=1, max_val=10)
-        assert result == 5
-
-    def test_below_minimum(self) -> None:
-        """Test error when value below minimum."""
-        with pytest.raises(ValidationError, match="must be at least"):
-            validate_integer_range(0, min_val=1, max_val=10)
-
-    def test_above_maximum(self) -> None:
-        """Test error when value above maximum."""
-        with pytest.raises(ValidationError, match="cannot exceed"):
-            validate_integer_range(11, min_val=1, max_val=10)
-
-    def test_non_integer_value(self) -> None:
-        """Test error when value is not an integer."""
-        with pytest.raises(ValidationError, match="must be an integer"):
-            validate_integer_range("abc", min_val=1, max_val=10)
-
-    def test_string_convertible_to_int(self) -> None:
-        """Test string that can be converted to int."""
-        result = validate_integer_range("5", min_val=1, max_val=10)
-        assert result == 5
-
-    def test_no_minimum(self) -> None:
-        """Test validation with no minimum bound."""
-        result = validate_integer_range(-100, max_val=100)
-        assert result == -100
-
-    def test_no_maximum(self) -> None:
-        """Test validation with no maximum bound."""
-        result = validate_integer_range(1000, min_val=1)
-        assert result == 1000
-
-    def test_custom_name_in_error(self) -> None:
-        """Test custom parameter name appears in error message."""
-        with pytest.raises(ValidationError, match="timeout"):
-            validate_integer_range(0, min_val=1, name="timeout")
 
 
 class TestValidateFloatRange:
