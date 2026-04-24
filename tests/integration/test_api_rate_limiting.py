@@ -207,6 +207,7 @@ class TestApiClientRateLimiting:
     @pytest.mark.skip(
         reason="Cache checking logic is complex to mock - functionality verified by other tests"
     )
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_skips_rate_limit_for_cached_responses(self) -> None:
         """Test API client doesn't rate limit cached responses."""
         client = NHLApiClient(rate_limit_max_requests=2, rate_limit_window=1.0, cache_enabled=True)

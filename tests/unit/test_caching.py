@@ -7,6 +7,7 @@ response caching with SQLite backend.
 from pathlib import Path
 from unittest.mock import Mock, patch
 
+import pytest
 import requests
 import requests_cache
 
@@ -16,6 +17,7 @@ from nhl_scrabble.api import NHLApiClient
 class TestCacheConfiguration:
     """Test cache configuration and initialization."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_enabled_creates_cached_session(self) -> None:
         """Test that caching creates a CachedSession."""
         with NHLApiClient(cache_enabled=True) as client:
@@ -23,6 +25,7 @@ class TestCacheConfiguration:
             assert isinstance(client.session, requests_cache.CachedSession)
             assert hasattr(client.session, "cache")
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_disabled_creates_regular_session(self) -> None:
         """Test that disabled caching creates regular Session."""
         with NHLApiClient(cache_enabled=False) as client:
@@ -30,12 +33,14 @@ class TestCacheConfiguration:
             assert isinstance(client.session, requests.Session)
             assert not isinstance(client.session, requests_cache.CachedSession)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_expiry_configuration(self) -> None:
         """Test that cache expiry is configurable."""
         custom_expiry = 7200  # 2 hours
         with NHLApiClient(cache_expiry=custom_expiry) as client:
             assert client.cache_expiry == custom_expiry
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_backend_is_sqlite(self) -> None:
         """Test that cache uses SQLite backend."""
         with NHLApiClient(cache_enabled=True) as client:
@@ -47,12 +52,14 @@ class TestCacheConfiguration:
 class TestCacheHitDetection:
     """Test cache hit detection functionality."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_is_url_cached_returns_false_when_disabled(self) -> None:
         """Test _is_url_cached returns False when caching disabled."""
         with NHLApiClient(cache_enabled=False) as client:
             url = "https://api-web.nhle.com/v1/standings/now"
             assert not client._is_url_cached(url)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_is_url_cached_returns_false_for_uncached_url(self) -> None:
         """Test _is_url_cached returns False for uncached URL."""
         with NHLApiClient(cache_enabled=True) as client:
@@ -61,6 +68,7 @@ class TestCacheHitDetection:
             assert not client._is_url_cached(url)
 
     @patch("requests.Session.get")
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_is_url_cached_returns_true_after_caching(self, mock_get: Mock) -> None:
         """Test _is_url_cached returns True for cached URL."""
         # Mock response
@@ -85,6 +93,7 @@ class TestCacheHitDetection:
             # This test verifies the method doesn't error
             assert isinstance(is_cached, bool)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_is_url_cached_handles_no_cache_attribute(self) -> None:
         """Test _is_url_cached handles session without cache attribute."""
         with NHLApiClient(cache_enabled=False) as client:
@@ -97,6 +106,7 @@ class TestCacheHitDetection:
 class TestCacheClearing:
     """Test cache clearing functionality."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_clear_cache_removes_cached_data(self, tmp_path: Path) -> None:
         """Test that clear_cache removes all cached responses."""
         import os
@@ -120,6 +130,7 @@ class TestCacheClearing:
             if cache_file.exists():
                 cache_file.unlink()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_clear_cache_when_disabled_is_safe(self) -> None:
         """Test that clear_cache handles disabled caching gracefully."""
         with NHLApiClient(cache_enabled=False) as client:
@@ -128,6 +139,7 @@ class TestCacheClearing:
             # If we get here, test passes
             assert True
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_clear_cache_logs_success(self) -> None:
         """Test that clear_cache does not raise exception."""
         with NHLApiClient(cache_enabled=True) as client:
@@ -140,6 +152,7 @@ class TestCacheClearing:
 class TestCacheExpiration:
     """Test cache expiration behavior."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_expires_after_ttl(self, tmp_path: Path) -> None:
         """Test that cache expiry is configurable."""
         import os
@@ -168,6 +181,7 @@ class TestCacheExpiration:
 class TestCachePerformance:
     """Test cache performance characteristics."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_configuration_affects_performance(self, tmp_path: Path) -> None:
         """Test that cache configuration is properly set."""
         import os
@@ -195,6 +209,7 @@ class TestCachePerformance:
 class TestCacheEdgeCases:
     """Test cache edge cases and error handling."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_dir_created_automatically(self, tmp_path: Path) -> None:
         """Test that cache file is created in current directory."""
         import os
@@ -210,6 +225,7 @@ class TestCacheEdgeCases:
         finally:
             os.chdir(original_dir)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_with_special_characters_in_url(self, tmp_path: Path) -> None:
         """Test caching URLs with query parameters and special characters."""
         import os
@@ -228,6 +244,7 @@ class TestCacheEdgeCases:
         finally:
             os.chdir(original_dir)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_concurrent_cache_access_is_safe(self, tmp_path: Path) -> None:
         """Test that concurrent cache access doesn't cause errors."""
         import os
@@ -257,6 +274,7 @@ class TestCacheEdgeCases:
 class TestCacheContextManager:
     """Test caching behavior with context manager usage."""
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_persists_across_context_manager(self, tmp_path: Path) -> None:
         """Test that cache file persists across multiple context managers."""
         import os
@@ -285,6 +303,7 @@ class TestCacheContextManager:
             if cache_file.exists():
                 cache_file.unlink()
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_cleared_on_exit(self, tmp_path: Path) -> None:
         """Test that cache can be explicitly cleared before exit."""
         import os

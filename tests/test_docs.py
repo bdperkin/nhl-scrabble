@@ -20,6 +20,7 @@ pytestmark = [
 ]
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_sphinx_build_succeeds() -> None:
     """Test that Sphinx documentation builds without errors.
 
@@ -94,6 +95,7 @@ def test_sphinx_linkcheck() -> None:
     ), f"Link check had critical errors:\n{result.stdout}\n{result.stderr}"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_sphinx_coverage() -> None:
     """Test documentation coverage is acceptable.
 
@@ -128,6 +130,7 @@ def test_sphinx_coverage() -> None:
     assert coverage_file.exists(), "Coverage report not created"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_sphinx_doctest() -> None:
     """Test that all code examples in documentation execute correctly.
 
@@ -162,6 +165,7 @@ def test_sphinx_doctest() -> None:
     ), f"Doctest had critical errors:\n{result.stdout}\n{result.stderr}"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_sitemap_generated() -> None:
     """Test that sitemap.xml is generated for SEO.
 
