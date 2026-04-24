@@ -118,6 +118,9 @@ Each task includes:
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -                                                                        |
 | 023 | Extend Sphinx Builder Functionality                           | LOW      | 4-6 hours                                                  | Active    | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | -                                                                        |
 | 024 | Extend Sphinx Extension Functionality                         | LOW      | 3-5 hours                                                  | Active    | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | -                                                                        |
+| 025 | Add Automated Documentation Link Validation to CI             | MEDIUM   | 1 hour                                                     | Active    | [#351](https://github.com/bdperkin/nhl-scrabble/issues/351) | From documentation audit (task 013), gap #2                              |
+| 026 | Add Automated Code Example Testing to CI                      | MEDIUM   | 2 hours                                                    | Active    | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | From documentation audit (task 013), gap #3                              |
+| 027 | Improve Function Example Coverage in Docstrings               | MEDIUM   | 3-4 hours                                                  | Active    | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | From documentation audit (task 013), gap #4                              |
 
 ### Testing
 

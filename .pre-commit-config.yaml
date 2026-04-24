@@ -251,8 +251,11 @@ repos:
           - mdformat-ruff  # Python code block linting integration
           - mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
-        # Exclude GitHub issue templates (YAML frontmatter incompatible) and generated docs
-        exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md)
+        # Exclude files with pseudo-code and generated docs (matches blacken-docs)
+        exclude: >-
+          ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md|tasks/|\.claude/commands/|
+          docs/(how-to/(run-tests|build-documentation)\.md|tutorials/01-getting-started\.md|
+          explanation/|contributing/))
 
   # ============================================================================
   # Documentation - RST File Linting and Validation
@@ -279,10 +282,10 @@ repos:
     hooks:
       - id: blacken-docs
         # Format code blocks in documentation (RST, Markdown)
-        # Exclude files with pseudo-code and doctest examples (>>> prompts)
+        # Exclude files with pseudo-code, doctest examples, and files that conflict with mdformat
         args: [--line-length=100]
         additional_dependencies: [black==26.3.1]
-        exclude: ^(tasks/|\.claude/commands/|docs/(how-to/(run-tests|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/cli-standards\.md))
+        exclude: ^(tasks/|\.claude/commands/|docs/(how-to/(run-tests|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/))
 
   - repo: https://github.com/econchick/interrogate
     rev: 1.7.0
