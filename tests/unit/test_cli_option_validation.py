@@ -143,22 +143,23 @@ class TestSearchLimitValidation:
 class TestServePortValidation:
     """Tests for serve --port option validation (IntRange: 1-65535)."""
 
-    def test_port_valid_min(self):
+    @patch("uvicorn.run")
+    def test_port_valid_min(self, mock_uvicorn):
         """Test --port accepts minimum value (1)."""
         runner = CliRunner()
-        # Will fail due to missing uvicorn, but port validation should pass
         result = runner.invoke(cli, ["serve", "--port", "1"])
-        # Exit code may be non-zero due to uvicorn, but shouldn't be port validation error
-        # Check that error is NOT about port validation
+        # Port validation should pass
         assert "not in the range" not in result.output
 
-    def test_port_valid_default(self):
+    @patch("uvicorn.run")
+    def test_port_valid_default(self, mock_uvicorn):
         """Test --port accepts default value (8000)."""
         runner = CliRunner()
         result = runner.invoke(cli, ["serve", "--port", "8000"])
         assert "not in the range" not in result.output
 
-    def test_port_valid_max(self):
+    @patch("uvicorn.run")
+    def test_port_valid_max(self, mock_uvicorn):
         """Test --port accepts maximum value (65535)."""
         runner = CliRunner()
         result = runner.invoke(cli, ["serve", "--port", "65535"])
@@ -188,25 +189,32 @@ class TestServePortValidation:
 class TestWatchIntervalValidation:
     """Tests for watch --interval option validation (IntRange: 1+)."""
 
-    def test_interval_valid_min(self):
+    @patch("nhl_scrabble.cli.run_analysis")
+    def test_interval_valid_min(self, mock_run):
         """Test --interval accepts minimum value (1)."""
+        # Make command exit immediately by raising KeyboardInterrupt
+        mock_run.side_effect = KeyboardInterrupt
         runner = CliRunner()
-        # Command will fail without mocks, but interval validation should pass
         result = runner.invoke(cli, ["watch", "--interval", "1"])
-        # May fail for other reasons, but not interval validation
-        assert "not in the range" not in result.output or result.exit_code != 2
+        # Should exit cleanly (0) from KeyboardInterrupt handling
+        # Interval validation should pass (no "not in the range")
+        assert "not in the range" not in result.output
 
-    def test_interval_valid_default(self):
+    @patch("nhl_scrabble.cli.run_analysis")
+    def test_interval_valid_default(self, mock_run):
         """Test --interval accepts default value (300)."""
+        mock_run.side_effect = KeyboardInterrupt
         runner = CliRunner()
         result = runner.invoke(cli, ["watch", "--interval", "300"])
-        assert "not in the range" not in result.output or result.exit_code != 2
+        assert "not in the range" not in result.output
 
-    def test_interval_valid_large(self):
+    @patch("nhl_scrabble.cli.run_analysis")
+    def test_interval_valid_large(self, mock_run):
         """Test --interval accepts large value (86400 = 1 day)."""
+        mock_run.side_effect = KeyboardInterrupt
         runner = CliRunner()
         result = runner.invoke(cli, ["watch", "--interval", "86400"])
-        assert "not in the range" not in result.output or result.exit_code != 2
+        assert "not in the range" not in result.output
 
     def test_interval_invalid_zero(self):
         """Test --interval rejects 0."""
