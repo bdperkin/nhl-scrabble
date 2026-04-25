@@ -379,3 +379,166 @@ After this fix:
 - Any format-specific implementation challenges
 - User feedback on fix
 - Actual effort vs estimated
+
+## Implementation Notes
+
+**Implemented**: 2026-04-25
+**Branch**: bug-fixes/010-fix-output-format-validation-mismatch
+**PR**: #385 - https://github.com/bdperkin/nhl-scrabble/pull/385
+**Commit**: 3ca7247 (squashed in merge commit 90dc584)
+**Issue**: Closes #366 - https://github.com/bdperkin/nhl-scrabble/issues/366
+
+### Actual Implementation
+
+Followed the proposed solution (Option 1) exactly as planned:
+- Added 5 missing formats to Config's allowed values: yaml, xml, table, markdown, template
+- All formatters already existed, so no additional implementation needed
+- Verified all 10 CLI formats now work correctly
+
+### Additional Fix: Excessive Logging
+
+During testing, discovered and fixed a related issue:
+- **Problem**: dicttoxml library logged entire data dictionary at INFO level when using XML format
+- **Solution**: Suppressed dicttoxml logger to WARNING level in XMLFormatter
+- **Bonus**: Changed "Active filters" log from INFO to DEBUG (already shown in console)
+- **Impact**: Clean, concise output without internal library debug messages
+
+### Challenges Encountered
+
+1. **Test Failures**: Some existing tests expected "xml" to be invalid
+   - **Solution**: Updated tests to use truly invalid format ("invalid_format")
+   - **Files**: `test_cli_validation.py`, `test_config_security.py`
+
+2. **Ruff Linting**: Parametrize decorator format preferences
+   - **Issue**: Ruff wanted list-of-tuples, not tuple-of-tuples
+   - **Solution**: Adjusted test parametrization to use correct format
+   - **Impact**: All 67 pre-commit hooks passed
+
+### Deviations from Plan
+
+**Additions beyond original scope**:
+- Added logging verbosity fix (not in original task but discovered during testing)
+- Added 1 additional test for logging suppression
+- Updated 2 existing tests that expected old behavior
+
+**No deviations** from the core fix - implemented exactly as planned.
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 30 minutes - 1 hour
+- **Actual**: ~1 hour 15 minutes
+- **Breakdown**:
+  - Core fix: 15 minutes (simple one-line change)
+  - Tests: 30 minutes (24 comprehensive tests added)
+  - Logging fix: 15 minutes (discovered during testing)
+  - Test fixes: 10 minutes (updating tests expecting old behavior)
+  - Documentation: 5 minutes (CHANGELOG, PR description)
+- **Variance Reason**: Additional logging fix added value beyond original scope
+
+### Related PRs
+
+- #385 - Main implementation (merged)
+
+### Test Coverage Metrics
+
+**Before**:
+- Config coverage: 61.74%
+- No tests for CLI-Config format consistency
+
+**After**:
+- Config coverage: 94.78% (+33%)
+- 24 new tests added:
+  - 14 unit tests for Config format validation
+  - 9 integration tests for CLI format validation
+  - 1 unit test for logging suppression
+
+**CI Results**:
+- ✅ 47/50 checks passed
+- ⚠️ 3 experimental/non-blocking checks failed (expected)
+  - Python 3.15-dev (experimental)
+  - py315 tox (experimental)
+  - ty type checker (validation mode)
+
+### Lessons Learned
+
+1. **CLI-Config Consistency**: Need automated tests to catch mismatches
+   - **Action**: Added comprehensive tests to prevent future regressions
+   - **Future**: Consider deriving CLI choices from Config constants (DRY)
+
+2. **Third-Party Library Logging**: Libraries can have verbose default logging
+   - **Action**: Always suppress third-party INFO logging to WARNING
+   - **Pattern**: Set library loggers during import/initialization
+
+3. **Pre-Flight Testing**: Testing with actual formats revealed logging issue
+   - **Benefit**: Fixed two issues in one PR, better UX
+   - **Practice**: Always manually test CLI changes with real usage
+
+4. **Test Expectations**: Tests can encode incorrect assumptions
+   - **Example**: Tests expected "xml" to be invalid (it wasn't)
+   - **Lesson**: Verify test assumptions match actual requirements
+
+### User Impact
+
+**Before**:
+```bash
+$ nhl-scrabble analyze -f markdown
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Config
+  Value error, NHL_SCRABBLE_OUTPUT_FORMAT: Invalid value 'markdown'. Allowed values: csv, excel, html, json, text
+# Confusing error, broken trust
+
+$ nhl-scrabble analyze -f xml
+2026-04-25 14:59:24 - dicttoxml - INFO - Inside unicode_me(). val = "{'teams': {'DAL': {'total': 626...
+# 100+ lines of verbose library debug output
+```
+
+**After**:
+```bash
+$ nhl-scrabble analyze -f markdown -o report.md
+✓ Successfully fetched 32 of 32 teams
+# Clean output, works as expected
+
+$ nhl-scrabble analyze -f xml -o report.xml
+✓ Successfully fetched 32 of 32 teams
+# Clean output, no library debug messages
+```
+
+### Performance Impact
+
+None - validation is negligible overhead. No performance-related changes.
+
+### Security Impact
+
+None - only expanding allowed values for existing, safe formats. No new security considerations.
+
+### Documentation Updates
+
+- ✅ CHANGELOG.md - Documented both fixes
+- ✅ PR description - Comprehensive explanation
+- ✅ Task file - This implementation notes section
+- ✅ Test docstrings - Clear explanations of what tests verify
+
+### Future Improvements
+
+Based on this implementation:
+
+1. **Single Source of Truth**: Derive CLI choices from Config constants
+   ```python
+   # config.py
+   ALLOWED_OUTPUT_FORMATS = {"text", "json", ...}
+
+   # cli.py
+   from nhl_scrabble.config import ALLOWED_OUTPUT_FORMATS
+   type=click.Choice(list(ALLOWED_OUTPUT_FORMATS))
+   ```
+
+2. **Pre-commit Hook**: Check CLI-Config consistency
+   - Verify CLI choices match Config validation
+   - Prevent future mismatches at commit time
+
+3. **Integration Test**: Automated CLI-Config sync verification
+   - Test that all CLI choices are accepted by Config
+   - Already added in this PR (`test_config_accepts_all_cli_format_options`)
+
+4. **Library Logging Audit**: Review all third-party library loggers
+   - Suppress verbose libraries to WARNING by default
+   - Consistent logging experience across all output formats

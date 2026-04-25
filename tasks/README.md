@@ -45,7 +45,7 @@ Each task includes:
 | 007 | Fix Branch Protection Hook Failures in CI                 | MEDIUM   | 1-2 hours | Completed | [#58](https://github.com/bdperkin/nhl-scrabble/issues/58)   | -     |
 | 008 | Fix NHLApiClient Session Cleanup Warning                  | MEDIUM   | 1-2 hours | Completed | [#362](https://github.com/bdperkin/nhl-scrabble/issues/362) | PR [#367](https://github.com/bdperkin/nhl-scrabble/pull/367), completed 2026-04-25, actual effort: 1.5h |
 | 009 | Verify and Validate Caching is Enabled by Default        | MEDIUM   | 2-3 hours | Completed | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | PR [#368](https://github.com/bdperkin/nhl-scrabble/pull/368), completed 2026-04-24 |
-| 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH     | 30min-1h  | Active    | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | -     |
+| 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH     | 30min-1h  | Completed | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | PR [#385](https://github.com/bdperkin/nhl-scrabble/pull/385), completed 2026-04-25, actual effort: 1h 15min |
 | 011 | Use Platform-Specific Cache Directory with Permission Checking | MEDIUM   | 3-4 hours | Completed | [#369](https://github.com/bdperkin/nhl-scrabble/issues/369) | PR [#373](https://github.com/bdperkin/nhl-scrabble/pull/373), completed 2026-04-25, actual effort: 3.5h |
 
 ### Security
