@@ -163,7 +163,7 @@ class NHLApiClient:
         self.rate_limiter = RateLimiter(
             max_requests=rate_limit_max_requests, time_window=rate_limit_window
         )
-        logger.info(
+        logger.debug(
             f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s"
         )
 
@@ -176,7 +176,7 @@ class NHLApiClient:
                 NHLApiError,
             ),
         )
-        logger.info(
+        logger.debug(
             f"Circuit breaker initialized: threshold={dos_circuit_breaker_threshold}, "
             f"timeout={dos_circuit_breaker_timeout}s"
         )
@@ -225,7 +225,7 @@ class NHLApiClient:
                 allowable_methods=["GET"],
                 cache_control=True,  # Respect Cache-Control headers
             )
-            logger.info(f"HTTP caching enabled (directory: {cache_path}, expiry: {cache_expiry}s)")
+            logger.debug(f"HTTP caching enabled (directory: {cache_path}, expiry: {cache_expiry}s)")
         else:
             self.session = requests.Session()
             logger.debug("HTTP caching disabled")
@@ -237,7 +237,7 @@ class NHLApiClient:
         )
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
-        logger.info(
+        logger.debug(
             f"Connection pool configured: max_connections={dos_max_connections}, "
             f"max_per_host={dos_max_per_host}"
         )
@@ -404,7 +404,7 @@ class NHLApiClient:
         url = f"{self.base_url}/{endpoint}"
 
         season_desc = f"season {season}" if season else "current season"
-        logger.info(f"Fetching NHL teams from standings endpoint for {season_desc}")
+        logger.debug(f"Fetching NHL teams from standings endpoint for {season_desc}")
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)
@@ -455,7 +455,7 @@ class NHLApiClient:
                         "conference": team.get("conferenceName", "Unknown"),
                     }
 
-                logger.info(f"Successfully fetched {len(teams_info)} teams")
+                logger.debug(f"Successfully fetched {len(teams_info)} teams")
 
                 # Log cache status
                 from_cache = (

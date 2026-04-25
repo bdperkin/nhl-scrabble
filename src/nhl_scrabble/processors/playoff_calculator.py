@@ -265,7 +265,7 @@ class PlayoffCalculator:
             >>> "Eastern" in standings
             True
         """
-        logger.info("Calculating playoff standings")
+        logger.debug("Calculating playoff standings")
 
         # Group teams by division
         teams_by_division = self._group_teams_by_division(team_scores)
@@ -288,6 +288,6 @@ class PlayoffCalculator:
         # Group results by conference
         result = self._group_by_conference(all_teams)
 
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(f"Playoff standings calculated for {len(all_teams)} teams")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Playoff standings calculated for {len(all_teams)} teams")
         return result

@@ -267,5 +267,5 @@ def create_dependencies(
         scorer=scorer,
     )
 
-    logger.info("Created all core dependencies")
+    logger.debug("Created all core dependencies")
     return api_client, scorer, team_processor
