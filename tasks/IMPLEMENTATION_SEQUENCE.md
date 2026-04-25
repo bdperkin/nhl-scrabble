@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-25 (synchronized with filesystem)
-**Total Tasks**: 59 active tasks
-**Estimated Effort**: ~500 hours
+**Total Tasks**: 63 active tasks
+**Estimated Effort**: ~518 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -321,6 +321,10 @@ ______________________________________________________________________
 
 ```bash
 # Release Automation Parent Task (documents full automation scope)
+/implement-task enhancement/030-automate-changelog-generation.md  # 4-6h, Issue #379  # Automate CHANGELOG generation from git tags/commits using git-cliff
+/implement-task enhancement/031-add-version-validation-pre-commit-hook.md  # 1-2h, Issue #380  # Add pre-commit hook to validate version consistency (hatch-vcs)
+/implement-task enhancement/032-github-release-notes-from-tag-annotations.md  # 2-3h, Issue #381  # Automate GitHub release creation from git tag annotations
+/implement-task enhancement/033-enhance-version-badge-display.md  # 30min-1h, Issue #382  # Enhance version badge in README with PyPI preparation
 /implement-task new-features/019-comprehensive-release-automation-skill.md  # 8-12h, Issue #247
 
 # Release Automation Pipeline Sub-tasks (MUST BE SEQUENTIAL)

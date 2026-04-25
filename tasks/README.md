@@ -128,6 +128,11 @@ Each task includes:
 | 027 | Improve Function Example Coverage in Docstrings               | MEDIUM   | 3-4 hours                                                  | Active    | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | From documentation audit (task 013), gap #4                              |
 | 028 | Add Unicode Normalization for Player Names                    | MEDIUM   | 2-3 hours                                                  | Completed | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | PR [#374](https://github.com/bdperkin/nhl-scrabble/pull/374), completed 2026-04-25, actual effort: 2.5h |
 | 029 | Track ty Type Checker Validation Period (1-2 weeks)          | MEDIUM   | 1-2 weeks                                                  | Active    | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | Validation tracking for ty integration (PR #324)                         |
+| 030 | Automate CHANGELOG Generation from Git Tags and Commits       | MEDIUM   | 4-6 hours                                                  | Active    | [#379](https://github.com/bdperkin/nhl-scrabble/issues/379) | -                                                                        |
+| 031 | Add Version Validation in Pre-commit Hooks                    | MEDIUM   | 1-2 hours                                                  | Active    | [#380](https://github.com/bdperkin/nhl-scrabble/issues/380) | -                                                                        |
+| 032 | Create GitHub Release Notes from Tag Annotations              | MEDIUM   | 2-3 hours                                                  | Active    | [#381](https://github.com/bdperkin/nhl-scrabble/issues/381) | -                                                                        |
+| 033 | Enhance Version Badge Display in README                       | LOW      | 30min-1h                                                   | Active    | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | -                                                                        |
+| 034 | Evaluate semantic-release for Fully Automated Releases        | LOW      | 6-10 hours                                                 | Active    | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | Research task - evaluate comprehensive release automation alternative    |
 
 ### Testing
 
@@ -257,11 +262,11 @@ Each task includes:
 | Bug Fixes    | 1      | 10        | 11      |
 | Security     | 1      | 14        | 15      |
 | Optimization | 0      | 13        | 13      |
-| Enhancement  | 7      | 33        | 40      |
+| Enhancement  | 12     | 33        | 45      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 4      | 26        | 30      |
-| **TOTAL**    | **58** | **125**   | **183** |
+| **TOTAL**    | **63** | **125**   | **188** |
 
 ### Effort Estimates by Category
 
@@ -270,11 +275,11 @@ Each task includes:
 | Bug Fixes    | 12.25 hours      |
 | Security     | 82.75 hours      |
 | Optimization | 36.0 hours       |
-| Enhancement  | 201.5 hours      |
+| Enhancement  | 219.25 hours     |
 | Testing      | 265.0 hours      |
 | New Features | 227.0 hours      |
 | Refactoring  | 219.0 hours      |
-| **TOTAL**    | **1043.5 hours** |
+| **TOTAL**    | **1061.25 hours**|
 
 ### Completion Progress
 
@@ -283,11 +288,11 @@ Each task includes:
 | Bug Fixes    | 90.9%           |
 | Security     | 93.3%           |
 | Optimization | 100.0%          |
-| Enhancement  | 82.5%           |
+| Enhancement  | 73.3%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
 | Refactoring  | 83.3%           |
-| **OVERALL**  | **67.8%**       |
+| **OVERALL**  | **66.5%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -295,8 +300,8 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 1     |
-| MEDIUM   | 55    |
-| LOW      | 3     |
+| MEDIUM   | 58    |
+| LOW      | 5     |
 
 ## Recommended Implementation Order
 
@@ -310,12 +315,12 @@ _No critical priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 183 tasks (59 active, 124 completed)
+**Total Tasks**: 188 tasks (63 active, 125 completed)
 
-- **Total Estimated Effort**: 1043.5 hours
-  - Active Tasks: ~500 hours
+- **Total Estimated Effort**: 1061.25 hours
+  - Active Tasks: ~517.75 hours
   - Completed Tasks: ~543.5 hours
-- **Overall Completion**: 67.0%
+- **Overall Completion**: 66.5%
 
 ## Task Management Guidelines
 
@@ -358,5 +363,5 @@ tasks/
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-25
-**Total Tasks**: 182
-**Completion Rate**: 67.0%
+**Total Tasks**: 188
+**Completion Rate**: 66.5%

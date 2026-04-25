@@ -1,0 +1,557 @@
+# Create GitHub Release Notes from Tag Annotations
+
+**GitHub Issue**: [#381](https://github.com/bdperkin/nhl-scrabble/issues/381)
+
+## Priority
+
+**MEDIUM** - Should Do (Next Month)
+
+## Estimated Effort
+
+2-3 hours
+
+## Description
+
+Automate GitHub release creation with release notes extracted from git tag annotations. When developers create an annotated tag with release notes, automatically create a corresponding GitHub release with those notes.
+
+This complements:
+- Task #010: Dynamic versioning from git tags
+- Task #030: CHANGELOG automation from git commits
+
+Together, these tasks create a complete release automation workflow:
+1. Developer creates annotated tag with release notes
+2. GitHub release is auto-created with tag annotation as release notes
+3. CHANGELOG is auto-generated from git commits
+4. Package version is auto-derived from tag
+
+## Current State
+
+**Manual GitHub Release Process:**
+
+```bash
+# 1. Developer creates tag
+git tag -a v2.1.0 -m "Release version 2.1.0"
+git push --tags
+
+# 2. Developer manually creates GitHub release
+# - Navigate to GitHub UI
+# - Click "Create a new release"
+# - Select tag
+# - Write release notes (duplicating tag annotation)
+# - Publish release
+```
+
+**Issues:**
+- ❌ Manual GitHub release creation is tedious
+- ❌ Release notes duplicated (tag annotation + GitHub release)
+- ❌ Easy to forget to create GitHub release
+- ❌ Inconsistent release note format
+- ❌ No automation or CI integration
+
+**Existing Infrastructure:**
+- ✅ Dynamic versioning from git tags (task #010)
+- ✅ Conventional commits used throughout
+- ✅ GitHub Actions CI/CD configured
+- ❌ No release workflow yet
+- ❌ No automated GitHub release creation
+
+## Proposed Solution
+
+Create GitHub Actions workflow to automatically create releases from annotated git tags:
+
+### 1. Workflow Trigger
+
+Trigger on tag push matching `v*.*.*` pattern:
+
+```yaml
+# .github/workflows/release.yml
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Semantic versioning tags (v1.0.0, v2.1.3, etc.)
+```
+
+### 2. Extract Tag Annotation
+
+Use `git tag -l -n9999` to get full tag annotation:
+
+```yaml
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create releases
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Full history for tag annotations
+
+      - name: Extract tag annotation
+        id: tag-annotation
+        run: |
+          # Get tag name from ref
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+          # Extract tag annotation (full message)
+          TAG_MESSAGE=$(git tag -l -n9999 "$TAG_NAME" | sed "1s/^$TAG_NAME  *//")
+
+          # If empty, provide default message
+          if [ -z "$TAG_MESSAGE" ]; then
+            TAG_MESSAGE="Release $TAG_NAME"
+          fi
+
+          # Save to file for multiline handling
+          echo "$TAG_MESSAGE" > tag_message.txt
+          echo "has_annotation=true" >> $GITHUB_OUTPUT
+```
+
+### 3. Create GitHub Release
+
+Use `softprops/action-gh-release` for reliable release creation:
+
+```yaml
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag-annotation.outputs.tag_name }}
+          name: ${{ steps.tag-annotation.outputs.tag_name }}
+          body_path: tag_message.txt
+          draft: false
+          prerelease: ${{ contains(steps.tag-annotation.outputs.tag_name, '-rc') || contains(steps.tag-annotation.outputs.tag_name, '-beta') || contains(steps.tag-annotation.outputs.tag_name, '-alpha') }}
+          generate_release_notes: false  # Use tag annotation, not auto-generated
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### 4. Tag Annotation Format
+
+Recommended format for tag annotations:
+
+```bash
+# Simple release
+git tag -a v2.1.0 -m "Release v2.1.0
+
+## What's Changed
+
+- Add feature X
+- Fix bug Y
+- Improve performance Z
+
+## Breaking Changes
+
+None
+
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0"
+
+# Pre-release
+git tag -a v2.2.0-rc1 -m "Release v2.2.0-rc1 (Release Candidate)
+
+## What's Changed (Pre-release)
+
+- Testing new feature A
+- Experimental optimization B
+
+## Known Issues
+
+- Issue #123 still under investigation
+
+**This is a pre-release and should not be used in production.**"
+
+# Push tag
+git push origin v2.1.0
+```
+
+### 5. Integration with CHANGELOG (Task #030)
+
+When task #030 is implemented, combine both:
+
+```yaml
+      - name: Generate CHANGELOG
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --tag ${{ steps.tag-annotation.outputs.tag_name }}
+        env:
+          OUTPUT: CHANGELOG_ENTRY.md
+
+      - name: Combine tag annotation and changelog
+        run: |
+          cat tag_message.txt > release_notes.md
+          echo -e "\n\n---\n\n## Detailed Changelog\n" >> release_notes.md
+          cat CHANGELOG_ENTRY.md >> release_notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release_notes.md
+          # ... rest of config
+```
+
+## Implementation Steps
+
+1. **Create Release Workflow** (1h)
+   - Create `.github/workflows/release.yml`
+   - Configure tag trigger (`v*.*.*` pattern)
+   - Add permissions (`contents: write`)
+   - Set up checkout with full history
+
+2. **Extract Tag Annotation** (30min)
+   - Parse tag name from `GITHUB_REF`
+   - Extract tag message with `git tag -l -n9999`
+   - Handle empty annotations (default message)
+   - Save to file for multiline support
+
+3. **Create GitHub Release** (30min)
+   - Use `softprops/action-gh-release@v2`
+   - Auto-detect pre-releases (rc, beta, alpha)
+   - Use tag annotation as release body
+   - Configure release settings
+
+4. **Testing** (45min)
+   - Create test annotated tag
+   - Verify workflow triggers
+   - Check GitHub release is created
+   - Verify release notes match annotation
+   - Test pre-release detection
+   - Clean up test releases
+
+5. **Documentation** (15min)
+   - Update CONTRIBUTING.md with tag annotation format
+   - Document release process
+   - Add workflow documentation
+   - Update CLAUDE.md
+
+## Testing Strategy
+
+### Local Testing (Tag Annotation Format)
+
+```bash
+# 1. Create test annotated tag locally
+git tag -a v2.1.0-test -m "Test Release v2.1.0-test
+
+## What's Changed
+
+- Test feature A
+- Test fix B
+
+This is a test release."
+
+# 2. Extract annotation (verify format)
+git tag -l -n9999 v2.1.0-test
+
+# 3. Clean up
+git tag -d v2.1.0-test
+```
+
+### CI Testing (Workflow)
+
+```bash
+# 1. Create test tag and push
+git tag -a v0.0.1-test -m "Test release workflow
+
+This is a test to verify automated GitHub release creation."
+git push origin v0.0.1-test
+
+# 2. Monitor GitHub Actions workflow
+# - Check workflow triggers
+# - Verify tag annotation extraction
+# - Confirm GitHub release created
+
+# 3. Verify GitHub release
+gh release view v0.0.1-test
+# Check release notes match tag annotation
+
+# 4. Clean up
+gh release delete v0.0.1-test --yes
+git tag -d v0.0.1-test
+git push origin --delete v0.0.1-test
+```
+
+### Pre-release Testing
+
+```bash
+# Test pre-release detection
+git tag -a v2.2.0-rc1 -m "Release Candidate 1"
+git push origin v2.2.0-rc1
+
+# Verify release is marked as pre-release
+gh release view v2.2.0-rc1 --json isPrerelease
+```
+
+### Integration Testing
+
+```bash
+# Full release cycle
+git tag -a v2.1.0 -m "$(cat <<'EOF'
+Release v2.1.0
+
+## What's Changed
+
+- Feature: Add interactive mode
+- Fix: Correct API error handling
+- Perf: Optimize report generation
+
+## Breaking Changes
+
+None
+
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0
+EOF
+)"
+git push origin v2.1.0
+
+# Verify:
+# 1. GitHub Actions workflow runs
+# 2. GitHub release created
+# 3. Release notes match annotation
+# 4. Release is not marked as pre-release
+```
+
+## Acceptance Criteria
+
+- [ ] `.github/workflows/release.yml` workflow created
+- [ ] Workflow triggers on tag push matching `v*.*.*`
+- [ ] Tag annotation extracted correctly (full multiline message)
+- [ ] GitHub release created automatically
+- [ ] Release name matches tag name
+- [ ] Release notes match tag annotation
+- [ ] Pre-releases auto-detected (rc, beta, alpha suffixes)
+- [ ] Empty annotations handled gracefully (default message)
+- [ ] Workflow has `contents: write` permission
+- [ ] Documentation updated:
+  - [ ] CONTRIBUTING.md (tag annotation format)
+  - [ ] CLAUDE.md (release automation)
+  - [ ] Workflow comments
+- [ ] Tests pass (test tag creates release)
+- [ ] Clean up test releases
+- [ ] Integration with future CHANGELOG automation considered
+
+## Related Files
+
+- `.github/workflows/release.yml` - Release automation workflow (to be created)
+- `CONTRIBUTING.md` - Document tag annotation format and release process
+- `CLAUDE.md` - Document release automation
+- `.github/workflows/ci.yml` - Existing CI workflow (reference)
+
+## Dependencies
+
+**Related Tasks:**
+- Task #010 (refactoring/010-dynamic-versioning.md) - Dynamic versioning from git tags (completed)
+  - Releases use same git tags as versioning
+- Task #030 (enhancement/030-automate-changelog-generation.md) - CHANGELOG automation (active)
+  - Can be combined with release notes for comprehensive releases
+  - Release notes (from tag) + detailed changelog (from commits)
+
+**GitHub Actions:**
+- `actions/checkout@v6` - Checkout code with full history
+- `softprops/action-gh-release@v2` - Create GitHub releases
+
+**GitHub Permissions:**
+- `contents: write` - Required to create releases
+
+**Tools:**
+- Git (tag annotation extraction)
+- GitHub CLI (`gh` for testing)
+
+## Additional Notes
+
+### Tag Annotation Best Practices
+
+**Good Annotations:**
+
+```bash
+# Structured release
+git tag -a v2.1.0 -m "Release v2.1.0
+
+## What's Changed
+
+### Features
+- Add REST API server (#150)
+- Add interactive mode (#133)
+
+### Bug Fixes
+- Fix API error handling (#40)
+- Fix rate limiting (#47)
+
+### Performance
+- Optimize report generation (#115)
+
+## Breaking Changes
+
+None
+
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0"
+
+# Minimal (auto-generated changelog will supplement)
+git tag -a v2.1.0 -m "Release v2.1.0
+
+See CHANGELOG.md for details."
+
+# Pre-release
+git tag -a v2.2.0-rc1 -m "Release Candidate 1 for v2.2.0
+
+## Testing Focus
+- New caching system
+- API performance improvements
+
+**Do not use in production**"
+```
+
+**Poor Annotations:**
+
+```bash
+# ❌ Too short
+git tag -a v2.1.0 -m "v2.1.0"
+
+# ❌ No version in message
+git tag -a v2.1.0 -m "New release"
+
+# ❌ Lightweight tag (no annotation)
+git tag v2.1.0  # No -a flag
+```
+
+### Pre-release Detection
+
+Automatically marks as pre-release if tag contains:
+- `-rc` (release candidate): `v2.1.0-rc1`
+- `-beta` (beta release): `v2.1.0-beta2`
+- `-alpha` (alpha release): `v2.1.0-alpha1`
+
+### Workflow Permissions
+
+**Required Permission:**
+```yaml
+permissions:
+  contents: write  # Create releases
+```
+
+**Why:** GitHub Actions needs explicit permission to create releases in the repository.
+
+### Release Assets (Future Enhancement)
+
+This task focuses on release notes. Future enhancements could add assets:
+
+```yaml
+      - name: Build package
+        run: python -m build
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: tag_message.txt
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+```
+
+### Integration with CI/CD
+
+**Release workflow vs CI workflow:**
+- **CI workflow**: Runs on every push/PR (tests, quality checks)
+- **Release workflow**: Runs only on tag push (creates release)
+
+Both can coexist:
+
+```yaml
+# CI: .github/workflows/ci.yml (existing)
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Release: .github/workflows/release.yml (new)
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+```
+
+### Combining with CHANGELOG (Task #030)
+
+When both are implemented:
+
+**Tag Annotation** (high-level):
+- What's changed (summary)
+- Breaking changes
+- Migration notes
+
+**CHANGELOG** (detailed):
+- All commits since last release
+- Categorized by type (feat, fix, etc.)
+- Commit-level details
+
+**Combined Release Notes:**
+```
+[Tag Annotation - High-level summary]
+
+---
+
+## Detailed Changelog
+
+[Auto-generated from commits via git-cliff]
+```
+
+### Error Handling
+
+**Empty annotation:**
+```yaml
+# Fallback to default message
+if [ -z "$TAG_MESSAGE" ]; then
+  TAG_MESSAGE="Release $TAG_NAME"
+fi
+```
+
+**Invalid tag format:**
+- Workflow only triggers on `v*.*.*` pattern
+- Invalid tags (e.g., `2.1.0` without `v`) won't trigger
+
+**Failed release creation:**
+- GitHub Actions will fail workflow
+- Developer receives notification
+- Can manually retry or fix
+
+### Security Considerations
+
+- Uses `GITHUB_TOKEN` (auto-provided by GitHub Actions)
+- No secrets required
+- `contents: write` permission scoped to workflow
+- Tag annotations are public (don't include secrets)
+
+### Performance
+
+- Workflow execution: ~30-60 seconds
+  - Checkout: ~10s
+  - Tag extraction: ~5s
+  - Release creation: ~10s
+- No impact on main CI (separate workflow)
+
+### Versioning Strategy
+
+**Semantic Versioning:**
+- Major: `v3.0.0` (breaking changes)
+- Minor: `v2.1.0` (new features)
+- Patch: `v2.0.1` (bug fixes)
+- Pre-release: `v2.1.0-rc1` (release candidates)
+
+**Tag Format:**
+- ✅ `v2.1.0` - Valid
+- ✅ `v2.1.0-rc1` - Valid (pre-release)
+- ✅ `v2.1.0-beta2` - Valid (pre-release)
+- ❌ `2.1.0` - Invalid (missing `v`)
+- ❌ `version-2.1.0` - Invalid (wrong format)
+
+## Implementation Notes
+
+*To be filled during implementation:*
+- Actual workflow configuration used
+- Tag annotation format adopted
+- Integration with CHANGELOG automation (if task #030 completed)
+- Challenges encountered (multiline handling, edge cases)
+- Developer feedback on release process
+- Actual effort vs estimated
+- Any deviations from proposed solution
