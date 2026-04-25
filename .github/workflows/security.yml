@@ -189,12 +189,32 @@ jobs:
       - name: Run Safety check
         run: |
           echo "Running Safety vulnerability database check..."
-          safety check --json --output safety-report.json || true
-          safety check --output safety-report.txt || true
+          # Generate JSON report
+          safety check --json > safety-report.json 2>&1 || \
+            echo "Safety check completed with findings"
 
-          # Also run with default output
+          # Generate text report
+          safety check > safety-report.txt 2>&1 || \
+            echo "Safety check completed with findings"
+
+          # Also run with default output for GitHub Actions logs
           safety check || echo "::warning::Safety found known vulnerabilities"
         continue-on-error: true
+
+      - name: Verify safety reports exist
+        if: always()
+        run: |
+          echo "Checking for safety report files..."
+          if [ -f safety-report.json ]; then
+            echo "✓ safety-report.json exists ($(wc -c < safety-report.json) bytes)"
+          else
+            echo "✗ safety-report.json not found"
+          fi
+          if [ -f safety-report.txt ]; then
+            echo "✓ safety-report.txt exists ($(wc -c < safety-report.txt) bytes)"
+          else
+            echo "✗ safety-report.txt not found"
+          fi
 
       - name: Upload safety reports
         uses: actions/upload-artifact@v7
@@ -205,6 +225,7 @@ jobs:
             safety-report.json
             safety-report.txt
           retention-days: 90
+          if-no-files-found: warn
 
   summary:
     name: Security Audit Summary
