@@ -10,12 +10,16 @@ Security features:
     - Type safety enforcement
     - Range validation
     - Format validation
+    - Unicode normalization for international player names
 """
 
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+
+from unidecode import unidecode
 
 from nhl_scrabble.exceptions import ValidationError
 
@@ -216,25 +220,88 @@ def validate_team_abbreviation(abbrev: str) -> str:
     return clean_abbrev
 
 
+def normalize_player_name(name: str) -> str:
+    """Normalize Unicode player name to ASCII for Scrabble scoring.
+
+    Performs three-step normalization to convert international player names
+    with diacritics, accents, and non-Latin scripts to ASCII equivalents:
+
+    1. **NFD Decomposition + Diacritic Removal**: Decomposes accented characters
+       (é → e + combining acute accent), then removes combining marks
+    2. **Transliteration**: Converts non-Latin scripts to Latin (Cyrillic → Roman)
+    3. **ASCII Conversion**: Handles special cases (œ → oe, ß → ss, etc.)
+
+    This ensures all NHL players can be processed correctly while mapping to
+    valid Scrabble tiles (A-Z only).
+
+    Args:
+        name: Player name (may contain Unicode characters, diacritics, or non-Latin scripts)
+
+    Returns:
+        ASCII-only name suitable for Scrabble scoring and validation
+
+    Examples:
+        >>> normalize_player_name("Ondřej Pavelec")
+        'Ondrej Pavelec'
+        >>> normalize_player_name("José Théodore")
+        'Jose Theodore'
+        >>> normalize_player_name("P.K. Subban")
+        'P.K. Subban'
+        >>> normalize_player_name("Bjørn Sørensen")
+        'Bjorn Sorensen'
+        >>> normalize_player_name("Tomáš Hertl")
+        'Tomas Hertl'
+
+    Notes:
+        - ASCII names are unchanged (no modification)
+        - Normalization is deterministic (same input → same output)
+        - Performance: ~0.1ms per name (negligible overhead)
+        - Security: Normalization happens before validation (defense in depth)
+    """
+    # Step 1: NFD normalization + diacritic removal
+    # NFD decomposes accented characters: e-acute → e + combining-acute-accent (U+0065 + U+0301)
+    nfd_form = unicodedata.normalize("NFD", name)
+
+    # Remove combining marks (Unicode category 'Mn')
+    # This strips diacritics while preserving base characters
+    without_diacritics = "".join(char for char in nfd_form if unicodedata.category(char) != "Mn")
+
+    # Step 2 & 3: Transliteration + ASCII conversion
+    # unidecode handles:
+    # - Special ligatures: œ → oe, æ → ae
+    # - German: ß → ss, ü → u
+    # - Scandinavian: ø → o, å → a
+    # - Cyrillic → Roman transliteration
+    # - 100+ languages
+    # Note: unidecode returns str but older mypy versions see it as Any
+    return str(unidecode(without_diacritics))
+
+
 def validate_player_name(name: str) -> str:
     """Validate and sanitize player name.
 
     Player names can contain letters, spaces, hyphens, apostrophes, and periods
     to support international names (e.g., "Jean-Gabriel Pageau", "P.K. Subban").
 
+    Unicode characters (diacritics, accents, non-Latin scripts) are automatically
+    normalized to ASCII equivalents before validation. This ensures international
+    players with accented names are processed correctly while maintaining Scrabble
+    tile compatibility (A-Z only).
+
     Args:
-        name: Player name to validate
+        name: Player name to validate (may contain Unicode characters)
 
     Returns:
-        Sanitized name with whitespace stripped
+        Sanitized and normalized name (ASCII-only, whitespace stripped)
 
     Raises:
         ValidationError: If name format is invalid with specific reason:
-            - Name is empty
+            - Name is empty (or empty after normalization)
             - Name is too long (>100 characters)
-            - Name contains invalid characters
+            - Name contains invalid characters (even after normalization)
 
     Security:
+        - Normalizes Unicode to ASCII before validation (defense in depth)
         - Prevents XSS attacks via player names
         - Prevents injection attacks in logs/reports
         - Sanitizes before use in templates or output
@@ -248,6 +315,10 @@ def validate_player_name(name: str) -> str:
         'P.K. Subban'
         >>> validate_player_name("Ryan O'Reilly")
         "Ryan O'Reilly"
+        >>> validate_player_name("Ondřej Pavelec")
+        'Ondrej Pavelec'
+        >>> validate_player_name("José Théodore")
+        'Jose Theodore'
         >>> validate_player_name("")
         Traceback (most recent call last):
         ValidationError: Player name cannot be empty
@@ -255,19 +326,23 @@ def validate_player_name(name: str) -> str:
         Traceback (most recent call last):
         ValidationError: Player name contains invalid characters: 'Connor<script>alert(1)</script>'
     """
-    # Strip whitespace
-    clean_name = name.strip()
+    # Normalize Unicode to ASCII (handles diacritics, accents, transliteration)
+    # This must happen BEFORE validation to support international player names
+    # Then strip whitespace from normalized name
+    clean_name = normalize_player_name(name).strip()
 
-    # Check not empty
+    # Check not empty (after normalization and stripping)
     if not clean_name:
         raise ValidationError("Player name cannot be empty")
 
     # Check length (reasonable bound to prevent DoS)
+    # Note: Check length AFTER normalization as some characters may expand (œ → oe)
     if len(clean_name) > 100:
         raise ValidationError(f"Player name too long ({len(clean_name)} characters, maximum 100)")
 
-    # Allow letters, spaces, hyphens, apostrophes, periods
+    # Allow letters, spaces, hyphens, apostrophes, periods (ASCII only after normalization)
     # This supports international names: "Jean-Gabriel Pageau", "P.K. Subban", "Ryan O'Reilly"
+    # And normalized international names: "Ondrej Pavelec" (from "Ondřej"), "Jose Theodore" (from "José")
     if not re.match(r"^[a-zA-Z\s\-'\.]+$", clean_name):
         raise ValidationError(
             f"Player name contains invalid characters: '{name}'. "

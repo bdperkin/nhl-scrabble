@@ -125,7 +125,7 @@ Each task includes:
 | 025 | Add Automated Documentation Link Validation to CI             | MEDIUM   | 1 hour                                                     | Active    | [#351](https://github.com/bdperkin/nhl-scrabble/issues/351) | From documentation audit (task 013), gap #2                              |
 | 026 | Add Automated Code Example Testing to CI                      | MEDIUM   | 2 hours                                                    | Active    | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | From documentation audit (task 013), gap #3                              |
 | 027 | Improve Function Example Coverage in Docstrings               | MEDIUM   | 3-4 hours                                                  | Active    | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | From documentation audit (task 013), gap #4                              |
-| 028 | Add Unicode Normalization for Player Names                    | MEDIUM   | 2-3 hours                                                  | Active    | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | -                                                                        |
+| 028 | Add Unicode Normalization for Player Names                    | MEDIUM   | 2-3 hours                                                  | Completed | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | PR [#374](https://github.com/bdperkin/nhl-scrabble/pull/374), completed 2026-04-25, actual effort: 2.5h |
 
 ### Testing
 
