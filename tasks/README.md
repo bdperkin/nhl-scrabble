@@ -229,7 +229,7 @@ Each task includes:
 | 007 | Add Dependency Injection                                                      | LOW      | 8-10 hours          | Completed | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | PR [#360](https://github.com/bdperkin/nhl-scrabble/pull/360), 2026-04-24, 6h actual    |
 | 008 | Repository Cleanup and Consolidation                                          | MEDIUM   | 4-6 hours           | Completed | [#216](https://github.com/bdperkin/nhl-scrabble/issues/216) | -                                                                                      |
 | 009 | Git Branch Pruning Automation                                                 | MEDIUM   | 30-60 minutes       | Completed | [#220](https://github.com/bdperkin/nhl-scrabble/issues/220) | -                                                                                      |
-| 010 | Dynamic Versioning from Git Tags                                              | MEDIUM   | 2-4 hours           | Active    | [#222](https://github.com/bdperkin/nhl-scrabble/issues/222) | -                                                                                      |
+| 010 | Dynamic Versioning from Git Tags                                              | MEDIUM   | 2-4 hours           | Completed | [#222](https://github.com/bdperkin/nhl-scrabble/issues/222) | PR [#378](https://github.com/bdperkin/nhl-scrabble/pull/378), 2026-04-25, 3.5h actual |
 | 011 | Dependency Synchronization and Automation                                     | MEDIUM   | 3-4 hours           | Completed | [#226](https://github.com/bdperkin/nhl-scrabble/issues/226) | PR [#341](https://github.com/bdperkin/nhl-scrabble/pull/341), 2026-04-23, 4.5h actual  |
 | 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Completed | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | PR [#349](https://github.com/bdperkin/nhl-scrabble/pull/349), 2026-04-23, 5h actual    |
 | 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Completed | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | PR [#350](https://github.com/bdperkin/nhl-scrabble/pull/350), 2026-04-24, 4h actual    |
@@ -260,8 +260,8 @@ Each task includes:
 | Enhancement  | 7      | 33        | 40      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 5      | 25        | 30      |
-| **TOTAL**    | **59** | **124**   | **183** |
+| Refactoring  | 4      | 26        | 30      |
+| **TOTAL**    | **58** | **125**   | **183** |
 
 ### Effort Estimates by Category
 
