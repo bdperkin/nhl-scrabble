@@ -240,7 +240,7 @@ class ScrabbleScorer:
                 (stats["currsize"] / stats["maxsize"]) * 100 if stats["maxsize"] > 0 else 0
             )
 
-            logger.info(
+            logger.debug(
                 "Scrabble scoring cache stats: "
                 f"hits={stats['hits']}, "
                 f"misses={stats['misses']}, "
@@ -249,7 +249,7 @@ class ScrabbleScorer:
                 f"({utilization:.1f}% full)"
             )
         else:
-            logger.info("Scrabble scoring cache: No calls yet")
+            logger.debug("Scrabble scoring cache: No calls yet")
 
     @staticmethod
     def clear_cache() -> None:

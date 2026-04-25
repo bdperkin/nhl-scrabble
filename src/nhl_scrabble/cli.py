@@ -311,7 +311,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
                 filter_teams,
             )
 
-            logger.info("Applying filters to analysis results")
+            logger.debug("Applying filters to analysis results")
             team_scores = filter_teams(team_scores, filters)
             all_players = filter_players(all_players, filters)
             division_standings = filter_division_standings(division_standings, filters)

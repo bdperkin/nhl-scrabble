@@ -207,7 +207,7 @@ class TestScrabbleScorerCaching:
         ScrabbleScorer.calculate_score("Test1")
 
         # Log stats
-        with caplog.at_level("INFO"):
+        with caplog.at_level("DEBUG"):
             ScrabbleScorer.log_cache_stats()
 
         # Verify log message
@@ -220,7 +220,7 @@ class TestScrabbleScorerCaching:
         """Test logging stats when cache is empty."""
         ScrabbleScorer.clear_cache()
 
-        with caplog.at_level("INFO"):
+        with caplog.at_level("DEBUG"):
             ScrabbleScorer.log_cache_stats()
 
         assert "No calls yet" in caplog.text

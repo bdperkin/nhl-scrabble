@@ -252,7 +252,7 @@ class TestConcurrentProcessingPerformance:
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=5)
 
-        with caplog.at_level("INFO"):
+        with caplog.at_level("DEBUG"):
             team_scores, _players, _failed = processor.process_all_teams()
 
         # Verify logging includes concurrent mode message

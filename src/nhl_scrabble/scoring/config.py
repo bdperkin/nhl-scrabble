@@ -126,7 +126,7 @@ class ScoringConfig:
             available = ", ".join(cls.BUILT_IN_SYSTEMS.keys())
             raise ValueError(f"Unknown scoring system: {system}. Available systems: {available}")
 
-        logger.info(f"Using built-in scoring system: {system_lower}")
+        logger.debug(f"Using built-in scoring system: {system_lower}")
         return cls.BUILT_IN_SYSTEMS[system_lower].copy()
 
     @classmethod
@@ -181,7 +181,7 @@ class ScoringConfig:
             missing_str = ", ".join(sorted(missing_letters))
             raise ValueError(f"Scoring config from {source} is missing letters: {missing_str}")
 
-        logger.info(f"Successfully loaded custom scoring config with {len(normalized)} letters")
+        logger.debug(f"Successfully loaded custom scoring config with {len(normalized)} letters")
         return normalized
 
     @classmethod
@@ -213,7 +213,7 @@ class ScoringConfig:
         if not path.exists():
             raise FileNotFoundError(f"Scoring config file not found: {path}")
 
-        logger.info(f"Loading custom scoring config from: {path}")
+        logger.debug(f"Loading custom scoring config from: {path}")
 
         try:
             with path.open() as f:

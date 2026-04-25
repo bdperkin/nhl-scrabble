@@ -159,7 +159,7 @@ class TeamProcessor:
             True
         """
         season_desc = f"for season {season}" if season else "for current season"
-        logger.info(
+        logger.debug(
             f"Starting team processing {season_desc} "
             f"(concurrent mode, max_workers={self.max_workers})"
         )
@@ -167,7 +167,7 @@ class TeamProcessor:
         # Fetch all teams metadata
         teams_info = self.api_client.get_teams(season=season)
         total_teams = len(teams_info)
-        logger.info(f"Fetched {total_teams} teams from NHL API")
+        logger.debug(f"Fetched {total_teams} teams from NHL API")
 
         team_scores: dict[str, TeamScore] = {}
         all_players: list[PlayerScore] = []
@@ -201,7 +201,7 @@ class TeamProcessor:
                         team_score, team_players = result
                         team_scores[team_abbrev] = team_score
                         all_players.extend(team_players)
-                        logger.info(f"Processed {team_abbrev} ({completed}/{total_teams})")
+                        logger.debug(f"Processed {team_abbrev} ({completed}/{total_teams})")
 
                         # Call progress callback if provided
                         if progress_callback:
@@ -212,7 +212,7 @@ class TeamProcessor:
                     logger.error(f"Error processing {team_abbrev}: {e}")
                     failed_teams.append(team_abbrev)
 
-        logger.info(
+        logger.debug(
             f"Processing complete: {len(team_scores)} teams processed, "
             f"{len(failed_teams)} failed (concurrent mode)"
         )
