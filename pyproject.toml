@@ -16,10 +16,10 @@ keywords = [
     "scrabble",
     "sports",
 ]
-[[project.authors]]
-
-authors.email = "bdperkin@gmail.com"
-authors.name = "Brandon Perkins"
+license.text = "MIT"
+authors = [
+    { name = "Brandon Perkins", email = "bdperkin@gmail.com" },
+]
 requires-python = ">=3.12"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -133,16 +133,13 @@ urls.Homepage = "https://github.com/bdperkin/nhl-scrabble"
 urls.Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
 urls.Repository = "https://github.com/bdperkin/nhl-scrabble"
 scripts.nhl-scrabble = "nhl_scrabble.cli:cli"
-license.text = "MIT"
 
 [tool.hatch]
-[tool.hatch.build]
-hooks.vcs.version-file = "src/nhl_scrabble/_version.py"
-targets.wheel.packages = [
+build.hooks.vcs.version-file = "src/nhl_scrabble/_version.py"
+build.targets.wheel.packages = [
     "src/nhl_scrabble",
 ]
-[tool.hatch.version]
-source = "vcs"
+version.source = "vcs"
 
 [tool.black]
 line-length = 100
@@ -209,23 +206,15 @@ lint.ignore = [
     "TRY300",
     "TRY400",
 ]
-lint.per-file-ignores = [
-    "SLF001",
-]
-lint.isort = [
-    "nhl_scrabble",
-]
-lint.mccabe = 10
-lint.pylint = 50
-lint.per-file-ignores = [
+lint.per-file-ignores."__init__.py" = [
     "D104",
     "F401",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."scripts/generate_branding.py" = [
     "PLR0915",
     "T201",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."scripts/update_dependencies.py" = [
     "C901",
     "PLR0911",
     "PLR0912",
@@ -233,64 +222,64 @@ lint.per-file-ignores = [
     "S607",
     "T201",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/__main__.py" = [
     "T201",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/api/nhl_client.py" = [
     "ANN401",  # API responses return dict[str, Any] for unstructured JSON
     "C901",
     "PLR0912",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/api_server/routes/*.py" = [
     "C901",
     "ERA001",
     "FAST002",
     "TRY301",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/cli.py" = [
     "C901",
     "PLC0415",
     "T201",
     "TC003",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/exporters/excel_exporter.py" = [
     "ANN401", # Excel export methods accept dict[str, Any] for flexibility
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/formatters/*.py" = [
     "ANN401", # Formatters accept dict[str, Any] for unstructured data
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/formatters/__init__.py" = [
     "ANN401", # Factory pattern requires flexible kwargs
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/formatters/factory.py" = [
     "ANN401", # Factory pattern requires flexible kwargs
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/logging_config.py" = [
     "PERF403",
     "PLC0415",
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/models/*.py" = [
     "ANN401", # to_dict() methods return dict[str, Any] for JSON serialization
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/reports/base.py" = [
     "ANN401", # Abstract method intentionally uses Any for flexibility
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/reports/comparison.py" = [
     "ANN401", # JSON generation methods return dict[str, Any]
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/security/circuit_breaker.py" = [
     "ANN401", # Generic wrapper uses *args: Any, **kwargs: Any pattern
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/utils/retry.py" = [
     "ANN401", # Decorator wrappers use *args: Any, **kwargs: Any pattern
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/validators.py" = [
     "ANN401", # API response validation uses dict[str, Any]
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."src/nhl_scrabble/web/app.py" = [
     "ANN401", # FastAPI/Pydantic response models use dict[str, Any]
 ]
-lint.per-file-ignores = [
+lint.per-file-ignores."tests/**/*.py" = [
     "ANN",
     "ARG",
     "PLC0415",
@@ -298,9 +287,17 @@ lint.per-file-ignores = [
     "S101",
     "SLF001",
 ]
-lint.pylint = 7
-lint.pylint = 12
-lint.pylint = 6
+lint.per-file-ignores."tests/unit/test_nhl_client.py" = [
+    "SLF001",
+]
+lint.isort.known-first-party = [
+    "nhl_scrabble",
+]
+lint.mccabe.max-complexity = 10
+lint.pylint.max-args = 7
+lint.pylint.max-branches = 12
+lint.pylint.max-returns = 6
+lint.pylint.max-statements = 50
 
 [tool.isort]
 profile = "black"
@@ -440,72 +437,71 @@ pep621_dev_dependency_groups = [
     "branding",
 ]
 known_first_party = [ "nhl_scrabble" ]
+package_module_name_map.bandit = "bandit"
+package_module_name_map.beautifulsoup4 = "beautifulsoup4"
+package_module_name_map.blacken-docs = "blacken_docs"
+package_module_name_map.build = "build"
+package_module_name_map.cairosvg = "cairosvg"
+package_module_name_map.certifi = "certifi"
+package_module_name_map.check-jsonschema = "check_jsonschema"
+package_module_name_map.colorlog = "colorlog"
+package_module_name_map.dicttoxml = "dicttoxml"
+package_module_name_map.diff-cover = "diff_cover"
+package_module_name_map.fastapi = "fastapi"
+package_module_name_map.httpx = "httpx"
+package_module_name_map.jinja2 = "jinja2"
+package_module_name_map.mypy = "mypy"
+package_module_name_map.myst-parser = "myst_parser"
+package_module_name_map.nhl-scrabble = "nhl_scrabble"
+package_module_name_map.openpyxl = "openpyxl"
+package_module_name_map.pdoc = "pdoc"
+package_module_name_map.Pillow = "pillow"
+package_module_name_map.pip-audit = "pip_audit"
+package_module_name_map.pip-licenses = "pip_licenses"
+package_module_name_map.pre-commit = "pre_commit"
+package_module_name_map.prompt-toolkit = "prompt_toolkit"
+package_module_name_map.pydantic = "pydantic"
+package_module_name_map.pytest-benchmark = "pytest_benchmark"
+package_module_name_map.pytest-clarity = "pytest_clarity"
+package_module_name_map.pytest-cov = "pytest_cov"
+package_module_name_map.pytest-mock = "pytest_mock"
+package_module_name_map.pytest = "pytest"
+package_module_name_map.pytest-randomly = "pytest_randomly"
+package_module_name_map.pytest-rerunfailures = "pytest_rerunfailures"
+package_module_name_map.pytest-sphinx = "pytest_sphinx"
+package_module_name_map.pytest-sugar = "pytest_sugar"
+package_module_name_map.pytest-timeout = "pytest_timeout"
+package_module_name_map.pytest-watch = "pytest_watch"
+package_module_name_map.pytest-xdist = "pytest_xdist"
+package_module_name_map.python-dotenv = "dotenv"
+package_module_name_map.pyyaml = "yaml"
+package_module_name_map.refurb = "refurb"
+package_module_name_map.requests-cache = "requests_cache"
+package_module_name_map.requests = "requests"
+package_module_name_map.rich = "rich"
+package_module_name_map.ruff = "ruff"
+package_module_name_map.safety = "safety"
+package_module_name_map.sphinx-autobuild = "sphinx_autobuild"
+package_module_name_map.sphinx-autodoc-typehints = "sphinx_autodoc_typehints"
+package_module_name_map.sphinxcontrib-programoutput = "sphinxcontrib_programoutput"
+package_module_name_map.sphinxcontrib-spelling = "sphinxcontrib_spelling"
+package_module_name_map.sphinx-copybutton = "sphinx_copybutton"
+package_module_name_map.sphinx-design = "sphinx_design"
+package_module_name_map.sphinxext-opengraph = "sphinxext_opengraph"
+package_module_name_map.sphinx-rtd-theme = "sphinx_rtd_theme"
+package_module_name_map.sphinx-sitemap = "sphinx_sitemap"
+package_module_name_map.sphinx = "sphinx"
+package_module_name_map.starlette = "starlette"
+package_module_name_map.tomli = "tomli"
+package_module_name_map.tomli-w = "tomli_w"
+package_module_name_map.tox = "tox"
+package_module_name_map.tox-uv = "tox_uv"
+package_module_name_map.twine = "twine"
+package_module_name_map.types-PyYAML = "types_pyyaml"
+package_module_name_map.types-requests = "types_requests"
+package_module_name_map.ty = "ty"
+package_module_name_map.uvicorn = "uvicorn"
 per_rule_ignores = {}
-[tool.deptry.package_module_name_map]
-bandit = "bandit"
-beautifulsoup4 = "beautifulsoup4"
-blacken-docs = "blacken_docs"
-build = "build"
-cairosvg = "cairosvg"
-certifi = "certifi"
-check-jsonschema = "check_jsonschema"
-colorlog = "colorlog"
-dicttoxml = "dicttoxml"
-diff-cover = "diff_cover"
-fastapi = "fastapi"
-httpx = "httpx"
-jinja2 = "jinja2"
-mypy = "mypy"
-myst-parser = "myst_parser"
-nhl-scrabble = "nhl_scrabble"
-openpyxl = "openpyxl"
-pdoc = "pdoc"
-Pillow = "pillow"
-pip-audit = "pip_audit"
-pip-licenses = "pip_licenses"
-pre-commit = "pre_commit"
-prompt-toolkit = "prompt_toolkit"
-pydantic = "pydantic"
-pytest-benchmark = "pytest_benchmark"
-pytest-clarity = "pytest_clarity"
-pytest-cov = "pytest_cov"
-pytest-mock = "pytest_mock"
-pytest = "pytest"
-pytest-randomly = "pytest_randomly"
-pytest-rerunfailures = "pytest_rerunfailures"
-pytest-sphinx = "pytest_sphinx"
-pytest-sugar = "pytest_sugar"
-pytest-timeout = "pytest_timeout"
-pytest-watch = "pytest_watch"
-pytest-xdist = "pytest_xdist"
-python-dotenv = "dotenv"
-pyyaml = "yaml"
-refurb = "refurb"
-requests-cache = "requests_cache"
-requests = "requests"
-rich = "rich"
-ruff = "ruff"
-safety = "safety"
-sphinx-autobuild = "sphinx_autobuild"
-sphinx-autodoc-typehints = "sphinx_autodoc_typehints"
-sphinxcontrib-programoutput = "sphinxcontrib_programoutput"
-sphinxcontrib-spelling = "sphinxcontrib_spelling"
-sphinx-copybutton = "sphinx_copybutton"
-sphinx-design = "sphinx_design"
-sphinxext-opengraph = "sphinxext_opengraph"
-sphinx-rtd-theme = "sphinx_rtd_theme"
-sphinx-sitemap = "sphinx_sitemap"
-sphinx = "sphinx"
-starlette = "starlette"
-tomli = "tomli"
-tomli-w = "tomli_w"
-tox = "tox"
-tox-uv = "tox_uv"
-twine = "twine"
-types-PyYAML = "types_pyyaml"
-types-requests = "types_requests"
-ty = "ty"
-uvicorn = "uvicorn"
 
 [tool.pyproject-fmt]
 # Column width for line wrapping
@@ -515,28 +511,25 @@ indent = 4
 # Keep full version specifiers (don't simplify)
 # Example: keep ">=1.0.0" instead of simplifying to ">=1.0"
 keep_full_version = true
-# Use long table format for better readability
-table_format = "long"
 
 [tool.pytest]
-[tool.pytest.ini_options]
-testpaths = [
+ini_options.testpaths = [
     "tests",
 ]
-python_files = [
+ini_options.python_files = [
     "test_*.py",
 ]
-python_classes = [
+ini_options.python_classes = [
     "Test*",
 ]
-python_functions = [
+ini_options.python_functions = [
     "test_*",
 ]
-timeout = 60
-timeout_method = "thread"
-junit_family = "xunit2"
-junit_logging = "all"
-addopts = [
+ini_options.timeout = 60
+ini_options.timeout_method = "thread"
+ini_options.junit_family = "xunit2"
+ini_options.junit_logging = "all"
+ini_options.addopts = [
     "--strict-markers",
     "--strict-config",
     "-n",
@@ -547,7 +540,7 @@ addopts = [
     "--cov-report=xml",
     "--timeout=60",
 ]
-markers = [
+ini_options.markers = [
     "unit: Unit tests",
     "integration: Integration tests",
     "slow: Slow running tests",
@@ -557,10 +550,15 @@ markers = [
 ]
 
 [tool.coverage]
-[tool.coverage.html]
-directory = "htmlcov"
-[tool.coverage.report]
-exclude_lines = [
+run.branch = true
+run.omit = [
+    "*/__main__.py",
+    "*/tests/*",
+]
+run.source = [
+    "src",
+]
+report.exclude_lines = [
     "@abstractmethod",
     "def __repr__",
     "if __name__ == .__main__.:",
@@ -569,18 +567,10 @@ exclude_lines = [
     "raise AssertionError",
     "raise NotImplementedError",
 ]
-precision = 2
-show_missing = true
-skip_covered = false
-[tool.coverage.run]
-branch = true
-omit = [
-    "*/__main__.py",
-    "*/tests/*",
-]
-source = [
-    "src",
-]
+report.precision = 2
+report.show_missing = true
+report.skip_covered = false
+html.directory = "htmlcov"
 
 [tool.mypy]
 python_version = "3.12"
@@ -618,6 +608,7 @@ disallow_incomplete_defs = true
 disallow_untyped_defs = true
 no_implicit_optional = true
 no_implicit_reexport = true
+
 [[tool.mypy.overrides]]
 module = [
     "tests.*",
@@ -720,16 +711,13 @@ skips = [
 exclude_tests = [  ]
 
 [tool.ty]
+environment.python-version = "3.12"
 rules = {}
-[tool.ty.environment]
-python-version = "3.12"
-[tool.ty.src]
-include = [
+src.include = [
     "src/",
     "tests/",
 ]
-[tool.ty.terminal]
-error-on-warning = false
+terminal.error-on-warning = false
 
 [tool.autoflake]
 check = true
@@ -965,10 +953,8 @@ ignore_names = [
 min_confidence = 60
 
 [tool.pymarkdown]
-[tool.pymarkdown.mode]
-strict-config = true
-[tool.pymarkdown.plugins]
-enabled = [
+mode.strict-config = true
+plugins.enabled = [
     "md001",
     "md002",
     "md003",
@@ -1019,18 +1005,18 @@ enabled = [
     "md052",
     "md053",
 ]
-disabled = [  ]
-md010.enabled = false
-md012.enabled = true
-md013.enabled = false
-md022.enabled = false
-md024.enabled = false
-md029.enabled = false
-md031.enabled = false
-md032.enabled = false
-md033.enabled = false
-md034.enabled = false
-md036.enabled = false
-md040.enabled = false
-md041.enabled = false
-md043.enabled = false
+plugins.disabled = [  ]
+plugins.md010.enabled = false
+plugins.md012.enabled = true
+plugins.md013.enabled = false
+plugins.md022.enabled = false
+plugins.md024.enabled = false
+plugins.md029.enabled = false
+plugins.md031.enabled = false
+plugins.md032.enabled = false
+plugins.md033.enabled = false
+plugins.md034.enabled = false
+plugins.md036.enabled = false
+plugins.md040.enabled = false
+plugins.md041.enabled = false
+plugins.md043.enabled = false
