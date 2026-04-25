@@ -777,8 +777,13 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     is_flag=True,
     help="Enable verbose logging",
 )
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable API response caching (always fetch fresh data)",
+)
 @click.help_option("-h", "--help")
-def interactive(no_fetch: bool, verbose: bool) -> None:
+def interactive(no_fetch: bool, verbose: bool, no_cache: bool) -> None:
     r"""Start interactive mode for exploring NHL Scrabble data.
 
     Interactive mode provides a REPL (Read-Eval-Print Loop) for exploring
@@ -795,8 +800,12 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
       Enable verbose logging for debugging:
         $ nhl-scrabble interactive --verbose
 
+      Disable caching (fetch fresh data):
+        $ nhl-scrabble interactive --no-cache
+
       Combine options:
         $ nhl-scrabble interactive --no-fetch --verbose
+        $ nhl-scrabble interactive --no-fetch --no-cache
     """
     from nhl_scrabble.interactive import InteractiveShell
 
@@ -808,6 +817,10 @@ def interactive(no_fetch: bool, verbose: bool) -> None:
         raise click.ClickException(f"Configuration error: {e}") from e
 
     config.verbose = verbose
+
+    # Override cache setting from CLI
+    if no_cache:
+        config.cache_enabled = False
 
     # Setup logging
     setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
@@ -968,6 +981,11 @@ def generate_search_json(
     is_flag=True,
     help="Suppress progress bars and status messages",
 )
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable API response caching (always fetch fresh data)",
+)
 # === Filtering Options ===
 @click.option(
     "--min-score",
@@ -995,7 +1013,7 @@ def generate_search_json(
     help="Filter by conference name (Eastern or Western)",
 )
 @click.help_option("-h", "--help")
-def search(  # noqa: PLR0913  # CLI function needs many parameters
+def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and parameters
     query: str | None,
     fuzzy: bool,
     limit: int,
@@ -1003,6 +1021,7 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
     output: str | None,
     verbose: bool,
     quiet: bool,
+    no_cache: bool,
     min_score: int | None,
     max_score: int | None,
     teams: str | None,
@@ -1047,6 +1066,9 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
       Save results to file:
         $ nhl-scrabble search --min-score 60 --output high-scorers.txt
 
+      Disable caching (fetch fresh data):
+        $ nhl-scrabble search McDavid --no-cache
+
       Combine multiple filters:
         $ nhl-scrabble search "Connor*" --teams EDM --min-score 40
         $ nhl-scrabble search --divisions Metropolitan --min-score 50 --output metro-high.txt
@@ -1059,6 +1081,10 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
         raise click.ClickException(f"Configuration error: {e}") from e
 
     config.verbose = verbose
+
+    # Override cache setting from CLI
+    if no_cache:
+        config.cache_enabled = False
 
     # Setup logging
     setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)

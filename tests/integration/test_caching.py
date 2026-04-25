@@ -279,3 +279,214 @@ def test_cache_respects_allowable_codes(tmp_path: Path) -> None:
         cache_file = tmp_path / ".nhl_cache.sqlite"
         if cache_file.exists():
             cache_file.unlink()
+
+
+# CLI Command Caching Tests
+
+
+@pytest.mark.integration
+def test_cli_analyze_command_caching(tmp_path: Path) -> None:
+    """Test that analyze command respects cache settings."""
+    import os
+    from unittest.mock import patch
+
+    from click.testing import CliRunner
+
+    from nhl_scrabble.cli import cli
+
+    original_dir = Path.cwd()
+    os.chdir(tmp_path)
+
+    try:
+        cache_file = tmp_path / ".nhl_cache.sqlite"
+        if cache_file.exists():
+            cache_file.unlink()
+
+        # Mock API responses to avoid real API calls
+        mock_teams = {"TOR": {"division": "Atlantic", "conference": "Eastern"}}
+        mock_roster = {
+            "forwards": [{"firstName": {"default": "Test"}, "lastName": {"default": "Player"}}],
+            "defensemen": [],
+            "goalies": [],
+        }
+
+        with (
+            patch("nhl_scrabble.api.nhl_client.NHLApiClient.get_teams", return_value=mock_teams),
+            patch(
+                "nhl_scrabble.api.nhl_client.NHLApiClient.get_team_roster", return_value=mock_roster
+            ),
+        ):
+            runner = CliRunner()
+            result = runner.invoke(cli, ["analyze", "--quiet"])
+            assert result.exit_code == 0, f"Command failed: {result.output}"
+
+            # Cache file should exist
+            assert cache_file.exists(), "Cache file was not created"
+
+        if cache_file.exists():
+            cache_file.unlink()
+    finally:
+        os.chdir(original_dir)
+
+
+@pytest.mark.integration
+def test_cli_analyze_no_cache_flag(tmp_path: Path) -> None:
+    """Test that analyze --no-cache flag disables caching."""
+    import os
+    from unittest.mock import patch
+
+    from click.testing import CliRunner
+
+    from nhl_scrabble.cli import cli
+
+    original_dir = Path.cwd()
+    os.chdir(tmp_path)
+
+    try:
+        cache_file = tmp_path / ".nhl_cache.sqlite"
+        if cache_file.exists():
+            cache_file.unlink()
+
+        # Mock API responses
+        mock_teams = {"TOR": {"division": "Atlantic", "conference": "Eastern"}}
+        mock_roster = {
+            "forwards": [{"firstName": {"default": "Test"}, "lastName": {"default": "Player"}}],
+            "defensemen": [],
+            "goalies": [],
+        }
+
+        with (
+            patch("nhl_scrabble.api.nhl_client.NHLApiClient.get_teams", return_value=mock_teams),
+            patch(
+                "nhl_scrabble.api.nhl_client.NHLApiClient.get_team_roster", return_value=mock_roster
+            ),
+        ):
+            runner = CliRunner()
+            result = runner.invoke(cli, ["analyze", "--quiet", "--no-cache"])
+            assert result.exit_code == 0
+
+            # Cache file should NOT exist (caching disabled)
+            assert not cache_file.exists(), "Cache file was created despite --no-cache flag"
+
+    finally:
+        os.chdir(original_dir)
+
+
+@pytest.mark.integration
+def test_cli_search_command_caching(tmp_path: Path) -> None:
+    """Test that search command respects cache settings."""
+    import os
+    from unittest.mock import patch
+
+    from click.testing import CliRunner
+
+    from nhl_scrabble.cli import cli
+
+    original_dir = Path.cwd()
+    os.chdir(tmp_path)
+
+    try:
+        cache_file = tmp_path / ".nhl_cache.sqlite"
+        if cache_file.exists():
+            cache_file.unlink()
+
+        # Mock API responses
+        mock_teams = {"EDM": {"division": "Pacific", "conference": "Western"}}
+        mock_roster = {
+            "forwards": [{"firstName": {"default": "Connor"}, "lastName": {"default": "McDavid"}}],
+            "defensemen": [],
+            "goalies": [],
+        }
+
+        with (
+            patch("nhl_scrabble.api.nhl_client.NHLApiClient.get_teams", return_value=mock_teams),
+            patch(
+                "nhl_scrabble.api.nhl_client.NHLApiClient.get_team_roster", return_value=mock_roster
+            ),
+        ):
+            runner = CliRunner()
+            result = runner.invoke(cli, ["search", "McDavid", "--quiet"])
+            assert result.exit_code == 0
+
+            # Cache file should exist
+            assert cache_file.exists(), "Cache file was not created"
+
+        if cache_file.exists():
+            cache_file.unlink()
+    finally:
+        os.chdir(original_dir)
+
+
+@pytest.mark.integration
+def test_cli_search_no_cache_flag(tmp_path: Path) -> None:
+    """Test that search --no-cache flag disables caching."""
+    import os
+    from unittest.mock import patch
+
+    from click.testing import CliRunner
+
+    from nhl_scrabble.cli import cli
+
+    original_dir = Path.cwd()
+    os.chdir(tmp_path)
+
+    try:
+        cache_file = tmp_path / ".nhl_cache.sqlite"
+        if cache_file.exists():
+            cache_file.unlink()
+
+        # Mock API responses
+        mock_teams = {"EDM": {"division": "Pacific", "conference": "Western"}}
+        mock_roster = {
+            "forwards": [{"firstName": {"default": "Connor"}, "lastName": {"default": "McDavid"}}],
+            "defensemen": [],
+            "goalies": [],
+        }
+
+        with (
+            patch("nhl_scrabble.api.nhl_client.NHLApiClient.get_teams", return_value=mock_teams),
+            patch(
+                "nhl_scrabble.api.nhl_client.NHLApiClient.get_team_roster", return_value=mock_roster
+            ),
+        ):
+            runner = CliRunner()
+            result = runner.invoke(cli, ["search", "McDavid", "--quiet", "--no-cache"])
+            assert result.exit_code == 0
+
+            # Cache file should NOT exist (caching disabled)
+            assert not cache_file.exists(), "Cache file was created despite --no-cache flag"
+
+    finally:
+        os.chdir(original_dir)
+
+
+@pytest.mark.integration
+def test_cache_statistics_method(tmp_path: Path) -> None:
+    """Test NHLApiClient.get_cache_info() returns cache statistics."""
+    import os
+
+    original_dir = Path.cwd()
+    os.chdir(tmp_path)
+
+    try:
+        # Test with caching enabled
+        with NHLApiClient(cache_enabled=True) as client:
+            cache_info = client.get_cache_info()
+
+            assert isinstance(cache_info, dict)
+            assert "enabled" in cache_info
+            assert cache_info["enabled"] is True
+
+        # Test with caching disabled
+        with NHLApiClient(cache_enabled=False) as client:
+            cache_info = client.get_cache_info()
+
+            assert isinstance(cache_info, dict)
+            assert "enabled" in cache_info
+            assert cache_info["enabled"] is False
+
+    finally:
+        os.chdir(original_dir)
+        cache_file = tmp_path / ".nhl_cache.sqlite"
+        if cache_file.exists():
+            cache_file.unlink()

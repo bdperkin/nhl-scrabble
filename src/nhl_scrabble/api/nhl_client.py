@@ -727,6 +727,50 @@ class NHLApiClient:
         else:
             logger.debug("Cache not available or caching disabled")
 
+    def get_cache_info(self) -> dict[str, Any]:
+        """Get cache statistics and information.
+
+        Returns:
+            Dictionary with cache information:
+            - enabled (bool): Whether caching is enabled
+            - backend (str | None): Cache backend type (e.g., "sqlite")
+            - size (int | None): Number of cached responses
+            - expiry (int): Cache expiry time in seconds
+
+        Examples:
+            >>> client = NHLApiClient(cache_enabled=True)
+            >>> info = client.get_cache_info()
+            >>> print(info["enabled"])
+            True
+            >>> print(info["backend"])
+            'sqlite'
+        """
+        info: dict[str, Any] = {
+            "enabled": self.cache_enabled,
+            "backend": None,
+            "size": None,
+            "expiry": self.cache_expiry,
+        }
+
+        if self.cache_enabled and hasattr(self.session, "cache"):
+            # Get backend type
+            if hasattr(self.session.cache, "db_path"):
+                info["backend"] = "sqlite"
+
+            # Get cache size (number of responses)
+            try:
+                if hasattr(self.session.cache, "responses"):
+                    # requests-cache 1.0+
+                    info["size"] = len(self.session.cache.responses)
+                elif hasattr(self.session.cache, "__len__"):
+                    # Fallback to __len__ if available
+                    info["size"] = len(self.session.cache)
+            except Exception:  # noqa: BLE001
+                # If we can't get size, leave it as None
+                logger.debug("Could not retrieve cache size")
+
+        return info
+
     def close(self) -> None:
         """Close the session and release resources."""
         if not self._closed and hasattr(self, "session"):
