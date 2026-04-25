@@ -44,7 +44,7 @@ Each task includes:
 | 006 | Validate CLI Output Paths                                 | MEDIUM   | 1-2 hours | Completed | [#49](https://github.com/bdperkin/nhl-scrabble/issues/49) | -     |
 | 007 | Fix Branch Protection Hook Failures in CI                 | MEDIUM   | 1-2 hours | Completed | [#58](https://github.com/bdperkin/nhl-scrabble/issues/58)   | -     |
 | 008 | Fix NHLApiClient Session Cleanup Warning                  | MEDIUM   | 1-2 hours | Active    | [#362](https://github.com/bdperkin/nhl-scrabble/issues/362) | -     |
-| 009 | Verify and Validate Caching is Enabled by Default        | MEDIUM   | 2-3 hours | Active    | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | -     |
+| 009 | Verify and Validate Caching is Enabled by Default        | MEDIUM   | 2-3 hours | Completed | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | PR [#368](https://github.com/bdperkin/nhl-scrabble/pull/368), completed 2026-04-24 |
 | 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH     | 30min-1h  | Active    | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | -     |
 
 ### Security
