@@ -160,12 +160,12 @@ class InteractiveShell:
                 args = parts[1:]
 
                 # Check if data is loaded (except for help/exit/refresh)
-                if command not in ["help", "exit", "quit", "refresh"] and not self.data:
+                if command not in ("help", "exit", "quit", "refresh") and not self.data:
                     self.console.print("[red]No data loaded. Use 'refresh' to fetch data.[/red]")
                     continue
 
                 # Execute command
-                if command in ["exit", "quit"]:
+                if command in ("exit", "quit"):
                     break
                 if command == "help":
                     self.cmd_help(args)

@@ -7,6 +7,7 @@ results via browser instead of CLI.
 from __future__ import annotations
 
 import logging
+import operator
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -235,7 +236,7 @@ def _convert_teams_to_dict(
         }
         for team_score in team_scores_dict.values()
     ]
-    teams_data.sort(key=lambda x: x["total_score"], reverse=True)  # type: ignore[arg-type, return-value]
+    teams_data.sort(key=operator.itemgetter("total_score"), reverse=True)  # type: ignore[arg-type, return-value]
     return teams_data
 
 
@@ -311,7 +312,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 
             # Convert player objects to dicts and sort by score
             all_players = _convert_players_to_dict(all_players_objects)
-            all_players.sort(key=lambda x: x["score"], reverse=True)
+            all_players.sort(key=operator.itemgetter("score"), reverse=True)
 
             # Calculate playoff standings
             playoff_calc = PlayoffCalculator()

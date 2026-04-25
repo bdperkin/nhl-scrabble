@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import heapq
+import operator
 from typing import Any
 
 from nhl_scrabble.models.player import PlayerScore
@@ -115,7 +116,7 @@ class StatsReporter(BaseReporter):
             f"[First: {self._format_score(player.first_score, width=2)}, "
             f"Last: {self._format_score(player.last_score, width=2)}]"
             for rank, player in enumerate(top_players, 1)
-            for div_abbrev in [player.division.split()[0][:3].upper()]
+            for div_abbrev in (player.division.split()[0][:3].upper(),)
         )
 
         # Fun stats
@@ -163,7 +164,7 @@ class StatsReporter(BaseReporter):
         }
 
         if division_avg_per_player:
-            top_division = max(division_avg_per_player.items(), key=lambda x: x[1])
+            top_division = max(division_avg_per_player.items(), key=operator.itemgetter(1))
             parts.append(
                 f"\n\nHighest Avg Division (per player): "
                 f"{top_division[0]} = {self._format_average(top_division[1])} points/player"
@@ -176,7 +177,7 @@ class StatsReporter(BaseReporter):
         }
 
         if conference_avg_per_player:
-            top_conference = max(conference_avg_per_player.items(), key=lambda x: x[1])
+            top_conference = max(conference_avg_per_player.items(), key=operator.itemgetter(1))
             parts.append(
                 f"\nHighest Avg Conference (per player): "
                 f"{top_conference[0]} = {self._format_average(top_conference[1])} points/player"

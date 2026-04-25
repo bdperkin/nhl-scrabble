@@ -86,12 +86,12 @@ class TemplateFormatter:
         template_content = self.template_path.read_text()
 
         # Create template environment with autoescape enabled (security: prevent XSS)
-        env = Environment(autoescape=select_autoescape(default=True))
-        template = env.from_string(template_content)
+        template = Environment(autoescape=select_autoescape(default=True)).from_string(
+            template_content
+        )
 
         # Add timestamp to data
-        template_data = {
-            **data,
+        template_data = data | {
             "timestamp": datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
         }
 

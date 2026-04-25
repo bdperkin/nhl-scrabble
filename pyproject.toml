@@ -414,7 +414,10 @@ skip_glob = [
 [tool.refurb]
 enable_all = true
 python_version = "3.12"
-ignore = []
+ignore = [
+    "FURB113",  # Multiple append() calls are sometimes more readable than extend()
+    "FURB120",  # Explicit default arguments can improve code clarity
+]
 
 [tool.ssort]
 skip = [

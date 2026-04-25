@@ -36,7 +36,7 @@ class JSONFormatter(logging.Formatter):
 
         # Add any extra fields
         for key, value in record.__dict__.items():
-            if key not in [
+            if key not in (
                 "name",
                 "msg",
                 "args",
@@ -58,7 +58,7 @@ class JSONFormatter(logging.Formatter):
                 "exc_info",
                 "exc_text",
                 "stack_info",
-            ]:
+            ):
                 log_data[key] = value
 
         return json.dumps(log_data)
@@ -90,7 +90,7 @@ def setup_logging(
 
     # Remove existing handlers
     root_logger = logging.getLogger()
-    for handler in root_logger.handlers[:]:
+    for handler in root_logger.handlers.copy():
         root_logger.removeHandler(handler)
 
     # Create console handler

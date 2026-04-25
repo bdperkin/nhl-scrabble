@@ -300,7 +300,7 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 **Python Modernization Hooks (2 from asottile/pyupgrade and local):**
 
 - `pyupgrade`: Modernize Python syntax for Python 3.12+ (f-strings, type hints, removes deprecated imports)
-- `refurb`: Python code modernization linter (pathlib, comprehensions, modern idioms) - **warning mode, non-blocking**
+- `refurb`: Python code modernization linter (pathlib, comprehensions, modern idioms)
 
 **Python Statement Sorting Hooks (1 from bwhmather/ssort):**
 

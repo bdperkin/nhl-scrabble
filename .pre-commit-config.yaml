@@ -411,16 +411,16 @@ repos:
   - repo: local
     hooks:
       - id: refurb
-        name: refurb (warning mode - non-blocking)
+        name: refurb
         # Comprehensive code modernization (matches ruff's ALL rules philosophy)
-        # WARNING MODE: Shows suggestions but doesn't block commits during adoption phase
+        # Blocking: Enforces modern Python idioms and patterns
         description: Python code modernization linter (pathlib, comprehensions, modern idioms)
-        entry: bash -c 'refurb src/ --enable-all || true'
+        entry: refurb src/ --enable-all
         language: system
         types: [python]
         pass_filenames: false
         verbose: true
-        # Non-blocking during adoption phase (remove '|| true' after team training)
+        # Blocking: refurb suggestions will prevent commits
         # Configuration is read automatically from pyproject.toml
 
   # ============================================================================

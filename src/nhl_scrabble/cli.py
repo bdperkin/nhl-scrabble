@@ -9,6 +9,7 @@ import signal
 import sys
 import time
 import types
+from contextlib import suppress
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -1603,7 +1604,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
 
     # Watch loop
     iteration = 0
-    try:
+    with suppress(KeyboardInterrupt):
         while not shutdown_flag[0]:
             iteration += 1
             timestamp = datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -1658,10 +1659,6 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
                         f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
                     )
                     _interruptible_sleep(interval, shutdown_flag)
-
-    except KeyboardInterrupt:
-        # Additional safety net
-        pass
 
     # Clean shutdown
     console.print("\n" + "=" * 80)

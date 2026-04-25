@@ -6,6 +6,7 @@ import random
 import time
 import types
 import weakref
+from contextlib import suppress
 from datetime import timedelta
 from typing import Any, ClassVar
 
@@ -201,7 +202,6 @@ class NHLApiClient:
         adapter = HTTPAdapter(
             pool_connections=dos_max_connections,
             pool_maxsize=dos_max_per_host,
-            max_retries=0,  # We handle retries ourselves via @retry decorator
         )
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
@@ -234,7 +234,7 @@ class NHLApiClient:
             NHLApiError: If URL fails SSRF protection validation
         """
         try:
-            validate_url_for_ssrf(url, allow_private=False)
+            validate_url_for_ssrf(url)
         except SSRFProtectionError as e:
             logger.error(f"SSRF protection blocked request to {url}: {e}")
             raise NHLApiError(f"Request blocked by security protection: {e}") from e
@@ -259,13 +259,10 @@ class NHLApiClient:
         retry_after = response.headers.get("Retry-After")
 
         if retry_after:
-            try:
-                # Try as integer (seconds)
+            # Try as integer (seconds)
+            # Could be HTTP date format, but uncommon for 429 - default to exponential backoff
+            with suppress(ValueError):
                 return float(retry_after)
-            except ValueError:
-                # Could be HTTP date format, but uncommon for 429
-                # Default to exponential backoff
-                pass
 
         # No Retry-After header, use exponential backoff
         # Start with 1 second
@@ -474,7 +471,7 @@ class NHLApiClient:
         Note:
             Modifies roster_data in-place for efficiency
         """
-        for position in ["forwards", "defensemen", "goalies"]:
+        for position in ("forwards", "defensemen", "goalies"):
             if position not in roster_data:
                 continue
 

@@ -100,11 +100,11 @@ class PlayoffCalculator:
         """
         wild_cards: dict[str, list[PlayoffTeam]] = {}
 
-        for conference in ["Eastern", "Western"]:
+        for conference in ("Eastern", "Western"):
             # Get all teams in this conference not in top 3 of their division
             wild_card_candidates: list[PlayoffTeam] = []
 
-            for _division, teams in teams_by_division.items():
+            for teams in teams_by_division.values():
                 # Check if this division is in this conference
                 if teams and teams[0].conference == conference:
                     # Add teams not already in playoffs (not in top 3 of their division)
@@ -154,7 +154,7 @@ class PlayoffCalculator:
         """
         conference_leaders: dict[str, PlayoffTeam] = {}
 
-        for conference in ["Eastern", "Western"]:
+        for conference in ("Eastern", "Western"):
             conf_teams = [t for t in all_teams if t.conference == conference]
             if conf_teams:
                 conference_leaders[conference] = max(conf_teams, key=lambda x: (x.total, x.avg))

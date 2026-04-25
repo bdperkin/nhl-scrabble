@@ -193,7 +193,7 @@ class StatisticsDashboard:
         table.add_column("Top Team", style="magenta")
 
         # Filter divisions if needed
-        divisions = dict(self.division_standings)
+        divisions = self.division_standings.copy()
         if self.division_filter:
             divisions = {k: v for k, v in divisions.items() if k == self.division_filter}
 
@@ -230,7 +230,7 @@ class StatisticsDashboard:
         table.add_column("Top Team", style="magenta")
 
         # Filter conferences if needed
-        conferences = dict(self.conference_standings)
+        conferences = self.conference_standings.copy()
         if self.conference_filter:
             conferences = {k: v for k, v in conferences.items() if k == self.conference_filter}
 
