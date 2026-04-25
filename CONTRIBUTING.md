@@ -724,6 +724,12 @@ make ty
 # Comprehensive type checking (ty + mypy)
 make type-check
 
+# Format pyproject.toml configuration file
+make pyproject-fmt
+# or via tox: tox -e pyproject-fmt
+# or directly: pyproject-fmt pyproject.toml
+# Note: pyproject.toml is automatically formatted on commit via pre-commit hook
+
 # Modernize Python syntax with pyupgrade
 tox -e pyupgrade
 # or directly: pyupgrade --py312-plus $(find src tests -name "*.py")
