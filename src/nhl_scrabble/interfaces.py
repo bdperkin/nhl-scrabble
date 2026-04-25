@@ -33,6 +33,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
+    import types
     from collections.abc import Callable
 
     from nhl_scrabble.models.player import PlayerScore
@@ -50,7 +51,8 @@ class APIClientProtocol(Protocol):
         Implementations should be thread-safe for concurrent roster fetching.
 
     Resource Management:
-        Implementations should support context manager protocol for session cleanup.
+        Implementations must support context manager protocol for automatic session cleanup.
+        Use as: `with api_client: ...` to ensure proper resource cleanup.
     """
 
     def get_teams(self, season: str | None = None) -> dict[str, dict[str, str]]:
@@ -104,6 +106,39 @@ class APIClientProtocol(Protocol):
 
         Should be called when the client is no longer needed to properly clean up network
         connections and resources.
+        """
+        ...
+
+    def __enter__(self) -> APIClientProtocol:
+        """Enter context manager - returns self.
+
+        Enables usage with `with` statement for automatic resource cleanup.
+
+        Returns:
+            Self (the API client instance)
+
+        Examples:
+            >>> with api_client as client:
+            ...     teams = client.get_teams()
+            ...     # Session automatically closed on exit
+        """
+        ...
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
+    ) -> None:
+        """Exit context manager - cleanup resources.
+
+        Automatically closes the client session when exiting the `with` block,
+        even if an exception occurred during processing.
+
+        Args:
+            exc_type: Exception type if an exception was raised, None otherwise
+            exc_val: Exception value if an exception was raised, None otherwise
+            exc_tb: Exception traceback if an exception was raised, None otherwise
         """
         ...
 

@@ -260,138 +260,141 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     # Create dependency container
     container = DependencyContainer(config)
 
-    # Initialize components using dependency injection
-    api_client = container.create_api_client()
-    scorer = container.create_scorer(letter_values=scoring_values)
-    team_processor = container.create_team_processor(
-        api_client=api_client,
-        scorer=scorer,
-    )
-    playoff_calculator = PlayoffCalculator()
-
-    # Clear cache if requested
-    if clear_cache:
-        api_client.clear_cache()
-        logger.info("API cache cleared")
-
-    # Create progress manager
-    progress_mgr = ProgressManager(enabled=not quiet)
-
-    # Get team count for progress tracking
-    teams_info = api_client.get_teams(season=season)
-    total_teams = len(teams_info)
-
-    # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
-
-    # Display summary (only if not quiet)
-    if not quiet:
-        console.print(
-            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-            f"{len(team_scores) + len(failed_teams)} teams"
+    # Use api_client as context manager for automatic cleanup
+    with container.create_api_client() as api_client:
+        # Initialize components using dependency injection
+        scorer = container.create_scorer(letter_values=scoring_values)
+        team_processor = container.create_team_processor(
+            api_client=api_client,
+            scorer=scorer,
         )
-        if failed_teams:
-            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+        playoff_calculator = PlayoffCalculator()
 
-    # Calculate standings
-    division_standings = team_processor.calculate_division_standings(team_scores)
-    conference_standings = team_processor.calculate_conference_standings(team_scores)
-    playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
+        # Clear cache if requested
+        if clear_cache:
+            api_client.clear_cache()
+            logger.info("API cache cleared")
 
-    # Apply filters if specified
-    if filters and filters.is_active():
-        from nhl_scrabble.filters import (
-            filter_conference_standings,
-            filter_division_standings,
-            filter_players,
-            filter_playoff_standings,
-            filter_teams,
-        )
+        # Create progress manager
+        progress_mgr = ProgressManager(enabled=not quiet)
 
-        logger.info("Applying filters to analysis results")
-        team_scores = filter_teams(team_scores, filters)
-        all_players = filter_players(all_players, filters)
-        division_standings = filter_division_standings(division_standings, filters)
-        conference_standings = filter_conference_standings(conference_standings, filters)
-        playoff_standings = filter_playoff_standings(playoff_standings, filters)
+        # Get team count for progress tracking
+        teams_info = api_client.get_teams(season=season)
+        total_teams = len(teams_info)
 
-        # Log filter results
+        # Process all teams with progress tracking
+        with progress_mgr.track_api_fetching(total_teams):
+            team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
+
+        # Display summary (only if not quiet)
         if not quiet:
             console.print(
-                f"\n[green]✓[/green] Filters applied: {len(team_scores)} teams, "
-                f"{len(all_players)} players"
+                f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+                f"{len(team_scores) + len(failed_teams)} teams"
+            )
+            if failed_teams:
+                console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+        # Calculate standings
+        division_standings = team_processor.calculate_division_standings(team_scores)
+        conference_standings = team_processor.calculate_conference_standings(team_scores)
+        playoff_standings = playoff_calculator.calculate_playoff_standings(team_scores)
+
+        # Apply filters if specified
+        if filters and filters.is_active():
+            from nhl_scrabble.filters import (
+                filter_conference_standings,
+                filter_division_standings,
+                filter_players,
+                filter_playoff_standings,
+                filter_teams,
             )
 
-    # Excel format uses special exporter (multi-sheet workbook)
-    if config.output_format == "excel":
-        if output_path:
-            generate_excel_report(
-                team_scores,
-                all_players,
-                division_standings,
-                conference_standings,
-                playoff_standings,
-                output_path,
-                sheets,
+            logger.info("Applying filters to analysis results")
+            team_scores = filter_teams(team_scores, filters)
+            all_players = filter_players(all_players, filters)
+            division_standings = filter_division_standings(division_standings, filters)
+            conference_standings = filter_conference_standings(conference_standings, filters)
+            playoff_standings = filter_playoff_standings(playoff_standings, filters)
+
+            # Log filter results
+            if not quiet:
+                console.print(
+                    f"\n[green]✓[/green] Filters applied: {len(team_scores)} teams, "
+                    f"{len(all_players)} players"
+                )
+
+        # Excel format uses special exporter (multi-sheet workbook)
+        if config.output_format == "excel":
+            if output_path:
+                generate_excel_report(
+                    team_scores,
+                    all_players,
+                    division_standings,
+                    conference_standings,
+                    playoff_standings,
+                    output_path,
+                    sheets,
+                )
+                return None
+            raise ValueError("Excel format requires output path")
+
+        # For text format, use the existing rich report generator
+        if config.output_format == "text":
+            report_generator = ReportGenerator(
+                team_scores=team_scores,
+                all_players=all_players,
+                division_standings=division_standings,
+                conference_standings=conference_standings,
+                playoff_standings=playoff_standings,
+                top_players_count=config.top_players_count,
+                top_team_players_count=config.top_team_players_count,
             )
-            return None
-        raise ValueError("Excel format requires output path")
+            return report_generator.get_report(report_filter)
 
-    # For text format, use the existing rich report generator
-    if config.output_format == "text":
-        report_generator = ReportGenerator(
-            team_scores=team_scores,
-            all_players=all_players,
-            division_standings=division_standings,
-            conference_standings=conference_standings,
-            playoff_standings=playoff_standings,
-            top_players_count=config.top_players_count,
-            top_team_players_count=config.top_team_players_count,
-        )
-        return report_generator.get_report(report_filter)
+        # For all other formats, use the formatter factory
+        from nhl_scrabble.formatters import get_formatter
 
-    # For all other formats, use the formatter factory
-    from nhl_scrabble.formatters import get_formatter
-
-    # Prepare data dictionary for formatters
-    teams_data = {
-        abbrev: {
-            "total": team.total,
-            "players": [asdict(p) for p in team.players],
-            "division": team.division,
-            "conference": team.conference,
-            "avg_per_player": team.avg_per_player,
+        # Prepare data dictionary for formatters
+        teams_data = {
+            abbrev: {
+                "total": team.total,
+                "players": [asdict(p) for p in team.players],
+                "division": team.division,
+                "conference": team.conference,
+                "avg_per_player": team.avg_per_player,
+            }
+            for abbrev, team in team_scores.items()
         }
-        for abbrev, team in team_scores.items()
-    }
 
-    divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
-    conferences_data = {name: asdict(standing) for name, standing in conference_standings.items()}
-    playoffs_data = {
-        conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
-    }
+        divisions_data = {name: asdict(standing) for name, standing in division_standings.items()}
+        conferences_data = {
+            name: asdict(standing) for name, standing in conference_standings.items()
+        }
+        playoffs_data = {
+            conf: [asdict(team) for team in teams] for conf, teams in playoff_standings.items()
+        }
 
-    formatter_data = {
-        "teams": teams_data,
-        "divisions": divisions_data,
-        "conferences": conferences_data,
-        "playoffs": playoffs_data,
-        "summary": {
-            "total_teams": len(team_scores),
-            "total_players": len(all_players),
-        },
-    }
+        formatter_data = {
+            "teams": teams_data,
+            "divisions": divisions_data,
+            "conferences": conferences_data,
+            "playoffs": playoffs_data,
+            "summary": {
+                "total_teams": len(team_scores),
+                "total_players": len(all_players),
+            },
+        }
 
-    # Get appropriate formatter
-    formatter_kwargs = {}
-    if config.output_format == "template":
-        formatter_kwargs["template_file"] = template_file
+        # Get appropriate formatter
+        formatter_kwargs = {}
+        if config.output_format == "template":
+            formatter_kwargs["template_file"] = template_file
 
-    formatter = get_formatter(config.output_format, **formatter_kwargs)
+        formatter = get_formatter(config.output_format, **formatter_kwargs)
 
-    # Generate and return formatted output
-    return formatter.format(formatter_data)
+        # Generate and return formatted output
+        return formatter.format(formatter_data)
 
 
 @cli.command()
@@ -1073,57 +1076,67 @@ def search(  # noqa: PLR0913  # CLI function needs many parameters
 
         # Initialize components using dependency injection
         container = DependencyContainer(config)
-        api_client = container.create_api_client()
-        scorer = container.create_scorer()
-        team_processor = container.create_team_processor(
-            api_client=api_client,
-            scorer=scorer,
-        )
 
-        # Process all teams (progress handled internally by TeamProcessor)
-        _, all_players, failed_teams = team_processor.process_all_teams()
-
-        # Display summary (only if not quiet)
-        if not quiet and failed_teams:
-            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
-
-        # Create search instance
-        searcher = PlayerSearch(all_players)
-
-        # Perform search
-        results = searcher.search(
-            query or "",
-            fuzzy=fuzzy,
-            min_score=min_score,
-            max_score=max_score,
-            team=teams,
-            division=divisions,
-            conference=conferences,
-        )
-
-        # Limit results
-        if limit and len(results) > limit:
-            results = results[:limit]
-
-        # Generate output
-        if output_format == "json":
-            output_text = generate_search_json(results, query, searcher.get_stats())
-        else:
-            output_text = generate_search_text(
-                results, query, fuzzy, min_score, max_score, teams, divisions, conferences, limit
+        # Use api_client as context manager for automatic cleanup
+        with container.create_api_client() as api_client:
+            scorer = container.create_scorer()
+            team_processor = container.create_team_processor(
+                api_client=api_client,
+                scorer=scorer,
             )
 
-        # Output results
-        if output:
-            Path(output).write_text(output_text)
-            if not quiet:
-                console.print(f"\n[green]✓[/green] Results saved to: {output}")
-        else:
-            print(output_text)
+            # Process all teams (progress handled internally by TeamProcessor)
+            _, all_players, failed_teams = team_processor.process_all_teams()
 
-        if not quiet:
-            console.print("\n" + "=" * 80)
-            console.print("[green]✓ Search complete![/green]")
+            # Display summary (only if not quiet)
+            if not quiet and failed_teams:
+                console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+            # Create search instance
+            searcher = PlayerSearch(all_players)
+
+            # Perform search
+            results = searcher.search(
+                query or "",
+                fuzzy=fuzzy,
+                min_score=min_score,
+                max_score=max_score,
+                team=teams,
+                division=divisions,
+                conference=conferences,
+            )
+
+            # Limit results
+            if limit and len(results) > limit:
+                results = results[:limit]
+
+            # Generate output
+            if output_format == "json":
+                output_text = generate_search_json(results, query, searcher.get_stats())
+            else:
+                output_text = generate_search_text(
+                    results,
+                    query,
+                    fuzzy,
+                    min_score,
+                    max_score,
+                    teams,
+                    divisions,
+                    conferences,
+                    limit,
+                )
+
+            # Output results
+            if output:
+                Path(output).write_text(output_text)
+                if not quiet:
+                    console.print(f"\n[green]✓[/green] Results saved to: {output}")
+            else:
+                print(output_text)
+
+            if not quiet:
+                console.print("\n" + "=" * 80)
+                console.print("[green]✓ Search complete![/green]")
 
     except NHLApiError as e:
         logger.error(f"NHL API error: {e}")
@@ -1217,43 +1230,45 @@ def fetch_dashboard_data(
     """
     # Initialize components using dependency injection
     container = DependencyContainer(config)
-    api_client = container.create_api_client()
-    scorer = container.create_scorer()
-    team_processor = container.create_team_processor(
-        api_client=api_client,
-        scorer=scorer,
-    )
 
-    # Create progress manager
-    progress_mgr = ProgressManager(enabled=not quiet)
-
-    # Get team count for progress tracking
-    teams_info = api_client.get_teams(season=season)
-    total_teams = len(teams_info)
-
-    # Process all teams with progress tracking
-    with progress_mgr.track_api_fetching(total_teams):
-        team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
-
-    # Display summary (only if not quiet)
-    if not quiet:
-        console.print(
-            f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-            f"{len(team_scores) + len(failed_teams)} teams"
+    # Use api_client as context manager for automatic cleanup
+    with container.create_api_client() as api_client:
+        scorer = container.create_scorer()
+        team_processor = container.create_team_processor(
+            api_client=api_client,
+            scorer=scorer,
         )
-        if failed_teams:
-            console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
 
-    # Calculate standings
-    division_standings = team_processor.calculate_division_standings(team_scores)
-    conference_standings = team_processor.calculate_conference_standings(team_scores)
+        # Create progress manager
+        progress_mgr = ProgressManager(enabled=not quiet)
 
-    return {
-        "team_scores": team_scores,
-        "all_players": all_players,
-        "division_standings": division_standings,
-        "conference_standings": conference_standings,
-    }
+        # Get team count for progress tracking
+        teams_info = api_client.get_teams(season=season)
+        total_teams = len(teams_info)
+
+        # Process all teams with progress tracking
+        with progress_mgr.track_api_fetching(total_teams):
+            team_scores, all_players, failed_teams = team_processor.process_all_teams(season=season)
+
+        # Display summary (only if not quiet)
+        if not quiet:
+            console.print(
+                f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
+                f"{len(team_scores) + len(failed_teams)} teams"
+            )
+            if failed_teams:
+                console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+
+        # Calculate standings
+        division_standings = team_processor.calculate_division_standings(team_scores)
+        conference_standings = team_processor.calculate_conference_standings(team_scores)
+
+        return {
+            "team_scores": team_scores,
+            "all_players": all_players,
+            "division_standings": division_standings,
+            "conference_standings": conference_standings,
+        }
 
 
 @cli.command()
