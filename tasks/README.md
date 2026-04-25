@@ -115,9 +115,9 @@ Each task includes:
 | 012 | Enhance Implement-Task Skill with Pre-Flight Validation       | MEDIUM   | 1-2 hours                                                  | Completed | [#225](https://github.com/bdperkin/nhl-scrabble/issues/225) | -                                                                        |
 | 015 | Add Standard Short Options to CLI Commands                    | MEDIUM   | 30-60 minutes                                              | Completed | [#229](https://github.com/bdperkin/nhl-scrabble/issues/229) | PR [#320](https://github.com/bdperkin/nhl-scrabble/pull/320), 2026-04-21 |
 | 016 | Format CLI Help Examples with Comments                        | LOW      | 15-30 minutes                                              | Completed | [#230](https://github.com/bdperkin/nhl-scrabble/issues/230) | PR #319, completed 2026-04-21                                            |
-| 017 | Expand CLI Output Formats                                     | MEDIUM   | 3-4 hours                                                  | Active    | [#231](https://github.com/bdperkin/nhl-scrabble/issues/231) | -                                                                        |
+| 017 | Expand CLI Output Formats                                     | MEDIUM   | 3-4 hours                                                  | Completed | [#231](https://github.com/bdperkin/nhl-scrabble/issues/231) | PR [#328](https://github.com/bdperkin/nhl-scrabble/pull/328), 2026-04-22 |
 | 018 | Support Additional Sphinx Output Formats                      | MEDIUM   | 2-3 hours                                                  | Completed | [#232](https://github.com/bdperkin/nhl-scrabble/issues/232) | PR [#330](https://github.com/bdperkin/nhl-scrabble/pull/330), 2026-04-22 |
-| 019 | Integrate Sphinx Doctest and Linkcheck into Build Process     | MEDIUM   | 1-2 hours                                                  | Active    | [#233](https://github.com/bdperkin/nhl-scrabble/issues/233) | -                                                                        |
+| 019 | Integrate Sphinx Doctest and Linkcheck into Build Process     | MEDIUM   | 1-2 hours                                                  | Completed | [#233](https://github.com/bdperkin/nhl-scrabble/issues/233) | PR [#333](https://github.com/bdperkin/nhl-scrabble/pull/333), 2026-04-22 |
 | 020 | Enable Colorized Log Output Formatting                        | LOW      | 45 minutes                                                 | Completed | [#234](https://github.com/bdperkin/nhl-scrabble/issues/234) | PR [#321](https://github.com/bdperkin/nhl-scrabble/pull/321), 2026-04-21 |
 | 021 | Optimize Tox Execution with Parallel and Fail-Fast Behavior   | MEDIUM   | 3-5 hours                                                  | Completed | [#283](https://github.com/bdperkin/nhl-scrabble/issues/283) | PR [#326](https://github.com/bdperkin/nhl-scrabble/pull/326), 2026-04-22 |
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -                                                                        |
@@ -127,6 +127,7 @@ Each task includes:
 | 026 | Add Automated Code Example Testing to CI                      | MEDIUM   | 2 hours                                                    | Active    | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | From documentation audit (task 013), gap #3                              |
 | 027 | Improve Function Example Coverage in Docstrings               | MEDIUM   | 3-4 hours                                                  | Active    | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | From documentation audit (task 013), gap #4                              |
 | 028 | Add Unicode Normalization for Player Names                    | MEDIUM   | 2-3 hours                                                  | Completed | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | PR [#374](https://github.com/bdperkin/nhl-scrabble/pull/374), completed 2026-04-25, actual effort: 2.5h |
+| 029 | Track ty Type Checker Validation Period (1-2 weeks)          | MEDIUM   | 1-2 weeks                                                  | Active    | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | Validation tracking for ty integration (PR #324)                         |
 
 ### Testing
 
@@ -224,7 +225,7 @@ Each task includes:
 | 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -                                                                                      |
 | 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1.5 hours           | Completed | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | [PR #336](https://github.com/bdperkin/nhl-scrabble/pull/336)                           |
 | 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -                                                                                      |
-| 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Active    | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | -                                                                                      |
+| 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Completed | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | PR [#361](https://github.com/bdperkin/nhl-scrabble/pull/361), 2026-04-24, 6h actual    |
 | 007 | Add Dependency Injection                                                      | LOW      | 8-10 hours          | Completed | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | PR [#360](https://github.com/bdperkin/nhl-scrabble/pull/360), 2026-04-24, 6h actual    |
 | 008 | Repository Cleanup and Consolidation                                          | MEDIUM   | 4-6 hours           | Completed | [#216](https://github.com/bdperkin/nhl-scrabble/issues/216) | -                                                                                      |
 | 009 | Git Branch Pruning Automation                                                 | MEDIUM   | 30-60 minutes       | Completed | [#220](https://github.com/bdperkin/nhl-scrabble/issues/220) | -                                                                                      |
@@ -245,7 +246,7 @@ Each task includes:
 | 024 | Make 'ty' Blocking After Validation Period                                    | LOW      | 30min-1h            | Active    | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | -                                                                                      |
 | 025 | Make 'refurb' Blocking After Validation Period                                | LOW      | 30min-1h            | Completed | [#356](https://github.com/bdperkin/nhl-scrabble/issues/356) | PR [#370](https://github.com/bdperkin/nhl-scrabble/pull/370), 2026-04-24, 1.5h actual |
 | 026 | Make 'gitlint' Blocking (Except GitHub CI Workflows) After Validation Period  | LOW      | 30min-1h            | Completed | [#357](https://github.com/bdperkin/nhl-scrabble/issues/357) | PR [#371](https://github.com/bdperkin/nhl-scrabble/pull/371), 2026-04-24, 45min actual |
-| 027 | Audit and Adjust Logging Levels                                               | LOW      | 2-3 hours           | Active    | [#364](https://github.com/bdperkin/nhl-scrabble/issues/364) | -                                                                                      |
+| 027 | Audit and Adjust Logging Levels                                               | LOW      | 2-3 hours           | Completed | [#364](https://github.com/bdperkin/nhl-scrabble/issues/364) | PR [#376](https://github.com/bdperkin/nhl-scrabble/pull/376), 2026-04-25, 3h actual    |
 
 ## Statistics
 
@@ -256,11 +257,11 @@ Each task includes:
 | Bug Fixes    | 1      | 10        | 11      |
 | Security     | 1      | 14        | 15      |
 | Optimization | 0      | 13        | 13      |
-| Enhancement  | 6      | 33        | 39      |
+| Enhancement  | 7      | 33        | 40      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 6      | 24        | 30      |
-| **TOTAL**    | **59** | **123**   | **182** |
+| Refactoring  | 5      | 25        | 30      |
+| **TOTAL**    | **59** | **124**   | **183** |
 
 ### Effort Estimates by Category
 
@@ -282,11 +283,11 @@ Each task includes:
 | Bug Fixes    | 90.9%           |
 | Security     | 93.3%           |
 | Optimization | 100.0%          |
-| Enhancement  | 84.6%           |
+| Enhancement  | 82.5%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
-| Refactoring  | 76.7%           |
-| **OVERALL**  | **67.0%**       |
+| Refactoring  | 83.3%           |
+| **OVERALL**  | **67.8%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -294,8 +295,8 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 1     |
-| MEDIUM   | 57    |
-| LOW      | 0     |
+| MEDIUM   | 55    |
+| LOW      | 3     |
 
 ## Recommended Implementation Order
 
@@ -309,7 +310,7 @@ _No critical priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 182 tasks (60 active, 122 completed)
+**Total Tasks**: 183 tasks (59 active, 124 completed)
 
 - **Total Estimated Effort**: 1043.5 hours
   - Active Tasks: ~500 hours
