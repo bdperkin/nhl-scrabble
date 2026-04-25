@@ -95,7 +95,7 @@ class TestConfigInjectionPrevention:
 
     def test_rejects_invalid_output_format(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test config rejects invalid output format."""
-        monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", "xml")
+        monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", "invalid_format")
 
         with pytest.raises(
             ValueError,

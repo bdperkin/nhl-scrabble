@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Output Format Validation** - Fixed CLI-Config mismatch for output formats (#366)
+  - Config now accepts all 10 CLI-advertised formats: text, json, yaml, xml, html, table, markdown, csv, excel, template
+  - Previously, formats like markdown, yaml, xml, table, and template were accepted by CLI but rejected by Config
+  - Users no longer get confusing pydantic ValidationError when using valid CLI format options
+  - Added comprehensive unit and integration tests to prevent future CLI-Config inconsistencies
+- **Logging Verbosity** - Reduced excessive INFO logging during analysis
+  - Suppressed verbose dicttoxml INFO logging when using XML output format
+  - Changed "Active filters" message from INFO to DEBUG (already shown in console output)
+  - Users now see clean, concise output without internal library debug messages
+
 ## [0.0.1] - TBD
 
 ### Added

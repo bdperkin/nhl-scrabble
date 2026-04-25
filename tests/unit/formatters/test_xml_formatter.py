@@ -67,3 +67,37 @@ def test_xml_formatter_import_error_without_dicttoxml(
     formatter = XMLFormatter()
     with pytest.raises(ImportError, match="dicttoxml is required"):
         formatter.format(sample_data)
+
+
+def test_xml_formatter_suppresses_dicttoxml_logging(
+    sample_data: dict[str, Any], caplog: pytest.LogCaptureFixture
+) -> None:
+    """Test XML formatter suppresses verbose dicttoxml INFO logging.
+
+    Related to issue #366 - dicttoxml library logs verbose INFO messages
+    showing entire data dictionary during conversion, which clutters output.
+    This test verifies dicttoxml logger is set to WARNING level.
+    """
+    pytest.importorskip("dicttoxml")
+
+    import logging
+
+    # Capture logs at INFO level
+    caplog.set_level(logging.INFO)
+
+    formatter = XMLFormatter()
+    output = formatter.format(sample_data)
+
+    # Should produce valid XML
+    assert "<nhl_scrabble>" in output
+
+    # Should NOT have dicttoxml INFO messages in logs
+    # (dicttoxml logs things like "Inside unicode_me(). val = ...")
+    dicttoxml_logs = [record for record in caplog.records if record.name == "dicttoxml"]
+
+    # All dicttoxml logs should be WARNING or higher (no INFO/DEBUG)
+    info_logs = [log for log in dicttoxml_logs if log.levelno < logging.WARNING]
+    assert len(info_logs) == 0, (
+        f"dicttoxml should not log at INFO level, but got {len(info_logs)} INFO messages: "
+        f"{[log.message for log in info_logs]}"
+    )

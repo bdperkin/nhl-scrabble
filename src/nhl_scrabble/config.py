@@ -382,7 +382,18 @@ class Config(BaseSettings):
                 "output_format",
                 "NHL_SCRABBLE_OUTPUT_FORMAT",
                 "text",
-                {"text", "json", "html", "csv", "excel"},
+                {
+                    "text",
+                    "json",
+                    "yaml",
+                    "xml",
+                    "html",
+                    "table",
+                    "markdown",
+                    "csv",
+                    "excel",
+                    "template",
+                },
             ),
             "sanitize_logs": get_bool(
                 "sanitize_logs", "NHL_SCRABBLE_SANITIZE_LOGS", True  # noqa: FBT003

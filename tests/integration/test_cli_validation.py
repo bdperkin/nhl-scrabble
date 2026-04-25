@@ -181,7 +181,7 @@ class TestEnvironmentVariableValidation:
 
     def test_invalid_output_format(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test invalid output format from env is rejected."""
-        monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", "xml")
+        monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", "invalid_format")
 
         runner = CliRunner()
         result = runner.invoke(cli, ["analyze"])
