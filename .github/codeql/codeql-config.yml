@@ -1,0 +1,29 @@
+# CodeQL Configuration
+# Configures CodeQL code scanning for the repository
+
+name: "CodeQL Config"
+
+# Paths to exclude from analysis
+paths-ignore:
+  - '**/test_*.py'  # Exclude test files from certain checks
+  - '**/__pycache__/**'
+  - '**/.*'
+  - 'docs/**'
+
+# Query filters to reduce false positives
+query-filters:
+  # Suppress "ineffectual statement" warnings in Protocol method docstrings
+  # Protocol methods require docstrings but have empty bodies (just `...`)
+  # CodeQL incorrectly flags docstrings as ineffectual statements
+  - exclude:
+      id: py/ineffectual-statement
+      paths:
+        - src/nhl_scrabble/interfaces.py
+
+  # Suppress "unreachable code" warnings in pytest test files
+  # CodeQL doesn't properly understand pytest.raises() context managers
+  # and incorrectly flags subsequent test cases as unreachable
+  - exclude:
+      id: py/unreachable-statement
+      paths:
+        - tests/unit/test_exceptions.py
