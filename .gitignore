@@ -40,6 +40,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Auto-generated version file (hatch-vcs)
+src/nhl_scrabble/_version.py
+
 # PyInstaller artifacts
 *.manifest
 *.spec

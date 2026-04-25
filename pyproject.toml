@@ -1,12 +1,13 @@
 [build-system]
 requires = [
     "hatchling",
+    "hatch-vcs",
 ]
 build-backend = "hatchling.build"
 
 [project]
 name = "nhl-scrabble"
-version = "2.1.0"
+dynamic = ["version"]
 description = "NHL Roster Scrabble Score Analyzer - Calculate Scrabble scores for NHL player names"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -146,6 +147,12 @@ packages = [
     "src/nhl_scrabble",
 ]
 
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/nhl_scrabble/_version.py"
+
 [tool.flake8]
 max-line-length = 100
 extend-ignore = [
@@ -176,6 +183,7 @@ exclude = [
     ".pytest_cache",
     ".mypy_cache",
     ".ruff_cache",
+    "src/nhl_scrabble/_version.py",
 ]
 
 [tool.autoflake]
@@ -194,6 +202,7 @@ exclude = [
     "dist",
     "*.egg-info",
     "__pycache__",
+    "src/nhl_scrabble/_version.py",
 ]
 
 [tool.docformatter]
@@ -213,6 +222,7 @@ exclude = [
     "build",
     "dist",
     "*.egg-info",
+    "src/nhl_scrabble/_version.py",
 ]
 
 [tool.black]
@@ -222,7 +232,7 @@ target-version = [
 ]
 skip-string-normalization = false
 skip-magic-trailing-comma = false
-extend-exclude = "/(\n  # directories\n  \\.eggs\n  | \\.git\n  | \\.tox\n  | \\.venv\n  | venv\n  | build\n  | dist\n  | \\.egg-info\n  | __pycache__\n  | \\.pytest_cache\n  | \\.mypy_cache\n  | \\.ruff_cache\n)/\n"
+extend-exclude = "/(\n  # directories\n  \\.eggs\n  | \\.git\n  | \\.tox\n  | \\.venv\n  | venv\n  | build\n  | dist\n  | \\.egg-info\n  | __pycache__\n  | \\.pytest_cache\n  | \\.mypy_cache\n  | \\.ruff_cache\n  # auto-generated files\n  | src/nhl_scrabble/_version\\.py\n)/\n"
 
 [tool.ruff]
 target-version = "py312"
@@ -230,6 +240,9 @@ line-length = 100
 src = [
     "src",
     "tests",
+]
+exclude = [
+    "src/nhl_scrabble/_version.py",
 ]
 
 [tool.ruff.lint]
@@ -411,6 +424,7 @@ skip_glob = [
     "dist/*",
     "*.egg-info/*",
     "__pycache__/*",
+    "src/nhl_scrabble/_version.py",
 ]
 
 [tool.refurb]
@@ -425,6 +439,7 @@ ignore = [
 skip = [
     "tests/fixtures/",
     "migrations/",
+    "src/nhl_scrabble/_version.py",
 ]
 src_paths = [
     "src/",
@@ -434,6 +449,7 @@ src_paths = [
 [tool.mypy]
 python_version = "3.12"
 plugins = ["pydantic.mypy"]
+exclude = ["src/nhl_scrabble/_version.py"]
 strict = true
 warn_unreachable = true
 warn_no_return = true
@@ -830,6 +846,7 @@ exclude = [
     "__pycache__",
     "tests",
     ".scratch",
+    "src/nhl_scrabble/_version.py",
 ]
 ext = []
 style = "sphinx"
@@ -922,7 +939,7 @@ ty = "ty"
 uvicorn = "uvicorn"
 
 [tool.unimport]
-exclude = "\\.git|\\.tox|\\.venv|venv|build|dist|.*\\.egg-info|__pycache__"
+exclude = "\\.git|\\.tox|\\.venv|venv|build|dist|.*\\.egg-info|__pycache__|src/nhl_scrabble/_version\\.py"
 ignore_init = true
 include_star_import = false
 gitignore = true
@@ -931,6 +948,7 @@ gitignore = true
 convention = "pep257"
 match = ".*\\.py"
 match_dir = "[^\\.].*"
+match-dir = "(?!_version\\.py$).*"
 add-ignore = [
     "D100",
     "D101",
@@ -956,6 +974,7 @@ exclude = [
     "dist",
     "*.egg-info",
     "__pycache__",
+    "src/nhl_scrabble/_version.py",
 ]
 ignore_decorators = [
     "@*.command",
@@ -1022,6 +1041,7 @@ exclude_dirs = [
     "build",
     "dist",
     "*.egg-info",
+    "src/nhl_scrabble/_version.py",
 ]
 severity = "LOW"
 confidence = "LOW"

@@ -25,7 +25,12 @@ class TestCLIBasics:
         runner = CliRunner()
         result = runner.invoke(cli, ["--version"])
         assert result.exit_code == 0
-        assert "2.1.0" in result.output
+        # Check for version format (dynamic versioning from git tags)
+        assert "nhl-scrabble, version" in result.output
+        # Version could be "X.Y.Z" or "X.Y.Z.devN+ghash" depending on git state
+        import re
+
+        assert re.search(r"\d+\.\d+", result.output), "Version should contain major.minor"
 
     def test_cli_help(self) -> None:
         """Test --help flag."""

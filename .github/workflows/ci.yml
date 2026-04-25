@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Required for hatch-vcs version detection
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
@@ -164,6 +166,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Required for hatch-vcs version detection
 
       - name: Cache tox environments
         uses: actions/cache@v5
@@ -215,6 +219,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Required for hatch-vcs version detection
 
       - name: Cache pre-commit hooks
         uses: actions/cache@v5

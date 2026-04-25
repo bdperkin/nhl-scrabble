@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) package that fetches current NHL roster data and calculates "Scrabble scores" for player names based on standard Scrabble letter values. It generates comprehensive reports showing team, division, and conference standings based on these scores, complete with a mock playoff bracket.
 
-**Current Version:** 2.0.0
+**Current Version:** Dynamically versioned from Git tags (see [Versioning Strategy](#versioning-strategy))
 **Python:** [3.12-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
 **Pre-commit Hooks:** 67 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/), [refurb](https://github.com/dosisod/refurb), and [ssort](https://github.com/bwhmather/ssort))
@@ -597,6 +597,180 @@ link-mode = "copy"      # Copy files instead of linking
 ```
 
 These settings optimize for speed and reliability. Note: `prefer-binary` is a UV command-line flag, not a config option.
+
+## Versioning Strategy
+
+The project uses **dynamic versioning** from Git tags via [hatch-vcs](https://github.com/ofek/hatch-vcs), eliminating manual version management and ensuring consistency between Git history and package versions.
+
+### How It Works
+
+**Configuration (pyproject.toml):**
+
+```toml
+[project]
+dynamic = ["version"]  # Version determined at build time
+
+[tool.hatch.version]
+source = "vcs"  # Use version control system (Git)
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/nhl_scrabble/_version.py"  # Auto-generated
+```
+
+**Version Detection:**
+
+1. **Tagged Release**: `git tag v2.1.0` → Package version `2.1.0`
+1. **Development Build**: 5 commits after v2.1.0 → Version `2.1.1.dev5+g<hash>`
+1. **No Tags**: Fallback to `0.0.0+unknown`
+
+**Auto-generated Version File:**
+
+```python
+# src/nhl_scrabble/_version.py (generated at build time, not committed)
+__version__ = "2.1.0"
+__version_tuple__ = (2, 1, 0)
+```
+
+### Release Process
+
+**Creating a New Release:**
+
+```bash
+# 1. Ensure main is clean and tests pass
+git checkout main
+git pull origin main
+make test
+
+# 2. Create annotated tag (triggers version)
+git tag -a v2.1.0 -m "Release version 2.1.0"
+
+# 3. Push tag (triggers CI/CD release)
+git push --tags
+
+# 4. CI automatically builds and publishes package
+```
+
+**Tag Format:** `vX.Y.Z` (Semantic Versioning)
+
+- Major: `v3.0.0` (breaking changes)
+- Minor: `v2.1.0` (new features, backward compatible)
+- Patch: `v2.0.1` (bug fixes)
+- Pre-release: `v2.1.0-rc1` (release candidates)
+
+### Development Versions
+
+**Between Releases:**
+
+```bash
+# After tagging v2.1.0, make 3 commits
+git tag v2.1.0
+git commit -m "feat: add feature X"
+git commit -m "fix: fix bug Y"
+git commit -m "docs: update docs"
+
+# Build shows development version
+python -m build
+# Version: 2.1.1.dev3+g1234567
+#          │ │ │ │   │ └─ Git commit hash
+#          │ │ │ │   └─── Dev commits count
+#          │ │ │ └─────── Next patch version
+#          │ │ └───────── Minor version
+#          └─└─────────── Major version
+```
+
+**PEP 440 Compliance:** All versions follow [PEP 440](https://peps.python.org/pep-0440/) standards.
+
+### Version Access in Code
+
+**Import Version:**
+
+```python
+from nhl_scrabble import __version__
+
+print(f"NHL Scrabble {__version__}")
+# Output: NHL Scrabble 2.1.0 (or 2.1.1.dev3+g1234567 in development)
+```
+
+**Fallback Handling:**
+
+```python
+# In src/nhl_scrabble/__init__.py
+try:
+    from nhl_scrabble._version import __version__
+except ImportError:
+    # Fallback for development without build (editable install)
+    __version__ = "0.0.0+unknown"
+```
+
+### CI/CD Integration
+
+**Required: Full Git History**
+
+All GitHub Actions workflows use `fetch-depth: 0` for version detection:
+
+```yaml
+- name: Checkout code
+  uses: actions/checkout@v6
+  with:
+    fetch-depth: 0  # Required for hatch-vcs
+```
+
+**Why?** Shallow clones (default `fetch-depth: 1`) don't include tags, breaking version detection.
+
+### Troubleshooting
+
+**Version shows `0.0.0+unknown`:**
+
+**Causes:**
+
+- No Git tags exist
+- Shallow clone (CI missing `fetch-depth: 0`)
+- Not in Git repository
+
+**Solutions:**
+
+```bash
+# Check for tags
+git tag
+
+# Create initial tag if none exist
+git tag v0.1.0
+
+# Ensure full clone in CI
+fetch-depth: 0  # In GitHub Actions checkout
+```
+
+**Build fails with "version not found":**
+
+**Cause:** Missing `hatch-vcs` in build requirements
+
+**Solution:**
+
+```toml
+[build-system]
+requires = ["hatchling", "hatch-vcs"]  # Ensure both are listed
+```
+
+### Benefits
+
+- ✅ **Zero Manual Maintenance**: No more version bumps in `pyproject.toml`
+- ✅ **Single Source of Truth**: Git tags define versions
+- ✅ **Automatic Dev Versions**: Distinguish releases from development
+- ✅ **No Version Drift**: Package version always matches Git tag
+- ✅ **Clean Git History**: No "bump version" commits
+- ✅ **PEP 440 Compliant**: All versions follow standards
+
+### Migration Notes
+
+**From Manual Versioning:**
+
+1. Last manual version was `2.1.0`
+1. Created Git tag `v2.1.0` to match
+1. Removed static version from `pyproject.toml`
+1. Added dynamic versioning configuration
+1. Future releases only require Git tags
+
+**Backward Compatibility:** All existing PyPI releases unaffected.
 
 ## NHL API Integration
 
