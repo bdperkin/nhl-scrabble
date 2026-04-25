@@ -25,7 +25,7 @@ class TestCLIBasics:
         runner = CliRunner()
         result = runner.invoke(cli, ["--version"])
         assert result.exit_code == 0
-        assert "2.0.0" in result.output
+        assert "2.1.0" in result.output
 
     def test_cli_help(self) -> None:
         """Test --help flag."""

@@ -18,7 +18,7 @@ class TestShortOptions:
         result = runner.invoke(cli, ["-V"])
 
         assert result.exit_code == 0
-        assert "2.0.0" in result.output
+        assert "2.1.0" in result.output
         assert "nhl-scrabble" in result.output.lower()
 
     def test_version_long_option(self) -> None:
@@ -27,7 +27,7 @@ class TestShortOptions:
         result = runner.invoke(cli, ["--version"])
 
         assert result.exit_code == 0
-        assert "2.0.0" in result.output
+        assert "2.1.0" in result.output
         assert "nhl-scrabble" in result.output.lower()
 
     def test_version_options_equivalent(self) -> None:

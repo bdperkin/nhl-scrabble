@@ -7,6 +7,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-25
+
+### Deprecated
+
+- **CSVExporter Class** - Deprecated in favor of CSVFormatter for consistent architecture (#023)
+
+  - **What's Deprecated**: `nhl_scrabble.exporters.csv_exporter.CSVExporter` class and all its methods
+
+    - `CSVExporter.__init__()` - Raises `DeprecationWarning` on instantiation
+    - `CSVExporter.export_team_scores()` - Raises `DeprecationWarning` on call
+    - `CSVExporter.export_player_scores()` - Raises `DeprecationWarning` on call
+    - `CSVExporter.export_division_standings()` - Raises `DeprecationWarning` on call
+    - `CSVExporter.export_conference_standings()` - Raises `DeprecationWarning` on call
+    - `CSVExporter.export_playoff_standings()` - Raises `DeprecationWarning` on call
+
+  - **Why**: CSVExporter duplicates CSVFormatter functionality (both generate CSV strings, CSVExporter just writes to files)
+
+    - Confusing dual architecture (formatters vs exporters)
+    - Maintenance burden (two implementations of CSV generation)
+    - CSVExporter not used in production code (only in tests)
+    - Violates DRY principle
+
+  - **Replacement**: Use `CSVFormatter` via the formatter factory pattern instead:
+
+    ```python
+    # OLD (deprecated):
+    from nhl_scrabble.exporters.csv_exporter import CSVExporter
+
+    exporter = CSVExporter()  # DeprecationWarning!
+    exporter.export_team_scores(teams, Path("teams.csv"))  # DeprecationWarning!
+
+    # NEW (recommended):
+    from nhl_scrabble.formatters import get_formatter
+    from pathlib import Path
+
+    formatter = get_formatter("csv")
+    csv_string = formatter.format(data)
+    Path("teams.csv").write_text(csv_string)
+    ```
+
+  - **Timeline**:
+
+    - **v2.1.0** (current) - Deprecation warnings added, functionality maintained
+    - **v2.2.0** (future) - Continued deprecation warnings
+    - **v3.0.0** (future) - CSVExporter removed entirely (breaking change)
+
+  - **Migration Guide**: See `docs/how-to/migrate-csv-exporter.md` for complete migration examples
+
+  - **Note**: `ExcelExporter` is **NOT** deprecated - it provides legitimate multi-sheet workbook functionality that formatters cannot easily replicate (binary format, cell styling, multi-sheet structure)
+
+  - **Backward Compatibility**: CSVExporter continues to work during deprecation period (all tests pass, output unchanged)
+
+  - **Changes**:
+
+    - Added deprecation warnings to all CSVExporter methods
+    - Updated docstrings with `.. deprecated::` directives
+    - Added `.vulture_allowlist` deprecation comments
+    - Created comprehensive migration guide (`docs/how-to/migrate-csv-exporter.md`)
+    - Added 10 deprecation warning tests to verify warnings are raised correctly
+    - All existing CSVExporter tests pass (backward compatibility maintained)
+
+  - **Related**: Refactoring task #023 - Consolidate exporters and formatters architecture
+
 ### Added
 
 - **Unicode Normalization for Player Names** - Automatic normalization of international player names with diacritics and accents (#363)
