@@ -10,6 +10,11 @@ jobs:
   test:
     name: Test on Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
+
+    env:
+      # Use Node.js 24 for all actions
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     strategy:
       matrix:
         python-version: ["3.12", "3.13", "3.14"]
@@ -98,6 +103,11 @@ jobs:
   tox:
     name: Tox tests with UV (${{ matrix.tox-env }})
     runs-on: ubuntu-latest
+
+    env:
+      # Use Node.js 24 for all actions
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     strategy:
       fail-fast: true  # Stop all jobs if one fails
       matrix:
@@ -197,6 +207,10 @@ jobs:
   pre-commit:
     name: Pre-commit checks
     runs-on: ubuntu-latest
+
+    env:
+      # Use Node.js 24 for all actions
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
