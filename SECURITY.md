@@ -229,6 +229,45 @@ We treat SSRF vulnerabilities as **HIGH** severity and will prioritize fixes.
 - **Squash Merge Only**: Consistent git history, easier reverts
 - **Auto-delete Branches**: Reduces clutter and stale branches
 
+## Known Vulnerabilities and Monitoring
+
+### Active CVE Tracking
+
+The project actively monitors and tracks known vulnerabilities:
+
+**CVE-2026-3219** (pip)
+
+- **Status**: No fix available (as of April 2026)
+- **Severity**: MEDIUM
+- **Description**: pip handles concatenated tar and ZIP files as ZIP files regardless of filename
+- **Impact**: Could result in confusing installation behavior
+- **Mitigation**: Temporarily ignored in pip-audit workflow (`.github/workflows/security.yml`)
+- **Tracking**: Issue #375
+- **Action Plan**:
+  1. Monitor pip releases monthly for security patches
+  1. Remove `--ignore-vuln CVE-2026-3219` flag when fix is available
+  1. Verify resolution with pip-audit
+  1. Close tracking issue
+
+### CVE Monitoring Process
+
+When vulnerabilities are discovered with no immediate fix:
+
+1. **Create Tracking Issue**: GitHub issue created with CVE details
+1. **Add Mitigation**: Temporary workaround implemented (e.g., ignore flag)
+1. **Document**: CVE added to this SECURITY.md file
+1. **Monitor**: Regular checks for patches (weekly for CRITICAL/HIGH, monthly for MEDIUM/LOW)
+1. **Resolve**: Apply fix when available, remove workarounds, close issue
+1. **Verify**: Run security scans to confirm resolution
+
+### Security Monitoring Resources
+
+- **PyPI pip releases**: https://pypi.org/project/pip/#history
+- **pip changelog**: https://pip.pypa.io/en/stable/news/
+- **pip security advisories**: https://github.com/pypa/pip/security/advisories
+- **CVE database**: https://cve.mitre.org/
+- **GitHub Dependabot**: Automated monitoring for all dependencies
+
 ## Disclosure Policy
 
 - **Private Disclosure Period**: Minimum 90 days before public disclosure

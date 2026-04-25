@@ -940,6 +940,37 @@ The project has comprehensive security measures:
 - ✅ **Secret Scanning** - Detects committed secrets/API keys
 - ✅ **pip-audit** - CI-based dependency vulnerability scanning
 
+**CodeQL Configuration:**
+
+The project uses custom CodeQL configuration to suppress false positives:
+
+- **Configuration**: `.github/codeql/codeql-config.yml`
+- **Purpose**: Filters out known false positives while maintaining security coverage
+- **Suppressions**:
+  - `py/ineffectual-statement` in Protocol docstrings (interfaces.py)
+  - `py/unreachable-statement` in pytest test files
+- **Rationale**: Protocol methods require docstrings but have empty bodies (`...`), which CodeQL incorrectly flags as ineffectual statements
+
+**Security Monitoring:**
+
+Active vulnerability tracking with dedicated GitHub issues:
+
+- **CVE-2026-3219** (pip): Tracked in issue #375
+  - Status: No fix available (as of April 2026)
+  - Mitigation: Temporarily ignored in pip-audit workflow
+  - Monitoring: Monthly checks for pip security releases
+  - Action: Will remove ignore flag when patch is available
+- **Process**: All unpatched CVEs get tracking issues with monitoring schedules
+
+**CI/CD Future-Proofing:**
+
+Node.js 24 migration completed (April 2026):
+
+- All GitHub Actions workflows use Node.js 24
+- CodeQL actions upgraded from v3 to v4
+- Setup-uv upgraded from v5 to v7
+- Future-proof for Node.js 20 EOL (September 2026)
+
 **Dependency Management:**
 
 - Dependabot creates update PRs weekly (Mondays 9 AM ET)
