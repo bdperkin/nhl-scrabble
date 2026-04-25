@@ -1323,7 +1323,7 @@ wheels = [
 
 [[package]]
 name = "nhl-scrabble"
-version = "2.0.0"
+version = "2.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "certifi" },
