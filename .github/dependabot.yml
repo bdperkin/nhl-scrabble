@@ -1,5 +1,10 @@
 # GitHub Dependabot Configuration
 # Automatically checks for dependency updates and security vulnerabilities
+#
+# Known Issue: GitHub's dependency graph update workflow (dynamic/dependabot/update-graph)
+# currently runs on Node.js 20 and shows deprecation warnings. This is a GitHub-managed
+# workflow that we cannot modify. GitHub will update it before Node.js 20 EOL (Sept 2026).
+# The warnings are informational only - all runs complete successfully.
 
 version: 2
 updates:
