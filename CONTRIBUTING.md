@@ -1083,23 +1083,71 @@ security:
 
 ### Commit Messages
 
-Write clear, descriptive commit messages:
+Write clear, descriptive commit messages following the [Conventional Commits](https://www.conventionalcommits.org/) format:
 
 ```
-Add feature to export reports as CSV
+feat(reports): Add CSV export functionality
 
-- Implement CSVReporter class
-- Add --format csv option to CLI
-- Include tests for CSV generation
-- Update documentation
+Implement CSVReporter class with support for team and player data export.
+Add --format csv CLI option and comprehensive tests for CSV generation.
+Update documentation with CSV export examples.
+
+Closes #123
 ```
 
-Guidelines:
+**Format Requirements** (enforced by gitlint):
 
-- Use present tense ("Add feature" not "Added feature")
-- First line should be 50 characters or less
-- Provide detailed description in the body if needed
-- Reference issues with `#issue-number`
+- **Title**: 5-100 characters, format: `type(scope): description`
+  - Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`
+  - Scope: Optional module/component (e.g., `api`, `cli`, `reports`)
+  - Description: Clear summary of the change
+- **Body**: Minimum 10 characters total, max 100 characters per line
+  - Explain WHY the change was made, not just WHAT changed
+  - Include motivation, context, and implementation details
+  - Reference related issues with `Closes #123` or `Fixes #456`
+- **Present tense**: "Add feature" not "Added feature"
+
+**Good Examples**:
+
+```
+✅ feat(api): Add caching to NHL API client
+
+Implement request-level caching with 1-hour TTL to reduce API calls
+and improve performance. Cache is stored in memory and cleared on
+process restart.
+
+Closes #42
+```
+
+```
+✅ fix(cli): Validate output path before writing
+
+Check that output directory exists and is writable before attempting
+to write report files. Prevents cryptic IOError messages.
+
+Fixes #87
+```
+
+```
+✅ docs: Update installation instructions
+
+Add UV installation instructions and update Python version requirements
+to reflect 3.12+ support.
+```
+
+**Bad Examples**:
+
+```
+❌ "fix" - Title too short (< 5 characters)
+
+❌ "Add support for multiple output formats including JSON, CSV, Excel, HTML, and XML with comprehensive formatting options"
+   - Title too long (> 100 characters)
+
+❌ "feat: Add feature" - Body missing (non-trivial change needs explanation)
+```
+
+**Note**: Commit messages are validated by [gitlint](https://jorisroovers.com/gitlint/) in pre-commit hooks and CI.
+Bot commits may need `SKIP=gitlint git commit` if gitlint conflicts with automated formats.
 
 ## Code Style Guidelines
 

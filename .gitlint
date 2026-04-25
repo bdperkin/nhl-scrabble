@@ -10,6 +10,12 @@ ignore-fixup-amend-commits = true
 ignore-squash-commits = true
 ignore = B6
 
+# Note: Bot commit exemption not available in gitlint 0.19.1
+# If bot commits cause issues, we can:
+# 1. Upgrade gitlint to a version with ignore-by-author support
+# 2. Configure exemption via pre-commit args
+# 3. Use SKIP=gitlint for bot-generated commits
+
 [title-max-length]
 line-length = 100
 
