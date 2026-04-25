@@ -43,7 +43,7 @@ Each task includes:
 | 005 | Implement Exponential Backoff for Retries                 | MEDIUM   | 2-3 hours | Completed | [#48](https://github.com/bdperkin/nhl-scrabble/issues/48) | -     |
 | 006 | Validate CLI Output Paths                                 | MEDIUM   | 1-2 hours | Completed | [#49](https://github.com/bdperkin/nhl-scrabble/issues/49) | -     |
 | 007 | Fix Branch Protection Hook Failures in CI                 | MEDIUM   | 1-2 hours | Completed | [#58](https://github.com/bdperkin/nhl-scrabble/issues/58)   | -     |
-| 008 | Fix NHLApiClient Session Cleanup Warning                  | MEDIUM   | 1-2 hours | Active    | [#362](https://github.com/bdperkin/nhl-scrabble/issues/362) | -     |
+| 008 | Fix NHLApiClient Session Cleanup Warning                  | MEDIUM   | 1-2 hours | Completed | [#362](https://github.com/bdperkin/nhl-scrabble/issues/362) | PR [#367](https://github.com/bdperkin/nhl-scrabble/pull/367), completed 2026-04-25, actual effort: 1.5h |
 | 009 | Verify and Validate Caching is Enabled by Default        | MEDIUM   | 2-3 hours | Completed | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | PR [#368](https://github.com/bdperkin/nhl-scrabble/pull/368), completed 2026-04-24 |
 | 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH     | 30min-1h  | Active    | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | -     |
 | 011 | Use Platform-Specific Cache Directory with Permission Checking | MEDIUM   | 3-4 hours | Completed | [#369](https://github.com/bdperkin/nhl-scrabble/issues/369) | PR [#373](https://github.com/bdperkin/nhl-scrabble/pull/373), completed 2026-04-25, actual effort: 3.5h |
@@ -66,6 +66,7 @@ Each task includes:
 | 008 | Protect Against Config Injection                                         | MEDIUM   | 2-3 hours     | Completed | [#137](https://github.com/bdperkin/nhl-scrabble/issues/137) | -     |
 | 009 | Add Bandit Security Linting for Python Code                              | MEDIUM   | 1-2 hours     | Completed | [#239](https://github.com/bdperkin/nhl-scrabble/issues/239) | -     |
 | 010 | Add Safety Dependency Vulnerability Scanning                             | MEDIUM   | 1-2 hours     | Completed | [#240](https://github.com/bdperkin/nhl-scrabble/issues/240) | -     |
+| 011 | Monitor and Fix CVE-2026-3219 When pip Patch is Available                | MEDIUM   | 30min-1h      | Active    | [#375](https://github.com/bdperkin/nhl-scrabble/issues/375) | Security monitoring for pip vulnerability |
 
 ### Optimization
 
@@ -252,40 +253,40 @@ Each task includes:
 
 | Category     | Active | Completed | Total   |
 | ------------ | ------ | --------- | ------- |
-| Bug Fixes    | 3      | 7         | 10      |
-| Security     | 0      | 14        | 14      |
+| Bug Fixes    | 2      | 8         | 10      |
+| Security     | 1      | 14        | 15      |
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 11     | 19        | 30      |
-| **TOTAL**    | **62** | **114**   | **176** |
+| **TOTAL**    | **62** | **115**   | **177** |
 
 ### Effort Estimates by Category
 
 | Category     | Estimated Effort |
 | ------------ | ---------------- |
 | Bug Fixes    | 12.25 hours      |
-| Security     | 82.0 hours       |
+| Security     | 82.75 hours      |
 | Optimization | 36.0 hours       |
 | Enhancement  | 201.5 hours      |
 | Testing      | 265.0 hours      |
 | New Features | 227.0 hours      |
 | Refactoring  | 219.0 hours      |
-| **TOTAL**    | **1042.75 hours** |
+| **TOTAL**    | **1043.5 hours** |
 
 ### Completion Progress
 
 | Category     | Completion Rate |
 | ------------ | --------------- |
-| Bug Fixes    | 70.0%           |
-| Security     | 100.0%          |
+| Bug Fixes    | 80.0%           |
+| Security     | 93.3%           |
 | Optimization | 100.0%          |
 | Enhancement  | 91.4%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
 | Refactoring  | 63.3%           |
-| **OVERALL**  | **64.8%**       |
+| **OVERALL**  | **65.0%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -308,12 +309,12 @@ _No critical priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 176 tasks (62 active, 114 completed)
+**Total Tasks**: 177 tasks (62 active, 115 completed)
 
-- **Total Estimated Effort**: 1042.75 hours
+- **Total Estimated Effort**: 1043.5 hours
   - Active Tasks: 502 hours
-  - Completed Tasks: 540.75 hours (actual: 534 hours)
-- **Overall Completion**: 64.8%
+  - Completed Tasks: 541.5 hours (actual: 535.5 hours)
+- **Overall Completion**: 65.0%
 
 ## Task Management Guidelines
 
@@ -355,6 +356,6 @@ tasks/
 
 ______________________________________________________________________
 
-**Last Updated**: 1777047267.67835
-**Total Tasks**: 164
-**Completion Rate**: 57.9%
+**Last Updated**: 2026-04-25
+**Total Tasks**: 177
+**Completion Rate**: 65.0%
