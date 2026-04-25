@@ -266,28 +266,20 @@ class TestNHLApiClient:
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_file_created(self, tmp_path: Path) -> None:
         """Test that cache file is created."""
-        import os
+        cache_dir = tmp_path / "cache"
+        cache_file = cache_dir / "api_cache.sqlite"
 
-        # Change to temp directory
-        original_dir = Path.cwd()
-        os.chdir(tmp_path)
+        # Remove cache file if exists
+        if cache_file.exists():
+            cache_file.unlink()
 
-        try:
-            cache_file = tmp_path / ".nhl_cache.sqlite"
+        # Create client with custom cache directory
+        client = NHLApiClient(cache_dir=cache_dir)
 
-            # Remove cache file if exists
-            if cache_file.exists():
-                cache_file.unlink()
+        # Cache file should be created
+        assert cache_file.exists()
 
-            # Create client which should create cache
-            client = NHLApiClient()
-
-            # Cache file should be created
-            assert cache_file.exists()
-
-            client.close()
-        finally:
-            os.chdir(original_dir)
+        client.close()
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_context_manager_closes_session(self) -> None:
