@@ -194,14 +194,15 @@ Building Documentation
 Release Process
 ---------------
 
-1. Update version in ``pyproject.toml``
+1. Ensure main branch is clean and up to date
 2. Update ``CHANGELOG.md`` with release notes
 3. Run full test suite: ``make tox-parallel``
 4. Run CI simulation: ``make ci``
-5. Create release commit: ``git commit -m "chore: Release v2.1.0"``
-6. Tag release: ``git tag -a v2.1.0 -m "Release v2.1.0"``
-7. Push: ``git push && git push --tags``
-8. GitHub Actions builds and publishes to PyPI automatically
+5. Tag release: ``git tag -a v0.1.0 -m "Release v0.1.0"``
+6. Push tag: ``git push --tags``
+7. GitHub Actions builds and publishes to PyPI automatically
+
+Note: Version is dynamically determined from git tags (hatch-vcs), no manual version updates needed.
 
 Project Resources
 -----------------

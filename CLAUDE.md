@@ -31,7 +31,7 @@ make tox              # Fast testing with UV via [tox-uv](https://github.com/tox
 
 ## Package Architecture
 
-### Modern Python Package (v2.0.0+)
+### Modern Python Package (v0.0.1+)
 
 The project has been transformed from a single script into a professional Python package with proper structure:
 
@@ -552,7 +552,7 @@ Central configuration for the entire project:
 ```toml
 [project]
 name = "nhl-scrabble"
-version = "2.0.0"
+dynamic = ["version"]
 requires-python = ">=3.12"
 
 [tool.uv]
@@ -619,16 +619,16 @@ version-file = "src/nhl_scrabble/_version.py"  # Auto-generated
 
 **Version Detection:**
 
-1. **Tagged Release**: `git tag v2.1.0` → Package version `2.1.0`
-1. **Development Build**: 5 commits after v2.1.0 → Version `2.1.1.dev5+g<hash>`
+1. **Tagged Release**: `git tag v0.1.0` → Package version `0.1.0`
+1. **Development Build**: 5 commits after v0.1.0 → Version `0.1.1.dev5+g<hash>`
 1. **No Tags**: Fallback to `0.0.0+unknown`
 
 **Auto-generated Version File:**
 
 ```python
 # src/nhl_scrabble/_version.py (generated at build time, not committed)
-__version__ = "2.1.0"
-__version_tuple__ = (2, 1, 0)
+__version__ = "0.1.0"
+__version_tuple__ = (0, 1, 0)
 ```
 
 ### Release Process
@@ -642,7 +642,7 @@ git pull origin main
 make test
 
 # 2. Create annotated tag (triggers version)
-git tag -a v2.1.0 -m "Release version 2.1.0"
+git tag -a v0.1.0 -m "Release version 0.1.0"
 
 # 3. Push tag (triggers CI/CD release)
 git push --tags
@@ -652,25 +652,25 @@ git push --tags
 
 **Tag Format:** `vX.Y.Z` (Semantic Versioning)
 
-- Major: `v3.0.0` (breaking changes)
-- Minor: `v2.1.0` (new features, backward compatible)
-- Patch: `v2.0.1` (bug fixes)
-- Pre-release: `v2.1.0-rc1` (release candidates)
+- Major: `v1.0.0` (breaking changes)
+- Minor: `v0.1.0` (new features, backward compatible)
+- Patch: `v0.0.2` (bug fixes)
+- Pre-release: `v0.1.0-rc1` (release candidates)
 
 ### Development Versions
 
 **Between Releases:**
 
 ```bash
-# After tagging v2.1.0, make 3 commits
-git tag v2.1.0
+# After tagging v0.1.0, make 3 commits
+git tag v0.1.0
 git commit -m "feat: add feature X"
 git commit -m "fix: fix bug Y"
 git commit -m "docs: update docs"
 
 # Build shows development version
 python -m build
-# Version: 2.1.1.dev3+g1234567
+# Version: 0.1.1.dev3+g1234567
 #          │ │ │ │   │ └─ Git commit hash
 #          │ │ │ │   └─── Dev commits count
 #          │ │ │ └─────── Next patch version
@@ -688,7 +688,7 @@ python -m build
 from nhl_scrabble import __version__
 
 print(f"NHL Scrabble {__version__}")
-# Output: NHL Scrabble 2.1.0 (or 2.1.1.dev3+g1234567 in development)
+# Output: NHL Scrabble 0.1.0 (or 0.1.1.dev3+g1234567 in development)
 ```
 
 **Fallback Handling:**
@@ -764,13 +764,13 @@ requires = ["hatchling", "hatch-vcs"]  # Ensure both are listed
 
 **From Manual Versioning:**
 
-1. Last manual version was `2.1.0`
-1. Created Git tag `v2.1.0` to match
+1. Last manual version was `0.0.1`
+1. Created Git tag `v0.0.1` to match
 1. Removed static version from `pyproject.toml`
 1. Added dynamic versioning configuration
 1. Future releases only require Git tags
 
-**Backward Compatibility:** All existing PyPI releases unaffected.
+**Backward Compatibility:** This is the initial pre-release version, no prior releases exist.
 
 ## NHL API Integration
 
@@ -1493,7 +1493,7 @@ The project uses UV automatically via tox-uv:
 
 ## Project Statistics
 
-- **Package:** nhl-scrabble 2.0.0
+- **Package:** nhl-scrabble 0.0.1
 - **Python:** 3.12, 3.13, 3.14 (supported), 3.15-dev (experimental)
 - **Lines of Code:** ~1,866 (src)
 - **Lines of Tests:** ~680 (tests)

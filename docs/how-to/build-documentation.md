@@ -658,7 +658,7 @@ make docs-pdf
 cp docs/_build/latex/nhl-scrabble.pdf dist/
 
 # Or upload to GitHub Releases
-gh release upload v2.0.0 docs/_build/latex/nhl-scrabble.pdf
+gh release upload v0.1.0 docs/_build/latex/nhl-scrabble.pdf
 ```
 
 ## Configuration

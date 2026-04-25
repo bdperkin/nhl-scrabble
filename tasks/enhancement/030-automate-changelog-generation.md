@@ -168,10 +168,10 @@ git cliff --unreleased
 git cliff --output CHANGELOG.md
 
 # Generate changelog for specific version range
-git cliff v2.0.0..v2.1.0
+git cliff v0.0.1..v0.1.0
 
 # Generate full changelog from all tags
-git cliff --tag v2.1.0
+git cliff --tag v0.1.0
 ```
 
 ### CI/CD Integration (GitHub Actions)
@@ -297,7 +297,7 @@ brew install git-cliff
 git cliff --unreleased --output /dev/stdout
 
 # 3. Test specific version range
-git cliff v2.0.0..HEAD --output /dev/stdout
+git cliff v0.0.1..HEAD --output /dev/stdout
 
 # 4. Test full changelog generation
 git cliff --output test-changelog.md
@@ -311,8 +311,8 @@ diff CHANGELOG.md test-changelog.md
 
 ```bash
 # 1. Create test tag
-git tag v2.1.1-test
-git push origin v2.1.1-test
+git tag v0.1.1-test
+git push origin v0.1.1-test
 
 # 2. Monitor GitHub Actions workflow
 # Verify changelog is generated and committed
@@ -321,8 +321,8 @@ git push origin v2.1.1-test
 # Verify release notes include changelog
 
 # 4. Clean up test tag
-git tag -d v2.1.1-test
-git push origin --delete v2.1.1-test
+git tag -d v0.1.1-test
+git push origin --delete v0.1.1-test
 ```
 
 ### Unit Tests
