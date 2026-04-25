@@ -241,7 +241,7 @@ Each task includes:
 | 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Completed | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | PR [#372](https://github.com/bdperkin/nhl-scrabble/pull/372), 2026-04-24, 30min actual |
 | 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -                                                                                      |
 | 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Completed | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | PR [#335](https://github.com/bdperkin/nhl-scrabble/pull/335), 2026-04-22, 3.5h actual  |
-| 023 | Consolidate Exporters and Formatters Architecture                             | LOW      | 3-5 hours           | Active    | TBD                                                         | -                                                                                      |
+| 023 | Consolidate Exporters and Formatters Architecture                             | LOW      | 3-5 hours           | Completed | [#377](https://github.com/bdperkin/nhl-scrabble/pull/377)  | PR [#377](https://github.com/bdperkin/nhl-scrabble/pull/377), 2026-04-25, 2.5h actual |
 | 024 | Make 'ty' Blocking After Validation Period                                    | LOW      | 30min-1h            | Active    | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | -                                                                                      |
 | 025 | Make 'refurb' Blocking After Validation Period                                | LOW      | 30min-1h            | Completed | [#356](https://github.com/bdperkin/nhl-scrabble/issues/356) | PR [#370](https://github.com/bdperkin/nhl-scrabble/pull/370), 2026-04-24, 1.5h actual |
 | 026 | Make 'gitlint' Blocking (Except GitHub CI Workflows) After Validation Period  | LOW      | 30min-1h            | Completed | [#357](https://github.com/bdperkin/nhl-scrabble/issues/357) | PR [#371](https://github.com/bdperkin/nhl-scrabble/pull/371), 2026-04-24, 45min actual |
@@ -259,8 +259,8 @@ Each task includes:
 | Enhancement  | 6      | 33        | 39      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 7      | 23        | 30      |
-| **TOTAL**    | **60** | **122**   | **182** |
+| Refactoring  | 6      | 24        | 30      |
+| **TOTAL**    | **59** | **123**   | **182** |
 
 ### Effort Estimates by Category
 
