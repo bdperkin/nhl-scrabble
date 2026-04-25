@@ -39,6 +39,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING: Cache Location** - Cache now stored in platform-specific user cache directory (#369)
+
+  - **Linux**: `~/.cache/nhl-scrabble/` (follows XDG Base Directory specification)
+  - **macOS**: `~/Library/Caches/nhl-scrabble/` (follows Apple guidelines)
+  - **Windows**: `%LOCALAPPDATA%\nhl-scrabble\Cache\` (follows Windows conventions)
+  - **Migration**: Old cache files (`.nhl_cache.sqlite`) in working directories can be safely deleted
+  - **Custom Location**: Set `NHL_SCRABBLE_CACHE_DIR` environment variable to use custom cache directory
+  - **Configuration**: Added `cache_dir` parameter to `NHLApiClient` and `Config` class
+  - **Permission Checking**: Added proper error handling when cache directory is not writable
+  - **Benefits**: Eliminates filesystem pollution, prevents permission errors when running from read-only directories
+  - **Dependencies**: Added `platformdirs>=4.0.0` for platform-specific directory paths
+
 - **Unified Configuration Management** - Refactored configuration system to use pydantic-settings for unified config management (#161)
 
   - Consolidated configuration sources with clear precedence: CLI args (future) > env vars > .env file > defaults

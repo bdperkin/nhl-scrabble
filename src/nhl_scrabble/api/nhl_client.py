@@ -2,15 +2,18 @@
 
 import atexit
 import logging
+import os
 import random
 import time
 import types
 import weakref
 from contextlib import suppress
 from datetime import timedelta
+from pathlib import Path
 from typing import Any, ClassVar
 
 import certifi
+import platformdirs
 import requests
 import requests_cache
 from requests.adapters import HTTPAdapter
@@ -105,6 +108,7 @@ class NHLApiClient:
         max_backoff: float = 30.0,
         cache_enabled: bool = True,
         cache_expiry: int = 3600,
+        cache_dir: str | Path | None = None,
         verify_ssl: bool = True,
         dos_max_connections: int = 10,
         dos_max_per_host: int = 5,
@@ -124,6 +128,7 @@ class NHLApiClient:
             max_backoff: Maximum backoff delay in seconds (default: 30.0)
             cache_enabled: Enable HTTP caching (default: True)
             cache_expiry: Cache expiration in seconds (default: 3600 = 1 hour)
+            cache_dir: Cache directory path (default: platform-specific user cache directory)
             verify_ssl: SSL verification (must be True, cannot be disabled for security)
             dos_max_connections: Maximum connection pool connections (default: 10)
             dos_max_per_host: Maximum connections per host (default: 5)
@@ -131,7 +136,7 @@ class NHLApiClient:
             dos_circuit_breaker_timeout: Circuit breaker timeout in seconds (default: 60.0)
 
         Raises:
-            NHLApiError: If base_url fails SSRF protection validation
+            NHLApiError: If base_url fails SSRF protection validation or cache directory not writable
             ValueError: If verify_ssl is False (SSL verification cannot be disabled)
         """
         # Initialize state tracking FIRST (before any potential exceptions)
@@ -183,17 +188,44 @@ class NHLApiClient:
         # Session can be either CachedSession or regular Session
         self.session: requests_cache.CachedSession | requests.Session
         if cache_enabled:
-            # Create cached session
+            # Determine cache directory
+            if cache_dir is None:
+                # Use platform-specific user cache directory
+                cache_path = Path(platformdirs.user_cache_dir("nhl-scrabble", "bdperkin"))
+            else:
+                cache_path = Path(cache_dir)
+
+            # Create cache directory with permission checking
+            try:
+                cache_path.mkdir(parents=True, exist_ok=True)
+            except (OSError, PermissionError) as e:
+                logger.error(f"Cannot create cache directory {cache_path}: {e}")
+                raise NHLApiError(
+                    f"Cache directory not writable: {cache_path}. "
+                    f"Check permissions or specify a different cache directory "
+                    f"with the cache_dir parameter."
+                ) from e
+
+            # Verify directory is writable
+            if not os.access(cache_path, os.W_OK):
+                error_msg = (
+                    f"Cache directory not writable: {cache_path}. "
+                    f"Check permissions or specify a different cache directory."
+                )
+                logger.error(error_msg)
+                raise NHLApiError(error_msg)
+
+            # Create cached session with platform-specific path
+            cache_file = cache_path / "api_cache"
             self.session = requests_cache.CachedSession(
-                cache_name=".nhl_cache",
+                cache_name=str(cache_file),
                 backend="sqlite",
                 expire_after=timedelta(seconds=cache_expiry),
                 allowable_codes=[200],  # Only cache successful responses
                 allowable_methods=["GET"],
                 cache_control=True,  # Respect Cache-Control headers
             )
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f"HTTP caching enabled (expiry: {cache_expiry}s)")
+            logger.info(f"HTTP caching enabled (directory: {cache_path}, expiry: {cache_expiry}s)")
         else:
             self.session = requests.Session()
             logger.debug("HTTP caching disabled")

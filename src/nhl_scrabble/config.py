@@ -58,6 +58,7 @@ class Config(BaseSettings):
         max_backoff: Maximum backoff delay in seconds
         cache_enabled: Enable HTTP caching for API responses
         cache_expiry: Cache expiration time in seconds
+        cache_dir: Cache directory path (default: platform-specific user cache directory)
         max_concurrent_requests: Maximum number of concurrent API requests
         top_players_count: Number of top players to show in reports
         top_team_players_count: Number of top players per team to show
@@ -158,6 +159,13 @@ class Config(BaseSettings):
         Field(
             default=3600,
             description="Cache expiry seconds (1-86400)",
+        ),
+    ]
+    cache_dir: Annotated[
+        str | None,
+        Field(
+            default=None,
+            description="Cache directory path (default: platform-specific user cache dir)",
         ),
     ]
 
@@ -359,6 +367,7 @@ class Config(BaseSettings):
                 "cache_enabled", "NHL_SCRABBLE_CACHE_ENABLED", True  # noqa: FBT003
             ),
             "cache_expiry": get_int("cache_expiry", "NHL_SCRABBLE_CACHE_EXPIRY", 3600, 1, 86400),
+            "cache_dir": data.get("cache_dir") or os.getenv("NHL_SCRABBLE_CACHE_DIR"),
             "max_concurrent_requests": get_int(
                 "max_concurrent_requests", "NHL_SCRABBLE_MAX_CONCURRENT", 5, 1, 50
             ),
