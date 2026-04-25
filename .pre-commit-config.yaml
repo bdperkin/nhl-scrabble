@@ -408,20 +408,17 @@ repos:
   # Complements pyupgrade (syntax) with semantic improvements
   # Docs: https://github.com/dosisod/refurb
 
-  - repo: local
+  - repo: https://github.com/dosisod/refurb
+    rev: v2.3.1
     hooks:
       - id: refurb
-        name: refurb
         # Comprehensive code modernization (matches ruff's ALL rules philosophy)
         # Blocking: Enforces modern Python idioms and patterns
-        description: Python code modernization linter (pathlib, comprehensions, modern idioms)
-        entry: refurb src/ --enable-all
-        language: system
-        types: [python]
-        pass_filenames: false
-        verbose: true
-        # Blocking: refurb suggestions will prevent commits
         # Configuration is read automatically from pyproject.toml
+        args: ["--enable-all"]
+        files: ^src/
+        additional_dependencies:
+          - pydantic>=2.0  # Required for mypy plugin support
 
   # ============================================================================
   # Python Statement Sorting - Class Member Organization
