@@ -236,7 +236,7 @@ def _convert_teams_to_dict(
         }
         for team_score in team_scores_dict.values()
     ]
-    teams_data.sort(key=operator.itemgetter("total_score"), reverse=True)  # type: ignore[arg-type, return-value]
+    teams_data.sort(key=operator.itemgetter("total_score"), reverse=True)
     return teams_data
 
 
