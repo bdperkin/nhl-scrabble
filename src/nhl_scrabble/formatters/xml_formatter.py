@@ -65,6 +65,6 @@ class XMLFormatter:
         )
 
         # Parse and pretty-print (safe: parsing our own generated XML, not untrusted input)
-        return xml.dom.minidom.parseString(xml_bytes).toprettyxml(
+        return xml.dom.minidom.parseString(xml_bytes).toprettyxml(  # noqa: S318  # nosec B318
             indent="  "
-        )  # noqa: S318  # nosec B318
+        )
