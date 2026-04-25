@@ -210,7 +210,7 @@ def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
         raise SSRFProtectionError(f"Invalid URL format: {e}") from e
 
     # Check scheme (only http/https)
-    if parsed.scheme not in ["http", "https"]:
+    if parsed.scheme not in ("http", "https"):
         raise SSRFProtectionError(f"Only HTTP/HTTPS URLs allowed, got scheme '{parsed.scheme}'")
 
     # Extract hostname and port

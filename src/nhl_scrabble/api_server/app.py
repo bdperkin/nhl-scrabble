@@ -48,9 +48,6 @@ def create_app() -> FastAPI:
             "based on Scrabble letter values."
         ),
         version="1.0.0",
-        docs_url="/docs",
-        redoc_url="/redoc",
-        openapi_url="/openapi.json",
     )
 
     # Add CORS middleware

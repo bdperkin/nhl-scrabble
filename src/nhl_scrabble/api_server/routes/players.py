@@ -16,6 +16,7 @@ Example:
         $ curl http://localhost:8000/api/v1/players?limit=10
 """
 
+import operator
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
@@ -95,10 +96,10 @@ async def get_players(
             # Sort
             reverse = order.lower() == "desc"
             if sort_by == "score":
-                players_data.sort(key=lambda p: p["score"], reverse=reverse)
+                players_data.sort(key=operator.itemgetter("score"), reverse=reverse)
             elif sort_by == "name":
                 players_data.sort(
-                    key=lambda p: (p["last_name"], p["first_name"]),
+                    key=operator.itemgetter("last_name", "first_name"),
                     reverse=reverse,
                 )
 

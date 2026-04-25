@@ -60,7 +60,7 @@ class TeamProcessor:
         team_players: list[PlayerScore] = []
 
         # Process all position groups
-        for position in ["forwards", "defensemen", "goalies"]:
+        for position in ("forwards", "defensemen", "goalies"):
             if position not in roster:
                 continue
 

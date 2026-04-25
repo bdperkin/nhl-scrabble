@@ -62,7 +62,7 @@ class PlayoffReporter(BaseReporter):
             "\n        p-Presidents' Trophy, e-Eliminated",
         ]
 
-        for conference in ["Eastern", "Western"]:
+        for conference in ("Eastern", "Western"):
             if conference not in standings:
                 continue
 

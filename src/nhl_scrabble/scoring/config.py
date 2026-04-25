@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import string
 from pathlib import Path
 from typing import ClassVar
 
@@ -90,7 +91,7 @@ class ScoringConfig:
     }
 
     # Uniform scoring (all letters worth 1 point)
-    UNIFORM_VALUES: ClassVar[dict[str, int]] = dict.fromkeys("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1)
+    UNIFORM_VALUES: ClassVar[dict[str, int]] = dict.fromkeys(string.ascii_uppercase, 1)
 
     # Mapping of system names to value dictionaries
     BUILT_IN_SYSTEMS: ClassVar[dict[str, dict[str, int]]] = {
@@ -149,7 +150,7 @@ class ScoringConfig:
 
         # Normalize to uppercase and validate
         normalized: dict[str, int] = {}
-        expected_letters = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        expected_letters = set(string.ascii_uppercase)
         provided_letters = set()
 
         for letter, value in config_data.items():

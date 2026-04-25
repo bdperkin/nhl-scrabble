@@ -130,8 +130,7 @@ def _get_playoff_standings(team_scores: dict[str, Any]) -> dict[str, Any]:
     Returns:
         dict: Playoff bracket data.
     """
-    calculator = PlayoffCalculator()
-    playoff_standings = calculator.calculate_playoff_standings(team_scores)
+    playoff_standings = PlayoffCalculator().calculate_playoff_standings(team_scores)
 
     # Format eastern conference
     eastern_teams = playoff_standings.get("Eastern", [])
