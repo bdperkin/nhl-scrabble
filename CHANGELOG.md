@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Unicode Normalization for Player Names** - Automatic normalization of international player names with diacritics and accents (#363)
+
+  - Added `unidecode>=1.3.0` dependency for robust Unicode-to-ASCII transliteration
+  - Created `normalize_player_name()` function in `validators.py` for three-step normalization:
+    1. NFD decomposition + diacritic removal (é → e, ř → r)
+    1. Transliteration of non-Latin scripts (Cyrillic → Roman)
+    1. ASCII conversion (œ → oe, ß → ss, ø → o)
+  - Updated `validate_player_name()` to normalize names before validation
+  - Supports international players from all countries (Czech, French-Canadian, Scandinavian, etc.)
+  - Eliminates "Invalid player name" warnings for accented names (Ondřej, José, Bjørn, etc.)
+  - Preserves player identity instead of replacing with "Unknown"
+  - Maintains Scrabble tile compatibility (ASCII A-Z only)
+  - Security: Normalization happens before validation (emojis and special symbols still rejected)
+  - Performance: ~0.1ms per name (negligible overhead, \<0.01% of total runtime)
+  - Added 17 comprehensive tests covering normalization edge cases
+  - Breaking change: Output displays normalized ASCII names (e.g., "Ondrej" instead of "Ondřej")
+
 - **Enhanced Caching Support** - Improved API response caching functionality and consistency (#365)
 
   - Added `--no-cache` option to `search` and `interactive` commands for consistency across all CLI commands

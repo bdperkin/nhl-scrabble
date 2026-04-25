@@ -49,6 +49,7 @@ dependencies = [
     "pydantic",
     "pydantic-settings>=2.7.3",
     "platformdirs>=4.0.0",
+    "unidecode>=1.3.0",
 ]
 
 [project.license]
