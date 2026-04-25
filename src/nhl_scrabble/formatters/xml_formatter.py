@@ -49,9 +49,13 @@ class XMLFormatter:
             True
         """
         try:
+            import logging  # noqa: PLC0415
             import xml.dom.minidom  # noqa: PLC0415  # nosec B408
 
             from dicttoxml import dicttoxml  # noqa: PLC0415
+
+            # Suppress dicttoxml's verbose INFO logging
+            logging.getLogger("dicttoxml").setLevel(logging.WARNING)
         except ImportError as e:
             raise ImportError(
                 "dicttoxml is required for XML format. Install with: pip install dicttoxml"

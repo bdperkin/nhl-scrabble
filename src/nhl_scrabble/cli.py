@@ -708,7 +708,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
         # Log active filters
         if filters.is_active():
-            logger.info(f"Active filters: {filters}")
+            logger.debug(f"Active filters: {filters}")
             if not quiet:
                 console.print("\n[yellow]Filters active:[/yellow]")
                 if filters.divisions:
