@@ -18,8 +18,12 @@ class TestShortOptions:
         result = runner.invoke(cli, ["-V"])
 
         assert result.exit_code == 0
-        assert "2.1.0" in result.output
-        assert "nhl-scrabble" in result.output.lower()
+        # Check for version format (dynamic versioning from git tags)
+        assert "nhl-scrabble, version" in result.output
+        # Version could be "X.Y.Z" or "X.Y.Z.devN+ghash" depending on git state
+        import re
+
+        assert re.search(r"\d+\.\d+", result.output), "Version should contain major.minor"
 
     def test_version_long_option(self) -> None:
         """Test --version shows version (backwards compatibility)."""
@@ -27,8 +31,12 @@ class TestShortOptions:
         result = runner.invoke(cli, ["--version"])
 
         assert result.exit_code == 0
-        assert "2.1.0" in result.output
-        assert "nhl-scrabble" in result.output.lower()
+        # Check for version format (dynamic versioning from git tags)
+        assert "nhl-scrabble, version" in result.output
+        # Version could be "X.Y.Z" or "X.Y.Z.devN+ghash" depending on git state
+        import re
+
+        assert re.search(r"\d+\.\d+", result.output), "Version should contain major.minor"
 
     def test_version_options_equivalent(self) -> None:
         """Test -V and --version produce identical output."""
