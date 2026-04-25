@@ -16,7 +16,7 @@ Security features:
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 from urllib.parse import urlparse
 
 from unidecode import unidecode
@@ -273,9 +273,8 @@ def normalize_player_name(name: str) -> str:
     # - Scandinavian: ø → o, å → a
     # - Cyrillic → Roman transliteration
     # - 100+ languages
-    ascii_name = cast("str", unidecode(without_diacritics))
-
-    return ascii_name
+    # Note: unidecode returns str but older mypy versions see it as Any
+    return str(unidecode(without_diacritics))
 
 
 def validate_player_name(name: str) -> str:
