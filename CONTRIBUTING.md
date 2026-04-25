@@ -2043,14 +2043,20 @@ This runs comprehensive package validation:
 
 ### Release Steps
 
-1. **Update Version**
-
-   - Update version in `src/nhl_scrabble/__init__.py`
-   - Update version in `pyproject.toml`
+**Note:** This project uses **dynamic versioning** from Git tags via [hatch-vcs](https://github.com/ofek/hatch-vcs). Version numbers are automatically determined from Git tags—no manual version updates needed!
 
 1. **Update Changelog**
 
    - Update `CHANGELOG.md` with release notes
+   - Document all changes since last release
+
+1. **Ensure Clean State**
+
+   ```bash
+   git checkout main
+   git pull origin main
+   make test  # Ensure all tests pass
+   ```
 
 1. **Validate Package**
 
@@ -2058,16 +2064,21 @@ This runs comprehensive package validation:
    make package  # Build and validate
    ```
 
-1. **Create Git Tag**
+1. **Create Git Tag** (This sets the version!)
 
    ```bash
-   git tag -a v2.0.0 -m "Release v2.0.0"
+   # Tag format: vX.Y.Z (Semantic Versioning)
+   git tag -a v2.1.0 -m "Release v2.1.0"
+
+   # The tag becomes the package version automatically
+   # v2.1.0 → Package version 2.1.0
+   # v2.1.0-rc1 → Package version 2.1.0rc1
    ```
 
 1. **Push Tag**
 
    ```bash
-   git push origin v2.0.0
+   git push --tags  # Triggers CI/CD release workflow
    ```
 
 1. **Create GitHub Release**
