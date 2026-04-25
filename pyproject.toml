@@ -837,6 +837,7 @@ exclude = [
     "__pycache__",
     "tests",
     ".scratch",
+    "src/nhl_scrabble/_version.py",
 ]
 ext = []
 style = "sphinx"
