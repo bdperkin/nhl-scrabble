@@ -368,23 +368,23 @@ nhl-scrabble analyze --verbose 2>&1 | grep -i "cache"
 
 ## Acceptance Criteria
 
-- [ ] Cache stored in platform-specific user cache directory by default
-- [ ] Linux: `~/.cache/nhl-scrabble/`
-- [ ] macOS: `~/Library/Caches/nhl-scrabble/`
-- [ ] Windows: `%LOCALAPPDATA%\nhl-scrabble\Cache\`
-- [ ] Users can specify custom cache directory via `cache_dir` parameter
-- [ ] Users can specify custom cache directory via `NHL_SCRABBLE_CACHE_DIR` env var
-- [ ] Permission checking before attempting to create cache file
-- [ ] Clear error message when cache directory is not writable
-- [ ] Cache directory created with `parents=True` if it doesn't exist
-- [ ] No more cache files in current working directory
-- [ ] Running from read-only directories (e.g., `/`) works without errors
-- [ ] Tests updated to use temporary directories
-- [ ] Documentation updated with new cache location
-- [ ] Migration note for users with existing cache files
-- [ ] All tests pass (unit + integration)
-- [ ] Type checking passes (mypy)
-- [ ] Linting passes (ruff)
+- [x] Cache stored in platform-specific user cache directory by default
+- [x] Linux: `~/.cache/nhl-scrabble/`
+- [x] macOS: `~/Library/Caches/nhl-scrabble/`
+- [x] Windows: `%LOCALAPPDATA%\nhl-scrabble\Cache\`
+- [x] Users can specify custom cache directory via `cache_dir` parameter
+- [x] Users can specify custom cache directory via `NHL_SCRABBLE_CACHE_DIR` env var
+- [x] Permission checking before attempting to create cache file
+- [x] Clear error message when cache directory is not writable
+- [x] Cache directory created with `parents=True` if it doesn't exist
+- [x] No more cache files in current working directory
+- [x] Running from read-only directories (e.g., `/`) works without errors
+- [x] Tests updated to use temporary directories
+- [x] Documentation updated with new cache location
+- [x] Migration note for users with existing cache files
+- [x] All tests pass (unit + integration)
+- [x] Type checking passes (mypy)
+- [x] Linting passes (ruff)
 
 ## Related Files
 
@@ -466,10 +466,79 @@ Users with existing cache files in their working directories will need to either
 
 ## Implementation Notes
 
-*To be filled during implementation:*
+**Implemented**: 2026-04-25
+**Branch**: bug-fixes/011-use-platform-cache-directory
+**PR**: #373 - https://github.com/bdperkin/nhl-scrabble/pull/373
+**Commits**: 2 commits (096db10, 24a4857)
 
-- Actual platformdirs behavior on different platforms
-- User feedback on cache migration
-- Performance measurements
-- Any challenges with permission checking
-- Actual effort vs estimated
+### Actual Implementation
+
+Successfully implemented platform-specific cache directory support using platformdirs library. The implementation followed the proposed solution closely with all planned features:
+
+- Added `platformdirs>=4.0.0` dependency to pyproject.toml
+- Updated `NHLApiClient` to use `platformdirs.user_cache_dir()` for default cache location
+- Added `cache_dir` parameter to `NHLApiClient.__init__()` for custom paths
+- Added `Config.cache_dir` field with `NHL_SCRABBLE_CACHE_DIR` environment variable support
+- Updated `DependencyContainer.create_api_client()` to pass cache_dir from config
+- Implemented permission checking with `os.access()` and `mkdir(parents=True, exist_ok=True)`
+- Added clear error messages for permission errors and directory creation failures
+- Updated all tests (10 unit + 2 integration) to use temporary cache directories
+
+### Platform-Specific Behavior
+
+The platformdirs library provides correct paths for each platform:
+- **Linux**: `~/.cache/nhl-scrabble/` (XDG Base Directory specification)
+- **macOS**: `~/Library/Caches/nhl-scrabble/` (Apple guidelines)
+- **Windows**: `%LOCALAPPDATA%\nhl-scrabble\Cache\` (Windows conventions)
+
+All paths are automatically created with proper parent directory creation.
+
+### Challenges Encountered
+
+1. **Test Updates**: Had to update all existing cache tests to use `cache_dir` parameter instead of changing to temp directories with `os.chdir()`. This was straightforward but required updating ~12 test functions.
+
+2. **Test Fixture Fix**: One test (`test_cache_file_created`) was still using the old pattern of changing to temp directory. Fixed by using `cache_dir` parameter.
+
+3. **Non-blocking CI Failures**: As expected, Python 3.15-dev and ty type checker failed in CI, but these are experimental/validation mode and don't block merging.
+
+### Deviations from Plan
+
+No significant deviations from the original plan. All features were implemented as specified.
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 3-4 hours
+- **Actual**: ~3.5 hours
+- **Breakdown**:
+  - Implementation: 1.5 hours (dependency, code changes)
+  - Testing: 1 hour (new tests + updating existing tests)
+  - Documentation: 0.5 hour (CHANGELOG, comments)
+  - CI/PR: 0.5 hour (PR creation, CI monitoring, merge)
+
+The implementation was very close to estimate, with most time spent on updating existing tests to use the new cache_dir parameter.
+
+### Related PRs
+
+- #373 - Main implementation (merged)
+
+### Lessons Learned
+
+1. **platformdirs Integration**: The platformdirs library works excellently for cross-platform cache directory management. Using `user_cache_dir()` with app name and author ensures proper isolation.
+
+2. **Permission Checking**: Using both `mkdir(parents=True, exist_ok=True)` for creation and `os.access(path, os.W_OK)` for verification provides robust permission handling.
+
+3. **Test Migration**: When changing fundamental behavior like cache location, it's important to update ALL tests systematically. Missed one test initially which caused a CI failure.
+
+4. **Backward Compatibility**: Since this is a breaking change (cache location moved), clear documentation in CHANGELOG.md about migration is critical for users.
+
+### Performance Impact
+
+- **No measurable performance impact**: platformdirs is lightweight and only called once during client initialization
+- **Benefit**: Eliminates potential permission errors that would cause failures
+
+### User Migration
+
+Migration is straightforward for users:
+1. Old cache files (`.nhl_cache.sqlite`) can be safely deleted from working directories
+2. New cache will be automatically created in platform-specific location on first run
+3. Custom location can be set via `NHL_SCRABBLE_CACHE_DIR` environment variable if needed

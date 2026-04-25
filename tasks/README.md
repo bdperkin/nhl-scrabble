@@ -46,7 +46,7 @@ Each task includes:
 | 008 | Fix NHLApiClient Session Cleanup Warning                  | MEDIUM   | 1-2 hours | Active    | [#362](https://github.com/bdperkin/nhl-scrabble/issues/362) | -     |
 | 009 | Verify and Validate Caching is Enabled by Default        | MEDIUM   | 2-3 hours | Completed | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | PR [#368](https://github.com/bdperkin/nhl-scrabble/pull/368), completed 2026-04-24 |
 | 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH     | 30min-1h  | Active    | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | -     |
-| 011 | Use Platform-Specific Cache Directory with Permission Checking | MEDIUM   | 3-4 hours | Active    | [#369](https://github.com/bdperkin/nhl-scrabble/issues/369) | Fixes cache permission errors when running from read-only directories |
+| 011 | Use Platform-Specific Cache Directory with Permission Checking | MEDIUM   | 3-4 hours | Completed | [#369](https://github.com/bdperkin/nhl-scrabble/issues/369) | PR [#373](https://github.com/bdperkin/nhl-scrabble/pull/373), completed 2026-04-25, actual effort: 3.5h |
 
 ### Security
 
