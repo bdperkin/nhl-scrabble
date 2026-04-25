@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Enhanced Caching Support** - Improved API response caching functionality and consistency (#365)
+
+  - Added `--no-cache` option to `search` and `interactive` commands for consistency across all CLI commands
+  - Added `get_cache_info()` method to `NHLApiClient` for retrieving cache statistics
+  - Added comprehensive integration tests for caching behavior across all CLI commands
+  - Verified caching is enabled by default across all commands (cache_enabled = True in config)
+  - Documented cache behavior and location in CLI help text
+  - Cache location: `.nhl_cache.sqlite` in current directory
+  - All commands now consistently support `--no-cache` flag to force fresh data fetch
+
 - **Consistent Error Handling Strategy** - Implemented centralized exception hierarchy for better error handling (#162)
 
   - Created `src/nhl_scrabble/exceptions.py` with comprehensive exception hierarchy
