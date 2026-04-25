@@ -237,7 +237,7 @@ Each task includes:
 | 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Completed | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | PR [#338](https://github.com/bdperkin/nhl-scrabble/pull/338), 2026-04-23, 45min actual |
 | 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Completed | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | PR [#339](https://github.com/bdperkin/nhl-scrabble/pull/339), 2026-04-23, 1.5h actual  |
 | 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Completed | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | PR [#340](https://github.com/bdperkin/nhl-scrabble/pull/340), 2026-04-23, 2.5h actual  |
-| 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Active    | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | -                                                                                      |
+| 020 | Migrate from Deprecated codecov/test-results-action to codecov/codecov-action | MEDIUM   | 30min-1h            | Completed | [#285](https://github.com/bdperkin/nhl-scrabble/issues/285) | PR [#372](https://github.com/bdperkin/nhl-scrabble/pull/372), 2026-04-24, 30min actual |
 | 021 | Comprehensive Task Documentation Synchronization and Validation               | MEDIUM   | 3-5 hours           | Completed | [#286](https://github.com/bdperkin/nhl-scrabble/issues/286) | -                                                                                      |
 | 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Completed | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | PR [#335](https://github.com/bdperkin/nhl-scrabble/pull/335), 2026-04-22, 3.5h actual  |
 | 023 | Consolidate Exporters and Formatters Architecture                             | LOW      | 3-5 hours           | Active    | TBD                                                         | -                                                                                      |
@@ -258,8 +258,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 12     | 18        | 30      |
-| **TOTAL**    | **63** | **113**   | **176** |
+| Refactoring  | 11     | 19        | 30      |
+| **TOTAL**    | **62** | **114**   | **176** |
 
 ### Effort Estimates by Category
 
@@ -278,14 +278,14 @@ Each task includes:
 
 | Category     | Completion Rate |
 | ------------ | --------------- |
-| Bug Fixes    | 100.0%          |
+| Bug Fixes    | 70.0%           |
 | Security     | 100.0%          |
 | Optimization | 100.0%          |
 | Enhancement  | 91.4%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
-| Refactoring  | 60.0%           |
-| **OVERALL**  | **64.2%**       |
+| Refactoring  | 63.3%           |
+| **OVERALL**  | **64.8%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -308,12 +308,12 @@ _No critical priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 180 tasks (65 active, 115 completed)
+**Total Tasks**: 176 tasks (62 active, 114 completed)
 
-- **Total Estimated Effort**: 1043.5 hours
-  - Active Tasks: 503 hours
-  - Completed Tasks: 540.5 hours (actual: 533.5 hours)
-- **Overall Completion**: 63.4%
+- **Total Estimated Effort**: 1042.75 hours
+  - Active Tasks: 502 hours
+  - Completed Tasks: 540.75 hours (actual: 534 hours)
+- **Overall Completion**: 64.8%
 
 ## Task Management Guidelines
 
