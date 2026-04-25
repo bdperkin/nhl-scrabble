@@ -323,14 +323,14 @@ pre-commit run check-version-consistency
 # Revert change
 
 # Test 3c: Add hardcoded version (should fail)
-# Add __version__ = "2.0.0" to src/nhl_scrabble/__init__.py
+# Add __version__ = "0.1.0" to src/nhl_scrabble/__init__.py
 pre-commit run check-version-consistency
 # Revert change
 
 # Test 3d: Create invalid tag (should fail)
-git tag 2.0.0  # Missing 'v' prefix
+git tag 0.1.0  # Missing 'v' prefix
 pre-commit run check-version-consistency
-git tag -d 2.0.0
+git tag -d 0.1.0
 
 # 4. Run on all files
 pre-commit run check-version-consistency --all-files

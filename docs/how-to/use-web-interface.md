@@ -134,7 +134,7 @@ curl http://localhost:8000/health
 ```json
 {
   "status": "healthy",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "timestamp": "2026-04-21T12:00:00Z"
 }
 ```

@@ -30,7 +30,7 @@ Together, these tasks create a complete release automation workflow:
 
 ```bash
 # 1. Developer creates tag
-git tag -a v2.1.0 -m "Release version 2.1.0"
+git tag -a v0.1.0 -m "Release version 0.1.0"
 git push --tags
 
 # 2. Developer manually creates GitHub release
@@ -134,7 +134,7 @@ Recommended format for tag annotations:
 
 ```bash
 # Simple release
-git tag -a v2.1.0 -m "Release v2.1.0
+git tag -a v0.1.0 -m "Release v0.1.0
 
 ## What's Changed
 
@@ -146,10 +146,10 @@ git tag -a v2.1.0 -m "Release v2.1.0
 
 None
 
-**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0"
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.1...v0.1.0"
 
 # Pre-release
-git tag -a v2.2.0-rc1 -m "Release v2.2.0-rc1 (Release Candidate)
+git tag -a v0.2.0-rc1 -m "Release v0.2.0-rc1 (Release Candidate)
 
 ## What's Changed (Pre-release)
 
@@ -163,7 +163,7 @@ git tag -a v2.2.0-rc1 -m "Release v2.2.0-rc1 (Release Candidate)
 **This is a pre-release and should not be used in production.**"
 
 # Push tag
-git push origin v2.1.0
+git push origin v0.1.0
 ```
 
 ### 5. Integration with CHANGELOG (Task #030)
@@ -232,7 +232,7 @@ When task #030 is implemented, combine both:
 
 ```bash
 # 1. Create test annotated tag locally
-git tag -a v2.1.0-test -m "Test Release v2.1.0-test
+git tag -a v0.1.0-test -m "Test Release v0.1.0-test
 
 ## What's Changed
 
@@ -242,10 +242,10 @@ git tag -a v2.1.0-test -m "Test Release v2.1.0-test
 This is a test release."
 
 # 2. Extract annotation (verify format)
-git tag -l -n9999 v2.1.0-test
+git tag -l -n9999 v0.1.0-test
 
 # 3. Clean up
-git tag -d v2.1.0-test
+git tag -d v0.1.0-test
 ```
 
 ### CI Testing (Workflow)
@@ -276,19 +276,19 @@ git push origin --delete v0.0.1-test
 
 ```bash
 # Test pre-release detection
-git tag -a v2.2.0-rc1 -m "Release Candidate 1"
-git push origin v2.2.0-rc1
+git tag -a v0.2.0-rc1 -m "Release Candidate 1"
+git push origin v0.2.0-rc1
 
 # Verify release is marked as pre-release
-gh release view v2.2.0-rc1 --json isPrerelease
+gh release view v0.2.0-rc1 --json isPrerelease
 ```
 
 ### Integration Testing
 
 ```bash
 # Full release cycle
-git tag -a v2.1.0 -m "$(cat <<'EOF'
-Release v2.1.0
+git tag -a v0.1.0 -m "$(cat <<'EOF'
+Release v0.1.0
 
 ## What's Changed
 
@@ -300,10 +300,10 @@ Release v2.1.0
 
 None
 
-**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.1...v0.1.0
 EOF
 )"
-git push origin v2.1.0
+git push origin v0.1.0
 
 # Verify:
 # 1. GitHub Actions workflow runs
@@ -366,7 +366,7 @@ git push origin v2.1.0
 
 ```bash
 # Structured release
-git tag -a v2.1.0 -m "Release v2.1.0
+git tag -a v0.1.0 -m "Release v0.1.0
 
 ## What's Changed
 
@@ -385,15 +385,15 @@ git tag -a v2.1.0 -m "Release v2.1.0
 
 None
 
-**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0"
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.1...v0.1.0"
 
 # Minimal (auto-generated changelog will supplement)
-git tag -a v2.1.0 -m "Release v2.1.0
+git tag -a v0.1.0 -m "Release v0.1.0
 
 See CHANGELOG.md for details."
 
 # Pre-release
-git tag -a v2.2.0-rc1 -m "Release Candidate 1 for v2.2.0
+git tag -a v0.2.0-rc1 -m "Release Candidate 1 for v0.2.0
 
 ## Testing Focus
 - New caching system
@@ -406,21 +406,21 @@ git tag -a v2.2.0-rc1 -m "Release Candidate 1 for v2.2.0
 
 ```bash
 # ❌ Too short
-git tag -a v2.1.0 -m "v2.1.0"
+git tag -a v0.1.0 -m "v0.1.0"
 
 # ❌ No version in message
-git tag -a v2.1.0 -m "New release"
+git tag -a v0.1.0 -m "New release"
 
 # ❌ Lightweight tag (no annotation)
-git tag v2.1.0  # No -a flag
+git tag v0.1.0  # No -a flag
 ```
 
 ### Pre-release Detection
 
 Automatically marks as pre-release if tag contains:
-- `-rc` (release candidate): `v2.1.0-rc1`
-- `-beta` (beta release): `v2.1.0-beta2`
-- `-alpha` (alpha release): `v2.1.0-alpha1`
+- `-rc` (release candidate): `v0.1.0-rc1`
+- `-beta` (beta release): `v0.1.0-beta1`
+- `-alpha` (alpha release): `v0.1.0-alpha1`
 
 ### Workflow Permissions
 
@@ -533,17 +533,17 @@ fi
 ### Versioning Strategy
 
 **Semantic Versioning:**
-- Major: `v3.0.0` (breaking changes)
-- Minor: `v2.1.0` (new features)
-- Patch: `v2.0.1` (bug fixes)
-- Pre-release: `v2.1.0-rc1` (release candidates)
+- Major: `v1.0.0` (breaking changes)
+- Minor: `v0.1.0` (new features)
+- Patch: `v0.0.2` (bug fixes)
+- Pre-release: `v0.1.0-rc1` (release candidates)
 
 **Tag Format:**
-- ✅ `v2.1.0` - Valid
-- ✅ `v2.1.0-rc1` - Valid (pre-release)
-- ✅ `v2.1.0-beta2` - Valid (pre-release)
-- ❌ `2.1.0` - Invalid (missing `v`)
-- ❌ `version-2.1.0` - Invalid (wrong format)
+- ✅ `v0.1.0` - Valid
+- ✅ `v0.1.0-rc1` - Valid (pre-release)
+- ✅ `v0.1.0-beta1` - Valid (pre-release)
+- ❌ `0.1.0` - Invalid (missing `v`)
+- ❌ `version-0.1.0` - Invalid (wrong format)
 
 ## Implementation Notes
 
