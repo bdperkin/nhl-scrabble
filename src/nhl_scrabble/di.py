@@ -84,6 +84,7 @@ class DependencyContainer:
     def create_api_client(
         self,
         cache_enabled: bool | None = None,
+        cache_dir: str | None = None,
     ) -> APIClientProtocol:
         """Create NHL API client with configuration.
 
@@ -93,6 +94,7 @@ class DependencyContainer:
 
         Args:
             cache_enabled: Override cache setting from config. If None, uses config value.
+            cache_dir: Override cache directory from config. If None, uses config value.
 
         Returns:
             Configured API client implementing APIClientProtocol
@@ -114,6 +116,7 @@ class DependencyContainer:
         """
         # Use override if provided, otherwise use config value
         use_cache = cache_enabled if cache_enabled is not None else self.config.cache_enabled
+        use_cache_dir = cache_dir if cache_dir is not None else self.config.cache_dir
 
         client = NHLApiClient(
             base_url=self.config.api_base_url,
@@ -125,6 +128,7 @@ class DependencyContainer:
             max_backoff=self.config.max_backoff,
             cache_enabled=use_cache,
             cache_expiry=self.config.cache_expiry,
+            cache_dir=use_cache_dir,
             dos_max_connections=self.config.dos_max_connections,
             dos_max_per_host=self.config.dos_max_per_host,
             dos_circuit_breaker_threshold=self.config.dos_circuit_breaker_threshold,

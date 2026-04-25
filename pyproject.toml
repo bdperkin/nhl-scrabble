@@ -48,6 +48,7 @@ dependencies = [
     "prompt-toolkit>=3.0.52",
     "pydantic",
     "pydantic-settings>=2.7.3",
+    "platformdirs>=4.0.0",
 ]
 
 [project.license]

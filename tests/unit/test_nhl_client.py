@@ -637,3 +637,57 @@ class TestNHLApiClient:
         result = client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
         assert result is False
         client.close()
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_cache_uses_platform_directory(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Test cache uses platform-specific directory by default."""
+        # Mock platformdirs to return test directory
+        monkeypatch.setattr("platformdirs.user_cache_dir", lambda *args: str(tmp_path))
+
+        client = NHLApiClient(cache_enabled=True)
+
+        # Cache directory should be created
+        assert tmp_path.exists()
+        assert tmp_path.is_dir()
+
+        # Cache file should be in platform directory
+        expected_cache = tmp_path / "api_cache.sqlite"
+        assert expected_cache.exists()
+
+        client.close()
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_cache_uses_custom_directory(self, tmp_path: Path) -> None:
+        """Test cache uses custom directory when specified."""
+        custom_dir = tmp_path / "custom_cache"
+
+        client = NHLApiClient(cache_enabled=True, cache_dir=custom_dir)
+
+        # Cache should be in custom directory
+        assert custom_dir.exists()
+        assert (custom_dir / "api_cache.sqlite").exists()
+
+        client.close()
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_cache_directory_permission_error(self) -> None:
+        """Test proper error when cache directory is not writable."""
+        read_only_dir = "/root/.cache"  # Typically not writable by regular users
+
+        with pytest.raises(Exception, match="Cache directory not writable"):
+            NHLApiClient(cache_enabled=True, cache_dir=read_only_dir)
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_cache_directory_creation(self, tmp_path: Path) -> None:
+        """Test cache directory is created if it doesn't exist."""
+        cache_dir = tmp_path / "nested" / "cache" / "dir"
+
+        client = NHLApiClient(cache_enabled=True, cache_dir=cache_dir)
+
+        # Nested directory should be created
+        assert cache_dir.exists()
+        assert cache_dir.is_dir()
+
+        client.close()
