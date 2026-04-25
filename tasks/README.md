@@ -242,7 +242,7 @@ Each task includes:
 | 022 | Remove Backward Compatibility Code Before First Release                       | MEDIUM   | 2-4 hours           | Completed | [#329](https://github.com/bdperkin/nhl-scrabble/issues/329) | PR [#335](https://github.com/bdperkin/nhl-scrabble/pull/335), 2026-04-22, 3.5h actual  |
 | 023 | Consolidate Exporters and Formatters Architecture                             | LOW      | 3-5 hours           | Active    | TBD                                                         | -                                                                                      |
 | 024 | Make 'ty' Blocking After Validation Period                                    | LOW      | 30min-1h            | Active    | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | -                                                                                      |
-| 025 | Make 'refurb' Blocking After Validation Period                                | LOW      | 30min-1h            | Active    | [#356](https://github.com/bdperkin/nhl-scrabble/issues/356) | -                                                                                      |
+| 025 | Make 'refurb' Blocking After Validation Period                                | LOW      | 30min-1h            | Completed | [#356](https://github.com/bdperkin/nhl-scrabble/issues/356) | PR [#370](https://github.com/bdperkin/nhl-scrabble/pull/370), 2026-04-24, 1.5h actual |
 | 026 | Make 'gitlint' Blocking (Except GitHub CI Workflows) After Validation Period  | LOW      | 30min-1h            | Active    | [#357](https://github.com/bdperkin/nhl-scrabble/issues/357) | -                                                                                      |
 | 027 | Audit and Adjust Logging Levels                                               | LOW      | 2-3 hours           | Active    | [#364](https://github.com/bdperkin/nhl-scrabble/issues/364) | -                                                                                      |
 
@@ -258,8 +258,8 @@ Each task includes:
 | Enhancement  | 3      | 32        | 35      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 14     | 16        | 30      |
-| **TOTAL**    | **65** | **111**   | **176** |
+| Refactoring  | 13     | 17        | 30      |
+| **TOTAL**    | **64** | **112**   | **176** |
 
 ### Effort Estimates by Category
 
@@ -271,8 +271,8 @@ Each task includes:
 | Enhancement  | 201.5 hours      |
 | Testing      | 265.0 hours      |
 | New Features | 227.0 hours      |
-| Refactoring  | 219.75 hours     |
-| **TOTAL**    | **1043.5 hours**  |
+| Refactoring  | 219.0 hours      |
+| **TOTAL**    | **1042.75 hours** |
 
 ### Completion Progress
 
@@ -284,8 +284,8 @@ Each task includes:
 | Enhancement  | 91.4%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
-| Refactoring  | 55.2%           |
-| **OVERALL**  | **64.5%**       |
+| Refactoring  | 56.7%           |
+| **OVERALL**  | **63.6%**       |
 
 ### Priority Distribution (Active Tasks)
 
