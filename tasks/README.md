@@ -229,7 +229,7 @@ Each task includes:
 | 003 | Unified Configuration Management                                              | MEDIUM   | 5-6 hours           | Completed | [#161](https://github.com/bdperkin/nhl-scrabble/issues/161) | PR [#358](https://github.com/bdperkin/nhl-scrabble/pull/358), 2026-04-24, 5h actual    |
 | 003 | Port check-branch-protection.sh Git Hook to Python                            | MEDIUM   | 1-2 hours           | Completed | [#101](https://github.com/bdperkin/nhl-scrabble/issues/101) | -                                                                                      |
 | 004 | Add pyupgrade for Automatic Python Syntax Modernization                       | MEDIUM   | 1.5 hours           | Completed | [#118](https://github.com/bdperkin/nhl-scrabble/issues/118) | [PR #336](https://github.com/bdperkin/nhl-scrabble/pull/336)                           |
-| 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Active    | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | -                                                                                      |
+| 005 | Add djlint for HTML and Jinja2 Template Linting                               | MEDIUM   | 30-60 minutes       | Completed | [#127](https://github.com/bdperkin/nhl-scrabble/issues/127) | PR [#388](https://github.com/bdperkin/nhl-scrabble/pull/388), 2026-04-26, ~50min actual |
 | 006 | Implement Consistent Error Handling Strategy                                  | MEDIUM   | 6-8 hours           | Completed | [#162](https://github.com/bdperkin/nhl-scrabble/issues/162) | PR [#361](https://github.com/bdperkin/nhl-scrabble/pull/361), 2026-04-24, 6h actual    |
 | 007 | Add Dependency Injection                                                      | LOW      | 8-10 hours          | Completed | [#163](https://github.com/bdperkin/nhl-scrabble/issues/163) | PR [#360](https://github.com/bdperkin/nhl-scrabble/pull/360), 2026-04-24, 6h actual    |
 | 008 | Repository Cleanup and Consolidation                                          | MEDIUM   | 4-6 hours           | Completed | [#216](https://github.com/bdperkin/nhl-scrabble/issues/216) | -                                                                                      |
@@ -265,8 +265,8 @@ Each task includes:
 | Enhancement  | 12     | 33        | 45      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 3      | 27        | 30      |
-| **TOTAL**    | **62** | **126**   | **188** |
+| Refactoring  | 2      | 28        | 30      |
+| **TOTAL**    | **61** | **129**   | **190** |
 
 ### Effort Estimates by Category
 
