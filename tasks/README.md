@@ -240,7 +240,7 @@ Each task includes:
 | 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Completed | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | PR [#350](https://github.com/bdperkin/nhl-scrabble/pull/350), 2026-04-24, 4h actual    |
 | 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Completed | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | PR [#337](https://github.com/bdperkin/nhl-scrabble/pull/337), 2026-04-22, 2.5h actual  |
 | 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 45 minutes          | Completed | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | PR [#386](https://github.com/bdperkin/nhl-scrabble/pull/386), 2026-04-25, 45min actual |
-| 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Active    | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | -                                                                                      |
+| 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Completed | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | PR [#387](https://github.com/bdperkin/nhl-scrabble/pull/387), 2026-04-26, 1.5h actual |
 | 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Completed | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | PR [#338](https://github.com/bdperkin/nhl-scrabble/pull/338), 2026-04-23, 45min actual |
 | 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Completed | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | PR [#339](https://github.com/bdperkin/nhl-scrabble/pull/339), 2026-04-23, 1.5h actual  |
 | 019 | Add ssort Python Statement Sorter                                             | MEDIUM   | 2-3 hours           | Completed | [#246](https://github.com/bdperkin/nhl-scrabble/issues/246) | PR [#340](https://github.com/bdperkin/nhl-scrabble/pull/340), 2026-04-23, 2.5h actual  |
@@ -265,8 +265,8 @@ Each task includes:
 | Enhancement  | 12     | 33        | 45      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 4      | 26        | 30      |
-| **TOTAL**    | **63** | **125**   | **188** |
+| Refactoring  | 3      | 27        | 30      |
+| **TOTAL**    | **62** | **126**   | **188** |
 
 ### Effort Estimates by Category
 
