@@ -987,14 +987,14 @@ ignore = "H021,J004,J018,T003"  # Project-specific exceptions
 
 **Ignored rules** (with justification):
 
-| Rule | Description                  | Why Ignored                               |
-| ---- | ---------------------------- | ----------------------------------------- |
-| H021 | Inline styles                | Acceptable for single-file templates      |
-| H023 | Entity references (&copy;)   | Standard HTML entities are readable       |
-| J004 | Static URLs - url_for()      | Not using Flask's static helper           |
-| J018 | Internal links - url_for()   | Direct URLs are intentional               |
-| T003 | Endblock names               | Optional style, blocks are small & clear  |
-| T028 | Spaceless tags               | Minor style preference, no functionality  |
+| Rule | Description                | Why Ignored                              |
+| ---- | -------------------------- | ---------------------------------------- |
+| H021 | Inline styles              | Acceptable for single-file templates     |
+| H023 | Entity references (©)      | Standard HTML entities are readable      |
+| J004 | Static URLs - url_for()    | Not using Flask's static helper          |
+| J018 | Internal links - url_for() | Direct URLs are intentional              |
+| T003 | Endblock names             | Optional style, blocks are small & clear |
+| T028 | Spaceless tags             | Minor style preference, no functionality |
 
 **Benefits:**
 
