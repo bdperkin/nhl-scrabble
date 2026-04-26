@@ -259,14 +259,14 @@ Each task includes:
 
 | Category     | Active | Completed | Total   |
 | ------------ | ------ | --------- | ------- |
-| Bug Fixes    | 1      | 10        | 11      |
+| Bug Fixes    | 0      | 11        | 11      |
 | Security     | 1      | 14        | 15      |
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 12     | 33        | 45      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
-| Refactoring  | 2      | 28        | 30      |
-| **TOTAL**    | **61** | **129**   | **190** |
+| Refactoring  | 1      | 29        | 30      |
+| **TOTAL**    | **59** | **129**   | **188** |
 
 ### Effort Estimates by Category
 
@@ -315,7 +315,7 @@ _No critical priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 188 tasks (62 active, 126 completed)
+**Total Tasks**: 188 tasks (59 active, 129 completed)
 
 - **Total Estimated Effort**: 1061.25 hours
   - Active Tasks: ~517 hours
