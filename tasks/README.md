@@ -67,6 +67,7 @@ Each task includes:
 | 009 | Add Bandit Security Linting for Python Code                              | MEDIUM   | 1-2 hours     | Completed | [#239](https://github.com/bdperkin/nhl-scrabble/issues/239) | -     |
 | 010 | Add Safety Dependency Vulnerability Scanning                             | MEDIUM   | 1-2 hours     | Completed | [#240](https://github.com/bdperkin/nhl-scrabble/issues/240) | -     |
 | 011 | Monitor and Fix CVE-2026-3219 When pip Patch is Available                | MEDIUM   | 30min-1h      | Active    | [#375](https://github.com/bdperkin/nhl-scrabble/issues/375) | Security monitoring for pip vulnerability |
+| 012 | Add Local CodeQL Scanning Integration                                    | MEDIUM   | 4-6 hours     | Active    | [#389](https://github.com/bdperkin/nhl-scrabble/issues/389) | Enable local security scanning before pushing code |
 
 ### Optimization
 
@@ -260,48 +261,48 @@ Each task includes:
 | Category     | Active | Completed | Total   |
 | ------------ | ------ | --------- | ------- |
 | Bug Fixes    | 0      | 11        | 11      |
-| Security     | 1      | 14        | 15      |
+| Security     | 2      | 14        | 16      |
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 12     | 33        | 45      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 1      | 29        | 30      |
-| **TOTAL**    | **59** | **129**   | **188** |
+| **TOTAL**    | **60** | **129**   | **189** |
 
 ### Effort Estimates by Category
 
 | Category     | Estimated Effort |
 | ------------ | ---------------- |
 | Bug Fixes    | 12.25 hours      |
-| Security     | 82.75 hours      |
+| Security     | 87.75 hours      |
 | Optimization | 36.0 hours       |
 | Enhancement  | 219.25 hours     |
 | Testing      | 265.0 hours      |
 | New Features | 227.0 hours      |
 | Refactoring  | 219.0 hours      |
-| **TOTAL**    | **1061.25 hours**|
+| **TOTAL**    | **1066.25 hours**|
 
 ### Completion Progress
 
 | Category     | Completion Rate |
 | ------------ | --------------- |
-| Bug Fixes    | 90.9%           |
-| Security     | 93.3%           |
+| Bug Fixes    | 100.0%          |
+| Security     | 87.5%           |
 | Optimization | 100.0%          |
 | Enhancement  | 73.3%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
-| Refactoring  | 83.3%           |
-| **OVERALL**  | **66.5%**       |
+| Refactoring  | 96.7%           |
+| **OVERALL**  | **68.3%**       |
 
 ### Priority Distribution (Active Tasks)
 
 | Priority | Count |
 | -------- | ----- |
 | CRITICAL | 0     |
-| HIGH     | 1     |
-| MEDIUM   | 58    |
-| LOW      | 5     |
+| HIGH     | 0     |
+| MEDIUM   | 59    |
+| LOW      | 1     |
 
 ## Recommended Implementation Order
 
@@ -311,16 +312,16 @@ _No critical priority tasks_
 
 ### High Priority (Current Sprint)
 
-1. **Bug Fix**: [#010 Fix Output Format Validation Mismatch](bug-fixes/010-fix-output-format-validation-mismatch.md) - 30min-1h - CLI crashes with confusing pydantic error for valid format options like markdown
+_No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 188 tasks (59 active, 129 completed)
+**Total Tasks**: 189 tasks (60 active, 129 completed)
 
-- **Total Estimated Effort**: 1061.25 hours
-  - Active Tasks: ~517 hours
+- **Total Estimated Effort**: 1066.25 hours
+  - Active Tasks: ~522 hours
   - Completed Tasks: ~544.25 hours
-- **Overall Completion**: 67.0%
+- **Overall Completion**: 68.3%
 
 ## Task Management Guidelines
 

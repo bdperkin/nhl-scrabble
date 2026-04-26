@@ -1,8 +1,8 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
-**Generated**: 2026-04-25 (synchronized with filesystem)
-**Total Tasks**: 59 active tasks
-**Estimated Effort**: ~517 hours
+**Generated**: 2026-04-26 (synchronized with filesystem)
+**Total Tasks**: 60 active tasks
+**Estimated Effort**: ~522 hours
 **Strategy**: Priority-first with dependency awareness
 
 ## How to Use This File
@@ -53,7 +53,7 @@ ______________________________________________________________________
 
 ## Phase 2: Medium Priority Workflows - Deployment & Security
 
-**Total Effort**: 12-18 hours
+**Total Effort**: 16-24 hours
 **Focus**: Release automation, security, and quality workflows
 **Dependencies**: Sub-tasks of enhancement/022, GitHub releases depends on PyPI
 
@@ -62,6 +62,7 @@ ______________________________________________________________________
 /implement-task new-features/033-github-release-workflow.md       # 2-3h, Issue #300
 
 # Security & Quality Workflows
+/implement-task security/012-local-codeql-scanning.md             # 4-6h, Issue #389
 /implement-task new-features/039-benchmark-workflow.md            # 3-4h, Issue #306
 /implement-task new-features/040-sbom-workflow.md                 # 2-3h, Issue #307
 /implement-task new-features/041-provenance-workflow.md           # 2-3h, Issue #308
