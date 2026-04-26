@@ -1,3 +1,42 @@
+# ============================================================================
+# NHL Scrabble - Project Configuration
+# ============================================================================
+# Central configuration file for the NHL Scrabble Score Analyzer project.
+# Follows PEP 621 (Project Metadata), PEP 517 (Build System), PEP 518 (pyproject.toml).
+#
+# Documentation:
+# - PEP 621: https://peps.python.org/pep-0621/
+# - PEP 517: https://peps.python.org/pep-0517/
+# - PEP 518: https://peps.python.org/pep-0518/
+#
+# Auto-formatting: This file is automatically formatted by pyproject-fmt pre-commit hook.
+# Manual formatting is not necessary - commit changes and the hook applies formatting.
+#
+# Key Sections:
+# - [build-system]: Build backend configuration (hatchling + hatch-vcs)
+# - [project]: Core metadata (name, version, dependencies, etc.)
+# - [project.optional-dependencies]: Extra dependency groups (test, lint, docs, etc.)
+# - [tool.*]: Tool-specific configurations (ruff, mypy, pytest, etc.)
+#
+# Versioning Strategy:
+# - Version is dynamically determined from git tags via hatch-vcs
+# - Tagged release: v0.1.0 → Package version 0.1.0
+# - Development: 5 commits after v0.1.0 → 0.1.1.dev5+g<hash>
+# - No tags: 0.0.0+unknown
+# - To release: git tag -a v0.1.0 -m "Release 0.1.0" && git push --tags
+#
+# Dependency Philosophy:
+# - Use >= for minimum versions (maximum compatibility)
+# - Only specify minimums when specific features required
+# - Avoid upper bounds unless breaking changes known
+# - Document WHY minimum versions are specified
+#
+# Tool Configuration Philosophy:
+# - Enable ALL rules by default (comprehensive quality)
+# - Selectively ignore with documented justification
+# - Matches ruff's "ALL rules" approach
+# - Per-file exceptions documented with rationale
+# ============================================================================
 [build-system]
 build-backend = "hatchling.build"
 requires = [
