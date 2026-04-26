@@ -744,6 +744,13 @@ make validate-json
 # or via tox: tox -e check-jsonschema
 # or directly: check-jsonschema --schemafile "https://json.schemastore.org/github-workflow.json" .github/workflows/*.yml
 
+# Lint and format HTML/Jinja2 templates with djlint
+make djlint
+# or via tox: tox -e djlint (check + reformat)
+# or via tox: tox -e djlint-check (check only, no formatting)
+# or directly: djlint src/ --profile=jinja --lint --check
+# Apply formatting: djlint src/ --profile=jinja --reformat
+
 # Run pre-commit hooks manually
 pre-commit run --all-files
 
@@ -924,6 +931,95 @@ refurb is currently in **warning mode** - it shows modernization suggestions but
 | ty        | **Fast type checking**     | Same as mypy but 10-100x faster (validation mode) |
 
 All tools work together to maintain high code quality!
+
+### HTML/Template Linting and Formatting
+
+The project uses **[djlint](https://github.com/Riverside-Healthcare/djLint)** to lint and format HTML templates with Jinja2 syntax, ensuring consistent formatting and catching template errors before runtime:
+
+```bash
+# Lint templates (check only)
+djlint src/ --profile=jinja --lint --check
+
+# Format templates (reformat)
+djlint src/ --profile=jinja --reformat
+
+# Via tox (recommended)
+tox -e djlint-check  # Check only (CI-friendly)
+tox -e djlint        # Check + reformat
+
+# Pre-commit hooks run automatically
+pre-commit run djlint-jinja --all-files            # Check only
+pre-commit run djlint-reformat-jinja --all-files   # Reformat
+```
+
+**What djlint does:**
+
+- **Template syntax validation**: Ensures Jinja2 syntax is correct
+- **HTML structure validation**: Validates HTML5 structure (W3C rules)
+- **Consistent formatting**: Auto-formats HTML and embedded CSS/JS
+- **Accessibility checks**: Detects missing alt text, ARIA issues
+- **Error prevention**: Catches template errors before runtime
+
+**Example output:**
+
+```bash
+$ djlint src/nhl_scrabble/templates/report.html --profile=jinja --lint
+
+Linting report.html
+--------------------
+H006 5:4 Img tag without alt attribute.
+T001 12:8 Variables should be wrapped in whitespace. {{ var }}
+
+2 files linted, 2 errors found.
+```
+
+**Configuration** (in `pyproject.toml`):
+
+```toml
+[tool.djlint]
+profile = "jinja"               # Jinja2 template syntax
+indent = 4                      # Match Python indentation
+max_line_length = 120           # Reasonable line length
+format_css = true               # Format <style> blocks
+format_js = true                # Format <script> blocks
+ignore = "H021,J004,J018,T003"  # Project-specific exceptions
+```
+
+**Ignored rules** (with justification):
+
+| Rule | Description                | Why Ignored                              |
+| ---- | -------------------------- | ---------------------------------------- |
+| H021 | Inline styles              | Acceptable for single-file templates     |
+| H023 | Entity references (©)      | Standard HTML entities are readable      |
+| J004 | Static URLs - url_for()    | Not using Flask's static helper          |
+| J018 | Internal links - url_for() | Direct URLs are intentional              |
+| T003 | Endblock names             | Optional style, blocks are small & clear |
+| T028 | Spaceless tags             | Minor style preference, no functionality |
+
+**Benefits:**
+
+- ✅ **Runtime error prevention**: Catch template errors before they render
+- ✅ **Consistent formatting**: All templates follow same style
+- ✅ **Accessibility**: Automated detection of accessibility issues
+- ✅ **Fast**: Lints 100 templates in ~1 second
+- ✅ **Automatic**: Runs on every commit via pre-commit hook
+
+**Integration:**
+
+- **Pre-commit**: Runs on every commit (`.pre-commit-config.yaml`)
+- **Tox**: `tox -e djlint-check` for CI, `tox -e djlint` for development
+- **CI**: Runs on all PRs via GitHub Actions (via tox)
+
+**When to use:**
+
+- Before committing template changes
+- When adding new HTML templates
+- To enforce consistent template style
+- To catch accessibility issues early
+
+**Template file patterns:**
+
+djlint automatically detects files matching: `*.html`, `*.jinja`, `*.jinja2`
 
 ### JSON/YAML Schema Validation
 

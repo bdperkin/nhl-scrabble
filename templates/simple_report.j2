@@ -2,12 +2,12 @@ NHL Scrabble Scores Report
 Generated: {{ timestamp }}
 
 {% if summary %}
-Summary:
-- Total Teams: {{ summary.total_teams }}
-- Total Players: {{ summary.total_players }}
+    Summary:
+    - Total Teams: {{ summary.total_teams }}
+    - Total Players: {{ summary.total_players }}
 {% endif %}
 
 Top Teams by Score:
 {% for abbrev, team in teams.items()|sort(attribute='1.total', reverse=True) %}
-{{ loop.index }}. {{ abbrev }}: {{ team.total }} points ({{ team.division }})
+    {{ loop.index }}. {{ abbrev }}: {{ team.total }} points ({{ team.division }})
 {% endfor %}

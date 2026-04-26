@@ -110,6 +110,7 @@ test = [
     "pytest-xdist>=3.8.0",
 ]
 lint = [
+    "djlint>=1.34.0",
     "refurb>=2.3.1",
     "ruff",
 ]
@@ -767,6 +768,34 @@ omit = [
     "*/tests/*",
     "*/__main__.py",
 ]
+
+[tool.djlint]
+# Template profile (jinja, django, nunjucks, handlebars, twig, angular, golang)
+profile = "jinja"
+# Indentation
+indent = 4
+max_line_length = 120
+max_attribute_length = 80
+# Formatting options
+format_css = true
+format_js = true
+preserve_blank_lines = true
+preserve_leading_space = false
+# Linting rules
+# H006: Img tag without alt attribute (may have decorative images or dynamic alt)
+# H021: Inline styles (acceptable for single-file template with <style> block)
+# H023: Entity references (using &copy; is standard and readable)
+# H030: Consider meta keywords (outdated for SEO, not relevant for reports)
+# H031: Consider meta description (not needed for generated reports)
+# J004: Static URLs - not using Flask's url_for (project doesn't use Flask static helper)
+# J018: Internal links - not using Flask's url_for (direct URLs are intentional)
+# T003: Endblock names - optional style preference, blocks are small and clear
+# T028: Spaceless tags - minor style preference, doesn't affect functionality
+ignore = "H006,H021,H023,H030,H031,J004,J018,T003,T028"
+# Exclude patterns (comma-separated glob patterns)
+exclude = ".git,.tox,.venv,venv,node_modules,htmlcov,_build,dist"
+# Extension matching
+extension = "html"
 
 [tool.autoflake]
 check = true
