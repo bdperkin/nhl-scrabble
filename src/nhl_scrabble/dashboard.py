@@ -270,7 +270,8 @@ class StatisticsDashboard:
 
         # Split left column into standings
         layout["left"].split_column(
-            Layout(name="divisions", ratio=1), Layout(name="conferences", ratio=1)
+            Layout(name="divisions", ratio=1),
+            Layout(name="conferences", ratio=1),
         )
 
         # Split right column into teams and players

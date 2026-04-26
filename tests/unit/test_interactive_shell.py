@@ -467,7 +467,9 @@ class TestDisplayMethods:
             # Should not raise
 
     def test_display_team_list(
-        self, shell_with_data: InteractiveShell, mock_team_scores: list[TeamScore]
+        self,
+        shell_with_data: InteractiveShell,
+        mock_team_scores: list[TeamScore],
     ) -> None:
         """Test displaying team list."""
         with patch.object(shell_with_data.console, "print"):
@@ -657,7 +659,9 @@ class TestRunMethodCoverage:
         """Test run continues on Ctrl+C."""
         with (
             patch.object(
-                shell_with_data.session, "prompt", side_effect=[KeyboardInterrupt(), "exit"]
+                shell_with_data.session,
+                "prompt",
+                side_effect=[KeyboardInterrupt(), "exit"],
             ),
             patch.object(shell_with_data.console, "print"),
         ):

@@ -421,7 +421,9 @@ class TestStatisticsDashboard:
 
     @patch("nhl_scrabble.dashboard.Live")
     def test_run_keyboard_interrupt(
-        self, mock_live: MagicMock, dashboard: StatisticsDashboard
+        self,
+        mock_live: MagicMock,
+        dashboard: StatisticsDashboard,
     ) -> None:
         """Test dashboard handles keyboard interrupt gracefully."""
         # Mock Live to raise KeyboardInterrupt

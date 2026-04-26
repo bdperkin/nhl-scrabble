@@ -51,7 +51,7 @@ class ExcelExporter:
         if not OPENPYXL_AVAILABLE:
             raise ImportError(
                 "openpyxl is required for Excel export. "
-                "Install with: pip install nhl-scrabble[export]"
+                "Install with: pip install nhl-scrabble[export]",
             )
 
     def _format_header_row(self, ws: Worksheet, row: int = 1) -> None:
@@ -92,7 +92,9 @@ class ExcelExporter:
             ws.column_dimensions[column_letter].width = adjusted_width
 
     def export_team_scores(
-        self, teams: dict[str, TeamScore] | list[TeamScore], output: Path
+        self,
+        teams: dict[str, TeamScore] | list[TeamScore],
+        output: Path,
     ) -> None:
         """Export team scores to Excel file.
 
@@ -116,7 +118,7 @@ class ExcelExporter:
                 "Total Score",
                 "Player Count",
                 "Average Score",
-            ]
+            ],
         )
         self._format_header_row(ws)
 
@@ -136,7 +138,7 @@ class ExcelExporter:
                     team.total,
                     team.player_count,
                     round(team.avg_per_player, 2),
-                ]
+                ],
             )
 
         self._auto_adjust_columns(ws)
@@ -166,7 +168,7 @@ class ExcelExporter:
                 "First Name Score",
                 "Last Name Score",
                 "Total Score",
-            ]
+            ],
         )
         self._format_header_row(ws)
 
@@ -184,7 +186,7 @@ class ExcelExporter:
                     player.first_score,
                     player.last_score,
                     player.full_score,
-                ]
+                ],
             )
 
         self._auto_adjust_columns(ws)
@@ -233,12 +235,14 @@ class ExcelExporter:
                     "Total Score",
                     "Player Count",
                     "Average Score",
-                ]
+                ],
             )
             self._format_header_row(ws_teams)
 
             sorted_teams = sorted(
-                team_scores.values(), key=lambda t: (t.total, t.avg_per_player), reverse=True
+                team_scores.values(),
+                key=lambda t: (t.total, t.avg_per_player),
+                reverse=True,
             )
             for team in sorted_teams:
                 ws_teams.append(
@@ -249,7 +253,7 @@ class ExcelExporter:
                         team.total,
                         team.player_count,
                         round(team.avg_per_player, 2),
-                    ]
+                    ],
                 )
             self._auto_adjust_columns(ws_teams)
 
@@ -265,7 +269,7 @@ class ExcelExporter:
                     "First Name Score",
                     "Last Name Score",
                     "Total Score",
-                ]
+                ],
             )
             self._format_header_row(ws_players)
 
@@ -280,7 +284,7 @@ class ExcelExporter:
                         player.first_score,
                         player.last_score,
                         player.full_score,
-                    ]
+                    ],
                 )
             self._auto_adjust_columns(ws_players)
 
@@ -294,7 +298,7 @@ class ExcelExporter:
                     "Total Score",
                     "Player Count",
                     "Average Score",
-                ]
+                ],
             )
             self._format_header_row(ws_divisions)
 
@@ -309,7 +313,7 @@ class ExcelExporter:
                             team.total,
                             team.player_count,
                             round(team.avg_per_player, 2),
-                        ]
+                        ],
                     )
             self._auto_adjust_columns(ws_divisions)
 
@@ -324,7 +328,7 @@ class ExcelExporter:
                     "Total Score",
                     "Player Count",
                     "Average Score",
-                ]
+                ],
             )
             self._format_header_row(ws_conferences)
 
@@ -340,7 +344,7 @@ class ExcelExporter:
                             team.total,
                             team.player_count,
                             round(team.avg_per_player, 2),
-                        ]
+                        ],
                     )
             self._auto_adjust_columns(ws_conferences)
 
@@ -356,7 +360,7 @@ class ExcelExporter:
                     "Total Score",
                     "Average Score",
                     "Status",
-                ]
+                ],
             )
             self._format_header_row(ws_playoffs)
 
@@ -373,7 +377,7 @@ class ExcelExporter:
                             playoff_team.total,
                             round(playoff_team.avg, 2),
                             playoff_team.status_indicator,
-                        ]
+                        ],
                     )
             self._auto_adjust_columns(ws_playoffs)
 

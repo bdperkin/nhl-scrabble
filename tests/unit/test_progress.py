@@ -121,7 +121,9 @@ class TestProgressManager:
 
         # Verify add_task called
         mock_progress.add_task.assert_called_once_with(
-            "Calculating Scrabble scores", total=5, status=""
+            "Calculating Scrabble scores",
+            total=5,
+            status="",
         )
 
         # Verify update called for each player

@@ -101,7 +101,7 @@ def sample_playoff_standings():
                 in_playoffs=True,
                 division_rank=1,
                 status_indicator="y",
-            )
+            ),
         ],
         "Western": [
             PlayoffTeam(
@@ -115,7 +115,7 @@ def sample_playoff_standings():
                 in_playoffs=True,
                 division_rank=1,
                 status_indicator="y",
-            )
+            ),
         ],
     }
 
@@ -318,7 +318,7 @@ def test_html_report_escapes_dangerous_content(
             team="TOR",
             division="Atlantic",
             conference="Eastern",
-        )
+        ),
     ]
 
     # Prepare data for formatter

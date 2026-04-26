@@ -123,7 +123,7 @@ def retry(
                     # Log retry
                     logger.warning(
                         f"{func.__name__} failed on attempt {attempt + 1}/{max_attempts}: {e}, "
-                        f"retrying in {delay:.2f}s"
+                        f"retrying in {delay:.2f}s",
                     )
 
                     # Call callback if provided

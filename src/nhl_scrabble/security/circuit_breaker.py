@@ -110,7 +110,7 @@ class CircuitBreaker:
             # Any failure in HALF_OPEN state immediately opens circuit
             logger.warning(
                 f"Circuit breaker transitioning from HALF_OPEN to OPEN "
-                f"after failure (total: {self.failure_count})"
+                f"after failure (total: {self.failure_count})",
             )
             self.state = CircuitState.OPEN
 
@@ -118,7 +118,7 @@ class CircuitBreaker:
             # Threshold reached in CLOSED state
             logger.warning(
                 f"Circuit breaker transitioning from CLOSED to OPEN "
-                f"after {self.failure_count} failures (threshold: {self.failure_threshold})"
+                f"after {self.failure_count} failures (threshold: {self.failure_threshold})",
             )
             self.state = CircuitState.OPEN
 
@@ -150,13 +150,13 @@ class CircuitBreaker:
                 if time_since_failure >= self.timeout:
                     logger.info(
                         f"Circuit breaker transitioning from OPEN to HALF_OPEN "
-                        f"after {time_since_failure:.1f}s timeout"
+                        f"after {time_since_failure:.1f}s timeout",
                     )
                     self.state = CircuitState.HALF_OPEN
                 else:
                     raise CircuitBreakerOpenError(
                         f"Circuit breaker is OPEN (failed {self.failure_count} times, "
-                        f"retry in {self.timeout - time_since_failure:.1f}s)"
+                        f"retry in {self.timeout - time_since_failure:.1f}s)",
                     )
             else:
                 # Should not happen, but handle gracefully
@@ -178,7 +178,7 @@ class CircuitBreaker:
         """
         logger.info(
             f"Circuit breaker manually reset from {self.state.value} "
-            f"(had {self.failure_count} failures)"
+            f"(had {self.failure_count} failures)",
         )
         self.failure_count = 0
         self.last_failure_time = None

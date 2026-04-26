@@ -73,8 +73,8 @@ class TestNHLApiClientSSRFProtection:
                     "teamAbbrev": {"default": "TOR"},
                     "divisionName": "Atlantic",
                     "conferenceName": "Eastern",
-                }
-            ]
+                },
+            ],
         }
 
         with patch.object(client.session, "get", return_value=mock_response):

@@ -226,7 +226,9 @@ class TestReportGenerator:
         # Mock all generate methods
         with (
             patch.object(
-                generator._conference_reporter, "generate", return_value="Conference Report"
+                generator._conference_reporter,
+                "generate",
+                return_value="Conference Report",
             ),
             patch.object(generator._division_reporter, "generate", return_value="Division Report"),
             patch.object(generator._playoff_reporter, "generate", return_value="Playoff Report"),
@@ -259,7 +261,9 @@ class TestReportGenerator:
         # Mock all generate methods
         with (
             patch.object(
-                generator._conference_reporter, "generate", return_value="Conference Report"
+                generator._conference_reporter,
+                "generate",
+                return_value="Conference Report",
             ),
             patch.object(generator._division_reporter, "generate", return_value="Division Report"),
             patch.object(generator._playoff_reporter, "generate", return_value="Playoff Report"),
@@ -291,7 +295,9 @@ class TestReportGenerator:
 
         # Mock the generate method
         with patch.object(
-            generator._conference_reporter, "generate", return_value="Conference Report"
+            generator._conference_reporter,
+            "generate",
+            return_value="Conference Report",
         ):
             # Access only conference report
             report = generator.conference_report

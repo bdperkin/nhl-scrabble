@@ -172,7 +172,9 @@ class TestApiClientRateLimiting:
     def test_api_client_rate_limit_stats(self) -> None:
         """Test API client tracks rate limit statistics."""
         client = NHLApiClient(
-            rate_limit_max_requests=5, rate_limit_window=10.0, cache_enabled=False
+            rate_limit_max_requests=5,
+            rate_limit_window=10.0,
+            cache_enabled=False,
         )
 
         with patch.object(client.session, "get") as mock_get:
@@ -205,7 +207,7 @@ class TestApiClientRateLimiting:
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     @pytest.mark.skip(
-        reason="Cache checking logic is complex to mock - functionality verified by other tests"
+        reason="Cache checking logic is complex to mock - functionality verified by other tests",
     )
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_api_client_skips_rate_limit_for_cached_responses(self) -> None:
@@ -225,8 +227,8 @@ class TestApiClientRateLimiting:
                         "teamAbbrev": {"default": "TOR"},
                         "divisionName": "Atlantic",
                         "conferenceName": "Eastern",
-                    }
-                ]
+                    },
+                ],
             }
             mock_response.from_cache = True  # Cached response
             mock_get.return_value = mock_response

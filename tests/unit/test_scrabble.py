@@ -36,10 +36,10 @@ class TestScrabbleScorer:
     def test_calculate_score_special_characters(self, scrabble_scorer: ScrabbleScorer) -> None:
         """Test that special characters are worth 0 points."""
         assert scrabble_scorer.calculate_score("O'BRIEN") == scrabble_scorer.calculate_score(
-            "OBRIEN"
+            "OBRIEN",
         )
         assert scrabble_scorer.calculate_score("ALEX-123") == scrabble_scorer.calculate_score(
-            "ALEX"
+            "ALEX",
         )
 
     def test_score_player(self, scrabble_scorer: ScrabbleScorer) -> None:

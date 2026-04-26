@@ -33,7 +33,11 @@ class TestGetReportMethod:
     def test_get_report_conference(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with 'conference' type."""
@@ -48,7 +52,9 @@ class TestGetReportMethod:
         )
 
         with patch.object(
-            generator._conference_reporter, "generate", return_value="Conference Report"
+            generator._conference_reporter,
+            "generate",
+            return_value="Conference Report",
         ):
             report = generator.get_report("conference")
             assert report == "Conference Report"
@@ -62,7 +68,11 @@ class TestGetReportMethod:
     def test_get_report_division(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with 'division' type."""
@@ -89,7 +99,11 @@ class TestGetReportMethod:
     def test_get_report_playoff(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with 'playoff' type."""
@@ -116,7 +130,11 @@ class TestGetReportMethod:
     def test_get_report_team(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with 'team' type."""
@@ -143,7 +161,11 @@ class TestGetReportMethod:
     def test_get_report_stats(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with 'stats' type."""
@@ -170,7 +192,11 @@ class TestGetReportMethod:
     def test_get_report_none_returns_full_report(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with None returns full report."""
@@ -203,7 +229,11 @@ class TestGetReportMethod:
     def test_get_report_invalid_type_raises_error(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with invalid type raises ValueError."""
@@ -223,7 +253,11 @@ class TestGetReportMethod:
     def test_get_report_empty_string_raises_error(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test get_report with empty string raises ValueError."""
@@ -247,7 +281,11 @@ class TestReportCaching:
     def test_conference_report_caching(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test conference report is cached and not regenerated."""
@@ -276,7 +314,11 @@ class TestReportCaching:
     def test_division_report_caching(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test division report is cached and not regenerated."""
@@ -305,7 +347,11 @@ class TestReportCaching:
     def test_playoff_report_caching(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test playoff report is cached and not regenerated."""
@@ -334,7 +380,11 @@ class TestReportCaching:
     def test_stats_report_caching(
         self,
         sample_data: tuple[
-            dict[str, Any], list[Any], dict[str, Any], dict[str, Any], dict[str, Any]
+            dict[str, Any],
+            list[Any],
+            dict[str, Any],
+            dict[str, Any],
+            dict[str, Any],
         ],
     ) -> None:
         """Test stats report is cached and not regenerated."""

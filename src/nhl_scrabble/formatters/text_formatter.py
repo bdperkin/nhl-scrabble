@@ -69,7 +69,7 @@ class TextFormatter:
             lines.append("TEAM STANDINGS")
             lines.append("-" * 80)
             lines.append(
-                f"{'Rank':<6} {'Team':<6} {'Division':<15} {'Conference':<12} {'Score':>8} {'Avg':>8}"
+                f"{'Rank':<6} {'Team':<6} {'Division':<15} {'Conference':<12} {'Score':>8} {'Avg':>8}",
             )
             lines.append("-" * 80)
 
@@ -87,7 +87,7 @@ class TextFormatter:
                 conference = team_data.get("conference", "N/A")
 
                 lines.append(
-                    f"{rank:<6} {abbrev:<6} {division:<15} {conference:<12} {total:>8} {avg:>8.2f}"
+                    f"{rank:<6} {abbrev:<6} {division:<15} {conference:<12} {total:>8} {avg:>8.2f}",
                 )
 
             lines.append("")

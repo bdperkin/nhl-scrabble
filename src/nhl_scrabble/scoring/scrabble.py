@@ -153,7 +153,11 @@ class ScrabbleScorer:
         return self._calculate_with_values(name, values_tuple)
 
     def score_player(
-        self, player_data: dict[str, Any], team: str, division: str, conference: str
+        self,
+        player_data: dict[str, Any],
+        team: str,
+        division: str,
+        conference: str,
     ) -> PlayerScore:
         """Score a player and return a PlayerScore object.
 
@@ -246,7 +250,7 @@ class ScrabbleScorer:
                 f"misses={stats['misses']}, "
                 f"hit_rate={hit_rate:.1f}%, "
                 f"size={stats['currsize']}/{stats['maxsize']} "
-                f"({utilization:.1f}% full)"
+                f"({utilization:.1f}% full)",
             )
         else:
             logger.debug("Scrabble scoring cache: No calls yet")

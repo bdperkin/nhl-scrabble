@@ -420,7 +420,8 @@ class TestValidateApiResponseStructure:
         """Test valid API response structure."""
         data: dict[str, list[str]] = {"forwards": [], "defensemen": [], "goalies": []}
         result = validate_api_response_structure(
-            data, required_keys=["forwards", "defensemen", "goalies"]
+            data,
+            required_keys=["forwards", "defensemen", "goalies"],
         )
         assert result == data
 
@@ -429,7 +430,8 @@ class TestValidateApiResponseStructure:
         data: dict[str, list[str]] = {"forwards": [], "defensemen": []}
         with pytest.raises(ValidationError, match="missing required keys"):
             validate_api_response_structure(
-                data, required_keys=["forwards", "defensemen", "goalies"]
+                data,
+                required_keys=["forwards", "defensemen", "goalies"],
             )
 
     def test_missing_multiple_keys(self) -> None:
@@ -437,7 +439,8 @@ class TestValidateApiResponseStructure:
         data: dict[str, list[str]] = {"forwards": []}
         with pytest.raises(ValidationError, match="missing required keys"):
             validate_api_response_structure(
-                data, required_keys=["forwards", "defensemen", "goalies"]
+                data,
+                required_keys=["forwards", "defensemen", "goalies"],
             )
 
     def test_extra_keys_allowed(self) -> None:

@@ -66,7 +66,9 @@ class TestInteractiveCommand:
 
     @patch("nhl_scrabble.interactive.InteractiveShell")
     def test_interactive_keyboard_interrupt(
-        self, mock_shell_class: MagicMock, runner: CliRunner
+        self,
+        mock_shell_class: MagicMock,
+        runner: CliRunner,
     ) -> None:
         """Test interactive command handles keyboard interrupt."""
         # Setup mock to raise KeyboardInterrupt
@@ -83,7 +85,9 @@ class TestInteractiveCommand:
 
     @patch("nhl_scrabble.interactive.InteractiveShell")
     def test_interactive_unexpected_error(
-        self, mock_shell_class: MagicMock, runner: CliRunner
+        self,
+        mock_shell_class: MagicMock,
+        runner: CliRunner,
     ) -> None:
         """Test interactive command handles unexpected errors."""
         # Setup mock to raise error

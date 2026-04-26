@@ -221,7 +221,8 @@ class TestDivisionStandingsToDict:
         assert manual_dict == asdict_output
 
     def test_to_dict_contains_all_fields(
-        self, sample_division_standings: DivisionStandings
+        self,
+        sample_division_standings: DivisionStandings,
     ) -> None:
         """Verify to_dict() includes all expected fields."""
         result = sample_division_standings.to_dict()
@@ -250,7 +251,8 @@ class TestConferenceStandingsToDict:
         assert manual_dict == asdict_output
 
     def test_to_dict_contains_all_fields(
-        self, sample_conference_standings: ConferenceStandings
+        self,
+        sample_conference_standings: ConferenceStandings,
     ) -> None:
         """Verify to_dict() includes all expected fields."""
         result = sample_conference_standings.to_dict()
@@ -260,7 +262,8 @@ class TestConferenceStandingsToDict:
         assert set(result.keys()) == expected_fields
 
     def test_to_dict_json_serializable(
-        self, sample_conference_standings: ConferenceStandings
+        self,
+        sample_conference_standings: ConferenceStandings,
     ) -> None:
         """Verify to_dict() output is JSON-serializable."""
         standings_dict = sample_conference_standings.to_dict()

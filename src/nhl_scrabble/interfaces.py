@@ -76,7 +76,9 @@ class APIClientProtocol(Protocol):
         ...
 
     def get_team_roster(
-        self, team_abbrev: str, season: str | None = None
+        self,
+        team_abbrev: str,
+        season: str | None = None,
     ) -> dict[str, list[dict[str, object]]]:
         """Fetch the roster for a specific team.
 
@@ -154,7 +156,11 @@ class ScorerProtocol(Protocol):
     """
 
     def score_player(
-        self, player_data: dict[str, dict[str, str]], team: str, division: str, conference: str
+        self,
+        player_data: dict[str, dict[str, str]],
+        team: str,
+        division: str,
+        conference: str,
     ) -> PlayerScore:
         """Score a player and return a PlayerScore object.
 
@@ -216,7 +222,8 @@ class TeamProcessorProtocol(Protocol):
         ...
 
     def calculate_division_standings(
-        self, team_scores: dict[str, TeamScore]
+        self,
+        team_scores: dict[str, TeamScore],
     ) -> dict[str, DivisionStandings]:
         """Calculate division-level standings from team scores.
 
@@ -234,7 +241,8 @@ class TeamProcessorProtocol(Protocol):
         ...
 
     def calculate_conference_standings(
-        self, team_scores: dict[str, TeamScore]
+        self,
+        team_scores: dict[str, TeamScore],
     ) -> dict[str, ConferenceStandings]:
         """Calculate conference-level standings from team scores.
 

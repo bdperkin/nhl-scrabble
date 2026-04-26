@@ -284,7 +284,7 @@ class Config(BaseSettings):
                     if not min_value <= value <= max_value:
                         raise ValueError(
                             f"{env_var}: Value {value} outside allowed range "
-                            f"[{min_value}, {max_value}]"
+                            f"[{min_value}, {max_value}]",
                         )
                     return value
                 # Convert to string for validation
@@ -313,7 +313,7 @@ class Config(BaseSettings):
                     if not min_value <= value_float <= max_value:
                         raise ValueError(
                             f"{env_var}: Value {value} outside allowed range "
-                            f"[{min_value}, {max_value}]"
+                            f"[{min_value}, {max_value}]",
                         )
                     return value_float
                 value_str = str(value)
@@ -354,28 +354,54 @@ class Config(BaseSettings):
             "api_timeout": get_int("api_timeout", "NHL_SCRABBLE_API_TIMEOUT", 10, 1, 300),
             "api_retries": get_int("api_retries", "NHL_SCRABBLE_API_RETRIES", 3, 0, 10),
             "rate_limit_max_requests": get_int(
-                "rate_limit_max_requests", "NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS", 30, 1, 1000
+                "rate_limit_max_requests",
+                "NHL_SCRABBLE_RATE_LIMIT_MAX_REQUESTS",
+                30,
+                1,
+                1000,
             ),
             "rate_limit_window": get_float(
-                "rate_limit_window", "NHL_SCRABBLE_RATE_LIMIT_WINDOW", 60.0, 1.0, 3600.0
+                "rate_limit_window",
+                "NHL_SCRABBLE_RATE_LIMIT_WINDOW",
+                60.0,
+                1.0,
+                3600.0,
             ),
             "backoff_factor": get_float(
-                "backoff_factor", "NHL_SCRABBLE_BACKOFF_FACTOR", 2.0, 1.0, 10.0
+                "backoff_factor",
+                "NHL_SCRABBLE_BACKOFF_FACTOR",
+                2.0,
+                1.0,
+                10.0,
             ),
             "max_backoff": get_float("max_backoff", "NHL_SCRABBLE_MAX_BACKOFF", 30.0, 1.0, 300.0),
             "cache_enabled": get_bool(
-                "cache_enabled", "NHL_SCRABBLE_CACHE_ENABLED", True  # noqa: FBT003
+                "cache_enabled",
+                "NHL_SCRABBLE_CACHE_ENABLED",
+                True,  # noqa: FBT003
             ),
             "cache_expiry": get_int("cache_expiry", "NHL_SCRABBLE_CACHE_EXPIRY", 3600, 1, 86400),
             "cache_dir": data.get("cache_dir") or os.getenv("NHL_SCRABBLE_CACHE_DIR"),
             "max_concurrent_requests": get_int(
-                "max_concurrent_requests", "NHL_SCRABBLE_MAX_CONCURRENT", 5, 1, 50
+                "max_concurrent_requests",
+                "NHL_SCRABBLE_MAX_CONCURRENT",
+                5,
+                1,
+                50,
             ),
             "top_players_count": get_int(
-                "top_players_count", "NHL_SCRABBLE_TOP_PLAYERS", 20, 1, 1000
+                "top_players_count",
+                "NHL_SCRABBLE_TOP_PLAYERS",
+                20,
+                1,
+                1000,
             ),
             "top_team_players_count": get_int(
-                "top_team_players_count", "NHL_SCRABBLE_TOP_TEAM_PLAYERS", 5, 1, 100
+                "top_team_players_count",
+                "NHL_SCRABBLE_TOP_TEAM_PLAYERS",
+                5,
+                1,
+                100,
             ),
             "verbose": get_bool("verbose", "NHL_SCRABBLE_VERBOSE", False),  # noqa: FBT003
             "output_format": get_enum(
@@ -396,13 +422,23 @@ class Config(BaseSettings):
                 },
             ),
             "sanitize_logs": get_bool(
-                "sanitize_logs", "NHL_SCRABBLE_SANITIZE_LOGS", True  # noqa: FBT003
+                "sanitize_logs",
+                "NHL_SCRABBLE_SANITIZE_LOGS",
+                True,  # noqa: FBT003
             ),
             "dos_max_connections": get_int(
-                "dos_max_connections", "NHL_SCRABBLE_DOS_MAX_CONNECTIONS", 10, 1, 100
+                "dos_max_connections",
+                "NHL_SCRABBLE_DOS_MAX_CONNECTIONS",
+                10,
+                1,
+                100,
             ),
             "dos_max_per_host": get_int(
-                "dos_max_per_host", "NHL_SCRABBLE_DOS_MAX_PER_HOST", 5, 1, 50
+                "dos_max_per_host",
+                "NHL_SCRABBLE_DOS_MAX_PER_HOST",
+                5,
+                1,
+                50,
             ),
             "dos_circuit_breaker_threshold": get_int(
                 "dos_circuit_breaker_threshold",
@@ -431,7 +467,7 @@ class Config(BaseSettings):
         except SSRFProtectionError as e:
             logger.error(
                 f"SSRF protection blocked API base URL '{api_base_url}': {e}. "
-                "Only official NHL API domains are allowed for security."
+                "Only official NHL API domains are allowed for security.",
             )
             raise ValueError(f"Invalid API base URL: {e}") from e
 

@@ -45,7 +45,10 @@ class PlayerSearch:
         return [p for p in players if query_lower in p.full_name.lower()]
 
     def _fuzzy_search(
-        self, query: str, players: list[PlayerScore], cutoff: float = 0.6
+        self,
+        query: str,
+        players: list[PlayerScore],
+        cutoff: float = 0.6,
     ) -> list[PlayerScore]:
         """Perform fuzzy search using difflib.
 

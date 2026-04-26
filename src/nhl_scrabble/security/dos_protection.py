@@ -73,7 +73,7 @@ def create_protected_session(
 
     logger.debug(
         f"Created protected session with max_connections={max_connections}, "
-        f"max_per_host={max_connections_per_host}, pool_timeout={pool_timeout}s"
+        f"max_per_host={max_connections_per_host}, pool_timeout={pool_timeout}s",
     )
 
     return session

@@ -48,7 +48,9 @@ class TestUnifiedConfig:
         assert config.output_format == "text"  # default (no env var set)
 
     def test_config_precedence_dotenv_file(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test that .env file values are loaded (lowest precedence)."""
         # Create a .env file
@@ -56,7 +58,7 @@ class TestUnifiedConfig:
         env_file.write_text(
             "NHL_SCRABBLE_API_TIMEOUT=20\n"
             "NHL_SCRABBLE_VERBOSE=true\n"
-            "NHL_SCRABBLE_OUTPUT_FORMAT=json\n"
+            "NHL_SCRABBLE_OUTPUT_FORMAT=json\n",
         )
 
         # Change to temp directory so .env is found
@@ -74,7 +76,9 @@ class TestUnifiedConfig:
         assert config.output_format == "json"
 
     def test_config_precedence_env_over_dotenv(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test that environment variables override .env file (correct precedence)."""
         # Create a .env file
@@ -176,14 +180,16 @@ class TestUnifiedConfig:
         assert config.api_timeout == 45
 
     def test_config_extra_fields_ignored(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test that extra fields in .env file are ignored."""
         env_file = tmp_path / ".env"
         env_file.write_text(
             "NHL_SCRABBLE_API_TIMEOUT=20\n"
             "NHL_SCRABBLE_UNKNOWN_FIELD=value\n"  # Should be ignored
-            "UNRELATED_VAR=value\n"  # Should be ignored
+            "UNRELATED_VAR=value\n",  # Should be ignored
         )
 
         monkeypatch.chdir(tmp_path)
@@ -199,7 +205,9 @@ class TestUnifiedConfig:
         assert not hasattr(config, "unknown_field")
 
     def test_config_comprehensive_precedence(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test complete precedence chain: direct > env > .env > defaults."""
         # 1. Set defaults (implicit, baked into Config class)

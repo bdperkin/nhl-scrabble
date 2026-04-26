@@ -29,18 +29,22 @@ class TeamReporter(BaseReporter):
         parts = [self._format_header("📊 TEAM SCRABBLE SCORES (Sorted by Total Score)")]
 
         sorted_teams = self._sort_by_key(
-            team_scores.items(), key=lambda x: x[1].total, reverse=True
+            team_scores.items(),
+            key=lambda x: x[1].total,
+            reverse=True,
         )
 
         for rank, (team_abbrev, team_data) in enumerate(sorted_teams, 1):
             parts.append(
                 f"\n\n#{rank} {team_abbrev} ({team_data.division}): "
-                f"{self._format_score(team_data.total)} points ({team_data.player_count} players)"
+                f"{self._format_score(team_data.total)} points ({team_data.player_count} players)",
             )
 
             # Show top players from each team
             top_players = heapq.nlargest(
-                self.top_players_per_team, team_data.players, key=lambda x: x.full_score
+                self.top_players_per_team,
+                team_data.players,
+                key=lambda x: x.full_score,
             )
 
             parts.extend(

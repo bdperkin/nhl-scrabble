@@ -15,7 +15,8 @@ if OPENPYXL_AVAILABLE:
 
 
 pytestmark = pytest.mark.skipif(
-    not OPENPYXL_AVAILABLE, reason="openpyxl not installed (optional dependency)"
+    not OPENPYXL_AVAILABLE,
+    reason="openpyxl not installed (optional dependency)",
 )
 
 
@@ -121,7 +122,9 @@ def test_excel_exporter_initialization() -> None:
 
 
 def test_export_team_scores_dict(
-    excel_exporter: ExcelExporter, sample_teams: dict[str, TeamScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_teams: dict[str, TeamScore],
+    tmp_path: Path,
 ) -> None:
     """Test exporting team scores from dictionary to Excel."""
     output = tmp_path / "teams.xlsx"
@@ -155,7 +158,9 @@ def test_export_team_scores_dict(
 
 
 def test_export_team_scores_list(
-    excel_exporter: ExcelExporter, sample_teams: dict[str, TeamScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_teams: dict[str, TeamScore],
+    tmp_path: Path,
 ) -> None:
     """Test exporting team scores from list to Excel."""
     output = tmp_path / "teams.xlsx"
@@ -170,7 +175,9 @@ def test_export_team_scores_list(
 
 
 def test_export_player_scores(
-    excel_exporter: ExcelExporter, sample_players: list[PlayerScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_players: list[PlayerScore],
+    tmp_path: Path,
 ) -> None:
     """Test exporting player scores to Excel."""
     output = tmp_path / "players.xlsx"
@@ -203,7 +210,9 @@ def test_export_player_scores(
 
 
 def test_export_full_report_all_sheets(
-    excel_exporter: ExcelExporter, sample_teams: dict[str, TeamScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_teams: dict[str, TeamScore],
+    tmp_path: Path,
 ) -> None:
     """Test exporting full report with all sheets."""
     output = tmp_path / "full_report.xlsx"
@@ -276,7 +285,9 @@ def test_export_full_report_all_sheets(
 
 
 def test_export_full_report_selected_sheets(
-    excel_exporter: ExcelExporter, sample_teams: dict[str, TeamScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_teams: dict[str, TeamScore],
+    tmp_path: Path,
 ) -> None:
     """Test exporting full report with selected sheets only."""
     output = tmp_path / "selected_report.xlsx"
@@ -314,7 +325,9 @@ def test_export_full_report_selected_sheets(
 
 
 def test_excel_header_formatting(
-    excel_exporter: ExcelExporter, sample_teams: dict[str, TeamScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_teams: dict[str, TeamScore],
+    tmp_path: Path,
 ) -> None:
     """Test that Excel headers have proper formatting."""
     output = tmp_path / "teams.xlsx"
@@ -333,7 +346,9 @@ def test_excel_header_formatting(
 
 
 def test_excel_column_widths(
-    excel_exporter: ExcelExporter, sample_players: list[PlayerScore], tmp_path: Path
+    excel_exporter: ExcelExporter,
+    sample_players: list[PlayerScore],
+    tmp_path: Path,
 ) -> None:
     """Test that Excel columns are auto-adjusted."""
     output = tmp_path / "players.xlsx"

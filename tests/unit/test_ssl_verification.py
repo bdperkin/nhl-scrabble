@@ -47,8 +47,8 @@ class TestSSLVerificationInRequests:
                         "teamAbbrev": {"default": "TOR"},
                         "divisionName": "Atlantic",
                         "conferenceName": "Eastern",
-                    }
-                ]
+                    },
+                ],
             }
             mock_get.return_value = mock_response
 
@@ -92,7 +92,7 @@ class TestSSLErrorHandling:
         with patch.object(client.session, "get") as mock_get:
             # Simulate SSL verification failure
             mock_get.side_effect = requests.exceptions.SSLError(
-                "certificate verify failed: self signed certificate"
+                "certificate verify failed: self signed certificate",
             )
 
             with pytest.raises(NHLApiSSLError, match="SSL certificate verification failed"):
@@ -105,7 +105,7 @@ class TestSSLErrorHandling:
         with patch.object(client.session, "get") as mock_get:
             # Simulate SSL verification failure
             mock_get.side_effect = requests.exceptions.SSLError(
-                "certificate verify failed: certificate has expired"
+                "certificate verify failed: certificate has expired",
             )
 
             with pytest.raises(NHLApiSSLError, match="SSL certificate verification failed"):

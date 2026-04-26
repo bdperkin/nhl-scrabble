@@ -76,7 +76,11 @@ class MockScorer:
         self.score_calls: list[tuple[str, str]] = []
 
     def score_player(
-        self, player_data: dict[str, Any], team: str, division: str, conference: str
+        self,
+        player_data: dict[str, Any],
+        team: str,
+        division: str,
+        conference: str,
     ) -> PlayerScore:
         """Return mock player score."""
         first_name = player_data["firstName"]["default"]

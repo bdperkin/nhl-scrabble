@@ -65,7 +65,7 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     # This catches attempts like "../../../etc/passwd"
     if "../" in path or "/.." in path or path.startswith(".."):
         raise ValidationError(
-            f"Path contains suspicious pattern '../' (potential path traversal attack): {path}"
+            f"Path contains suspicious pattern '../' (potential path traversal attack): {path}",
         )
 
     # Convert to Path and resolve to absolute path
@@ -78,7 +78,7 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     if not file_path.parent.exists():
         raise ValidationError(
             f"Directory does not exist: {file_path.parent}. "
-            f"Create it first: mkdir -p {file_path.parent}"
+            f"Create it first: mkdir -p {file_path.parent}",
         )
 
     # Check parent directory is a directory (not a file)
@@ -89,19 +89,19 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     if not (file_path.parent.stat().st_mode & 0o200):  # Owner write permission
         raise ValidationError(
             f"Directory is not writable: {file_path.parent}. "
-            f"Check permissions: ls -ld {file_path.parent}"
+            f"Check permissions: ls -ld {file_path.parent}",
         )
 
     # Check file doesn't exist (unless overwrite allowed)
     if file_path.exists() and not allow_overwrite:
         raise ValidationError(
-            f"File {file_path} already exists. Use --force to overwrite or choose a different name."
+            f"File {file_path} already exists. Use --force to overwrite or choose a different name.",
         )
 
     # Check file is writable if it exists and we're allowing overwrite
     if file_path.exists() and allow_overwrite and not (file_path.stat().st_mode & 0o200):
         raise ValidationError(
-            f"File is not writable: {file_path}. Check permissions: ls -l {file_path}"
+            f"File is not writable: {file_path}. Check permissions: ls -l {file_path}",
         )
 
     # Validate filename is safe (alphanumeric, dash, underscore, dot only)
@@ -109,7 +109,7 @@ def validate_file_path(path: str, allow_overwrite: bool = False) -> Path:
     if not re.match(r"^[\w\-\.]+$", file_path.name):
         raise ValidationError(
             f"Filename {file_path.name} contains invalid characters. "
-            f"Use only letters, numbers, dash (-), underscore (_), and dot (.)."
+            f"Use only letters, numbers, dash (-), underscore (_), and dot (.).",
         )
 
     return file_path
@@ -210,7 +210,7 @@ def validate_team_abbreviation(abbrev: str) -> str:
     # Check length (NHL abbreviations are 2-3 characters: TOR, MTL, VGK, etc.)
     if not 2 <= len(clean_abbrev) <= 3:
         raise ValidationError(
-            f"Team abbreviation must be 2-3 characters, got '{abbrev}' ({len(clean_abbrev)} characters)"
+            f"Team abbreviation must be 2-3 characters, got '{abbrev}' ({len(clean_abbrev)} characters)",
         )
 
     # Check only letters (no numbers, special characters, etc.)
@@ -346,7 +346,7 @@ def validate_player_name(name: str) -> str:
     if not re.match(r"^[a-zA-Z\s\-'\.]+$", clean_name):
         raise ValidationError(
             f"Player name contains invalid characters: '{name}'. "
-            f"Only letters, spaces, hyphens (-), apostrophes ('), and periods (.) are allowed."
+            f"Only letters, spaces, hyphens (-), apostrophes ('), and periods (.) are allowed.",
         )
 
     return clean_name
@@ -396,7 +396,7 @@ def validate_url(url: str, allowed_schemes: list[str] | None = None) -> str:
     # Check scheme is allowed
     if parsed.scheme not in allowed_schemes:
         raise ValidationError(
-            f"URL scheme must be one of {allowed_schemes}, got '{parsed.scheme}' in URL: {url}"
+            f"URL scheme must be one of {allowed_schemes}, got '{parsed.scheme}' in URL: {url}",
         )
 
     # Check has netloc (domain)
@@ -407,7 +407,9 @@ def validate_url(url: str, allowed_schemes: list[str] | None = None) -> str:
 
 
 def validate_api_response_structure(
-    data: dict[str, Any], required_keys: list[str], context: str = "API response"
+    data: dict[str, Any],
+    required_keys: list[str],
+    context: str = "API response",
 ) -> dict[str, Any]:
     """Validate API response has required structure.
 
@@ -444,7 +446,7 @@ def validate_api_response_structure(
 
     if missing_keys:
         raise ValidationError(
-            f"{context} missing required keys: {missing_keys}. Available keys: {list(data.keys())}"
+            f"{context} missing required keys: {missing_keys}. Available keys: {list(data.keys())}",
         )
 
     return data

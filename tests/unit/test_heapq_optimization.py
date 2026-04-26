@@ -34,12 +34,13 @@ class TestHeapqCorrectness:
                     team="TOR",
                     division="Atlantic",
                     conference="Eastern",
-                )
+                ),
             )
         return players
 
     def test_heapq_nlargest_returns_same_as_sorted_top_20(
-        self, sample_players: list[PlayerScore]
+        self,
+        sample_players: list[PlayerScore],
     ) -> None:
         """Verify heapq.nlargest produces same top 20 as sorted."""
         k = 20
@@ -57,7 +58,8 @@ class TestHeapqCorrectness:
             assert player.full_name == heapq_result[i].full_name
 
     def test_heapq_nlargest_returns_same_as_sorted_top_5(
-        self, sample_players: list[PlayerScore]
+        self,
+        sample_players: list[PlayerScore],
     ) -> None:
         """Verify heapq.nlargest produces same top 5 as sorted."""
         k = 5
@@ -194,7 +196,7 @@ class TestHeapqSemantics:
         # highly optimized Timsort, but it expresses intent better
         print(  # noqa: T201
             f"\nPerformance comparison (n=700, k=20): "
-            f"{speedup:.2f}x (sorted: {sorted_time:.3f}s, heapq: {heapq_time:.3f}s)"
+            f"{speedup:.2f}x (sorted: {sorted_time:.3f}s, heapq: {heapq_time:.3f}s)",
         )
 
         # The real benefit is semantic - heapq.nlargest clearly says "top-N"

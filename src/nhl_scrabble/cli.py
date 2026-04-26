@@ -92,14 +92,14 @@ def validate_output_path(output: str | None) -> None:
     # Check if directory exists
     if not output_dir.exists():
         raise click.ClickException(
-            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}"
+            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}",
         )
 
     # Check if directory is writable
     if not os.access(output_dir, os.W_OK):
         raise click.ClickException(
             f"Output directory is not writable: {output_dir}\n"
-            f"Check permissions with: ls -ld {output_dir}"
+            f"Check permissions with: ls -ld {output_dir}",
         )
 
     # Check if file exists and is writable
@@ -107,7 +107,7 @@ def validate_output_path(output: str | None) -> None:
         if not os.access(output_path, os.W_OK):
             raise click.ClickException(
                 f"Output file exists but is not writable: {output_path}\n"
-                f"Check permissions with: ls -l {output_path}"
+                f"Check permissions with: ls -l {output_path}",
             )
 
         # Warn if file will be overwritten
@@ -291,7 +291,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
         if not quiet:
             console.print(
                 f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-                f"{len(team_scores) + len(failed_teams)} teams"
+                f"{len(team_scores) + len(failed_teams)} teams",
             )
             if failed_teams:
                 console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
@@ -322,7 +322,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
             if not quiet:
                 console.print(
                     f"\n[green]✓[/green] Filters applied: {len(team_scores)} teams, "
-                    f"{len(all_players)} players"
+                    f"{len(all_players)} players",
                 )
 
         # Excel format uses special exporter (multi-sheet workbook)
@@ -654,7 +654,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     if scoring_config and scoring != "scrabble":
         raise click.ClickException(
             "--scoring and --scoring-config are mutually exclusive. "
-            "Use --scoring for built-in systems or --scoring-config for custom values."
+            "Use --scoring for built-in systems or --scoring-config for custom values.",
         )
 
     # Load scoring configuration
@@ -673,14 +673,14 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     if output_format in ("csv", "excel") and not output:
         raise click.ClickException(
             f"{output_format.upper()} format requires --output option\n"
-            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}"
+            f"Example: nhl-scrabble analyze --format {output_format} --output report.{output_format}",
         )
 
     # Validate template format requires --template option
     if output_format == "template" and not template:
         raise click.ClickException(
             "Template format requires --template option\n"
-            "Example: nhl-scrabble analyze --format template --template custom.j2"
+            "Example: nhl-scrabble analyze --format template --template custom.j2",
         )
 
     # Validate output path BEFORE making API calls
@@ -750,7 +750,8 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             print(result)
         else:
             console.print(
-                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option", style="yellow"
+                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option",
+                style="yellow",
             )
 
         console.print("\n" + "=" * 80)
@@ -902,11 +903,11 @@ def generate_search_text(  # noqa: PLR0913  # Need all search parameters
         for i, player in enumerate(results, 1):
             lines.append(
                 f"{i:3d}. {player.full_name:<30} | Score: {player.full_score:3d} | "
-                f"Team: {player.team:4s} | {player.division}"
+                f"Team: {player.team:4s} | {player.division}",
             )
             lines.append(
                 f"     First: {player.first_name} ({player.first_score}) | "
-                f"Last: {player.last_name} ({player.last_score})"
+                f"Last: {player.last_name} ({player.last_score})",
             )
             lines.append("")
     else:
@@ -918,7 +919,9 @@ def generate_search_text(  # noqa: PLR0913  # Need all search parameters
 
 
 def generate_search_json(
-    results: list[PlayerScore], query: str | None, stats: dict[str, int | float]
+    results: list[PlayerScore],
+    query: str | None,
+    stats: dict[str, int | float],
 ) -> str:
     """Generate JSON format search results.
 
@@ -1281,7 +1284,7 @@ def fetch_dashboard_data(
         if not quiet:
             console.print(
                 f"\n[green]✓[/green] Successfully fetched {len(team_scores)} of "
-                f"{len(team_scores) + len(failed_teams)} teams"
+                f"{len(team_scores) + len(failed_teams)} teams",
             )
             if failed_teams:
                 console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
@@ -1585,7 +1588,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
 
     # Display header
     console.print(
-        "\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer - Watch Mode 🏒[/bold cyan]\n"
+        "\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer - Watch Mode 🏒[/bold cyan]\n",
     )
     console.print("=" * 80)
     console.print(f"[yellow]Auto-refresh every {interval} seconds (Ctrl+C to stop)[/yellow]\n")
@@ -1632,7 +1635,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
                 # Wait for next iteration (unless shutdown requested)
                 if not shutdown_flag[0]:
                     console.print(
-                        f"\n[dim]Next refresh in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
+                        f"\n[dim]Next refresh in {interval} seconds... (Press Ctrl+C to stop)[/dim]",
                     )
                     _interruptible_sleep(interval, shutdown_flag)
 
@@ -1644,7 +1647,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
                 # Wait before retry
                 if not shutdown_flag[0]:
                     console.print(
-                        f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
+                        f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]",
                     )
                     _interruptible_sleep(interval, shutdown_flag)
 
@@ -1656,7 +1659,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
                 # Wait before retry
                 if not shutdown_flag[0]:
                     console.print(
-                        f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]"
+                        f"\n[dim]Retrying in {interval} seconds... (Press Ctrl+C to stop)[/dim]",
                     )
                     _interruptible_sleep(interval, shutdown_flag)
 

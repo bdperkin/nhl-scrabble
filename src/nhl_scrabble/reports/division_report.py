@@ -19,7 +19,9 @@ class DivisionReporter(BaseReporter):
         parts = [self._format_header("🗺️  DIVISION SCRABBLE SCORES")]
 
         sorted_divisions = self._sort_by_key(
-            standings.items(), key=lambda x: x[1].total, reverse=True
+            standings.items(),
+            key=lambda x: x[1].total,
+            reverse=True,
         )
 
         for rank, (division, data) in enumerate(sorted_divisions, 1):
@@ -30,7 +32,7 @@ class DivisionReporter(BaseReporter):
                     f"\n   Teams: {len(data.teams)} ({self._format_team_list(data.teams)})",
                     f"\n   Players: {data.player_count}",
                     f"\n   Avg per team: {self._format_average(data.avg_per_team, width=6, decimals=1)}",
-                ]
+                ],
             )
 
         return "".join(parts)

@@ -49,7 +49,8 @@ def test_xml_formatter_contains_data(sample_data: dict[str, Any]) -> None:
 
 
 def test_xml_formatter_import_error_without_dicttoxml(
-    sample_data: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+    sample_data: dict[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test XML formatter raises ImportError when dicttoxml not installed."""
     # Mock import to fail
@@ -70,7 +71,8 @@ def test_xml_formatter_import_error_without_dicttoxml(
 
 
 def test_xml_formatter_suppresses_dicttoxml_logging(
-    sample_data: dict[str, Any], caplog: pytest.LogCaptureFixture
+    sample_data: dict[str, Any],
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test XML formatter suppresses verbose dicttoxml INFO logging.
 

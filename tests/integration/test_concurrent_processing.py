@@ -151,7 +151,9 @@ class TestConcurrentProcessingPerformance:
             mock_get.side_effect = [standings_response] + [roster_response] * num_teams
 
             api_client = NHLApiClient(
-                cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+                cache_enabled=False,
+                rate_limit_max_requests=1000,
+                rate_limit_window=1.0,
             )
             scorer = ScrabbleScorer()
             processor = TeamProcessor(api_client, scorer, max_workers=worker_count)
@@ -166,7 +168,7 @@ class TestConcurrentProcessingPerformance:
         print("\nWorker Count Performance:")  # noqa: T201
         for workers, data in sorted(results.items()):
             print(  # noqa: T201
-                f"  max_workers={workers:2d}: {data['time']:.3f}s ({data['teams']} teams)"
+                f"  max_workers={workers:2d}: {data['time']:.3f}s ({data['teams']} teams)",
             )
 
         # Verify all produced same results
@@ -208,7 +210,9 @@ class TestConcurrentProcessingPerformance:
         mock_get.side_effect = responses
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=5)
@@ -223,7 +227,7 @@ class TestConcurrentProcessingPerformance:
         assert len(all_players) > 0, "Should have some players from successful teams"
 
         print(  # noqa: T201
-            f"\nFailure Handling: {len(team_scores)} succeeded, {len(failed_teams)} failed"
+            f"\nFailure Handling: {len(team_scores)} succeeded, {len(failed_teams)} failed",
         )
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
@@ -247,7 +251,9 @@ class TestConcurrentProcessingPerformance:
         mock_get.side_effect = [standings_response] + [roster_response] * num_teams
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=5)
@@ -282,7 +288,9 @@ class TestConcurrentProcessingRealWorld:
         """
         # Sequential mode
         api_client_seq = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer_seq = ScrabbleScorer()
         processor_seq = TeamProcessor(api_client_seq, scorer_seq, max_workers=1)
@@ -293,7 +301,9 @@ class TestConcurrentProcessingRealWorld:
 
         # Concurrent mode
         api_client_conc = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer_conc = ScrabbleScorer()
         processor_conc = TeamProcessor(api_client_conc, scorer_conc, max_workers=5)

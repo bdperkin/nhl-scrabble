@@ -30,7 +30,7 @@ def temp_template(tmp_path: Path) -> Path:
     """Create temporary template file."""
     template_file = tmp_path / "test.j2"
     template_file.write_text(
-        "NHL Scores\n{% for abbrev, team in teams.items() %}{{ abbrev }}: {{ team.total }}\n{% endfor %}"
+        "NHL Scores\n{% for abbrev, team in teams.items() %}{{ abbrev }}: {{ team.total }}\n{% endfor %}",
     )
     return template_file
 
@@ -67,7 +67,8 @@ def test_template_formatter_file_not_found() -> None:
 
 
 def test_template_formatter_adds_timestamp(
-    sample_data: dict[str, Any], temp_template: Path
+    sample_data: dict[str, Any],
+    temp_template: Path,
 ) -> None:
     """Test Template formatter adds timestamp to data."""
     # Create template that uses timestamp

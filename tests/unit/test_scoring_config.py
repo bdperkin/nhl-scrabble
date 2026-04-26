@@ -182,7 +182,9 @@ class TestScoringConfig:
             ScoringConfig.load_from_file(config_file)
 
     def test_load_from_file_duplicate_letters_warns(
-        self, tmp_path: Path, caplog: pytest.LogCaptureFixture
+        self,
+        tmp_path: Path,
+        caplog: pytest.LogCaptureFixture,
     ) -> None:
         """Test that duplicate letters log a warning (uses first value)."""
         config_file = tmp_path / "duplicate.json"

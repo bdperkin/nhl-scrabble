@@ -108,7 +108,10 @@ class AnalysisRequest(BaseModel):
     """Request model for analysis endpoint."""
 
     top_players: int = Field(
-        default=20, ge=1, le=100, description="Number of top players to include"
+        default=20,
+        ge=1,
+        le=100,
+        description="Number of top players to include",
     )
     top_team_players: int = Field(default=5, ge=1, le=30, description="Top players per team")
     use_cache: bool = Field(default=True, description="Use cached results if available")
@@ -509,7 +512,7 @@ async def cache_stats() -> dict[str, Any]:
                 "cached_at": cached["cached_at"],
                 "age_seconds": cache_age.total_seconds(),
                 "expires_in_seconds": max(0, 3600 - cache_age.total_seconds()),
-            }
+            },
         )
 
     return {

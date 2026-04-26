@@ -52,7 +52,7 @@ def validate_positive_int(
     for char in dangerous_chars:
         if char in value:
             raise ConfigValidationError(
-                f"Invalid integer: {value!r} (contains dangerous character: {char!r})"
+                f"Invalid integer: {value!r} (contains dangerous character: {char!r})",
             )
 
     # Validate it's a valid integer
@@ -103,7 +103,7 @@ def validate_positive_float(
     for char in dangerous_chars:
         if char in value:
             raise ConfigValidationError(
-                f"Invalid float: {value!r} (contains dangerous character: {char!r})"
+                f"Invalid float: {value!r} (contains dangerous character: {char!r})",
             )
 
     # Validate it's a valid float
@@ -156,7 +156,7 @@ def validate_safe_path(
     for char in dangerous_chars:
         if char in value:
             raise ConfigValidationError(
-                f"Unsafe characters in path: {value!r} (contains: {char!r})"
+                f"Unsafe characters in path: {value!r} (contains: {char!r})",
             )
 
     # Convert to Path and resolve
@@ -168,7 +168,7 @@ def validate_safe_path(
     # Check for absolute paths if not allowed
     if not allow_absolute and path.is_absolute():
         raise ConfigValidationError(
-            f"Absolute paths not allowed: {value!r}. Use relative paths only."
+            f"Absolute paths not allowed: {value!r}. Use relative paths only.",
         )
 
     # Resolve to absolute path for traversal checking
@@ -184,7 +184,7 @@ def validate_safe_path(
         resolved_path.relative_to(cwd)
     except ValueError as e:
         raise ConfigValidationError(
-            f"Path outside working directory: {resolved_path} (working directory: {cwd})"
+            f"Path outside working directory: {resolved_path} (working directory: {cwd})",
         ) from e
 
     # Check existence if required
@@ -231,7 +231,7 @@ def validate_enum(
     for char in dangerous_chars:
         if char in value:
             raise ConfigValidationError(
-                f"Invalid value {value!r} (contains dangerous character: {char!r})"
+                f"Invalid value {value!r} (contains dangerous character: {char!r})",
             )
 
     # Normalize case for comparison if not case-sensitive
@@ -287,7 +287,7 @@ def validate_boolean(value: str) -> bool:
     for char in dangerous_chars:
         if char in value:
             raise ConfigValidationError(
-                f"Invalid boolean: {value!r} (contains dangerous character: {char!r})"
+                f"Invalid boolean: {value!r} (contains dangerous character: {char!r})",
             )
 
     # Normalize to lowercase
@@ -303,7 +303,7 @@ def validate_boolean(value: str) -> bool:
         return False
     raise ConfigValidationError(
         f"Invalid boolean: {value!r}. "
-        "Allowed: true, false, 1, 0, yes, no, on, off (empty string = false)"
+        "Allowed: true, false, 1, 0, yes, no, on, off (empty string = false)",
     )
 
 
@@ -338,7 +338,7 @@ def validate_url(value: str, require_https: bool = True) -> str:
     for char in dangerous_chars:
         if char in value:
             raise ConfigValidationError(
-                f"Invalid URL: {value!r} (contains dangerous character: {char!r})"
+                f"Invalid URL: {value!r} (contains dangerous character: {char!r})",
             )
 
     # Basic URL format validation
@@ -358,7 +358,7 @@ def validate_url(value: str, require_https: bool = True) -> str:
     # Require HTTPS if specified
     if require_https and not value.startswith("https://"):
         raise ConfigValidationError(
-            f"URL must use HTTPS protocol: {value!r} (HTTP is insecure for API communication)"
+            f"URL must use HTTPS protocol: {value!r} (HTTP is insecure for API communication)",
         )
 
     return value
