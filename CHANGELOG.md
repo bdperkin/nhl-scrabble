@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-04-26
+
 ### Fixed
 
 - **Output Format Validation** - Fixed CLI-Config mismatch for output formats (#366)
@@ -19,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Changed "Active filters" message from INFO to DEBUG (already shown in console output)
   - Users now see clean, concise output without internal library debug messages
 
-## [0.0.1] - TBD
+## [0.0.1] - 2026-04-20
 
 ### Added
 
@@ -245,4 +247,5 @@ Initial pre-release version with core NHL Scrabble functionality.
 - CVE-2026-3219 (pip vulnerability) - Monitoring for patch availability (Issue #375)
 
 [0.0.1]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.1
-[unreleased]: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.1...HEAD
+[0.0.2]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.2
+[unreleased]: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.2...HEAD
