@@ -52,7 +52,10 @@
     </div>
 
     <div class="table-container">
-        <table id="playersTable" class="results-table sortable" role="table" aria-label="Top players by Scrabble score">
+        <table id="playersTable"
+               class="results-table sortable"
+               role="table"
+               aria-label="Top players by Scrabble score">
             <thead>
                 <tr>
                     <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
@@ -63,12 +66,14 @@
             </thead>
             <tbody>
                 {% for player in top_players %}
-                <tr data-original-index="{{ loop.index }}">
-                    <td data-value="{{ loop.index }}">{{ loop.index }}</td>
-                    <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">{{ player.first_name }} {{ player.last_name }}</td>
-                    <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
-                    <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
-                </tr>
+                    <tr data-original-index="{{ loop.index }}">
+                        <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                        <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
+                            {{ player.first_name }} {{ player.last_name }}
+                        </td>
+                        <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
+                        <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -90,7 +95,10 @@
     </div>
 
     <div class="table-container">
-        <table id="teamsTable" class="results-table standings-table sortable" role="table" aria-label="Team standings">
+        <table id="teamsTable"
+               class="results-table standings-table sortable"
+               role="table"
+               aria-label="Team standings">
             <thead>
                 <tr>
                     <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
@@ -104,15 +112,15 @@
             </thead>
             <tbody>
                 {% for team in team_standings %}
-                <tr data-original-index="{{ loop.index }}">
-                    <td data-value="{{ loop.index }}">{{ loop.index }}</td>
-                    <td class="team-name" data-value="{{ team.name }}">{{ team.name }}</td>
-                    <td data-value="{{ team.division }}">{{ team.division }}</td>
-                    <td data-value="{{ team.conference }}">{{ team.conference }}</td>
-                    <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
-                    <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
-                    <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
-                </tr>
+                    <tr data-original-index="{{ loop.index }}">
+                        <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                        <td class="team-name" data-value="{{ team.name }}">{{ team.name }}</td>
+                        <td data-value="{{ team.division }}">{{ team.division }}</td>
+                        <td data-value="{{ team.conference }}">{{ team.conference }}</td>
+                        <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
+                        <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
+                        <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -124,14 +132,12 @@
     <h3>Division Standings</h3>
     <div class="division-grid">
         {% for division, teams in division_standings.items() %}
-        <div class="division-card">
-            <h4>{{ division }}</h4>
-            <ol>
-                {% for team in teams[:5] %}
-                <li>{{ team.name }} ({{ team.total_score }})</li>
-                {% endfor %}
-            </ol>
-        </div>
+            <div class="division-card">
+                <h4>{{ division }}</h4>
+                <ol>
+                    {% for team in teams[:5] %}<li>{{ team.name }} ({{ team.total_score }})</li>{% endfor %}
+                </ol>
+            </div>
         {% endfor %}
     </div>
 </section>

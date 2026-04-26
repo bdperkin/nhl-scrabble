@@ -292,6 +292,23 @@ repos:
           explanation/|contributing/))
 
   # ============================================================================
+  # HTML/Template Linting - djlint for HTML and Jinja2 Templates
+  # ============================================================================
+
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.34.1
+    hooks:
+      - id: djlint-reformat-jinja
+        name: djlint (reformat Jinja2 templates)
+        description: Lint and format HTML templates with Jinja2 syntax
+        # Reformat automatically
+
+      - id: djlint-jinja
+        name: djlint (check Jinja2 templates)
+        description: Lint HTML templates with Jinja2 syntax
+        # Check only (don't auto-fix)
+
+  # ============================================================================
   # Documentation - RST File Linting and Validation
   # ============================================================================
 
