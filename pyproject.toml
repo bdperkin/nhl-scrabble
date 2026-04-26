@@ -1,114 +1,151 @@
+# ============================================================================
+# NHL Scrabble - Project Configuration
+# ============================================================================
+# Central configuration file for the NHL Scrabble Score Analyzer project.
+# Follows PEP 621 (Project Metadata), PEP 517 (Build System), PEP 518 (pyproject.toml).
+#
+# Documentation:
+# - PEP 621: https://peps.python.org/pep-0621/
+# - PEP 517: https://peps.python.org/pep-0517/
+# - PEP 518: https://peps.python.org/pep-0518/
+#
+# Auto-formatting: This file is automatically formatted by pyproject-fmt pre-commit hook.
+# Manual formatting is not necessary - commit changes and the hook applies formatting.
+#
+# Key Sections:
+# - [build-system]: Build backend configuration (hatchling + hatch-vcs)
+# - [project]: Core metadata (name, version, dependencies, etc.)
+# - [project.optional-dependencies]: Extra dependency groups (test, lint, docs, etc.)
+# - [tool.*]: Tool-specific configurations (ruff, mypy, pytest, etc.)
+#
+# Versioning Strategy:
+# - Version is dynamically determined from git tags via hatch-vcs
+# - Tagged release: v0.1.0 → Package version 0.1.0
+# - Development: 5 commits after v0.1.0 → 0.1.1.dev5+g<hash>
+# - No tags: 0.0.0+unknown
+# - To release: git tag -a v0.1.0 -m "Release 0.1.0" && git push --tags
+#
+# Dependency Philosophy:
+# - Use >= for minimum versions (maximum compatibility)
+# - Only specify minimums when specific features required
+# - Avoid upper bounds unless breaking changes known
+# - Document WHY minimum versions are specified
+#
+# Tool Configuration Philosophy:
+# - Enable ALL rules by default (comprehensive quality)
+# - Selectively ignore with documented justification
+# - Matches ruff's "ALL rules" approach
+# - Per-file exceptions documented with rationale
+# ============================================================================
 [build-system]
-requires = [
-    "hatchling",
-    "hatch-vcs",
-]
 build-backend = "hatchling.build"
+requires = [
+    "hatch-vcs",
+    "hatchling",
+]
 
 [project]
 name = "nhl-scrabble"
-dynamic = ["version"]
 description = "NHL Roster Scrabble Score Analyzer - Calculate Scrabble scores for NHL player names"
 readme = "README.md"
-requires-python = ">=3.12"
-authors = [
-    { name = "Brandon Perkins", email = "bdperkin@gmail.com" },
-]
 keywords = [
+    "analytics",
+    "hockey",
     "nhl",
     "scrabble",
-    "hockey",
-    "analytics",
     "sports",
 ]
+requires-python = ">=3.12"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Games/Entertainment",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+dynamic = [ "version" ]
 dependencies = [
-    "requests>=2.33.1",
-    "requests-cache>=1.3.1",
     "certifi",
     "click",
     "colorlog>=6.10.1",
-    "rich>=15.0.0",
-    "jinja2>=3.1.6",
-    "pyyaml>=6.0.3",
     "dicttoxml>=1.7.16",
     "fastapi",
-    "uvicorn[standard]>=0.27.0",
-    "starlette>=1.0.0",
+    "jinja2>=3.1.6",
+    "platformdirs>=4.0.0",
     "prompt-toolkit>=3.0.52",
     "pydantic",
     "pydantic-settings>=2.7.3",
-    "platformdirs>=4.0.0",
+    "pyyaml>=6.0.3",
+    "requests>=2.33.1",
+    "requests-cache>=1.3.1",
+    "rich>=15.0.0",
+    "starlette>=1.0.0",
     "unidecode>=1.3.0",
+    "uvicorn[standard]>=0.27.0",
 ]
-
+[[project.authors]]
+name = "Brandon Perkins"
+email = "bdperkin@gmail.com"
 [project.license]
 text = "MIT"
-
 [project.optional-dependencies]
 test = [
+    "beautifulsoup4>=4.14.3",
+    "diff-cover>=10.2.0",
+    "httpx>=0.28.1",
     "pytest>=9.0.3",
+    "pytest-benchmark>=5.2.3",
+    "pytest-clarity>=1.0.1",
     "pytest-cov>=7.1.0",
     "pytest-mock>=3.15.1",
     "pytest-randomly>=4.1.0",
     "pytest-rerunfailures>=16.1",
     "pytest-sugar>=1.1.1",
-    "pytest-clarity>=1.0.1",
     "pytest-timeout>=2.4.0",
     "pytest-xdist>=3.8.0",
-    "pytest-benchmark>=5.2.3",
-    "diff-cover>=10.2.0",
-    "beautifulsoup4>=4.14.3",
-    "httpx>=0.28.1",
 ]
 lint = [
-    "ruff",
     "refurb>=2.3.1",
+    "ruff",
 ]
 type = [
     "mypy",
-    "types-requests>=2.33.0.20260408",
-    "types-PyYAML>=6.0.12.20260408",
     "ty",
+    "types-pyyaml>=6.0.12.20260408",
+    "types-requests>=2.33.0.20260408",
 ]
 security = [
-    "pip-audit>=2.10.0",
     "bandit[toml]>=1.7.5",
-    "safety>=3.7.0",
+    "pip-audit>=2.10.0",
     "pip-licenses>=5.5.5",
+    "safety>=3.7.0",
 ]
 branding = [
-    "Pillow>=12.2.0",
     "cairosvg>=2.9.0",
+    "pillow>=12.2.0",
 ]
 export = [
     "openpyxl>=3.1.5",
 ]
 docs = [
+    "blacken-docs>=1.20.0",
+    "myst-parser>=5.0.0",
+    "pytest-sphinx>=0.7.1",
     "sphinx>=9.1.0",
     "sphinx-autobuild>=2025.8.25",
     "sphinx-autodoc-typehints>=3.10.2",
     "sphinx-copybutton>=0.5.2",
     "sphinx-design>=0.7.0",
     "sphinx-rtd-theme>=3.1.0",
+    "sphinx-sitemap>=2.9.0",
     "sphinxcontrib-programoutput>=0.19",
     "sphinxcontrib-spelling>=8.0.2",
     "sphinxext-opengraph>=0.13.0",
-    "myst-parser>=5.0.0",
-    "sphinx-sitemap>=2.9.0",
-    "pytest-sphinx>=0.7.1",
-    "blacken-docs>=1.20.0",
 ]
 docs-gen = [
     "pdoc>=16.0.0",
@@ -127,103 +164,42 @@ tox = [
     "tox-uv>=1.35.1",
 ]
 dev = [
-    "nhl-scrabble[test,lint,type,security,docs,export,watch,build,publish,tox]",
-    "pre-commit",
     "check-jsonschema>=0.37.1",
+    "nhl-scrabble[build,docs,export,lint,publish,security,test,tox,type,watch]",
+    "pre-commit",
     "tomli>=2.4.1",
     "tomli-w>=1.2.0",
 ]
-
 [project.scripts]
 nhl-scrabble = "nhl_scrabble.cli:cli"
-
 [project.urls]
 Homepage = "https://github.com/bdperkin/nhl-scrabble"
 Repository = "https://github.com/bdperkin/nhl-scrabble"
 Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
 
+[tool.hatch.build.hooks.vcs]
+version-file = "src/nhl_scrabble/_version.py"
 [tool.hatch.build.targets.wheel]
 packages = [
     "src/nhl_scrabble",
 ]
-
 [tool.hatch.version]
 source = "vcs"
 
-[tool.hatch.build.hooks.vcs]
-version-file = "src/nhl_scrabble/_version.py"
-
-[tool.flake8]
-max-line-length = 100
-extend-ignore = [
-    "E501",
-    "W503",
-    "E203",
-]
-per-file-ignores = [
-    "__init__.py:F401,F403",
-    "tests/*:S101",
-    "src/nhl_scrabble/api/nhl_client.py:C901",
-    "src/nhl_scrabble/api_server/routes/players.py:C901",
-    "src/nhl_scrabble/validators.py:C901",
-    "src/nhl_scrabble/cli.py:TC003,C901",
-    "src/nhl_scrabble/config_validators.py:C901",
-    "scripts/update_dependencies.py:C901",
-]
-max-complexity = 10
-exclude = [
-    ".git",
-    ".tox",
-    ".venv",
-    "venv",
-    "build",
-    "dist",
-    "*.egg-info",
-    "__pycache__",
-    ".pytest_cache",
-    ".mypy_cache",
-    ".ruff_cache",
-    "src/nhl_scrabble/_version.py",
-]
-
-[tool.autoflake]
-check = true
-in-place = false
-remove-all-unused-imports = true
-remove-unused-variables = true
-remove-duplicate-keys = true
-ignore-init-module-imports = true
-exclude = [
-    ".git",
-    ".tox",
-    ".venv",
-    "venv",
-    "build",
-    "dist",
-    "*.egg-info",
-    "__pycache__",
-    "src/nhl_scrabble/_version.py",
-]
-
-[tool.docformatter]
-wrap_length = 100
-wrap_summaries = 100
-wrap_descriptions = 100
-black = false
-style = "pep257"
-make_summary_multi_line = false
-close_quotes_on_newline = false
-pre_summary_newline = false
-exclude = [
-    ".git",
-    ".tox",
-    ".venv",
-    "venv",
-    "build",
-    "dist",
-    "*.egg-info",
-    "src/nhl_scrabble/_version.py",
-]
+[tool.uv]
+python-preference = "managed"
+constraint-dependencies = []
+override-dependencies = []
+index-strategy = "first-index"
+keyring-provider = "disabled"
+resolution = "highest"
+compile-bytecode = true
+link-mode = "copy"
+managed = true
+package = true
+cache-keys = []
+preview = false
+[tool.uv.sources]
 
 [tool.black]
 line-length = 100
@@ -232,7 +208,11 @@ target-version = [
 ]
 skip-string-normalization = false
 skip-magic-trailing-comma = false
-extend-exclude = "/(\n  # directories\n  \\.eggs\n  | \\.git\n  | \\.tox\n  | \\.venv\n  | venv\n  | build\n  | dist\n  | \\.egg-info\n  | __pycache__\n  | \\.pytest_cache\n  | \\.mypy_cache\n  | \\.ruff_cache\n  # auto-generated files\n  | src/nhl_scrabble/_version\\.py\n)/\n"
+extend-exclude = """\
+    /(\n  # directories\n  \\.eggs\n  | \\.git\n  | \\.tox\n  | \\.venv\n  | venv\n  | build\n  | \
+    dist\n  | \\.egg-info\n  | __pycache__\n  | \\.pytest_cache\n  | \\.mypy_cache\n  | \
+    \\.ruff_cache\n  # auto-generated files\n  | src/nhl_scrabble/_version\\.py\n)/\n\
+    """
 
 [tool.ruff]
 target-version = "py312"
@@ -244,7 +224,10 @@ src = [
 exclude = [
     "src/nhl_scrabble/_version.py",
 ]
-
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = false
 [tool.ruff.lint]
 select = [
     "ALL",
@@ -285,7 +268,12 @@ ignore = [
     "PYI034",
     "PYI036",
 ]
-
+[tool.ruff.lint.isort]
+known-first-party = [
+    "nhl_scrabble",
+]
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = [
     "F401",
@@ -339,57 +327,43 @@ ignore = [
     "SLF001",
 ]
 "src/nhl_scrabble/reports/base.py" = [
-    "ANN401",  # Abstract method intentionally uses Any for flexibility
+    "ANN401", # Abstract method intentionally uses Any for flexibility
 ]
 "src/nhl_scrabble/formatters/factory.py" = [
-    "ANN401",  # Factory pattern requires flexible kwargs
+    "ANN401", # Factory pattern requires flexible kwargs
 ]
 "src/nhl_scrabble/formatters/__init__.py" = [
-    "ANN401",  # Factory pattern requires flexible kwargs
+    "ANN401", # Factory pattern requires flexible kwargs
 ]
 "src/nhl_scrabble/models/*.py" = [
-    "ANN401",  # to_dict() methods return dict[str, Any] for JSON serialization
+    "ANN401", # to_dict() methods return dict[str, Any] for JSON serialization
 ]
 "src/nhl_scrabble/reports/comparison.py" = [
-    "ANN401",  # JSON generation methods return dict[str, Any]
+    "ANN401", # JSON generation methods return dict[str, Any]
 ]
 "src/nhl_scrabble/validators.py" = [
-    "ANN401",  # API response validation uses dict[str, Any]
+    "ANN401", # API response validation uses dict[str, Any]
 ]
 "src/nhl_scrabble/web/app.py" = [
-    "ANN401",  # FastAPI/Pydantic response models use dict[str, Any]
+    "ANN401", # FastAPI/Pydantic response models use dict[str, Any]
 ]
 "src/nhl_scrabble/exporters/excel_exporter.py" = [
-    "ANN401",  # Excel export methods accept dict[str, Any] for flexibility
+    "ANN401", # Excel export methods accept dict[str, Any] for flexibility
 ]
 "src/nhl_scrabble/formatters/*.py" = [
-    "ANN401",  # Formatters accept dict[str, Any] for unstructured data
+    "ANN401", # Formatters accept dict[str, Any] for unstructured data
 ]
 "src/nhl_scrabble/utils/retry.py" = [
-    "ANN401",  # Decorator wrappers use *args: Any, **kwargs: Any pattern
+    "ANN401", # Decorator wrappers use *args: Any, **kwargs: Any pattern
 ]
 "src/nhl_scrabble/security/circuit_breaker.py" = [
-    "ANN401",  # Generic wrapper uses *args: Any, **kwargs: Any pattern
+    "ANN401", # Generic wrapper uses *args: Any, **kwargs: Any pattern
 ]
-
-[tool.ruff.lint.mccabe]
-max-complexity = 10
-
 [tool.ruff.lint.pylint]
 max-args = 7
 max-branches = 12
 max-returns = 6
 max-statements = 50
-
-[tool.ruff.lint.isort]
-known-first-party = [
-    "nhl_scrabble",
-]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-docstring-code-format = false
 
 [tool.isort]
 profile = "black"
@@ -427,29 +401,207 @@ skip_glob = [
     "src/nhl_scrabble/_version.py",
 ]
 
-[tool.refurb]
-enable_all = true
-python_version = "3.12"
-ignore = [
-    "FURB113",  # Multiple append() calls are sometimes more readable than extend()
-    "FURB120",  # Explicit default arguments can improve code clarity
+[tool.flake8]
+max-line-length = 100
+extend-ignore = [
+    "E501",
+    "W503",
+    "E203",
 ]
-
-[tool.ssort]
-skip = [
-    "tests/fixtures/",
-    "migrations/",
+per-file-ignores = [
+    "__init__.py:F401,F403",
+    "tests/*:S101",
+    "src/nhl_scrabble/api/nhl_client.py:C901",
+    "src/nhl_scrabble/api_server/routes/players.py:C901",
+    "src/nhl_scrabble/validators.py:C901",
+    "src/nhl_scrabble/cli.py:TC003,C901",
+    "src/nhl_scrabble/config_validators.py:C901",
+    "scripts/update_dependencies.py:C901",
+]
+max-complexity = 10
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
     "src/nhl_scrabble/_version.py",
 ]
-src_paths = [
-    "src/",
-    "tests/",
+
+[tool.codespell]
+check-filenames = true
+check-hidden = true
+skip = """\
+    *.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytes\
+    t_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*\
+    """
+ignore-words = ".codespell-ignore-words.txt"
+count = true
+quiet-level = 0
+
+[tool.docformatter]
+wrap_length = 100
+wrap_summaries = 100
+wrap_descriptions = 100
+black = false
+style = "pep257"
+make_summary_multi_line = false
+close_quotes_on_newline = false
+pre_summary_newline = false
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "src/nhl_scrabble/_version.py",
 ]
+
+[tool.check-wheel-contents]
+toplevel = [
+    "nhl_scrabble",
+]
+ignore = [
+    "W002",
+]
+
+[tool.deptry]
+exclude = [
+    "\\.git",
+    "\\.tox",
+    "\\.venv",
+    "venv",
+    "build",
+    "dist",
+    ".*\\.egg-info",
+    "__pycache__",
+    "tests",
+    "qa",
+    "scripts",
+]
+ignore = []
+pep621_dev_dependency_groups = [
+    "dev",
+    "test",
+    "lint",
+    "type",
+    "security",
+    "docs",
+    "watch",
+    "build",
+    "publish",
+    "tox",
+    "docs-gen",
+    "branding",
+]
+known_first_party = [ "nhl_scrabble" ]
+[tool.deptry.package_module_name_map]
+bandit = "bandit"
+beautifulsoup4 = "beautifulsoup4"
+blacken-docs = "blacken_docs"
+build = "build"
+cairosvg = "cairosvg"
+certifi = "certifi"
+check-jsonschema = "check_jsonschema"
+colorlog = "colorlog"
+dicttoxml = "dicttoxml"
+diff-cover = "diff_cover"
+fastapi = "fastapi"
+httpx = "httpx"
+jinja2 = "jinja2"
+mypy = "mypy"
+myst-parser = "myst_parser"
+nhl-scrabble = "nhl_scrabble"
+openpyxl = "openpyxl"
+pdoc = "pdoc"
+Pillow = "pillow"
+pip-audit = "pip_audit"
+pip-licenses = "pip_licenses"
+pre-commit = "pre_commit"
+prompt-toolkit = "prompt_toolkit"
+pydantic = "pydantic"
+pytest-benchmark = "pytest_benchmark"
+pytest-clarity = "pytest_clarity"
+pytest-cov = "pytest_cov"
+pytest-mock = "pytest_mock"
+pytest = "pytest"
+pytest-randomly = "pytest_randomly"
+pytest-rerunfailures = "pytest_rerunfailures"
+pytest-sphinx = "pytest_sphinx"
+pytest-sugar = "pytest_sugar"
+pytest-timeout = "pytest_timeout"
+pytest-watch = "pytest_watch"
+pytest-xdist = "pytest_xdist"
+python-dotenv = "dotenv"
+pyyaml = "yaml"
+refurb = "refurb"
+requests-cache = "requests_cache"
+requests = "requests"
+rich = "rich"
+ruff = "ruff"
+safety = "safety"
+sphinx-autobuild = "sphinx_autobuild"
+sphinx-autodoc-typehints = "sphinx_autodoc_typehints"
+sphinxcontrib-programoutput = "sphinxcontrib_programoutput"
+sphinxcontrib-spelling = "sphinxcontrib_spelling"
+sphinx-copybutton = "sphinx_copybutton"
+sphinx-design = "sphinx_design"
+sphinxext-opengraph = "sphinxext_opengraph"
+sphinx-rtd-theme = "sphinx_rtd_theme"
+sphinx-sitemap = "sphinx_sitemap"
+sphinx = "sphinx"
+starlette = "starlette"
+tomli = "tomli"
+tomli-w = "tomli_w"
+tox = "tox"
+tox-uv = "tox_uv"
+twine = "twine"
+types-PyYAML = "types_pyyaml"
+types-requests = "types_requests"
+ty = "ty"
+uvicorn = "uvicorn"
+[tool.deptry.per_rule_ignores]
+
+[tool.pyproject-fmt]
+column_width = 100
+indent = 4
+keep_full_version = true
+table_format = "long"
+
+[tool.bandit]
+targets = [
+    "src",
+]
+exclude_dirs = [
+    "tests",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "src/nhl_scrabble/_version.py",
+]
+severity = "LOW"
+confidence = "LOW"
+skips = [
+    "B101",
+    "B311",
+]
+exclude_tests = []
 
 [tool.mypy]
 python_version = "3.12"
-plugins = ["pydantic.mypy"]
-exclude = ["src/nhl_scrabble/_version.py"]
+plugins = [ "pydantic.mypy" ]
+exclude = [ "src/nhl_scrabble/_version.py" ]
 strict = true
 warn_unreachable = true
 warn_no_return = true
@@ -482,7 +634,6 @@ disallow_incomplete_defs = true
 disallow_untyped_defs = true
 no_implicit_optional = true
 no_implicit_reexport = true
-
 [[tool.mypy.overrides]]
 module = [
     "tests.*",
@@ -494,7 +645,6 @@ disallow_untyped_decorators = false
 disallow_any_expr = false
 disallow_any_explicit = false
 check_untyped_defs = false
-
 [[tool.mypy.overrides]]
 module = [
     "nhl_scrabble.cli",
@@ -506,14 +656,12 @@ module = [
 disallow_untyped_decorators = false
 disallow_subclassing_any = false
 disallow_any_explicit = false
-
 [[tool.mypy.overrides]]
 module = [
     "update_dependencies",
 ]
 # Script uses conditional imports for compatibility
 warn_unused_ignores = false
-
 [[tool.mypy.overrides]]
 module = [
     "nhl_scrabble.reports.base",
@@ -547,17 +695,14 @@ module = [
 # - Pre-existing type inconsistencies
 disallow_any_explicit = false
 
+[tool.ty.environment]
+python-version = "3.12"
+[tool.ty.rules]
 [tool.ty.src]
 include = [
     "src/",
     "tests/",
 ]
-
-[tool.ty.environment]
-python-version = "3.12"
-
-[tool.ty.rules]
-
 [tool.ty.terminal]
 error-on-warning = false
 
@@ -598,16 +743,8 @@ markers = [
     "flaky: Flaky test that may fail intermittently (will be retried on failure)",
 ]
 
-[tool.coverage.run]
-source = [
-    "src",
-]
-branch = true
-omit = [
-    "*/tests/*",
-    "*/__main__.py",
-]
-
+[tool.coverage.html]
+directory = "htmlcov"
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
@@ -621,9 +758,53 @@ exclude_lines = [
 precision = 2
 show_missing = true
 skip_covered = false
+[tool.coverage.run]
+source = [
+    "src",
+]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/__main__.py",
+]
 
-[tool.coverage.html]
-directory = "htmlcov"
+[tool.autoflake]
+check = true
+in-place = false
+remove-all-unused-imports = true
+remove-unused-variables = true
+remove-duplicate-keys = true
+ignore-init-module-imports = true
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+    "__pycache__",
+    "src/nhl_scrabble/_version.py",
+]
+
+[tool.refurb]
+enable_all = true
+python_version = "3.12"
+ignore = [
+    "FURB113", # Multiple append() calls are sometimes more readable than extend()
+    "FURB120", # Explicit default arguments can improve code clarity
+]
+
+[tool.ssort]
+skip = [
+    "tests/fixtures/",
+    "migrations/",
+    "src/nhl_scrabble/_version.py",
+]
+src_paths = [
+    "src/",
+    "tests/",
+]
 
 [tool.diff_cover]
 compare_branch = "origin/main"
@@ -658,14 +839,6 @@ histogram = "normal"
 warmup = true
 warmup_iterations = 5
 min_time = 5e-06
-
-[tool.codespell]
-check-filenames = true
-check-hidden = true
-skip = "*.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*"
-ignore-words = ".codespell-ignore-words.txt"
-count = true
-quiet-level = 0
 
 [tool.rstcheck]
 report_level = "INFO"
@@ -706,7 +879,6 @@ end_of_line = "lf"
 
 [tool.pymarkdown.mode]
 strict-config = true
-
 [tool.pymarkdown.plugins]
 enabled = [
     "md001",
@@ -760,64 +932,34 @@ enabled = [
     "md053",
 ]
 disabled = []
-
 [tool.pymarkdown.plugins.md010]
 enabled = false
-
 [tool.pymarkdown.plugins.md012]
 enabled = true
-
-[tool.pymarkdown.plugins.md029]
-enabled = false
-
 [tool.pymarkdown.plugins.md013]
 enabled = false
-
 [tool.pymarkdown.plugins.md022]
 enabled = false
-
 [tool.pymarkdown.plugins.md024]
 enabled = false
-
+[tool.pymarkdown.plugins.md029]
+enabled = false
 [tool.pymarkdown.plugins.md031]
 enabled = false
-
 [tool.pymarkdown.plugins.md032]
 enabled = false
-
 [tool.pymarkdown.plugins.md033]
 enabled = false
-
 [tool.pymarkdown.plugins.md034]
 enabled = false
-
 [tool.pymarkdown.plugins.md036]
 enabled = false
-
 [tool.pymarkdown.plugins.md040]
 enabled = false
-
 [tool.pymarkdown.plugins.md041]
 enabled = false
-
 [tool.pymarkdown.plugins.md043]
 enabled = false
-
-[tool.uv]
-managed = true
-package = true
-compile-bytecode = true
-link-mode = "copy"
-resolution = "highest"
-constraint-dependencies = []
-override-dependencies = []
-index-strategy = "first-index"
-keyring-provider = "disabled"
-cache-keys = []
-python-preference = "managed"
-preview = false
-
-[tool.uv.sources]
 
 [tool.interrogate]
 fail-under = 100.0
@@ -851,92 +993,6 @@ exclude = [
 ext = []
 style = "sphinx"
 omit-covered-files = false
-
-[tool.deptry]
-exclude = [
-    "\\.git",
-    "\\.tox",
-    "\\.venv",
-    "venv",
-    "build",
-    "dist",
-    ".*\\.egg-info",
-    "__pycache__",
-    "tests",
-    "qa",
-    "scripts",
-]
-ignore = []
-pep621_dev_dependency_groups = ["dev", "test", "lint", "type", "security", "docs", "watch", "build", "publish", "tox", "docs-gen", "branding"]
-known_first_party = ["nhl_scrabble"]
-
-[tool.deptry.per_rule_ignores]
-
-[tool.deptry.package_module_name_map]
-bandit = "bandit"
-beautifulsoup4 = "beautifulsoup4"
-blacken-docs = "blacken_docs"
-build = "build"
-cairosvg = "cairosvg"
-certifi = "certifi"
-check-jsonschema = "check_jsonschema"
-colorlog = "colorlog"
-dicttoxml = "dicttoxml"
-diff-cover = "diff_cover"
-fastapi = "fastapi"
-httpx = "httpx"
-jinja2 = "jinja2"
-mypy = "mypy"
-myst-parser = "myst_parser"
-nhl-scrabble =  "nhl_scrabble"
-openpyxl = "openpyxl"
-pdoc = "pdoc"
-Pillow = "pillow"
-pip-audit = "pip_audit"
-pip-licenses = "pip_licenses"
-pre-commit = "pre_commit"
-prompt-toolkit = "prompt_toolkit"
-pydantic = "pydantic"
-pytest-benchmark = "pytest_benchmark"
-pytest-clarity = "pytest_clarity"
-pytest-cov = "pytest_cov"
-pytest-mock = "pytest_mock"
-pytest = "pytest"
-pytest-randomly = "pytest_randomly"
-pytest-rerunfailures = "pytest_rerunfailures"
-pytest-sphinx = "pytest_sphinx"
-pytest-sugar = "pytest_sugar"
-pytest-timeout = "pytest_timeout"
-pytest-watch = "pytest_watch"
-pytest-xdist = "pytest_xdist"
-python-dotenv = "dotenv"
-pyyaml = "yaml"
-refurb = "refurb"
-requests-cache = "requests_cache"
-requests = "requests"
-rich = "rich"
-ruff = "ruff"
-safety = "safety"
-sphinx-autobuild = "sphinx_autobuild"
-sphinx-autodoc-typehints = "sphinx_autodoc_typehints"
-sphinxcontrib-programoutput = "sphinxcontrib_programoutput"
-sphinxcontrib-spelling = "sphinxcontrib_spelling"
-sphinx-copybutton = "sphinx_copybutton"
-sphinx-design = "sphinx_design"
-sphinxext-opengraph = "sphinxext_opengraph"
-sphinx-rtd-theme = "sphinx_rtd_theme"
-sphinx-sitemap = "sphinx_sitemap"
-sphinx = "sphinx"
-starlette = "starlette"
-tomli = "tomli"
-tomli-w = "tomli_w"
-tox = "tox"
-tox-uv = "tox_uv"
-twine = "twine"
-types-PyYAML = "types_pyyaml"
-types-requests = "types_requests"
-ty = "ty"
-uvicorn = "uvicorn"
 
 [tool.unimport]
 exclude = "\\.git|\\.tox|\\.venv|venv|build|dist|.*\\.egg-info|__pycache__|src/nhl_scrabble/_version\\.py"
@@ -1028,33 +1084,3 @@ ignore_names = [
     "_*",
 ]
 min_confidence = 60
-
-[tool.bandit]
-targets = [
-    "src",
-]
-exclude_dirs = [
-    "tests",
-    ".tox",
-    ".venv",
-    "venv",
-    "build",
-    "dist",
-    "*.egg-info",
-    "src/nhl_scrabble/_version.py",
-]
-severity = "LOW"
-confidence = "LOW"
-skips = [
-    "B101",
-    "B311",
-]
-exclude_tests = []
-
-[tool.check-wheel-contents]
-toplevel = [
-    "nhl_scrabble",
-]
-ignore = [
-    "W002",
-]

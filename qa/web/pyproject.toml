@@ -1,28 +1,102 @@
+# ============================================================================
+# NHL Scrabble QA - Web Automation Test Configuration
+# ============================================================================
+# Configuration for web-based quality assurance testing using Playwright.
+#
+# This is a separate test-only package for end-to-end browser automation,
+# performance testing, and accessibility validation. Not published to PyPI.
+#
+# Key Technologies:
+# - Playwright: Browser automation (Chromium, Firefox, WebKit)
+# - Locust: Distributed load testing framework
+# - axe-core: Accessibility testing (WCAG 2.1 compliance)
+# - Pillow: Screenshot comparison for visual regression
+#
+# Location: qa/web/
+#
+# Installation:
+#   cd qa/web && pip install -e .          # Test dependencies only
+#   cd qa/web && pip install -e .[dev]     # With development tools
+#
+# Usage:
+#   cd qa/web && pytest                    # Run all tests
+#   pytest --html=report.html              # Generate HTML report
+#   pytest -n auto                         # Parallel execution
+#   pytest -m accessibility                # Accessibility tests only
+#   pytest --headed                        # Visible browser mode
+#   pytest --cov=tests --cov-report=html   # Coverage report
+#
+# Test Organization (recommended):
+#   qa/web/
+#   ├── tests/
+#   │   ├── conftest.py              # Shared fixtures
+#   │   ├── test_accessibility.py    # Accessibility (axe-core)
+#   │   ├── test_functional.py       # Functional UI tests
+#   │   ├── test_visual.py           # Visual regression
+#   │   └── test_performance.py      # Performance (Locust)
+#   ├── pages/                       # Page Object Models
+#   └── fixtures/                    # Test data and baselines
+#
+# Best Practices:
+# 1. Page Object Model Pattern - Encapsulate page structure in classes
+# 2. Playwright Auto-wait - Avoid time.sleep(), use built-in waiting
+# 3. Test Isolation - Each test independent with fixture setup/teardown
+# 4. Screenshots on Failure - Auto-captured by pytest-playwright
+# 5. Accessibility First - Run axe tests on every major page
+# ============================================================================
+# ============================================================================
+# Build System - setuptools (simpler for test-only packages)
+# ============================================================================
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=68",
+  "wheel",
+]
+
+# ============================================================================
+# Project Metadata
+# ============================================================================
 [project]
 name = "nhl-scrabble-qa-web"
 version = "1.0.0"
 description = "Web automation tests for NHL Scrabble"
 requires-python = ">=3.12"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+# ============================================================================
+# Core Test Dependencies
+# ============================================================================
+# axe-playwright: Accessibility testing (WCAG 2.1, ARIA, color contrast)
+# locust: Load testing (API endpoints, concurrent user simulation)
+# pillow: Image processing (screenshot comparison, visual regression)
+# playwright: Browser automation (auto-wait, screenshots, video, network)
+# pytest: Test framework
+# pytest-html: HTML test reports
+# pytest-playwright: Pytest integration for Playwright
+# pytest-xdist: Parallel test execution (significantly faster)
+# ============================================================================
 dependencies = [
-    "playwright>=1.58.0",
-    "pytest>=9.0.3",
-    "pytest-playwright>=0.7.2",
-    "pytest-html>=4.2.0",
-    "pytest-xdist>=3.8.0",
-    "pillow>=12.2.0",
-    "axe-playwright>=0.1.0",
-    "locust>=2.43.4",
+  "axe-playwright>=0.1",
+  "locust>=2.43.4",
+  "pillow>=12.2",
+  "playwright>=1.58",
+  "pytest>=9.0.3",
+  "pytest-html>=4.2",
+  "pytest-playwright>=0.7.2",
+  "pytest-xdist>=3.8",
 ]
-
-[project.optional-dependencies]
-dev = [
-    "pytest-cov>=7.1.0",
-    "pytest-timeout>=2.4.0",
+# ============================================================================
+# Development Dependencies (optional)
+# ============================================================================
+# pytest-cov: Coverage tracking for test code
+# pytest-timeout: Prevent hanging tests (network, browser automation)
+# ============================================================================
+optional-dependencies.dev = [
+  "pytest-cov>=7.1",
+  "pytest-timeout>=2.4",
 ]
-
-[build-system]
-requires = [
-    "setuptools>=68",
-    "wheel",
-]
-build-backend = "setuptools.build_meta"

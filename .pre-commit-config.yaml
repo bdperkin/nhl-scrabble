@@ -137,6 +137,19 @@ repos:
         files: ^src/
 
   # ============================================================================
+  # Configuration Formatting - pyproject.toml
+  # ============================================================================
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.21.1
+    hooks:
+      - id: pyproject-fmt
+        name: pyproject-fmt
+        description: Format pyproject.toml
+        # Auto-fix enabled (modifies file in place)
+        # Run before validate-pyproject to ensure valid format
+
+  # ============================================================================
   # Project Validation - Configuration Validation
   # ============================================================================
 

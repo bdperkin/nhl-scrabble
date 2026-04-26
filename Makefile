@@ -297,6 +297,12 @@ black-format: check-venv ## Formatting - auto-fix code style with black (authori
 	@printf "$(BLUE)Formatting code with black...$(NC)\n"
 	@$(BIN)/black src tests
 
+pyproject-fmt: check-venv ## Configuration - format pyproject.toml
+	@printf "$(BLUE)Formatting pyproject.toml...$(NC)\n"
+	@$(BIN)/tox -e pyproject-fmt
+
+format-pyproject: pyproject-fmt ## Configuration - alias for pyproject-fmt
+
 mypy: check-venv ## Type checking - verify type hints (mypy)
 	@printf "$(BLUE)Running mypy type checker...$(NC)\n"
 	@$(BIN)/tox -e mypy

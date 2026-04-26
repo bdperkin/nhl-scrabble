@@ -134,6 +134,7 @@ jobs:
           - pymarkdown
           - mdformat
           - pyroma
+          - pyproject-fmt
           - validate-pyproject
           - tox-ini-fmt
           - yamllint
@@ -249,9 +250,9 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "pyproject.toml"
 
-      - name: Install docformatter, pyroma, deptry, pydocstyle, refurb, and safety for pre-commit
+      - name: Install pre-commit dependencies
         run: |
-          uv pip install docformatter pyroma deptry pydocstyle refurb safety --system
+          uv pip install docformatter pyroma pyproject-fmt deptry pydocstyle refurb safety --system
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.1

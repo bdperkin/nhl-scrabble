@@ -239,7 +239,7 @@ Each task includes:
 | 012 | Audit and Standardize Command-Line Options for Consistency                    | MEDIUM   | 2-4 hours           | Completed | [#236](https://github.com/bdperkin/nhl-scrabble/issues/236) | PR [#349](https://github.com/bdperkin/nhl-scrabble/pull/349), 2026-04-23, 5h actual    |
 | 013 | Perform Project-Wide Documentation Audit                                      | MEDIUM   | 4-6 hours           | Completed | [#237](https://github.com/bdperkin/nhl-scrabble/issues/237) | PR [#350](https://github.com/bdperkin/nhl-scrabble/pull/350), 2026-04-24, 4h actual    |
 | 014 | Add Refurb Python Code Modernization Linter                                   | MEDIUM   | 2-3 hours           | Completed | [#241](https://github.com/bdperkin/nhl-scrabble/issues/241) | PR [#337](https://github.com/bdperkin/nhl-scrabble/pull/337), 2026-04-22, 2.5h actual  |
-| 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 30 minutes - 1 hour | Active    | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | -                                                                                      |
+| 015 | Add pyproject-fmt Configuration Formatter                                     | MEDIUM   | 45 minutes          | Completed | [#242](https://github.com/bdperkin/nhl-scrabble/issues/242) | PR [#386](https://github.com/bdperkin/nhl-scrabble/pull/386), 2026-04-25, 45min actual |
 | 016 | Add Trailing Comma Python Formatter                                           | MEDIUM   | 30 minutes - 1 hour | Active    | [#243](https://github.com/bdperkin/nhl-scrabble/issues/243) | -                                                                                      |
 | 017 | Extend JSON/YAML Schema Validation with check-jsonschema                      | MEDIUM   | 1-2 hours           | Completed | [#244](https://github.com/bdperkin/nhl-scrabble/issues/244) | PR [#338](https://github.com/bdperkin/nhl-scrabble/pull/338), 2026-04-23, 45min actual |
 | 018 | Add check-wheel-contents Package Validator                                    | MEDIUM   | 1-2 hours           | Completed | [#245](https://github.com/bdperkin/nhl-scrabble/issues/245) | PR [#339](https://github.com/bdperkin/nhl-scrabble/pull/339), 2026-04-23, 1.5h actual  |
@@ -315,12 +315,12 @@ _No critical priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 188 tasks (63 active, 125 completed)
+**Total Tasks**: 188 tasks (62 active, 126 completed)
 
 - **Total Estimated Effort**: 1061.25 hours
-  - Active Tasks: ~517.75 hours
-  - Completed Tasks: ~543.5 hours
-- **Overall Completion**: 66.5%
+  - Active Tasks: ~517 hours
+  - Completed Tasks: ~544.25 hours
+- **Overall Completion**: 67.0%
 
 ## Task Management Guidelines
 
