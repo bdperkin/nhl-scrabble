@@ -6,14 +6,14 @@ Here are today's NHL Scrabble scores:
 
 Top 5 Teams:
 {% for abbrev, team in teams.items()|sort(attribute='1.total', reverse=True)|list[:5] %}
-{{ loop.index }}. {{ abbrev }}: {{ team.total }} points
-   Division: {{ team.division }}
-   Average per player: {{ "%.2f"|format(team.avg_per_player) }}
+    {{ loop.index }}. {{ abbrev }}: {{ team.total }} points
+    Division: {{ team.division }}
+    Average per player: {{ "%.2f"|format(team.avg_per_player) }}
 {% endfor %}
 
 {% if summary %}
-Total teams analyzed: {{ summary.total_teams }}
-Total players: {{ summary.total_players }}
+    Total teams analyzed: {{ summary.total_teams }}
+    Total players: {{ summary.total_players }}
 {% endif %}
 
 Best regards,

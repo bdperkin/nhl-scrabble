@@ -2,8 +2,8 @@
 
 *Top 3 Teams:*
 {% for abbrev, team in teams.items()|sort(attribute='1.total', reverse=True)|list[:3] %}
-{{ loop.index }}. *{{ abbrev }}*: {{ team.total }} points
-   :star: Top average: {{ "%.2f"|format(team.avg_per_player) }} per player
+    {{ loop.index }}. *{{ abbrev }}*: {{ team.total }} points
+    :star: Top average: {{ "%.2f"|format(team.avg_per_player) }} per player
 {% endfor %}
 
 _Generated: {{ timestamp }}_
