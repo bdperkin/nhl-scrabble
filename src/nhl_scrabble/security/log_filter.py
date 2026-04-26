@@ -94,7 +94,7 @@ class SensitiveDataFilter(logging.Filter):
         # Apostrophes only allowed mid-word (O'Reilly), not at end
         (
             re_compile(
-                r"([Pp]layer(?:\s+[Nn]ame)?:?\s+)(['\"])?([A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+)(?:[-\s][A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+))+)(\2)?"
+                r"([Pp]layer(?:\s+[Nn]ame)?:?\s+)(['\"])?([A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+)(?:[-\s][A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+))+)(\2)?",
             ),
             r"\1\2[REDACTED-NAME]\4",
         ),
@@ -104,7 +104,7 @@ class SensitiveDataFilter(logging.Filter):
         # Apostrophes only allowed mid-word (O'Reilly), not at end
         (
             re_compile(
-                r"^([A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+)(?:[-\s][A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+))+)$"
+                r"^([A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+)(?:[-\s][A-Z](?:[a-zA-Z]*'[a-zA-Z]+|[a-zA-Z]+))+)$",
             ),
             "[REDACTED-NAME]",
         ),
@@ -146,7 +146,7 @@ class SensitiveDataFilter(logging.Filter):
         # Examples: "birthplace: Toronto, ON", "birthCity='Montreal'"
         (
             re_compile(
-                r"(birth(?:place|city|City|Place|_city|_place)[:=\s]+['\"]?)([A-Z][a-zA-Z\s,.-]+?)(['\"]?(?:\s|,|$))"
+                r"(birth(?:place|city|City|Place|_city|_place)[:=\s]+['\"]?)([A-Z][a-zA-Z\s,.-]+?)(['\"]?(?:\s|,|$))",
             ),
             r"\1[REDACTED-PLACE]\3",
         ),

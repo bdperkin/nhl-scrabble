@@ -87,7 +87,7 @@ class MarkdownFormatter:
                 conference = team_data.get("conference", "N/A")
 
                 lines.append(
-                    f"| {rank} | {abbrev} | {division} | {conference} | {total} | {avg:.2f} |"
+                    f"| {rank} | {abbrev} | {division} | {conference} | {total} | {avg:.2f} |",
                 )
 
             lines.append("")

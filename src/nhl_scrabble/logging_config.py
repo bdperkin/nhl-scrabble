@@ -65,7 +65,9 @@ class JSONFormatter(logging.Formatter):
 
 
 def setup_logging(
-    verbose: bool = False, json_output: bool = False, sanitize_logs: bool = True
+    verbose: bool = False,
+    json_output: bool = False,
+    sanitize_logs: bool = True,
 ) -> None:
     """Configure logging for the application.
 

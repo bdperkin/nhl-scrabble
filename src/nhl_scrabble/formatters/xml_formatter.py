@@ -58,7 +58,7 @@ class XMLFormatter:
             logging.getLogger("dicttoxml").setLevel(logging.WARNING)
         except ImportError as e:
             raise ImportError(
-                "dicttoxml is required for XML format. Install with: pip install dicttoxml"
+                "dicttoxml is required for XML format. Install with: pip install dicttoxml",
             ) from e
 
         # Convert dict to XML
@@ -70,5 +70,5 @@ class XMLFormatter:
 
         # Parse and pretty-print (safe: parsing our own generated XML, not untrusted input)
         return xml.dom.minidom.parseString(xml_bytes).toprettyxml(  # noqa: S318  # nosec B318
-            indent="  "
+            indent="  ",
         )

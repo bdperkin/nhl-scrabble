@@ -89,7 +89,9 @@ class TestPlayerSortingPerformance:
     """
 
     def test_benchmark_sort_players_by_score(
-        self, benchmark: Any, sample_players: list[PlayerScore]
+        self,
+        benchmark: Any,
+        sample_players: list[PlayerScore],
     ) -> None:
         """Benchmark sorting all players by score.
 
@@ -109,7 +111,9 @@ class TestPlayerSortingPerformance:
         assert result[0].full_score >= result[-1].full_score
 
     def test_benchmark_sort_teams_by_total(
-        self, benchmark: Any, sample_teams: list[TeamScore]
+        self,
+        benchmark: Any,
+        sample_teams: list[TeamScore],
     ) -> None:
         """Benchmark sorting teams by total score.
 
@@ -136,7 +140,9 @@ class TestDataAggregationPerformance:
     """
 
     def test_benchmark_aggregate_by_division(
-        self, benchmark: Any, sample_players: list[PlayerScore]
+        self,
+        benchmark: Any,
+        sample_players: list[PlayerScore],
     ) -> None:
         """Benchmark grouping players by division.
 
@@ -161,7 +167,9 @@ class TestDataAggregationPerformance:
         assert sum(len(players) for players in result.values()) == 700
 
     def test_benchmark_calculate_team_totals(
-        self, benchmark: Any, sample_teams: list[TeamScore]
+        self,
+        benchmark: Any,
+        sample_teams: list[TeamScore],
     ) -> None:
         """Benchmark calculating team totals.
 
@@ -187,7 +195,9 @@ class TestStringOperationsPerformance:
     """
 
     def test_benchmark_format_player_lines(
-        self, benchmark: Any, sample_players: list[PlayerScore]
+        self,
+        benchmark: Any,
+        sample_players: list[PlayerScore],
     ) -> None:
         """Benchmark formatting player data as strings.
 
@@ -209,7 +219,9 @@ class TestStringOperationsPerformance:
         assert len(result) == 700
 
     def test_benchmark_join_large_report(
-        self, benchmark: Any, sample_teams: list[TeamScore]
+        self,
+        benchmark: Any,
+        sample_teams: list[TeamScore],
     ) -> None:
         """Benchmark joining large reports.
 

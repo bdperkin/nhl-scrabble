@@ -72,7 +72,8 @@ def test_yaml_formatter_readable(sample_data: dict[str, Any]) -> None:
 
 
 def test_yaml_formatter_import_error_without_pyyaml(
-    sample_data: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+    sample_data: dict[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test YAML formatter raises ImportError when PyYAML not installed."""
     # Mock import to fail

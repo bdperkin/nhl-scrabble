@@ -30,7 +30,10 @@ class TeamProcessor:
     """
 
     def __init__(
-        self, api_client: APIClientProtocol, scorer: ScorerProtocol, max_workers: int = 5
+        self,
+        api_client: APIClientProtocol,
+        scorer: ScorerProtocol,
+        max_workers: int = 5,
     ) -> None:
         """Initialize the team processor.
 
@@ -44,7 +47,11 @@ class TeamProcessor:
         self.max_workers = max_workers
 
     def _process_team_roster(
-        self, roster: dict[str, Any], team_abbrev: str, division: str, conference: str
+        self,
+        roster: dict[str, Any],
+        team_abbrev: str,
+        division: str,
+        conference: str,
     ) -> list[PlayerScore]:
         """Process a single team's roster and score all players.
 
@@ -66,7 +73,10 @@ class TeamProcessor:
 
             for player_data in roster[position]:
                 player_score = self.scorer.score_player(
-                    player_data, team_abbrev, division, conference
+                    player_data,
+                    team_abbrev,
+                    division,
+                    conference,
                 )
                 team_players.append(player_score)
 
@@ -74,13 +84,16 @@ class TeamProcessor:
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 f"Scored {len(team_players)} players for {team_abbrev} "
-                f"(total: {sum(p.full_score for p in team_players)})"
+                f"(total: {sum(p.full_score for p in team_players)})",
             )
 
         return team_players
 
     def _fetch_and_process_team(
-        self, team_abbrev: str, team_meta: dict[str, str], season: str | None = None
+        self,
+        team_abbrev: str,
+        team_meta: dict[str, str],
+        season: str | None = None,
     ) -> tuple[TeamScore, list[PlayerScore]] | None:
         """Fetch and process a single team (thread-safe).
 
@@ -105,7 +118,10 @@ class TeamProcessor:
 
             # Process roster
             team_players = self._process_team_roster(
-                roster, team_abbrev, team_meta["division"], team_meta["conference"]
+                roster,
+                team_abbrev,
+                team_meta["division"],
+                team_meta["conference"],
             )
 
             # Calculate team score
@@ -161,7 +177,7 @@ class TeamProcessor:
         season_desc = f"for season {season}" if season else "for current season"
         logger.debug(
             f"Starting team processing {season_desc} "
-            f"(concurrent mode, max_workers={self.max_workers})"
+            f"(concurrent mode, max_workers={self.max_workers})",
         )
 
         # Fetch all teams metadata
@@ -178,7 +194,10 @@ class TeamProcessor:
             # Submit all roster fetch jobs
             future_to_team = {
                 executor.submit(
-                    self._fetch_and_process_team, team_abbrev, team_meta, season
+                    self._fetch_and_process_team,
+                    team_abbrev,
+                    team_meta,
+                    season,
                 ): team_abbrev
                 for team_abbrev, team_meta in teams_info.items()
             }
@@ -194,7 +213,7 @@ class TeamProcessor:
                         # Team failed to fetch
                         failed_teams.append(team_abbrev)
                         logger.warning(
-                            f"No roster data for {team_abbrev} ({completed}/{total_teams})"
+                            f"No roster data for {team_abbrev} ({completed}/{total_teams})",
                         )
                     else:
                         # Success
@@ -214,12 +233,13 @@ class TeamProcessor:
 
         logger.debug(
             f"Processing complete: {len(team_scores)} teams processed, "
-            f"{len(failed_teams)} failed (concurrent mode)"
+            f"{len(failed_teams)} failed (concurrent mode)",
         )
         return team_scores, all_players, failed_teams
 
     def calculate_division_standings(
-        self, team_scores: dict[str, TeamScore]
+        self,
+        team_scores: dict[str, TeamScore],
     ) -> dict[str, DivisionStandings]:
         """Calculate division-level standings from team scores.
 
@@ -235,7 +255,7 @@ class TeamProcessor:
             True
         """
         division_data: dict[str, dict[str, Any]] = defaultdict(
-            lambda: {"total": 0, "teams": [], "player_count": 0}
+            lambda: {"total": 0, "teams": [], "player_count": 0},
         )
 
         for team_abbrev, team_score in team_scores.items():
@@ -261,7 +281,8 @@ class TeamProcessor:
         return standings
 
     def calculate_conference_standings(
-        self, team_scores: dict[str, TeamScore]
+        self,
+        team_scores: dict[str, TeamScore],
     ) -> dict[str, ConferenceStandings]:
         """Calculate conference-level standings from team scores.
 
@@ -277,7 +298,7 @@ class TeamProcessor:
             True
         """
         conference_data: dict[str, dict[str, Any]] = defaultdict(
-            lambda: {"total": 0, "teams": [], "player_count": 0}
+            lambda: {"total": 0, "teams": [], "player_count": 0},
         )
 
         for team_abbrev, team_score in team_scores.items():

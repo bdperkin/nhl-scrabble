@@ -85,7 +85,9 @@ class StatsReporter(BaseReporter):
     def generate(
         self,
         data: tuple[
-            list[PlayerScore], dict[str, DivisionStandings], dict[str, ConferenceStandings]
+            list[PlayerScore],
+            dict[str, DivisionStandings],
+            dict[str, ConferenceStandings],
         ],
     ) -> str:
         """Generate statistics report.
@@ -102,12 +104,14 @@ class StatsReporter(BaseReporter):
         # Top players overall
         parts.append(
             self._format_header(
-                f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS (Across All Teams)"
-            )
+                f"🌟 TOP {self.top_players_count} HIGHEST-SCORING PLAYERS (Across All Teams)",
+            ),
         )
 
         top_players = heapq.nlargest(
-            self.top_players_count, all_players, key=lambda x: x.full_score
+            self.top_players_count,
+            all_players,
+            key=lambda x: x.full_score,
         )
 
         parts.extend(
@@ -131,7 +135,7 @@ class StatsReporter(BaseReporter):
             parts.append(
                 f"\nHighest First Name: {top_first.first_name} "
                 f"({top_first.full_name}, {top_first.team}) = "
-                f"{self._format_score(top_first.first_score)} points"
+                f"{self._format_score(top_first.first_score)} points",
             )
         else:
             parts.append("\nHighest First Name: N/A (no players)")
@@ -142,7 +146,7 @@ class StatsReporter(BaseReporter):
             parts.append(
                 f"\nHighest Last Name: {top_last.last_name} "
                 f"({top_last.full_name}, {top_last.team}) = "
-                f"{self._format_score(top_last.last_score)} points"
+                f"{self._format_score(top_last.last_score)} points",
             )
         else:
             parts.append("\nHighest Last Name: N/A (no players)")
@@ -154,7 +158,7 @@ class StatsReporter(BaseReporter):
                 f"\n  Full Name: {self._format_average(stats['avg_full'], width=5)}",
                 f"\n  First Name: {self._format_average(stats['avg_first'], width=5)}",
                 f"\n  Last Name: {self._format_average(stats['avg_last'], width=5)}",
-            ]
+            ],
         )
 
         # Division with highest average per player
@@ -167,7 +171,7 @@ class StatsReporter(BaseReporter):
             top_division = max(division_avg_per_player.items(), key=operator.itemgetter(1))
             parts.append(
                 f"\n\nHighest Avg Division (per player): "
-                f"{top_division[0]} = {self._format_average(top_division[1])} points/player"
+                f"{top_division[0]} = {self._format_average(top_division[1])} points/player",
             )
 
         # Conference with highest average per player
@@ -180,7 +184,7 @@ class StatsReporter(BaseReporter):
             top_conference = max(conference_avg_per_player.items(), key=operator.itemgetter(1))
             parts.append(
                 f"\nHighest Avg Conference (per player): "
-                f"{top_conference[0]} = {self._format_average(top_conference[1])} points/player"
+                f"{top_conference[0]} = {self._format_average(top_conference[1])} points/player",
             )
 
         return "".join(parts)

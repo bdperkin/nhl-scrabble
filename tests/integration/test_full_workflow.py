@@ -120,7 +120,9 @@ class TestFullWorkflow:
         ]
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         team_processor = TeamProcessor(api_client, scorer)
@@ -344,7 +346,9 @@ class TestErrorRecoveryWorkflow:
         ]
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         team_processor = TeamProcessor(api_client, scorer)
@@ -380,7 +384,9 @@ class TestErrorRecoveryWorkflow:
         ]
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         team_processor = TeamProcessor(api_client, scorer)

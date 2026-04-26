@@ -22,7 +22,8 @@ class PlayoffCalculator:
     """
 
     def _group_teams_by_division(
-        self, team_scores: dict[str, TeamScore]
+        self,
+        team_scores: dict[str, TeamScore],
     ) -> dict[str, list[PlayoffTeam]]:
         """Group teams by division and convert to PlayoffTeam objects.
 
@@ -48,7 +49,8 @@ class PlayoffCalculator:
         return teams_by_division
 
     def _determine_division_leaders(
-        self, teams_by_division: dict[str, list[PlayoffTeam]]
+        self,
+        teams_by_division: dict[str, list[PlayoffTeam]],
     ) -> tuple[dict[str, PlayoffTeam], list[PlayoffTeam]]:
         """Determine top 3 teams from each division (automatic playoff spots).
 
@@ -114,7 +116,9 @@ class PlayoffCalculator:
 
             # Get top 2 wild cards using heapq for O(n log k) complexity
             conference_wild_cards = heapq.nlargest(
-                2, wild_card_candidates, key=lambda x: (x.total, x.avg)
+                2,
+                wild_card_candidates,
+                key=lambda x: (x.total, x.avg),
             )
 
             for i, team in enumerate(conference_wild_cards):
@@ -221,7 +225,9 @@ class PlayoffCalculator:
         """
         for team in all_teams:
             team.status_indicator = self._get_status_indicator(
-                team, presidents_trophy_team, conference_leaders
+                team,
+                presidents_trophy_team,
+                conference_leaders,
             )
 
     def _group_by_conference(self, all_teams: list[PlayoffTeam]) -> dict[str, list[PlayoffTeam]]:
@@ -245,7 +251,8 @@ class PlayoffCalculator:
         return result
 
     def calculate_playoff_standings(
-        self, team_scores: dict[str, TeamScore]
+        self,
+        team_scores: dict[str, TeamScore],
     ) -> dict[str, list[PlayoffTeam]]:
         """Calculate complete playoff standings with all teams.
 
@@ -282,7 +289,10 @@ class PlayoffCalculator:
 
         # Assign status indicators
         self._assign_status_indicators(
-            all_teams, playoff_teams, presidents_trophy_team, conference_leaders
+            all_teams,
+            playoff_teams,
+            presidents_trophy_team,
+            conference_leaders,
         )
 
         # Group results by conference

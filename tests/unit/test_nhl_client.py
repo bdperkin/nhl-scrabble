@@ -19,7 +19,10 @@ class TestNHLApiClient:
     def test_client_initialization(self) -> None:
         """Test client initialization with custom parameters."""
         client = NHLApiClient(
-            timeout=15, retries=5, rate_limit_max_requests=120, rate_limit_window=60.0
+            timeout=15,
+            retries=5,
+            rate_limit_max_requests=120,
+            rate_limit_window=60.0,
         )
 
         assert client.timeout == 15
@@ -82,7 +85,9 @@ class TestNHLApiClient:
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_team_roster_success(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+        self,
+        mock_get: Mock,
+        sample_roster_data: dict[str, Any],
     ) -> None:
         """Test successful roster fetching."""
         mock_response = Mock()
@@ -90,7 +95,9 @@ class TestNHLApiClient:
         mock_response.json.return_value = sample_roster_data
         mock_get.return_value = mock_response
         client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         roster = client.get_team_roster("EDM")
 
@@ -114,7 +121,9 @@ class TestNHLApiClient:
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_team_roster_retry(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+        self,
+        mock_get: Mock,
+        sample_roster_data: dict[str, Any],
     ) -> None:
         """Test retry logic on failure."""
         import requests
@@ -131,7 +140,10 @@ class TestNHLApiClient:
         ]
 
         client = NHLApiClient(
-            cache_enabled=False, retries=3, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            retries=3,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         roster = client.get_team_roster("EDM")
 
@@ -372,7 +384,9 @@ class TestNHLApiClient:
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_rate_limiting_between_successful_requests(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+        self,
+        mock_get: Mock,
+        sample_roster_data: dict[str, Any],
     ) -> None:
         """Test that rate limiting applies between successful requests."""
         import time
@@ -403,7 +417,9 @@ class TestNHLApiClient:
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_no_rate_limiting_on_first_request(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+        self,
+        mock_get: Mock,
+        sample_roster_data: dict[str, Any],
     ) -> None:
         """Test that first request has no delay."""
         import time
@@ -415,7 +431,9 @@ class TestNHLApiClient:
         mock_get.return_value = mock_response
 
         client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=60, rate_limit_window=60.0
+            cache_enabled=False,
+            rate_limit_max_requests=60,
+            rate_limit_window=60.0,
         )
 
         start = time.time()
@@ -430,7 +448,9 @@ class TestNHLApiClient:
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_failed_request_doesnt_affect_rate_limiting(
-        self, mock_get: Mock, sample_roster_data: dict[str, Any]
+        self,
+        mock_get: Mock,
+        sample_roster_data: dict[str, Any],
     ) -> None:
         """Test that failed requests don't affect rate limiting."""
         # First request succeeds
@@ -445,7 +465,10 @@ class TestNHLApiClient:
         ]
 
         client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=10, rate_limit_window=1.0, retries=1
+            cache_enabled=False,
+            rate_limit_max_requests=10,
+            rate_limit_window=1.0,
+            retries=1,
         )
 
         start = time.time()
@@ -632,7 +655,9 @@ class TestNHLApiClient:
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_cache_uses_platform_directory(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test cache uses platform-specific directory by default."""
         # Mock platformdirs to return test directory

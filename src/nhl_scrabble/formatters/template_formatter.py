@@ -42,7 +42,7 @@ class TemplateFormatter:
         if not template_file:
             raise ValueError(
                 "template_file is required for TemplateFormatter. "
-                "Provide with: get_formatter('template', template_file='path/to/template.j2')"
+                "Provide with: get_formatter('template', template_file='path/to/template.j2')",
             )
 
         self.template_path = Path(template_file)
@@ -79,7 +79,7 @@ class TemplateFormatter:
             from jinja2 import Environment, select_autoescape  # noqa: PLC0415
         except ImportError as e:
             raise ImportError(
-                "Jinja2 is required for template format. Install with: pip install jinja2"
+                "Jinja2 is required for template format. Install with: pip install jinja2",
             ) from e
 
         # Read template file
@@ -87,7 +87,7 @@ class TemplateFormatter:
 
         # Create template environment with autoescape enabled (security: prevent XSS)
         template = Environment(autoescape=select_autoescape(default=True)).from_string(
-            template_content
+            template_content,
         )
 
         # Add timestamp to data

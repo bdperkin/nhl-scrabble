@@ -492,6 +492,19 @@ repos:
         args: [--in-place, --wrap-summaries, "100", --wrap-descriptions, "100"]
         exclude: ^src/nhl_scrabble/formatters/html_formatter\.py$  # Contains HTML template strings
 
+  # ============================================================================
+  # Python Formatting - Trailing Commas
+  # ============================================================================
+
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v4.0.0
+    hooks:
+      - id: add-trailing-comma
+        name: add-trailing-comma
+        # Add trailing commas to multi-line Python structures for better diffs
+        # Run after black but before ruff-format
+        description: Add trailing commas to Python structures
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:

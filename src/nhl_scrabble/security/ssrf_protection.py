@@ -149,7 +149,10 @@ def resolve_hostname(hostname: str) -> list[str]:
     try:
         # Get all IP addresses for hostname (both IPv4 and IPv6)
         addr_info = socket.getaddrinfo(
-            hostname, None, family=socket.AF_UNSPEC, type=socket.SOCK_STREAM
+            hostname,
+            None,
+            family=socket.AF_UNSPEC,
+            type=socket.SOCK_STREAM,
         )
 
         # Extract unique IPs (info[4][0] is always the IP address string)
@@ -224,11 +227,11 @@ def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
     if hostname not in ALLOWED_DOMAINS:
         logger.warning(
             f"SSRF protection blocked request to non-allowed domain: {hostname}. "
-            f"Allowed domains: {', '.join(ALLOWED_DOMAINS)}"
+            f"Allowed domains: {', '.join(ALLOWED_DOMAINS)}",
         )
         raise SSRFProtectionError(
             f"Hostname '{hostname}' not in allowed domains list. "
-            f"Allowed domains: {', '.join(ALLOWED_DOMAINS)}"
+            f"Allowed domains: {', '.join(ALLOWED_DOMAINS)}",
         )
 
     # Check for blocked ports
@@ -246,11 +249,11 @@ def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
             if is_ip_blocked(ip):
                 logger.warning(
                     f"SSRF protection blocked request: hostname '{hostname}' "
-                    f"resolves to blocked IP address: {ip}"
+                    f"resolves to blocked IP address: {ip}",
                 )
                 raise SSRFProtectionError(
                     f"Hostname '{hostname}' resolves to blocked IP address: {ip}. "
-                    f"Private/internal IPs are not allowed."
+                    f"Private/internal IPs are not allowed.",
                 )
 
     return url

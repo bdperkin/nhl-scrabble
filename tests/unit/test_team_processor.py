@@ -41,7 +41,9 @@ class TestTeamProcessorConcurrent:
         mock_get.return_value = roster_response
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer)
@@ -68,7 +70,9 @@ class TestTeamProcessorConcurrent:
         mock_get.return_value = not_found_response
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer)
@@ -103,7 +107,9 @@ class TestTeamProcessorConcurrent:
 
         # Initialize processor with concurrent mode
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=5)
@@ -145,7 +151,9 @@ class TestTeamProcessorConcurrent:
         ]
 
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=3)
@@ -179,7 +187,9 @@ class TestTeamProcessorConcurrent:
         # Test sequential mode (max_workers=1)
         mock_get.side_effect = [standings_response] + [roster_response] * num_teams
         api_client_seq = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer_seq = ScrabbleScorer()
         processor_seq = TeamProcessor(api_client_seq, scorer_seq, max_workers=1)
@@ -190,7 +200,9 @@ class TestTeamProcessorConcurrent:
 
         # Test concurrent mode (max_workers=5)
         api_client_conc = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer_conc = ScrabbleScorer()
         processor_conc = TeamProcessor(api_client_conc, scorer_conc, max_workers=5)
@@ -233,7 +245,9 @@ class TestTeamProcessorThreadSafety:
 
         # Use high concurrency to stress test
         api_client = NHLApiClient(
-            cache_enabled=False, rate_limit_max_requests=1000, rate_limit_window=1.0
+            cache_enabled=False,
+            rate_limit_max_requests=1000,
+            rate_limit_window=1.0,
         )
         scorer = ScrabbleScorer()
         processor = TeamProcessor(api_client, scorer, max_workers=10)

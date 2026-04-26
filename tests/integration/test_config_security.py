@@ -29,7 +29,8 @@ class TestConfigInjectionPrevention:
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "60.0 | whoami")
 
         with pytest.raises(
-            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*dangerous character"
+            ValueError,
+            match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*dangerous character",
         ):
             Config.from_env()
 
@@ -80,7 +81,8 @@ class TestConfigInjectionPrevention:
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "0.5")
 
         with pytest.raises(
-            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*outside allowed range"
+            ValueError,
+            match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*outside allowed range",
         ):
             Config.from_env()
 
@@ -89,7 +91,8 @@ class TestConfigInjectionPrevention:
         monkeypatch.setenv("NHL_SCRABBLE_RATE_LIMIT_WINDOW", "5000.0")
 
         with pytest.raises(
-            ValueError, match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*outside allowed range"
+            ValueError,
+            match=r"NHL_SCRABBLE_RATE_LIMIT_WINDOW.*outside allowed range",
         ):
             Config.from_env()
 

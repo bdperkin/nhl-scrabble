@@ -93,7 +93,9 @@ class TestCLIProgress:
     @patch("nhl_scrabble.di.NHLApiClient")
     @patch("nhl_scrabble.cli.ProgressManager")
     def test_progress_manager_created_with_quiet_flag(
-        self, mock_progress_manager: Mock, mock_api_client: Mock
+        self,
+        mock_progress_manager: Mock,
+        mock_api_client: Mock,
     ) -> None:
         """Test ProgressManager is created with correct enabled flag."""
         # Setup mocks

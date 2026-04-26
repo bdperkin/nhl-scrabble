@@ -209,7 +209,9 @@ class TestCombinedValidation:
         )
 
     def test_environment_validation_before_cli(
-        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+        tmp_path: Path,
     ) -> None:
         """Test environment variables are validated even if CLI validation would pass."""
         # Invalid environment variable

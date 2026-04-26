@@ -360,7 +360,8 @@ def test_cache_statistics_method(tmp_path: Path) -> None:
 
 @pytest.mark.integration
 def test_cache_location_follows_platform_standard(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     """Test cache is created in platform-specific location."""
     from unittest.mock import patch

@@ -300,7 +300,7 @@ class DependencyUpdater:
                                 updated_deps.append(f"{name}{operator}{new_version}")
                                 print(
                                     f"  Updated {name} in [{group}]: "
-                                    f"{updates[name].current} → {new_version}"
+                                    f"{updates[name].current} → {new_version}",
                                 )
                             else:
                                 updated_deps.append(dep)
@@ -417,7 +417,7 @@ class DependencyUpdater:
                     pinned = "📌 PINNED" if pkg in self.pins else ""
 
                     print(
-                        f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking} {pinned}".rstrip()
+                        f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking} {pinned}".rstrip(),
                     )
         else:
             print("\n✅ All pyproject.toml files are up to date!")
@@ -441,7 +441,7 @@ class DependencyUpdater:
                     pinned = "📌 PINNED" if pkg in self.pins else ""
 
                     print(
-                        f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking} {pinned}".rstrip()
+                        f"  {pkg:40s} {update.current:12s} → {update.latest:12s} {breaking} {pinned}".rstrip(),
                     )
 
         print("\n" + "=" * 80)

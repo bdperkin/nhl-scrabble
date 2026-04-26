@@ -20,7 +20,9 @@ class TestHistoricalDataStoreInit:
     """Tests for HistoricalDataStore initialization edge cases."""
 
     def test_init_with_default_directory(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test initialization with default directory path."""
         monkeypatch.chdir(tmp_path)

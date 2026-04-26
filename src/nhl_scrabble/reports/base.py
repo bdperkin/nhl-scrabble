@@ -59,7 +59,10 @@ class BaseReporter(ABC):
         return f"\n{title}\n{separator}"
 
     def _sort_by_key(
-        self, items: Iterable[T], key: Callable[[T], Any], reverse: bool = False
+        self,
+        items: Iterable[T],
+        key: Callable[[T], Any],
+        reverse: bool = False,
     ) -> list[T]:
         """Sort items by a key function.
 

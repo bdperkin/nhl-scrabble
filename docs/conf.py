@@ -272,7 +272,7 @@ def _configure_doctest_exclusions(app: "Sphinx") -> None:
                 "api/nhl-api.rst",
                 "api/processors.rst",
                 "api/scoring.rst",
-            ]
+            ],
         )
 
 

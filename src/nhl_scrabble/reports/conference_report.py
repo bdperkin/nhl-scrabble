@@ -19,7 +19,9 @@ class ConferenceReporter(BaseReporter):
         parts = [self._format_header("🌎 CONFERENCE SCRABBLE SCORES")]
 
         sorted_conferences = self._sort_by_key(
-            standings.items(), key=lambda x: x[1].total, reverse=True
+            standings.items(),
+            key=lambda x: x[1].total,
+            reverse=True,
         )
 
         for rank, (conference, data) in enumerate(sorted_conferences, 1):
@@ -30,7 +32,7 @@ class ConferenceReporter(BaseReporter):
                     f"\n   Teams: {len(data.teams)} ({self._format_team_list(data.teams)})",
                     f"\n   Players: {data.player_count}",
                     f"\n   Avg per team: {self._format_average(data.avg_per_team, width=6, decimals=1)}",
-                ]
+                ],
             )
 
         return "".join(parts)

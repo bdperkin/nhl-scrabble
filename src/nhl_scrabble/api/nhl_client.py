@@ -91,7 +91,7 @@ class NHLApiClient:
         alive_instances = [ref() for ref in cls._instances if ref() is not None]
         if alive_instances:
             logger.warning(
-                f"Cleaning up {len(alive_instances)} unclosed NHLApiClient session(s) at exit"
+                f"Cleaning up {len(alive_instances)} unclosed NHLApiClient session(s) at exit",
             )
             for instance in alive_instances:
                 if instance and not instance._closed:  # noqa: SLF001
@@ -161,10 +161,11 @@ class NHLApiClient:
 
         # Initialize rate limiter
         self.rate_limiter = RateLimiter(
-            max_requests=rate_limit_max_requests, time_window=rate_limit_window
+            max_requests=rate_limit_max_requests,
+            time_window=rate_limit_window,
         )
         logger.debug(
-            f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s"
+            f"Rate limiter initialized: {rate_limit_max_requests} requests per {rate_limit_window}s",
         )
 
         # Initialize circuit breaker for DoS prevention
@@ -178,7 +179,7 @@ class NHLApiClient:
         )
         logger.debug(
             f"Circuit breaker initialized: threshold={dos_circuit_breaker_threshold}, "
-            f"timeout={dos_circuit_breaker_timeout}s"
+            f"timeout={dos_circuit_breaker_timeout}s",
         )
 
         # Use certifi CA bundle for SSL verification
@@ -203,7 +204,7 @@ class NHLApiClient:
                 raise NHLApiError(
                     f"Cache directory not writable: {cache_path}. "
                     f"Check permissions or specify a different cache directory "
-                    f"with the cache_dir parameter."
+                    f"with the cache_dir parameter.",
                 ) from e
 
             # Verify directory is writable
@@ -239,7 +240,7 @@ class NHLApiClient:
         self.session.mount("http://", adapter)
         logger.debug(
             f"Connection pool configured: max_connections={dos_max_connections}, "
-            f"max_per_host={dos_max_per_host}"
+            f"max_per_host={dos_max_per_host}",
         )
 
         self.session.headers.update({"User-Agent": "NHL-Scrabble/2.0"})
@@ -252,7 +253,7 @@ class NHLApiClient:
         """Destructor - close session if not already closed (safety net)."""
         if not self._closed:
             logger.warning(
-                "NHLApiClient session was not explicitly closed - cleaning up in destructor"
+                "NHLApiClient session was not explicitly closed - cleaning up in destructor",
             )
             self.close()
 
@@ -516,7 +517,7 @@ class NHLApiClient:
                 ):
                     try:
                         player["firstName"]["default"] = validate_player_name(
-                            player["firstName"]["default"]
+                            player["firstName"]["default"],
                         )
                     except ValidationError as e:
                         logger.warning(f"Invalid player first name in API response: {e}")
@@ -531,7 +532,7 @@ class NHLApiClient:
                 ):
                     try:
                         player["lastName"]["default"] = validate_player_name(
-                            player["lastName"]["default"]
+                            player["lastName"]["default"],
                         )
                     except ValidationError as e:
                         logger.warning(f"Invalid player last name in API response: {e}")
@@ -539,7 +540,9 @@ class NHLApiClient:
                         player["lastName"]["default"] = "Unknown"
 
     def get_team_roster(  # noqa: PLR0915
-        self, team_abbrev: str, season: str | None = None
+        self,
+        team_abbrev: str,
+        season: str | None = None,
     ) -> dict[str, Any]:
         """Fetch the roster for a specific team with input and response validation.
 
@@ -633,15 +636,15 @@ class NHLApiClient:
                             logger.warning(
                                 f"Rate limited (429) for {team_abbrev} "
                                 f"(attempt {attempt + 1}/{self.retries}), "
-                                f"retrying in {retry_after:.2f}s..."
+                                f"retrying in {retry_after:.2f}s...",
                             )
                             time.sleep(retry_after)
                             continue
                         logger.error(
-                            f"Rate limited (429) for {team_abbrev} after {self.retries} attempts"
+                            f"Rate limited (429) for {team_abbrev} after {self.retries} attempts",
                         )
                         raise NHLApiConnectionError(
-                            f"Rate limited after {self.retries} attempts"
+                            f"Rate limited after {self.retries} attempts",
                         ) from None
 
                     response.raise_for_status()
@@ -656,7 +659,7 @@ class NHLApiClient:
                         )
                     except ValidationError as e:
                         logger.error(
-                            f"Invalid roster response structure for {validated_abbrev}: {e}"
+                            f"Invalid roster response structure for {validated_abbrev}: {e}",
                         )
                         raise NHLApiError(f"Invalid API response: {e}") from e
 
@@ -665,7 +668,7 @@ class NHLApiClient:
 
                     if logger.isEnabledFor(logging.DEBUG):
                         logger.debug(
-                            f"Successfully fetched and validated roster for {validated_abbrev}"
+                            f"Successfully fetched and validated roster for {validated_abbrev}",
                         )
 
                     # Log cache status
@@ -687,20 +690,20 @@ class NHLApiClient:
                         logger.warning(
                             f"Timeout fetching {team_abbrev} "
                             f"(attempt {attempt + 1}/{self.retries}), "
-                            f"retrying in {backoff_delay:.2f}s..."
+                            f"retrying in {backoff_delay:.2f}s...",
                         )
                         time.sleep(backoff_delay)
                     else:
                         logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
                         raise NHLApiConnectionError(
-                            f"Request timed out after {self.retries} attempts"
+                            f"Request timed out after {self.retries} attempts",
                         ) from None
 
                 except requests.exceptions.SSLError as e:
                     # SSL errors should not be retried - certificate validation failure is permanent
                     logger.error(f"SSL certificate verification failed for {team_abbrev}: {e}")
                     raise NHLApiSSLError(
-                        f"SSL certificate verification failed for {url}: {e}"
+                        f"SSL certificate verification failed for {url}: {e}",
                     ) from e
 
                 except requests.exceptions.ConnectionError:
@@ -709,13 +712,13 @@ class NHLApiClient:
                         logger.warning(
                             f"Connection error for {team_abbrev} "
                             f"(attempt {attempt + 1}/{self.retries}), "
-                            f"retrying in {backoff_delay:.2f}s..."
+                            f"retrying in {backoff_delay:.2f}s...",
                         )
                         time.sleep(backoff_delay)
                     else:
                         logger.error(f"Failed to fetch {team_abbrev} after {self.retries} attempts")
                         raise NHLApiConnectionError(
-                            f"Connection failed after {self.retries} attempts"
+                            f"Connection failed after {self.retries} attempts",
                         ) from None
 
                 except requests.exceptions.HTTPError as e:

@@ -87,7 +87,7 @@ class AnalysisFilters:
                 self.excluded_teams,
                 self.min_score is not None,
                 self.max_score is not None,
-            ]
+            ],
         )
 
     def should_include_team(self, team: TeamScore | PlayoffTeam) -> bool:
@@ -132,7 +132,8 @@ class AnalysisFilters:
 
 
 def filter_teams(
-    team_scores: dict[str, TeamScore], filters: AnalysisFilters
+    team_scores: dict[str, TeamScore],
+    filters: AnalysisFilters,
 ) -> dict[str, TeamScore]:
     """Filter team scores based on filters.
 
@@ -193,7 +194,8 @@ def filter_players(players: list[PlayerScore], filters: AnalysisFilters) -> list
 
 
 def filter_division_standings(
-    division_standings: dict[str, DivisionStandings], filters: AnalysisFilters
+    division_standings: dict[str, DivisionStandings],
+    filters: AnalysisFilters,
 ) -> dict[str, DivisionStandings]:
     """Filter division standings based on filters.
 
@@ -235,7 +237,8 @@ def filter_division_standings(
 
 
 def filter_conference_standings(
-    conference_standings: dict[str, Any], filters: AnalysisFilters
+    conference_standings: dict[str, Any],
+    filters: AnalysisFilters,
 ) -> dict[str, Any]:
     """Filter conference standings based on filters.
 
@@ -261,7 +264,8 @@ def filter_conference_standings(
 
 
 def filter_playoff_standings(
-    playoff_standings: dict[str, list[PlayoffTeam]], filters: AnalysisFilters
+    playoff_standings: dict[str, list[PlayoffTeam]],
+    filters: AnalysisFilters,
 ) -> dict[str, list[PlayoffTeam]]:
     """Filter playoff standings based on filters.
 

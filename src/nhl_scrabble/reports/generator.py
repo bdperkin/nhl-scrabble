@@ -134,7 +134,7 @@ class ReportGenerator:
         """
         if self._stats_report is None:
             self._stats_report = self._stats_reporter.generate(
-                (self._all_players, self._division_standings, self._conference_standings)
+                (self._all_players, self._division_standings, self._conference_standings),
             )
         return self._stats_report
 
@@ -190,5 +190,5 @@ class ReportGenerator:
         # Invalid report type
         valid_types = ["conference", "division", "playoff", "team", "stats"]
         raise ValueError(
-            f"Unknown report type: {report_type}. Valid options: {', '.join(valid_types)}"
+            f"Unknown report type: {report_type}. Valid options: {', '.join(valid_types)}",
         )

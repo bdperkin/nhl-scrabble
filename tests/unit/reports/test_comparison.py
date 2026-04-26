@@ -81,7 +81,9 @@ class TestSeasonComparison:
         assert "No data available" in report
 
     def test_generate_text_report_with_data(
-        self, mock_team_score: Mock, mock_player_score: Mock
+        self,
+        mock_team_score: Mock,
+        mock_player_score: Mock,
     ) -> None:
         """Test generating text report with data."""
         comparison = SeasonComparison(["20222023"])
@@ -108,7 +110,9 @@ class TestSeasonComparison:
         assert report["comparison"]["20222023"]["error"] == "No data available"
 
     def test_generate_json_report_with_data(
-        self, mock_team_score: Mock, mock_player_score: Mock
+        self,
+        mock_team_score: Mock,
+        mock_player_score: Mock,
     ) -> None:
         """Test generating JSON report with data."""
         comparison = SeasonComparison(["20222023"])
@@ -160,7 +164,9 @@ class TestTrendAnalysis:
         assert "error" in trends
 
     def test_calculate_trends_with_data(
-        self, mock_team_score: Mock, mock_player_score: Mock
+        self,
+        mock_team_score: Mock,
+        mock_player_score: Mock,
     ) -> None:
         """Test trend calculation with multiple seasons."""
         analysis = TrendAnalysis("20202021", "20232024")

@@ -134,7 +134,8 @@ class TestCLIOutputFormatValidation:
         runner = CliRunner()
         with runner.isolated_filesystem():
             result = runner.invoke(
-                cli, ["analyze", "--format", output_format, "--output", f"test.{extension}"]
+                cli,
+                ["analyze", "--format", output_format, "--output", f"test.{extension}"],
             )
 
             # Should not crash with ValidationError or pydantic error

@@ -21,7 +21,15 @@ class TestPlayoffCalculator:
         # Create some players
         player1 = PlayerScore("John", "Doe", "John Doe", 10, 10, 20, "TOR", "Atlantic", "Eastern")
         player2 = PlayerScore(
-            "Jane", "Smith", "Jane Smith", 15, 15, 30, "MTL", "Atlantic", "Eastern"
+            "Jane",
+            "Smith",
+            "Jane Smith",
+            15,
+            15,
+            30,
+            "MTL",
+            "Atlantic",
+            "Eastern",
         )
         player3 = PlayerScore("Bob", "Jones", "Bob Jones", 12, 12, 24, "EDM", "Pacific", "Western")
 
@@ -39,7 +47,9 @@ class TestPlayoffCalculator:
         return teams
 
     def test_calculate_playoff_standings(
-        self, calculator: PlayoffCalculator, sample_teams: dict[str, TeamScore]
+        self,
+        calculator: PlayoffCalculator,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test basic playoff standings calculation."""
         standings = calculator.calculate_playoff_standings(sample_teams)
@@ -50,7 +60,9 @@ class TestPlayoffCalculator:
         assert len(standings["Western"]) > 0
 
     def test_division_leaders_make_playoffs(
-        self, calculator: PlayoffCalculator, sample_teams: dict[str, TeamScore]
+        self,
+        calculator: PlayoffCalculator,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test that top 3 from each division make playoffs."""
         standings = calculator.calculate_playoff_standings(sample_teams)
@@ -67,7 +79,9 @@ class TestPlayoffCalculator:
         assert western_playoff >= 3
 
     def test_presidents_trophy_assigned(
-        self, calculator: PlayoffCalculator, sample_teams: dict[str, TeamScore]
+        self,
+        calculator: PlayoffCalculator,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test that Presidents' Trophy is assigned to team with highest points."""
         standings = calculator.calculate_playoff_standings(sample_teams)
@@ -83,7 +97,9 @@ class TestPlayoffCalculator:
         assert presidents_teams[0].total == 520
 
     def test_division_leaders_get_y_indicator(
-        self, calculator: PlayoffCalculator, sample_teams: dict[str, TeamScore]
+        self,
+        calculator: PlayoffCalculator,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test that division leaders get 'y' status (unless they have higher status)."""
         standings = calculator.calculate_playoff_standings(sample_teams)
@@ -97,7 +113,9 @@ class TestPlayoffCalculator:
         assert tor.division_rank == 1
 
     def test_eliminated_teams_get_e_indicator(
-        self, calculator: PlayoffCalculator, sample_teams: dict[str, TeamScore]
+        self,
+        calculator: PlayoffCalculator,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test that eliminated teams get 'e' status."""
         standings = calculator.calculate_playoff_standings(sample_teams)
@@ -109,7 +127,9 @@ class TestPlayoffCalculator:
             assert team.status_indicator == "e"
 
     def test_playoff_teams_get_x_or_higher(
-        self, calculator: PlayoffCalculator, sample_teams: dict[str, TeamScore]
+        self,
+        calculator: PlayoffCalculator,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test that playoff teams have at least 'x' status."""
         standings = calculator.calculate_playoff_standings(sample_teams)

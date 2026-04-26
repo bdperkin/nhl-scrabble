@@ -348,7 +348,7 @@ class TestGenerateFunctions:
                     first_score=10,
                     last_score=20,
                     full_score=30,
-                )
+                ),
             ],
             division="Atlantic",
             conference="Eastern",
@@ -364,7 +364,7 @@ class TestGenerateFunctions:
                     "division": team.division,
                     "conference": team.conference,
                     "avg_per_player": team.avg_per_player,
-                }
+                },
             },
             "divisions": {},
             "conferences": {},
@@ -395,7 +395,7 @@ class TestGenerateFunctions:
                 first_score=10,
                 last_score=20,
                 full_score=30,
-            )
+            ),
         ]
 
         result = generate_search_text(
@@ -447,7 +447,7 @@ class TestGenerateFunctions:
                 first_score=10,
                 last_score=20,
                 full_score=30,
-            )
+            ),
         ]
 
         stats = {"total_players": 100}
@@ -501,7 +501,7 @@ class TestOtherCommands:
                     first_score=10,
                     last_score=20,
                     full_score=30,
-                )
+                ),
             ],  # all_players
             [],  # failed_teams
         )
@@ -558,7 +558,7 @@ class TestOtherCommands:
                     first_score=15,
                     last_score=25,
                     full_score=40,
-                )
+                ),
             ],
             [],
         )
@@ -580,7 +580,10 @@ class TestOtherCommands:
     @patch("nhl_scrabble.di.TeamProcessor")
     @patch("nhl_scrabble.di.NHLApiClient")
     def test_search_to_file(
-        self, mock_client: MagicMock, mock_processor: MagicMock, tmp_path: Path
+        self,
+        mock_client: MagicMock,
+        mock_processor: MagicMock,
+        tmp_path: Path,
     ) -> None:
         """Test search output to file."""
         output_file = tmp_path / "search.txt"
@@ -623,7 +626,9 @@ class TestOtherCommands:
     @patch("nhl_scrabble.di.TeamProcessor")
     @patch("nhl_scrabble.di.NHLApiClient")
     def test_dashboard_with_filters(
-        self, mock_client: MagicMock, mock_processor: MagicMock
+        self,
+        mock_client: MagicMock,
+        mock_processor: MagicMock,
     ) -> None:
         """Test dashboard with division/conference filters."""
         mock_client.return_value.get_teams.return_value = []
@@ -705,7 +710,7 @@ class TestAPIClientSessionCleanup:
         mock_api_client.__enter__ = MagicMock(return_value=mock_api_client)
         mock_api_client.__exit__ = MagicMock(return_value=None)
         mock_api_client.get_teams.return_value = {
-            "TOR": {"division": "Atlantic", "conference": "Eastern"}
+            "TOR": {"division": "Atlantic", "conference": "Eastern"},
         }
 
         # Create mock container
@@ -745,7 +750,8 @@ class TestAPIClientSessionCleanup:
 
     @patch("nhl_scrabble.cli.DependencyContainer")
     def test_search_command_uses_api_client_context_manager(
-        self, mock_container_class: MagicMock
+        self,
+        mock_container_class: MagicMock,
     ) -> None:
         """Test that search command uses api_client as context manager.
 
@@ -761,7 +767,7 @@ class TestAPIClientSessionCleanup:
         mock_container.create_api_client.return_value = mock_api_client
         mock_container.create_scorer.return_value = MagicMock()
         mock_container.create_team_processor.return_value = MagicMock(
-            process_all_teams=MagicMock(return_value=({}, [], []))
+            process_all_teams=MagicMock(return_value=({}, [], [])),
         )
         mock_container_class.return_value = mock_container
 
@@ -778,7 +784,8 @@ class TestAPIClientSessionCleanup:
 
     @patch("nhl_scrabble.cli.DependencyContainer")
     def test_fetch_dashboard_data_uses_api_client_context_manager(
-        self, mock_container_class: MagicMock
+        self,
+        mock_container_class: MagicMock,
     ) -> None:
         """Test that fetch_dashboard_data uses api_client as context manager.
 
@@ -792,7 +799,7 @@ class TestAPIClientSessionCleanup:
         mock_api_client.__enter__ = MagicMock(return_value=mock_api_client)
         mock_api_client.__exit__ = MagicMock(return_value=None)
         mock_api_client.get_teams.return_value = {
-            "TOR": {"division": "Atlantic", "conference": "Eastern"}
+            "TOR": {"division": "Atlantic", "conference": "Eastern"},
         }
 
         # Create mock container

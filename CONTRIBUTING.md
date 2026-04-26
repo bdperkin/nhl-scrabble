@@ -1267,6 +1267,53 @@ tox -e ssort-apply   # Apply sorting
 
 **Note:** ssort runs automatically in pre-commit hooks. Files in `tests/fixtures/` and `migrations/` are excluded.
 
+### Trailing Commas
+
+The project uses [add-trailing-comma](https://github.com/asottile/add-trailing-comma) to automatically add trailing commas to multi-line Python structures. This improves git diffs by making adding/removing items single-line changes and reduces merge conflicts.
+
+**Benefits:**
+
+- **Better Git Diffs**: Adding an item = 1 line changed (not 2)
+- **Fewer Merge Conflicts**: Independent changes merge cleanly
+- **Consistent Style**: All multi-line structures have trailing commas
+
+**Examples:**
+
+```python
+# Multi-line function call
+result = function_name(
+    arg1,
+    arg2,
+    arg3,  # Trailing comma added automatically
+)
+
+# Multi-line list
+items = [
+    "item1",
+    "item2",
+    "item3",  # Trailing comma added automatically
+]
+
+# Multi-line dict
+config = {
+    "key1": "value1",
+    "key2": "value2",
+    "key3": "value3",  # Trailing comma added automatically
+}
+```
+
+**Usage:**
+
+```bash
+# Check/apply trailing commas
+make trailing-comma
+
+# Or use tox
+tox -e add-trailing-comma
+```
+
+**Note:** Trailing commas are automatically added by pre-commit hooks. No manual management needed!
+
 ## Logging Guidelines
 
 Proper logging levels help maintain clean user output while providing detailed diagnostics for debugging.

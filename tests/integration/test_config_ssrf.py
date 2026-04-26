@@ -70,7 +70,8 @@ class TestConfigSSRFProtection:
         assert config_dict["api_base_url"] == "https://api-web.nhle.com/v1"
 
     def test_config_from_env_preserves_other_settings(
-        self, monkeypatch: pytest.MonkeyPatch
+        self,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Test that SSRF validation doesn't affect other config settings."""
         monkeypatch.setenv("NHL_SCRABBLE_API_BASE_URL", "https://api-web.nhle.com/v1")
@@ -87,7 +88,9 @@ class TestConfigSSRFProtection:
         assert config.verbose is True
 
     def test_config_ssrf_error_logged(
-        self, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+        caplog: pytest.LogCaptureFixture,
     ) -> None:
         """Test that SSRF protection errors are logged."""
         import logging

@@ -41,7 +41,7 @@ NC := \033[0m # No Color
         test test-unit test-integration test-cov test-watch test-failed test-verbose \
         tox tox-list tox-parallel tox-clean tox-recreate tox-envs \
         uv-pip uv-check \
-        ruff-check ruff-format black-check black-format mypy ty type-check refurb refurb-report modernization quality check pre-commit ci \
+        ruff-check ruff-format black-check black-format mypy ty type-check refurb refurb-report modernization trailing-comma quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
         build check-wheel package publish publish-test \
         docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-all \
@@ -336,6 +336,10 @@ ssort-apply: check-venv ## Statement sorting - apply Python statement sorting
 	@$(BIN)/tox -e ssort-apply
 
 ssort: ssort-check ## Statement sorting - alias for ssort-check
+
+trailing-comma: check-venv ## Formatting - add trailing commas to Python code
+	@printf "$(BLUE)Adding trailing commas to Python code...$(NC)\n"
+	@$(BIN)/tox -e add-trailing-comma
 
 quality: check-venv ## Quality - run all checks (ruff-check + mypy)
 	@printf "$(BLUE)Running quality checks...$(NC)\n"

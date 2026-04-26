@@ -58,7 +58,7 @@ class CSVFormatter:
                 "Conference",
                 "Total Score",
                 "Avg Per Player",
-            ]
+            ],
         )
 
         # Write data rows
@@ -84,7 +84,7 @@ class CSVFormatter:
                         conference,
                         total,
                         f"{avg:.2f}",
-                    ]
+                    ],
                 )
 
         return output.getvalue()

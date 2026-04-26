@@ -108,7 +108,8 @@ def test_analyze_get_returns_html_for_htmx(client: TestClient) -> None:
     headers = {"HX-Request": "true", "Accept": "text/html"}
 
     response = client.get(
-        "/api/analyze?top_players=5&top_team_players=3&use_cache=false", headers=headers
+        "/api/analyze?top_players=5&top_team_players=3&use_cache=false",
+        headers=headers,
     )
 
     # Will fail if NHL API is unavailable
@@ -130,7 +131,8 @@ def test_analyze_get_html_includes_sortable_tables(client: TestClient) -> None:
     headers = {"HX-Request": "true", "Accept": "text/html"}
 
     response = client.get(
-        "/api/analyze?top_players=5&top_team_players=3&use_cache=false", headers=headers
+        "/api/analyze?top_players=5&top_team_players=3&use_cache=false",
+        headers=headers,
     )
 
     if response.status_code == 200:
@@ -148,7 +150,8 @@ def test_analyze_get_html_includes_export_buttons(client: TestClient) -> None:
     headers = {"HX-Request": "true", "Accept": "text/html"}
 
     response = client.get(
-        "/api/analyze?top_players=5&top_team_players=3&use_cache=false", headers=headers
+        "/api/analyze?top_players=5&top_team_players=3&use_cache=false",
+        headers=headers,
     )
 
     if response.status_code == 200:
@@ -165,7 +168,8 @@ def test_analyze_get_html_includes_chart_canvases(client: TestClient) -> None:
     headers = {"HX-Request": "true", "Accept": "text/html"}
 
     response = client.get(
-        "/api/analyze?top_players=5&top_team_players=3&use_cache=false", headers=headers
+        "/api/analyze?top_players=5&top_team_players=3&use_cache=false",
+        headers=headers,
     )
 
     if response.status_code == 200:
@@ -183,7 +187,8 @@ def test_analyze_get_html_includes_fade_on_scroll(client: TestClient) -> None:
     headers = {"HX-Request": "true", "Accept": "text/html"}
 
     response = client.get(
-        "/api/analyze?top_players=5&top_team_players=3&use_cache=false", headers=headers
+        "/api/analyze?top_players=5&top_team_players=3&use_cache=false",
+        headers=headers,
     )
 
     if response.status_code == 200:
@@ -210,9 +215,9 @@ def test_static_files_are_accessible(client: TestClient) -> None:
         response = client.get(js_file)
         assert response.status_code == 200, f"Failed to load {js_file}"
         assert response.headers["content-type"].startswith(
-            "application/javascript"
+            "application/javascript",
         ) or response.headers["content-type"].startswith(
-            "text/javascript"
+            "text/javascript",
         ), f"Wrong content-type for {js_file}"
 
 
@@ -264,7 +269,7 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
 
     # Verify both CDNs are in the allowlist using set intersection
     assert expected_cdns.issubset(
-        allowed_sources
+        allowed_sources,
     ), f"Missing CDNs in CSP. Expected: {expected_cdns}, Found: {allowed_sources & expected_cdns}"
 
 
@@ -272,7 +277,8 @@ def test_csp_header_allows_cdn_scripts(client: TestClient) -> None:
 def test_analyze_post_still_works(client: TestClient) -> None:
     """Test that POST endpoint still works for backward compatibility."""
     response = client.post(
-        "/api/analyze", json={"top_players": 5, "top_team_players": 3, "use_cache": False}
+        "/api/analyze",
+        json={"top_players": 5, "top_team_players": 3, "use_cache": False},
     )
 
     # Will fail if NHL API is unavailable
@@ -295,7 +301,9 @@ def test_analyze_post_still_works(client: TestClient) -> None:
 )
 @pytest.mark.flaky(reruns=3, reruns_delay=2)
 def test_analyze_with_different_parameters(
-    client: TestClient, top_players: int, top_team_players: int
+    client: TestClient,
+    top_players: int,
+    top_team_players: int,
 ) -> None:
     """Test analyze endpoint with different parameters.
 
@@ -304,7 +312,7 @@ def test_analyze_with_different_parameters(
     3 times with 2-second delay between attempts.
     """
     response = client.get(
-        f"/api/analyze?top_players={top_players}&top_team_players={top_team_players}&use_cache=false"
+        f"/api/analyze?top_players={top_players}&top_team_players={top_team_players}&use_cache=false",
     )
 
     if response.status_code == 200:

@@ -89,7 +89,7 @@ def test_static_js_available(client: TestClient) -> None:
 
     assert response.status_code == 200
     assert response.headers["content-type"].startswith(
-        "application/javascript"
+        "application/javascript",
     ) or response.headers["content-type"].startswith("text/javascript")
 
     # Check for some JS content

@@ -29,7 +29,7 @@ class InteractiveShell:
         self.data: dict[str, Any] | None = None
         self.history_file = Path.home() / ".nhl_scrabble_history"
         self.session: PromptSession[str] = PromptSession(
-            history=FileHistory(str(self.history_file))
+            history=FileHistory(str(self.history_file)),
         )
         self.console = Console()
 
@@ -55,7 +55,7 @@ class InteractiveShell:
             {
                 "prompt": "#00aa00 bold",
                 "command": "#0000ff",
-            }
+            },
         )
 
     def fetch_data(self) -> None:
@@ -80,7 +80,7 @@ class InteractiveShell:
             # Calculate playoff positions
             playoff_calculator = PlayoffCalculator()
             playoff_standings_data = playoff_calculator.calculate_playoff_standings(
-                team_scores_dict
+                team_scores_dict,
             )
 
             # Extract playoff teams from standings
@@ -111,7 +111,7 @@ class InteractiveShell:
             if failed_teams:
                 self.console.print(
                     f"[yellow]⚠ Warning: Failed to fetch {len(failed_teams)} teams: "
-                    f"{', '.join(failed_teams)}[/yellow]"
+                    f"{', '.join(failed_teams)}[/yellow]",
                 )
 
     def get_completer(self) -> WordCompleter:
@@ -433,7 +433,7 @@ class InteractiveShell:
         """Filter teams by division or conference."""
         if not args:
             self.console.print(
-                "[yellow]Usage: filter division <div> | filter conference <conf>[/yellow]"
+                "[yellow]Usage: filter division <div> | filter conference <conf>[/yellow]",
             )
             return
 
@@ -473,7 +473,7 @@ class InteractiveShell:
 
         else:
             self.console.print(
-                "[yellow]Usage: filter division <div> | filter conference <conf>[/yellow]"
+                "[yellow]Usage: filter division <div> | filter conference <conf>[/yellow]",
             )
 
     def cmd_search(self, args: list[str]) -> None:
@@ -681,5 +681,5 @@ class InteractiveShell:
 
             self.console.print(table)
             self.console.print(
-                "\n[yellow]Tip: Type 'help <command>' for detailed help on a specific command[/yellow]"
+                "\n[yellow]Tip: Type 'help <command>' for detailed help on a specific command[/yellow]",
             )

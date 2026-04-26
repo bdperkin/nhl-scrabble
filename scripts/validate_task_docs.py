@@ -205,7 +205,9 @@ def run_validation() -> tuple[int, list[tuple[str, bool]]]:  # noqa: C901, PLR09
             print()
         else:
             print(
-                Colors.yellow("⚠️  Could not find '**Total Tasks**:' in IMPLEMENTATION_SEQUENCE.md")
+                Colors.yellow(
+                    "⚠️  Could not find '**Total Tasks**:' in IMPLEMENTATION_SEQUENCE.md",
+                ),
             )
             print()
             sequence_counts = None
@@ -224,7 +226,7 @@ def run_validation() -> tuple[int, list[tuple[str, bool]]]:  # noqa: C901, PLR09
     print("Check 1: Active tasks (Filesystem vs README.md)")
     if readme_counts and filesystem_counts["active_total"] == readme_counts["active"]:
         print(
-            f"  {Colors.green('✅ PASS')}: Active count matches ({filesystem_counts['active_total']})"
+            f"  {Colors.green('✅ PASS')}: Active count matches ({filesystem_counts['active_total']})",
         )
         results.append(("Check 1", True))
     else:
@@ -242,7 +244,7 @@ def run_validation() -> tuple[int, list[tuple[str, bool]]]:  # noqa: C901, PLR09
     print("Check 2: Completed tasks (Filesystem vs README.md)")
     if readme_counts and filesystem_counts["completed"] == readme_counts["completed"]:
         print(
-            f"  {Colors.green('✅ PASS')}: Completed count matches ({filesystem_counts['completed']})"
+            f"  {Colors.green('✅ PASS')}: Completed count matches ({filesystem_counts['completed']})",
         )
         results.append(("Check 2", True))
     else:
@@ -277,7 +279,7 @@ def run_validation() -> tuple[int, list[tuple[str, bool]]]:  # noqa: C901, PLR09
         print("Check 4: Active tasks (IMPLEMENTATION_SEQUENCE.md vs README.md)")
         if sequence_counts["active"] == readme_counts["active"]:
             print(
-                f"  {Colors.green('✅ PASS')}: Active count matches ({sequence_counts['active']})"
+                f"  {Colors.green('✅ PASS')}: Active count matches ({sequence_counts['active']})",
             )
             results.append(("Check 4", True))
         else:
@@ -295,7 +297,7 @@ def run_validation() -> tuple[int, list[tuple[str, bool]]]:  # noqa: C901, PLR09
         print("Check 5: Active tasks (IMPLEMENTATION_SEQUENCE.md vs Filesystem)")
         if sequence_counts["active"] == filesystem_counts["active_total"]:
             print(
-                f"  {Colors.green('✅ PASS')}: Active count matches ({sequence_counts['active']})"
+                f"  {Colors.green('✅ PASS')}: Active count matches ({sequence_counts['active']})",
             )
             results.append(("Check 5", True))
         else:

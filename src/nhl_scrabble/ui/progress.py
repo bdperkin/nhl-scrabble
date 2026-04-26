@@ -83,7 +83,8 @@ class ProgressManager:
 
     @contextmanager
     def track_score_calculation(
-        self, total_players: int
+        self,
+        total_players: int,
     ) -> Generator[Callable[[], None], None, None]:
         """Track score calculation progress.
 
@@ -108,7 +109,8 @@ class ProgressManager:
 
     @contextmanager
     def track_report_generation(
-        self, total_reports: int
+        self,
+        total_reports: int,
     ) -> Generator[Callable[[str], None], None, None]:
         """Track report generation progress.
 

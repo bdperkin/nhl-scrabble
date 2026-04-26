@@ -261,7 +261,7 @@ class TestDocumentationBuilds:
             # PDF compilation failed - this is expected if images are incompatible
             # Skip the test with a message
             pytest.skip(
-                f"PDF compilation failed (expected due to image compatibility): {result.stderr[:200]}"
+                f"PDF compilation failed (expected due to image compatibility): {result.stderr[:200]}",
             )
 
     def test_makefile_targets_exist(self):

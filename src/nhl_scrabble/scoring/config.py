@@ -145,7 +145,7 @@ class ScoringConfig:
         """
         if not isinstance(config_data, dict):
             raise TypeError(
-                f"Scoring config must be a dictionary, got {type(config_data).__name__}"
+                f"Scoring config must be a dictionary, got {type(config_data).__name__}",
             )
 
         # Normalize to uppercase and validate
@@ -169,7 +169,7 @@ class ScoringConfig:
 
             if letter_upper in normalized and normalized[letter_upper] != value:
                 logger.warning(
-                    f"Duplicate letter {letter_upper} in config (using first value: {normalized[letter_upper]})"
+                    f"Duplicate letter {letter_upper} in config (using first value: {normalized[letter_upper]})",
                 )
             else:
                 normalized[letter_upper] = value

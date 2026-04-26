@@ -196,7 +196,15 @@ class TestFilterFunctions:
         """Create sample teams for testing."""
         player1 = PlayerScore("John", "Doe", "John Doe", 10, 10, 20, "TOR", "Atlantic", "Eastern")
         player2 = PlayerScore(
-            "Jane", "Smith", "Jane Smith", 15, 15, 30, "MTL", "Atlantic", "Eastern"
+            "Jane",
+            "Smith",
+            "Jane Smith",
+            15,
+            15,
+            30,
+            "MTL",
+            "Atlantic",
+            "Eastern",
         )
         player3 = PlayerScore("Bob", "Jones", "Bob Jones", 12, 12, 24, "EDM", "Pacific", "Western")
 
@@ -216,10 +224,26 @@ class TestFilterFunctions:
             PlayerScore("Jane", "Smith", "Jane Smith", 15, 15, 30, "MTL", "Atlantic", "Eastern"),
             PlayerScore("Bob", "Jones", "Bob Jones", 12, 12, 24, "BOS", "Atlantic", "Eastern"),
             PlayerScore(
-                "Alice", "Johnson", "Alice Johnson", 20, 30, 50, "EDM", "Pacific", "Western"
+                "Alice",
+                "Johnson",
+                "Alice Johnson",
+                20,
+                30,
+                50,
+                "EDM",
+                "Pacific",
+                "Western",
             ),
             PlayerScore(
-                "Charlie", "Brown", "Charlie Brown", 25, 35, 60, "VAN", "Pacific", "Western"
+                "Charlie",
+                "Brown",
+                "Charlie Brown",
+                25,
+                35,
+                60,
+                "VAN",
+                "Pacific",
+                "Western",
             ),
         ]
 
@@ -330,10 +354,18 @@ class TestFilterFunctions:
         """Test filtering division standings with no filters."""
         standings = {
             "Atlantic": DivisionStandings(
-                name="Atlantic", total=1000, teams=[], player_count=25, avg_per_team=200.0
+                name="Atlantic",
+                total=1000,
+                teams=[],
+                player_count=25,
+                avg_per_team=200.0,
             ),
             "Pacific": DivisionStandings(
-                name="Pacific", total=900, teams=[], player_count=25, avg_per_team=180.0
+                name="Pacific",
+                total=900,
+                teams=[],
+                player_count=25,
+                avg_per_team=180.0,
             ),
         }
         filters = AnalysisFilters()
@@ -345,10 +377,18 @@ class TestFilterFunctions:
         """Test filtering division standings by division."""
         standings = {
             "Atlantic": DivisionStandings(
-                name="Atlantic", total=1000, teams=[], player_count=25, avg_per_team=200.0
+                name="Atlantic",
+                total=1000,
+                teams=[],
+                player_count=25,
+                avg_per_team=200.0,
             ),
             "Pacific": DivisionStandings(
-                name="Pacific", total=900, teams=[], player_count=25, avg_per_team=180.0
+                name="Pacific",
+                total=900,
+                teams=[],
+                player_count=25,
+                avg_per_team=180.0,
             ),
         }
         filters = AnalysisFilters(divisions=frozenset(["Atlantic"]))
@@ -455,7 +495,8 @@ class TestFilterFunctions:
         assert len(result["Western"]) == 2
 
     def test_filter_playoff_standings_by_conference(
-        self, sample_teams: dict[str, TeamScore]
+        self,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test filtering playoff standings by conference."""
         playoff_standings = {
@@ -605,7 +646,8 @@ class TestFilterFunctions:
         assert len(result["Western"]) == 1  # Only EDM
 
     def test_filter_playoff_standings_removes_empty_conferences(
-        self, sample_teams: dict[str, TeamScore]
+        self,
+        sample_teams: dict[str, TeamScore],
     ) -> None:
         """Test that conferences with no teams after filtering are removed."""
         playoff_standings = {

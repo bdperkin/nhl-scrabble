@@ -30,7 +30,7 @@ class TestConferenceReporterEdgeCases:
                 teams=["WSH", "NYR", "PIT"],
                 player_count=90,
                 avg_per_team=1666.67,
-            )
+            ),
         }
         reporter = ConferenceReporter()
         result = reporter.generate(standings)
@@ -47,7 +47,7 @@ class TestConferenceReporterEdgeCases:
                 teams=[],
                 player_count=0,
                 avg_per_team=0.0,
-            )
+            ),
         }
         reporter = ConferenceReporter()
         result = reporter.generate(standings)
@@ -63,7 +63,7 @@ class TestConferenceReporterEdgeCases:
                 teams=["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08"],
                 player_count=240,
                 avg_per_team=124999.875,
-            )
+            ),
         }
         reporter = ConferenceReporter()
         result = reporter.generate(standings)
@@ -90,7 +90,7 @@ class TestDivisionReporterEdgeCases:
                 teams=["WSH", "NYR", "PIT"],
                 player_count=90,
                 avg_per_team=1500.0,
-            )
+            ),
         }
         reporter = DivisionReporter()
         result = reporter.generate(standings)
@@ -106,7 +106,7 @@ class TestDivisionReporterEdgeCases:
                 teams=[f"T{i:02d}" for i in range(1, 11)],
                 player_count=300,
                 avg_per_team=5000.0,
-            )
+            ),
         }
         reporter = DivisionReporter()
         result = reporter.generate(standings)
@@ -139,8 +139,8 @@ class TestPlayoffReporterEdgeCases:
                     status_indicator="z-y",
                     in_playoffs=True,
                     division_rank=1,
-                )
-            ]
+                ),
+            ],
         }
         reporter = PlayoffReporter()
         result = reporter.generate(standings)
@@ -176,7 +176,7 @@ class TestPlayoffReporterEdgeCases:
                     in_playoffs=False,
                     division_rank=5,
                 ),
-            ]
+            ],
         }
         reporter = PlayoffReporter()
         result = reporter.generate(standings)
@@ -211,7 +211,7 @@ class TestPlayoffReporterEdgeCases:
                     in_playoffs=True,
                     division_rank=5,
                 ),
-            ]
+            ],
         }
         reporter = PlayoffReporter()
         result = reporter.generate(standings)
@@ -238,7 +238,7 @@ class TestTeamReporterEdgeCases:
                 players=[],
                 division="Metropolitan",
                 conference="Eastern",
-            )
+            ),
         }
         reporter = TeamReporter()
         result = reporter.generate(teams)
@@ -258,7 +258,7 @@ class TestTeamReporterEdgeCases:
                 team="WSH",
                 division="Metropolitan",
                 conference="Eastern",
-            )
+            ),
         ]
         teams = {
             "WSH": TeamScore(
@@ -267,7 +267,7 @@ class TestTeamReporterEdgeCases:
                 players=players,
                 division="Metropolitan",
                 conference="Eastern",
-            )
+            ),
         }
         reporter = TeamReporter(top_players_per_team=5)
         result = reporter.generate(teams)
@@ -297,7 +297,7 @@ class TestTeamReporterEdgeCases:
                 players=players,
                 division="Metropolitan",
                 conference="Eastern",
-            )
+            ),
         }
         reporter = TeamReporter(top_players_per_team=3)
         result = reporter.generate(teams)
@@ -330,7 +330,7 @@ class TestStatsReporterEdgeCases:
                 team="WSH",
                 division="Metropolitan",
                 conference="Eastern",
-            )
+            ),
         ]
         div_standings = {
             "Metropolitan": DivisionStandings(
@@ -339,7 +339,7 @@ class TestStatsReporterEdgeCases:
                 teams=["WSH"],
                 player_count=1,
                 avg_per_team=50.0,
-            )
+            ),
         }
         conf_standings = {
             "Eastern": ConferenceStandings(
@@ -348,7 +348,7 @@ class TestStatsReporterEdgeCases:
                 teams=["WSH"],
                 player_count=1,
                 avg_per_team=50.0,
-            )
+            ),
         }
         reporter = StatsReporter(top_players_count=20)
         data = (players, div_standings, conf_standings)
@@ -365,7 +365,7 @@ class TestStatsReporterEdgeCases:
                 teams=[],
                 player_count=0,
                 avg_per_team=0.0,
-            )
+            ),
         }
         conf_standings = {}
         reporter = StatsReporter()
@@ -384,7 +384,7 @@ class TestStatsReporterEdgeCases:
                 teams=[],
                 player_count=0,
                 avg_per_team=0.0,
-            )
+            ),
         }
         reporter = StatsReporter()
         data = (players, div_standings, conf_standings)
@@ -411,7 +411,7 @@ class TestStatsReporterEdgeCases:
                 teams=["PIT"],
                 player_count=1,
                 avg_per_team=53.0,
-            )
+            ),
         }
         conf_standings = {
             "Eastern": ConferenceStandings(
@@ -420,7 +420,7 @@ class TestStatsReporterEdgeCases:
                 teams=["PIT"],
                 player_count=1,
                 avg_per_team=53.0,
-            )
+            ),
         }
         reporter = StatsReporter(top_players_count=10)
         data = ([player], div_standings, conf_standings)

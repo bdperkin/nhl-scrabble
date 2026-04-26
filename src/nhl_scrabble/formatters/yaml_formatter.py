@@ -52,7 +52,7 @@ class YAMLFormatter:
             import yaml  # noqa: PLC0415
         except ImportError as e:
             raise ImportError(
-                "PyYAML is required for YAML format. Install with: pip install pyyaml"
+                "PyYAML is required for YAML format. Install with: pip install pyyaml",
             ) from e
 
         # Use safe_dump with proper formatting options
