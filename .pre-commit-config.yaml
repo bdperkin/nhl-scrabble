@@ -137,7 +137,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pycqa/isort
-    rev: 8.0.1  # ci: autoupdate-freeze (pinned until isort 9.0.0 stable is released - alpha has breaking formatting changes)
+    rev: 8.0.1  # ci: autoupdate-freeze (9.0.0a3 has breaking formatting)
     hooks:
       - id: isort
         # Comprehensive import sorting (matches ruff's ALL rules philosophy)
