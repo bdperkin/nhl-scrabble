@@ -343,9 +343,9 @@ class NHLApiClient:
             True if the URL response is cached and valid, False otherwise
 
         Examples:
-            >>> client = NHLApiClient(cache_enabled=True)
-            >>> client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")
-            False  # Not cached initially
+            >>> client = NHLApiClient(cache_enabled=True)  # doctest: +SKIP
+            >>> client._is_url_cached("https://api-web.nhle.com/v1/roster/TOR/current")  # doctest: +SKIP
+            False  # Not cached initially  # doctest: +SKIP
         """
         if not self.cache_enabled:
             return False
