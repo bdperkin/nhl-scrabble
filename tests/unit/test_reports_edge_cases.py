@@ -234,6 +234,7 @@ class TestTeamReporterEdgeCases:
         teams = {
             "WSH": TeamScore(
                 abbrev="WSH",
+                name="Washington Capitals",
                 total=0,
                 players=[],
                 division="Metropolitan",
@@ -263,6 +264,7 @@ class TestTeamReporterEdgeCases:
         teams = {
             "WSH": TeamScore(
                 abbrev="WSH",
+                name="Washington Capitals",
                 total=50,
                 players=players,
                 division="Metropolitan",
@@ -293,6 +295,7 @@ class TestTeamReporterEdgeCases:
         teams = {
             "WSH": TeamScore(
                 abbrev="WSH",
+                name="Washington Capitals",
                 total=sum(p.full_score for p in players),
                 players=players,
                 division="Metropolitan",

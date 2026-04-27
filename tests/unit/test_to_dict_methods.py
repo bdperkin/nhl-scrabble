@@ -31,6 +31,7 @@ def sample_team(sample_player: PlayerScore) -> TeamScore:
     """Create a sample team for testing."""
     return TeamScore(
         abbrev="WSH",
+        name="Washington Capitals",
         total=250,
         players=[sample_player],
         division="Metropolitan",
@@ -167,6 +168,7 @@ class TestTeamScoreToDict:
 
         expected_base_fields = {
             "abbrev",
+            "name",
             "total",
             "division",
             "conference",
@@ -182,6 +184,7 @@ class TestTeamScoreToDict:
         result = sample_team.to_dict()
 
         assert result["abbrev"] == "WSH"
+        assert result["name"] == "Washington Capitals"
         assert result["total"] == 250
         assert result["division"] == "Metropolitan"
         assert result["conference"] == "Eastern"

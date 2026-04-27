@@ -41,6 +41,7 @@ class TestTeamScore:
         """Test creating a TeamScore instance."""
         team = TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=100,
             players=[sample_player],
             division="Pacific",
@@ -56,6 +57,7 @@ class TestTeamScore:
         """Test that avg_per_player is calculated automatically."""
         team = TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=100,
             players=[sample_player, sample_player],  # 2 players
             division="Pacific",
@@ -68,6 +70,7 @@ class TestTeamScore:
         """Test team with no players."""
         team = TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=0,
             players=[],
             division="Pacific",
@@ -81,6 +84,7 @@ class TestTeamScore:
         """Test player_count property."""
         team = TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=100,
             players=[sample_player, sample_player, sample_player],
             division="Pacific",
@@ -195,6 +199,7 @@ class TestSlotsOptimization:
 
         team = TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=100,
             players=[sample_player],
             division="Pacific",

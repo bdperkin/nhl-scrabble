@@ -70,6 +70,7 @@ def sample_team_scores():
     return {
         "WSH": TeamScore(
             abbrev="WSH",
+            name="Washington Capitals",
             total=1500,
             players=[],
             division="Metropolitan",
@@ -77,6 +78,7 @@ def sample_team_scores():
         ),
         "EDM": TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=1450,
             players=[],
             division="Pacific",

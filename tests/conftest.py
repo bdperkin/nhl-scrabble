@@ -67,6 +67,7 @@ def sample_team_score(sample_player: PlayerScore) -> TeamScore:
     """Return a sample TeamScore object."""
     return TeamScore(
         abbrev="EDM",
+        name="Edmonton Oilers",
         total=100,
         players=[sample_player],
         division="Pacific",

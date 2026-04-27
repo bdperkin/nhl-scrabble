@@ -103,6 +103,7 @@ class TestSeasonComparisonEdgeCases:
         # Create mock teams with attributes
         team1 = TeamScore(
             abbrev="WSH",
+            name="Washington Capitals",
             total=1500,
             players=[],
             division="Metropolitan",
@@ -110,6 +111,7 @@ class TestSeasonComparisonEdgeCases:
         )
         team2 = TeamScore(
             abbrev="PIT",
+            name="Pittsburgh Penguins",
             total=1400,
             players=[],
             division="Metropolitan",

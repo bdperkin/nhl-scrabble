@@ -91,7 +91,7 @@ class TestAnalysisFilters:
     def test_should_include_team_no_filters(self) -> None:
         """Test team inclusion with no filters."""
         filters = AnalysisFilters()
-        team = TeamScore("TOR", 500, [], "Atlantic", "Eastern")
+        team = TeamScore("TOR", "Toronto Maple Leafs", 500, [], "Atlantic", "Eastern")
         assert filters.should_include_team(team)
 
     def test_should_include_team_excluded(self) -> None:
@@ -100,43 +100,43 @@ class TestAnalysisFilters:
             teams=frozenset(["TOR", "MTL"]),
             excluded_teams=frozenset(["TOR"]),
         )
-        team = TeamScore("TOR", 500, [], "Atlantic", "Eastern")
+        team = TeamScore("TOR", "Toronto Maple Leafs", 500, [], "Atlantic", "Eastern")
         assert not filters.should_include_team(team)
 
     def test_should_include_team_in_teams_filter(self) -> None:
         """Test team is included when in teams filter."""
         filters = AnalysisFilters(teams=frozenset(["TOR", "MTL"]))
-        team = TeamScore("TOR", 500, [], "Atlantic", "Eastern")
+        team = TeamScore("TOR", "Toronto Maple Leafs", 500, [], "Atlantic", "Eastern")
         assert filters.should_include_team(team)
 
     def test_should_include_team_not_in_teams_filter(self) -> None:
         """Test team is excluded when not in teams filter."""
         filters = AnalysisFilters(teams=frozenset(["TOR", "MTL"]))
-        team = TeamScore("BOS", 500, [], "Atlantic", "Eastern")
+        team = TeamScore("BOS", "Boston Bruins", 500, [], "Atlantic", "Eastern")
         assert not filters.should_include_team(team)
 
     def test_should_include_team_in_division_filter(self) -> None:
         """Test team is included when in division filter."""
         filters = AnalysisFilters(divisions=frozenset(["Atlantic"]))
-        team = TeamScore("TOR", 500, [], "Atlantic", "Eastern")
+        team = TeamScore("TOR", "Toronto Maple Leafs", 500, [], "Atlantic", "Eastern")
         assert filters.should_include_team(team)
 
     def test_should_include_team_not_in_division_filter(self) -> None:
         """Test team is excluded when not in division filter."""
         filters = AnalysisFilters(divisions=frozenset(["Atlantic"]))
-        team = TeamScore("EDM", 500, [], "Pacific", "Western")
+        team = TeamScore("EDM", "Edmonton Oilers", 500, [], "Pacific", "Western")
         assert not filters.should_include_team(team)
 
     def test_should_include_team_in_conference_filter(self) -> None:
         """Test team is included when in conference filter."""
         filters = AnalysisFilters(conferences=frozenset(["Eastern"]))
-        team = TeamScore("TOR", 500, [], "Atlantic", "Eastern")
+        team = TeamScore("TOR", "Toronto Maple Leafs", 500, [], "Atlantic", "Eastern")
         assert filters.should_include_team(team)
 
     def test_should_include_team_not_in_conference_filter(self) -> None:
         """Test team is excluded when not in conference filter."""
         filters = AnalysisFilters(conferences=frozenset(["Eastern"]))
-        team = TeamScore("EDM", 500, [], "Pacific", "Western")
+        team = TeamScore("EDM", "Edmonton Oilers", 500, [], "Pacific", "Western")
         assert not filters.should_include_team(team)
 
     def test_should_include_player_no_filters(self) -> None:
@@ -209,11 +209,25 @@ class TestFilterFunctions:
         player3 = PlayerScore("Bob", "Jones", "Bob Jones", 12, 12, 24, "EDM", "Pacific", "Western")
 
         return {
-            "TOR": TeamScore("TOR", 500, [player1] * 25, "Atlantic", "Eastern"),
-            "MTL": TeamScore("MTL", 450, [player2] * 25, "Atlantic", "Eastern"),
-            "BOS": TeamScore("BOS", 400, [player1] * 25, "Atlantic", "Eastern"),
-            "EDM": TeamScore("EDM", 520, [player3] * 25, "Pacific", "Western"),
-            "VAN": TeamScore("VAN", 480, [player3] * 25, "Pacific", "Western"),
+            "TOR": TeamScore(
+                "TOR",
+                "Toronto Maple Leafs",
+                500,
+                [player1] * 25,
+                "Atlantic",
+                "Eastern",
+            ),
+            "MTL": TeamScore(
+                "MTL",
+                "Montreal Canadiens",
+                450,
+                [player2] * 25,
+                "Atlantic",
+                "Eastern",
+            ),
+            "BOS": TeamScore("BOS", "Boston Bruins", 400, [player1] * 25, "Atlantic", "Eastern"),
+            "EDM": TeamScore("EDM", "Edmonton Oilers", 520, [player3] * 25, "Pacific", "Western"),
+            "VAN": TeamScore("VAN", "Vancouver Canucks", 480, [player3] * 25, "Pacific", "Western"),
         }
 
     @pytest.fixture
