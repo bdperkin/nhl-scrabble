@@ -129,6 +129,7 @@ class TeamProcessor:
 
             team_score = TeamScore(
                 abbrev=team_abbrev,
+                name=team_meta.get("name", team_abbrev),
                 total=team_total,
                 players=team_players,
                 division=team_meta["division"],

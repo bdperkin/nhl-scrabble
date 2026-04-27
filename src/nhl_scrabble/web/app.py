@@ -235,6 +235,7 @@ def _convert_teams_to_dict(
     teams_data = [
         {
             "abbrev": team_score.abbrev,
+            "name": team_score.name,
             "total_score": team_score.total,
             "avg_score": team_score.avg_per_player,
             "player_count": team_score.player_count,

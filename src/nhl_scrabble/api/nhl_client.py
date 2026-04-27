@@ -451,7 +451,9 @@ class NHLApiClient:
                 teams_info: dict[str, dict[str, str]] = {}
                 for team in data["standings"]:
                     team_abbrev = team["teamAbbrev"]["default"]
+                    team_name = team.get("teamName", {}).get("default", team_abbrev)
                     teams_info[team_abbrev] = {
+                        "name": team_name,
                         "division": team.get("divisionName", "Unknown"),
                         "conference": team.get("conferenceName", "Unknown"),
                     }
