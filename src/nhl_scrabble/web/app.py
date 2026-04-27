@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
@@ -183,6 +183,17 @@ async def favicon() -> HTMLResponse:
     <text y="0.9em" font-size="90">🏒</text>
 </svg>"""
     return HTMLResponse(content=svg_content, media_type="image/svg+xml")
+
+
+@app.get("/robots.txt")
+async def robots_txt() -> FileResponse:
+    """Serve robots.txt file.
+
+    Returns:
+        robots.txt file for web crawlers
+    """
+    robots_file = STATIC_DIR / "robots.txt"
+    return FileResponse(robots_file, media_type="text/plain")
 
 
 def _convert_players_to_dict(
