@@ -349,14 +349,28 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
             total_score: int | float = (
                 sum(int(p["score"]) for p in all_players) if all_players else 0
             )
+
+            # Get highest player's team name
+            highest_player_team_name = None
+            if all_players:
+                highest_player_abbrev = all_players[0]["team"]
+                for team in teams_data:
+                    if team["abbrev"] == highest_player_abbrev:
+                        highest_player_team_name = team["name"]
+                        break
+
             stats = {
                 "total_players": len(all_players),
                 "total_teams": len(teams_data),
                 "highest_score": all_players[0]["score"] if all_players else 0,
+                "highest_player_name": all_players[0]["full_name"] if all_players else None,
+                "highest_player_team": highest_player_team_name,
                 "lowest_score": all_players[-1]["score"] if all_players else 0,
                 "avg_score": total_score / len(all_players) if all_players else 0,
                 "highest_team": teams_data[0]["abbrev"] if teams_data else None,
+                "highest_team_name": teams_data[0]["name"] if teams_data else None,
                 "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
+                "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
             }
 
             # Convert playoff standings to dict format
