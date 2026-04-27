@@ -76,7 +76,7 @@ class ScrabbleScorer:
             >>> # Custom scoring (all letters worth 1 point)
             >>> uniform_values = {chr(i): 1 for i in range(65, 91)}
             >>> scorer = ScrabbleScorer(letter_values=uniform_values)
-            >>> scorer.calculate_score("ALEX")
+            >>> scorer.calculate_score_custom("ALEX")
             4
         """
         self._letter_values = letter_values if letter_values is not None else self.LETTER_VALUES

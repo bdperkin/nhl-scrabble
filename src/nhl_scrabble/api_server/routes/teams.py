@@ -52,9 +52,9 @@ async def get_teams(
 
     Example:
         >>> # Get all teams
-        >>> response = await get_teams()
+        >>> response = await get_teams()  # doctest: +SKIP
         >>> # Filter by division
-        >>> response = await get_teams(division="Atlantic")
+        >>> response = await get_teams(division="Atlantic")  # doctest: +SKIP
     """
     try:
         with NHLApiClient() as api_client:
@@ -118,8 +118,8 @@ async def get_team(abbrev: str) -> dict[str, Any]:
         HTTPException: If team not found or fetch fails.
 
     Example:
-        >>> response = await get_team("TOR")
-        >>> assert response["abbrev"] == "TOR"
+        >>> response = await get_team("TOR")  # doctest: +SKIP
+        >>> assert response["abbrev"] == "TOR"  # doctest: +SKIP
     """
     try:
         with NHLApiClient() as api_client:

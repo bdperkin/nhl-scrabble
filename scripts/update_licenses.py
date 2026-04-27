@@ -9,7 +9,7 @@ This script:
 5. Checks if LICENSES.md is up-to-date with current dependencies
 """
 
-# ruff: noqa: T201, RUF012, S607, PERF401, BLE001, PLC0415
+# ruff: noqa: RUF012, PERF401, BLE001, PLC0415
 
 from __future__ import annotations
 

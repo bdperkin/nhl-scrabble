@@ -14,8 +14,6 @@ Exit Codes:
     1: One or more validation checks failed
 """
 
-# ruff: noqa: T201
-
 import re
 import sys
 from pathlib import Path

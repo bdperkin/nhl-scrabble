@@ -10,106 +10,106 @@
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[codz]
-*$py.class
+/*.py[codz]
+/*$py.class
 
 # C extensions
-*.so
+/*.so
 
 # ============================================================================
 # Python Distribution / Packaging
 # ============================================================================
 
 # Build artifacts
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+/.Python
+/build/
+/develop-eggs/
+/dist/
+/downloads/
+/eggs/
+/.eggs/
+/lib/
+/lib64/
+/parts/
+/sdist/
+/var/
+/wheels/
+/share/python-wheels/
+/*.egg-info/
+/.installed.cfg
+/*.egg
+/MANIFEST
 
 # Auto-generated version file (hatch-vcs)
-src/nhl_scrabble/_version.py
+/src/nhl_scrabble/_version.py
 
 # PyInstaller artifacts
-*.manifest
-*.spec
+/*.manifest
+/*.spec
 
 # Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+/pip-log.txt
+/pip-delete-this-directory.txt
 
 # ============================================================================
 # Testing / Coverage
 # ============================================================================
 
 # Pytest
-.pytest_cache/
-.hypothesis/
+/.pytest_cache/
+/.hypothesis/
 
 # Coverage reports
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
-*.py,cover
-.cache
+/htmlcov/
+/.coverage
+/.coverage.*
+/coverage.xml
+/*.cover
+/*.py,cover
+/.cache
 
 # Benchmark results (pytest-benchmark)
-.benchmarks/
+/.benchmarks/
 
 # Tox
-.tox/
-.nox/
+/.tox/
+/.nox/
 
 # Test artifacts
-nosetests.xml
-junit.xml
-junit-*.xml
-cover/
+/nosetests.xml
+/junit.xml
+/junit-*.xml
+/cover/
 
 # ============================================================================
 # Type Checking
 # ============================================================================
 
 # MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+/.mypy_cache/
+/.dmypy.json
+/dmypy.json
 
 # Pytype
-.pytype/
+/.pytype/
 
 # Pyre
-.pyre/
+/.pyre/
 
 # ============================================================================
 # Code Quality Tools
 # ============================================================================
 
 # Ruff
-.ruff_cache/
+/.ruff_cache/
 
 # ============================================================================
 # Documentation
 # ============================================================================
 
 # Sphinx
-docs/_build/
-_build/
+/docs/_build/
+/_build/
 
 # MkDocs
 /site
@@ -124,26 +124,26 @@ _build/
 #uv.lock
 
 # PEP 582 (e.g., PDM)
-__pypackages__/
-.pdm-python
-.pdm-build/
+/__pypackages__/
+/.pdm-python
+/.pdm-build/
 
 # Pixi
-.pixi
+/.pixi
 
 # ============================================================================
 # Virtual Environments
 # ============================================================================
 
 # Standard Python virtual environments
-.env
-.envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+/.env
+/.envrc
+/.venv
+/env/
+/venv/
+/ENV/
+/env.bak/
+/venv.bak/
 
 # ============================================================================
 # IDEs / Editors
@@ -158,76 +158,76 @@ venv.bak/
 #.vscode/
 
 # Cursor AI Editor
-.cursorignore
-.cursorindexingignore
+/.cursorignore
+/.cursorindexingignore
 
 # Spyder
-.spyderproject
-.spyproject
+/.spyderproject
+/.spyproject
 
 # Rope
-.ropeproject
+/.ropeproject
 
 # ============================================================================
 # Jupyter / IPython
 # ============================================================================
 
 # Jupyter Notebook
-.ipynb_checkpoints
+/.ipynb_checkpoints
 
 # IPython
-profile_default/
-ipython_config.py
+/profile_default/
+/ipython_config.py
 
 # Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+/marimo/_static/
+/marimo/_lsp/
+/__marimo__/
 
 # ============================================================================
 # Version Control / Python Tools
 # ============================================================================
 
 # PyPI configuration (credentials)
-.pypirc
+/.pypirc
 
 # ============================================================================
 # OS / System Files
 # ============================================================================
 
 # Logs
-*.log
+/*.log
 
 # Temporary files
-*.tmp
-*.temp
-*.bak
-*.swp
-*~
+/*.tmp
+/*.temp
+/*.bak
+/*.swp
+/*~
 
 # ============================================================================
 # Project-Specific
 # ============================================================================
 
 # Environment variables (may contain secrets)
-.env
+/.env
 
 # Local configuration
-local_settings.py
+/local_settings.py
 
 # API cache files
-.nhl_cache.sqlite
-.nhl_cache.sqlite-shm
-.nhl_cache.sqlite-wal
-.nhl_cache.sqlite-journal
+/.nhl_cache.sqlite
+/.nhl_cache.sqlite-shm
+/.nhl_cache.sqlite-wal
+/.nhl_cache.sqlite-journal
 
 # Database files
-*.sqlite3
-*.sqlite3-journal
-*.db
+/*.sqlite3
+/*.sqlite3-journal
+/*.db
 
 # Generated reports
-sync-report.md
+/sync-report.md
 /reports/
 /bandit-report.html
 /bandit-report.json
@@ -240,40 +240,43 @@ sync-report.md
 /safety-report.txt
 /safety-results.json
 /safety-results.txt
-refurb-report.txt
+/refurb-report.txt
+
+# Runtime data
+/data/
 
 # ============================================================================
 # QA Testing
 # ============================================================================
 
 # QA test artifacts
-qa/web/test-results/
-qa/web/traces/
-qa/web/videos/
-qa/web/downloads/
-qa/web/reports/*.html
-qa/web/reports/*.xml
-qa/web/screenshots/*-actual.png
-qa/web/screenshots/*-diff.png
-qa/web/*.log
-qa/web/locust-*.csv
+/qa/web/test-results/
+/qa/web/traces/
+/qa/web/videos/
+/qa/web/downloads/
+/qa/web/reports/*.html
+/qa/web/reports/*.xml
+/qa/web/screenshots/*-actual.png
+/qa/web/screenshots/*-diff.png
+/qa/web/*.log
+/qa/web/locust-*.csv
 
 # ============================================================================
 # Claude Code
 # ============================================================================
 
 # Lock files
-.claude/*.lock
+/.claude/*.lock
 
 # Temporary/runtime files
-.claude/*.tmp
+/.claude/*.tmp
 
 # ============================================================================
 # Debugging
 # ============================================================================
 
 # Cython debug symbols
-cython_debug/
+/cython_debug/
 
 # Scratch/temporary development files
-.scratch/
+/.scratch/

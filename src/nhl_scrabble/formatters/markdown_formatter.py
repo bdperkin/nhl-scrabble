@@ -18,6 +18,7 @@ class MarkdownFormatter:
 
     Example:
         >>> formatter = MarkdownFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "# NHL Scrabble Scores" in output
         True

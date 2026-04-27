@@ -17,6 +17,7 @@ class TableFormatter:
 
     Example:
         >>> formatter = TableFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "┃" in output  # Rich uses box-drawing characters
         True

@@ -211,6 +211,10 @@ test-verbose: check-venv ## Run tests with verbose output
 	@printf "$(BLUE)Running tests with verbose output...$(NC)\n"
 	@$(BIN)/tox -e fast -- -vv -s
 
+doctest: check-venv ## Run doctest on all docstrings and markdown examples
+	@printf "$(BLUE)Running doctest on Python modules...$(NC)\n"
+	@$(BIN)/tox -e doctest
+
 ###################
 # Tox - Multi-environment Testing
 ###################

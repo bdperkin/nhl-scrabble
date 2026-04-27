@@ -17,6 +17,7 @@ class YAMLFormatter:
 
     Example:
         >>> formatter = YAMLFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "teams:" in output
         True

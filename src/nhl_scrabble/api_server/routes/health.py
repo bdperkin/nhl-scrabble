@@ -27,8 +27,8 @@ async def health() -> dict[str, Any]:
         dict: Health status information.
 
     Example:
-        >>> response = await health()
-        >>> assert response["status"] == "healthy"
+        >>> response = await health()  # doctest: +SKIP
+        >>> assert response["status"] == "healthy"  # doctest: +SKIP
     """
     return {
         "status": "healthy",

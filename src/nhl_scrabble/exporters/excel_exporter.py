@@ -37,9 +37,9 @@ class ExcelExporter:
         pip install nhl-scrabble[export]
 
     Examples:
-        >>> exporter = ExcelExporter()
-        >>> exporter.export_full_report(data, Path("report.xlsx"))
-        >>> exporter.export_team_scores(teams, Path("teams.xlsx"))
+        >>> exporter = ExcelExporter()  # doctest: +SKIP
+        >>> exporter.export_full_report(data, Path("report.xlsx"))  # doctest: +SKIP
+        >>> exporter.export_team_scores(teams, Path("teams.xlsx"))  # doctest: +SKIP
     """
 
     def __init__(self) -> None:

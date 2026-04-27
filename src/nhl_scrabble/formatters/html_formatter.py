@@ -18,6 +18,7 @@ class HTMLFormatter:
 
     Example:
         >>> formatter = HTMLFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "<!DOCTYPE html>" in output
         True

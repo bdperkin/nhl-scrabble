@@ -161,6 +161,9 @@ jobs:
           - tox-env: refurb
             experimental: true
             # Non-blocking during adoption phase - provides modernization suggestions
+          - tox-env: doctest
+            experimental: true
+            # Non-blocking during initial rollout - existing doctest failures need fixing
 
     continue-on-error: ${{ matrix.experimental }}
 
