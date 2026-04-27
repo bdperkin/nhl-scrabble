@@ -213,7 +213,7 @@ Each task includes:
 | 035 | PR Auto-Labeling Workflow                             | MEDIUM   | 1-2 hours           | Active    | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | -     |
 | 036 | PR Size Checker Workflow                              | MEDIUM   | 1-2 hours           | Active    | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | -     |
 | 037 | Stale Issue and PR Management Workflow                | LOW      | 1 hour              | Completed | [#304](https://github.com/bdperkin/nhl-scrabble/issues/304) | PR [#395](https://github.com/bdperkin/nhl-scrabble/pull/395), completed 2026-04-26, actual effort: 45min |
-| 038 | First-Time Contributor Welcome Workflow               | MEDIUM   | 30 minutes - 1 hour | Active    | [#305](https://github.com/bdperkin/nhl-scrabble/issues/305) | -     |
+| 038 | First-Time Contributor Welcome Workflow               | LOW      | 30 minutes - 1 hour | Completed | [#305](https://github.com/bdperkin/nhl-scrabble/issues/305) | PR [#397](https://github.com/bdperkin/nhl-scrabble/pull/397), completed 2026-04-27, actual effort: 45min |
 | 039 | Performance Benchmark Testing Workflow                | MEDIUM   | 3-4 hours           | Active    | [#306](https://github.com/bdperkin/nhl-scrabble/issues/306) | -     |
 | 040 | Software Bill of Materials (SBOM) Generation Workflow | MEDIUM   | 2-3 hours           | Active    | [#307](https://github.com/bdperkin/nhl-scrabble/issues/307) | -     |
 | 041 | SLSA Provenance Generation Workflow                   | MEDIUM   | 2-3 hours           | Active    | [#308](https://github.com/bdperkin/nhl-scrabble/issues/308) | -     |
@@ -266,9 +266,9 @@ Each task includes:
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 11     | 34        | 45      |
 | Testing      | 8      | 23        | 31      |
-| New Features | 36     | 7         | 43      |
+| New Features | 35     | 8         | 43      |
 | Refactoring  | 1      | 29        | 30      |
-| **TOTAL**    | **58** | **131**   | **189** |
+| **TOTAL**    | **57** | **132**   | **189** |
 
 ### Effort Estimates by Category
 
@@ -292,9 +292,9 @@ Each task includes:
 | Optimization | 100.0%          |
 | Enhancement  | 75.6%           |
 | Testing      | 74.2%           |
-| New Features | 16.3%           |
+| New Features | 18.6%           |
 | Refactoring  | 96.7%           |
-| **OVERALL**  | **69.3%**       |
+| **OVERALL**  | **69.8%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -302,7 +302,7 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 0     |
-| MEDIUM   | 58    |
+| MEDIUM   | 57    |
 | LOW      | 0     |
 
 ## Recommended Implementation Order

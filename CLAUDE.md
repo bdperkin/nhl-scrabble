@@ -1244,6 +1244,65 @@ Issues/PRs with these labels are never marked stale:
 
 Closed items can be reopened at any time if still relevant. The bot doesn't prevent reopening.
 
+### First-Time Contributor Welcome
+
+Automated welcome workflow creates a welcoming community atmosphere and helps onboard new contributors:
+
+**Configuration:**
+
+- **Workflow**: `.github/workflows/welcome.yml`
+- **Triggers**: First PR or issue from new contributors
+- **Action**: Posts friendly welcome message automatically
+
+**Welcome Messages:**
+
+**For First-Time PRs:**
+
+- Thanks contributor by name
+- Explains PR review process
+- Links to CONTRIBUTING.md and documentation
+- Provides tips for smooth review
+- Sets positive, encouraging tone
+
+**For First-Time Issues:**
+
+- Thanks issue reporter
+- Explains issue triage process
+- Invites contributor to work on issue
+- Links to resources
+- Encourages participation
+
+**Detection Logic:**
+
+- Counts all PRs/issues by user
+- If count == 1, triggers welcome message
+- No duplicate messages on subsequent contributions
+- Works for both PRs and issues independently
+
+**Security:**
+
+- Uses `pull_request_target` for fork write permissions
+- Safe: only posts comments, no code execution
+- Does not checkout PR code
+- Minimal permissions (read contents, write issues/PRs)
+
+**Benefits:**
+
+- Reduces contributor anxiety
+- Sets positive community tone
+- Encourages more contributions
+- Builds inclusive community
+- Clarifies expectations upfront
+
+**Customization:**
+
+Welcome messages can be customized in `.github/workflows/welcome.yml` to adjust:
+
+- Tone and language
+- Project-specific links
+- Additional resources
+- Tips and guidance
+
 ## Documentation
 
 **Online Documentation:** https://bdperkin.github.io/nhl-scrabble/
