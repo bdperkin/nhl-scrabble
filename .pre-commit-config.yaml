@@ -32,6 +32,10 @@ ci:
     # Requires python3-venv package not available in pre-commit.ci Python 3.12
     - pyroma
     - check-wheel-contents
+    # Requires network access to json.schemastore.org (unreliable in CI)
+    - check-github-workflows
+    - check-dependabot
+    - check-jsonschema
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
