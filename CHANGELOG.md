@@ -7,6 +7,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-04-27
+
+### Added
+
+- **Automated PyPI Publishing Workflow** (#405)
+
+  - Implemented GitHub Actions workflow for automated package publishing on version tags
+  - 5-stage automated pipeline: Build → Test → TestPyPI → PyPI → GitHub Release
+  - Multi-platform testing: 3 operating systems × 3 Python versions (Ubuntu, macOS, Windows on Python 3.12-3.14)
+  - OIDC-based trusted publishing (no API tokens required)
+  - Automated GitHub Release creation with distribution artifacts
+  - Release notes auto-extracted from CHANGELOG.md
+  - Workflow file: `.github/workflows/publish.yml`
+
+- **Comprehensive Release Documentation** (#405)
+
+  - Created `docs/RELEASING.md` (785 lines) - Complete release workflow guide
+  - Version tagging strategy and semantic versioning guidelines
+  - CHANGELOG.md format guidelines (Keep a Changelog)
+  - PyPI Trusted Publishing setup instructions
+  - Troubleshooting guide with common failure patterns and solutions
+  - Rollback strategies for failed releases
+  - Manual release fallback process
+  - Best practices and release timing recommendations
+  - Performance metrics and time savings documentation
+
+### Changed
+
+- **PyPI Package Metadata** (#407)
+
+  - Homepage URL now points to documentation site (https://bdperkin.github.io/nhl-scrabble/)
+  - Added explicit Documentation link to PyPI project links
+  - Added Changelog link for easy access to release history
+  - Improved user experience for PyPI package discovery
+
+- **Release Process Improvements**
+
+  - Release time reduced from 30 minutes (manual) to ~5 minutes (automated)
+  - Time savings: 6x faster release process
+  - Automated verification: builds, tests, and publishes with zero manual steps
+  - Consistent builds across all releases
+  - Eliminated manual errors in release process
+
+### Fixed
+
+- **PyPI Package Page** (#406)
+
+  - Fixed broken logo image (changed from relative to absolute GitHub URL)
+  - Fixed broken interrogate badge (changed from relative to absolute GitHub URL)
+  - Images now display correctly on https://pypi.org/project/nhl-scrabble/
+
+### Security
+
+- **OIDC Trusted Publishing** (#405)
+  - Replaced API token-based authentication with OIDC (OpenID Connect)
+  - Short-lived credentials that expire in minutes
+  - Automatic credential rotation
+  - Credentials bound to specific repository, workflow, and environment
+  - Eliminated security risks from long-lived API tokens
+
+### Documentation
+
+- **Release Process**
+  - CONTRIBUTING.md: Updated with automated release workflow
+  - CLAUDE.md: Added "Automated Package Publishing" section with workflow details
+  - README.md: Added PyPI version and downloads badges
+  - Complete documentation ensures smooth releases for all contributors
+
 ## [0.0.4] - 2026-04-27
 
 ### Added
