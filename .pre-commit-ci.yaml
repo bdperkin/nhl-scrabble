@@ -1,6 +1,10 @@
 # Configuration for https://pre-commit.ci
 # Automates pre-commit hook version updates via GitHub integration
 ci:
+  # Python version for pre-commit.ci service
+  # Using 3.12 (our minimum supported version) maximizes tool compatibility
+  python_version: '3.12'
+
   # Auto-update hook versions weekly (every Monday)
   autoupdate_schedule: weekly
   autoupdate_commit_msg: 'chore(deps): Update pre-commit hooks'
