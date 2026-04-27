@@ -136,6 +136,7 @@ Each task includes:
 | 034 | Evaluate semantic-release for Fully Automated Releases        | LOW      | 6-10 hours                                                 | Active    | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | Research task - evaluate comprehensive release automation alternative    |
 | 035 | Implement pre-commit.ci GitHub Automation                     | MEDIUM   | 1-2 hours                                                  | Completed | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | PR [#393](https://github.com/bdperkin/nhl-scrabble/pull/393), completed 2026-04-27, actual effort: 45 minutes |
 | 036 | Implement File-Based Logging for Uvicorn Web Server           | MEDIUM   | 3-5 hours                                                  | Active    | [#398](https://github.com/bdperkin/nhl-scrabble/issues/398) | Add permanent file-based logging with rotation for web server |
+| 037 | Documentation Refactoring and Web Interface Polish             | MEDIUM   | 16-24 hours                                                | Completed | [#399](https://github.com/bdperkin/nhl-scrabble/issues/399) | Branch fix/web-interface-minor-improvements, 18 commits, actual effort: 18h |
 
 ### Testing
 
