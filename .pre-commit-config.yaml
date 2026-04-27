@@ -36,6 +36,8 @@ ci:
     - check-github-workflows
     - check-dependabot
     - check-jsonschema
+    # Fails on documentation pseudo-code and illustrative examples
+    - mdformat
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
