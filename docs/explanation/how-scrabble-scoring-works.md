@@ -20,6 +20,11 @@ Standard Scrabble letter point values used for scoring:
 | **8**  | J, X                         |
 | **10** | Q, Z                         |
 
+**References:**
+
+- [Scrabble Letter Values (Wikipedia)](https://en.wikipedia.org/wiki/Scrabble#Letter_distribution) - Official tile point values
+- [Scrabble Letter Distributions (Wikipedia)](https://en.wikipedia.org/wiki/Scrabble_letter_distributions) - Comprehensive distribution information
+
 **Implementation:**
 
 ```python
