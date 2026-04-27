@@ -137,7 +137,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.0a3
+    rev: 8.0.1  # ci: autoupdate-freeze (pinned until isort 9.0.0 stable is released - alpha has breaking formatting changes)
     hooks:
       - id: isort
         # Comprehensive import sorting (matches ruff's ALL rules philosophy)
@@ -372,7 +372,7 @@ repos:
         additional_dependencies: [tomli]  # Required to read pyproject.toml
 
   - repo: https://github.com/osprey-oss/deptry
-    rev: 0.25.1
+    rev: 0.24.0  # ci: autoupdate-freeze (0.25.1 requires Rust 1.94, system has 1.93.1)
     hooks:
       - id: deptry
         # Comprehensive dependency checker (matches ruff's ALL rules philosophy)
@@ -416,7 +416,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.7
+    rev: 0.11.6  # ci: autoupdate-freeze (0.11.7 not available in PyPI mirror yet)
     hooks:
       - id: uv-lock
 
@@ -539,7 +539,7 @@ repos:
         description: Add trailing commas to Python structures
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.12
+    rev: v0.15.10  # ci: autoupdate-freeze (0.15.12 not available in PyPI mirror yet)
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
@@ -596,7 +596,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.2
+    rev: v1.20.1  # ci: autoupdate-freeze (1.20.2 not available in PyPI mirror yet)
     hooks:
       - id: mypy
         additional_dependencies:

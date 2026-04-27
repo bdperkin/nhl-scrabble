@@ -73,6 +73,8 @@ def get_formatter(format_type: str, **kwargs: Any) -> OutputFormatter:
         >>> output = formatter.format(data)
     """
     # Lazy import to avoid circular dependencies at module level
-    from nhl_scrabble.formatters.factory import get_formatter as factory_get_formatter  # noqa: PLC0415
+    from nhl_scrabble.formatters.factory import (  # noqa: PLC0415
+        get_formatter as factory_get_formatter,
+    )
 
     return factory_get_formatter(format_type, **kwargs)
