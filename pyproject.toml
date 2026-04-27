@@ -135,6 +135,7 @@ export = [
 ]
 docs = [
     "blacken-docs>=1.20.0",
+    "linkchecker>=10.0.0",
     "myst-parser>=5.0.0",
     "pytest-sphinx>=0.7.1",
     "sphinx>=9.1.0",
@@ -518,6 +519,7 @@ diff-cover = "diff_cover"
 fastapi = "fastapi"
 httpx = "httpx"
 jinja2 = "jinja2"
+linkchecker = "linkchecker"
 mypy = "mypy"
 myst-parser = "myst_parser"
 nhl-scrabble = "nhl_scrabble"

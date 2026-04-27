@@ -1,0 +1,41 @@
+# Configuration for linkchecker
+# https://linkchecker.github.io/linkchecker/
+
+[checking]
+# Number of threads to use for checking
+threads=10
+
+# Timeout for connection attempts (seconds)
+timeout=30
+
+# Recursion depth (1 = check only given URLs)
+recursionlevel=1
+
+# Check external links
+checkextern=1
+
+[filtering]
+# Ignore URLs matching these patterns (rate-limited or dynamic)
+ignoreurl=
+    # GitHub Actions URLs (require authentication)
+    ^https://github.com/.*/actions
+    # Codecov URLs (vary by commit, can be flaky)
+    ^https://codecov.io
+    ^https://app.codecov.io
+    # Shields.io badges (can be slow/rate-limited)
+    ^https://shields.io
+    ^https://img.shields.io
+    # GitHub API (rate-limited)
+    ^https://api.github.com
+    # Pre-commit.ci results (dynamic, require service to be active)
+    ^https://results.pre-commit.ci
+
+[output]
+# Show status messages
+status=1
+
+# Verbose output
+verbose=1
+
+# Show warnings
+warnings=1
