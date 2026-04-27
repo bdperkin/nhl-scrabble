@@ -2307,6 +2307,22 @@ If package validation fails in CI:
 1. Commit and push changes
 1. CI will re-run validation
 
+## Stale Issue/PR Policy
+
+To keep the issue tracker relevant and manageable:
+
+- **Issues** inactive for 60 days are marked stale
+- **Pull requests** inactive for 30 days are marked stale
+- Items are closed 7 days after being marked stale
+
+**To prevent closure:**
+
+- Add a comment with an update
+- Add the `keep-open` label
+- Continue working on it
+
+**Closed items can be reopened** at any time if still relevant.
+
 ## Questions?
 
 - Open an issue for bug reports or feature requests
