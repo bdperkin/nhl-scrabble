@@ -1,8 +1,48 @@
 # Project-Wide Tooling Analysis and Recommendations
 
 **Date**: 2026-04-21
+**Last Updated**: 2026-04-27
 **Status**: Implementation In Progress (10/10 tasks created, 2/10 complete)
 **Next Steps**: Implement remaining tasks, integrate tools into pre-commit and CI/CD
+
+## Recent Tooling Additions (2026-04-27)
+
+### License Management Automation
+
+**Purpose**: Automate LICENSES.md generation and dependency license tracking
+
+**Tool**: scripts/update_licenses.py (custom Python script)
+
+**What It Does**:
+
+- Generates current license list using pip-licenses
+- Deduplicates entries (pip-licenses outputs duplicates)
+- Validates no prohibited licenses in runtime dependencies
+- Updates LICENSES.md with current license information
+- Checks if LICENSES.md is up-to-date with current dependencies
+
+**Integration Points**:
+
+- **Makefile targets**: licenses-check, licenses-update, licenses-validate
+- **Tox environments**: licenses, licenses-check, licenses-update
+- **Pre-commit hook**: Potential future integration
+
+**Modes**:
+
+- `--check`: Verify LICENSES.md is up-to-date (exit 1 if not)
+- `--update`: Update LICENSES.md with current licenses
+- `--validate`: Validate licenses only (no update)
+- `--verbose`: Enable verbose output
+
+**Features**:
+
+- Handles pip-licenses quirks (duplicates, multi-line license text)
+- Skips continuation rows from embedded license text
+- Allows dev-only dependencies with non-permissive licenses (exception list)
+- Preserves LICENSES.md header (lines 1-49)
+- Formats table with consistent column widths (mdformat compatible)
+
+**Impact**: Eliminated manual LICENSES.md maintenance, fixed duplicate entries, ensured license compliance
 
 ## Executive Summary
 

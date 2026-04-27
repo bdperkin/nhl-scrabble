@@ -1,9 +1,24 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-26 (synchronized with filesystem)
+**Last Updated**: 2026-04-27
 **Total Tasks**: 60 active tasks
 **Estimated Effort**: ~522 hours
 **Strategy**: Priority-first with dependency awareness
+
+## Recent Documentation Improvements (2026-04-27)
+
+**Branch**: fix/web-interface-minor-improvements (6 commits)
+
+Major documentation refactoring completed outside formal task system:
+
+- **12 new documentation files** created (~2,500 lines total)
+- **CONTRIBUTING.md**: Reduced 78% (2440 → 527 lines) with 7 focused contributing guides
+- **README.md**: Reduced 52% (804 → 386 lines) with 4 comprehensive documentation files
+- **License automation**: Created scripts/update_licenses.py, fixed LICENSES.md duplicates
+- **Manual testing checklist**: Moved to docs/testing/ with proper naming
+
+All documentation now follows Diátaxis framework with minimal duplication.
 
 ## How to Use This File
 
