@@ -38,6 +38,26 @@ class TemplateFormatter:
         Raises:
             ValueError: If template_file is None or empty
             FileNotFoundError: If template file doesn't exist
+
+        Examples:
+            Initialize with template file:
+
+            >>> import tempfile
+            >>> from pathlib import Path
+            >>> with tempfile.NamedTemporaryFile(mode='w', suffix='.j2', delete=False) as f:
+            ...     _ = f.write("Hello {{ name }}")
+            ...     temp_path = f.name
+            >>> formatter = TemplateFormatter(template_file=temp_path)
+            >>> formatter.template_path.exists()
+            True
+            >>> Path(temp_path).unlink()  # Cleanup
+
+            ValueError when no template provided:
+
+            >>> TemplateFormatter()  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+                ...
+            ValueError: template_file is required for TemplateFormatter...
         """
         if not template_file:
             raise ValueError(

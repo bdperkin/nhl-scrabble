@@ -175,6 +175,22 @@ class CircuitBreaker:
         """Manually reset circuit breaker to CLOSED state.
 
         Useful for testing or manual intervention.
+
+        Examples:
+            Reset circuit breaker after failures:
+
+            >>> cb = CircuitBreaker(failure_threshold=1)
+            >>> try:
+            ...     cb.call(lambda: 1 / 0)  # Trigger failure
+            ... except ZeroDivisionError:
+            ...     pass
+            >>> cb.failure_count > 0
+            True
+            >>> cb.reset()
+            >>> cb.failure_count
+            0
+            >>> cb.state == CircuitState.CLOSED
+            True
         """
         logger.info(
             f"Circuit breaker manually reset from {self.state.value} "
@@ -190,6 +206,19 @@ class CircuitBreaker:
 
         Returns:
             True if circuit is OPEN, False otherwise
+
+        Examples:
+            Check if circuit is open:
+
+            >>> cb = CircuitBreaker(failure_threshold=1)
+            >>> cb.is_open
+            False
+            >>> try:
+            ...     cb.call(lambda: 1 / 0)  # Trigger failure to open circuit
+            ... except ZeroDivisionError:
+            ...     pass
+            >>> cb.is_open
+            True
         """
         return self.state == CircuitState.OPEN
 
@@ -199,11 +228,30 @@ class CircuitBreaker:
 
         Returns:
             True if circuit is CLOSED, False otherwise
+
+        Examples:
+            Check if circuit is closed:
+
+            >>> cb = CircuitBreaker(failure_threshold=5)
+            >>> cb.is_closed
+            True
+            >>> cb.call(lambda x: x * 2, 5)
+            10
+            >>> cb.is_closed
+            True
         """
         return self.state == CircuitState.CLOSED
 
     def __repr__(self) -> str:
-        """Return string representation of circuit breaker state."""
+        """Return string representation of circuit breaker state.
+
+        Examples:
+            String representation:
+
+            >>> cb = CircuitBreaker(failure_threshold=5, timeout=60.0)
+            >>> repr(cb)  # doctest: +ELLIPSIS
+            'CircuitBreaker(state=closed, failures=0/5, timeout=60.0s)'
+        """
         return (
             f"CircuitBreaker(state={self.state.value}, "
             f"failures={self.failure_count}/{self.failure_threshold}, "
