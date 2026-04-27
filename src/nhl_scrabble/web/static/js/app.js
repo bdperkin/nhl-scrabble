@@ -102,6 +102,11 @@ document.addEventListener('DOMContentLoaded', function() {
             initializeCharts(data);
             initializeExportButtons();
             initializeTableSorting();
+
+            // Re-initialize scroll animations for dynamically loaded content
+            if (typeof initScrollAnimations === 'function') {
+                initScrollAnimations();
+            }
         }, 100);
 
         // Scroll to results
