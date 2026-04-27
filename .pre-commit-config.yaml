@@ -518,7 +518,7 @@ repos:
         stages: [pre-commit]
 
   - repo: https://github.com/PyCQA/docformatter
-    rev: v1.7.8
+    rev: v1.7.7  # ci: autoupdate-freeze (1.7.8 removes blank lines, conflicts with flake8)
     hooks:
       - id: docformatter
         # Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
