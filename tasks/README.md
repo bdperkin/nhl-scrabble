@@ -212,7 +212,7 @@ Each task includes:
 | 034 | Docker Container Build and Publish Workflow           | MEDIUM   | 3-4 hours           | Active    | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | -     |
 | 035 | PR Auto-Labeling Workflow                             | MEDIUM   | 1-2 hours           | Active    | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | -     |
 | 036 | PR Size Checker Workflow                              | MEDIUM   | 1-2 hours           | Active    | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | -     |
-| 037 | Stale Issue and PR Management Workflow                | MEDIUM   | 1 hour              | Active    | [#304](https://github.com/bdperkin/nhl-scrabble/issues/304) | -     |
+| 037 | Stale Issue and PR Management Workflow                | LOW      | 1 hour              | Completed | [#304](https://github.com/bdperkin/nhl-scrabble/issues/304) | PR [#395](https://github.com/bdperkin/nhl-scrabble/pull/395), completed 2026-04-26, actual effort: 45min |
 | 038 | First-Time Contributor Welcome Workflow               | MEDIUM   | 30 minutes - 1 hour | Active    | [#305](https://github.com/bdperkin/nhl-scrabble/issues/305) | -     |
 | 039 | Performance Benchmark Testing Workflow                | MEDIUM   | 3-4 hours           | Active    | [#306](https://github.com/bdperkin/nhl-scrabble/issues/306) | -     |
 | 040 | Software Bill of Materials (SBOM) Generation Workflow | MEDIUM   | 2-3 hours           | Active    | [#307](https://github.com/bdperkin/nhl-scrabble/issues/307) | -     |
@@ -266,9 +266,9 @@ Each task includes:
 | Optimization | 0      | 13        | 13      |
 | Enhancement  | 11     | 34        | 45      |
 | Testing      | 8      | 23        | 31      |
-| New Features | 37     | 6         | 43      |
+| New Features | 36     | 7         | 43      |
 | Refactoring  | 1      | 29        | 30      |
-| **TOTAL**    | **59** | **130**   | **189** |
+| **TOTAL**    | **58** | **131**   | **189** |
 
 ### Effort Estimates by Category
 
@@ -279,9 +279,9 @@ Each task includes:
 | Optimization | 36.0 hours       |
 | Enhancement  | 219.25 hours     |
 | Testing      | 265.0 hours      |
-| New Features | 227.0 hours      |
+| New Features | 226.0 hours      |
 | Refactoring  | 219.0 hours      |
-| **TOTAL**    | **1066.25 hours**|
+| **TOTAL**    | **1065.25 hours**|
 
 ### Completion Progress
 
@@ -292,9 +292,9 @@ Each task includes:
 | Optimization | 100.0%          |
 | Enhancement  | 75.6%           |
 | Testing      | 74.2%           |
-| New Features | 14.0%           |
+| New Features | 16.3%           |
 | Refactoring  | 96.7%           |
-| **OVERALL**  | **68.8%**       |
+| **OVERALL**  | **69.3%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -303,7 +303,7 @@ Each task includes:
 | CRITICAL | 0     |
 | HIGH     | 0     |
 | MEDIUM   | 58    |
-| LOW      | 1     |
+| LOW      | 0     |
 
 ## Recommended Implementation Order
 
