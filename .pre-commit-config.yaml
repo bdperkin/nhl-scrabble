@@ -38,6 +38,8 @@ ci:
     - check-jsonschema
     # Fails on documentation pseudo-code and illustrative examples
     - mdformat
+    # Executable not found in pre-commit.ci environment
+    - safety
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
