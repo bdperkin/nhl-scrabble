@@ -7,6 +7,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2026-04-27
+
+### Added
+
+- **Documentation Refactoring** (#400)
+
+  - Created 8 detailed contributing guides in `docs/contributing/`
+  - New guides: code-style.md, commit-messages.md, dependency-updates.md, logging-guidelines.md, pre-commit-hooks.md, pull-requests.md, release-process.md, testing-guidelines.md
+  - Created comprehensive how-scrabble-scoring-works.md (483 lines) with technical implementation details
+  - Created using-the-cli.md tutorial (369 lines) for complete CLI usage
+  - Created run-benchmarks.md how-to guide (134 lines) for performance testing
+  - Created project-stats.md reference (412 lines) with comprehensive project metrics
+  - Moved manual-testing-checklist.md to `docs/testing/` for better organization
+
+- **License Management Automation** (#400)
+
+  - Automated license tracking with `scripts/update_licenses.py` (408 lines)
+  - Automatic license generation using pip-licenses
+  - Deduplication logic for clean license reports
+  - Prohibited license validation for runtime dependencies
+  - Makefile targets: `licenses-check`, `licenses-update`, `licenses-validate`
+  - Tox environments for CI integration
+  - LICENSES.md automatically maintained
+
+### Changed
+
+- **Documentation Structure** (#400)
+
+  - Refactored README.md from ~1,200 to ~400 lines with no content loss
+  - Refactored CONTRIBUTING.md from ~2,500 to ~300 lines with links to detailed guides
+  - Consolidated duplicate documentation across files
+  - Added authoritative Scrabble references (Wikipedia links)
+  - Improved documentation discoverability following Diátaxis framework
+
+- **Task Documentation Synchronization**
+
+  - Synchronized task counts across all tracking systems
+  - Updated tasks/README.md with accurate counts (57 active, 135 completed)
+  - Regenerated tasks/IMPLEMENTATION_SEQUENCE.md with optimal task ordering
+  - Simplified implementation sequence (reduced from 637 to 119 lines)
+  - Removed 889 lines of outdated documentation
+  - Moved completed task 037 from active to completed directory
+  - Improved completion rate: 69.8% → 70.3%
+
+### Fixed
+
+- **Web Interface Improvements** (#400)
+
+  - Fixed favicon 404 errors (added PNG and SVG favicons)
+  - Fixed robots.txt 404 errors
+  - Fixed CSP blocking Swagger UI/ReDoc (exempted API documentation endpoints)
+  - Fixed invisible analysis results (scroll animation re-initialization)
+  - Fixed blank team names in Division Standings (added team name field to data pipeline)
+  - Improved stats card layout with two-line display (score + context)
+  - Added Documentation and ReDoc links to navigation
+
+- **Security**
+
+  - Dismissed 3 CodeQL false positives (Protocol method docstrings in interfaces.py)
+  - All security scans now clean with no open alerts
+
+### Dependencies
+
+- **GitHub Actions Updates**
+  - Bumped actions/upload-artifact from 5 to 7 (#403)
+  - Bumped actions/github-script from 7 to 9 (#402)
+  - Bumped actions/stale from 9 to 10 (#401)
+  - All CI workflows now use latest action versions
+
+### Documentation
+
+- Total new documentation: ~2,500 lines across 12 new files
+- Total documentation removed: ~3,000 lines of duplicates (consolidated)
+- Net improvement in documentation quality and organization
+- All documentation follows Diátaxis framework (Tutorials, How-to, Reference, Explanation)
+
 ## [0.0.3] - 2026-04-27
 
 ### Added
