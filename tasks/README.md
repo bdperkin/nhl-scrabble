@@ -127,7 +127,7 @@ Each task includes:
 | 023 | Extend Sphinx Builder Functionality | LOW | 4-6 hours | Active | - | - |
 | 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours | Active | - | - |
 | 025 | Add Automated Documentation Link Validation to CI | MEDIUM | 1 hour | Completed | [#351](https://github.com/bdperkin/nhl-scrabble/issues/351) | PR [#1](https://github.com/bdperkin/nhl-scrabble/pull/1) |
-| 026 | Add Automated Code Example Testing to CI | MEDIUM | 2 hours | Active | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | - |
+| 026 | Add Automated Code Example Testing to CI | MEDIUM | 2 hours (actual: 4 hours) | Completed | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | PR [#408](https://github.com/bdperkin/nhl-scrabble/pull/408), completed 2026-04-27, 18 doctest failures fixed, 39 acceptable baseline documented |
 | 027 | Improve Function Example Coverage in Docstrings | MEDIUM | 3-4 hours | Active | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | - |
 | 028 | Add Unicode Normalization for Player Names | MEDIUM | 2-3 hours | Completed | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | - |
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | : 1-2 weeks (ongoing monitoring + final decision) | Active | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | PR [#324](https://github.com/bdperkin/nhl-scrabble/pull/324) |
@@ -289,9 +289,9 @@ Each task includes:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 192 tasks (57 active, 135 completed)
+**Total Tasks**: 192 tasks (56 active, 136 completed)
 
-**Overall Completion**: 70.3%
+**Overall Completion**: 70.8%
 
 ## Task Management Guidelines
 
@@ -335,4 +335,4 @@ ______________________________________________________________________
 
 **Last Updated**: 2026-04-27
 **Total Tasks**: 192
-**Completion Rate**: 70.3%
+**Completion Rate**: 70.8%
