@@ -479,9 +479,9 @@ make uv-pip ARGS="list"
 uv lock
 ```
 
-### Makefile (57 Targets)
+### Makefile (110+ Targets)
 
-Self-documenting Makefile with comprehensive automation organized in 16 logical groupings:
+Self-documenting Makefile with comprehensive automation organized in 18+ logical groupings:
 
 ```bash
 make help            # Show all targets with descriptions
@@ -508,6 +508,11 @@ make quality         # All checks
 make uv-pre-commit   # Pre-commit with UV
 make validate-json   # Validate JSON/YAML configs against schemas
 make validate-configs # Alias for validate-json
+
+# License Management
+make licenses-check    # Check if LICENSES.md is up-to-date
+make licenses-update   # Update LICENSES.md with current dependencies
+make licenses-validate # Validate dependency licenses
 
 # Running
 make run             # Run analyzer (via tox)
@@ -1315,6 +1320,7 @@ Step-by-step lessons for beginners:
 
 - **[Getting Started](docs/tutorials/01-getting-started.md)** - First NHL Scrabble analysis
 - **[Understanding Output](docs/tutorials/02-understanding-output.md)** - Deep dive into reports
+- **[Using the CLI](docs/tutorials/using-the-cli.md)** - Complete command-line interface guide
 - **[First Contribution](docs/tutorials/03-first-contribution.md)** - Make your first code contribution
 
 ### How-to Guides (Problem-Oriented)
@@ -1323,9 +1329,10 @@ Practical solutions to specific tasks:
 
 - **[Installation Variations](docs/how-to/installation.md)** - Different ways to install
 - **[Run Tests](docs/how-to/run-tests.md)** - Execute different test configurations
+- **[Run Benchmarks](docs/how-to/run-benchmarks.md)** - Performance benchmarking with pytest-benchmark
 - **[Add Report Type](docs/how-to/add-report-type.md)** - Create custom reports
 - **[Use UV](docs/how-to/use-uv.md)** - 10-100x faster package management
-- **[And more...](docs/how-to/)** - 10 how-to guides total
+- **[And more...](docs/how-to/)** - 11 how-to guides total
 
 ### Reference (Information-Oriented)
 
@@ -1333,7 +1340,8 @@ Technical specifications:
 
 - **[CLI Reference](docs/reference/cli.md)** - All commands and options
 - **[Configuration](docs/reference/configuration.md)** - All settings explained
-- **[Makefile Reference](docs/reference/makefile.md)** - All 55 Makefile targets
+- **[Makefile Reference](docs/reference/makefile.md)** - All 110+ Makefile targets
+- **[Project Statistics](docs/reference/project-stats.md)** - Detailed metrics and statistics
 - **[Environment Variables](docs/reference/environment-variables.md)** - Complete list
 - **[And more...](docs/reference/)** - Complete technical reference
 
@@ -1342,15 +1350,35 @@ Technical specifications:
 Background and design philosophy:
 
 - **[Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md)** - The concept explained
+- **[How Scrabble Scoring Works](docs/explanation/how-scrabble-scoring-works.md)** - Technical implementation details
 - **[Architecture Overview](docs/explanation/architecture.md)** - System design
 - **[NHL API Strategy](docs/explanation/nhl-api-strategy.md)** - API integration approach
 - **[Testing Philosophy](docs/explanation/testing-philosophy.md)** - Testing approach
 - **[And more...](docs/explanation/)** - Design decisions and rationale
 
+### Contributing Guides
+
+Detailed contribution guidelines:
+
+- **[Code Style](docs/contributing/code-style.md)** - Python style guidelines and conventions
+- **[Commit Messages](docs/contributing/commit-messages.md)** - Conventional Commits format
+- **[Logging Guidelines](docs/contributing/logging-guidelines.md)** - Log level criteria and best practices
+- **[Testing Guidelines](docs/contributing/testing-guidelines.md)** - Test structure and organization
+- **[Pull Requests](docs/contributing/pull-requests.md)** - PR submission and review process
+- **[Dependency Updates](docs/contributing/dependency-updates.md)** - Automated dependency management
+- **[Release Process](docs/contributing/release-process.md)** - Creating and publishing releases
+- **[Pre-commit Hooks](docs/contributing/pre-commit-hooks.md)** - All 67 hooks explained
+
+### Testing Documentation
+
+QA and testing resources:
+
+- **[Manual Testing Checklist](docs/testing/manual-testing-checklist.md)** - Web interactivity testing
+
 ### Community Documentation
 
 - **README.md** - Project overview
-- **CONTRIBUTING.md** - Development guide
+- **CONTRIBUTING.md** - Development guide (links to detailed contributing guides)
 - **CODE_OF_CONDUCT.md** - Community standards
 - **SECURITY.md** - Security policy
 - **SUPPORT.md** - Getting help
@@ -1522,6 +1550,71 @@ pytest && tox -p auto
 - Immediately: Security patches
 
 See [CONTRIBUTING.md](CONTRIBUTING.md#updating-dependencies) for detailed update process.
+
+### Managing Dependency Licenses
+
+The project includes automated license tracking and validation:
+
+```bash
+# Check if LICENSES.md is up-to-date
+make licenses-check
+
+# Update LICENSES.md with current dependencies
+make licenses-update
+
+# Validate dependency licenses (no update)
+make licenses-validate
+```
+
+**Automation Tool** (`scripts/update_licenses.py`):
+
+- Generates current license list using pip-licenses
+- Deduplicates entries (pip-licenses outputs duplicates)
+- Validates no prohibited licenses in runtime dependencies
+- Updates LICENSES.md with current license information
+- Checks if LICENSES.md is up-to-date with dependencies
+
+**Modes:**
+
+- `--check` - Verify LICENSES.md is up-to-date (exit 1 if not)
+- `--update` - Update LICENSES.md with current licenses
+- `--validate` - Validate licenses only (no update)
+- `--verbose` - Enable verbose output
+
+**Usage:**
+
+```bash
+# Via Makefile (recommended)
+make licenses-update
+
+# Direct script usage
+python scripts/update_licenses.py --update
+python scripts/update_licenses.py --check
+python scripts/update_licenses.py --validate
+
+# Via tox
+tox -e licenses        # Full license check
+tox -e licenses-check  # Check up-to-date
+tox -e licenses-update # Update LICENSES.md
+```
+
+**Features:**
+
+- Handles pip-licenses quirks (duplicates, multi-line text)
+- Skips continuation rows from embedded license text
+- Allows dev-only dependencies with non-permissive licenses
+- Preserves LICENSES.md header (lines 1-49)
+- Formats table with mdformat-compatible spacing
+
+**Prohibited Licenses** (runtime dependencies only):
+
+- GPL, AGPL, LGPL (copyleft licenses)
+- Proprietary licenses
+
+**Allowed Exceptions** (dev-only dependencies):
+
+- blocklint, CairoSVG, pyenchant, docutils, LinkChecker
+- Unidecode, djlint, docformatter, refurb, dicttoxml
 
 ### Adding a New Test
 
