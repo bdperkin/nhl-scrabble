@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-04-27
+
+### Added
+
+- **First-Time Contributor Welcome Workflow** (#397)
+
+  - Automated welcome messages for first-time PR contributors
+  - Automated welcome messages for first-time issue reporters
+  - Friendly onboarding with links to CONTRIBUTING.md and documentation
+  - Clear next steps for contribution process
+  - Only triggers once per contributor (no duplicate messages)
+  - Safe implementation using `pull_request_target` for fork permissions
+
+- **Automated Stale Issue/PR Management** (#395)
+
+  - Daily workflow to mark inactive issues (60 days) and PRs (30 days) as stale
+  - Auto-closes stale items after 7-day warning period
+  - Exempt labels: `keep-open`, `pinned`, `security`, `good-first-issue`, `help-wanted`, `enhancement`, `bug`, `work-in-progress`, `wip`
+  - Manual trigger available via workflow_dispatch
+  - Keeps issue tracker clean and relevant
+
+- **Automated Documentation Link Validation** (#394)
+
+  - Weekly scheduled link checking in all Markdown documentation
+  - PR-triggered link validation for changed documentation
+  - Automatic issue creation for broken links (scheduled runs)
+  - PR comments for broken links in pull requests
+  - Soft-fail for flaky external links (e.g., sphinx-build)
+  - Prevents documentation rot
+
+- **Pre-commit.ci GitHub Automation** (#393)
+
+  - Automated pre-commit hook updates via pre-commit.ci bot
+  - Weekly autoupdate checks for all 67+ hooks
+  - Auto-fix and commit for fixable issues
+  - PR creation for hook updates
+  - Reduces manual maintenance overhead
+
+### Fixed
+
+- **Pre-commit.ci Compatibility** - Fixed multiple hook compatibility issues for CI environment
+  - Skip `safety` hook in pre-commit.ci (requires authentication)
+  - Skip `mdformat` in pre-commit.ci (platform-specific issues)
+  - Skip JSON schema validation hooks in CI (network dependency)
+  - Skip `check-wheel-contents` in pre-commit.ci (build environment required)
+  - Skip `pyroma` in pre-commit.ci (package metadata access issues)
+  - Force Python 3.12 for `unimport` hook (version compatibility)
+  - All hooks now work correctly in both local and CI environments
+
 ## [0.0.2] - 2026-04-26
 
 ### Fixed
