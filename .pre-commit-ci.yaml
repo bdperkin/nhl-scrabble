@@ -1,0 +1,19 @@
+# Configuration for https://pre-commit.ci
+# Automates pre-commit hook version updates via GitHub integration
+ci:
+  # Auto-update hook versions weekly (every Monday)
+  autoupdate_schedule: weekly
+  autoupdate_commit_msg: 'chore(deps): Update pre-commit hooks'
+
+  # Auto-fix issues when possible (formatting, trailing whitespace, etc.)
+  autofix_commit_msg: 'style: Auto-fixes from pre-commit.ci'
+  autofix_prs: true
+
+  # Skip certain hooks in CI (if needed)
+  # Empty list = run all hooks
+  skip: []
+
+  # Require all hooks to pass before autoupdate
+  # Empty string = create PR for review (recommended)
+  # Setting to 'main' would auto-merge (NOT recommended)
+  autoupdate_branch: ''

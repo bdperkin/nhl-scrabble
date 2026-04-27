@@ -2144,6 +2144,38 @@ pytest
 tox -p auto
 ```
 
+### Pre-commit Hook Updates
+
+Hook versions are automatically updated by [pre-commit.ci](https://pre-commit.ci).
+
+- **Schedule**: Weekly (every Monday)
+- **Process**: Automated PRs created when updates available
+- **Review**: Maintainer reviews and merges PRs
+- **Manual update**: Run `pre-commit autoupdate` if urgent
+
+**When pre-commit.ci creates an update PR:**
+
+1. Review version changes and changelogs
+1. Ensure all CI checks pass
+1. Test locally for major version bumps
+1. Merge PR to apply updates
+
+**Manual updates between automation cycles:**
+
+```bash
+# Update all hooks to latest versions
+pre-commit autoupdate
+
+# Update specific hook
+pre-commit autoupdate --repo https://github.com/astral-sh/ruff-pre-commit
+
+# Test updated hooks
+pre-commit run --all-files
+
+# Commit if tests pass
+git commit -am "chore(deps): Update pre-commit hooks"
+```
+
 ### Rollback
 
 If updates cause issues:

@@ -337,6 +337,48 @@ SKIP=mypy git commit -m "message"
 
 All hooks run automatically on `git commit`, ensuring code quality before changes enter the repository.
 
+### Automated Hook Updates
+
+Pre-commit hooks are automatically updated via [pre-commit.ci](https://pre-commit.ci):
+
+- Runs weekly autoupdate check
+- Creates PRs when new hook versions available
+- All 67 hooks checked for updates
+- CI validates updates don't break builds
+
+**Review Process**
+
+When reviewing pre-commit.ci PRs:
+
+1. Check version changes (patch, minor, major)
+1. Review release notes for breaking changes
+1. Verify CI passes with new versions
+1. Test locally for major updates:
+   ```bash
+   git fetch origin
+   git checkout pre-commit-ci-update-config
+   pre-commit run --all-files
+   ```
+1. Merge if all checks pass
+
+**Manual Updates**
+
+For urgent updates between weekly cycles:
+
+```bash
+# Update all hooks to latest versions
+pre-commit autoupdate
+
+# Update specific hook
+pre-commit autoupdate --repo https://github.com/astral-sh/ruff-pre-commit
+
+# Test updated hooks
+pre-commit run --all-files
+
+# Commit if tests pass
+git commit -am "chore(deps): Update pre-commit hooks"
+```
+
 ### Admin Commits to Main Branch
 
 **IMPORTANT PROJECT RULE**: When admin bypass is necessary to commit directly to `main`:
