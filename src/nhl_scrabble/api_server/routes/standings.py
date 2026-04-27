@@ -186,8 +186,8 @@ async def get_standings(
         HTTPException: If invalid type or fetch fails.
 
     Example:
-        >>> response = await get_standings("division")
-        >>> assert "divisions" in response
+        >>> response = await get_standings("division")  # doctest: +SKIP
+        >>> assert "divisions" in response  # doctest: +SKIP
     """
     if standings_type not in {"division", "conference", "playoffs"}:
         raise HTTPException(

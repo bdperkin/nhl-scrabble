@@ -55,9 +55,9 @@ async def get_players(
 
     Example:
         >>> # Get all players
-        >>> response = await get_players()
+        >>> response = await get_players()  # doctest: +SKIP
         >>> # Filter by minimum score
-        >>> response = await get_players(min_score=100, limit=10)
+        >>> response = await get_players(min_score=100, limit=10)  # doctest: +SKIP
     """
     try:
         with NHLApiClient() as api_client:

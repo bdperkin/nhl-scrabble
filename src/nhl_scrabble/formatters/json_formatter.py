@@ -18,6 +18,7 @@ class JSONFormatter:
 
     Example:
         >>> formatter = JSONFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> parsed = json.loads(output)
     """

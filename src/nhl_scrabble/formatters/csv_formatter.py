@@ -18,6 +18,7 @@ class CSVFormatter:
 
     Example:
         >>> formatter = CSVFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "Rank,Team" in output
         True

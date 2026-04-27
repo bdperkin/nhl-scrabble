@@ -17,6 +17,7 @@ class XMLFormatter:
 
     Example:
         >>> formatter = XMLFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "<?xml" in output
         True

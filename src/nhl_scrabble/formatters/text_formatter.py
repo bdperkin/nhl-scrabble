@@ -16,6 +16,7 @@ class TextFormatter:
 
     Example:
         >>> formatter = TextFormatter()
+        >>> data = {"teams": {}, "summary": {}}
         >>> output = formatter.format(data)
         >>> "NHL Scrabble Scores" in output
         True

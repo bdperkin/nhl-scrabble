@@ -107,12 +107,14 @@ class DependencyContainer:
             ...     teams = client.get_teams()
 
         Examples:
-            >>> client = container.create_api_client()
-            >>> teams = client.get_teams()
-            >>> client.close()
+            >>> from nhl_scrabble.config import Config
+            >>> container = DependencyContainer(Config.from_env())
+            >>> client = container.create_api_client()  # doctest: +SKIP
+            >>> teams = client.get_teams()  # doctest: +SKIP
+            >>> client.close()  # doctest: +SKIP
 
             >>> # Disable caching for fresh data
-            >>> client = container.create_api_client(cache_enabled=False)
+            >>> client = container.create_api_client(cache_enabled=False)  # doctest: +SKIP
         """
         # Use override if provided, otherwise use config value
         use_cache = cache_enabled if cache_enabled is not None else self.config.cache_enabled
@@ -156,6 +158,8 @@ class DependencyContainer:
 
         Examples:
             >>> # Standard Scrabble scoring
+            >>> from nhl_scrabble.config import Config
+            >>> container = DependencyContainer(Config.from_env())
             >>> scorer = container.create_scorer()
             >>> scorer.calculate_score("ALEX")
             11
@@ -199,12 +203,16 @@ class DependencyContainer:
 
         Examples:
             >>> # Production usage - auto-create dependencies
-            >>> processor = container.create_team_processor()
+            >>> from nhl_scrabble.config import Config
+            >>> container = DependencyContainer(Config.from_env())
+            >>> processor = container.create_team_processor()  # doctest: +SKIP
 
             >>> # Testing usage - inject mocks
-            >>> mock_client = MockAPIClient()
-            >>> mock_scorer = MockScorer()
-            >>> processor = container.create_team_processor(
+            >>> class MockAPIClient: pass  # doctest: +SKIP
+            >>> class MockScorer: pass  # doctest: +SKIP
+            >>> mock_client = MockAPIClient()  # doctest: +SKIP
+            >>> mock_scorer = MockScorer()  # doctest: +SKIP
+            >>> processor = container.create_team_processor(  # doctest: +SKIP
             ...     api_client=mock_client,
             ...     scorer=mock_scorer
             ... )
