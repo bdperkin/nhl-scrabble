@@ -102,6 +102,7 @@ test = [
     "pytest-benchmark>=5.2.3",
     "pytest-clarity>=1.0.1",
     "pytest-cov>=7.1.0",
+    "pytest-doctestplus>=1.3.2",
     "pytest-mock>=3.15.1",
     "pytest-randomly>=4.1.0",
     "pytest-rerunfailures>=16.1",
@@ -282,6 +283,11 @@ max-complexity = 10
 "__init__.py" = [
     "F401",
     "D104",
+]
+"scripts/**/*.py" = [
+    "T201",
+    "S603",
+    "S607",
 ]
 "tests/**/*.py" = [
     "ARG",
@@ -746,6 +752,11 @@ markers = [
     "timeout: Custom timeout for specific tests (e.g., @pytest.mark.timeout(300))",
     "no_parallel: Tests that must run sequentially (e.g., @pytest.mark.no_parallel)",
     "flaky: Flaky test that may fail intermittently (will be retried on failure)",
+]
+doctest_optionflags = [
+    "NORMALIZE_WHITESPACE",
+    "ELLIPSIS",
+    "IGNORE_EXCEPTION_DETAIL",
 ]
 
 [tool.coverage.html]

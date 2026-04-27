@@ -321,6 +321,99 @@ pip install linkchecker
 1. **Fix broken links**: Update URLs or remove dead links
 1. **Update redirects**: Replace redirected URLs with final destinations
 
+## Automated Code Example Testing
+
+The project includes automated testing of code examples in docstrings and documentation to prevent documentation drift.
+
+### What Gets Tested
+
+**Python Docstrings** (`pytest --doctest-modules`):
+
+- Function and method examples in docstrings
+- Class usage examples
+- Module-level examples
+- Uses pytest-doctestplus for enhanced doctest support
+
+**Markdown Documentation** (`python scripts/test_markdown_examples.py`):
+
+- Python code blocks in documentation files
+- Executable examples in tutorials and how-to guides
+- Skips pseudo-code and illustrative examples
+
+### CI/CD Integration
+
+**Tox Environment**: `tox -e doctest`
+
+**GitHub Actions**: Runs on all commits (experimental/non-blocking)
+
+**Status**: Currently experimental due to existing doctest failures that need fixing
+
+### Local Usage
+
+```bash
+# Run all doctest checks
+make doctest
+
+# Or via tox
+tox -e doctest
+
+# Test docstrings only
+pytest --doctest-modules src/nhl_scrabble/
+
+# Test Markdown examples only
+python scripts/test_markdown_examples.py
+```
+
+### Excluded Documentation
+
+The following directories contain pseudo-code or illustrative examples that are not meant to be executed:
+
+- `docs/explanation/` - Architecture documentation
+- `docs/contributing/` - Guidelines with example patterns
+- `docs/how-to/` - Guides with context-dependent examples
+- `docs/testing/` - Testing documentation with pytest examples
+- `CLAUDE.md` - Project documentation
+- `tasks/` - Task files
+
+### Writing Testable Examples
+
+**Good Docstring Examples**:
+
+```python
+def calculate_score(name: str) -> int:
+    """Calculate Scrabble score.
+
+    Examples:
+        >>> from nhl_scrabble.scoring import ScrabbleScorer
+        >>> scorer = ScrabbleScorer()
+        >>> scorer.calculate_score("TEST")
+        4
+    """
+```
+
+**Skipping Examples**:
+
+```python
+def fetch_api() -> dict:
+    """Fetch from API.
+
+    Examples:
+        >>> # doctest: +SKIP
+        >>> data = fetch_api()  # Requires network
+    """
+```
+
+### Current Status
+
+**Docstring Examples**: 78 passing, 57 failing (as of initial rollout)
+**Markdown Examples**: 3 passing, 3 skipped, 0 failing
+
+**Next Steps**:
+
+1. Fix failing docstring examples (tracked in follow-up issue)
+1. Make doctest CI check blocking once failures are resolved
+1. Add more executable examples to documentation
+
 ## Follow-up Tasks
 
 Common follow-up tasks from audits:
