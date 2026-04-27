@@ -18,6 +18,7 @@ def mock_team_scores() -> list[TeamScore]:
     """Create mock team scores for testing."""
     team1 = TeamScore(
         abbrev="TOR",
+        name="Toronto Maple Leafs",
         total=1000,
         division="Atlantic",
         conference="Eastern",
@@ -49,6 +50,7 @@ def mock_team_scores() -> list[TeamScore]:
 
     team2 = TeamScore(
         abbrev="EDM",
+        name="Edmonton Oilers",
         total=900,
         division="Pacific",
         conference="Western",

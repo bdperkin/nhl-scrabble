@@ -47,64 +47,30 @@ A [Python](https://www.python.org/) application that fetches current NHL roster 
 
 ## Features
 
-- 🏒 **Live NHL Data** - Fetches current roster data directly from the official [NHL API](https://gitlab.com/dword4/nhlapi)
-- 🌐 **Web Interface** - [FastAPI](https://fastapi.tiangolo.com/)-powered web server with auto-generated API documentation
-  - **Interactive Dashboard** - Modern, responsive UI with real-time analysis
-  - **Data Visualizations** - [Chart.js](https://www.chartjs.org/)-powered graphs and charts
-  - **HTMX Integration** - [HTMX](https://htmx.org/)-powered dynamic updates without page reloads
-  - **REST API** - Programmatic access with [OpenAPI](https://www.openapis.org/) documentation
-  - **Mobile-Friendly** - Fully responsive design for all devices
-  - **Accessibility** - WCAG 2.1 AA compliant with keyboard navigation and screen reader support
-- 📊 **Comprehensive Reports** - Multiple report types including:
-  - Conference standings with total and average scores
-  - Division standings breakdown
-  - NHL-style playoff bracket (wild card format)
-  - Team scores with top players
-  - League-wide statistics and fun facts
-- 📈 **Progress Tracking** - Real-time progress bars show operation status (API fetching, scoring, report generation)
-- 🎯 **Flexible Output** - Text, JSON, or HTML format output with responsive design
-- 🎨 **Colorized Logging** - Color-coded log levels (DEBUG=cyan, INFO=green, WARNING=yellow, ERROR=red) with automatic TTY detection and NO_COLOR support
-- ⚙️ **Configurable** - Customize via environment variables or command-line options
-- 🧪 **Well-Tested** - Comprehensive test suite with >90% coverage on core modules, including full web interface integration tests
-- 📦 **Modern Python** - Uses type hints, dataclasses, and follows best practices
-- 🛠️ **Developer-Friendly** - Self-documenting Makefile with 55 targets for all development tasks
-- ⚡ **Lightning Fast** - Optional uv support for 10-100x faster package installation
-- 🔒 **Production-Ready** - Security headers, CORS configuration, caching, and deployment guides for nginx, Docker, and cloud platforms
+- 🏒 **Live NHL Data** - Fetches current roster data from the official [NHL API](https://gitlab.com/dword4/nhlapi)
+- 🌐 **Web Interface** - [FastAPI](https://fastapi.tiangolo.com/)-powered server with interactive dashboard
+  - Interactive dashboard with real-time analysis
+  - [Chart.js](https://www.chartjs.org/) visualizations and graphs
+  - REST API with [OpenAPI](https://www.openapis.org/) documentation
+  - Mobile-friendly responsive design (WCAG 2.1 AA)
+- 📊 **Comprehensive Reports** - Conference/division standings, playoff brackets, team scores, statistics
+- 📈 **Progress Tracking** - Real-time progress bars for long operations
+- 🎯 **Flexible Output** - Text, JSON, or HTML format
+- 🎨 **Colorized Logging** - Color-coded log levels with TTY detection and NO_COLOR support
+- 🧪 **Well-Tested** - >90% coverage on core modules with 170+ tests
+- ⚡ **Lightning Fast** - [UV](https://docs.astral.sh/uv/) support for 10-100x faster installation
+- 🔒 **Production-Ready** - Security headers, CORS, caching, deployment guides
 
 ## Screenshots
 
 ### Web Interface
 
-The NHL Scrabble web interface provides a modern, interactive experience for analyzing player name scores.
+The NHL Scrabble web interface provides a modern, interactive experience:
 
-**Main Dashboard**
-
-- Clean, responsive design with intuitive navigation
-- One-click analysis with configurable options (top players, team players, caching)
-- Real-time loading indicators during NHL API fetching (~30 seconds)
-- Mobile-friendly hamburger menu for smaller screens
-
-**Analysis Results**
-
-- **Top Players Table** - Sortable table showing highest-scoring players across all teams with click-to-sort functionality
-- **Team Standings** - Complete team rankings with total scores, averages, and player counts
-- **Division Standings** - Teams grouped by division (Atlantic, Metropolitan, Central, Pacific)
-- **Conference Standings** - Eastern vs Western conference breakdown
-- **Playoff Bracket** - Mock playoff matchups based on Scrabble scores with seed indicators (y, x, z, p, e)
-- **Statistics Summary** - Overall stats including total players, highest/lowest scores, team leaders
-
-**Interactive Features**
-
-- **Data Visualizations** - Chart.js charts showing score distribution, team comparison, and conference breakdown
-- **Export Options** - Download results as JSON, CSV, or PDF
-- **Table Sorting** - Click any column header to sort (name, score, team)
-- **Responsive Charts** - Interactive tooltips and legends on all visualizations
-
-**API Documentation**
-
-- **Swagger UI** (`/docs`) - Interactive API explorer with try-it-now functionality
-- **ReDoc** (`/redoc`) - Clean, organized API reference documentation
-- **Health Check** (`/health`) - JSON endpoint showing service status and version
+- **Main Dashboard** - Clean, responsive design with one-click analysis
+- **Analysis Results** - Sortable tables, standings, playoff brackets, statistics
+- **Interactive Features** - Chart.js visualizations, export (JSON/CSV/PDF), table sorting
+- **API Documentation** - Swagger UI (`/docs`) and ReDoc (`/redoc`)
 
 ### CLI Output
 
@@ -120,24 +86,9 @@ TOP 20 PLAYERS BY SCRABBLE SCORE
 ...
 ```
 
-**JSON Output** (Machine-Readable)
+**JSON Output** - Machine-readable format for integrations
 
-```json
-{
-  "top_players": [...],
-  "team_standings": [...],
-  "division_standings": {...},
-  "conference_standings": {...},
-  "playoff_bracket": {...},
-  "stats": {...}
-}
-```
-
-**HTML Output** (Browser)
-
-- Fully styled HTML report with embedded CSS
-- Printable format for sharing
-- Same comprehensive data as text output
+**HTML Output** - Fully styled browser report with embedded CSS
 
 ## Installation
 
@@ -176,250 +127,87 @@ Or use the Python module directly:
 python -m nhl_scrabble analyze
 ```
 
+For detailed usage, see the [CLI Tutorial](docs/tutorials/using-the-cli.md).
+
 ## Usage
 
-### Basic Usage
+### CLI Commands
 
 ```bash
-# Run analysis with default settings (shows progress bars)
+# Basic analysis
 nhl-scrabble analyze
 
-# Show version
-nhl-scrabble -V               # Short option
-nhl-scrabble --version        # Long option
+# Verbose output with colorized logging
+nhl-scrabble analyze -v
 
-# Show help
-nhl-scrabble -h               # Short option
-nhl-scrabble --help           # Long option
-nhl-scrabble analyze -h       # Command help
+# JSON output to file
+nhl-scrabble analyze -f json -o report.json
 
-# Enable verbose logging (with colorized output in terminal)
-nhl-scrabble analyze -v       # Short option
-nhl-scrabble analyze --verbose # Long option
+# HTML output
+nhl-scrabble analyze -f html -o report.html
 
-# Disable colorized output (NO_COLOR standard)
-NO_COLOR=1 nhl-scrabble analyze -v
-
-# Suppress progress bars (useful for scripting/automation)
-nhl-scrabble analyze -q       # Short option
-nhl-scrabble analyze --quiet  # Long option
-
-# Save output to a file
-nhl-scrabble analyze -o report.txt        # Short option
-nhl-scrabble analyze --output report.txt  # Long option
-
-# Generate JSON output
-nhl-scrabble analyze -f json -o report.json           # Short options
-nhl-scrabble analyze --format json --output report.json # Long options
-
-# Generate HTML output (opens in browser)
-nhl-scrabble analyze -f html -o report.html # Short options
-nhl-scrabble analyze --format html --output report.html
-
-# Customize number of top players shown
+# Customize display
 nhl-scrabble analyze --top-players 50 --top-team-players 10
-
-# Mix short and long options (both work!)
-nhl-scrabble analyze -f json --output report.json -v
 ```
 
-### Web Interface
-
-Start the web server for browser-based access:
+### Web Server
 
 ```bash
-# Start web server on default port (8000)
+# Start web server (default port 8000)
 nhl-scrabble serve
 
-# Start with auto-reload for development
-nhl-scrabble serve --reload
-
-# Custom host and port
-nhl-scrabble serve --host 0.0.0.0 --port 5000
+# Custom host and port with auto-reload
+nhl-scrabble serve --host 0.0.0.0 --port 5000 --reload
 ```
 
-Once started, visit:
-
-- **API Documentation**: http://localhost:8000/docs (Interactive Swagger UI)
-- **Alternative Docs**: http://localhost:8000/redoc (ReDoc)
-- **Health Check**: http://localhost:8000/health
-
-The web interface provides:
-
-- ✅ RESTful API endpoints for programmatic access
-- 📚 Auto-generated OpenAPI documentation
-- 🩺 Health check endpoint for monitoring
+Visit http://localhost:8000/docs for interactive API documentation.
 
 ### Interactive Dashboard
 
-Launch an interactive terminal dashboard with real-time statistics and visualizations:
-
 ```bash
-# Launch dashboard
+# Launch terminal dashboard
 nhl-scrabble dashboard
 
-# Filter by division
-nhl-scrabble dashboard --divisions Atlantic
+# Filter by division/conference
+nhl-scrabble dashboard --divisions Atlantic --conferences Eastern
 
-# Filter by conference
-nhl-scrabble dashboard --conferences Eastern
-
-# Run for 30 seconds then exit
-nhl-scrabble dashboard --duration 30
-
-# Display static snapshot (no live updates)
+# Static snapshot (no live updates)
 nhl-scrabble dashboard --static
-
-# Combine filters
-nhl-scrabble dashboard --divisions Metropolitan --conferences Eastern
 ```
 
-The dashboard displays:
+**Complete Usage Documentation:**
 
-- 🏆 Top teams by total Scrabble score
-- ⭐ Top players by individual score
-- 📊 Division standings with statistics
-- 🏟️ Conference standings overview
-- 🎨 Rich visualizations with tables and panels
-- ⚡ Live updates (configurable refresh rate)
-
-Press `Ctrl+C` to exit the dashboard.
-
-### Configuration
-
-Configure via environment variables:
-
-```bash
-export NHL_SCRABBLE_API_TIMEOUT=15
-export NHL_SCRABBLE_API_RETRIES=5
-export NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
-export NHL_SCRABBLE_TOP_PLAYERS=30
-export NHL_SCRABBLE_VERBOSE=true
-
-nhl-scrabble analyze
-```
-
-Or create a `.env` file:
-
-```env
-NHL_SCRABBLE_API_TIMEOUT=15
-NHL_SCRABBLE_API_RETRIES=5
-NHL_SCRABBLE_RATE_LIMIT_DELAY=0.5
-NHL_SCRABBLE_TOP_PLAYERS=30
-NHL_SCRABBLE_VERBOSE=true
-```
-
-### Command-Line Options
-
-```
-Options:
-  --format [text|json]      Output format (default: text)
-  -o, --output PATH         Output file path (default: stdout)
-  -v, --verbose             Enable verbose logging
-  -q, --quiet               Suppress progress bars
-  --top-players INTEGER     Number of top players to show (default: 20)
-  --top-team-players INTEGER
-                           Number of top players per team (default: 5)
-  --help                   Show this message and exit
-```
+- [CLI Tutorial](docs/tutorials/using-the-cli.md) - Step-by-step CLI guide
+- [CLI Reference](docs/reference/cli.md) - All commands and options
+- [Configuration Guide](docs/reference/configuration.md) - Environment variables and settings
 
 ## How It Works
 
-### Scrabble Letter Values
+The analyzer uses standard English Scrabble letter point values (A=1, Z=10, etc.) to score player names. It fetches live NHL data, calculates scores, aggregates by team/division/conference, and generates comprehensive reports with playoff brackets.
 
-The analyzer uses standard English Scrabble letter point values:
+**Learn More:**
 
-- **1 point**: A, E, I, O, U, L, N, S, T, R
-- **2 points**: D, G
-- **3 points**: B, C, M, P
-- **4 points**: F, H, V, W, Y
-- **5 points**: K
-- **8 points**: J, X
-- **10 points**: Q, Z
-
-### Workflow
-
-1. **Fetch Teams** - Retrieves all NHL teams with division/conference info from the standings endpoint
-1. **Get Rosters** - Fetches current roster for each team (with retry logic and rate limiting)
-1. **Calculate Scores** - Sums Scrabble letter values for each player's name
-1. **Aggregate Data** - Computes team, division, and conference totals
-1. **Generate Reports** - Creates comprehensive reports with multiple views of the data
-
-### NHL API Endpoints
-
-- Standings: `https://api-web.nhle.com/v1/standings/now`
-- Team rosters: `https://api-web.nhle.com/v1/roster/{team_abbrev}/current`
-
-## Example Output
-
-```
-🏒 NHL Roster Scrabble Score Analyzer 🏒
-================================================================================
-
-🌎 CONFERENCE SCRABBLE SCORES
-================================================================================
-
-#1 Eastern
-   Total: 15247 points
-   Teams: 16 (BOS, BUF, CAR, CBJ, DET, FLA, MTL, NJD, NYI, NYR, OTT, PHI, PIT, TBL, TOR, WSH)
-   Players: 512
-   Avg per team: 952.9
-
-...
-
-🎰 WILD CARD PLAYOFF STANDINGS (Scrabble Edition)
-================================================================================
-Top 3 from each division + 2 wild cards per conference
-...
-
-📊 TEAM SCRABBLE SCORES (Sorted by Total Score)
-================================================================================
-
-#1 TOR (Atlantic): 1523 points (28 players)
-   1. Alexander Ovechkin: 87 (Alexander=45, Ovechkin=42)
-   2. Connor McDavid: 65 (Connor=32, McDavid=33)
-   ...
-```
+- [Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md) - The concept explained
+- [How Scrabble Scoring Works](docs/explanation/how-scrabble-scoring-works.md) - Detailed scoring logic
+- [Architecture Overview](docs/explanation/architecture.md) - System design
+- [NHL API Strategy](docs/explanation/nhl-api-strategy.md) - API integration approach
 
 ## Development
 
-### Setup Development Environment
-
-The project includes a comprehensive Makefile for all development tasks:
+### Quick Start
 
 ```bash
-# Clone the repository
+# Clone and setup
 git clone https://github.com/bdperkin/nhl-scrabble.git
 cd nhl-scrabble
-
-# Initialize development environment
-make init           # Creates venv, installs deps, sets up hooks
-
-# Activate virtual environment
+make init
 source .venv/bin/activate
 
-# View all available commands
+# View all available commands (57 targets)
 make help
 ```
 
-Or manually:
-
-```bash
-# Clone and install with dev dependencies
-git clone https://github.com/bdperkin/nhl-scrabble.git
-cd nhl-scrabble
-
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-
-# Install pre-commit hooks
-pre-commit install
-```
-
-### Running Tests
-
-Using Make (recommended):
+### Testing
 
 ```bash
 # Run all tests
@@ -428,117 +216,34 @@ make test
 # Run with coverage
 make test-cov
 
-# Run only unit tests
-make test-unit
+# Multi-version testing with tox
+make tox              # Test Python 3.12, 3.13, 3.14
+make tox-parallel     # Faster parallel execution
+```
 
-# Run only integration tests
-make test-integration
+### Code Quality
 
-# Run all quality checks (format, lint, type-check, tests)
+```bash
+# Format and lint
+make ruff-format
+make ruff-check
+
+# Type checking
+make mypy
+
+# Run all quality checks
+make quality
+
+# Full validation (format + quality + tests)
 make check
 ```
 
-Or directly with pytest:
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov
-
-# Run only unit tests
-pytest tests/unit
-
-# Run only integration tests
-pytest tests/integration -m integration
-```
-
-### Multi-Environment Testing with Tox
-
-The project supports testing across multiple Python versions using [tox](https://tox.wiki/) with [pytest](https://docs.pytest.org/):
-
-```bash
-# Test across all Python versions (3.12, 3.13, 3.14)
-make tox
-
-# Run in parallel for faster results
-make tox-parallel
-
-# Clean and recreate environments
-make tox-clean
-make tox-recreate
-
-# List all available tox environments
-make tox-list
-make tox-envs       # Alternative way to list environments
-
-# Use dynamic pattern rule for any tox environment:
-make tox-py312      # Test Python 3.12 (handled by pattern rule)
-make tox-py313      # Test Python 3.13 (handled by pattern rule)
-make tox-py314      # Test Python 3.14 (handled by pattern rule)
-make tox-coverage   # Coverage report (handled by pattern rule)
-make tox-ruff-check # Linting (handled by pattern rule)
-make tox-mypy       # Type checking (handled by pattern rule)
-make tox-ci         # Simulate full CI pipeline (handled by pattern rule)
-
-# Or use tox directly:
-tox -e py312        # Test Python 3.12
-tox -e py313        # Test Python 3.13
-tox -e py314        # Test Python 3.14
-tox -e coverage     # Coverage report
-tox -e ruff-check   # Linting
-tox -e mypy         # Type checking
-tox -e ci           # Simulate full CI pipeline
-```
-
-Or use tox directly:
-
-```bash
-# Run all default environments
-tox
-
-# Run in parallel
-tox -p auto
-
-# Run specific environment
-tox -e py312
-tox -e py313
-tox -e py314
-tox -e ruff-check
-tox -e mypy
-tox -e coverage
-
-# Recreate environments (useful after dependency changes)
-tox -r
-```
-
-See [docs/TOX.md](docs/TOX.md) for complete tox documentation and [docs/TOX-UV.md](docs/TOX-UV.md) for tox with UV acceleration (10-100x faster).
-
-### Fast Package Management with UV
-
-The project uses [UV](https://docs.astral.sh/uv/) via the [tox-uv](https://github.com/tox-dev/tox-uv) plugin, providing 10-100x faster package management automatically when using [tox](https://tox.wiki/):
-
-```bash
-# UV acceleration is automatic with tox
-make tox              # Uses UV automatically
-make tox-parallel     # Even faster with parallel execution
-
-# Check if uv is available (optional)
-make uv-check
-
-# Direct UV pip access (advanced usage)
-make uv-pip ARGS="list"
-```
-
-**Note:** Individual uv-\* Makefile targets have been removed. UV is now integrated via tox-uv and works automatically with all tox commands. See [docs/TOX-UV.md](docs/TOX-UV.md) for complete tox-uv documentation.
-
 ### Pre-commit Hooks
 
-The project uses comprehensive [pre-commit](https://pre-commit.com/) hooks (55 total) for automatic code quality checks:
+The project uses 67 comprehensive pre-commit hooks for automatic code quality validation:
 
 ```bash
-# Install pre-commit hooks (one-time setup)
+# Install hooks (one-time)
 pre-commit install
 
 # Run all hooks manually
@@ -548,155 +253,124 @@ pre-commit run --all-files
 pre-commit autoupdate
 ```
 
-**Hook Categories:**
+**Complete Development Documentation:**
 
-- **Meta hooks** (3): Configuration validation (check-hooks-apply, check-useless-excludes, sync-pre-commit-deps)
-- **File quality** (18): Formatting, syntax, security (trailing-whitespace, check-yaml, detect-private-key, etc.)
-- **Python quality** (7): Code patterns (blanket-noqa, mock-methods, eval, type-annotations, etc.)
-- **Python imports** (2): Import sorting and absolute imports ([isort](https://pycqa.github.io/isort/), absolufy-imports)
-- **Project validation** (1): pyproject.toml validation against [PEP](https://peps.python.org/) standards (validate-pyproject)
-- **Python formatting** (2): [Black](https://black.readthedocs.io/) formatting and [PEP 8](https://peps.python.org/pep-0008/) auto-formatting ([autopep8](https://github.com/hhatto/autopep8))
-- **Docstring formatting** (1): Python docstring formatting ([docformatter](https://docformatter.readthedocs.io/))
-- **YAML linting** (1): YAML file validation and linting ([yamllint](https://yamllint.readthedocs.io/))
-- **Spelling** (1): Code and documentation spell checking ([codespell](https://github.com/codespell-project/codespell))
-- **Markdown** (2): Markdown linting ([pymarkdown](https://github.com/jackdewinter/pymarkdown)) and formatting ([mdformat](https://mdformat.readthedocs.io/))
-- **Documentation** (2): RST style linting ([doc8](https://doc8.readthedocs.io/)) and syntax checking ([rstcheck](https://rstcheck.readthedocs.io/))
-- **UV** (1): Dependency lock file validation (uv-lock)
-- **Flake8** (1): Python code linting and style checking ([flake8](https://flake8.pycqa.org/))
-- **Ruff** (2): Comprehensive linting and formatting ([ruff](https://docs.astral.sh/ruff/))
-- **MyPy** (1): Strict type checking ([mypy](https://mypy-lang.org/))
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines and workflow
+- [Makefile Reference](docs/reference/makefile.md) - All 57 Makefile targets
+- [Testing Guide](docs/how-to/run-tests.md) - Test execution and configuration
+- [UV Package Manager](docs/how-to/use-uv.md) - 10-100x faster installation
 
-All hooks run automatically on commit, ensuring code quality before changes are committed.
-
-### Code Quality
-
-Using Make (recommended):
-
-```bash
-# Format code
-make ruff-format
-
-# Check formatting (no changes)
-make ruff-format-check
-
-# Lint code
-make ruff-check
-
-# Type check
-make mypy
-
-# Run all quality checks
-make quality
-
-# Run everything (format-check + quality + tests)
-make check
-```
-
-Or directly:
-
-```bash
-# Format code with ruff
-ruff format .
-
-# Lint code with ruff
-ruff check .
-
-# Type check with mypy
-mypy src
-```
-
-### Project Structure
+## Project Structure
 
 ```
 nhl-scrabble/
 ├── src/nhl_scrabble/          # Main package
 │   ├── api/                   # NHL API client
 │   ├── scoring/               # Scrabble scoring logic
-│   ├── models/                # Data models
+│   ├── models/                # Data models (Pydantic)
 │   ├── processors/            # Business logic
 │   ├── reports/               # Report generators
-│   ├── cli.py                 # CLI interface
-│   ├── config.py              # Configuration
-│   ├── logging_config.py      # Logging setup
-│   └── py.typed               # PEP 561 type marker
-├── tests/                     # Test suite
+│   ├── cli.py                 # CLI interface (Click)
+│   └── config.py              # Configuration management
+├── tests/                     # Test suite (170+ tests)
 │   ├── unit/                  # Unit tests
-│   ├── integration/           # Integration tests
-│   └── fixtures/              # Test fixtures
-├── docs/                      # Documentation
+│   └── integration/           # Integration tests
+├── docs/                      # Documentation (Diátaxis framework)
 ├── pyproject.toml             # Project & UV configuration
-├── uv.lock                    # Dependency lock file (1,957 lines)
-├── .pre-commit-config.yaml    # Pre-commit hooks (32 hooks)
-├── .python-version            # Python versions (3.12-3.14)
-└── tox.ini                    # Testing automation
+└── uv.lock                    # Dependency lock file (1,957 lines)
 ```
 
-## Development Workflow
+See [Architecture Overview](docs/explanation/architecture.md) for detailed system design.
 
-The Makefile provides a streamlined development workflow with 55 documented targets:
+## Documentation
 
-```bash
-# View all available commands
-make help               # Self-documenting help with color output
+**Online Documentation:** https://bdperkin.github.io/nhl-scrabble/
 
-# First time setup
-make init               # Creates venv, installs deps, sets up hooks
+Documentation follows the [Diátaxis framework](https://diataxis.fr/):
 
-# Daily development
-make test-watch         # Run tests automatically on file changes
+- **[Tutorials](docs/tutorials/)** - Step-by-step lessons for beginners
+  - [Getting Started](docs/tutorials/01-getting-started.md)
+  - [Understanding Output](docs/tutorials/02-understanding-output.md)
+  - [First Contribution](docs/tutorials/03-first-contribution.md)
+- **[How-to Guides](docs/how-to/)** - Practical solutions to specific tasks
+  - [Installation Variations](docs/how-to/installation.md)
+  - [Run Tests](docs/how-to/run-tests.md)
+  - [Add Report Type](docs/how-to/add-report-type.md)
+  - [Use UV Package Manager](docs/how-to/use-uv.md)
+- **[Reference](docs/reference/)** - Technical specifications
+  - [CLI Reference](docs/reference/cli.md)
+  - [Configuration](docs/reference/configuration.md)
+  - [Makefile Reference](docs/reference/makefile.md)
+  - [Environment Variables](docs/reference/environment-variables.md)
+  - [Project Stats](docs/reference/project-stats.md)
+- **[Explanation](docs/explanation/)** - Design philosophy and concepts
+  - [Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md)
+  - [Architecture Overview](docs/explanation/architecture.md)
+  - [NHL API Strategy](docs/explanation/nhl-api-strategy.md)
 
-# Before committing
-make check              # Run all checks (format, ruff, mypy, tests)
+**Community:**
 
-# Simulate CI pipeline
-make ci                 # Run the full CI pipeline locally
-
-# Other useful targets
-make clean              # Remove all build/test artifacts
-make ruff-format        # Auto-format code with ruff
-make build              # Build distribution packages
-make run                # Run the NHL Scrabble analyzer
-```
-
-### Makefile Quick Reference
-
-| Category      | Targets                                             | Description         |
-| ------------- | --------------------------------------------------- | ------------------- |
-| **Setup**     | `init`, `venv`, `install-dev`, `install-hooks`      | Environment setup   |
-| **Testing**   | `test`, `test-cov`, `test-unit`, `test-integration` | Run tests           |
-| **Quality**   | `ruff-check`, `ruff-format`, `mypy`, `check`        | Code quality        |
-| **Cleaning**  | `clean`, `clean-all`                                | Remove artifacts    |
-| **Building**  | `build`, `publish`                                  | Build and publish   |
-| **Running**   | `run`, `run-verbose`, `run-json`                    | Run the application |
-| **Utilities** | `info`, `status`, `version`, `count`                | Project info        |
-
-See [docs/MAKEFILE.md](docs/MAKEFILE.md) for complete documentation of all 55 targets.
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
+- [SECURITY.md](SECURITY.md) - Security policy
+- [SUPPORT.md](SUPPORT.md) - Getting help
+- [CHANGELOG.md](CHANGELOG.md) - Version history
+- [CLAUDE.md](CLAUDE.md) - Project overview for Claude Code
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+**Quick Overview:**
 
 1. Fork the repository
 1. Create a feature branch (`git checkout -b feature/amazing-feature`)
-1. Make your changes
-1. Run tests and linting
+1. Make your changes with tests
+1. Run quality checks (`make check`)
 1. Commit your changes (`git commit -m 'Add amazing feature'`)
 1. Push to the branch (`git push origin feature/amazing-feature`)
 1. Open a Pull Request
+
+## Security
+
+This project takes security seriously with comprehensive automated scanning:
+
+- **[Dependabot](https://docs.github.com/en/code-security/dependabot)** - Automated dependency updates and security alerts
+- **[pip-audit](https://pypi.org/project/pip-audit/)** - CI vulnerability scanning
+- **[CodeQL](https://codeql.github.com/)** - Weekly security scans
+- **Pre-commit hooks** - 67 comprehensive quality and security checks
+
+**Reporting Vulnerabilities:** See [SECURITY.md](SECURITY.md) for responsible disclosure guidelines. Do **not** report security vulnerabilities through public GitHub issues.
+
+## Support
+
+- **Documentation**: https://bdperkin.github.io/nhl-scrabble/
+- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/bdperkin/nhl-scrabble/issues)
+- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/bdperkin/nhl-scrabble/discussions)
+
+See [SUPPORT.md](SUPPORT.md) for detailed support information.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Dependency Licenses
-
-All runtime dependencies use permissive licenses compatible with MIT (Apache, BSD, ISC, etc.). See [LICENSES.md](LICENSES.md) for the complete list of all dependency licenses.
+All runtime dependencies use permissive licenses compatible with MIT (Apache, BSD, ISC, etc.). See [LICENSES.md](LICENSES.md) for the complete list.
 
 To verify license compliance:
 
 ```bash
 tox -e licenses
 ```
+
+## Project Statistics
+
+- **Test Coverage**: 49.93% overall, >90% on core modules
+- **Tests**: 170+ tests (100% passing)
+- **Modules**: 15 core modules
+- **Makefile Targets**: 57 documented targets
+- **Pre-commit Hooks**: 67 comprehensive quality checks
+- **CI/CD**: GitHub Actions on Python 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
+
+See [Project Stats](docs/reference/project-stats.md) for complete metrics.
 
 ## Acknowledgments
 
@@ -706,97 +380,6 @@ tox -e licenses
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
-
-## Documentation
-
-Documentation is organized by purpose following the [Diátaxis framework](https://diataxis.fr/):
-
-### 📚 [Tutorials](docs/tutorials/) - Learning-oriented lessons
-
-Step-by-step guides for beginners:
-
-- [Getting Started](docs/tutorials/01-getting-started.md) - Your first NHL Scrabble analysis
-- [Understanding Output](docs/tutorials/02-understanding-output.md) - Deep dive into reports
-- [First Contribution](docs/tutorials/03-first-contribution.md) - Make your first code contribution
-
-### 🛠️ [How-to Guides](docs/how-to/) - Problem-oriented recipes
-
-Practical solutions to specific tasks:
-
-- [Installation Variations](docs/how-to/installation.md) - Different ways to install
-- [Run Tests](docs/how-to/run-tests.md) - Execute different test configurations
-- [Add Report Type](docs/how-to/add-report-type.md) - Create custom reports
-- [Use UV Package Manager](docs/how-to/use-uv.md) - 10-100x faster installation
-- [And more...](docs/how-to/)
-
-### 📖 [Reference](docs/reference/) - Technical specifications
-
-Complete API and configuration documentation:
-
-- [CLI Reference](docs/reference/cli.md) - All commands and options
-- [Configuration](docs/reference/configuration.md) - All settings explained
-- [Makefile Reference](docs/reference/makefile.md) - All 55 Makefile targets
-- [And more...](docs/reference/)
-
-### 💡 [Explanation](docs/explanation/) - Conceptual understanding
-
-Background and design philosophy:
-
-- [Why Scrabble Scoring?](docs/explanation/why-scrabble-scoring.md) - The concept explained
-- [Architecture Overview](docs/explanation/architecture.md) - System design
-- [NHL API Strategy](docs/explanation/nhl-api-strategy.md) - API integration approach
-- [And more...](docs/explanation/)
-
-### Community Documentation
-
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines
-- [SECURITY.md](SECURITY.md) - Security policy
-- [SUPPORT.md](SUPPORT.md) - Getting help
-- [CHANGELOG.md](CHANGELOG.md) - Version history
-- [CLAUDE.md](CLAUDE.md) - Project overview for Claude Code
-
-## Security
-
-This project takes security seriously and uses multiple tools to ensure dependencies are safe and up-to-date:
-
-- **[Dependabot](https://docs.github.com/en/code-security/dependabot)**: Automated dependency updates and security alerts
-  - Runs weekly (Mondays 9:00 AM ET)
-  - Monitors Python dependencies and [GitHub Actions](https://docs.github.com/en/actions)
-  - Creates PRs for security vulnerabilities immediately
-  - Groups non-security updates to reduce noise
-- **[pip-audit](https://pypi.org/project/pip-audit/)**: Scans dependencies for known vulnerabilities in CI
-- **[Pre-commit hooks](https://pre-commit.com/)**: 55 comprehensive quality and security checks
-
-### Reporting Security Vulnerabilities
-
-If you discover a security vulnerability, please review our [Security Policy](SECURITY.md) for responsible disclosure guidelines. Do **not** report security vulnerabilities through public GitHub issues.
-
-### Dependency Updates
-
-Dependabot automatically creates pull requests for:
-
-- **Security updates**: Immediate PRs for any vulnerable dependencies
-- **Development dependencies**: Weekly grouped PRs for minor/patch updates
-- **Production dependencies**: Weekly grouped PRs for patch updates only
-- **GitHub Actions**: Weekly updates for workflow dependencies
-
-All Dependabot PRs are automatically labeled, assigned, and follow [conventional commit](https://www.conventionalcommits.org/) format (`deps(scope): description`).
-
-## Support
-
-- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/bdperkin/nhl-scrabble/issues)
-
-## Development Stats
-
-- **Lines of Code**: ~1,866 (src)
-- **Lines of Tests**: ~680 (tests)
-- **Test Coverage**: 49.93% overall, >90% on core modules
-- **Python Modules**: 15 core modules
-- **Tests**: 36 tests (100% passing)
-- **Makefile Targets**: 55 documented targets
-- **Pre-commit Hooks**: 54 hooks ([pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks), [pygrep-hooks](https://github.com/pre-commit/pygrep-hooks), [isort](https://pycqa.github.io/isort/), [interrogate](https://interrogate.readthedocs.io/), [deptry](https://deptry.com/), [unimport](https://unimport.hakancelik.dev/), [pydocstyle](http://www.pydocstyle.org/), [vulture](https://github.com/jendrikseipp/vulture), [blocklint](https://github.com/PrincetonUniversity/blocklint), [gitlint](https://jorisroovers.com/gitlint/), absolufy-imports, [validate-pyproject](https://validate-pyproject.readthedocs.io/), [pyroma](https://github.com/regebro/pyroma), [tox-ini-fmt](https://github.com/tox-dev/tox-ini-fmt), [yamllint](https://yamllint.readthedocs.io/), [codespell](https://github.com/codespell-project/codespell), [pymarkdown](https://github.com/jackdewinter/pymarkdown), [mdformat](https://mdformat.readthedocs.io/), [doc8](https://doc8.readthedocs.io/), [rstcheck](https://rstcheck.readthedocs.io/), [uv](https://docs.astral.sh/uv/), [flake8](https://flake8.pycqa.org/), autoflake, [black](https://black.readthedocs.io/), docformatter, [ruff](https://docs.astral.sh/ruff/), [mypy](https://mypy-lang.org/))
-- **Dependency Lock**: [uv.lock](https://docs.astral.sh/uv/) with 1,957 lines (deterministic builds)
-- **CI/CD**: [GitHub Actions](https://docs.github.com/en/actions) on [Python](https://www.python.org/) 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
 
 ______________________________________________________________________
 

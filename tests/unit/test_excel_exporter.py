@@ -71,6 +71,7 @@ def sample_teams() -> dict[str, TeamScore]:
     return {
         "TOR": TeamScore(
             abbrev="TOR",
+            name="Toronto Maple Leafs",
             total=63,
             players=players_tor,
             division="Atlantic",
@@ -78,6 +79,7 @@ def sample_teams() -> dict[str, TeamScore]:
         ),
         "MTL": TeamScore(
             abbrev="MTL",
+            name="Montreal Canadiens",
             total=33,
             players=players_mtl,
             division="Atlantic",
@@ -400,6 +402,7 @@ def test_excel_sorting(excel_exporter: ExcelExporter, tmp_path: Path) -> None:
     teams = [
         TeamScore(
             abbrev="MTL",
+            name="Montreal Canadiens",
             total=30,
             players=[],
             division="Atlantic",
@@ -407,6 +410,7 @@ def test_excel_sorting(excel_exporter: ExcelExporter, tmp_path: Path) -> None:
         ),
         TeamScore(
             abbrev="TOR",
+            name="Toronto Maple Leafs",
             total=50,
             players=[],
             division="Atlantic",
@@ -414,6 +418,7 @@ def test_excel_sorting(excel_exporter: ExcelExporter, tmp_path: Path) -> None:
         ),
         TeamScore(
             abbrev="BOS",
+            name="Boston Bruins",
             total=40,
             players=[],
             division="Atlantic",

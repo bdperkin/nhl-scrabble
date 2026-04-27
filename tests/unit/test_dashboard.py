@@ -74,6 +74,7 @@ def sample_team_scores(sample_players: list[PlayerScore]) -> dict[str, TeamScore
     return {
         "EDM": TeamScore(
             abbrev="EDM",
+            name="Edmonton Oilers",
             total=150,
             players=[sample_players[0]],
             division="Pacific",
@@ -81,6 +82,7 @@ def sample_team_scores(sample_players: list[PlayerScore]) -> dict[str, TeamScore
         ),
         "TOR": TeamScore(
             abbrev="TOR",
+            name="Toronto Maple Leafs",
             total=140,
             players=[sample_players[1]],
             division="Atlantic",
@@ -88,6 +90,7 @@ def sample_team_scores(sample_players: list[PlayerScore]) -> dict[str, TeamScore
         ),
         "PIT": TeamScore(
             abbrev="PIT",
+            name="Pittsburgh Penguins",
             total=130,
             players=[sample_players[2]],
             division="Metropolitan",
@@ -95,6 +98,7 @@ def sample_team_scores(sample_players: list[PlayerScore]) -> dict[str, TeamScore
         ),
         "WSH": TeamScore(
             abbrev="WSH",
+            name="Washington Capitals",
             total=120,
             players=[sample_players[3]],
             division="Metropolitan",

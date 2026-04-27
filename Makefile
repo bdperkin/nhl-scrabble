@@ -51,6 +51,7 @@ NC := \033[0m # No Color
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
         deps-check deps-update deps-update-full \
+        licenses-check licenses-update licenses-validate \
         count tree all release
 
 ###################
@@ -741,6 +742,25 @@ deps-update-full: ## Update dependencies with full tox validation
 	@printf "$(BLUE)🔄 Updating dependencies with full validation...$(NC)\n"
 	@$(PYTHON) scripts/update_dependencies.py --apply --test --tox
 	@printf "$(GREEN)✅ Full dependency update complete$(NC)\n"
+
+###################
+# License Management
+###################
+
+licenses-check: ## Check if LICENSES.md is up-to-date with current dependencies
+	@printf "$(BLUE)🔍 Checking LICENSES.md...$(NC)\n"
+	@$(PYTHON) scripts/update_licenses.py --check --verbose
+	@printf "$(GREEN)✅ LICENSES.md is up-to-date$(NC)\n"
+
+licenses-update: ## Update LICENSES.md with current dependency licenses
+	@printf "$(BLUE)🔄 Updating LICENSES.md...$(NC)\n"
+	@$(PYTHON) scripts/update_licenses.py --update --verbose
+	@printf "$(GREEN)✅ LICENSES.md updated$(NC)\n"
+
+licenses-validate: ## Validate dependency licenses (no update)
+	@printf "$(BLUE)🔍 Validating dependency licenses...$(NC)\n"
+	@$(PYTHON) scripts/update_licenses.py --validate --verbose
+	@printf "$(GREEN)✅ All licenses valid$(NC)\n"
 
 ###################
 # QA Testing

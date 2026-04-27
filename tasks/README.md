@@ -135,6 +135,8 @@ Each task includes:
 | 033 | Enhance Version Badge Display in README                       | LOW      | 30min-1h                                                   | Active    | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | -                                                                        |
 | 034 | Evaluate semantic-release for Fully Automated Releases        | LOW      | 6-10 hours                                                 | Active    | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | Research task - evaluate comprehensive release automation alternative    |
 | 035 | Implement pre-commit.ci GitHub Automation                     | MEDIUM   | 1-2 hours                                                  | Completed | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | PR [#393](https://github.com/bdperkin/nhl-scrabble/pull/393), completed 2026-04-27, actual effort: 45 minutes |
+| 036 | Implement File-Based Logging for Uvicorn Web Server           | MEDIUM   | 3-5 hours                                                  | Active    | [#398](https://github.com/bdperkin/nhl-scrabble/issues/398) | Add permanent file-based logging with rotation for web server |
+| 037 | Documentation Refactoring and Web Interface Polish             | MEDIUM   | 16-24 hours                                                | Completed | [#399](https://github.com/bdperkin/nhl-scrabble/issues/399) | Branch fix/web-interface-minor-improvements, 18 commits, actual effort: 18h |
 
 ### Testing
 
@@ -361,6 +363,39 @@ tasks/
 - [CLAUDE.md](../CLAUDE.md) - Project overview and development guide
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
 - [GitHub Issues](https://github.com/bdperkin/nhl-scrabble/issues) - Issue tracker
+
+## Recent Enhancements (Outside Formal Task System)
+
+### Documentation Refactoring (2026-04-27)
+
+**Branch**: fix/web-interface-minor-improvements
+
+**Completed Work**:
+
+1. **Moved Testing Documentation**
+   - Relocated MANUAL_TESTING_CHECKLIST.md to docs/testing/manual-testing-checklist.md
+   - Renamed to follow project naming conventions
+
+2. **CONTRIBUTING.md Refactoring** (78% reduction: 2440 → 527 lines)
+   - Created 7 new contributing guides under docs/contributing/
+   - Created 1 new how-to guide (run-benchmarks.md)
+   - Eliminated duplication with focused, single-purpose files
+
+3. **License Management Automation**
+   - Fixed duplicate entries in LICENSES.md (417 lines → proper count)
+   - Created scripts/update_licenses.py for automated license tracking
+   - Added Makefile targets: licenses-check, licenses-update, licenses-validate
+   - Added tox environments for license management
+
+4. **README.md Refactoring** (52% reduction: 804 → 386 lines)
+   - Created 4 new documentation files:
+     - tutorials/using-the-cli.md (370 lines)
+     - contributing/pre-commit-hooks.md (527 lines)
+     - reference/project-stats.md (410 lines)
+     - explanation/how-scrabble-scoring-works.md (456 lines)
+   - Condensed sections with strategic links to detailed docs
+
+**Impact**: 12 new documentation files, ~2,500 lines of focused documentation created, significant reduction in duplication
 
 ______________________________________________________________________
 

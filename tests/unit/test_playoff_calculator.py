@@ -34,14 +34,35 @@ class TestPlayoffCalculator:
         player3 = PlayerScore("Bob", "Jones", "Bob Jones", 12, 12, 24, "EDM", "Pacific", "Western")
 
         teams = {
-            "TOR": TeamScore("TOR", 500, [player1] * 25, "Atlantic", "Eastern"),
-            "MTL": TeamScore("MTL", 450, [player2] * 25, "Atlantic", "Eastern"),
-            "BOS": TeamScore("BOS", 400, [player1] * 25, "Atlantic", "Eastern"),
-            "TBL": TeamScore("TBL", 380, [player1] * 25, "Atlantic", "Eastern"),
-            "EDM": TeamScore("EDM", 520, [player3] * 25, "Pacific", "Western"),
-            "VAN": TeamScore("VAN", 480, [player3] * 25, "Pacific", "Western"),
-            "CGY": TeamScore("CGY", 440, [player3] * 25, "Pacific", "Western"),
-            "SEA": TeamScore("SEA", 420, [player3] * 25, "Pacific", "Western"),
+            "TOR": TeamScore(
+                "TOR",
+                "Toronto Maple Leafs",
+                500,
+                [player1] * 25,
+                "Atlantic",
+                "Eastern",
+            ),
+            "MTL": TeamScore(
+                "MTL",
+                "Montreal Canadiens",
+                450,
+                [player2] * 25,
+                "Atlantic",
+                "Eastern",
+            ),
+            "BOS": TeamScore("BOS", "Boston Bruins", 400, [player1] * 25, "Atlantic", "Eastern"),
+            "TBL": TeamScore(
+                "TBL",
+                "Tampa Bay Lightning",
+                380,
+                [player1] * 25,
+                "Atlantic",
+                "Eastern",
+            ),
+            "EDM": TeamScore("EDM", "Edmonton Oilers", 520, [player3] * 25, "Pacific", "Western"),
+            "VAN": TeamScore("VAN", "Vancouver Canucks", 480, [player3] * 25, "Pacific", "Western"),
+            "CGY": TeamScore("CGY", "Calgary Flames", 440, [player3] * 25, "Pacific", "Western"),
+            "SEA": TeamScore("SEA", "Seattle Kraken", 420, [player3] * 25, "Pacific", "Western"),
         }
 
         return teams

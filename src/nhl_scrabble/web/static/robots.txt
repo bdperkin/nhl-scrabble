@@ -1,0 +1,8 @@
+# Robots.txt for NHL Scrabble Analyzer
+# This is a local development/self-hosted web interface
+
+User-agent: *
+Allow: /
+
+# Sitemap (if deployed publicly)
+# Sitemap: https://example.com/sitemap.xml

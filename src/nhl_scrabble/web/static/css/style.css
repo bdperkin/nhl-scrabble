@@ -317,6 +317,12 @@ input[type="checkbox"] {
     color: var(--color-primary);
 }
 
+.stat-detail {
+    font-size: 0.9rem;
+    color: var(--color-gray);
+    margin-top: var(--spacing-xs);
+}
+
 /* ===== Info Section ===== */
 .info-section {
     background: var(--color-white);

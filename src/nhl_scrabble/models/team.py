@@ -12,6 +12,7 @@ class TeamScore:
 
     Attributes:
         abbrev: Team abbreviation (e.g., 'TOR', 'MTL')
+        name: Team full name (e.g., 'Maple Leafs', 'Canadiens')
         total: Total Scrabble score for all players on the team
         players: List of all players on the team with their scores
         division: Division name
@@ -20,6 +21,7 @@ class TeamScore:
     """
 
     abbrev: str
+    name: str
     total: int
     players: list[PlayerScore]
     division: str
@@ -41,6 +43,7 @@ class TeamScore:
         """
         result = {
             "abbrev": self.abbrev,
+            "name": self.name,
             "total": self.total,
             "division": self.division,
             "conference": self.conference,

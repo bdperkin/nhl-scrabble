@@ -72,6 +72,7 @@ def sample_teams(sample_players: list[PlayerScore]) -> list[TeamScore]:
 
         team = TeamScore(
             abbrev=team_abbrev,
+            name=f"Team {team_abbrev}",
             total=total,
             players=players,
             division=["Atlantic", "Metropolitan", "Central", "Pacific"][i % 4],

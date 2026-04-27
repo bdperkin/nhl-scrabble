@@ -46,6 +46,13 @@ Versus players with lower scores:
 
 Notice how high-value letters (Z, V, K) dramatically increase the score!
 
+**Scrabble Letter Values Reference:**
+
+For the official Scrabble tile point values and letter distributions, see:
+
+- [Scrabble Letter Values (Wikipedia)](https://en.wikipedia.org/wiki/Scrabble#Letter_distribution) - Official tile point values
+- [Scrabble Letter Distributions (Wikipedia)](https://en.wikipedia.org/wiki/Scrabble_letter_distributions) - Comprehensive distribution information
+
 ## Why This Is Interesting
 
 ### 1. Pure Absurdity

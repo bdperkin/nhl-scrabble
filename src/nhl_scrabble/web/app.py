@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
@@ -53,19 +53,25 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         """
         response = await call_next(request)
 
+        # Skip CSP for API documentation endpoints (Swagger UI/ReDoc need external resources)
+        is_api_docs = request.url.path in ("/docs", "/redoc", "/openapi.json")
+
         # Security headers
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "style-src 'self' 'unsafe-inline'; "
-            "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
-            "img-src 'self' data:; "
-            "font-src 'self'; "
-            "connect-src 'self'"
-        )
+
+        # Only apply strict CSP to non-documentation pages
+        if not is_api_docs:
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "style-src 'self' 'unsafe-inline'; "
+                "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+                "img-src 'self' data:; "
+                "font-src 'self'; "
+                "connect-src 'self'"
+            )
 
         return response
 
@@ -179,6 +185,17 @@ async def favicon() -> HTMLResponse:
     return HTMLResponse(content=svg_content, media_type="image/svg+xml")
 
 
+@app.get("/robots.txt")
+async def robots_txt() -> FileResponse:
+    """Serve robots.txt file.
+
+    Returns:
+        robots.txt file for web crawlers
+    """
+    robots_file = STATIC_DIR / "robots.txt"
+    return FileResponse(robots_file, media_type="text/plain")
+
+
 def _convert_players_to_dict(
     players: list[PlayerScore],
 ) -> list[dict[str, str | int | float]]:
@@ -218,6 +235,7 @@ def _convert_teams_to_dict(
     teams_data = [
         {
             "abbrev": team_score.abbrev,
+            "name": team_score.name,
             "total_score": team_score.total,
             "avg_score": team_score.avg_per_player,
             "player_count": team_score.player_count,
@@ -331,14 +349,29 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
             total_score: int | float = (
                 sum(int(p["score"]) for p in all_players) if all_players else 0
             )
+
+            # Get highest player's team name
+            highest_player_team_name = None
+            if all_players:
+                highest_player_abbrev = all_players[0]["team"]
+                for team in teams_data:
+                    if team["abbrev"] == highest_player_abbrev:
+                        highest_player_team_name = team["name"]
+                        break
+
             stats = {
                 "total_players": len(all_players),
                 "total_teams": len(teams_data),
                 "highest_score": all_players[0]["score"] if all_players else 0,
+                "highest_player_name": all_players[0]["full_name"] if all_players else None,
+                "highest_player_team": highest_player_team_name,
                 "lowest_score": all_players[-1]["score"] if all_players else 0,
                 "avg_score": total_score / len(all_players) if all_players else 0,
                 "highest_team": teams_data[0]["abbrev"] if teams_data else None,
+                "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
+                "highest_team_name": teams_data[0]["name"] if teams_data else None,
                 "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
+                "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
             }
 
             # Convert playoff standings to dict format
