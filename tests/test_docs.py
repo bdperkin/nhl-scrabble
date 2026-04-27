@@ -3,6 +3,7 @@
 This module tests that the Sphinx documentation builds successfully and meets quality standards.
 """
 
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -57,11 +58,10 @@ def test_sphinx_build_succeeds() -> None:
     assert index_file.exists(), "Index file not created"
 
 
-@pytest.mark.flaky(reruns=6, reruns_delay=4)
-@pytest.mark.xfail(
-    strict=False,
-    reason="External link checking can fail due to network issues or rate limiting. "
-    "Retries 6 times, but soft-fails if all retries exhausted to avoid blocking CI.",
+@pytest.mark.skipif(
+    "PYTEST_XDIST_WORKER" in os.environ or "CI" in os.environ,
+    reason="Skipping linkcheck - causes worker crashes in parallel mode and is too "
+    "resource-intensive for CI. Run locally with: pytest tests/test_docs.py::test_sphinx_linkcheck -n 0",
 )
 def test_sphinx_linkcheck() -> None:
     """Test that all links in documentation are valid.
@@ -71,9 +71,14 @@ def test_sphinx_linkcheck() -> None:
     - All internal cross-references resolve
     - No broken links exist
 
-    Note: Marked as flaky with 6 retries (4-second delays) due to external link
-    checking. If all retries fail, marked as xfail (soft failure) to avoid
-    blocking the test suite - external sites may be temporarily unavailable.
+    Note: This test is skipped in CI and when running in parallel mode because:
+    - sphinx linkcheck subprocess can cause worker crashes due to resource usage
+    - Link checking is slow and resource-intensive (can take 2+ minutes)
+    - External sites may be temporarily unavailable, causing flaky failures
+    - More appropriate as a scheduled job than on every CI run
+
+    To run manually:
+        pytest tests/test_docs.py::test_sphinx_linkcheck -n 0
     """
     docs_dir = Path("docs")
     build_dir = docs_dir / "_build" / "linkcheck"
