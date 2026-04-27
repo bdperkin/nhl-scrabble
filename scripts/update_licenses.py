@@ -9,7 +9,7 @@ This script:
 5. Checks if LICENSES.md is up-to-date with current dependencies
 """
 
-# ruff: noqa: T201, RUF012, S607, PERF401, PLR0911, BLE001, PLC0415
+# ruff: noqa: T201, RUF012, S607, PERF401, BLE001, PLC0415
 
 from __future__ import annotations
 
@@ -178,7 +178,7 @@ class LicenseUpdater:
         # Build table
         lines = [
             f"| {'Name':<{max_name}} | {'Version':<{max_version}} | {'License':<{max_license}} |",
-            f"|{'-' * (max_name + 2)}|{'-' * (max_version + 2)}|{'-' * (max_license + 2)}|",
+            f"| {'-' * max_name} | {'-' * max_version} | {'-' * max_license} |",
         ]
 
         for entry in entries:
@@ -266,11 +266,11 @@ class LicenseUpdater:
         return False
 
 
-def main() -> int:  # noqa: C901
-    """Run the license updater CLI.
+def _parse_args() -> argparse.Namespace:
+    """Parse command-line arguments.
 
     Returns:
-        Exit code (0 for success, 1 for failure)
+        Parsed arguments
     """
     parser = argparse.ArgumentParser(
         description="Update and validate LICENSES.md with current dependency licenses",
@@ -303,6 +303,76 @@ def main() -> int:  # noqa: C901
     if not (args.check or args.update or args.validate):
         args.update = True
 
+    return args
+
+
+def _print_validation_errors(errors: list[str]) -> None:
+    """Print validation errors to stderr.
+
+    Args:
+        errors: List of validation error messages
+    """
+    print("License validation FAILED:", file=sys.stderr)
+    for error in errors:
+        print(f"  ✗ {error}", file=sys.stderr)
+
+
+def _handle_check_mode(updater: LicenseUpdater, entries: list[LicenseEntry]) -> int:
+    """Handle --check mode.
+
+    Args:
+        updater: LicenseUpdater instance
+        entries: License entries to check
+
+    Returns:
+        Exit code (0 for success, 1 for failure)
+    """
+    if not updater.check_up_to_date(entries):
+        print(
+            f"ERROR: {updater.LICENSES_FILE} is out of date. "
+            f"Run: python scripts/update_licenses.py --update",
+            file=sys.stderr,
+        )
+        return 1
+    print(f"{updater.LICENSES_FILE} is up-to-date ✓")
+    return 0
+
+
+def _handle_update_mode(updater: LicenseUpdater, entries: list[LicenseEntry]) -> int:
+    """Handle --update mode.
+
+    Args:
+        updater: LicenseUpdater instance
+        entries: License entries to write
+
+    Returns:
+        Exit code (0 for success)
+    """
+    updater.update_licenses_file(entries)
+    print(f"Updated {updater.LICENSES_FILE} with {len(entries)} dependencies ✓")
+    return 0
+
+
+def _handle_validate_mode(entries: list[LicenseEntry]) -> int:
+    """Handle --validate mode.
+
+    Args:
+        entries: License entries that were validated
+
+    Returns:
+        Exit code (0 for success)
+    """
+    print(f"All {len(entries)} dependency licenses are valid ✓")
+    return 0
+
+
+def main() -> int:
+    """Run the license updater CLI.
+
+    Returns:
+        Exit code (0 for success, 1 for failure)
+    """
+    args = _parse_args()
     updater = LicenseUpdater(verbose=args.verbose)
 
     try:
@@ -312,33 +382,18 @@ def main() -> int:  # noqa: C901
         # Validate licenses
         errors = updater.validate_licenses(entries)
         if errors:
-            print("License validation FAILED:", file=sys.stderr)
-            for error in errors:
-                print(f"  ✗ {error}", file=sys.stderr)
+            _print_validation_errors(errors)
             return 1
 
-        # Check mode
+        # Execute requested mode
         if args.check:
-            if not updater.check_up_to_date(entries):
-                print(
-                    f"ERROR: {updater.LICENSES_FILE} is out of date. "
-                    f"Run: python scripts/update_licenses.py --update",
-                    file=sys.stderr,
-                )
-                return 1
-            print(f"{updater.LICENSES_FILE} is up-to-date ✓")
-            return 0
-
-        # Update mode
+            return _handle_check_mode(updater, entries)
         if args.update:
-            updater.update_licenses_file(entries)
-            print(f"Updated {updater.LICENSES_FILE} with {len(entries)} dependencies ✓")
-            return 0
-
-        # Validate mode
+            return _handle_update_mode(updater, entries)
         if args.validate:
-            print(f"All {len(entries)} dependency licenses are valid ✓")
-            return 0
+            return _handle_validate_mode(entries)
+
+        return 0
 
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
@@ -347,8 +402,6 @@ def main() -> int:  # noqa: C901
 
             traceback.print_exc()
         return 1
-
-    return 0
 
 
 if __name__ == "__main__":
