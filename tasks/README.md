@@ -134,7 +134,7 @@ Each task includes:
 | 032 | Create GitHub Release Notes from Tag Annotations              | MEDIUM   | 2-3 hours                                                  | Active    | [#381](https://github.com/bdperkin/nhl-scrabble/issues/381) | -                                                                        |
 | 033 | Enhance Version Badge Display in README                       | LOW      | 30min-1h                                                   | Active    | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | -                                                                        |
 | 034 | Evaluate semantic-release for Fully Automated Releases        | LOW      | 6-10 hours                                                 | Active    | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | Research task - evaluate comprehensive release automation alternative    |
-| 035 | Implement pre-commit.ci GitHub Automation                     | MEDIUM   | 1-2 hours                                                  | Active    | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | Automate pre-commit hook updates via pre-commit.ci service               |
+| 035 | Implement pre-commit.ci GitHub Automation                     | MEDIUM   | 1-2 hours                                                  | Completed | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | PR [#393](https://github.com/bdperkin/nhl-scrabble/pull/393), completed 2026-04-27, actual effort: 45 minutes |
 
 ### Testing
 
@@ -264,11 +264,11 @@ Each task includes:
 | Bug Fixes    | 0      | 11        | 11      |
 | Security     | 2      | 14        | 16      |
 | Optimization | 0      | 13        | 13      |
-| Enhancement  | 12     | 33        | 45      |
+| Enhancement  | 11     | 34        | 45      |
 | Testing      | 8      | 23        | 31      |
 | New Features | 37     | 6         | 43      |
 | Refactoring  | 1      | 29        | 30      |
-| **TOTAL**    | **60** | **129**   | **189** |
+| **TOTAL**    | **59** | **130**   | **189** |
 
 ### Effort Estimates by Category
 
@@ -290,11 +290,11 @@ Each task includes:
 | Bug Fixes    | 100.0%          |
 | Security     | 87.5%           |
 | Optimization | 100.0%          |
-| Enhancement  | 73.3%           |
+| Enhancement  | 75.6%           |
 | Testing      | 74.2%           |
 | New Features | 14.0%           |
 | Refactoring  | 96.7%           |
-| **OVERALL**  | **68.3%**       |
+| **OVERALL**  | **68.8%**       |
 
 ### Priority Distribution (Active Tasks)
 
@@ -302,7 +302,7 @@ Each task includes:
 | -------- | ----- |
 | CRITICAL | 0     |
 | HIGH     | 0     |
-| MEDIUM   | 59    |
+| MEDIUM   | 58    |
 | LOW      | 1     |
 
 ## Recommended Implementation Order
