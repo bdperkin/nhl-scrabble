@@ -83,7 +83,7 @@ class TestUnifiedConfig:
         """Test that environment variables override .env file (correct precedence)."""
         # Create a .env file
         env_file = tmp_path / ".env"
-        env_file.write_text("NHL_SCRABBLE_API_TIMEOUT=20\n" "NHL_SCRABBLE_VERBOSE=false\n")
+        env_file.write_text("NHL_SCRABBLE_API_TIMEOUT=20\n"  "NHL_SCRABBLE_VERBOSE=false\n")
 
         # Change to temp directory
         monkeypatch.chdir(tmp_path)
@@ -213,7 +213,7 @@ class TestUnifiedConfig:
         # 1. Set defaults (implicit, baked into Config class)
         # 2. Create .env file
         env_file = tmp_path / ".env"
-        env_file.write_text("NHL_SCRABBLE_API_TIMEOUT=20\n" "NHL_SCRABBLE_API_RETRIES=5\n")
+        env_file.write_text("NHL_SCRABBLE_API_TIMEOUT=20\n"  "NHL_SCRABBLE_API_RETRIES=5\n")
 
         monkeypatch.chdir(tmp_path)
 
