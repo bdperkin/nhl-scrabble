@@ -1,7 +1,7 @@
 # NHL Scrabble - Priority-Ordered Implementation Sequence
 
 **Generated**: 2026-04-27
-**Total Tasks**: 58 active tasks
+**Total Tasks**: 57 active tasks
 **Strategy**: Priority → Dependencies → Strategic Value → Effort
 
 ## How to Use This File
@@ -28,7 +28,6 @@ ______________________________________________________________________
 /implement-task enhancement/031-add-version-validation-pre-commit-hook.md  # 1-2 hours, No issue
 /implement-task enhancement/032-github-release-notes-from-tag-annotations.md  # 2-3 hours, Issue #123
 /implement-task enhancement/036-file-based-logging-uvicorn.md  # 3-5 hours, No issue
-/implement-task enhancement/037-documentation-refactoring-web-interface-polish.md  # 16-24 hours (completed), Issue #398
 /implement-task new-features/018-automated-python-package-building-publishing.md  # 4-6 hours, Issue #224
 /implement-task new-features/033-github-release-workflow.md  # 2-3 hours, Issue #300
 /implement-task new-features/039-benchmark-workflow.md  # 3-4 hours, Issue #306
@@ -116,4 +115,4 @@ After completing each task:
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-27
-**Active Tasks**: 58
+**Active Tasks**: 57
