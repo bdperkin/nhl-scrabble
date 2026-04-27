@@ -301,10 +301,7 @@ repos:
           - mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
         # Exclude files with pseudo-code and generated docs (matches blacken-docs)
-        exclude: >-
-          ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md|tasks/|\.claude/commands/|
-          docs/(how-to/(run-tests|migrate-csv-exporter|build-documentation)\.md|tutorials/01-getting-started\.md|
-          explanation/|contributing/))
+        exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md|tasks/|\.claude/commands/|docs/(how-to/(run-tests|migrate-csv-exporter|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/|testing/))
 
   # ============================================================================
   # HTML/Template Linting - djlint for HTML and Jinja2 Templates
