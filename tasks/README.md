@@ -124,7 +124,7 @@ Each task includes:
 | 022 | Comprehensive GitHub Workflows Enhancement                    | MEDIUM   | 24-32 hours (main task coordination + sub-tasks)           | Active    | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | -                                                                        |
 | 023 | Extend Sphinx Builder Functionality                           | LOW      | 4-6 hours                                                  | Active    | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | -                                                                        |
 | 024 | Extend Sphinx Extension Functionality                         | LOW      | 3-5 hours                                                  | Active    | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | -                                                                        |
-| 025 | Add Automated Documentation Link Validation to CI             | MEDIUM   | 1 hour                                                     | Active    | [#351](https://github.com/bdperkin/nhl-scrabble/issues/351) | From documentation audit (task 013), gap #2                              |
+| 025 | Add Automated Documentation Link Validation to CI             | MEDIUM   | 1 hour                                                     | Completed | [#351](https://github.com/bdperkin/nhl-scrabble/issues/351) | PR [#394](https://github.com/bdperkin/nhl-scrabble/pull/394), completed 2026-04-27, actual effort: 1.5h |
 | 026 | Add Automated Code Example Testing to CI                      | MEDIUM   | 2 hours                                                    | Active    | [#352](https://github.com/bdperkin/nhl-scrabble/issues/352) | From documentation audit (task 013), gap #3                              |
 | 027 | Improve Function Example Coverage in Docstrings               | MEDIUM   | 3-4 hours                                                  | Active    | [#353](https://github.com/bdperkin/nhl-scrabble/issues/353) | From documentation audit (task 013), gap #4                              |
 | 028 | Add Unicode Normalization for Player Names                    | MEDIUM   | 2-3 hours                                                  | Completed | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | PR [#374](https://github.com/bdperkin/nhl-scrabble/pull/374), completed 2026-04-25, actual effort: 2.5h |
@@ -317,12 +317,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 190 tasks (60 active, 130 completed)
+**Total Tasks**: 190 tasks (59 active, 131 completed)
 
 - **Total Estimated Effort**: 1067.75 hours
-  - Active Tasks: ~503.5 hours
-  - Completed Tasks: ~564.25 hours
-- **Overall Completion**: 68.4%
+  - Active Tasks: ~502 hours
+  - Completed Tasks: ~565.75 hours
+- **Overall Completion**: 68.9%
 
 ## Task Management Guidelines
 
@@ -364,6 +364,6 @@ tasks/
 
 ______________________________________________________________________
 
-**Last Updated**: 2026-04-26
+**Last Updated**: 2026-04-27
 **Total Tasks**: 190
 **Completion Rate**: 68.4%
