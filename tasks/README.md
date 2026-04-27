@@ -134,6 +134,7 @@ Each task includes:
 | 032 | Create GitHub Release Notes from Tag Annotations              | MEDIUM   | 2-3 hours                                                  | Active    | [#381](https://github.com/bdperkin/nhl-scrabble/issues/381) | -                                                                        |
 | 033 | Enhance Version Badge Display in README                       | LOW      | 30min-1h                                                   | Active    | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | -                                                                        |
 | 034 | Evaluate semantic-release for Fully Automated Releases        | LOW      | 6-10 hours                                                 | Active    | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | Research task - evaluate comprehensive release automation alternative    |
+| 035 | Implement pre-commit.ci GitHub Automation                     | MEDIUM   | 1-2 hours                                                  | Active    | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | Automate pre-commit hook updates via pre-commit.ci service               |
 
 ### Testing
 
@@ -316,12 +317,12 @@ _No high priority tasks_
 
 ## Total Project Roadmap
 
-**Total Tasks**: 189 tasks (59 active, 130 completed)
+**Total Tasks**: 190 tasks (60 active, 130 completed)
 
-- **Total Estimated Effort**: 1066.25 hours
-  - Active Tasks: ~502 hours
+- **Total Estimated Effort**: 1067.75 hours
+  - Active Tasks: ~503.5 hours
   - Completed Tasks: ~564.25 hours
-- **Overall Completion**: 68.8%
+- **Overall Completion**: 68.4%
 
 ## Task Management Guidelines
 
@@ -364,5 +365,5 @@ tasks/
 ______________________________________________________________________
 
 **Last Updated**: 2026-04-26
-**Total Tasks**: 189
-**Completion Rate**: 68.8%
+**Total Tasks**: 190
+**Completion Rate**: 68.4%
