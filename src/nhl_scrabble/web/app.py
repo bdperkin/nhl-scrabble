@@ -368,6 +368,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
                 "lowest_score": all_players[-1]["score"] if all_players else 0,
                 "avg_score": total_score / len(all_players) if all_players else 0,
                 "highest_team": teams_data[0]["abbrev"] if teams_data else None,
+                "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
                 "highest_team_name": teams_data[0]["name"] if teams_data else None,
                 "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
                 "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
