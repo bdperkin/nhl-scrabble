@@ -29,7 +29,9 @@ fail_fast: true
 # Pre-commit.ci specific configuration
 ci:
   skip:
-    - pyroma  # Requires python3-venv package not available in pre-commit.ci Python 3.12
+    # Requires python3-venv package not available in pre-commit.ci Python 3.12
+    - pyroma
+    - check-wheel-contents
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
