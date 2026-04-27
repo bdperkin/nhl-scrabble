@@ -398,19 +398,47 @@ See [docs/contributing/dependency-updates.md](docs/contributing/dependency-updat
 
 (For maintainers)
 
+### Automated Release Workflow
+
+The project uses **automated PyPI publishing** via GitHub Actions. Releases are triggered by pushing version tags.
+
+**Time Savings:**
+
+- **Before:** 30 minutes, 9 manual steps
+- **After:** 5 minutes, 2 steps (tag + push)
+
 ### Quick Release Steps
 
-1. Update `CHANGELOG.md`
-1. Ensure clean state: `git checkout main && git pull && make test`
-1. Validate package: `make package`
-1. Create Git tag: `git tag -a v2.1.0 -m "Release v2.1.0"`
-1. Push tag: `git push --tags`
-1. Create GitHub Release
-1. Publish to PyPI (optional): `make publish-test` then `make publish`
+```bash
+# 1. Update CHANGELOG.md with release notes
+vim CHANGELOG.md
+
+# 2. Commit changelog
+git add CHANGELOG.md
+git commit -m "docs(changelog): Add v2.1.0 release notes"
+git push origin main
+
+# 3. Create and push version tag
+git tag -a v2.1.0 -m "Release version 2.1.0"
+git push --tags
+
+# That's it! The workflow automatically:
+# ✅ Builds sdist and wheel distributions
+# ✅ Verifies package metadata
+# ✅ Tests installation on 3 OS × 3 Python versions
+# ✅ Publishes to TestPyPI
+# ✅ Publishes to PyPI
+# ✅ Creates GitHub Release with artifacts
+```
 
 **Note:** This project uses **dynamic versioning** from Git tags via hatch-vcs. No manual version updates needed!
 
-See [docs/contributing/release-process.md](docs/contributing/release-process.md) for complete release process and package validation details.
+**Complete Documentation:**
+
+- [docs/RELEASING.md](docs/RELEASING.md) - Complete release guide with troubleshooting
+- [docs/contributing/release-process.md](docs/contributing/release-process.md) - Additional release details
+
+**Workflow File:** `.github/workflows/publish.yml`
 
 ## License
 

@@ -23,6 +23,8 @@
 
 <!-- Package Info -->
 
+[![PyPI version](https://img.shields.io/pypi/v/nhl-scrabble.svg)](https://pypi.org/project/nhl-scrabble/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/nhl-scrabble.svg)](https://pypi.org/project/nhl-scrabble/)
 [![Python 3.12-3.14](https://img.shields.io/badge/python-3.12--3.14-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Powered by UV](https://img.shields.io/badge/powered%20by-uv-black?logo=astral)](https://github.com/astral-sh/uv)

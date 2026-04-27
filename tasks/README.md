@@ -211,7 +211,7 @@ Each task includes:
 | 029 | Release Automation: Post-Release Phase | LOW | 1-2 hours | Active | [#265](https://github.com/bdperkin/nhl-scrabble/issues/265) | - |
 | 030 | Release Automation: Verification and Reporting Phase | LOW | 1-2 hours | Active | [#266](https://github.com/bdperkin/nhl-scrabble/issues/266) | - |
 | 031 | Release Automation: Orchestration and CLI Interface | LOW | 2-3 hours | Active | [#267](https://github.com/bdperkin/nhl-scrabble/issues/267) | - |
-| 032 | PyPI Package Publishing Workflow | HIGH | 4-6 hours | Active | [#299](https://github.com/bdperkin/nhl-scrabble/issues/299) | - |
+| 032 | PyPI Package Publishing Workflow | HIGH | 4-6 hours | Completed | [#299](https://github.com/bdperkin/nhl-scrabble/issues/299) | PR [#405](https://github.com/bdperkin/nhl-scrabble/pull/405) |
 | 033 | GitHub Release Automation Workflow | MEDIUM | 2-3 hours | Active | [#300](https://github.com/bdperkin/nhl-scrabble/issues/300) | PR [#1](https://github.com/bdperkin/nhl-scrabble/pull/1) |
 | 034 | Docker Container Build and Publish Workflow | LOW | 3-4 hours | Active | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | - |
 | 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours | Active | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | PR [#2](https://github.com/bdperkin/nhl-scrabble/pull/2) |
