@@ -719,6 +719,15 @@ wheels = [
 ]
 
 [[package]]
+name = "dnspython"
+version = "2.8.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8c/8b/57666417c0f90f08bcafa776861060426765fdb422eb10212086fb811d26/dnspython-2.8.0.tar.gz", hash = "sha256:181d3c6996452cb1189c4046c61599b84a5a86e099562ffde77d26984ff26d0f", size = 368251, upload-time = "2025-09-07T18:58:00.022Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ba/5a/18ad964b0086c6e62e2e7500f7edc89e3faa45033c71c1893d34eed2b2de/dnspython-2.8.0-py3-none-any.whl", hash = "sha256:01d9bbc4a2d76bf0db7c1f729812ded6d912bd318d3b1cf81d30c0f845dbf3af", size = 331094, upload-time = "2025-09-07T18:57:58.071Z" },
+]
+
+[[package]]
 name = "docopt"
 version = "0.6.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1125,6 +1134,20 @@ wheels = [
 ]
 
 [[package]]
+name = "linkchecker"
+version = "10.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "dnspython" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6e/60/1ad47dd9db638546c4e70b49b5adfddfaadb2c6669a1a9b06a4dcf140d7b/LinkChecker-10.6.0.tar.gz", hash = "sha256:fb7e8facda7749c2fa5fa5dc241c0adc302da3d31d588964a2570db501aa49e5", size = 547746, upload-time = "2025-07-28T18:43:50.884Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/07/ff8a29330fa35483a19221fd89e102e7ebf700acda8f0ba0b66ef14bcd48/LinkChecker-10.6.0-py3-none-any.whl", hash = "sha256:5268587ed0b0f7e7521b75905128c96856f30f67dad49f66e2c963bc174ca92d", size = 280937, upload-time = "2025-07-28T18:43:48.932Z" },
+]
+
+[[package]]
 name = "markdown-it-py"
 version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1434,6 +1457,7 @@ dev = [
     { name = "diff-cover" },
     { name = "djlint" },
     { name = "httpx" },
+    { name = "linkchecker" },
     { name = "mypy" },
     { name = "myst-parser" },
     { name = "openpyxl" },
@@ -1476,6 +1500,7 @@ dev = [
 ]
 docs = [
     { name = "blacken-docs" },
+    { name = "linkchecker" },
     { name = "myst-parser" },
     { name = "pytest-sphinx" },
     { name = "sphinx" },
@@ -1562,6 +1587,8 @@ requires-dist = [
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.28.1" },
     { name = "httpx", marker = "extra == 'test'", specifier = ">=0.28.1" },
     { name = "jinja2", specifier = ">=3.1.6" },
+    { name = "linkchecker", marker = "extra == 'dev'", specifier = ">=10.0.0" },
+    { name = "linkchecker", marker = "extra == 'docs'", specifier = ">=10.0.0" },
     { name = "mypy", marker = "extra == 'dev'" },
     { name = "mypy", marker = "extra == 'type'" },
     { name = "myst-parser", marker = "extra == 'dev'", specifier = ">=5.0.0" },

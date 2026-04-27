@@ -254,6 +254,73 @@ linkchecker docs/ --check-extern
 mdformat --check docs/ *.md
 ```
 
+## Automated Link Validation
+
+The project includes automated link checking via GitHub Actions and linkchecker:
+
+### CI/CD Integration
+
+**GitHub Actions Workflow**: `.github/workflows/link-checker.yml`
+
+**Runs On**:
+
+- Pull requests (when docs or markdown files change)
+- Monthly schedule (every Monday at 9 AM UTC)
+- Manual trigger via `workflow_dispatch`
+
+**Configuration**: `.linkcheckerrc`
+
+**Features**:
+
+- Multi-threaded checking (10 threads)
+- 30-second timeout per link
+- External link validation
+- HTML report artifact (30-day retention)
+- Continues on error for scheduled runs
+
+**Excluded URLs** (to prevent false positives from rate-limiting):
+
+- GitHub Actions URLs (`^https://github.com/.*/actions`)
+- Codecov URLs (`^https://codecov.io`, `^https://app.codecov.io`)
+- Shields.io badges (`^https://shields.io`, `^https://img.shields.io`)
+- GitHub API (`^https://api.github.com`)
+- pre-commit.ci results (`^https://results.pre-commit.ci`)
+
+### Local Usage
+
+```bash
+# Check all documentation links
+linkchecker docs/ *.md
+
+# With configuration file
+linkchecker --config .linkcheckerrc docs/ *.md
+
+# External links only
+linkchecker --check-extern docs/ *.md
+
+# Generate HTML report
+linkchecker --output=html docs/ *.md > link-report.html
+```
+
+### Installation
+
+Linkchecker is included in the `docs` optional dependency group:
+
+```bash
+# Install docs dependencies (includes linkchecker)
+pip install -e ".[docs]"
+
+# Or install linkchecker separately
+pip install linkchecker
+```
+
+### When Links Fail
+
+1. **Review CI report**: Download HTML artifact from workflow run
+1. **Check exclusions**: Add rate-limited sites to `.linkcheckerrc`
+1. **Fix broken links**: Update URLs or remove dead links
+1. **Update redirects**: Replace redirected URLs with final destinations
+
 ## Follow-up Tasks
 
 Common follow-up tasks from audits:

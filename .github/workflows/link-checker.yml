@@ -1,0 +1,77 @@
+name: Check Documentation Links
+
+on:
+  # Run on PR to catch issues before merge
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - '.github/workflows/link-checker.yml'
+
+  # Run monthly to catch external link rot
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install linkchecker
+        run: pip install linkchecker
+
+      - name: Check documentation links
+        run: |
+          # Check all markdown files
+          linkchecker \
+            --check-extern \
+            --ignore-url='^https://github.com/.*/actions' \
+            --ignore-url='^https://codecov.io' \
+            --ignore-url='^https://shields.io' \
+            --ignore-url='^https://api.github.com' \
+            --ignore-url='^https://app.codecov.io' \
+            --ignore-url='^https://results.pre-commit.ci' \
+            --timeout=30 \
+            --threads=10 \
+            docs/ *.md
+        continue-on-error: ${{ github.event_name == 'schedule' }}
+
+      - name: Generate HTML report
+        if: always()
+        run: |
+          linkchecker \
+            --check-extern \
+            --ignore-url='^https://github.com/.*/actions' \
+            --ignore-url='^https://codecov.io' \
+            --ignore-url='^https://shields.io' \
+            --ignore-url='^https://api.github.com' \
+            --ignore-url='^https://app.codecov.io' \
+            --ignore-url='^https://results.pre-commit.ci' \
+            --timeout=30 \
+            --threads=10 \
+            --output=html \
+            docs/ *.md > linkchecker-report.html || true
+
+      - name: Upload link check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linkchecker-report
+          path: linkchecker-report.html
+          retention-days: 30
