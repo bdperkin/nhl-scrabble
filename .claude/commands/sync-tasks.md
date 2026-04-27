@@ -12,6 +12,33 @@ Complete bi-directional synchronization of task files with GitHub project state 
 
 This command performs comprehensive task-GitHub reconciliation and synchronization:
 
+1. **Run Initial Validation**
+
+   Execute validation script to establish baseline state:
+
+   ```bash
+   python scripts/validate_task_docs.py
+   ```
+
+   - Capture validation output
+   - Document current discrepancies between:
+     - Filesystem task counts vs tasks/README.md
+     - Filesystem task counts vs tasks/IMPLEMENTATION_SEQUENCE.md
+     - README.md vs IMPLEMENTATION_SEQUENCE.md
+   - Report initial status:
+     - Active task count from filesystem
+     - Active task count from README.md
+     - Active task count from IMPLEMENTATION_SEQUENCE.md
+     - Completed task count from filesystem
+     - Completed task count from README.md
+   - If validation fails:
+     - Log all discrepancies for reconciliation
+     - Note which files need updates
+     - Continue with sync process
+   - If validation passes:
+     - Note that files are already consistent
+     - Continue with sync process
+
 1. **Analyze GitHub Project State**
 
    - Fetch all GitHub issues: `gh issue list --state all --limit 1000 --json number,title,state,labels,closedAt,createdAt,updatedAt,body`
@@ -232,6 +259,94 @@ This command performs comprehensive task-GitHub reconciliation and synchronizati
      - Completion velocity
      - Most common task types
 
+1. **Regenerate tasks/IMPLEMENTATION_SEQUENCE.md**
+
+   Complete reconstruction of the implementation sequence with optimal ordering:
+
+   - **Header Section**:
+     - Generation timestamp
+     - Last updated date
+     - Total active tasks count
+     - Estimated total effort (sum all active tasks)
+     - Implementation strategy statement
+   - **Recent Changes Section** (if applicable):
+     - Document recent work outside task system
+     - List major branches/commits
+     - Summarize documentation improvements
+     - Note any architectural changes
+   - **Usage Instructions**:
+     - Explain how to use this file
+     - Describe ordering criteria (Priority → Dependencies → Strategic Value → Effort)
+     - Note that tasks should be executed in order
+     - Explain dependency notation
+   - **Phase-Based Organization**:
+     - Group tasks into logical implementation phases
+     - Each phase includes:
+       - Phase number and title
+       - Total effort for phase
+       - Focus/objective statement
+       - Dependency requirements
+       - List of tasks as `/implement-task` commands
+       - Rationale explaining ordering and dependencies
+   - **Task Ordering Algorithm**:
+     - **Phase 1: CRITICAL Priority**
+       - Start with parent/coordinating tasks
+       - Then sub-tasks in dependency order
+       - Quick wins (< 2h) first within same dependency level
+     - **Phase 2: HIGH Priority**
+       - Infrastructure before features
+       - Bug fixes before enhancements
+       - Dependencies before dependents
+       - Quick wins first
+     - **Phase 3-N: MEDIUM Priority**
+       - Group by strategic themes (workflows, testing, features, etc.)
+       - Parent tasks before children
+       - Foundation before implementation
+       - Test infrastructure before specific tests
+     - **Final Phases: LOW Priority**
+       - Quality-of-life improvements
+       - Nice-to-have features
+       - Documentation polish
+       - Optimization opportunities
+   - **Strategic Value Analysis**:
+     - **Foundation Tasks** (highest strategic value):
+       - Infrastructure setup
+       - Framework establishment
+       - Core capabilities
+       - Required dependencies for other tasks
+     - **Feature Tasks** (medium strategic value):
+       - User-facing functionality
+       - API enhancements
+       - CLI improvements
+       - Build on foundation tasks
+     - **Polish Tasks** (lower strategic value):
+       - Developer experience
+       - Documentation improvements
+       - Performance optimizations
+       - Can be deferred if needed
+   - **Dependency Tracking**:
+     - Mark parent tasks clearly
+     - Note which tasks must complete before others
+     - Identify tasks that can run in parallel
+     - Flag circular dependencies if any exist
+   - **Effort Considerations**:
+     - Within same priority/dependency level, order by effort:
+       - Quick wins (< 2h) first for momentum
+       - Medium tasks (2-8h) next
+       - Large tasks (> 8h) last
+     - Balance quick wins with strategic progress
+     - Don't defer all large tasks to end
+   - **Format Each Task Entry**:
+     ```bash
+     # Task Title (Priority, Special Notes)
+     /implement-task category/ID-slug.md  # effort, Issue #number, [Dependencies: #ID1, #ID2]
+     ```
+   - **Include Rationale After Each Phase**:
+     - Explain why tasks are in this phase
+     - Justify the ordering within phase
+     - Note dependencies and blockers
+     - Highlight strategic considerations
+
 1. **Validate Changes**
 
    Before committing, validate all updates:
@@ -276,6 +391,32 @@ This command performs comprehensive task-GitHub reconciliation and synchronizati
      - Re-run hooks
      - Only proceed when all hooks pass
 
+1. **Run Final Validation**
+
+   Execute validation script to verify synchronization:
+
+   ```bash
+   python scripts/validate_task_docs.py
+   ```
+
+   - Verify all discrepancies from initial validation are resolved
+   - Confirm consistency between:
+     - Filesystem task counts == tasks/README.md counts
+     - Filesystem task counts == tasks/IMPLEMENTATION_SEQUENCE.md counts
+     - README.md counts == IMPLEMENTATION_SEQUENCE.md counts
+   - If validation passes:
+     - Proceed to commit
+     - Note success in commit message
+   - If validation fails:
+     - Review remaining discrepancies
+     - Fix any issues in README.md and/or IMPLEMENTATION_SEQUENCE.md
+     - Re-run validation until passes
+     - Stage any additional fixes
+   - Report final validation status:
+     - Initial discrepancies found: {count}
+     - Final discrepancies remaining: {count} (should be 0)
+     - Files updated to achieve consistency: {list}
+
 1. **Create Commit**
 
    Commit all synchronized changes:
@@ -296,6 +437,11 @@ This command performs comprehensive task-GitHub reconciliation and synchronizati
    - {change-1}
    - {change-2}
    - {change-3}
+
+   Documentation:
+   - Updated tasks/README.md with current counts
+   - Regenerated tasks/IMPLEMENTATION_SEQUENCE.md with optimal ordering
+   - Validation: {initial-failures} → {final-failures} discrepancies
 
    Statistics:
    - Total tasks: {total}
@@ -798,19 +944,28 @@ SYNC_TASKS_REPORT_FILE=sync-report.md  # Save report to file
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Step 1: Analyzing GitHub Project State...
+Step 1: Running Initial Validation...
+  ✓ Executed scripts/validate_task_docs.py
+  → Filesystem: 60 active, 79 completed
+  → README.md: 58 active, 79 completed
+  → IMPLEMENTATION_SEQUENCE.md: 58 active
+  ⚠ Found 2 discrepancies:
+    • README.md missing 2 active tasks
+    • IMPLEMENTATION_SEQUENCE.md missing 2 active tasks
+
+Step 2: Analyzing GitHub Project State...
   ✓ Fetched 52 issues
   ✓ Fetched 48 pull requests
   ✓ Fetched 25 workflow runs
   ✓ Fetched 3 Dependabot alerts
   ✓ Fetched 0 CodeQL alerts
 
-Step 2: Analyzing Task File State...
+Step 3: Analyzing Task File State...
   ✓ Scanned 7 task directories
-  ✓ Found 19 task files
-  ✓ Found 14 completed tasks
+  ✓ Found 60 task files
+  ✓ Found 79 completed tasks
 
-Step 3: Identifying Discrepancies...
+Step 4: Identifying Discrepancies...
   → Found 8 discrepancies requiring sync
 
   GitHub → Tasks (5):
@@ -825,45 +980,60 @@ Step 3: Identifying Discrepancies...
     • Task 005 has new PR #78, not linked in issue
     • New task 006 has no GitHub issue
 
-Step 4: Determining Sync Direction...
+Step 5: Determining Sync Direction...
   ✓ 5 use GitHub as source of truth
   ✓ 3 use tasks as source of truth
   ✓ 0 conflicts requiring manual review
 
-Step 5: Syncing GitHub → Tasks...
+Step 6: Syncing GitHub → Tasks...
   ✓ Completed task 007 from issue #52
   ✓ Added notes to task 003 from PR #75
   ✓ Updated task 004 priority to HIGH
   ✓ Created task 008 from security alert #12
   ✓ Updated task 004 description from issue #81
 
-Step 6: Syncing Tasks → GitHub...
+Step 7: Syncing Tasks → GitHub...
   ✓ Closed issue #74 from completed task 002
   ✓ Linked PR #78 in issue #79
   ✓ Created issue #86 for task 006
 
-Step 7: Updating All Task Files...
-  ✓ Normalized 19 task files
+Step 8: Updating All Task Files...
+  ✓ Normalized 60 task files
   ✓ Updated metadata in 8 files
   ✓ Added missing sections to 3 files
   ✓ Fixed formatting in 12 files
 
-Step 8: Regenerating tasks/README.md...
-  ✓ Updated summary statistics
+Step 9: Regenerating tasks/README.md...
+  ✓ Updated summary statistics (60 active, 79 completed)
   ✓ Rebuilt task index (7 categories)
-  ✓ Added 14 completed tasks section
+  ✓ Added completed tasks section
   ✓ Updated roadmap and metrics
 
-Step 9: Running Pre-commit Hooks...
-  ✓ All 55 hooks passed
+Step 10: Regenerating tasks/IMPLEMENTATION_SEQUENCE.md...
+  ✓ Analyzed task priorities and dependencies
+  ✓ Grouped 60 tasks into 12 implementation phases
+  ✓ Ordered by: Priority → Dependencies → Strategic Value → Effort
+  ✓ Updated total effort calculation: 522 hours
+  ✓ Added phase rationales and dependency notes
 
-Step 10: Creating Commit...
+Step 11: Running Pre-commit Hooks...
+  ✓ All 67 hooks passed
+
+Step 12: Running Final Validation...
+  ✓ Executed scripts/validate_task_docs.py
+  ✓ Filesystem: 60 active, 79 completed
+  ✓ README.md: 60 active, 79 completed
+  ✓ IMPLEMENTATION_SEQUENCE.md: 60 active
+  ✓ All validation checks passed!
+  → Discrepancies resolved: 2 → 0
+
+Step 13: Creating Commit...
   ✓ Commit: abc123d
 
-Step 11: Pushing Changes...
+Step 14: Pushing Changes...
   ✓ Pushed to origin/main
 
-Step 12: Generating Sync Report...
+Step 15: Generating Sync Report...
   ✓ Report saved to sync-report.md
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -871,21 +1041,29 @@ Step 12: Generating Sync Report...
 ✅ Synchronization Complete!
 
 Summary:
-  • Discrepancies resolved: 8
-  • Task files updated: 19
+  • GitHub-Task discrepancies resolved: 8
+  • Documentation validation: 2 → 0 discrepancies
+  • Task files updated: 60
   • GitHub issues updated: 3
   • Files moved to completed/: 2
   • New tasks created: 1
   • New issues created: 1
 
+Documentation:
+  • tasks/README.md: Updated and validated
+  • tasks/IMPLEMENTATION_SEQUENCE.md: Regenerated with optimal ordering
+  • Validation: ✅ All checks passed
+
 Statistics:
-  • Total tasks: 19
-  • Completed: 14 (74%)
-  • In progress: 3 (16%)
-  • Planned: 2 (10%)
+  • Total tasks: 139 (60 active, 79 completed)
+  • Active effort: 522 hours
+  • Completion rate: 57%
+  • In progress: 3 tasks
+  • Planned: 57 tasks
 
 Next Steps:
   • Review sync report: sync-report.md
+  • Review IMPLEMENTATION_SEQUENCE.md for task order
   • Check GitHub Actions: gh run watch
   • Monitor for issues: gh issue list
 ```
