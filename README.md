@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/logo.png" alt="NHL Scrabble Logo" width="256">
+  <img src="https://raw.githubusercontent.com/bdperkin/nhl-scrabble/main/.github/logo.png" alt="NHL Scrabble Logo" width="256">
 </p>
 
 <h1 align="center">NHL Scrabble Score Analyzer</h1>
@@ -19,7 +19,7 @@
 [![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bdperkin/nhl-scrabble/main.svg)](https://results.pre-commit.ci/latest/github/bdperkin/nhl-scrabble/main)
-[![interrogate](./interrogate_badge.svg)](https://interrogate.readthedocs.io/)
+[![interrogate](https://raw.githubusercontent.com/bdperkin/nhl-scrabble/main/interrogate_badge.svg)](https://interrogate.readthedocs.io/)
 
 <!-- Package Info -->
 
