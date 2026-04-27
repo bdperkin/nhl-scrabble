@@ -25,6 +25,7 @@ All exceptions include:
     - Context information when available
 """
 
+
 class NHLScrabbleError(Exception):
     """Base exception for all NHL Scrabble errors.
 
