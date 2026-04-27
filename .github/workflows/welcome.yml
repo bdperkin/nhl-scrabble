@@ -1,0 +1,140 @@
+name: Welcome First-Time Contributors
+
+on:
+  pull_request_target:
+    types: [opened]
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    name: Welcome New Contributor
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Welcome first-time PR contributors
+        if: github.event_name == 'pull_request_target'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Check if this is the user's first PR
+            const creator = context.payload.pull_request.user.login;
+
+            // Get all PRs by this user
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: creator
+            });
+
+            // If this is their first PR, welcome them!
+            if (prs.length === 1) {
+              const message = `## 👋 Welcome to NHL Scrabble!
+
+            Thank you **@${creator}** for your first pull request! 🎉
+
+            We're excited to have you as a contributor to this project!
+
+            ### What happens next?
+
+            1. **Automated checks** will run on your PR
+            2. A **maintainer will review** your changes
+            3. We may **request changes** or ask questions
+            4. Once approved, your PR will be **merged**!
+
+            ### Resources
+
+            - 📚 [Contributing Guide](https://github.com/${context.repo.owner}/\
+            ${context.repo.repo}/blob/main/CONTRIBUTING.md)
+            - 📖 [Documentation](https://bdperkin.github.io/nhl-scrabble/)
+            - 💬 Feel free to ask questions in comments
+            - 🐛 [Report issues](https://github.com/${context.repo.owner}/\
+            ${context.repo.repo}/issues/new)
+
+            ### Tips for a smooth review
+
+            - ✅ Make sure all CI checks pass
+            - ✅ Respond to review comments
+            - ✅ Keep commits focused and clear
+            - ✅ Update documentation if needed
+
+            Thank you for contributing! We'll review your PR as soon as possible. 🚀
+
+            ---
+            *This is an automated welcome message for first-time contributors.*`;
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: message
+              });
+            }
+
+      - name: Welcome first-time issue reporters
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Check if this is the user's first issue
+            const creator = context.payload.issue.user.login;
+
+            // Get all issues by this user
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: creator
+            });
+
+            // Filter out pull requests (they show up in issues API)
+            const actualIssues = issues.filter(issue => !issue.pull_request);
+
+            // If this is their first issue, welcome them!
+            if (actualIssues.length === 1) {
+              const message = `## 👋 Welcome!
+
+            Thank you **@${creator}** for opening your first issue! 🎉
+
+            ### What happens next?
+
+            1. A **maintainer will review** your issue
+            2. We may **ask for clarification** or additional details
+            3. If it's a bug, we'll work on a fix
+            4. If it's a feature request, we'll discuss feasibility
+
+            ### Want to contribute?
+
+            If you're interested in working on this yourself:
+
+            - 📚 Check out our [Contributing Guide](https://github.com/\
+            ${context.repo.owner}/${context.repo.repo}/blob/main/CONTRIBUTING.md)
+            - 💬 Comment below to express interest
+            - 🚀 We're happy to help guide you through the process!
+
+            ### Resources
+
+            - 📖 [Documentation](https://bdperkin.github.io/nhl-scrabble/)
+            - 🐛 [Report a bug](https://github.com/${context.repo.owner}/\
+            ${context.repo.repo}/issues/new?labels=bug)
+            - ✨ [Request a feature](https://github.com/${context.repo.owner}/\
+            ${context.repo.repo}/issues/new?labels=enhancement)
+
+            Thank you for helping improve NHL Scrabble! 🙏
+
+            ---
+            *This is an automated welcome message for first-time issue reporters.*`;
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue.number,
+                body: message
+              });
+            }
