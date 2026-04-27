@@ -17,7 +17,7 @@ Environment:
     (expected in pre-commit isolated environments).
 """
 
-# ruff: noqa: INP001, S603, S607, T201
+# ruff: noqa: INP001
 # INP001: tools directory is not a package
 # S603/S607: subprocess calls are to trusted tools (pdoc, python, git)
 # T201: print statements are appropriate for utility script
