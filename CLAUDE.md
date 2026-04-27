@@ -1198,6 +1198,52 @@ Node.js 24 migration completed (April 2026):
 - ✅ Squash merge only (consistent git history)
 - ✅ Auto-delete branches on merge
 
+### Stale Issue/PR Management
+
+Automated stale management workflow keeps the issue tracker clean and relevant:
+
+**Configuration:**
+
+- **Workflow**: `.github/workflows/stale.yml`
+- **Schedule**: Daily at 1 AM UTC
+- **Manual trigger**: Available via workflow_dispatch
+
+**Timeframes:**
+
+- **Issues**: 60 days inactive → marked stale, 7 days → closed
+- **Pull Requests**: 30 days inactive → marked stale, 7 days → closed
+- **Warning period**: 7 days between stale and close
+
+**Labels:**
+
+- `stale` - Item marked as stale (yellow, #fbca04)
+- `closed-by-bot` - Item auto-closed (gray, #d1d5da)
+- `keep-open` - Prevents stale marking (green, #0e8a16)
+
+**Exempt Labels:**
+
+Issues/PRs with these labels are never marked stale:
+
+- `keep-open`, `pinned`, `security`, `good-first-issue`, `help-wanted`
+- `enhancement`, `bug` (issues only)
+- `work-in-progress`, `wip` (PRs only)
+
+**To Prevent Closure:**
+
+- Add a comment with an update
+- Add the `keep-open` label
+- Continue working on it (push commits for PRs)
+
+**Rationale:**
+
+- **60 days for issues**: Ample time for discussion and intermittent work
+- **30 days for PRs**: PRs should move faster, prevents abandoned code
+- **7-day warning**: Fair notice without being forgotten
+
+**Reopening:**
+
+Closed items can be reopened at any time if still relevant. The bot doesn't prevent reopening.
+
 ## Documentation
 
 **Online Documentation:** https://bdperkin.github.io/nhl-scrabble/

@@ -212,20 +212,20 @@ gh issue view <stale-issue-number>
 
 ## Acceptance Criteria
 
-- [ ] Workflow file created: `.github/workflows/stale.yml`
-- [ ] Scheduled to run daily
-- [ ] Issues marked stale after 60 days
-- [ ] PRs marked stale after 30 days
-- [ ] Items closed 7 days after stale
-- [ ] Helpful messages posted
-- [ ] `keep-open` label exempts items
-- [ ] Important labels exempt items (security, etc.)
-- [ ] Stale label removed when updated
-- [ ] Manual trigger available
-- [ ] Required labels created
-- [ ] CONTRIBUTING.md updated
-- [ ] Workflow tested
-- [ ] No false positives in first run
+- [x] Workflow file created: `.github/workflows/stale.yml`
+- [x] Scheduled to run daily
+- [x] Issues marked stale after 60 days
+- [x] PRs marked stale after 30 days
+- [x] Items closed 7 days after stale
+- [x] Helpful messages posted
+- [x] `keep-open` label exempts items
+- [x] Important labels exempt items (security, etc.)
+- [x] Stale label removed when updated
+- [x] Manual trigger available
+- [x] Required labels created
+- [x] CONTRIBUTING.md updated
+- [x] Workflow tested (schema validation, YAML linting)
+- [ ] No false positives in first run (to be verified after deployment)
 
 ## Related Files
 
@@ -363,12 +363,107 @@ gh issue list --label closed-by-bot --state closed
 
 ## Implementation Notes
 
-*To be filled during implementation:*
+**Implemented**: 2026-04-26
+**Branch**: new-features/037-stale-management-workflow
+**PR**: #395 - https://github.com/bdperkin/nhl-scrabble/pull/395
+**Commits**: 1 commit (471dec4)
 
-- Date started:
-- Date completed:
-- Actual effort:
-- Items marked stale in first run:
-- Items closed in first month:
-- Adjustments made to timeframes:
-- Community feedback:
+### Actual Implementation
+
+Successfully implemented the automated stale management workflow as proposed:
+
+**Workflow Configuration:**
+- Created `.github/workflows/stale.yml` using `actions/stale@v9`
+- Scheduled to run daily at 1 AM UTC
+- Manual trigger available via workflow_dispatch
+- Issues: 60 days → stale, 7 days → close
+- PRs: 30 days → stale, 7 days → close
+
+**Labels Created:**
+- `stale` (yellow, #fbca04) - Marks inactive items
+- `keep-open` (green, #0e8a16) - Prevents stale marking
+- `closed-by-bot` (gray, #d1d5da) - Marks auto-closed items
+
+**Documentation Updates:**
+- Added "Stale Issue/PR Policy" section to CONTRIBUTING.md
+- Added "Stale Issue/PR Management" subsection to CLAUDE.md CI/CD section
+- Clear instructions on preventing closure and reopening
+
+**Workflow Features:**
+- Helpful, friendly messages explaining closure
+- Clear instructions on keeping items open
+- Automatic stale label removal when updated
+- Comprehensive exempt labels (security, pinned, etc.)
+- Different timeframes for issues vs PRs (rationale documented)
+
+### Challenges Encountered
+
+**Minor YAML Linting Issues:**
+- Initial commit failed yamllint due to line length (110+ chars)
+- Fixed by wrapping long message lines
+- Resolution: Split messages at 80-100 character boundaries
+
+**Label Naming:**
+- Repository has "work in progress" (with spaces) label
+- Updated workflow to include both formats: "work in progress", "work-in-progress", "wip"
+- Ensures compatibility with existing and new labels
+
+### Deviations from Plan
+
+**No Significant Deviations:**
+- Implementation followed the proposed solution exactly
+- Added support for existing "work in progress" label (with spaces)
+- Minor message text wrapping for YAML linting compliance
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 1 hour
+- **Actual**: ~45 minutes
+- **Variance**: -15 minutes (faster than estimated)
+- **Reason**: Straightforward implementation, well-planned task specification
+
+### Related PRs
+
+- #395 - Main implementation (stale workflow + documentation)
+
+### Lessons Learned
+
+**YAML Line Length:**
+- yamllint enforces 100-character line limit
+- Multi-line YAML strings should be wrapped early
+- Pre-commit hooks catch formatting issues before push
+
+**Label Naming Conventions:**
+- Check existing repository labels before workflow creation
+- Support multiple label name formats (spaces, hyphens)
+- Document label creation for reproducibility
+
+**Testing Approach:**
+- Schema validation (check-jsonschema) catches workflow errors early
+- Pre-commit hooks provide comprehensive validation
+- Manual workflow trigger allows testing before first scheduled run
+
+**Documentation:**
+- Adding policy to CONTRIBUTING.md improves contributor awareness
+- CI/CD documentation in CLAUDE.md helps maintainers understand automation
+- Clear reopening policy reduces contributor friction
+
+### Production Monitoring
+
+**Post-Deployment Tasks:**
+- Monitor first workflow run for false positives
+- Review items marked stale in first week
+- Adjust exempt labels if community feedback suggests changes
+- Track metrics: items staled per month, items closed, items reopened
+
+**Monitoring Commands:**
+```bash
+# List stale items
+gh issue list --label stale
+
+# List auto-closed items
+gh issue list --label closed-by-bot --state closed
+
+# View workflow runs
+gh run list --workflow=stale.yml
+```
