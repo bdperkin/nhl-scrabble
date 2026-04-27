@@ -1308,6 +1308,98 @@ Welcome messages can be customized in `.github/workflows/welcome.yml` to adjust:
 - Additional resources
 - Tips and guidance
 
+### Automated Package Publishing
+
+The project uses automated PyPI publishing via GitHub Actions. Releases are triggered by pushing version tags, eliminating manual build and upload steps.
+
+**Workflow:** `.github/workflows/publish.yml`
+
+**Trigger:** Push tags matching `v*` pattern (v1.0.0, v2.1.0, etc.)
+
+**Time Savings:**
+
+- **Manual Process:** 30 minutes, 9 steps
+- **Automated:** 5 minutes, 2 steps (tag + push)
+- **Speedup:** 6x faster
+
+**Workflow Stages:**
+
+1. **Build** (~15s)
+
+   - Builds source distribution (sdist)
+   - Builds wheel distribution
+   - Verifies with `twine check`
+   - Verifies with `check-wheel-contents`
+   - Uploads artifacts
+
+1. **Test Installation** (~2-3 min, parallel)
+
+   - Matrix: 3 OS × 3 Python versions
+   - Ubuntu, macOS, Windows
+   - Python 3.12, 3.13, 3.14
+   - Verifies CLI works
+   - Tests package imports
+
+1. **Publish to TestPyPI** (~10s)
+
+   - Uses OIDC trusted publishing (no API tokens)
+   - Environment: `testpypi`
+   - Skips if version exists
+
+1. **Publish to PyPI** (~10s)
+
+   - Uses OIDC trusted publishing
+   - Environment: `pypi`
+   - Production release
+
+1. **GitHub Release** (~5s)
+
+   - Extracts release notes from CHANGELOG.md
+   - Creates GitHub Release
+   - Attaches distribution artifacts
+
+**Total Time:** ~3-4 minutes
+
+**Security Benefits:**
+
+Traditional API tokens:
+
+- ❌ Manual token creation/rotation
+- ❌ Tokens can leak
+- ❌ Long-lived credentials
+- ❌ Security risk
+
+Trusted Publishing (OIDC):
+
+- ✅ No tokens to manage
+- ✅ Short-lived credentials
+- ✅ Automatic rotation
+- ✅ Bound to specific repo/workflow
+- ✅ More secure
+
+**Quick Release:**
+
+```bash
+# 1. Update CHANGELOG.md
+vim CHANGELOG.md
+git add CHANGELOG.md
+git commit -m "docs(changelog): Add v2.1.0 release notes"
+git push origin main
+
+# 2. Create and push version tag
+git tag -a v2.1.0 -m "Release version 2.1.0"
+git push --tags
+
+# Everything else is automatic!
+```
+
+**Documentation:**
+
+- [docs/RELEASING.md](docs/RELEASING.md) - Complete release guide
+- [docs/contributing/release-process.md](docs/contributing/release-process.md) - Additional details
+
+**PyPI Project:** https://pypi.org/project/nhl-scrabble/
+
 ## Documentation
 
 **Online Documentation:** https://bdperkin.github.io/nhl-scrabble/
