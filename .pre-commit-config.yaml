@@ -679,3 +679,30 @@ repos:
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
+
+  # ============================================================================
+  # Security Scanning - CodeQL Analysis (Manual Run Only)
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: codeql-analyze
+        name: CodeQL Security Analysis
+        # CodeQL static security analysis for Python code
+        # Manual run only due to performance (1-2 minutes per run)
+        # Run before pushing with: pre-commit run codeql-analyze --hook-stage manual
+        description: |
+          Run CodeQL security analysis locally before pushing to GitHub.
+          Catches security vulnerabilities early in development cycle.
+          Analysis time: ~1-2 minutes (too slow for auto-run)
+
+          Usage:
+            pre-commit run codeql-analyze --hook-stage manual
+            OR: make codeql-check
+
+          Requires: CodeQL CLI installed (make install-codeql)
+        entry: bash -c 'make codeql-check'
+        language: system
+        pass_filenames: false
+        stages: [manual]
+        verbose: true
