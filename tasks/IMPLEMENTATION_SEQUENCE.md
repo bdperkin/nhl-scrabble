@@ -2,7 +2,7 @@
 
 **Generated**: 2026-04-28 09:19:41
 **Total Tasks**: 44 active tasks
-**Estimated Total Effort**: 353.0 hours
+**Estimated Total Effort**: 360.0 hours
 
 This file provides the recommended implementation order for all active tasks, optimized for:
 
@@ -24,11 +24,16 @@ Tasks are grouped into phases for logical implementation progression.
 ## Phase 1: Enhancement (MEDIUM Priority)
 
 **Focus**: Enhancement improvements
-**Effort**: 30.0 hours
+**Effort**: 37.0 hours
 
 ```bash
 # Track ty Type Checker Validation Period (1-2 weeks)
-/implement-task enhancement/029-track-ty-validation-period.md  # Unknown,
+/implement-task enhancement/029-track-ty-validation-period.md  # Unknown, Issue #325
+```
+
+```bash
+# Add Comprehensive Bash Script Quality Tooling
+/implement-task enhancement/035-bash-script-quality-tooling.md  # 6-8 hours, Issue #424
 ```
 
 ```bash
