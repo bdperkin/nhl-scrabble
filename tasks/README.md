@@ -132,7 +132,7 @@ Each task includes:
 | 028 | Add Unicode Normalization for Player Names | MEDIUM | 2-3 hours | Completed | [#363](https://github.com/bdperkin/nhl-scrabble/issues/363) | - |
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | : 1-2 weeks (ongoing monitoring + final decision) | Active | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | PR [#324](https://github.com/bdperkin/nhl-scrabble/pull/324) |
 | 030 | Automate CHANGELOG Generation from Git Tags and Commits | MEDIUM | 4-6 hours | Active | - | - |
-| 031 | Add Version Validation in Pre-commit Hooks | MEDIUM | 1-2 hours | Active | - | - |
+| 031 | Add Version Validation in Pre-commit Hooks | MEDIUM | 1-2 hours (actual: 1.5 hours) | Completed | [#380](https://github.com/bdperkin/nhl-scrabble/issues/380) | PR [#411](https://github.com/bdperkin/nhl-scrabble/pull/411), completed 2026-04-27, 68th pre-commit hook, validates hatch-vcs dynamic versioning |
 | 032 | Create GitHub Release Notes from Tag Annotations | MEDIUM | 2-3 hours | Active | [#123](https://github.com/bdperkin/nhl-scrabble/issues/123) | - |
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Active | - | - |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Active | - | - |
