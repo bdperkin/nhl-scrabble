@@ -46,6 +46,21 @@ class RateLimiter:
             max_requests: Maximum requests allowed per time window
             time_window: Time window in seconds (default: 60s = 1 minute)
             burst_size: Max burst size (default: max_requests)
+
+        Examples:
+            Basic rate limiter (30 requests per minute):
+
+            >>> limiter = RateLimiter(max_requests=30, time_window=60.0)
+            >>> limiter.max_requests
+            30
+            >>> limiter.time_window
+            60.0
+
+            With custom burst size:
+
+            >>> limiter = RateLimiter(max_requests=10, time_window=60.0, burst_size=20)
+            >>> limiter.burst_size
+            20
         """
         self.max_requests = max_requests
         self.time_window = time_window
@@ -69,6 +84,19 @@ class RateLimiter:
 
         Returns:
             Number of tokens that refill per second.
+
+        Examples:
+            30 requests per 60 seconds = 0.5 tokens/second:
+
+            >>> limiter = RateLimiter(max_requests=30, time_window=60.0)
+            >>> limiter.refill_rate
+            0.5
+
+            10 requests per 10 seconds = 1.0 token/second:
+
+            >>> limiter = RateLimiter(max_requests=10, time_window=10.0)
+            >>> limiter.refill_rate
+            1.0
         """
         return self.max_requests / self.time_window
 

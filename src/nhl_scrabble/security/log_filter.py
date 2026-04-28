@@ -186,6 +186,41 @@ class SensitiveDataFilter(logging.Filter):
 
         Returns:
             True (always allows the record to be logged after sanitization).
+
+        Examples:
+            Sanitize API key from log record:
+
+            >>> import logging
+            >>> log_filter = SensitiveDataFilter()
+            >>> record = logging.LogRecord(
+            ...     name="test",
+            ...     level=logging.INFO,
+            ...     pathname="",
+            ...     lineno=0,
+            ...     msg="API request with api_key=secret123",
+            ...     args=(),
+            ...     exc_info=None
+            ... )
+            >>> log_filter.filter(record)
+            True
+            >>> record.msg
+            'API request with api_key=***'
+
+            Sanitize player name from log record:
+
+            >>> record = logging.LogRecord(
+            ...     name="test",
+            ...     level=logging.INFO,
+            ...     pathname="",
+            ...     lineno=0,
+            ...     msg="Processing player: Connor McDavid",
+            ...     args=(),
+            ...     exc_info=None
+            ... )
+            >>> log_filter.filter(record)
+            True
+            >>> "[REDACTED-NAME]" in record.msg
+            True
         """
         # Sanitize message
         if isinstance(record.msg, str):

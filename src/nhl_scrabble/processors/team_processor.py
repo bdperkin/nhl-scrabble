@@ -41,6 +41,25 @@ class TeamProcessor:
             api_client: NHL API client for fetching data (APIClientProtocol)
             scorer: Scrabble scorer for calculating player scores (ScorerProtocol)
             max_workers: Maximum number of concurrent API requests (default: 5)
+
+        Examples:
+            Initialize with mocked dependencies:
+
+            >>> class MockAPIClient:
+            ...     def get_teams(self):
+            ...         return {"TOR": {"division": "Atlantic", "conference": "Eastern"}}
+            ...     def get_team_roster(self, team):
+            ...         return {"forwards": [], "defensemen": [], "goalies": []}
+            ...     def close(self):
+            ...         pass
+            >>> class MockScorer:
+            ...     def score_player(self, player):
+            ...         return 10
+            >>> client = MockAPIClient()
+            >>> scorer = MockScorer()
+            >>> processor = TeamProcessor(client, scorer, max_workers=3)
+            >>> processor.max_workers
+            3
         """
         self.api_client = api_client
         self.scorer = scorer

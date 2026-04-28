@@ -78,6 +78,25 @@ class AnalysisFilters:
 
         Returns:
             True if at least one filter is set, False otherwise
+
+        Examples:
+            No filters active:
+
+            >>> filters = AnalysisFilters()
+            >>> filters.is_active()
+            False
+
+            Team filter active:
+
+            >>> filters = AnalysisFilters(teams=frozenset(['TOR', 'MTL']))
+            >>> filters.is_active()
+            True
+
+            Score filter active:
+
+            >>> filters = AnalysisFilters(min_score=50)
+            >>> filters.is_active()
+            True
         """
         return any(
             [
@@ -98,6 +117,34 @@ class AnalysisFilters:
 
         Returns:
             True if team passes all active filters, False otherwise
+
+        Examples:
+            No filters - include all teams:
+
+            >>> from nhl_scrabble.models.team import TeamScore
+            >>> team = TeamScore(
+            ...     abbrev="TOR",
+            ...     name="Maple Leafs",
+            ...     total=500,
+            ...     division="Atlantic",
+            ...     conference="Eastern",
+            ...     players=[]
+            ... )
+            >>> filters = AnalysisFilters()
+            >>> filters.should_include_team(team)
+            True
+
+            Team filter - team matches:
+
+            >>> filters = AnalysisFilters(teams=frozenset(['TOR', 'MTL']))
+            >>> filters.should_include_team(team)
+            True
+
+            Exclusion filter - team excluded:
+
+            >>> filters = AnalysisFilters(excluded_teams=frozenset(['TOR']))
+            >>> filters.should_include_team(team)
+            False
         """
         # Check exclusion first (takes precedence)
         if self.excluded_teams and team.abbrev in self.excluded_teams:
@@ -122,6 +169,37 @@ class AnalysisFilters:
 
         Returns:
             True if player passes all active score filters, False otherwise
+
+        Examples:
+            No score filters - include all:
+
+            >>> from nhl_scrabble.models.player import PlayerScore
+            >>> player = PlayerScore(
+            ...     first_name="Connor",
+            ...     last_name="McDavid",
+            ...     full_name="Connor McDavid",
+            ...     team="EDM",
+            ...     division="Pacific",
+            ...     conference="Western",
+            ...     first_score=20,
+            ...     last_score=15,
+            ...     full_score=35
+            ... )
+            >>> filters = AnalysisFilters()
+            >>> filters.should_include_player(player)
+            True
+
+            Minimum score filter - player passes:
+
+            >>> filters = AnalysisFilters(min_score=30)
+            >>> filters.should_include_player(player)
+            True
+
+            Maximum score filter - player fails:
+
+            >>> filters = AnalysisFilters(max_score=20)
+            >>> filters.should_include_player(player)
+            False
         """
         # Check minimum score
         if self.min_score is not None and player.full_score < self.min_score:
@@ -143,6 +221,40 @@ def filter_teams(
 
     Returns:
         Filtered dictionary of team scores
+
+    Examples:
+        No filters - return all teams:
+
+        >>> from nhl_scrabble.models.team import TeamScore
+        >>> teams = {
+        ...     "TOR": TeamScore(
+        ...         abbrev="TOR",
+        ...         name="Maple Leafs",
+        ...         total=500,
+        ...         division="Atlantic",
+        ...         conference="Eastern",
+        ...         players=[]
+        ...     ),
+        ...     "MTL": TeamScore(
+        ...         abbrev="MTL",
+        ...         name="Canadiens",
+        ...         total=450,
+        ...         division="Atlantic",
+        ...         conference="Eastern",
+        ...         players=[]
+        ...     )
+        ... }
+        >>> filters = AnalysisFilters()
+        >>> result = filter_teams(teams, filters)
+        >>> len(result)
+        2
+
+        Filter by team:
+
+        >>> filters = AnalysisFilters(teams=frozenset(['TOR']))
+        >>> result = filter_teams(teams, filters)
+        >>> list(result.keys())
+        ['TOR']
     """
     if not filters.is_active():
         return team_scores
@@ -161,6 +273,48 @@ def filter_players(players: list[PlayerScore], filters: AnalysisFilters) -> list
 
     Returns:
         Filtered list of players
+
+    Examples:
+        No filters - return all players:
+
+        >>> from nhl_scrabble.models.player import PlayerScore
+        >>> players = [
+        ...     PlayerScore(
+        ...         first_name="Connor",
+        ...         last_name="McDavid",
+        ...         full_name="Connor McDavid",
+        ...         team="EDM",
+        ...         division="Pacific",
+        ...         conference="Western",
+        ...         first_score=20,
+        ...         last_score=15,
+        ...         full_score=35
+        ...     ),
+        ...     PlayerScore(
+        ...         first_name="Auston",
+        ...         last_name="Matthews",
+        ...         full_name="Auston Matthews",
+        ...         team="TOR",
+        ...         division="Atlantic",
+        ...         conference="Eastern",
+        ...         first_score=18,
+        ...         last_score=20,
+        ...         full_score=38
+        ...     )
+        ... ]
+        >>> filters = AnalysisFilters()
+        >>> result = filter_players(players, filters)
+        >>> len(result)
+        2
+
+        Filter by minimum score:
+
+        >>> filters = AnalysisFilters(min_score=37)
+        >>> result = filter_players(players, filters)
+        >>> len(result)
+        1
+        >>> result[0].last_name
+        'Matthews'
     """
     if not filters.is_active():
         return players
@@ -205,6 +359,31 @@ def filter_division_standings(
 
     Returns:
         Filtered dictionary of division standings
+
+    Examples:
+        No filters - return all divisions:
+
+        >>> from nhl_scrabble.models.standings import DivisionStandings
+        >>> from nhl_scrabble.models.team import TeamScore
+        >>> atlantic = DivisionStandings(
+        ...     name="Atlantic",
+        ...     total=5000,
+        ...     teams=["TOR", "MTL"],
+        ...     player_count=50,
+        ...     avg_per_team=2500.0
+        ... )
+        >>> standings = {"Atlantic": atlantic, "Metropolitan": atlantic}
+        >>> filters = AnalysisFilters()
+        >>> result = filter_division_standings(standings, filters)
+        >>> len(result)
+        2
+
+        Filter by division:
+
+        >>> filters = AnalysisFilters(divisions=frozenset(['Atlantic']))
+        >>> result = filter_division_standings(standings, filters)
+        >>> list(result.keys())
+        ['Atlantic']
     """
     if not filters.is_active():
         return division_standings
@@ -248,6 +427,22 @@ def filter_conference_standings(
 
     Returns:
         Filtered dictionary of conference standings
+
+    Examples:
+        No filters - return all conferences:
+
+        >>> standings = {"Eastern": [], "Western": []}
+        >>> filters = AnalysisFilters()
+        >>> result = filter_conference_standings(standings, filters)
+        >>> len(result)
+        2
+
+        Filter by conference:
+
+        >>> filters = AnalysisFilters(conferences=frozenset(['Eastern']))
+        >>> result = filter_conference_standings(standings, filters)
+        >>> list(result.keys())
+        ['Eastern']
     """
     if not filters.is_active():
         return conference_standings
@@ -275,6 +470,36 @@ def filter_playoff_standings(
 
     Returns:
         Filtered dictionary of playoff standings
+
+    Examples:
+        No filters - return all playoff teams:
+
+        >>> from nhl_scrabble.models.standings import PlayoffTeam
+        >>> eastern_teams = [
+        ...     PlayoffTeam(
+        ...         abbrev="TOR",
+        ...         total=500,
+        ...         players=25,
+        ...         avg=20.0,
+        ...         division="Atlantic",
+        ...         conference="Eastern",
+        ...         seed_type="Atlantic #1",
+        ...         in_playoffs=True,
+        ...         status_indicator="y"
+        ...     )
+        ... ]
+        >>> standings = {"Eastern": eastern_teams, "Western": []}
+        >>> filters = AnalysisFilters()
+        >>> result = filter_playoff_standings(standings, filters)
+        >>> len(result)
+        2
+
+        Filter by conference:
+
+        >>> filters = AnalysisFilters(conferences=frozenset(['Eastern']))
+        >>> result = filter_playoff_standings(standings, filters)
+        >>> list(result.keys())
+        ['Eastern']
     """
     if not filters.is_active():
         return playoff_standings

@@ -200,6 +200,29 @@ sys.path.insert(0, os.path.abspath('../src'))
 # Import common modules for doctests
 from nhl_scrabble.scoring import ScrabbleScorer
 from nhl_scrabble.models.player import PlayerScore
+from nhl_scrabble.models.team import TeamScore
+from nhl_scrabble.models.standings import (
+    ConferenceStandings,
+    DivisionStandings,
+    PlayoffTeam,
+)
+
+# Import filter and search modules
+from nhl_scrabble.filters import AnalysisFilters
+from nhl_scrabble.search import PlayerSearch
+
+# Import utility modules
+from nhl_scrabble.rate_limiter import RateLimiter
+
+# Import security modules
+from nhl_scrabble.security.circuit_breaker import CircuitBreaker, CircuitState
+from nhl_scrabble.security.log_filter import SensitiveDataFilter
+
+# Import formatter modules
+from nhl_scrabble.formatters.template_formatter import TemplateFormatter
+
+# Import processor modules
+from nhl_scrabble.processors.team_processor import TeamProcessor
 
 # Import API modules for API documentation doctests
 from nhl_scrabble.api.nhl_client import NHLApiClient

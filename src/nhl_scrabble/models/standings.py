@@ -23,7 +23,22 @@ class DivisionStandings:
     avg_per_team: float
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
+        """Convert to dictionary for JSON serialization.
+
+        Examples:
+            >>> standings = DivisionStandings(
+            ...     name="Atlantic",
+            ...     total=5000,
+            ...     teams=["TOR", "MTL", "BOS"],
+            ...     player_count=75,
+            ...     avg_per_team=1666.67
+            ... )
+            >>> result = standings.to_dict()
+            >>> result['name']
+            'Atlantic'
+            >>> len(result['teams'])
+            3
+        """
         return {
             "name": self.name,
             "total": self.total,
@@ -33,7 +48,19 @@ class DivisionStandings:
         }
 
     def __repr__(self) -> str:
-        """Return a string representation of the division standings."""
+        """Return a string representation of the division standings.
+
+        Examples:
+            >>> standings = DivisionStandings(
+            ...     name="Atlantic",
+            ...     total=5000,
+            ...     teams=["TOR", "MTL", "BOS"],
+            ...     player_count=75,
+            ...     avg_per_team=1666.67
+            ... )
+            >>> repr(standings)
+            "DivisionStandings(name='Atlantic', total=5000, teams=3)"
+        """
         return f"DivisionStandings(name='{self.name}', total={self.total}, teams={len(self.teams)})"
 
 
@@ -56,7 +83,22 @@ class ConferenceStandings:
     avg_per_team: float
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
+        """Convert to dictionary for JSON serialization.
+
+        Examples:
+            >>> standings = ConferenceStandings(
+            ...     name="Eastern",
+            ...     total=10000,
+            ...     teams=["TOR", "MTL", "BOS", "NYR"],
+            ...     player_count=100,
+            ...     avg_per_team=2500.0
+            ... )
+            >>> result = standings.to_dict()
+            >>> result['name']
+            'Eastern'
+            >>> len(result['teams'])
+            4
+        """
         return {
             "name": self.name,
             "total": self.total,
@@ -66,7 +108,19 @@ class ConferenceStandings:
         }
 
     def __repr__(self) -> str:
-        """Return a string representation of the conference standings."""
+        """Return a string representation of the conference standings.
+
+        Examples:
+            >>> standings = ConferenceStandings(
+            ...     name="Eastern",
+            ...     total=10000,
+            ...     teams=["TOR", "MTL", "BOS", "NYR"],
+            ...     player_count=100,
+            ...     avg_per_team=2500.0
+            ... )
+            >>> repr(standings)
+            "ConferenceStandings(name='Eastern', total=10000, teams=4)"
+        """
         return (
             f"ConferenceStandings(name='{self.name}', total={self.total}, teams={len(self.teams)})"
         )
@@ -104,7 +158,27 @@ class PlayoffTeam:
     status_indicator: StatusIndicator = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
+        """Convert to dictionary for JSON serialization.
+
+        Examples:
+            >>> team = PlayoffTeam(
+            ...     abbrev="TOR",
+            ...     total=500,
+            ...     players=25,
+            ...     avg=20.0,
+            ...     conference="Eastern",
+            ...     division="Atlantic",
+            ...     seed_type="Atlantic #1",
+            ...     in_playoffs=True,
+            ...     division_rank=1,
+            ...     status_indicator="y"
+            ... )
+            >>> result = team.to_dict()
+            >>> result['abbrev']
+            'TOR'
+            >>> result['in_playoffs']
+            True
+        """
         return {
             "abbrev": self.abbrev,
             "total": self.total,
@@ -119,7 +193,24 @@ class PlayoffTeam:
         }
 
     def __repr__(self) -> str:
-        """Return a string representation of the playoff team."""
+        """Return a string representation of the playoff team.
+
+        Examples:
+            >>> team = PlayoffTeam(
+            ...     abbrev="TOR",
+            ...     total=500,
+            ...     players=25,
+            ...     avg=20.0,
+            ...     conference="Eastern",
+            ...     division="Atlantic",
+            ...     seed_type="Atlantic #1",
+            ...     in_playoffs=True,
+            ...     division_rank=1,
+            ...     status_indicator="y"
+            ... )
+            >>> repr(team)
+            "PlayoffTeam(abbrev='TOR', seed='Atlantic #1', status='y')"
+        """
         return (
             f"PlayoffTeam(abbrev='{self.abbrev}', "
             f"seed='{self.seed_type}', status='{self.status_indicator}')"

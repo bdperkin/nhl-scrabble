@@ -28,6 +28,27 @@ class PlayerSearch:
 
         Args:
             players: List of PlayerScore objects to search
+
+        Examples:
+            Initialize with player list:
+
+            >>> from nhl_scrabble.models.player import PlayerScore
+            >>> players = [
+            ...     PlayerScore(
+            ...         first_name="Connor",
+            ...         last_name="McDavid",
+            ...         full_name="Connor McDavid",
+            ...         team="EDM",
+            ...         division="Pacific",
+            ...         conference="Western",
+            ...         first_score=20,
+            ...         last_score=15,
+            ...         full_score=35
+            ...     )
+            ... ]
+            >>> searcher = PlayerSearch(players)
+            >>> len(searcher.players)
+            1
         """
         self.players = players
 
@@ -160,6 +181,41 @@ class PlayerSearch:
 
         Returns:
             List of top N players sorted by score (descending)
+
+        Examples:
+            Get top 3 players:
+
+            >>> from nhl_scrabble.models.player import PlayerScore
+            >>> players = [
+            ...     PlayerScore(
+            ...         first_name="Connor",
+            ...         last_name="McDavid",
+            ...         full_name="Connor McDavid",
+            ...         team="EDM",
+            ...         division="Pacific",
+            ...         conference="Western",
+            ...         first_score=20,
+            ...         last_score=15,
+            ...         full_score=35
+            ...     ),
+            ...     PlayerScore(
+            ...         first_name="Auston",
+            ...         last_name="Matthews",
+            ...         full_name="Auston Matthews",
+            ...         team="TOR",
+            ...         division="Atlantic",
+            ...         conference="Eastern",
+            ...         first_score=18,
+            ...         last_score=20,
+            ...         full_score=38
+            ...     )
+            ... ]
+            >>> searcher = PlayerSearch(players)
+            >>> top = searcher.get_top_players(n=1)
+            >>> len(top)
+            1
+            >>> top[0].last_name
+            'Matthews'
         """
         return sorted(self.players, key=lambda p: p.full_score, reverse=True)[:n]
 
@@ -173,6 +229,45 @@ class PlayerSearch:
                 - min_score: Minimum Scrabble score
                 - max_score: Maximum Scrabble score
                 - total_teams: Number of unique teams
+
+        Examples:
+            Get player statistics:
+
+            >>> from nhl_scrabble.models.player import PlayerScore
+            >>> players = [
+            ...     PlayerScore(
+            ...         first_name="Connor",
+            ...         last_name="McDavid",
+            ...         full_name="Connor McDavid",
+            ...         team="EDM",
+            ...         division="Pacific",
+            ...         conference="Western",
+            ...         first_score=20,
+            ...         last_score=15,
+            ...         full_score=35
+            ...     ),
+            ...     PlayerScore(
+            ...         first_name="Auston",
+            ...         last_name="Matthews",
+            ...         full_name="Auston Matthews",
+            ...         team="TOR",
+            ...         division="Atlantic",
+            ...         conference="Eastern",
+            ...         first_score=18,
+            ...         last_score=20,
+            ...         full_score=38
+            ...     )
+            ... ]
+            >>> searcher = PlayerSearch(players)
+            >>> stats = searcher.get_stats()
+            >>> stats['total_players']
+            2
+            >>> stats['total_teams']
+            2
+            >>> stats['min_score']
+            35
+            >>> stats['max_score']
+            38
         """
         if not self.players:
             return {

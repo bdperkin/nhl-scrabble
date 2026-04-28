@@ -39,6 +39,26 @@ class PlayerScore:
         Note:
             This is 2-3x faster than dataclasses.asdict()
             because it uses direct attribute access instead of reflection.
+
+        Examples:
+            Convert player to dictionary:
+
+            >>> player = PlayerScore(
+            ...     first_name="Connor",
+            ...     last_name="McDavid",
+            ...     full_name="Connor McDavid",
+            ...     first_score=20,
+            ...     last_score=15,
+            ...     full_score=35,
+            ...     team="EDM",
+            ...     division="Pacific",
+            ...     conference="Western"
+            ... )
+            >>> result = player.to_dict()
+            >>> result['full_name']
+            'Connor McDavid'
+            >>> result['full_score']
+            35
         """
         return {
             "first_name": self.first_name,
@@ -53,5 +73,23 @@ class PlayerScore:
         }
 
     def __repr__(self) -> str:
-        """Return a string representation of the player."""
+        """Return a string representation of the player.
+
+        Examples:
+            String representation:
+
+            >>> player = PlayerScore(
+            ...     first_name="Connor",
+            ...     last_name="McDavid",
+            ...     full_name="Connor McDavid",
+            ...     first_score=20,
+            ...     last_score=15,
+            ...     full_score=35,
+            ...     team="EDM",
+            ...     division="Pacific",
+            ...     conference="Western"
+            ... )
+            >>> repr(player)
+            "PlayerScore(name='Connor McDavid', score=35, team='EDM')"
+        """
         return f"PlayerScore(name='{self.full_name}', score={self.full_score}, team='{self.team}')"
