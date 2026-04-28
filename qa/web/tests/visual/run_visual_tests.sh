@@ -99,8 +99,8 @@ function update_baselines {
     pytest . --update-snapshots "${args[@]}"
     print_message "${GREEN}" "✓ Baselines updated successfully"
     print_message "${YELLOW}" "Remember to review and commit the changes:"
-    print_message "${YELLOW}" "  git diff qa/web/tests/visual/snapshots/"
-    print_message "${YELLOW}" "  git add qa/web/tests/visual/snapshots/"
+    print_message "${YELLOW}" "  git diff qa/web/tests/visual/__snapshots__/"
+    print_message "${YELLOW}" "  git add qa/web/tests/visual/__snapshots__/"
     print_message "${YELLOW}" "  git commit -m 'test(visual): Update baselines for <reason>'"
   else
     print_message "${YELLOW}" "Cancelled."

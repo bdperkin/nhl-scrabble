@@ -4,16 +4,17 @@ Tests capture full-page screenshots across all main pages and compare them again
 to detect unintended visual changes, layout shifts, and styling errors.
 """
 
+from collections.abc import Callable
+
 from pages.conferences_page import ConferencesPage
 from pages.divisions_page import DivisionsPage
 from pages.index_page import IndexPage
 from pages.playoffs_page import PlayoffsPage
 from pages.stats_page import StatsPage
 from pages.teams_page import TeamsPage
-from playwright.sync_api import expect
 
 
-def test_index_page_visual(index_page: IndexPage) -> None:
+def test_index_page_visual(index_page: IndexPage, assert_snapshot: Callable) -> None:
     """Test full page screenshot of the index/home page.
 
     Captures the entire home page to detect:
@@ -24,18 +25,17 @@ def test_index_page_visual(index_page: IndexPage) -> None:
 
     Args:
         index_page: IndexPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     index_page.navigate()
     index_page.wait_for_load()
 
     # Full page screenshot comparison
-    expect(index_page.page).to_have_screenshot(
-        "index-page-full.png",
-        full_page=True,
-    )
+    screenshot = index_page.page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "index-page-full.png", threshold=0.05)
 
 
-def test_teams_page_visual(teams_page: TeamsPage) -> None:
+def test_teams_page_visual(teams_page: TeamsPage, assert_snapshot: Callable) -> None:
     """Test full page screenshot of the teams page.
 
     Captures the entire teams standings page to detect:
@@ -46,18 +46,17 @@ def test_teams_page_visual(teams_page: TeamsPage) -> None:
 
     Args:
         teams_page: TeamsPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     teams_page.navigate()
     teams_page.wait_for_load()
 
     # Full page screenshot comparison
-    expect(teams_page.page).to_have_screenshot(
-        "teams-page-full.png",
-        full_page=True,
-    )
+    screenshot = teams_page.page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "teams-page-full.png", threshold=0.05)
 
 
-def test_divisions_page_visual(divisions_page: DivisionsPage) -> None:
+def test_divisions_page_visual(divisions_page: DivisionsPage, assert_snapshot: Callable) -> None:
     """Test full page screenshot of the divisions page.
 
     Captures the entire divisions page to detect:
@@ -68,18 +67,20 @@ def test_divisions_page_visual(divisions_page: DivisionsPage) -> None:
 
     Args:
         divisions_page: DivisionsPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     divisions_page.navigate()
     divisions_page.wait_for_load()
 
     # Full page screenshot comparison
-    expect(divisions_page.page).to_have_screenshot(
-        "divisions-page-full.png",
-        full_page=True,
-    )
+    screenshot = divisions_page.page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "divisions-page-full.png", threshold=0.05)
 
 
-def test_conferences_page_visual(conferences_page: ConferencesPage) -> None:
+def test_conferences_page_visual(
+    conferences_page: ConferencesPage,
+    assert_snapshot: Callable,
+) -> None:
     """Test full page screenshot of the conferences page.
 
     Captures the entire conferences page to detect:
@@ -90,18 +91,17 @@ def test_conferences_page_visual(conferences_page: ConferencesPage) -> None:
 
     Args:
         conferences_page: ConferencesPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     conferences_page.navigate()
     conferences_page.wait_for_load()
 
     # Full page screenshot comparison
-    expect(conferences_page.page).to_have_screenshot(
-        "conferences-page-full.png",
-        full_page=True,
-    )
+    screenshot = conferences_page.page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "conferences-page-full.png", threshold=0.05)
 
 
-def test_playoffs_page_visual(playoffs_page: PlayoffsPage) -> None:
+def test_playoffs_page_visual(playoffs_page: PlayoffsPage, assert_snapshot: Callable) -> None:
     """Test full page screenshot of the playoffs page.
 
     Captures the entire playoffs bracket page to detect:
@@ -112,18 +112,17 @@ def test_playoffs_page_visual(playoffs_page: PlayoffsPage) -> None:
 
     Args:
         playoffs_page: PlayoffsPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     playoffs_page.navigate()
     playoffs_page.wait_for_load()
 
     # Full page screenshot comparison
-    expect(playoffs_page.page).to_have_screenshot(
-        "playoffs-page-full.png",
-        full_page=True,
-    )
+    screenshot = playoffs_page.page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "playoffs-page-full.png", threshold=0.05)
 
 
-def test_stats_page_visual(stats_page: StatsPage) -> None:
+def test_stats_page_visual(stats_page: StatsPage, assert_snapshot: Callable) -> None:
     """Test full page screenshot of the stats page.
 
     Captures the entire stats page to detect:
@@ -134,18 +133,17 @@ def test_stats_page_visual(stats_page: StatsPage) -> None:
 
     Args:
         stats_page: StatsPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     stats_page.navigate()
     stats_page.wait_for_load()
 
     # Full page screenshot comparison
-    expect(stats_page.page).to_have_screenshot(
-        "stats-page-full.png",
-        full_page=True,
-    )
+    screenshot = stats_page.page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "stats-page-full.png", threshold=0.05)
 
 
-def test_index_page_viewport_visual(index_page: IndexPage) -> None:
+def test_index_page_viewport_visual(index_page: IndexPage, assert_snapshot: Callable) -> None:
     """Test viewport-only screenshot of the index page.
 
     Captures only the visible viewport (no scrolling) to detect:
@@ -155,18 +153,17 @@ def test_index_page_viewport_visual(index_page: IndexPage) -> None:
 
     Args:
         index_page: IndexPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     index_page.navigate()
     index_page.wait_for_load()
 
     # Viewport-only screenshot comparison
-    expect(index_page.page).to_have_screenshot(
-        "index-page-viewport.png",
-        full_page=False,
-    )
+    screenshot = index_page.page.screenshot(full_page=False)
+    assert_snapshot(screenshot, "index-page-viewport.png", threshold=0.05)
 
 
-def test_teams_page_viewport_visual(teams_page: TeamsPage) -> None:
+def test_teams_page_viewport_visual(teams_page: TeamsPage, assert_snapshot: Callable) -> None:
     """Test viewport-only screenshot of the teams page.
 
     Captures only the visible viewport to detect:
@@ -176,12 +173,11 @@ def test_teams_page_viewport_visual(teams_page: TeamsPage) -> None:
 
     Args:
         teams_page: TeamsPage fixture instance
+        assert_snapshot: Snapshot comparison fixture
     """
     teams_page.navigate()
     teams_page.wait_for_load()
 
     # Viewport-only screenshot comparison
-    expect(teams_page.page).to_have_screenshot(
-        "teams-page-viewport.png",
-        full_page=False,
-    )
+    screenshot = teams_page.page.screenshot(full_page=False)
+    assert_snapshot(screenshot, "teams-page-viewport.png", threshold=0.05)
