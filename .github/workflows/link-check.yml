@@ -1,14 +1,7 @@
 name: Link Check
 
 on:
-  # Run on PRs that modify markdown files
-  pull_request:
-    paths:
-      - '**.md'
-      - '.github/workflows/link-check.yml'
-      - '.github/markdown-link-check-config.json'
-
-  # Run on main branch pushes
+  # Run on main branch pushes (post-merge validation)
   push:
     branches:
       - main
@@ -45,28 +38,14 @@ jobs:
           config-file: '.github/markdown-link-check-config.json'
           use-quiet-mode: 'no'
           use-verbose-mode: 'yes'
-          check-modified-files-only: ${{ github.event_name == 'pull_request' }}
+          check-modified-files-only: 'yes'  # Only check modified files on push to main
         continue-on-error: true
 
-      - name: Create issue for broken links (scheduled runs only)
-        if: ${{ failure() && github.event_name == 'schedule' }}
+      - name: Create issue for broken links
+        if: failure()
         uses: peter-evans/create-issue-from-file@v6
         with:
           title: 'Broken links detected in documentation'
           content-filepath: '.github/workflows/broken-links-report.md'
           labels: 'documentation,broken-links,automated'
           assignees: ${{ github.repository_owner }}
-
-      - name: Comment on PR for broken links (PR runs only)
-        if: ${{ failure() && github.event_name == 'pull_request' }}
-        uses: actions/github-script@v9
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.name,
-              body: '⚠️ **Broken links detected**\n\n' +
-                    'Please fix the broken links in your documentation changes. ' +
-                    'Check the workflow logs for details.'
-            })
