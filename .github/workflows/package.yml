@@ -13,10 +13,6 @@ jobs:
     name: Validate Wheel Contents
     runs-on: ubuntu-latest
 
-    env:
-      # Use Node.js 24 for all actions
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
