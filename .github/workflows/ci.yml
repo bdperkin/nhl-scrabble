@@ -261,3 +261,13 @@ jobs:
         uses: pre-commit/action@v3.0.1
         env:
           UV_SYSTEM_PYTHON: "1"
+          # Skip check-jsonschema to run separately (non-blocking)
+          SKIP: check-jsonschema
+
+      - name: Run check-jsonschema (non-blocking)
+        run: |
+          uv pip install check-jsonschema --system
+          pre-commit run check-jsonschema --all-files
+        continue-on-error: true  # Don't block CI on network issues
+        env:
+          UV_SYSTEM_PYTHON: "1"
