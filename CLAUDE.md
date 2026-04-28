@@ -204,6 +204,7 @@ NHL_SCRABBLE_VERBOSE=true
 - **Dependency Review:** Automated PR checks for vulnerabilities and license compliance
 - **pip-audit:** Dependency vulnerability scanning
 - **Secret scanning:** Detects committed secrets
+- **SBOM Generation:** Automated Software Bill of Materials for supply chain transparency
 
 **Dependency Review Workflow:**
 
@@ -212,6 +213,15 @@ NHL_SCRABBLE_VERBOSE=true
 - Validates license compliance (allows: MIT, Apache-2.0, BSD, ISC, Python-2.0; denies: GPL-3.0, AGPL-3.0)
 - Posts detailed findings as PR comments
 - Enforces security and compliance policies before merge
+
+**SBOM Workflow:**
+
+- Generates CycloneDX (JSON/XML) and SPDX (JSON) formats
+- Triggers: Weekly (Mondays 6 AM UTC), releases, dependency changes, manual
+- Includes complete dependency tree with license information
+- Vulnerability scanning with Grype
+- Artifacts retained 90 days, attached to releases permanently
+- Location: GitHub Actions artifacts and release assets
 
 ### Publishing
 
