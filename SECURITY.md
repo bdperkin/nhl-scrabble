@@ -214,6 +214,25 @@ We treat SSRF vulnerabilities as **HIGH** severity and will prioritize fixes.
   - Runs in CI on every PR and main branch push
   - Checks against PyPI advisory database
 
+### Software Bill of Materials (SBOM)
+
+- **Automated SBOM Generation**: Weekly generation of dependency inventory
+  - **CycloneDX** format (JSON and XML) - Industry standard for tool integration
+  - **SPDX** format (JSON) - Linux Foundation standard for compliance
+  - Generated on:
+    - Every release (attached to GitHub releases)
+    - Weekly schedule (Mondays at 6 AM UTC)
+    - Dependency changes (pyproject.toml, uv.lock)
+    - Manual trigger via workflow_dispatch
+  - Includes:
+    - Complete dependency tree
+    - License information for all components
+    - Package URLs (purl) for each component
+    - Build metadata (timestamp, commit, ref)
+  - **Location**: GitHub Actions artifacts and release attachments
+  - **Retention**: 90 days for artifacts, permanent for releases
+  - **Vulnerability Scanning**: SBOM used for automated vulnerability detection with Grype
+
 ### Code Quality and Security
 
 - **MyPy**: Static type checking in strict mode

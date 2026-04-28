@@ -1,0 +1,198 @@
+name: SBOM Generation
+
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+      - main
+    paths:
+      - pyproject.toml
+      - uv.lock
+  schedule:
+    # Weekly SBOM generation (Mondays at 6 AM UTC)
+    - cron: "0 6 * * 1"
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write # For attaching to releases
+  actions: read
+  security-events: write # For uploading SARIF
+
+jobs:
+  generate-sbom:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+
+    env:
+      # Use Node.js 24 for all actions
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Full history for version detection
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - name: Install cyclonedx-bom
+        run: |
+          uv pip install cyclonedx-bom --system
+
+      - name: Install project dependencies
+        run: |
+          uv pip install -e . --system
+
+      - name: Generate CycloneDX SBOM (JSON)
+        run: |
+          cyclonedx-py environment \
+            --output-format json \
+            --output-file sbom-cyclonedx.json \
+            --gather-license-texts
+
+      - name: Generate CycloneDX SBOM (XML)
+        run: |
+          cyclonedx-py environment \
+            --output-format xml \
+            --output-file sbom-cyclonedx.xml \
+            --gather-license-texts
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          format: spdx-json
+          output-file: sbom-spdx.json
+
+      - name: Add metadata to SBOMs
+        run: |
+          # Add build metadata
+          echo "Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> sbom-metadata.txt
+          echo "Repository: ${{ github.repository }}" >> sbom-metadata.txt
+          echo "Commit: ${{ github.sha }}" >> sbom-metadata.txt
+          echo "Ref: ${{ github.ref }}" >> sbom-metadata.txt
+          echo "Event: ${{ github.event_name }}" >> sbom-metadata.txt
+          echo "Python Version: 3.12" >> sbom-metadata.txt
+
+      - name: Validate CycloneDX SBOM
+        run: |
+          # Install validator
+          uv pip install cyclonedx-python-lib --system
+
+          # Validate JSON format
+          echo "Validating CycloneDX JSON..."
+          python -c "
+          import json
+          import sys
+          try:
+              with open('sbom-cyclonedx.json') as f:
+                  data = json.load(f)
+              if 'bomFormat' not in data or data['bomFormat'] != 'CycloneDX':
+                  print('ERROR: Invalid CycloneDX format')
+                  sys.exit(1)
+              print(f'✓ Valid CycloneDX SBOM (version {data.get(\"specVersion\", \"unknown\")})')
+              print(f'✓ Components: {len(data.get(\"components\", []))}')
+          except Exception as e:
+              print(f'ERROR: {e}')
+              sys.exit(1)
+          "
+
+          # Validate XML format
+          echo "Validating CycloneDX XML..."
+          if [ -s sbom-cyclonedx.xml ]; then
+            echo "✓ CycloneDX XML generated"
+          else
+            echo "ERROR: CycloneDX XML empty or missing"
+            exit 1
+          fi
+
+      - name: Display SBOM summary
+        run: |
+          echo "=== SBOM Summary ==="
+          echo ""
+          echo "CycloneDX JSON:"
+          python -c "
+          import json
+          with open('sbom-cyclonedx.json') as f:
+              data = json.load(f)
+          print(f'  Format: {data.get(\"bomFormat\", \"unknown\")}')
+          print(f'  Spec Version: {data.get(\"specVersion\", \"unknown\")}')
+          print(f'  Components: {len(data.get(\"components\", []))}')
+          components = data.get('components', [])
+          if components:
+              licenses = set()
+              for comp in components:
+                  comp_licenses = comp.get('licenses', [])
+                  for lic in comp_licenses:
+                      if 'license' in lic:
+                          if 'id' in lic['license']:
+                              licenses.add(lic['license']['id'])
+                          elif 'name' in lic['license']:
+                              licenses.add(lic['license']['name'])
+              print(f'  Unique Licenses: {len(licenses)}')
+              print(f'  License Types: {sorted(licenses)[:10]}')  # Show first 10
+          "
+          echo ""
+          echo "SPDX JSON:"
+          python -c "
+          import json
+          with open('sbom-spdx.json') as f:
+              data = json.load(f)
+          print(f'  SPDX Version: {data.get(\"spdxVersion\", \"unknown\")}')
+          print(f'  Packages: {len(data.get(\"packages\", []))}')
+          "
+          echo ""
+          echo "Metadata:"
+          cat sbom-metadata.txt
+
+      - name: Upload SBOM artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: sbom-${{ github.sha }}
+          path: |
+            sbom-*.json
+            sbom-*.xml
+            sbom-metadata.txt
+          retention-days: 90
+
+      - name: Attach SBOMs to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            sbom-cyclonedx.json
+            sbom-cyclonedx.xml
+            sbom-spdx.json
+            sbom-metadata.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Vulnerability scan with Grype
+        id: grype-scan
+        uses: anchore/scan-action@v6
+        with:
+          sbom: sbom-spdx.json
+          fail-build: false
+          severity-cutoff: high
+
+      - name: Upload vulnerability results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: ${{ steps.grype-scan.outputs.sarif }}
+
+      - name: Display vulnerability summary
+        if: always()
+        run: |
+          echo "=== Vulnerability Scan Summary ==="
+          echo "Scan completed. Check Security tab for detailed results."
+          echo "SARIF file: ${{ steps.grype-scan.outputs.sarif }}"

@@ -10,6 +10,7 @@
 
 [![CI](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/bdperkin/nhl-scrabble/actions/workflows/codeql.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/codeql.yml)
+[![SBOM](https://github.com/bdperkin/nhl-scrabble/actions/workflows/sbom.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/sbom.yml)
 [![Docs](https://github.com/bdperkin/nhl-scrabble/actions/workflows/docs.yml/badge.svg)](https://github.com/bdperkin/nhl-scrabble/actions/workflows/docs.yml)
 [![codecov](https://codecov.io/gh/bdperkin/nhl-scrabble/branch/main/graph/badge.svg)](https://codecov.io/gh/bdperkin/nhl-scrabble)
 
