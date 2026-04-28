@@ -80,13 +80,13 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
             r"gcc|cmake|go|rustc|cargo|kubectl|helm|terraform|ansible|"
             r"codeql|unzip)\b",
             content,
-        )
+        ),
     )
     if external_cmds:
         if not re.search(r"#.*(?:Dependencies|Requires?):", header_text, re.I):
             issues.append(
                 f"Uses external commands but missing dependency documentation: "
-                f"{', '.join(sorted(external_cmds))}"
+                f"{', '.join(sorted(external_cmds))}",
             )
 
     return issues
