@@ -24,10 +24,10 @@ def test_framework_setup(index_page: IndexPage) -> None:
 
     # Verify we can get the page title
     title = index_page.get_title()
-    assert title is not None, "Page title should not be None"
+    assert title is not None, "Page title should not be None"  # noqa: S101
 
     # Verify page object methods work
-    assert index_page.page is not None, "Page object should be initialized"
+    assert index_page.page is not None, "Page object should be initialized"  # noqa: S101
 
 
 @pytest.mark.smoke
@@ -45,7 +45,7 @@ def test_page_navigation(index_page: IndexPage) -> None:
 
     # Verify URL is correct
     current_url = index_page.page.url
-    assert (
+    assert (  # noqa: S101
         "localhost:5000" in current_url or index_page.base_url in current_url
     ), "Should be on correct domain"
 
@@ -63,13 +63,13 @@ def test_page_fixtures(
         index_page: IndexPage fixture
     """
     # Verify IndexPage fixture
-    assert index_page is not None, "IndexPage fixture should work"
-    assert index_page.page is not None, "IndexPage should have page object"
-    assert index_page.base_url is not None, "IndexPage should have base URL"
+    assert index_page is not None, "IndexPage fixture should work"  # noqa: S101
+    assert index_page.page is not None, "IndexPage should have page object"  # noqa: S101
+    assert index_page.base_url is not None, "IndexPage should have base URL"  # noqa: S101
 
     # Verify page methods are accessible
-    assert callable(index_page.navigate), "navigate method should be callable"
-    assert callable(index_page.get_title), "get_title method should be callable"
+    assert callable(index_page.navigate), "navigate method should be callable"  # noqa: S101
+    assert callable(index_page.get_title), "get_title method should be callable"  # noqa: S101
 
 
 @pytest.mark.smoke
@@ -81,17 +81,17 @@ def test_playwright_imports() -> None:
     """
     # Test sync_api imports
     # Test that we can import all page objects
-    from pages.base_page import BasePage  # noqa: F401
-    from pages.conferences_page import ConferencesPage  # noqa: F401
-    from pages.divisions_page import DivisionsPage  # noqa: F401
-    from pages.index_page import IndexPage  # noqa: F401
-    from pages.playoffs_page import PlayoffsPage  # noqa: F401
-    from pages.stats_page import StatsPage  # noqa: F401
-    from pages.teams_page import TeamsPage  # noqa: F401
-    from playwright.sync_api import Page, expect  # noqa: F401
+    from pages.base_page import BasePage  # noqa: F401, PLC0415
+    from pages.conferences_page import ConferencesPage  # noqa: F401, PLC0415
+    from pages.divisions_page import DivisionsPage  # noqa: F401, PLC0415
+    from pages.index_page import IndexPage  # noqa: F401, PLC0415
+    from pages.playoffs_page import PlayoffsPage  # noqa: F401, PLC0415
+    from pages.stats_page import StatsPage  # noqa: F401, PLC0415
+    from pages.teams_page import TeamsPage  # noqa: F401, PLC0415
+    from playwright.sync_api import Page, expect  # noqa: F401, PLC0415
 
     # Test utilities import
-    from utilities import (  # noqa: F401
+    from utilities import (  # noqa: F401, PLC0415
         AssertionHelpers,
         DataGenerators,
         ScreenshotHelpers,
@@ -100,7 +100,7 @@ def test_playwright_imports() -> None:
     )
 
     # If we get here without ImportError, all imports work
-    assert True
+    assert True  # noqa: S101
 
 
 @pytest.mark.smoke
@@ -109,7 +109,7 @@ def test_utilities() -> None:
 
     Tests that utility classes can be instantiated and basic methods are accessible.
     """
-    from utilities import (
+    from utilities import (  # noqa: PLC0415
         AssertionHelpers,
         DataGenerators,
         ScreenshotHelpers,
@@ -118,18 +118,18 @@ def test_utilities() -> None:
     )
 
     # Verify utility classes can be instantiated
-    assert AssertionHelpers() is not None
-    assert WaitHelpers() is not None
-    assert DataGenerators() is not None
-    assert ScreenshotHelpers() is not None
-    assert TableHelpers() is not None
+    assert AssertionHelpers() is not None  # noqa: S101
+    assert WaitHelpers() is not None  # noqa: S101
+    assert DataGenerators() is not None  # noqa: S101
+    assert ScreenshotHelpers() is not None  # noqa: S101
+    assert TableHelpers() is not None  # noqa: S101
 
     # Test data generator methods
     random_str = DataGenerators.random_string(10)
-    assert len(random_str) == 10, "Random string should have correct length"
+    assert len(random_str) == 10, "Random string should have correct length"  # noqa: S101
 
     random_email = DataGenerators.random_email()
-    assert "@" in random_email, "Random email should contain @"
+    assert "@" in random_email, "Random email should contain @"  # noqa: S101
 
     random_num = DataGenerators.random_number(1, 10)
-    assert 1 <= random_num <= 10, "Random number should be in range"
+    assert 1 <= random_num <= 10, "Random number should be in range"  # noqa: S101

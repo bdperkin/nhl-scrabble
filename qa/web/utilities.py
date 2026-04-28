@@ -154,7 +154,7 @@ class DataGenerators:
         Returns:
             Random string
         """
-        return "".join(random.choices(string.ascii_letters + string.digits, k=length))
+        return "".join(random.choices(string.ascii_letters + string.digits, k=length))  # noqa: S311
 
     @staticmethod
     def random_email() -> str:
@@ -178,7 +178,7 @@ class DataGenerators:
         Returns:
             Random integer
         """
-        return random.randint(min_val, max_val)
+        return random.randint(min_val, max_val)  # noqa: S311
 
     @staticmethod
     def random_team_name() -> str:
@@ -197,7 +197,7 @@ class DataGenerators:
             "Red Wings",
             "Knights",
         ]
-        return f"{random.choice(cities)} {random.choice(mascots)}"
+        return f"{random.choice(cities)} {random.choice(mascots)}"  # noqa: S311
 
 
 class ScreenshotHelpers:
@@ -351,11 +351,8 @@ class TableHelpers:
 
 
 # Convenience function to access all helpers
-def get_helpers(page: Page) -> dict[str, Any]:
-    """Get all helper classes initialized with page.
-
-    Args:
-        page: Playwright Page object
+def get_helpers() -> dict[str, Any]:
+    """Get all helper classes initialized.
 
     Returns:
         Dictionary of helper instances
