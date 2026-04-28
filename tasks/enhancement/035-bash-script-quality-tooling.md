@@ -1,6 +1,6 @@
 # Add Comprehensive Bash Script Quality Tooling
 
-**GitHub Issue**: TBD
+**GitHub Issue**: [#424](https://github.com/bdperkin/nhl-scrabble/issues/424)
 
 ## Priority
 
