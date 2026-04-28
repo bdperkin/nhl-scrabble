@@ -574,8 +574,8 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 **Runtime Dependencies** (distributed with the package):
 
-- ✅ **Allowed**: MIT, Apache 2.0, BSD (2-clause, 3-clause), ISC, PSF, MPL-2.0, Unlicense, Public Domain
-- ❌ **Prohibited**: GPL, LGPL, AGPL (copyleft), Proprietary
+- ✅ **Allowed**: MIT, Apache 2.0, BSD (2-clause, 3-clause), ISC, PSF, MPL-2.0, Unlicense, Public Domain, Python-2.0
+- ❌ **Prohibited**: GPL-3.0, LGPL, AGPL-3.0 (copyleft), Proprietary
 
 **Development Dependencies** (build/test tools only):
 
@@ -590,6 +590,57 @@ tox -e licenses
 ```
 
 CI will automatically fail if prohibited licenses are detected in runtime dependencies.
+
+### Automated Dependency Review
+
+The project uses automated dependency review on all PRs that modify dependency files:
+
+**Automated Checks:**
+
+- 🔒 **Security Vulnerabilities**: Scans for known CVEs using pip-audit
+- 📋 **License Compliance**: Validates against allowed/denied license lists
+- ⚠️ **Severity Thresholds**: Fails on moderate+ severity vulnerabilities
+- 📝 **PR Comments**: Automatically posts review results
+
+**Severity Levels:**
+
+- **Critical/High**: Always fails CI
+- **Moderate**: Fails CI (configurable)
+- **Low**: Warning only, doesn't block
+
+**Workflow Triggers:**
+
+PRs modifying these files trigger review:
+
+- `pyproject.toml` - Project dependencies
+- `uv.lock` - Lock file
+- `requirements*.txt` - Requirements files
+
+**What to Expect:**
+
+When you add or update dependencies, the dependency-review workflow will:
+
+1. Check for security vulnerabilities in the new/changed dependencies
+1. Verify all licenses are allowed
+1. Comment on the PR with findings (if any)
+1. Fail the PR if critical issues are found
+
+**If Dependency Review Fails:**
+
+```bash
+# Security vulnerabilities found
+# → Update to patched version
+pip install "package>=fixed.version"
+
+# Denied license detected
+# → Find alternative package with compatible license
+# → Or request exception with justification
+
+# Check status
+gh pr checks
+```
+
+See `.github/workflows/dependency-review.yml` for configuration details.
 
 ## Questions?
 
