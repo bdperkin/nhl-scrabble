@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 193 tasks (43 active, 150 completed)
+**Total Tasks**: 193 tasks (42 active, 151 completed)
 
 ## Overview
 
@@ -150,7 +150,7 @@ Each task includes:
 | 012 | QA Automation Framework | MEDIUM | 30-40 hours (main task coordination + sub-tasks) | Completed | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | - |
 | 014 | Playwright Framework Setup | MEDIUM | 6-8 hours (actual: ~4h) | Completed | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | PR [#430](https://github.com/bdperkin/nhl-scrabble/pull/430), completed 2026-04-28 |
 | 015 | Functional Web Tests | MEDIUM | 6-8 hours | Completed | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | - |
-| 016 | Visual Regression Tests | MEDIUM | 4-6 hours | Completed | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | - |
+| 016 | Visual Regression Tests | MEDIUM | 4-6 hours (actual: ~3h) | Completed | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | PR #TBD, completed 2026-04-28 |
 | 017 | Performance and Load Tests | MEDIUM | 4-6 hours | Completed | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | - |
 | 018 | Accessibility Tests | MEDIUM | 2-4 hours (actual: ~2.5h) | Completed | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | PR [#431](https://github.com/bdperkin/nhl-scrabble/pull/431), completed 2026-04-28 |
 | 019 | QA CI/CD Integration | MEDIUM | 2-4 hours | Completed | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | - |
