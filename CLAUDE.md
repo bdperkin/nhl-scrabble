@@ -223,6 +223,18 @@ NHL_SCRABBLE_VERBOSE=true
 - Artifacts retained 90 days, attached to releases permanently
 - Location: GitHub Actions artifacts and release assets
 
+**Benchmark Workflow:**
+
+- Automated performance regression testing on PRs
+- Compares PR performance vs main branch baseline
+- Posts detailed comparison comment on PRs
+- Highlights regressions (>10% slower) and improvements (>10% faster)
+- Fails CI on significant regressions (>20% slower)
+- Stores baseline from main branch (90-day retention)
+- Triggers: PRs/pushes affecting `src/**/*.py`, `tests/benchmarks/**`, `pyproject.toml`
+- Uses pytest-benchmark with 5+ rounds and warmup
+- Results uploaded as artifacts for historical tracking
+
 ### Publishing
 
 Triggered by version tags (`v*`):

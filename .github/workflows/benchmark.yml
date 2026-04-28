@@ -1,0 +1,219 @@
+---
+name: Performance Benchmarks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**/*.py
+      - tests/benchmarks/**
+      - pyproject.toml
+      - .github/workflows/benchmark.yml
+  pull_request:
+    paths:
+      - src/**/*.py
+      - tests/benchmarks/**
+      - pyproject.toml
+      - .github/workflows/benchmark.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  benchmark:
+    name: Run Performance Benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: |
+          uv pip install -e ".[dev]" --system
+
+      - name: Run benchmarks on PR branch
+        run: |
+          pytest tests/benchmarks/ --benchmark-only \
+            --benchmark-json=pr-benchmark.json \
+            --benchmark-min-rounds=5 \
+            --benchmark-warmup=on \
+            -n 0 \
+            --no-cov
+
+      - name: Save PR benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-benchmark
+          path: pr-benchmark.json
+          retention-days: 7
+
+      - name: Checkout main branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin main
+          git checkout origin/main
+
+      - name: Run benchmarks on main branch
+        if: github.event_name == 'pull_request'
+        run: |
+          # Reinstall in case dependencies changed
+          uv pip install -e ".[dev]" --system
+          pytest tests/benchmarks/ --benchmark-only \
+            --benchmark-json=main-benchmark.json \
+            --benchmark-min-rounds=5 \
+            --benchmark-warmup=on \
+            -n 0 \
+            --no-cov
+
+      - name: Save main benchmark results
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-benchmark
+          path: main-benchmark.json
+          retention-days: 7
+
+      - name: Compare benchmarks
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Load benchmark results
+            const prBench = JSON.parse(fs.readFileSync('pr-benchmark.json'));
+            const mainBench = JSON.parse(fs.readFileSync('main-benchmark.json'));
+
+            // Compare benchmarks
+            const comparisons = [];
+            const regressions = [];
+            const improvements = [];
+
+            for (const prTest of prBench.benchmarks) {
+              const mainTest = mainBench.benchmarks.find(t => t.name === prTest.name);
+              if (!mainTest) continue;
+
+              const prTime = prTest.stats.mean;
+              const mainTime = mainTest.stats.mean;
+              const change = ((prTime - mainTime) / mainTime) * 100;
+
+              const comparison = {
+                name: prTest.name,
+                prTime: prTime.toFixed(6),
+                mainTime: mainTime.toFixed(6),
+                change: change.toFixed(2),
+                changePercent: Math.abs(change).toFixed(2)
+              };
+
+              comparisons.push(comparison);
+
+              if (change > 10) {  // >10% slower = regression
+                regressions.push(comparison);
+              } else if (change < -10) {  // >10% faster = improvement
+                improvements.push(comparison);
+              }
+            }
+
+            // Generate comment
+            let comment = `## 📊 Performance Benchmark Results\n\n`;
+
+            if (regressions.length > 0) {
+              comment += `### ⚠️ Performance Regressions Detected\n\n`;
+              comment += `| Test | Main Branch | This PR | Change |\n`;
+              comment += `| ---- | ----------- | ------- | ------ |\n`;
+              for (const reg of regressions) {
+                comment += `| \`${reg.name}\` | ${reg.mainTime}s | `;
+                comment += `${reg.prTime}s | 🔴 +${reg.changePercent}% slower |\n`;
+              }
+              comment += `\n`;
+            }
+
+            if (improvements.length > 0) {
+              comment += `### ✅ Performance Improvements\n\n`;
+              comment += `| Test | Main Branch | This PR | Change |\n`;
+              comment += `| ---- | ----------- | ------- | ------ |\n`;
+              for (const imp of improvements) {
+                comment += `| \`${imp.name}\` | ${imp.mainTime}s | `;
+                comment += `${imp.prTime}s | 🟢 ${imp.changePercent}% faster |\n`;
+              }
+              comment += `\n`;
+            }
+
+            comment += `### 📈 All Benchmark Comparisons\n\n`;
+            comment += `| Test | Main Branch | This PR | Change |\n`;
+            comment += `| ---- | ----------- | ------- | ------ |\n`;
+            for (const comp of comparisons) {
+              const emoji = comp.change > 10 ? '🔴' : comp.change < -10 ? '🟢' : '⚪';
+              const sign = comp.change > 0 ? '+' : '';
+              comment += `| \`${comp.name}\` | ${comp.mainTime}s | `;
+              comment += `${comp.prTime}s | ${emoji} ${sign}${comp.change}% |\n`;
+            }
+
+            comment += `\n---\n`;
+            comment += `*Benchmarks run with pytest-benchmark. `;
+            comment += `Each test runs 5+ rounds with warmup.*\n`;
+            comment += `*Regression threshold: 10% (warning), 20% (fail CI)*\n`;
+
+            // Check for existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            });
+
+            const existingComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('Performance Benchmark Results')
+            );
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: comment
+              });
+            }
+
+            // Fail if significant regressions (>20%)
+            const significantRegressions = regressions.filter(
+              r => parseFloat(r.changePercent) > 20
+            );
+            if (significantRegressions.length > 0) {
+              const msg = `⚠️ Significant performance regressions detected `;
+              core.setFailed(msg + `(>20% slower)`);
+            }
+
+      - name: Store baseline on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          # Store benchmark results as baseline
+          cp pr-benchmark.json benchmark-baseline.json
+
+      - name: Upload baseline
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-baseline
+          path: benchmark-baseline.json
+          retention-days: 90

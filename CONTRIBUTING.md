@@ -170,6 +170,84 @@ pytest tests/unit/test_scrabble.py::TestScrabbleScorer::test_calculate_score_bas
 - **pytest-randomly**: Randomizes test order to catch hidden dependencies
 - **pytest-benchmark**: Performance regression tracking
 
+### Performance Benchmarking
+
+The project includes automated performance benchmarking to catch performance regressions before they reach production.
+
+**Quick reference:**
+
+```bash
+# Run all benchmarks
+pytest tests/benchmarks/ --benchmark-only -n 0 --no-cov
+
+# Run with verbose output
+pytest tests/benchmarks/ --benchmark-only --benchmark-verbose -n 0 --no-cov
+
+# Save results for comparison
+pytest tests/benchmarks/ --benchmark-only --benchmark-json=results.json -n 0 --no-cov
+
+# Compare with saved baseline
+pytest tests/benchmarks/ --benchmark-only --benchmark-compare=results.json -n 0 --no-cov
+
+# Run specific benchmark
+pytest tests/benchmarks/test_benchmark_scoring.py::TestScoringSingleName::test_benchmark_short_name --benchmark-only -n 0 --no-cov
+```
+
+**Note:** Always use `-n 0 --no-cov` when running benchmarks to disable xdist parallel execution and coverage, which interfere with accurate timing.
+
+**Performance Thresholds:**
+
+- **Regression Warning (10%)**: Highlighted in PR comments
+- **Significant Regression (20%)**: Fails CI, requires review
+- **Improvement (10%+)**: Celebrated in PR comments
+
+**Automated Workflow:**
+
+The benchmark workflow runs automatically on PRs affecting performance-critical code:
+
+1. Runs benchmarks on PR branch
+1. Runs benchmarks on main branch
+1. Compares results and posts comment on PR
+1. Fails CI if regressions exceed 20%
+1. Stores baseline from main branch (90-day retention)
+
+**Triggers:**
+
+- PRs modifying: `src/**/*.py`, `tests/benchmarks/**`, `pyproject.toml`
+- Pushes to main (stores new baseline)
+- Manual dispatch
+
+**Writing Benchmarks:**
+
+```python
+# tests/benchmarks/test_your_feature.py
+import pytest
+
+
+def test_benchmark_your_function(benchmark):
+    """Benchmark your function.
+
+    Target: <100μs
+    """
+    result = benchmark(your_function, arg1, arg2)
+    assert result == expected
+```
+
+**Best Practices:**
+
+- One benchmark per function
+- Use fixtures for test data
+- Avoid network calls (use mocks)
+- Avoid file I/O (use in-memory)
+- Avoid random data (use deterministic fixtures)
+- Include warmup for accurate results
+- Set realistic performance targets
+
+**Detailed guides:**
+
+- [How to Run Benchmarks](docs/how-to/run-benchmarks.md) - Performance testing
+- [Benchmark Workflow](docs/contributing/benchmark-workflow.md) - CI integration
+
 ### Multi-Environment Testing with Tox
 
 Quick reference:
