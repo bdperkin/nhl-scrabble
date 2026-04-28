@@ -41,7 +41,8 @@ class BasePage:
         return self.page.title()
 
     def wait_for_load(
-        self, state: Literal["load", "domcontentloaded", "networkidle"] = "networkidle",
+        self,
+        state: Literal["load", "domcontentloaded", "networkidle"] = "networkidle",
     ) -> None:
         """Wait for page to reach a specific load state.
 
@@ -75,7 +76,8 @@ class BasePage:
             # Wait for any URL change
             current_url = self.page.url
             self.page.wait_for_function(
-                f'window.location.href !== "{current_url}"', timeout=timeout,
+                f'window.location.href !== "{current_url}"',
+                timeout=timeout,
             )
 
     def screenshot(self, name: str, full_page: bool = False) -> Path:
@@ -150,7 +152,7 @@ class BasePage:
         """
         try:
             return self.page.locator(selector).is_visible(timeout=timeout)
-        except Exception:
+        except TimeoutError:
             return False
 
     def is_enabled(self, selector: str, timeout: int = 1000) -> bool:
@@ -165,7 +167,7 @@ class BasePage:
         """
         try:
             return self.page.locator(selector).is_enabled(timeout=timeout)
-        except Exception:
+        except TimeoutError:
             return False
 
     def count_elements(self, selector: str) -> int:
