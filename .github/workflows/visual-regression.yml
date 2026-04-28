@@ -16,6 +16,12 @@ on:
       - "qa/web/pages/**"
 
   workflow_dispatch:  # Allow manual triggering
+    inputs:
+      update_baselines:
+        description: 'Generate/update baseline screenshots'
+        required: false
+        type: boolean
+        default: false
 
 # Workflow-level permissions for PR comments and artifact uploads
 permissions:
@@ -89,11 +95,20 @@ jobs:
         id: visual-tests
         run: |
           cd qa/web
-          pytest tests/visual/ \
-            --verbose \
-            --tb=short \
-            --maxfail=5 \
-            --junit-xml=visual-test-results.xml
+          if [[ "${{ github.event.inputs.update_baselines }}" == "true" ]]; then
+            echo "🔄 Generating baseline screenshots..."
+            pytest tests/visual/ \
+              --update-snapshots \
+              --verbose \
+              --tb=short \
+              --junit-xml=visual-test-results.xml
+          else
+            pytest tests/visual/ \
+              --verbose \
+              --tb=short \
+              --maxfail=5 \
+              --junit-xml=visual-test-results.xml
+          fi
         continue-on-error: true
 
       - name: Stop web server
@@ -123,8 +138,16 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
+      - name: Upload generated baseline screenshots
+        if: github.event.inputs.update_baselines == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-baselines
+          path: qa/web/tests/visual/__snapshots__/
+          retention-days: 7
+
       - name: Upload baseline screenshots (on first run)
-        if: failure()
+        if: failure() && github.event.inputs.update_baselines != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: baseline-screenshots
@@ -133,7 +156,10 @@ jobs:
           if-no-files-found: ignore
 
       - name: Comment PR with visual diff summary
-        if: failure() && github.event_name == 'pull_request'
+        if: |
+          failure() &&
+          github.event_name == 'pull_request' &&
+          github.event.inputs.update_baselines != 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -197,7 +223,9 @@ jobs:
 
       - name: Check if baselines exist
         id: check-baselines
-        if: steps.visual-tests.outcome == 'failure'
+        if: |
+          steps.visual-tests.outcome == 'failure' &&
+          github.event.inputs.update_baselines != 'true'
         run: |
           if [[ -d "qa/web/tests/visual/__snapshots__" ]] && \
              [[ -n "$(find qa/web/tests/visual/__snapshots__ -name '*.png' 2>/dev/null)" ]]; then
@@ -209,7 +237,8 @@ jobs:
       - name: Fail workflow if tests failed (with baselines)
         if: |
           steps.visual-tests.outcome == 'failure' &&
-          steps.check-baselines.outputs.baselines_exist == 'true'
+          steps.check-baselines.outputs.baselines_exist == 'true' &&
+          github.event.inputs.update_baselines != 'true'
         run: |
           echo "Visual regression tests failed. Review the diff artifacts."
           echo "Baselines exist, so this is a real regression."
@@ -218,12 +247,26 @@ jobs:
       - name: Warn about missing baselines (non-blocking)
         if: |
           steps.visual-tests.outcome == 'failure' &&
-          steps.check-baselines.outputs.baselines_exist == 'false'
+          steps.check-baselines.outputs.baselines_exist == 'false' &&
+          github.event.inputs.update_baselines != 'true'
         run: |
           echo "⚠️  Visual regression tests failed due to missing baselines."
           echo "This is expected for initial implementation."
           echo "Generate baselines with: pytest tests/visual/ --update-snapshots"
           echo "Continuing workflow as non-blocking warning."
+
+      - name: Baseline generation complete
+        if: github.event.inputs.update_baselines == 'true'
+        run: |
+          echo "✅ Baseline screenshots generated successfully!"
+          echo "Download the 'generated-baselines' artifact and commit to repository."
+          echo ""
+          echo "Steps:"
+          echo "1. Download artifact from this workflow run"
+          echo "2. Extract to qa/web/tests/visual/__snapshots__/"
+          echo "3. git add qa/web/tests/visual/__snapshots__/"
+          echo "4. git commit -m 'test(visual): Update baselines for CI environment'"
+          echo "5. git push"
 
   baseline-check:
     name: Check Baseline Screenshots
