@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 192 tasks (54 active, 138 completed)
+**Total Tasks**: 192 tasks (53 active, 139 completed)
 
 ## Overview
 
@@ -221,7 +221,7 @@ Each task includes:
 | 037 | Stale Issue and PR Management Workflow | LOW | 1 hour | Completed | [#304](https://github.com/bdperkin/nhl-scrabble/issues/304) | - |
 | 038 | First-Time Contributor Welcome Workflow | LOW | 30 minutes - 1 hour | Completed | [#305](https://github.com/bdperkin/nhl-scrabble/issues/305) | PR [#2](https://github.com/bdperkin/nhl-scrabble/pull/2) |
 | 039 | Performance Benchmark Testing Workflow | MEDIUM | 3-4 hours | Active | [#306](https://github.com/bdperkin/nhl-scrabble/issues/306) | - |
-| 040 | Software Bill of Materials (SBOM) Generation Workflow | MEDIUM | 2-3 hours | Active | [#307](https://github.com/bdperkin/nhl-scrabble/issues/307) | - |
+| 040 | Software Bill of Materials (SBOM) Generation Workflow | MEDIUM | 2-3 hours (actual: 2 hours) | Completed | [#307](https://github.com/bdperkin/nhl-scrabble/issues/307) | PR [#416](https://github.com/bdperkin/nhl-scrabble/pull/416), completed 2026-04-28, automated SBOM generation in CycloneDX and SPDX formats with vulnerability scanning |
 | 041 | SLSA Provenance Generation Workflow | MEDIUM | 2-3 hours | Active | [#308](https://github.com/bdperkin/nhl-scrabble/issues/308) | - |
 | 042 | Enhanced Dependency Review Workflow | MEDIUM | 1-2 hours | Completed | [#309](https://github.com/bdperkin/nhl-scrabble/issues/309) | PR [#414](https://github.com/bdperkin/nhl-scrabble/pull/414) |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours | Active | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | - |
@@ -291,7 +291,7 @@ Each task includes:
 
 ## Total Project Roadmap
 
-**Total Tasks**: 192 tasks (54 active, 138 completed)
+**Total Tasks**: 192 tasks (53 active, 139 completed)
 
 **Overall Completion**: 71.4%
 
