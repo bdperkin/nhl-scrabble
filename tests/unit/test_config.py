@@ -374,3 +374,123 @@ class TestConfigOutputFormats:
 
             config = Config.from_env()
             assert config.output_format == fmt.lower()
+
+
+class TestConfigLogging:
+    """Tests for Config logging configuration fields."""
+
+    def test_config_logging_defaults(self) -> None:
+        """Test Config logging fields have correct default values."""
+        config = Config()
+        assert config.log_file is None
+        assert config.log_max_bytes == 10485760  # 10MB
+        assert config.log_backup_count == 5
+
+    def test_config_logging_custom_values(self) -> None:
+        """Test Config with custom logging values."""
+        config = Config(
+            log_file="logs/app.log",
+            log_max_bytes=20971520,  # 20MB
+            log_backup_count=10,
+        )
+        assert config.log_file == "logs/app.log"
+        assert config.log_max_bytes == 20971520
+        assert config.log_backup_count == 10
+
+    def test_from_env_logging_file_path(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with log file path."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_FILE", "logs/nhl-scrabble.log")
+        config = Config.from_env()
+        assert config.log_file == "logs/nhl-scrabble.log"
+
+    def test_from_env_logging_max_bytes(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with custom log_max_bytes."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_MAX_BYTES", "20971520")  # 20MB
+        config = Config.from_env()
+        assert config.log_max_bytes == 20971520
+
+    def test_from_env_logging_backup_count(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with custom log_backup_count."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_BACKUP_COUNT", "10")
+        config = Config.from_env()
+        assert config.log_backup_count == 10
+
+    def test_from_env_logging_all_options(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with all logging options."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_FILE", "/var/log/nhl-scrabble/app.log")
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_MAX_BYTES", "52428800")  # 50MB
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_BACKUP_COUNT", "15")
+
+        config = Config.from_env()
+        assert config.log_file == "/var/log/nhl-scrabble/app.log"
+        assert config.log_max_bytes == 52428800
+        assert config.log_backup_count == 15
+
+    def test_from_env_logging_invalid_max_bytes(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with invalid log_max_bytes."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_MAX_BYTES", "invalid")
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_LOG_MAX_BYTES.*Invalid integer"):
+            Config.from_env()
+
+    def test_from_env_logging_invalid_backup_count(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with invalid log_backup_count."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_BACKUP_COUNT", "not_a_number")
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_LOG_BACKUP_COUNT.*Invalid integer"):
+            Config.from_env()
+
+    def test_from_env_logging_max_bytes_too_small(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with log_max_bytes below minimum."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_MAX_BYTES", "1000")  # Below 1MB minimum
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_LOG_MAX_BYTES.*outside allowed range"):
+            Config.from_env()
+
+    def test_from_env_logging_max_bytes_too_large(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with log_max_bytes above maximum."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_MAX_BYTES", "200000000")  # Above 100MB maximum
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_LOG_MAX_BYTES.*outside allowed range"):
+            Config.from_env()
+
+    def test_from_env_logging_backup_count_too_small(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with log_backup_count below minimum."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_BACKUP_COUNT", "0")
+        with pytest.raises(
+            ValueError,
+            match=r"NHL_SCRABBLE_LOG_BACKUP_COUNT.*outside allowed range",
+        ):
+            Config.from_env()
+
+    def test_from_env_logging_backup_count_too_large(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with log_backup_count above maximum."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_BACKUP_COUNT", "100")  # Above 50 maximum
+        with pytest.raises(
+            ValueError,
+            match=r"NHL_SCRABBLE_LOG_BACKUP_COUNT.*outside allowed range",
+        ):
+            Config.from_env()
+
+    def test_from_env_logging_negative_max_bytes(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with negative log_max_bytes."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_MAX_BYTES", "-1000")
+        with pytest.raises(ValueError, match=r"NHL_SCRABBLE_LOG_MAX_BYTES.*outside allowed range"):
+            Config.from_env()
+
+    def test_from_env_logging_negative_backup_count(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test Config.from_env() with negative log_backup_count."""
+        monkeypatch.setenv("NHL_SCRABBLE_LOG_BACKUP_COUNT", "-5")
+        with pytest.raises(
+            ValueError,
+            match=r"NHL_SCRABBLE_LOG_BACKUP_COUNT.*outside allowed range",
+        ):
+            Config.from_env()
+
+    def test_logging_config_in_to_dict(self) -> None:
+        """Test that logging config fields appear in to_dict()."""
+        config = Config(log_file="logs/app.log", log_max_bytes=20971520, log_backup_count=10)
+        config_dict = config.to_dict()
+
+        assert "log_file" in config_dict
+        assert "log_max_bytes" in config_dict
+        assert "log_backup_count" in config_dict
+        assert config_dict["log_file"] == "logs/app.log"
+        assert config_dict["log_max_bytes"] == 20971520
+        assert config_dict["log_backup_count"] == 10
