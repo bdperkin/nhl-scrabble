@@ -134,6 +134,7 @@ jobs:
     name: Generate and Commit Changelog
     needs: publish-pypi
     runs-on: ubuntu-latest
+    continue-on-error: true  # Don't fail release if changelog commit is blocked
 
     steps:
       - name: Checkout repository
