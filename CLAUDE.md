@@ -11,7 +11,7 @@ NHL Scrabble Score Analyzer is a Python package that fetches NHL roster data and
 - Python 3.12-3.14 (supported), 3.15-dev (experimental)
 - UV for 10-100x faster dependency management
 - Pydantic models, Click CLI, Rich terminal output
-- 68 pre-commit hooks, comprehensive CI/CD
+- 80 pre-commit hooks (12 for Bash quality & security), comprehensive CI/CD
 - Dynamic versioning from Git tags (hatch-vcs)
 
 ## Quick Start
@@ -79,6 +79,14 @@ make ruff-check      # Linting
 make ruff-format     # Formatting
 make type-check      # mypy + ty
 
+# Bash Script Quality
+make bash-validate   # All Bash quality checks
+make bash-fix        # Auto-format Bash scripts
+make beautysh        # Format Bash scripts
+make bashate         # Lint Bash scripts
+make bash-docs       # Validate documentation
+make bash-deps       # Check dependencies
+
 # Maintenance
 make deps-check      # Check for updates
 make licenses-check  # Validate licenses
@@ -97,7 +105,7 @@ tox -m test          # All tests
 
 ## Critical Rules
 
-### Pre-commit Hooks (68 total)
+### Pre-commit Hooks (80 total)
 
 All hooks run automatically on commit. **Never bypass quality checks.**
 
@@ -109,7 +117,7 @@ SKIP=check-branch-protection git commit -m "message"
 git commit --no-verify -m "message"
 ```
 
-Categories: Meta (3), file quality (18), Python quality (7), imports (2), project validation (4), YAML (1), schema validation (4), spelling (1), markdown (2), documentation (9), formatters (5), linters (4), type checking (2), version validation (1).
+Categories: Meta (3), file quality (18), Python quality (7), imports (2), project validation (4), YAML (1), schema validation (4), spelling (1), markdown (2), documentation (9), formatters (5), linters (4), type checking (2), version validation (1), **Bash quality & security (12)**.
 
 See memory for details or `docs/contributing/pre-commit-hooks.md`.
 
@@ -343,8 +351,8 @@ Tiebreaker: Average points per player, then alphabetical.
 - ~1,866 lines of code, ~680 lines of tests
 - 49.93% overall coverage, >90% on core modules
 - 170 tests, 100% passing
-- 110+ Makefile targets in 18 groupings
-- 68 pre-commit hooks
+- 117+ Makefile targets in 19 groupings (Shell Scripting section added)
+- 80 pre-commit hooks (12 for Bash quality & security)
 - 1,957-line uv.lock file
 
 ## Resources
@@ -363,4 +371,4 @@ Quick: Fork → feature branch → changes + tests → `make check` → PR
 
 ______________________________________________________________________
 
-**Note for Claude:** Project uses modern Python practices with extensive automation. UV provides 10-100x speedups. Use `make help` for all commands. Pre-commit hooks and tox are UV-accelerated. Check memory for detailed workflow/configuration information.
+**Note for Claude:** Project uses modern Python practices with extensive automation. UV provides 10-100x speedups. Use `make help` for all commands. Pre-commit hooks and tox are UV-accelerated. Bash scripts have comprehensive quality tooling (beautysh formatting, bashate linting, security patterns, documentation validation). Check memory for detailed workflow/configuration information.

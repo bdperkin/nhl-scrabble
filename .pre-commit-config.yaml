@@ -681,6 +681,192 @@ repos:
         stages: [pre-commit]
 
   # ============================================================================
+  # Shell Script Quality - Formatting & Linting
+  # ============================================================================
+
+  - repo: https://github.com/lovesegfault/beautysh
+    rev: v6.4.3
+    hooks:
+      - id: beautysh
+        name: beautysh - Format Bash scripts
+        # Auto-format Bash scripts with consistent style
+        description: |
+          Python-based Bash beautifier for consistent code style:
+          - 2-space indentation (project standard)
+          - Standardized spacing around operators
+          - Aligned continuation lines
+          - Function style enforcement (fnpar = name())
+        args: ["--indent-size", "2", "--force-function-style", "fnpar"]
+        files: \.sh$
+
+  - repo: local
+    hooks:
+      - id: bashate
+        name: bashate - Bash style checker
+        # Check Bash scripts for style violations and syntax errors
+        description: |
+          OpenStack Bash style checker (Python) for detecting style violations:
+          - Trailing whitespace, tab indentation
+          - Files must end with newline
+          - Line length limit (100 chars, matching Python)
+          - Consistent do/then placement
+          - Syntax error detection
+
+          Ignores:
+          - E003: Indent not multiple of 4 (we use 2 spaces)
+          - E006: Line starting with space (allow for alignment)
+        entry: bashate
+        language: python
+        additional_dependencies: ["bashate>=2.1.1"]
+        files: \.sh$
+        args: ["--ignore=E003,E006", "--max-line-length=100"]
+
+  # ============================================================================
+  # Shell Script Security - Bash Best Practices
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: bash-check-set-errexit
+        name: Bash - require error handling (set -e/-u/-o pipefail)
+        # Ensure scripts use proper error handling flags
+        description: |
+          Ensure scripts use proper error handling flags.
+          Scripts should start with: set -euo pipefail
+          - set -e: Exit on error
+          - set -u: Exit on undefined variable
+          - set -o pipefail: Exit on pipe failures
+        entry: '^(?!.*set\s+-[euo]|.*set\s+-o\s+(errexit|nounset|pipefail))'
+        language: pygrep
+        files: \.sh$
+        args: ["--negate"]
+
+      - id: bash-no-eval
+        name: Bash - prohibit eval usage
+        # Detect dangerous eval usage (security risk)
+        description: |
+          Detect dangerous eval usage (code injection risk).
+          eval executes arbitrary code and should be avoided.
+          Use arrays or explicit parameter expansion instead.
+        entry: '\beval\b'
+        language: pygrep
+        files: \.sh$
+
+      - id: bash-check-curl-fail
+        name: Bash - ensure curl uses --fail flag
+        # curl should use --fail to catch HTTP errors
+        description: |
+          curl should use --fail to catch HTTP errors.
+          Without --fail, curl succeeds even on HTTP 404/500 errors.
+          Add --fail to make curl exit non-zero on HTTP errors.
+        entry: 'curl\s+(?!.*--fail)'
+        language: pygrep
+        files: \.sh$
+
+      - id: bash-check-wget-quiet
+        name: Bash - ensure wget uses --quiet/-q flag
+        # wget should use --quiet for cleaner CI output
+        description: |
+          wget should use --quiet for cleaner CI output.
+          Add --quiet or -q to suppress verbose progress output.
+        entry: 'wget\s+(?!.*(-q|--quiet))'
+        language: pygrep
+        files: \.sh$
+
+      - id: bash-no-hardcoded-tmp
+        name: Bash - no hardcoded /tmp paths
+        # Use $TMPDIR or mktemp instead of hardcoded /tmp
+        description: |
+          Use $TMPDIR or mktemp instead of hardcoded /tmp.
+          Hardcoded /tmp paths are not portable and may have permission issues.
+          Use: mktemp or ${TMPDIR:-/tmp}
+        entry: '(?<!#).*(?<!\$)\b/tmp/'
+        language: pygrep
+        files: \.sh$
+
+      - id: bash-prefer-command-substitution
+        name: Bash - prefer $() over backticks
+        # Use modern command substitution syntax $() instead of backticks
+        description: |
+          Use modern command substitution syntax $() instead of backticks.
+          $() is more readable, nestable, and easier to escape.
+          Modern: result=$(command)
+          Deprecated: result=`command`
+        entry: '`[^`]+`'
+        language: pygrep
+        files: \.sh$
+
+      - id: bash-prefer-modern-test
+        name: Bash - prefer [[ ]] over [ ]
+        # Use modern test syntax [[ ]] for better safety
+        description: |
+          Use modern test syntax [[ ]] for better safety.
+          [[ ]] prevents word splitting, supports pattern matching,
+          and has more consistent behavior than [ ].
+          Modern: [[ "$var" == "value" ]]
+          Old: [ "$var" = "value" ]
+        entry: '(?<!#).*\[\s+[^\[]'
+        language: pygrep
+        files: \.sh$
+
+      - id: bash-check-quoted-variables
+        name: Bash - check for potentially unquoted variables
+        # Variables should generally be quoted to prevent word splitting
+        description: |
+          Variables should generally be quoted to prevent word splitting.
+          Unquoted variables can cause unexpected behavior with spaces.
+          Safe: "$VARIABLE"
+          Risky: $VARIABLE
+          This is informational - may have false positives for arithmetic.
+        entry: '\$[A-Z_][A-Z0-9_]*(?!\}|\"|\[)'
+        language: pygrep
+        files: \.sh$
+
+  # ============================================================================
+  # Shell Script Documentation - Completeness Checks
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-bash-docs
+        name: Check Bash script documentation
+        # Validate Bash script documentation completeness
+        description: |
+          Validate Bash script documentation completeness:
+          - File headers with purpose/description
+          - Usage documentation for scripts with arguments
+          - Function documentation
+          - Exit code documentation
+          - Dependency documentation
+
+          Ensures all Bash scripts are properly documented.
+        entry: python scripts/check_bash_docs.py
+        language: python
+        pass_filenames: false
+        files: \.sh$
+
+      - id: check-bash-deps
+        name: Check Bash script dependencies
+        # Detect and validate external command dependencies
+        description: |
+          Detect and validate external command dependencies.
+          Identifies external commands used and checks if
+          scripts validate command availability before use.
+
+          Suggests adding availability checks like:
+            if ! command -v COMMAND &> /dev/null; then
+                echo "Error: COMMAND not found" >&2
+                exit 1
+            fi
+
+          Manual run only (informational).
+        entry: python scripts/check_bash_deps.py
+        language: python
+        pass_filenames: false
+        files: \.sh$
+        stages: [manual]
+
+  # ============================================================================
   # Security Scanning - CodeQL Analysis (Manual Run Only)
   # ============================================================================
 
