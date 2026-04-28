@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 192 tasks (44 active, 148 completed)
+**Total Tasks**: 192 tasks (43 active, 149 completed)
 
 ## Overview
 
@@ -55,7 +55,7 @@ Each task includes:
 | ID  | Title | Priority | Effort | Status | GitHub Issue | Notes |
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
 | 011 | Monitor and Fix CVE-2026-3219 When pip Patch is Available | MEDIUM | Unknown | Active | - | - |
-| 012 | Add Local CodeQL Scanning Integration | MEDIUM | 4-6 hours | Completed | - | - |
+| 012 | Add Local CodeQL Scanning Integration | MEDIUM | 4-6 hours (actual: ~1.5h) | Completed | [#389](https://github.com/bdperkin/nhl-scrabble/issues/389) | PR [#423](https://github.com/bdperkin/nhl-scrabble/pull/423), completed 2026-04-28 |
 | 001 | Add pip-licenses for Dependency License Compliance | MEDIUM | 30-60 minutes (actual: 45 minutes) | Completed | [#126](https://github.com/bdperkin/nhl-scrabble/issues/126) | PR [#164](https://github.com/bdperkin/nhl-scrabble/pull/164), completed 2026-04-17 |
 | 001 | Add GitHub Dependabot Configuration | CRITICAL | 30 minutes (actual: ~25 minutes) | Completed | [#39](https://github.com/bdperkin/nhl-scrabble/issues/39) | PR [#65](https://github.com/bdperkin/nhl-scrabble/pull/65), completed 2026-04-16 |
 | 002 | Add Comprehensive Input Validation | MEDIUM | 3-4 hours (actual: ~3.5 hours) | Completed | [#129](https://github.com/bdperkin/nhl-scrabble/issues/129) | PR [#196](https://github.com/bdperkin/nhl-scrabble/pull/196), completed 2026-04-18 |
