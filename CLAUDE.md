@@ -9,7 +9,7 @@ NHL Scrabble Score Analyzer is a professional [Python](https://www.python.org/) 
 **Current Version:** Dynamically versioned from Git tags (see [Versioning Strategy](#versioning-strategy))
 **Python:** [3.12-3.14](https://www.python.org/downloads/) (supported), 3.15-dev (experimental)
 **License:** [MIT](https://opensource.org/licenses/MIT)
-**Pre-commit Hooks:** 67 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/), [refurb](https://github.com/dosisod/refurb), and [ssort](https://github.com/bwhmather/ssort))
+**Pre-commit Hooks:** 68 hooks (comprehensive quality checks including [Astral ty](https://docs.astral.sh/ty/), [refurb](https://github.com/dosisod/refurb), and [ssort](https://github.com/bwhmather/ssort))
 **Dependency Management:** [UV](https://docs.astral.sh/uv/) with deterministic lock file
 
 ## Quick Start
@@ -195,9 +195,9 @@ processor = TeamProcessor(MockAPIClient(), MockScorer())
 teams, players, failed = processor.process_all_teams()  # Uses mocks!
 ```
 
-## Pre-commit Hooks (67 Comprehensive Checks)
+## Pre-commit Hooks (68 Comprehensive Checks)
 
-The project uses 67 pre-commit hooks for automatic code quality validation:
+The project uses 68 pre-commit hooks for automatic code quality validation:
 
 ### Hook Categories
 
@@ -315,6 +315,14 @@ The project uses 67 pre-commit hooks for automatic code quality validation:
 
 - `mypy`: Strict type checking (strict mode with comprehensive options)
 - `ty`: Astral's fast type checker (10-100x faster than mypy, validation mode - non-blocking)
+
+**Version Validation Hooks (1 from local):**
+
+- `check-version-consistency`: Validates version consistency for hatch-vcs dynamic versioning
+  - Auto-generated `_version.py` not committed
+  - `pyproject.toml` has `dynamic = ["version"]`
+  - No hardcoded version strings in key files
+  - Git tags follow semantic versioning (vX.Y.Z)
 
 ### Pre-commit Usage
 
