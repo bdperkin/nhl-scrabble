@@ -153,6 +153,10 @@ docs = [
 docs-gen = [
     "pdoc>=16.0.0",
 ]
+qa = [
+    "locust>=2.32.7",
+    "pytest-playwright>=0.7.0",
+]
 watch = [
     "pytest-watch",
 ]
@@ -585,7 +589,12 @@ types-requests = "types_requests"
 ty = "ty"
 uvicorn = "uvicorn"
 [tool.deptry.per_rule_ignores]
-DEP002 = [ "bashate", "beautysh" ]
+DEP002 = [
+    "bashate",
+    "beautysh",
+    "locust",
+    "pytest-playwright",
+]
 
 [tool.pyproject-fmt]
 column_width = 100
@@ -758,6 +767,8 @@ markers = [
     "timeout: Custom timeout for specific tests (e.g., @pytest.mark.timeout(300))",
     "no_parallel: Tests that must run sequentially (e.g., @pytest.mark.no_parallel)",
     "flaky: Flaky test that may fail intermittently (will be retried on failure)",
+    "performance: Performance tests measuring page load and response times",
+    "benchmark: Benchmark tests using pytest-benchmark",
 ]
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
