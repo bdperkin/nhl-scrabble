@@ -7,7 +7,7 @@ Tests capture individual UI components (tables, cards, headers, etc.) to detect:
 - Spacing and alignment issues
 """
 
-from typing import Callable
+from collections.abc import Callable
 
 from pages.conferences_page import ConferencesPage
 from pages.divisions_page import DivisionsPage

@@ -7,7 +7,7 @@ Note: These tests use pytest-playwright's built-in browser fixtures rather than
 manual browser instantiation to avoid parameter conflicts.
 """
 
-from typing import Callable
+from collections.abc import Callable
 
 from pages.index_page import IndexPage
 from pages.teams_page import TeamsPage

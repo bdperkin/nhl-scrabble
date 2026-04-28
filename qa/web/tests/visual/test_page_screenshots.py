@@ -4,7 +4,7 @@ Tests capture full-page screenshots across all main pages and compare them again
 to detect unintended visual changes, layout shifts, and styling errors.
 """
 
-from typing import Callable
+from collections.abc import Callable
 
 from pages.conferences_page import ConferencesPage
 from pages.divisions_page import DivisionsPage
