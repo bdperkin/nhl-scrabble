@@ -1,7 +1,7 @@
 # ============================================================================
 # NHL Scrabble - Pre-commit Hooks Configuration
 # ============================================================================
-# 66 comprehensive hooks for code quality, security, and consistency
+# 67 comprehensive hooks for code quality, security, and consistency
 # Organized by category for maintainability
 # Matches ruff's ALL rules philosophy: comprehensive by default with selective ignores
 
@@ -657,3 +657,25 @@ repos:
         # Only run if docstrings or CLI code changed
         files: ^(src/nhl_scrabble/.*\.py|scripts/generate_cli_docs\.py)$
         additional_dependencies: [".[docs-gen]"]
+
+  # ============================================================================
+  # Version Validation - Dynamic Versioning Consistency
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-version-consistency
+        name: Check version consistency (hatch-vcs)
+        # Validates version configuration for hatch-vcs dynamic versioning
+        # Prevents common version-related errors before they reach CI
+        description: |
+          Validate version configuration for hatch-vcs dynamic versioning:
+          - Auto-generated _version.py not committed
+          - pyproject.toml has dynamic = ["version"]
+          - No hardcoded version strings in key files
+          - Git tags follow semantic versioning (vX.Y.Z)
+        entry: python .pre-commit-hooks/check-version-consistency.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

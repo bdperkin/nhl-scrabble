@@ -440,6 +440,54 @@ git push --tags
 
 **Workflow File:** `.github/workflows/publish.yml`
 
+### Version Requirements
+
+The project uses **hatch-vcs** for dynamic versioning from Git tags. A pre-commit hook (`check-version-consistency`) validates the following requirements:
+
+**1. Auto-generated `_version.py` Not Committed**
+
+- **Why**: hatch-vcs generates this file at build time from Git tags
+- **Rule**: Never commit `src/nhl_scrabble/_version.py`
+- **Fix**: `git rm --cached src/nhl_scrabble/_version.py`
+
+**2. Dynamic Versioning in `pyproject.toml`**
+
+- **Why**: Required for hatch-vcs to manage versions
+- **Rule**: `pyproject.toml` must contain:
+  ```toml
+  [project]
+  dynamic = ["version"]
+
+  [tool.hatch.version]
+  source = "vcs"
+  ```
+- **Fix**: Restore configuration if accidentally removed
+
+**3. No Hardcoded Version Strings**
+
+- **Why**: Defeats the purpose of dynamic versioning
+- **Rule**: Don't use `__version__ = "1.2.3"` in code
+- **Allowed**: `from nhl_scrabble._version import __version__`
+- **Fix**: Import from `_version.py` instead of hardcoding
+
+**4. Git Tags Follow Semantic Versioning**
+
+- **Why**: hatch-vcs expects `vX.Y.Z` format
+- **Rule**: Tags must match pattern `vX.Y.Z` (e.g., `v2.1.0`, `v1.0.0-rc1`)
+- **Fix**: Delete malformed tag and create correct one:
+  ```bash
+  git tag -d 0.1.0           # Delete wrong tag (missing 'v' prefix)
+  git tag -a v0.1.0 -m "..."  # Create correct tag
+  ```
+
+**Validation:**
+
+The pre-commit hook runs automatically on every commit. To test manually:
+
+```bash
+python .pre-commit-hooks/check-version-consistency.py
+```
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
