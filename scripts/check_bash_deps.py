@@ -149,7 +149,7 @@ def main() -> int:  # noqa: C901
 
     Complexity justified: Orchestrates dependency extraction, validation,
     and reporting across multiple scripts. Breaking into smaller functions
-    would scatter the control flow."""
+    would scatter the control flow.
 
     Returns:
         Exit code: 0 if all dependencies validated, 1 if missing checks
@@ -182,9 +182,7 @@ def main() -> int:  # noqa: C901
 
                 has_check = check_availability_check(script, cmd)
                 status = "✓" if has_check else "✗"
-                print(
-                    f"    {status} {cmd:<20} (lines: {', '.join(map(str, line_nums))})"
-                )
+                print(f"    {status} {cmd:<20} (lines: {', '.join(map(str, line_nums))})")
 
                 if not has_check:
                     missing_checks.append((script.name, cmd, line_nums))

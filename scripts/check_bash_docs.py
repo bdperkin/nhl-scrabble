@@ -22,7 +22,7 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
 
     Complexity justified: Must check 7 different documentation requirements
     (shebang, header, purpose, usage, functions, exit codes, dependencies).
-    Breaking into smaller functions would reduce readability."""
+    Breaking into smaller functions would reduce readability.
 
     Args:
         script_path: Path to Bash script to check
@@ -39,9 +39,7 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
         issues.append("Missing shebang line (should be #!/usr/bin/env bash)")
 
     # Check 2: File header comment (within first 10 lines)
-    has_header = any(
-        line.strip().startswith("#") and len(line.strip()) > 1 for line in lines[1:10]
-    )
+    has_header = any(line.strip().startswith("#") and len(line.strip()) > 1 for line in lines[1:10])
     if not has_header:
         issues.append("Missing file header documentation (first 10 lines)")
 
@@ -73,9 +71,7 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
     has_nonzero_exit = bool(re.search(r"exit\s+[1-9]", content))
     if has_exit and has_nonzero_exit:
         if not re.search(r"#.*(?:Exit [Cc]odes?|Returns?):", header_text):
-            issues.append(
-                "Script uses non-zero exit codes but missing exit code documentation"
-            )
+            issues.append("Script uses non-zero exit codes but missing exit code documentation")
 
     # Check 7: Dependency documentation
     external_cmds = set(
