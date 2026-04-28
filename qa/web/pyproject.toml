@@ -71,7 +71,7 @@ classifiers = [
 # ============================================================================
 # Core Test Dependencies
 # ============================================================================
-# axe-playwright: Accessibility testing (WCAG 2.1, ARIA, color contrast)
+# axe-playwright-python: Accessibility testing (WCAG 2.1, ARIA, color contrast)
 # locust: Load testing (API endpoints, concurrent user simulation)
 # pillow: Image processing (screenshot comparison, visual regression)
 # playwright: Browser automation (auto-wait, screenshots, video, network)
@@ -81,7 +81,7 @@ classifiers = [
 # pytest-xdist: Parallel test execution (significantly faster)
 # ============================================================================
 dependencies = [
-  # "axe-playwright>=0.1",  # Not available in PyPI - TODO: find alternative for accessibility testing
+  "axe-playwright-python>=0.1.7", # Accessibility testing (WCAG 2.1, ARIA, color contrast)
   "locust>=2.43.4",
   "pillow>=12.2",
   "playwright>=1.58",
@@ -107,3 +107,10 @@ optional-dependencies.dev = [
 [tool.setuptools]
 # Test-only package - include pages, fixtures, tests, scripts directories
 packages = [ "pages", "fixtures", "tests", "scripts" ]
+
+# ============================================================================
+# Ruff Configuration - Linting and Code Quality
+# ============================================================================
+[tool.ruff]
+# Ignore assert usage in test files (S101)
+lint.per-file-ignores."tests/**/*.py" = [ "S101" ]

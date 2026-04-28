@@ -152,7 +152,7 @@ Each task includes:
 | 015 | Functional Web Tests | MEDIUM | 6-8 hours | Completed | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | - |
 | 016 | Visual Regression Tests | MEDIUM | 4-6 hours | Completed | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | - |
 | 017 | Performance and Load Tests | MEDIUM | 4-6 hours | Completed | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | - |
-| 018 | Accessibility Tests | MEDIUM | 2-4 hours | Completed | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | - |
+| 018 | Accessibility Tests | MEDIUM | 2-4 hours (actual: ~2.5h) | Completed | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | PR [#431](https://github.com/bdperkin/nhl-scrabble/pull/431), completed 2026-04-28 |
 | 019 | QA CI/CD Integration | MEDIUM | 2-4 hours | Completed | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | - |
 | 021 | Test Analytics and Coverage Analysis Tool | MEDIUM | 4-6 hours | Completed | [#359](https://github.com/bdperkin/nhl-scrabble/issues/359) | - |
 | 001 | Add pytest-timeout to Prevent Hanging Tests | MEDIUM | 30-60 minutes (actual: ~45 minutes) | Completed | [#119](https://github.com/bdperkin/nhl-scrabble/issues/119) | PR [#168](https://github.com/bdperkin/nhl-scrabble/pull/168), completed 2026-04-17 |
