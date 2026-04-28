@@ -19,7 +19,7 @@
 #
 # Installation Location: ${HOME}/tools/codeql
 #
-# Post-Install: Add to PATH with: export PATH="${HOME}/tools/codeql:$PATH"
+# Post-Install: Add to PATH with: export PATH="${HOME}/tools/codeql:${PATH}"
 
 set -euo pipefail
 
@@ -34,11 +34,11 @@ OS="$(uname -s)"
 case "$OS" in
   Linux*)  PLATFORM="linux64" ;;
   Darwin*) PLATFORM="osx64" ;;
-  *)       echo "❌ Unsupported OS: $OS"; exit 1 ;;
+  *)       echo "❌ Unsupported OS: ${OS}"; exit 1 ;;
 esac
 
 # Download CodeQL CLI
-echo "⬇️  Downloading CodeQL CLI ($PLATFORM)..."
+echo "⬇️  Downloading CodeQL CLI (${PLATFORM})..."
 cd "$INSTALL_DIR"
 wget -q "https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql-${PLATFORM}.zip"
 unzip -q "codeql-${PLATFORM}.zip"
@@ -52,10 +52,10 @@ fi
 
 # Add to PATH instructions
 echo ""
-echo "✅ CodeQL CLI installed to: $INSTALL_DIR/codeql"
+echo "✅ CodeQL CLI installed to: ${INSTALL_DIR}/codeql"
 echo ""
 echo "Add to your PATH by running:"
-echo "  export PATH=\"$INSTALL_DIR/codeql:\$PATH\""
+echo "  export PATH=\"${INSTALL_DIR}/codeql:\$PATH\""
 echo ""
 echo "Or add to ~/.bashrc or ~/.zshrc:"
-echo "  echo 'export PATH=\"$INSTALL_DIR/codeql:\$PATH\"' >> ~/.bashrc"
+echo "  echo 'export PATH=\"${INSTALL_DIR}/codeql:\$PATH\"' >> ~/.bashrc"

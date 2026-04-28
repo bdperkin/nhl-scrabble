@@ -125,7 +125,7 @@ EXIT_CODE=$?
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "📁 Full results: $RESULTS_DIR/results.sarif"
-echo "🔍 View in VS Code: codeql sarif-viewer $RESULTS_DIR/results.sarif"
+echo "📁 Full results: ${RESULTS_DIR}/results.sarif"
+echo "🔍 View in VS Code: codeql sarif-viewer ${RESULTS_DIR}/results.sarif"
 
-exit $EXIT_CODE
+exit "${EXIT_CODE}"

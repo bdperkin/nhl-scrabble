@@ -817,8 +817,10 @@ repos:
           Unquoted variables can cause unexpected behavior with spaces.
           Safe: "$VARIABLE"
           Risky: $VARIABLE
-          This is informational - may have false positives for arithmetic.
-        entry: '\$[A-Z_][A-Z0-9_]*(?!\}|\"|\[)'
+          This is informational - may have false positives.
+
+          Excludes: assignments, command substitutions, braced syntax, and escaped variables.
+        entry: '(?<![\w"=\\])\$[A-Z_][A-Z0-9_]*(?![}\"\[])'
         language: pygrep
         files: \.sh$
 
