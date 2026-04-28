@@ -201,8 +201,17 @@ NHL_SCRABBLE_VERBOSE=true
 
 - **CodeQL:** Weekly scans + PR checks
 - **Dependabot:** Weekly updates (Mondays 9 AM ET)
+- **Dependency Review:** Automated PR checks for vulnerabilities and license compliance
 - **pip-audit:** Dependency vulnerability scanning
 - **Secret scanning:** Detects committed secrets
+
+**Dependency Review Workflow:**
+
+- Triggers on PRs modifying `pyproject.toml`, `uv.lock`, or `requirements*.txt`
+- Scans for security vulnerabilities (fails on moderate+ severity)
+- Validates license compliance (allows: MIT, Apache-2.0, BSD, ISC, Python-2.0; denies: GPL-3.0, AGPL-3.0)
+- Posts detailed findings as PR comments
+- Enforces security and compliance policies before merge
 
 ### Publishing
 
