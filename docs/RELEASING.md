@@ -71,14 +71,22 @@ The `.github/workflows/publish.yml` workflow executes in this order:
 - Uses OIDC trusted publishing (no API tokens)
 - Skips if version already exists
 
-**Stage 4: Publish to PyPI** (~10 seconds)
+**Stage 4: Generate SLSA Provenance** (~15-30 seconds)
+
+- Generates cryptographically signed build attestations
+- Creates SLSA Level 3 provenance
+- Uses Sigstore/Cosign keyless signing
+- Attaches provenance to GitHub release
+- Enables build verification and supply chain security
+
+**Stage 5: Publish to PyPI** (~10 seconds)
 
 - Downloads build artifacts
 - Publishes to https://pypi.org
 - Uses OIDC trusted publishing
 - Production release!
 
-**Stage 5: GitHub Release** (~5 seconds)
+**Stage 6: GitHub Release** (~5 seconds)
 
 - Extracts version from tag
 - Extracts tag annotation (release summary)
@@ -90,7 +98,7 @@ The `.github/workflows/publish.yml` workflow executes in this order:
 - Creates GitHub Release
 - Attaches distribution artifacts (sdist + wheel)
 
-**Total Time:** 3-4 minutes
+**Total Time:** 3-4.5 minutes
 
 ### 2. Version Tagging Strategy
 
@@ -358,6 +366,243 @@ pip install nhl-scrabble==2.1.0
 # Verify version
 python -c "import nhl_scrabble; print(nhl_scrabble.__version__)"
 ```
+
+## Verifying Build Provenance
+
+Each release includes cryptographically signed SLSA Level 3 build provenance that verifies build integrity and supply chain security.
+
+### Why Verify Provenance?
+
+**Build provenance verification ensures:**
+
+- ✅ **Authentic Build**: Built by official GitHub Actions workflow
+- ✅ **Correct Source**: Built from the exact tagged commit
+- ✅ **No Tampering**: Artifacts match signed provenance
+- ✅ **Trusted Builder**: Built using official SLSA generator
+- ✅ **Supply Chain Security**: End-to-end build integrity
+
+**Who should verify:**
+
+- Security-conscious users
+- Enterprise deployments
+- Regulated industries (finance, healthcare, government)
+- Containerized deployments
+- CI/CD pipelines downloading artifacts
+- Anyone installing from GitHub releases (not PyPI)
+
+### Verification Methods
+
+**Option 1: Using slsa-verifier (Recommended)**
+
+```bash
+# Install slsa-verifier
+go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@latest
+
+# Download release artifacts
+gh release download v2.1.0
+
+# Verify wheel provenance
+slsa-verifier verify-artifact \
+  nhl_scrabble-2.1.0-py3-none-any.whl \
+  --provenance-path nhl_scrabble-2.1.0.intoto.jsonl \  # codespell:ignore intoto
+  --source-uri github.com/bdperkin/nhl-scrabble
+
+# Verify source distribution provenance
+slsa-verifier verify-artifact \
+  nhl_scrabble-2.1.0.tar.gz \
+  --provenance-path nhl_scrabble-2.1.0.intoto.jsonl \  # codespell:ignore intoto
+  --source-uri github.com/bdperkin/nhl-scrabble
+
+# Success output:
+# Verified signature against tlog entry index 12345...
+# Verified build using builder "https://github.com/slsa-framework/slsa-github-generator/..."
+# Verifying artifact nhl_scrabble-2.1.0-py3-none-any.whl: PASSED
+# PASSED: Verified SLSA provenance
+```
+
+**Option 2: Using Cosign**
+
+```bash
+# Install cosign
+brew install cosign  # macOS
+# Or: https://github.com/sigstore/cosign/releases
+
+# Verify attestation
+cosign verify-attestation \
+  --type slsaprovenance \
+  --certificate-identity-regexp="^https://github.com/bdperkin/nhl-scrabble" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  nhl_scrabble-2.1.0-py3-none-any.whl
+```
+
+**Option 3: Manual Hash Verification**
+
+```bash
+# Download provenance
+gh release download v2.1.0 --pattern "*.intoto.jsonl"  # codespell:ignore intoto
+
+# View provenance (requires jq)
+cat nhl_scrabble-2.1.0.intoto.jsonl | jq .  # codespell:ignore intoto
+
+# Compute artifact hashes
+sha256sum nhl_scrabble-2.1.0-py3-none-any.whl
+sha256sum nhl_scrabble-2.1.0.tar.gz
+
+# Compare with hashes in provenance file
+# Look for "subject" array in provenance JSON
+```
+
+### Automated Verification in CI/CD
+
+Integrate provenance verification into your deployment pipeline:
+
+**GitHub Actions Example:**
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install slsa-verifier
+        run: |
+          go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@latest
+
+      - name: Download release artifacts
+        run: |
+          gh release download v2.1.0
+
+      - name: Verify provenance
+        run: |
+          slsa-verifier verify-artifact \
+            nhl_scrabble-2.1.0-py3-none-any.whl \
+            --provenance-path nhl_scrabble-2.1.0.intoto.jsonl \  # codespell:ignore intoto
+            --source-uri github.com/bdperkin/nhl-scrabble
+
+      - name: Install verified package
+        run: |
+          pip install nhl_scrabble-2.1.0-py3-none-any.whl
+```
+
+**Docker/Container Example:**
+
+```dockerfile
+# Dockerfile with provenance verification
+FROM python:3.12-slim
+
+# Install slsa-verifier
+RUN apt-get update && apt-get install -y golang && \
+    go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@latest
+
+# Download and verify
+RUN gh release download v2.1.0 && \
+    slsa-verifier verify-artifact \
+      nhl_scrabble-2.1.0-py3-none-any.whl \
+      --provenance-path nhl_scrabble-2.1.0.intoto.jsonl \  # codespell:ignore intoto
+      --source-uri github.com/bdperkin/nhl-scrabble && \
+    pip install nhl_scrabble-2.1.0-py3-none-any.whl
+```
+
+### What Provenance Contains
+
+Each provenance file (`.intoto.jsonl`) includes: # codespell:ignore intoto
+
+```json
+{
+  "predicate": {
+    "buildType": "https://github.com/slsa-framework/slsa-github-generator/generic@v1",
+    "builder": {
+      "id": "https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@refs/tags/v1.9.0"
+    },
+    "invocation": {
+      "configSource": {
+        "uri": "git+https://github.com/bdperkin/nhl-scrabble@refs/tags/v2.1.0",
+        "digest": {"sha1": "abcd1234..."}
+      }
+    },
+    "metadata": {
+      "buildInvocationId": "1234567890",
+      "buildStartedOn": "2026-04-22T10:30:00Z",
+      "buildFinishedOn": "2026-04-22T10:32:15Z"
+    },
+    "materials": [
+      {
+        "uri": "git+https://github.com/bdperkin/nhl-scrabble@refs/tags/v2.1.0"
+      }
+    ]
+  },
+  "subject": [
+    {
+      "name": "nhl_scrabble-2.1.0-py3-none-any.whl",
+      "digest": {"sha256": "abc123..."}
+    },
+    {
+      "name": "nhl_scrabble-2.1.0.tar.gz",
+      "digest": {"sha256": "def456..."}
+    }
+  ]
+}
+```
+
+**Key Fields:**
+
+- **buildType**: SLSA builder type (generic workflow)
+- **builder.id**: Exact SLSA generator version used
+- **invocation.configSource**: Git repository and tag/commit
+- **metadata**: Build timing and run ID
+- **subject**: Artifacts with SHA256 hashes
+
+### Provenance Verification Troubleshooting
+
+**Error: "failed to verify signature"**
+
+- Ensure provenance file is from the correct release
+- Check artifact filename matches exactly
+- Verify using latest slsa-verifier version
+- Check network connectivity (verifier needs to access Sigstore transparency log)
+
+**Error: "source URI mismatch"**
+
+- Ensure `--source-uri` matches the repository
+- Use `github.com/bdperkin/nhl-scrabble` (no https://)
+- Check you're verifying the correct release version
+
+**Error: "provenance file not found"**
+
+- Download provenance: `gh release download v2.1.0 --pattern "*.intoto.jsonl"` # codespell:ignore intoto
+- Check GitHub release has provenance attached
+- Verify provenance generation completed in workflow
+
+**Missing provenance on older releases:**
+
+- Provenance generation added in v2.1.0 (April 2026)
+- Older releases (v2.0.x) do not have provenance
+- Upgrade to v2.1.0+ for provenance support
+
+### SLSA Level 3 Compliance
+
+This project achieves **SLSA Level 3** compliance:
+
+| Level   | Requirements                           | Status     |
+| ------- | -------------------------------------- | ---------- |
+| Level 1 | Documentation of build process         | ✅ Yes     |
+| Level 2 | Hosted build platform (GitHub Actions) | ✅ Yes     |
+| Level 3 | Provenance + non-falsifiable           | ✅ Yes     |
+| Level 4 | Two-party review + hermetic builds     | ⚠️ Partial |
+
+**What SLSA Level 3 Provides:**
+
+- **Provenance**: Complete build metadata
+- **Non-Falsifiable**: Cryptographically signed, cannot be forged
+- **Hosted Build**: Isolated, ephemeral build environment
+- **Tamper-Evident**: Any modification invalidates signature
+
+**Compliance Standards:**
+
+- ✅ **NIST SSDF** (Secure Software Development Framework)
+- ✅ **EO 14028** (Executive Order on Cybersecurity - SBOM + Provenance)
+- ✅ **SLSA Framework** (Supply chain Levels for Software Artifacts)
+
+For more details, see: https://slsa.dev/
 
 ## Troubleshooting
 
@@ -801,14 +1046,15 @@ gh release delete v0.0.1-test --yes
 
 **Workflow Execution Time:**
 
-| Stage            | Time         | Notes                      |
-| ---------------- | ------------ | -------------------------- |
-| Build            | ~15s         | Builds sdist + wheel       |
-| Test Install     | ~2-3 min     | Parallel (3 OS × 3 Python) |
-| TestPyPI Publish | ~10s         | OIDC auth + upload         |
-| PyPI Publish     | ~10s         | OIDC auth + upload         |
-| GitHub Release   | ~5s          | Extract notes + create     |
-| **Total**        | **~3-4 min** | vs 30 min manual           |
+| Stage            | Time           | Notes                         |
+| ---------------- | -------------- | ----------------------------- |
+| Build            | ~15s           | Builds sdist + wheel          |
+| Test Install     | ~2-3 min       | Parallel (3 OS × 3 Python)    |
+| Provenance       | ~15-30s        | SLSA L3 attestation + signing |
+| TestPyPI Publish | ~10s           | OIDC auth + upload            |
+| PyPI Publish     | ~10s           | OIDC auth + upload            |
+| GitHub Release   | ~5s            | Extract notes + create        |
+| **Total**        | **~3-4.5 min** | vs 30 min manual              |
 
 **Time Savings:**
 
