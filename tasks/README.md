@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 193 tasks (44 active, 149 completed)
+**Total Tasks**: 193 tasks (43 active, 150 completed)
 
 ## Overview
 
@@ -99,7 +99,7 @@ Each task includes:
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | Unknown | Active | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | - |
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | - |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
-| 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours | Active | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | - |
+| 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | PR [#429](https://github.com/bdperkin/nhl-scrabble/pull/429), completed 2026-04-28 |
 | 001 | Implement HTML Output Format | MEDIUM | 4-6 hours (actual: ~4h) | Completed | [#46](https://github.com/bdperkin/nhl-scrabble/issues/46) | PR [#92](https://github.com/bdperkin/nhl-scrabble/pull/92), completed 2026-04-16 |
 | 001 | Add Progress Bars for Long Operations | MEDIUM | 2-3 hours (actual: ~3 hours) | Completed | [#132](https://github.com/bdperkin/nhl-scrabble/issues/132) | PR [#172](https://github.com/bdperkin/nhl-scrabble/pull/172), completed 2026-04-17 |
 | 002 | Add Interactive Mode (REPL) | MEDIUM | 4-6 hours (actual: Implementation was already complete on this branch) | Completed | [#133](https://github.com/bdperkin/nhl-scrabble/issues/133) | completed 2026-04-17 |
