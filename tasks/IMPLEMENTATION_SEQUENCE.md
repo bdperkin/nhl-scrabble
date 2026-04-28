@@ -17,57 +17,101 @@ Each task is listed as a `/implement-task` command ready to execute. Tasks are o
 
 ______________________________________________________________________
 
-## Implementation Order
+## Phase 1: Medium Priority - Workflow Automation
 
-/implement-task enhancement/022-comprehensive-github-workflows.md  # Unknown, No issue
-/implement-task enhancement/023-extend-sphinx-builders.md  # Unknown, Issue #331
-/implement-task enhancement/024-extend-sphinx-extensions.md  # Unknown, Issue #332
-/implement-task enhancement/029-track-ty-validation-period.md  # Unknown, Issue #325
-/implement-task enhancement/033-enhance-version-badge-display.md  # Unknown, Issue #382
-/implement-task enhancement/034-evaluate-semantic-release-automation.md  # Unknown, Issue #383
-/implement-task new-features/008-database-backend.md  # Unknown, No issue
-/implement-task new-features/009-notification-system.md  # Unknown, No issue
-/implement-task new-features/010-player-comparison-tool.md  # Unknown, No issue
-/implement-task new-features/011-offline-mode.md  # Unknown, No issue
-/implement-task new-features/012-config-profiles.md  # Unknown, No issue
-/implement-task new-features/013-plugin-system.md  # Unknown, No issue
-/implement-task new-features/014-docker-support.md  # Unknown, No issue
-/implement-task new-features/015-data-export-import.md  # Unknown, No issue
-/implement-task new-features/016-internationalization-localization.md  # Unknown, No issue
-/implement-task new-features/017-free-python-hosting-deployment.md  # Unknown, No issue
-/implement-task new-features/018-automated-python-package-building-publishing.md  # Unknown, No issue
-/implement-task new-features/019-comprehensive-release-automation-skill.md  # Unknown, No issue
-/implement-task new-features/020-i18n-cli-internationalization.md  # Unknown, No issue
-/implement-task new-features/021-i18n-web-internationalization.md  # Unknown, No issue
-/implement-task new-features/022-i18n-tui-internationalization.md  # Unknown, No issue
-/implement-task new-features/023-i18n-create-translation-files.md  # Unknown, No issue
-/implement-task new-features/024-i18n-priority-language-translations.md  # Unknown, No issue
-/implement-task new-features/025-release-pre-release-validation.md  # Unknown, No issue
-/implement-task new-features/026-release-version-bumping.md  # Unknown, No issue
-/implement-task new-features/027-release-build-validate.md  # Unknown, No issue
-/implement-task new-features/028-release-publish.md  # Unknown, No issue
-/implement-task new-features/029-release-post-release.md  # Unknown, No issue
-/implement-task new-features/030-release-verification.md  # Unknown, No issue
-/implement-task new-features/031-release-orchestration-cli.md  # Unknown, No issue
-/implement-task new-features/033-github-release-workflow.md  # Unknown, No issue
-/implement-task new-features/034-docker-build-publish-workflow.md  # Unknown, No issue
-/implement-task new-features/035-pr-auto-label-workflow.md  # Unknown, No issue
-/implement-task new-features/036-pr-size-check-workflow.md  # Unknown, No issue
-/implement-task new-features/039-benchmark-workflow.md  # Unknown, No issue
-/implement-task new-features/040-sbom-workflow.md  # Unknown, No issue
-/implement-task new-features/041-provenance-workflow.md  # Unknown, No issue
-/implement-task new-features/042-dependency-review-workflow.md  # Unknown, No issue
-/implement-task new-features/043-nightly-testing-workflow.md  # Unknown, No issue
-/implement-task refactoring/024-make-ty-blocking.md  # Unknown, No issue
-/implement-task security/011-monitor-cve-2026-3219-pip.md  # Unknown, Issue #375
-/implement-task security/012-local-codeql-scanning.md  # Unknown, Issue #389
-/implement-task testing/012-qa-automation-framework.md  # Unknown, No issue
-/implement-task testing/014-playwright-framework-setup.md  # Unknown, No issue
-/implement-task testing/015-functional-web-tests.md  # Unknown, No issue
-/implement-task testing/016-visual-regression-tests.md  # Unknown, No issue
-/implement-task testing/017-performance-load-tests.md  # Unknown, No issue
-/implement-task testing/018-accessibility-tests.md  # Unknown, No issue
-/implement-task testing/019-qa-cicd-integration.md  # Unknown, No issue
-/implement-task testing/021-test-analytics-coverage-tool.md  # Unknown, No issue
+**Total Effort**: 34-47 hours
+**Focus**: GitHub Actions workflows and CI/CD enhancements
+
+/implement-task new-features/042-dependency-review-workflow.md  # 1-2 hours, Issue #309
+/implement-task new-features/033-github-release-workflow.md  # 2-3 hours, Issue #300
+/implement-task new-features/040-sbom-workflow.md  # 2-3 hours, Issue #307
+/implement-task new-features/041-provenance-workflow.md  # 2-3 hours, Issue #308
+/implement-task new-features/039-benchmark-workflow.md  # 3-4 hours, Issue #306
+/implement-task enhancement/022-comprehensive-github-workflows.md  # 24-32 hours (main task coordination + sub-tasks), Issue #298
+
+**Rationale**: Workflow automation tasks build deployment and CI/CD infrastructure.
 
 ______________________________________________________________________
+
+## Phase 2: Medium Priority - Testing Infrastructure
+
+**Total Effort**: 58-82 hours
+**Focus**: QA automation, Playwright testing, and test analytics
+**Dependencies**: 5 tasks with dependencies
+
+/implement-task testing/018-accessibility-tests.md  # 2-4 hours, Issue #318
+/implement-task testing/019-qa-cicd-integration.md  # 2-4 hours, Issue #315
+/implement-task testing/016-visual-regression-tests.md  # 4-6 hours, Issue #317
+/implement-task testing/017-performance-load-tests.md  # 4-6 hours, Issue #314
+/implement-task testing/021-test-analytics-coverage-tool.md  # 4-6 hours, Issue #359
+/implement-task testing/014-playwright-framework-setup.md  # 6-8 hours, Issue #313
+/implement-task testing/015-functional-web-tests.md  # 6-8 hours, Issue #316
+/implement-task testing/012-qa-automation-framework.md  # 30-40 hours (main task coordination + sub-tasks), Issue #311
+
+**Rationale**: Testing infrastructure tasks establish frameworks before specific test implementations.
+
+______________________________________________________________________
+
+## Phase 3: Medium Priority - New Features
+
+**Total Effort**: 4-6 hours
+**Focus**: Feature enhancements and new capabilities
+
+/implement-task new-features/018-automated-python-package-building-publishing.md  # 4-6 hours, Issue #224
+
+**Rationale**: Feature tasks build on existing infrastructure and capabilities.
+
+______________________________________________________________________
+
+## Phase 4: Medium Priority - Other Enhancements
+
+**Total Effort**: 5-7 hours
+**Focus**: Additional improvements and optimizations
+
+/implement-task security/011-monitor-cve-2026-3219-pip.md  # 30 minutes - 1 hour (monitoring + update when available), No issue
+/implement-task security/012-local-codeql-scanning.md  # 4-6 hours, No issue
+/implement-task enhancement/029-track-ty-validation-period.md  # 1-2 weeks (ongoing monitoring + final decision), No issue
+
+**Rationale**: Tasks ordered by dependencies, then strategic value, then effort (quick wins first).
+
+______________________________________________________________________
+
+## Phase 5: Low Priority
+
+**Total Effort**: 148-218 hours
+**Focus**: Nice-to-have features and quality-of-life improvements
+
+/implement-task enhancement/033-enhance-version-badge-display.md  # 30 minutes - 1 hour, No issue
+/implement-task refactoring/024-make-ty-blocking.md  # 30 minutes - 1 hour, Issue #355
+/implement-task new-features/025-release-pre-release-validation.md  # 1-2 hours, Issue #261
+/implement-task new-features/026-release-version-bumping.md  # 1-2 hours, Issue #262
+/implement-task new-features/027-release-build-validate.md  # 1-2 hours, Issue #263
+/implement-task new-features/028-release-publish.md  # 1-2 hours, Issue #264
+/implement-task new-features/029-release-post-release.md  # 1-2 hours, Issue #265
+/implement-task new-features/030-release-verification.md  # 1-2 hours, Issue #266
+/implement-task new-features/035-pr-auto-label-workflow.md  # 1-2 hours, Issue #302
+/implement-task new-features/036-pr-size-check-workflow.md  # 1-2 hours, Issue #303
+/implement-task new-features/023-i18n-create-translation-files.md  # 2-3 hours, Issue #251
+/implement-task new-features/031-release-orchestration-cli.md  # 2-3 hours, Issue #267
+/implement-task new-features/043-nightly-testing-workflow.md  # 2-3 hours, Issue #310
+/implement-task enhancement/024-extend-sphinx-extensions.md  # 3-5 hours, No issue
+/implement-task new-features/012-config-profiles.md  # 3-4 hours, Issue #155
+/implement-task new-features/022-i18n-tui-internationalization.md  # 3-4 hours, Issue #250
+/implement-task new-features/034-docker-build-publish-workflow.md  # 3-4 hours, Issue #301
+/implement-task enhancement/023-extend-sphinx-builders.md  # 4-6 hours, No issue
+/implement-task new-features/010-player-comparison-tool.md  # 4-6 hours, Issue #153
+/implement-task new-features/011-offline-mode.md  # 4-5 hours, Issue #154
+/implement-task new-features/014-docker-support.md  # 4-6 hours, Issue #157
+/implement-task new-features/015-data-export-import.md  # 4-5 hours, Issue #158
+/implement-task new-features/020-i18n-cli-internationalization.md  # 4-6 hours, Issue #248
+/implement-task enhancement/034-evaluate-semantic-release-automation.md  # 6-10 hours (comprehensive evaluation + POC + recommendation), No issue
+/implement-task new-features/009-notification-system.md  # 6-8 hours, Issue #152
+/implement-task new-features/021-i18n-web-internationalization.md  # 6-8 hours, Issue #249
+/implement-task new-features/017-free-python-hosting-deployment.md  # 8-12 hours, Issue #219
+/implement-task new-features/019-comprehensive-release-automation-skill.md  # 8-12 hours, Issue #247
+/implement-task new-features/024-i18n-priority-language-translations.md  # 8-12 hours, Issue #252
+/implement-task new-features/013-plugin-system.md  # 10-14 hours, Issue #156
+/implement-task new-features/008-database-backend.md  # 12-16 hours, Issue #151
+/implement-task new-features/016-internationalization-localization.md  # 32-48 hours, Issue #218
+
+**Rationale**: Tasks ordered by dependencies, then strategic value, then effort (quick wins first).
