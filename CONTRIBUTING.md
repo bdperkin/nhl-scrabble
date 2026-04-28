@@ -410,16 +410,32 @@ The project uses **automated PyPI publishing** via GitHub Actions. Releases are 
 ### Quick Release Steps
 
 ```bash
-# 1. Update CHANGELOG.md with release notes
-vim CHANGELOG.md
+# 1. Create annotated tag with release notes
+git tag -a v2.1.0 -m "$(cat <<'EOF'
+Release v2.1.0
 
-# 2. Commit changelog
-git add CHANGELOG.md
-git commit -m "docs(changelog): Add v2.1.0 release notes"
-git push origin main
+## What's Changed
 
-# 3. Create and push version tag
-git tag -a v2.1.0 -m "Release version 2.1.0"
+### Features
+- Add interactive mode (#133)
+- Add REST API server (#150)
+
+### Bug Fixes
+- Fix API error handling (#40)
+- Fix rate limiting (#47)
+
+### Performance
+- Optimize report generation (#115)
+
+## Breaking Changes
+
+None
+
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0
+EOF
+)"
+
+# 2. Push tag to trigger release workflow
 git push --tags
 
 # That's it! The workflow automatically:
@@ -428,7 +444,11 @@ git push --tags
 # ✅ Tests installation on 3 OS × 3 Python versions
 # ✅ Publishes to TestPyPI
 # ✅ Publishes to PyPI
-# ✅ Creates GitHub Release with artifacts
+# ✅ Generates CHANGELOG.md from commits
+# ✅ Creates GitHub Release with:
+#    - Tag annotation as primary release notes
+#    - Auto-generated detailed changelog
+#    - Distribution artifacts (.whl, .tar.gz)
 ```
 
 **Note:** This project uses **dynamic versioning** from Git tags via hatch-vcs. No manual version updates needed!
@@ -439,6 +459,64 @@ git push --tags
 - [docs/contributing/release-process.md](docs/contributing/release-process.md) - Additional release details
 
 **Workflow File:** `.github/workflows/publish.yml`
+
+### Tag Annotation Format
+
+GitHub releases are created automatically from **annotated git tag messages**. The tag annotation becomes the primary release notes in GitHub.
+
+**Recommended Format:**
+
+```bash
+git tag -a v2.1.0 -m "$(cat <<'EOF'
+Release v2.1.0
+
+## What's Changed
+
+### Features
+- Feature description (#issue-number)
+
+### Bug Fixes
+- Fix description (#issue-number)
+
+### Performance
+- Performance improvement (#issue-number)
+
+## Breaking Changes
+
+[Describe any breaking changes, or write "None"]
+
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0
+EOF
+)"
+```
+
+**Pre-release Tags:**
+
+Pre-releases are auto-detected based on tag name:
+
+```bash
+# Release Candidate (auto-marked as pre-release)
+git tag -a v2.1.0-rc1 -m "Release Candidate 1 for v2.1.0
+
+## Testing Focus
+- New caching system
+- API performance improvements
+
+**Do not use in production**"
+
+# Beta Release
+git tag -a v2.1.0-beta1 -m "Beta 1: Testing new features"
+
+# Alpha Release
+git tag -a v2.1.0-alpha1 -m "Alpha 1: Early preview"
+```
+
+**Important:**
+
+- Always use **annotated tags** (`git tag -a`), not lightweight tags
+- Tag message becomes the GitHub release description
+- Auto-generated changelog is appended below tag annotation
+- Pre-releases are detected by `-rc`, `-beta`, or `-alpha` in tag name
 
 ### Version Requirements
 

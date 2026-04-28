@@ -189,21 +189,64 @@ jobs:
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Extract release notes
-        id: extract_notes
+      - name: Extract tag annotation
+        id: tag_annotation
+        run: |
+          # Get tag name from ref
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+          # Extract tag annotation (full message)
+          # Use -n9999 to get the full annotation (not truncated)
+          TAG_MESSAGE=$(
+            git tag -l -n9999 "$TAG_NAME" | \
+            sed "1s/^$TAG_NAME[[:space:]]*//" || \
+            echo ""
+          )
+
+          # If empty, provide default message
+          if [ -z "$TAG_MESSAGE" ]; then
+            TAG_MESSAGE="Release $TAG_NAME"
+          fi
+
+          # Save to file for multiline handling
+          echo "$TAG_MESSAGE" > tag_annotation.md
+
+      - name: Extract changelog section
+        id: extract_changelog
         run: |
           # Extract version section from CHANGELOG.md
           VERSION="${{ steps.get_version.outputs.VERSION }}"
           awk "/^## \\[$VERSION\\]/{flag=1; next} /^## \\[/{flag=0} flag" \
-            CHANGELOG.md > release_notes.md || \
-            echo "No release notes found" > release_notes.md
+            CHANGELOG.md > changelog_section.md || \
+            echo "" > changelog_section.md
+
+      - name: Combine release notes
+        run: |
+          # Start with tag annotation (primary release notes)
+          cat tag_annotation.md > release_notes.md
+
+          # Add separator and detailed changelog if it exists and is non-empty
+          if [ -s changelog_section.md ]; then
+            echo -e "\n\n---\n\n## Detailed Changelog\n" >> release_notes.md
+            cat changelog_section.md >> release_notes.md
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.tag_annotation.outputs.tag_name }}
+          name: ${{ steps.tag_annotation.outputs.tag_name }}
           files: dist/*
           body_path: release_notes.md
           draft: false
-          prerelease: false
+          prerelease: >-
+            ${{
+              contains(steps.tag_annotation.outputs.tag_name, '-rc') ||
+              contains(steps.tag_annotation.outputs.tag_name, '-beta') ||
+              contains(steps.tag_annotation.outputs.tag_name, '-alpha')
+            }}
+          # Use tag annotation + changelog, not auto-generated
+          generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
