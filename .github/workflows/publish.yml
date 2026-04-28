@@ -13,6 +13,8 @@ jobs:
   build:
     name: Build Python Package
     runs-on: ubuntu-latest
+    outputs:
+      hashes: ${{ steps.hash.outputs.hashes }}
 
     steps:
       - name: Checkout repository
@@ -52,6 +54,26 @@ jobs:
           name: python-package-distributions
           path: dist/
           retention-days: 7
+
+      - name: Generate hashes for provenance
+        id: hash
+        run: |
+          cd dist
+          sha256sum * > checksums.txt
+          cat checksums.txt
+          echo "hashes=$(cat checksums.txt | base64 -w0)" >> $GITHUB_OUTPUT
+
+  provenance:
+    name: Generate SLSA Provenance
+    needs: build
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.9.0
+    with:
+      base64-subjects: ${{ needs.build.outputs.hashes }}
+      upload-assets: true
 
   test-install:
     name: Test Package Installation
@@ -167,7 +189,7 @@ jobs:
 
   github-release:
     name: Create GitHub Release
-    needs: generate-changelog
+    needs: [generate-changelog, provenance]
     runs-on: ubuntu-latest
 
     steps:

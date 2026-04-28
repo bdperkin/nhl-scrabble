@@ -233,6 +233,117 @@ We treat SSRF vulnerabilities as **HIGH** severity and will prioritize fixes.
   - **Retention**: 90 days for artifacts, permanent for releases
   - **Vulnerability Scanning**: SBOM used for automated vulnerability detection with Grype
 
+### SLSA Build Provenance
+
+- **SLSA Level 3 Compliance**: Cryptographically signed build attestations verify build integrity
+  - **Build Provenance**: Automatically generated for every release
+  - **Cryptographic Signing**: Sigstore/Cosign keyless signing with OIDC
+  - **Non-Falsifiable**: Build provenance cannot be forged or tampered with
+  - **Supply Chain Security**: Verifiable end-to-end build integrity
+  - Generated on:
+    - Every version tag release (v\* tags)
+    - Attached to GitHub releases as `.intoto.jsonl` files # codespell:ignore intoto
+  - Contains:
+    - Build environment details (runner, OS, version)
+    - Build inputs (commit SHA, repository URL)
+    - Build configuration (workflow path, ref)
+    - Build outputs (artifact hashes)
+    - Builder identity (SLSA generator version)
+  - **Verification**: See "Verifying Build Provenance" section below
+  - **Standards Compliance**: NIST SSDF, EO 14028, SLSA Framework
+
+#### Verifying Build Provenance
+
+Verify the authenticity and integrity of releases using SLSA provenance:
+
+**Option 1: Using slsa-verifier (Recommended)**
+
+```bash
+# Download release artifacts
+gh release download v2.1.0
+
+# Verify artifact provenance
+slsa-verifier verify-artifact \
+  nhl_scrabble-2.1.0-py3-none-any.whl \
+  --provenance-path nhl_scrabble-2.1.0.intoto.jsonl \  # codespell:ignore intoto
+  --source-uri github.com/bdperkin/nhl-scrabble
+
+# Expected output:
+# Verified signature against tlog entry index 12345 at URL: ...
+# Verified build using builder "https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@refs/tags/v1.9.0" at commit abcd1234...
+# Verifying artifact nhl_scrabble-2.1.0-py3-none-any.whl: PASSED
+# PASSED: Verified SLSA provenance
+```
+
+**Option 2: Using Cosign**
+
+```bash
+# Verify attestation signature
+cosign verify-attestation \
+  --type slsaprovenance \
+  --certificate-identity-regexp="^https://github.com/bdperkin/nhl-scrabble" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  nhl_scrabble-2.1.0-py3-none-any.whl
+
+# Expected output shows signature verification and attestation details
+```
+
+**Option 3: Manual Inspection**
+
+```bash
+# Download provenance file
+gh release download v2.1.0 --pattern "*.intoto.jsonl"  # codespell:ignore intoto
+
+# View provenance (human-readable)
+cat nhl_scrabble-2.1.0.intoto.jsonl | jq .  # codespell:ignore intoto
+
+# Verify artifact hashes match
+sha256sum nhl_scrabble-2.1.0-py3-none-any.whl
+sha256sum nhl_scrabble-2.1.0.tar.gz
+# Compare with hashes in provenance file
+```
+
+**What Verification Proves:**
+
+- ✅ **Authentic Build**: Built by official GitHub Actions workflow
+- ✅ **Correct Source**: Built from the exact tagged commit in the repository
+- ✅ **No Tampering**: Artifacts match the signed provenance
+- ✅ **Trusted Builder**: Built using official SLSA generator (not custom/malicious builder)
+- ✅ **Build Integrity**: No modifications between build and distribution
+
+**Installation Best Practices:**
+
+```bash
+# Always verify provenance before installing from source
+gh release download v2.1.0
+slsa-verifier verify-artifact nhl_scrabble-2.1.0-py3-none-any.whl \
+  --provenance-path nhl_scrabble-2.1.0.intoto.jsonl \  # codespell:ignore intoto
+  --source-uri github.com/bdperkin/nhl-scrabble
+
+# If verification passes, install
+pip install nhl_scrabble-2.1.0-py3-none-any.whl
+
+# PyPI distributions are also verifiable
+# (provenance attached to GitHub releases, not PyPI directly)
+```
+
+**Tools Required:**
+
+- **slsa-verifier**: https://github.com/slsa-framework/slsa-verifier
+
+  ```bash
+  # Install slsa-verifier
+  go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@latest
+  ```
+
+- **Cosign**: https://github.com/sigstore/cosign
+
+  ```bash
+  # Install cosign
+  brew install cosign  # macOS
+  # Or download from: https://github.com/sigstore/cosign/releases
+  ```
+
 ### Code Quality and Security
 
 - **MyPy**: Static type checking in strict mode
