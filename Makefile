@@ -48,6 +48,7 @@ NC := \033[0m # No Color
         docs-doctest docs-doctest-verbose docs-linkcheck docs-linkcheck-verbose docs-coverage docs-quality \
         run run-verbose run-json \
         shell watch init info status version \
+        changelog-preview changelog-update changelog-tag \
         qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
         deps-check deps-update deps-update-full \
@@ -611,6 +612,38 @@ release: ci ## Prepare for release (run all checks)
 version: check-venv ## Show current version
 	@printf "$(BLUE)Current version:$(NC)\n"
 	@$(BIN)/tox -e version
+
+changelog-preview: ## Preview unreleased changelog entries
+	@printf "$(BLUE)Previewing unreleased changelog...$(NC)\n"
+	@if ! command -v git-cliff >/dev/null 2>&1; then \
+		printf "$(RED)❌ git-cliff not found. Install with: cargo install git-cliff$(NC)\n"; \
+		printf "$(YELLOW)See: https://git-cliff.org/$(NC)\n"; \
+		exit 1; \
+	fi
+	@git-cliff --unreleased
+
+changelog-update: ## Update CHANGELOG.md with all releases
+	@printf "$(BLUE)Updating CHANGELOG.md...$(NC)\n"
+	@if ! command -v git-cliff >/dev/null 2>&1; then \
+		printf "$(RED)❌ git-cliff not found. Install with: cargo install git-cliff$(NC)\n"; \
+		printf "$(YELLOW)See: https://git-cliff.org/$(NC)\n"; \
+		exit 1; \
+	fi
+	@git-cliff --output CHANGELOG.md
+	@printf "$(GREEN)✓ CHANGELOG.md updated$(NC)\n"
+
+changelog-tag: ## Generate changelog for specific tag (usage: make changelog-tag TAG=v1.0.0)
+	@printf "$(BLUE)Generating changelog for tag $(TAG)...$(NC)\n"
+	@if [ -z "$(TAG)" ]; then \
+		printf "$(RED)❌ TAG not specified. Usage: make changelog-tag TAG=v1.0.0$(NC)\n"; \
+		exit 1; \
+	fi
+	@if ! command -v git-cliff >/dev/null 2>&1; then \
+		printf "$(RED)❌ git-cliff not found. Install with: cargo install git-cliff$(NC)\n"; \
+		printf "$(YELLOW)See: https://git-cliff.org/$(NC)\n"; \
+		exit 1; \
+	fi
+	@git-cliff --tag $(TAG)
 
 ###################
 # Git Branch Management

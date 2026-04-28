@@ -130,14 +130,54 @@ jobs:
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
 
-  github-release:
-    name: Create GitHub Release
+  generate-changelog:
+    name: Generate and Commit Changelog
     needs: publish-pypi
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Full history for git-cliff
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: .cliff.toml
+          args: --verbose --tag ${{ github.ref_name }}
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Commit and Push Changelog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          # Only commit if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to CHANGELOG.md"
+          else
+            git commit -m "docs(changelog): Update CHANGELOG.md for ${{ github.ref_name }}"
+            git push
+          fi
+
+  github-release:
+    name: Create GitHub Release
+    needs: generate-changelog
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Fetch latest with changelog update
+          ref: ${{ github.ref }}
+
+      - name: Pull latest changes
+        run: |
+          git pull origin $(git rev-parse --abbrev-ref HEAD)
 
       - name: Download build artifacts
         uses: actions/download-artifact@v7
