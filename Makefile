@@ -415,6 +415,28 @@ security-report: check-venv ## Security - generate detailed security reports
 	@printf "$(GREEN)✓ Reports saved to reports/$(NC)\n"
 	@ls -lh reports/*.json reports/*.html reports/*.txt 2>/dev/null || true
 
+##########################
+# CodeQL Security Scanning
+##########################
+
+codeql: ## CodeQL - run local CodeQL security analysis
+	@printf "$(BLUE)Running CodeQL security analysis...$(NC)\n"
+	@bash scripts/codeql_local.sh
+	@printf "$(GREEN)✓ CodeQL analysis complete$(NC)\n"
+
+codeql-check: ## CodeQL - run CodeQL and fail on security findings (CI mode)
+	@printf "$(BLUE)Running CodeQL security analysis (strict mode)...$(NC)\n"
+	@bash scripts/codeql_local.sh --fail-on-findings
+
+codeql-clean: ## CodeQL - clean CodeQL database and results
+	@printf "$(BLUE)Cleaning CodeQL database and results...$(NC)\n"
+	@rm -rf .codeql-db/ .codeql-results/
+	@printf "$(GREEN)✅ CodeQL artifacts cleaned$(NC)\n"
+
+install-codeql: ## CodeQL - install CodeQL CLI locally (Linux/macOS)
+	@printf "$(BLUE)Installing CodeQL CLI...$(NC)\n"
+	@bash scripts/install_codeql.sh
+
 ###################
 # Build & Publish
 ###################

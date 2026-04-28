@@ -324,6 +324,86 @@ pre-commit run --all-files
 - **bandit**: Scans Python code for security vulnerabilities
 - **safety**: Scans dependencies for known CVEs
 
+### CodeQL Security Analysis
+
+Run local CodeQL security analysis before pushing to GitHub to catch vulnerabilities early:
+
+**Installation:**
+
+```bash
+# Install CodeQL CLI locally (one-time setup)
+make install-codeql
+
+# Or download manually
+wget https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql-linux64.zip
+unzip codeql-linux64.zip -d ~/tools/
+export PATH="$HOME/tools/codeql:$PATH"
+```
+
+**Usage:**
+
+```bash
+# Run CodeQL analysis (shows findings but doesn't fail)
+make codeql
+
+# Run in strict mode (fails build if findings exist)
+make codeql-check
+
+# Via tox
+tox -e codeql          # Show findings
+tox -e codeql-check    # Fail on findings
+
+# Via pre-commit (manual hook)
+pre-commit run codeql-analyze --hook-stage manual
+
+# Clean CodeQL artifacts
+make codeql-clean
+```
+
+**Why local CodeQL?**
+
+- **Earlier detection**: Catch vulnerabilities before pushing (no waiting for CI)
+- **Faster feedback**: 1-2 minutes local vs 10-15 minutes CI
+- **Offline development**: Run security scans without internet
+- **Pre-PR validation**: Ensure clean CodeQL scan before opening PR
+- **Learning tool**: See exactly what CodeQL detects
+
+**Performance notes:**
+
+- Analysis time: ~1-2 minutes for this codebase
+- Database size: ~50-100 MB
+- Too slow for auto-run on every commit
+- Run manually before pushing important changes
+
+**Configuration:**
+
+Local CodeQL uses the same configuration as GitHub Actions:
+
+- `.github/codeql/codeql-config.yml` for query filters
+- `security-and-quality` query suite
+- Same false positive suppressions
+
+This ensures **consistent results** between local and CI scanning.
+
+**Results format:**
+
+- Human-readable summary in terminal
+- Full SARIF results in `.codeql-results/results.sarif`
+- View in VS Code: `codeql sarif-viewer .codeql-results/results.sarif`
+
+**Recommendation:**
+
+For real-time security feedback while coding, also consider the **CodeQL VS Code extension**:
+
+```bash
+code --install-extension GitHub.vscode-codeql
+```
+
+Use both:
+
+- **VS Code extension**: Real-time feedback while coding
+- **Local CLI**: Pre-push validation via `make codeql-check`
+
 ## Documentation
 
 When adding new features:
