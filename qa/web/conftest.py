@@ -40,8 +40,7 @@ def base_url() -> str:
 
 @pytest.fixture
 def page_fixture(page: Page) -> Generator[Page, None, None]:
-    """
-    Enhanced page fixture with common setup and teardown.
+    """Enhanced page fixture with common setup and teardown.
 
     Sets default timeout and handles cleanup after test.
 
@@ -64,8 +63,7 @@ def page_fixture(page: Page) -> Generator[Page, None, None]:
 
 @pytest.fixture
 def base_page(page_fixture: Page, base_url: str) -> BasePage:
-    """
-    Fixture providing a BasePage instance.
+    """Fixture providing a BasePage instance.
 
     Args:
         page_fixture: Configured Playwright Page
@@ -79,8 +77,7 @@ def base_page(page_fixture: Page, base_url: str) -> BasePage:
 
 @pytest.fixture
 def index_page(page_fixture: Page, base_url: str) -> IndexPage:
-    """
-    Fixture providing an IndexPage instance.
+    """Fixture providing an IndexPage instance.
 
     Args:
         page_fixture: Configured Playwright Page
@@ -94,8 +91,7 @@ def index_page(page_fixture: Page, base_url: str) -> IndexPage:
 
 @pytest.fixture
 def teams_page(page_fixture: Page, base_url: str) -> TeamsPage:
-    """
-    Fixture providing a TeamsPage instance.
+    """Fixture providing a TeamsPage instance.
 
     Args:
         page_fixture: Configured Playwright Page
@@ -109,8 +105,7 @@ def teams_page(page_fixture: Page, base_url: str) -> TeamsPage:
 
 @pytest.fixture
 def divisions_page(page_fixture: Page, base_url: str) -> DivisionsPage:
-    """
-    Fixture providing a DivisionsPage instance.
+    """Fixture providing a DivisionsPage instance.
 
     Args:
         page_fixture: Configured Playwright Page
@@ -124,8 +119,7 @@ def divisions_page(page_fixture: Page, base_url: str) -> DivisionsPage:
 
 @pytest.fixture
 def conferences_page(page_fixture: Page, base_url: str) -> ConferencesPage:
-    """
-    Fixture providing a ConferencesPage instance.
+    """Fixture providing a ConferencesPage instance.
 
     Args:
         page_fixture: Configured Playwright Page
@@ -139,8 +133,7 @@ def conferences_page(page_fixture: Page, base_url: str) -> ConferencesPage:
 
 @pytest.fixture
 def playoffs_page(page_fixture: Page, base_url: str) -> PlayoffsPage:
-    """
-    Fixture providing a PlayoffsPage instance.
+    """Fixture providing a PlayoffsPage instance.
 
     Args:
         page_fixture: Configured Playwright Page
@@ -154,8 +147,7 @@ def playoffs_page(page_fixture: Page, base_url: str) -> PlayoffsPage:
 
 @pytest.fixture
 def stats_page(page_fixture: Page, base_url: str) -> StatsPage:
-    """
-    Fixture providing a StatsPage instance.
+    """Fixture providing a StatsPage instance.
 
     Args:
         page_fixture: Configured Playwright Page

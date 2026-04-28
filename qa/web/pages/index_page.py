@@ -5,16 +5,14 @@ from playwright.sync_api import Page
 
 
 class IndexPage(BasePage):
-    """
-    Page Object Model for the index/home page.
+    """Page Object Model for the index/home page.
 
-    Provides methods to interact with the home page elements
-    and navigate to other sections of the application.
+    Provides methods to interact with the home page elements and navigate to other sections of the
+    application.
     """
 
     def __init__(self, page: Page, base_url: str = "http://localhost:5000") -> None:
-        """
-        Initialize the index page.
+        """Initialize the index page.
 
         Args:
             page: Playwright Page object
@@ -28,8 +26,7 @@ class IndexPage(BasePage):
         super().navigate(self.url)
 
     def get_welcome_message(self) -> str:
-        """
-        Get the welcome/header message from the page.
+        """Get the welcome/header message from the page.
 
         Returns:
             Welcome message text
@@ -41,8 +38,7 @@ class IndexPage(BasePage):
         self.click("#analyze-button")
 
     def has_teams_link(self) -> bool:
-        """
-        Check if teams navigation link is visible.
+        """Check if teams navigation link is visible.
 
         Returns:
             True if teams link is visible
@@ -50,8 +46,7 @@ class IndexPage(BasePage):
         return self.is_visible('a[href="/teams"]')
 
     def has_divisions_link(self) -> bool:
-        """
-        Check if divisions navigation link is visible.
+        """Check if divisions navigation link is visible.
 
         Returns:
             True if divisions link is visible
@@ -59,8 +54,7 @@ class IndexPage(BasePage):
         return self.is_visible('a[href="/divisions"]')
 
     def has_conferences_link(self) -> bool:
-        """
-        Check if conferences navigation link is visible.
+        """Check if conferences navigation link is visible.
 
         Returns:
             True if conferences link is visible
@@ -68,8 +62,7 @@ class IndexPage(BasePage):
         return self.is_visible('a[href="/conferences"]')
 
     def has_playoffs_link(self) -> bool:
-        """
-        Check if playoffs navigation link is visible.
+        """Check if playoffs navigation link is visible.
 
         Returns:
             True if playoffs link is visible
@@ -77,8 +70,7 @@ class IndexPage(BasePage):
         return self.is_visible('a[href="/playoffs"]')
 
     def has_stats_link(self) -> bool:
-        """
-        Check if stats navigation link is visible.
+        """Check if stats navigation link is visible.
 
         Returns:
             True if stats link is visible
