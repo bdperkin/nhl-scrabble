@@ -80,8 +80,8 @@ pytest tests/visual/
 
 **Implemented**: 2026-04-28
 **Branch**: testing/016-visual-regression-tests
-**PR**: #TBD
-**Commits**: efacca7
+**PR**: #432 - https://github.com/bdperkin/nhl-scrabble/pull/432
+**Commits**: efacca7, 76c25e0
 
 ### Actual Implementation
 
@@ -216,7 +216,7 @@ cd qa/web/tests/visual
 
 ### Related PRs
 
-- #TBD - This implementation
+- #432 - Visual regression testing implementation
 
 ### Lessons Learned
 
