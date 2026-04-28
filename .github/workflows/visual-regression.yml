@@ -1,0 +1,286 @@
+name: Visual Regression Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/nhl_scrabble/web/**"
+      - "qa/web/tests/visual/**"
+      - "qa/web/pages/**"
+      - ".github/workflows/visual-regression.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/nhl_scrabble/web/**"
+      - "qa/web/tests/visual/**"
+      - "qa/web/pages/**"
+
+  workflow_dispatch:  # Allow manual triggering
+
+# Workflow-level permissions for PR comments and artifact uploads
+permissions:
+  contents: read
+  pull-requests: write  # Allow commenting on PRs
+  actions: read  # Allow reading workflow runs
+
+jobs:
+  visual-tests:
+    name: Visual Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Full history for version detection
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - name: Install project dependencies
+        run: |
+          uv pip install -e ".[dev,web]" --system
+
+      - name: Install QA web dependencies
+        run: |
+          cd qa/web
+          uv pip install -e . --system
+
+      - name: Install Playwright browsers
+        run: |
+          playwright install --with-deps chromium firefox webkit
+
+      - name: Start web server in background
+        run: |
+          nhl-scrabble serve --host 0.0.0.0 --port 5000 &
+          echo $! > server.pid
+
+          # Wait for server to be ready (max 60 seconds)
+          echo "Waiting for server to start..."
+          for i in {1..60}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "✓ Server is ready"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "✗ Server failed to start within 60 seconds"
+              cat server.log || true
+              exit 1
+            fi
+            sleep 1
+          done
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      - name: Run visual regression tests
+        id: visual-tests
+        run: |
+          cd qa/web
+          pytest tests/visual/ \
+            --verbose \
+            --tb=short \
+            --maxfail=5 \
+            --junit-xml=visual-test-results.xml
+        continue-on-error: true
+
+      - name: Stop web server
+        if: always()
+        run: |
+          if [[ -f server.pid ]]; then
+            kill $(cat server.pid) || true
+            rm server.pid
+          fi
+
+      - name: Upload visual test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: qa/web/visual-test-results.xml
+          retention-days: 30
+
+      - name: Upload visual diff screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: |
+            qa/web/test-results/**/*-diff.png
+            qa/web/test-results/**/*-actual.png
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Upload baseline screenshots (on first run)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-screenshots
+          path: qa/web/tests/visual/snapshots/**/*.png
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Comment PR with visual diff summary
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Find diff images
+            const testResultsDir = 'qa/web/test-results';
+            let diffCount = 0;
+            let diffFiles = [];
+
+            if (fs.existsSync(testResultsDir)) {
+              const findDiffs = (dir) => {
+                const files = fs.readdirSync(dir);
+                for (const file of files) {
+                  const fullPath = path.join(dir, file);
+                  if (fs.statSync(fullPath).isDirectory()) {
+                    findDiffs(fullPath);
+                  } else if (file.endsWith('-diff.png')) {
+                    diffCount++;
+                    diffFiles.push(fullPath);
+                  }
+                }
+              };
+              findDiffs(testResultsDir);
+            }
+
+            const comment = `## 🔍 Visual Regression Test Results
+
+            ⚠️ **Visual differences detected**: ${diffCount} screenshot(s) differ from baseline
+
+            ### Details
+            - **Diff Screenshots**: ${diffCount}
+            - **Artifacts**: Visual diff images uploaded to workflow artifacts
+
+            ### Next Steps
+            1. Download the \`visual-diffs\` artifact from this workflow run
+            2. Review the diff images to verify if changes are intentional
+            3. If changes are intentional:
+               - Run \`cd qa/web && pytest tests/visual/ --update-snapshots\`
+               - Commit the updated baseline screenshots
+            4. If changes are unintentional:
+               - Fix the styling/layout issues
+               - Re-run the tests
+
+            ### Artifact Links
+            - [Download Visual Diffs](https://github.com/${{
+              github.repository }}/actions/runs/${{ github.run_id }})
+
+            ---
+            *Automated comment from Visual Regression Tests workflow*
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Check if baselines exist
+        id: check-baselines
+        if: steps.visual-tests.outcome == 'failure'
+        run: |
+          if [[ -d "qa/web/tests/visual/snapshots" ]] && \
+             [[ -n "$(find qa/web/tests/visual/snapshots -name '*.png' 2>/dev/null)" ]]; then
+            echo "baselines_exist=true" >> $GITHUB_OUTPUT
+          else
+            echo "baselines_exist=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fail workflow if tests failed (with baselines)
+        if: |
+          steps.visual-tests.outcome == 'failure' &&
+          steps.check-baselines.outputs.baselines_exist == 'true'
+        run: |
+          echo "Visual regression tests failed. Review the diff artifacts."
+          echo "Baselines exist, so this is a real regression."
+          exit 1
+
+      - name: Warn about missing baselines (non-blocking)
+        if: |
+          steps.visual-tests.outcome == 'failure' &&
+          steps.check-baselines.outputs.baselines_exist == 'false'
+        run: |
+          echo "⚠️  Visual regression tests failed due to missing baselines."
+          echo "This is expected for initial implementation."
+          echo "Generate baselines with: pytest tests/visual/ --update-snapshots"
+          echo "Continuing workflow as non-blocking warning."
+
+  baseline-check:
+    name: Check Baseline Screenshots
+    runs-on: ubuntu-latest
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Check if baseline screenshots exist
+        id: baseline-check
+        run: |
+          SNAPSHOTS_DIR="qa/web/tests/visual/snapshots"
+          if [[ -d "$SNAPSHOTS_DIR" ]] && \
+             [[ -n "$(find "$SNAPSHOTS_DIR" -name '*.png')" ]]; then
+            echo "baselines_exist=true" >> $GITHUB_OUTPUT
+            echo "✓ Baseline screenshots found"
+          else
+            echo "baselines_exist=false" >> $GITHUB_OUTPUT
+            echo "⚠️  No baseline screenshots found"
+          fi
+
+      - name: Comment on PR if baselines missing
+        if: |
+          steps.baseline-check.outputs.baselines_exist == 'false' &&
+          github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comment = `## ⚠️ Visual Regression Baselines Missing
+
+            No baseline screenshots were found for visual regression testing.
+
+            ### Action Required
+            Generate baseline screenshots by running:
+
+            \`\`\`bash
+            cd qa/web
+            pytest tests/visual/ --update-snapshots
+            git add tests/visual/snapshots/
+            git commit -m "test(visual): Add baseline screenshots"
+            \`\`\`
+
+            This is expected for the first implementation of visual regression tests.
+
+            ---
+            *Automated comment from Visual Regression Tests workflow*
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
