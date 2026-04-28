@@ -148,7 +148,7 @@ Each task includes:
 | ID  | Title | Priority | Effort | Status | GitHub Issue | Notes |
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
 | 012 | QA Automation Framework | MEDIUM | 30-40 hours (main task coordination + sub-tasks) | Completed | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | - |
-| 014 | Playwright Framework Setup | MEDIUM | 6-8 hours | Completed | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | - |
+| 014 | Playwright Framework Setup | MEDIUM | 6-8 hours (actual: ~4h) | Completed | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | PR [#430](https://github.com/bdperkin/nhl-scrabble/pull/430), completed 2026-04-28 |
 | 015 | Functional Web Tests | MEDIUM | 6-8 hours | Completed | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | - |
 | 016 | Visual Regression Tests | MEDIUM | 4-6 hours | Completed | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | - |
 | 017 | Performance and Load Tests | MEDIUM | 4-6 hours | Completed | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | - |

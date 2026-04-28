@@ -24,3 +24,8 @@ locust-*.csv
 # Virtual environments
 .venv/
 venv/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
