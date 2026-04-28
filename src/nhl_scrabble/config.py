@@ -69,6 +69,9 @@ class Config(BaseSettings):
         dos_max_per_host: Maximum connections per host (DoS prevention)
         dos_circuit_breaker_threshold: Number of failures before circuit opens
         dos_circuit_breaker_timeout: Circuit breaker timeout in seconds
+        log_file: Path to log file (enables file logging with rotation, default: None)
+        log_max_bytes: Maximum log file size before rotation in bytes (default: 10MB)
+        log_backup_count: Number of backup log files to keep (default: 5)
 
     Examples:
         >>> import os
@@ -81,6 +84,12 @@ class Config(BaseSettings):
         >>> config = Config.from_env()
         >>> config.api_timeout
         15
+
+        >>> # Enable file logging
+        >>> os.environ["NHL_SCRABBLE_LOG_FILE"] = "logs/app.log"
+        >>> config = Config.from_env()
+        >>> config.log_file
+        'logs/app.log'
     """
 
     model_config = SettingsConfigDict(
@@ -242,6 +251,29 @@ class Config(BaseSettings):
         Field(
             default=60.0,
             description="Circuit breaker timeout seconds (1.0-300.0)",
+        ),
+    ]
+
+    # Logging Configuration
+    log_file: Annotated[
+        str | None,
+        Field(
+            default=None,
+            description="Log file path (default: None, enables file logging with rotation)",
+        ),
+    ]
+    log_max_bytes: Annotated[
+        int,
+        Field(
+            default=10485760,
+            description="Max log file size before rotation in bytes (1048576-104857600, default: 10MB)",
+        ),
+    ]
+    log_backup_count: Annotated[
+        int,
+        Field(
+            default=5,
+            description="Number of backup log files to keep (1-50)",
         ),
     ]
 
@@ -453,6 +485,21 @@ class Config(BaseSettings):
                 60.0,
                 1.0,
                 300.0,
+            ),
+            "log_file": data.get("log_file") or os.getenv("NHL_SCRABBLE_LOG_FILE"),
+            "log_max_bytes": get_int(
+                "log_max_bytes",
+                "NHL_SCRABBLE_LOG_MAX_BYTES",
+                10485760,  # 10MB
+                1048576,  # 1MB min
+                104857600,  # 100MB max
+            ),
+            "log_backup_count": get_int(
+                "log_backup_count",
+                "NHL_SCRABBLE_LOG_BACKUP_COUNT",
+                5,
+                1,
+                50,
             ),
         }
 

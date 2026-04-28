@@ -1195,8 +1195,19 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
     is_flag=True,
     help="Enable auto-reload for development (watches for file changes)",
 )
+@click.option(
+    "--log-file",
+    type=click.Path(path_type=Path),
+    help="Path to log file (enables file-based logging with rotation)",
+)
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Enable verbose logging",
+)
 @click.help_option("-h", "--help")
-def serve(host: str, port: int, reload: bool) -> None:
+def serve(host: str, port: int, reload: bool, log_file: Path | None, verbose: bool) -> None:
     r"""Start web interface server.
 
     Starts a FastAPI web server providing browser-based access to
@@ -1215,6 +1226,15 @@ def serve(host: str, port: int, reload: bool) -> None:
 
       Bind to all interfaces on custom port:
         $ nhl-scrabble serve --host 0.0.0.0 --port 3000 --reload
+
+      Enable file-based logging:
+        $ nhl-scrabble serve --log-file logs/server.log
+
+      Enable verbose logging with file output:
+        $ nhl-scrabble serve --verbose --log-file logs/debug.log
+
+      Combine multiple options:
+        $ nhl-scrabble serve --host 0.0.0.0 --port 5000 --reload --log-file logs/dev.log
     """
     try:
         import uvicorn
@@ -1225,7 +1245,24 @@ def serve(host: str, port: int, reload: bool) -> None:
         )
         raise click.Abort from None
 
+    # Load configuration for logging settings
+    try:
+        config = Config.from_env()
+    except ValueError as e:
+        raise click.ClickException(f"Configuration error: {e}") from e
+
+    # Setup logging with optional file output
+    setup_logging(
+        verbose=verbose,
+        sanitize_logs=config.sanitize_logs,
+        log_file=log_file,
+        max_bytes=config.log_max_bytes,
+        backup_count=config.log_backup_count,
+    )
+
     click.echo(f"Starting NHL Scrabble web server at http://{host}:{port}")
+    if log_file:
+        click.echo(f"Logging to: {log_file}")
     click.echo("Press CTRL+C to stop")
 
     # Import here to avoid loading FastAPI when not needed
