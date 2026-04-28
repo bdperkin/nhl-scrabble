@@ -72,7 +72,7 @@ class DivisionsPage(BasePage):
             Number of teams in division
         """
         return self.count_elements(
-            f".division-section:nth-child({division_index + 1}) table tbody tr"
+            f".division-section:nth-child({division_index + 1}) table tbody tr",
         )
 
     def has_division_table(self, division_name: str) -> bool:

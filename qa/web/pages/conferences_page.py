@@ -61,7 +61,7 @@ class ConferencesPage(BasePage):
             Conference score text
         """
         return self.get_text(
-            f".conference-section:nth-child({conference_index + 1}) .conference-score"
+            f".conference-section:nth-child({conference_index + 1}) .conference-score",
         )
 
     def get_teams_in_conference(self, conference_index: int = 0) -> int:
@@ -74,7 +74,7 @@ class ConferencesPage(BasePage):
             Number of teams in conference
         """
         return self.count_elements(
-            f".conference-section:nth-child({conference_index + 1}) table tbody tr"
+            f".conference-section:nth-child({conference_index + 1}) table tbody tr",
         )
 
     def has_conference_table(self, conference_name: str) -> bool:

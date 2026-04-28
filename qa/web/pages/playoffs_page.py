@@ -80,7 +80,7 @@ class PlayoffsPage(BasePage):
         return self.get_text(selector)
 
     def get_matchup_score(
-        self, conference: str, round_num: int, matchup_num: int, seed: int
+        self, conference: str, round_num: int, matchup_num: int, seed: int,
     ) -> str:
         """Get team score from a specific matchup.
 
