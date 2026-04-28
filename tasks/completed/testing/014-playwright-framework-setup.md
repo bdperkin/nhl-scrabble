@@ -169,7 +169,7 @@ def page_fixture(page: Page):
 **Implemented**: 2026-04-28
 **Branch**: testing/014-playwright-framework-setup
 **PR**: #430 - https://github.com/bdperkin/nhl-scrabble/pull/430
-**Commits**: 1 commit (19e0882)
+**Commits**: 8 commits (19e0882 → f279421)
 
 ### Actual Implementation
 
@@ -229,6 +229,10 @@ Followed the proposed solution with comprehensive implementation:
 2. **axe-playwright Unavailable**: Package not found in PyPI registry - commented out dependency with TODO to find alternative
 3. **Import Path Issues**: Tests require PYTHONPATH to be set to qa/web directory
 4. **Pre-commit Hook Loop**: Formatters (isort, black, docformatter) modified files in sequence, creating formatting loop
+5. **Code Quality Fixes**: Required multiple follow-up commits for quality checks:
+   - Fixed blind exception catching (`Exception` → `TimeoutError`) to catch only expected timeout scenarios
+   - Added appropriate `noqa` comments for test-specific patterns (S101 for pytest asserts, PLC0415 for import tests, S311 for non-cryptographic random)
+   - Removed unused function parameter in `get_helpers()` utility function
 
 ### Deviations from Plan
 
