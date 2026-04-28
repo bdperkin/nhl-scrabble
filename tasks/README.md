@@ -137,7 +137,7 @@ Each task includes:
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Active | - | - |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Active | - | - |
 | 035 | Implement pre-commit.ci GitHub Automation | MEDIUM | 1-2 hours | Completed | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | PR [#5](https://github.com/bdperkin/nhl-scrabble/pull/5) |
-| 036 | Implement File-Based Logging for Uvicorn Web Server | MEDIUM | 3-5 hours | Active | - | - |
+| 036 | Implement File-Based Logging for Uvicorn Web Server | MEDIUM | 3-5 hours | Completed | [#398](https://github.com/bdperkin/nhl-scrabble/issues/398) | PR [#413](https://github.com/bdperkin/nhl-scrabble/pull/413) |
 | 037 | Documentation Refactoring and Web Interface Polish | MEDIUM | 16-24 hours | Completed | [#398](https://github.com/bdperkin/nhl-scrabble/issues/398) | PR [#399](https://github.com/bdperkin/nhl-scrabble/pull/399), completed 2026-04-27 |
 
 ### Testing

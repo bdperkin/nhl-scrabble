@@ -523,8 +523,81 @@ cat logs/server.log.1
 
 ## Implementation Notes
 
-_To be filled during implementation:_
-- Actual approach taken
-- Challenges encountered
-- Deviations from plan
-- Actual effort vs estimated
+**Implemented**: 2026-04-27
+**Branch**: enhancement/036-file-based-logging-uvicorn
+**PR**: #413 - https://github.com/bdperkin/nhl-scrabble/pull/413
+**Commits**: 1 commit (f45693c)
+
+### Actual Implementation
+
+Followed the proposed solution closely with no major deviations:
+
+1. **Enhanced `setup_logging()` in `src/nhl_scrabble/logging_config.py`**:
+   - Added `log_file`, `max_bytes`, and `backup_count` parameters
+   - Implemented RotatingFileHandler for automatic log rotation
+   - File logs receive same security filters (SensitiveDataFilter) as console
+   - UTF-8 encoding for international characters
+   - Automatic parent directory creation
+
+2. **Updated `Config` class in `src/nhl_scrabble/config.py`**:
+   - Added `log_file`, `log_max_bytes`, `log_backup_count` fields
+   - Environment variable validation (1MB-100MB for max_bytes, 1-50 for backup_count)
+   - Updated docstring with logging configuration documentation
+
+3. **Updated `serve` command in `src/nhl_scrabble/cli.py`**:
+   - Added `--log-file` option
+   - Added `--verbose` option
+   - Integrated with Config logging settings
+
+4. **Comprehensive testing**:
+   - Created `tests/unit/test_logging_file_handler.py` with 12 tests
+   - Updated `tests/unit/test_config.py` with 15 tests for logging config
+   - All 27 tests passing
+
+### Challenges Encountered
+
+**Challenge 1**: Test compatibility with pytest's caplog fixture
+
+- **Issue**: Initial tests using `caplog` failed because `setup_logging()` removes all handlers (including pytest's caplog handler)
+- **Solution**: Rewrote tests to check handler existence and file content directly instead of relying on caplog
+
+**Challenge 2**: Black formatting adjustments
+
+- **Issue**: Pre-commit black hook reformatted test file after initial commit
+- **Solution**: Re-added changes and committed again after black formatting
+
+### Deviations from Plan
+
+**Minor deviations**:
+
+1. **Decided NOT to implement separate Uvicorn log config** (optional advanced feature from task):
+   - **Reason**: The simple approach of adding file logging to `setup_logging()` is sufficient
+   - **Benefit**: Simpler implementation, easier to maintain
+   - **Trade-off**: No separate access/error log files, but single unified log is adequate for most use cases
+
+2. **Added `--verbose` flag to serve command**:
+   - **Reason**: Provides better debugging experience when file logging enabled
+   - **Benefit**: Users can easily enable DEBUG level logging without environment variables
+   - **Not in original plan**: But aligns well with existing CLI patterns
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 3-5 hours
+- **Actual**: ~3 hours
+- **Breakdown**:
+  - Code implementation: 1h
+  - Test implementation: 1.5h
+  - CI debugging and PR creation: 0.5h
+
+**Reason for accuracy**: Task specification was very detailed with code examples, making implementation straightforward.
+
+### Related PRs
+
+- #413 - Main implementation (MERGED)
+
+### Lessons Learned
+
+1. **Pre-commit hooks can modify files**: Always run pre-commit before final commit to avoid extra commits for formatting
+2. **Test isolation is important**: Tests that modify global state (like logging handlers) need careful cleanup
+3. **Detailed task specifications accelerate implementation**: Having code examples in the task file reduced implementation time significantly
+4. **pytest fixtures have limitations**: Not all pytest fixtures work well with code that modifies global state (e.g., caplog vs. logging.getLogger())
