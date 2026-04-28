@@ -1,0 +1,14 @@
+{
+  "tasks": [
+    {
+      "id": "6600b578",
+      "cron": "57 8 1-7 * 1",
+      "prompt": "Check CVE-2026-3219 (pip vulnerability) for available fix and update issue #375.\n\nTask: Monitor pip releases for CVE-2026-3219 security patch\n\nSteps:\n1. Check current pip version: `pip --version`\n2. Check PyPI for new pip releases: https://pypi.org/project/pip/#history\n3. Search for \"CVE-2026-3219 pip fix patch release\"\n4. Check pip GitHub PR status: https://github.com/pypa/pip/pull/13870\n\nIf fix is NOT available:\n- Post monitoring update to issue #375 with check date and status\n- Note: \"No fix available yet, continuing monthly monitoring\"\n- Confirm next check date (first Monday of next month)\n\nIf fix IS available:\n- Post urgent notification to issue #375\n- Alert user: \"CVE-2026-3219 FIX AVAILABLE - pip version X.Y.Z released\"\n- Suggest: \"Run: /implement-task security/011-monitor-cve-2026-3219-pip.md\"\n- Do NOT automatically implement (requires user approval)\n\nContext:\n- Issue: #375\n- Task: tasks/security/011-monitor-cve-2026-3219-pip.md\n- Current mitigation: --ignore-vuln flag in .github/workflows/security.yml\n- Severity: MEDIUM\n- Frequency: Monthly (first Monday of each month)",
+      "createdAt": 1777389154424,
+      "recurring": true,
+      "createdBySessionId": "fd47365b-0874-4150-93ba-a8a3ce45e2a0",
+      "createdByPid": 2325921,
+      "createdByProcStart": "461853959"
+    }
+  ]
+}
