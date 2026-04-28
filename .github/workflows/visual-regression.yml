@@ -17,11 +17,21 @@ on:
 
   workflow_dispatch:  # Allow manual triggering
 
+# Workflow-level permissions for PR comments and artifact uploads
+permissions:
+  contents: read
+  pull-requests: write  # Allow commenting on PRs
+  actions: read  # Allow reading workflow runs
+
 jobs:
   visual-tests:
     name: Visual Regression Tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
       - name: Checkout code
@@ -89,7 +99,7 @@ jobs:
       - name: Stop web server
         if: always()
         run: |
-          if [ -f server.pid ]; then
+          if [[ -f server.pid ]]; then
             kill $(cat server.pid) || true
             rm server.pid
           fi
@@ -195,6 +205,10 @@ jobs:
     name: Check Baseline Screenshots
     runs-on: ubuntu-latest
 
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -203,8 +217,8 @@ jobs:
         id: baseline-check
         run: |
           SNAPSHOTS_DIR="qa/web/tests/visual/snapshots"
-          if [ -d "$SNAPSHOTS_DIR" ] && \
-             [ -n "$(find "$SNAPSHOTS_DIR" -name '*.png')" ]; then
+          if [[ -d "$SNAPSHOTS_DIR" ]] && \
+             [[ -n "$(find "$SNAPSHOTS_DIR" -name '*.png')" ]]; then
             echo "baselines_exist=true" >> $GITHUB_OUTPUT
             echo "✓ Baseline screenshots found"
           else
