@@ -56,7 +56,7 @@ def page_fixture(page: Page) -> Generator[Page, None, None]:
     # Set default navigation timeout to 30 seconds
     page.set_default_navigation_timeout(30000)
 
-    yield page
+    return page
 
     # Cleanup after test (page is automatically closed by pytest-playwright)
 
