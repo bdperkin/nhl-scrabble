@@ -1,6 +1,30 @@
 #!/usr/bin/env bash
+#
 # Local CodeQL security analysis script
 # Mirrors GitHub Actions CodeQL workflow for local development
+#
+# Purpose: Run CodeQL static security analysis locally before pushing to GitHub.
+#          Catches security vulnerabilities early in development cycle.
+#
+# Usage: ./codeql_local.sh [OPTIONS]
+#
+# Arguments:
+#   --fail-on-findings    Exit with code 1 if security findings detected (CI mode)
+#   (no arguments)        Run analysis and display results (default mode)
+#
+# Exit Codes:
+#   0 - Success (no findings or informational mode)
+#   1 - Error (CodeQL CLI not found, analysis failed, or findings in CI mode)
+#
+# Dependencies:
+#   - codeql: CodeQL CLI (install with: make install-codeql)
+#   - python: Python interpreter for SARIF processing
+#   - Standard tools: rm, mkdir
+#
+# Examples:
+#   ./codeql_local.sh                    # Run analysis, display results
+#   ./codeql_local.sh --fail-on-findings # CI mode, fail on findings
+#   make codeql-check                    # Makefile wrapper with --fail-on-findings
 
 set -euo pipefail
 
@@ -13,15 +37,15 @@ CONFIG_FILE="$PROJECT_ROOT/.github/codeql/codeql-config.yml"
 # Parse arguments
 FAIL_ON_FINDINGS=false
 if [[ "${1:-}" == "--fail-on-findings" ]]; then
-    FAIL_ON_FINDINGS=true
+  FAIL_ON_FINDINGS=true
 fi
 
 # Check CodeQL CLI is installed
 if ! command -v codeql &> /dev/null; then
-    echo "❌ CodeQL CLI not found"
-    echo "Install with: make install-codeql"
-    echo "Or download from: https://github.com/github/codeql-cli-binaries/releases"
-    exit 1
+  echo "❌ CodeQL CLI not found"
+  echo "Install with: make install-codeql"
+  echo "Or download from: https://github.com/github/codeql-cli-binaries/releases"
+  exit 1
 fi
 
 # Clean previous results
@@ -32,19 +56,19 @@ mkdir -p "$RESULTS_DIR"
 # Create CodeQL database
 echo "📦 Creating CodeQL database for Python..."
 codeql database create "$CODEQL_DB" \
-    --language=python \
-    --source-root="$PROJECT_ROOT" \
-    --overwrite
+  --language=python \
+  --source-root="$PROJECT_ROOT" \
+  --overwrite
 
 # Run CodeQL analysis with security-and-quality suite
 echo "🔍 Running CodeQL security analysis..."
 codeql database analyze "$CODEQL_DB" \
-    --format=sarif-latest \
-    --output="$RESULTS_DIR/results.sarif" \
-    --sarif-category=python \
-    --sarif-add-query-help \
-    --threads=0 \
-    -- security-and-quality
+  --format=sarif-latest \
+  --output="$RESULTS_DIR/results.sarif" \
+  --sarif-category=python \
+  --sarif-add-query-help \
+  --threads=0 \
+  -- security-and-quality
 
 # Convert SARIF to human-readable format
 echo ""
@@ -101,7 +125,7 @@ EXIT_CODE=$?
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "📁 Full results: $RESULTS_DIR/results.sarif"
-echo "🔍 View in VS Code: codeql sarif-viewer $RESULTS_DIR/results.sarif"
+echo "📁 Full results: ${RESULTS_DIR}/results.sarif"
+echo "🔍 View in VS Code: codeql sarif-viewer ${RESULTS_DIR}/results.sarif"
 
-exit $EXIT_CODE
+exit "${EXIT_CODE}"

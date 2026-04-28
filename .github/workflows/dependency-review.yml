@@ -25,7 +25,6 @@ jobs:
         with:
           fail-on-severity: moderate
           fail-on-scopes: runtime
-          deny-licenses: GPL-3.0, AGPL-3.0
           allow-licenses: MIT, Apache-2.0, BSD-3-Clause, BSD-2-Clause, ISC, Python-2.0
           comment-summary-in-pr: always
 

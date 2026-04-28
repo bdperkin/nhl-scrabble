@@ -863,6 +863,40 @@ qa-clean: ## Clean QA test artifacts
 	@cd qa/web && find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
 	@printf "$(GREEN)✓ QA artifacts cleaned$(NC)\n"
 
+####################
+# Shell Scripting
+####################
+
+beautysh: ## Shell - format Bash scripts with beautysh
+	@printf "$(BLUE)Formatting Bash scripts with beautysh...$(NC)\n"
+	@beautysh --indent-size 2 --force-function-style fnpar scripts/*.sh
+	@printf "$(GREEN)✓ Bash scripts formatted$(NC)\n"
+
+beautysh-check: ## Shell - check Bash script formatting
+	@printf "$(BLUE)Checking Bash script formatting...$(NC)\n"
+	@beautysh --check --indent-size 2 scripts/*.sh
+	@printf "$(GREEN)✓ Bash formatting valid$(NC)\n"
+
+bashate: ## Shell - lint Bash scripts with bashate
+	@printf "$(BLUE)Linting Bash scripts with bashate...$(NC)\n"
+	@bashate --ignore=E003,E006 --max-line-length=100 scripts/*.sh
+	@printf "$(GREEN)✓ Bash linting complete$(NC)\n"
+
+bash-docs: ## Shell - validate Bash script documentation
+	@printf "$(BLUE)Checking Bash script documentation...$(NC)\n"
+	@$(PYTHON) scripts/check_bash_docs.py
+	@printf "$(GREEN)✓ Bash documentation valid$(NC)\n"
+
+bash-deps: ## Shell - check Bash script dependencies
+	@printf "$(BLUE)Analyzing Bash script dependencies...$(NC)\n"
+	@$(PYTHON) scripts/check_bash_deps.py
+
+bash-validate: beautysh-check bashate bash-docs bash-deps ## Shell - run all Bash quality checks
+	@printf "$(GREEN)✅ All Bash quality checks passed$(NC)\n"
+
+bash-fix: beautysh ## Shell - auto-fix Bash quality issues
+	@printf "$(GREEN)✅ Bash scripts auto-formatted$(NC)\n"
+
 ###################
 # All-in-one
 ###################

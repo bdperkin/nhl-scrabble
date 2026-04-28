@@ -166,9 +166,13 @@ tox = [
     "tox",
     "tox-uv>=1.35.1",
 ]
+shell = [
+    "bashate>=2.1.1",
+    "beautysh>=6.2.1",
+]
 dev = [
     "check-jsonschema>=0.37.1",
-    "nhl-scrabble[build,docs,export,lint,publish,security,test,tox,type,watch]",
+    "nhl-scrabble[build,docs,export,lint,publish,security,shell,test,tox,type,watch]",
     "pre-commit",
     "tomli>=2.4.1",
     "tomli-w>=1.2.0",
@@ -511,6 +515,7 @@ pep621_dev_dependency_groups = [
     "tox",
     "docs-gen",
     "branding",
+    "shell",
 ]
 known_first_party = [ "nhl_scrabble" ]
 [tool.deptry.package_module_name_map]
@@ -580,6 +585,7 @@ types-requests = "types_requests"
 ty = "ty"
 uvicorn = "uvicorn"
 [tool.deptry.per_rule_ignores]
+DEP002 = [ "bashate", "beautysh" ]
 
 [tool.pyproject-fmt]
 column_width = 100
@@ -1031,6 +1037,7 @@ exclude = [
     "*.egg-info",
     "__pycache__",
     "tests",
+    "scripts",
     ".scratch",
     "src/nhl_scrabble/_version.py",
 ]
