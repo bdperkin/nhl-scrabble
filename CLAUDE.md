@@ -704,6 +704,87 @@ git push --tags
 - Patch: `v0.0.2` (bug fixes)
 - Pre-release: `v0.1.0-rc1` (release candidates)
 
+### Automated Changelog Generation
+
+The project uses [git-cliff](https://git-cliff.org/) to **automatically generate CHANGELOG.md** from conventional commits.
+
+**Configuration:**
+
+- **git-cliff config**: `.cliff.toml`
+- **Format**: [Keep a Changelog](https://keepachangelog.com/) format
+- **Trigger**: Automatic on version tag push (CI/CD)
+- **Commit parsing**: Conventional Commits format
+
+**How It Works:**
+
+1. Developer writes commits following [Conventional Commits](https://www.conventionalcommits.org/) format
+1. On release (version tag push), GitHub Actions workflow runs
+1. `git-cliff` parses git history and generates CHANGELOG.md
+1. Updated CHANGELOG.md is committed back to repository
+1. GitHub release is created with changelog notes extracted from CHANGELOG.md
+
+**Commit Type Mapping** (to Keep a Changelog categories):
+
+| Commit Type                                  | Changelog Section |
+| -------------------------------------------- | ----------------- |
+| `feat:`                                      | **Added**         |
+| `fix:`                                       | **Fixed**         |
+| `refactor:`                                  | **Changed**       |
+| `perf:`                                      | **Performance**   |
+| `docs:`                                      | **Documentation** |
+| `deprecate:`                                 | **Deprecated**    |
+| `remove:`                                    | **Removed**       |
+| `security:`                                  | **Security**      |
+| `style:`, `test:`, `chore:`, `ci:`, `build:` | *(skipped)*       |
+
+**Local Usage:**
+
+```bash
+# Preview unreleased changes
+make changelog-preview
+
+# Update CHANGELOG.md with all releases
+make changelog-update
+
+# Generate changelog for specific tag
+make changelog-tag TAG=v1.0.0
+```
+
+**Installation** (optional for local usage):
+
+```bash
+# Install git-cliff
+cargo install git-cliff
+# or
+brew install git-cliff
+# or (Arch Linux)
+yay -S git-cliff
+```
+
+**CI/CD Integration:**
+
+The `.github/workflows/publish.yml` workflow automatically:
+
+1. Generates updated CHANGELOG.md using git-cliff
+1. Commits changelog back to repository
+1. Creates GitHub release with changelog notes
+
+**Benefits:**
+
+- ✅ Eliminates manual CHANGELOG.md maintenance
+- ✅ Ensures all changes are documented consistently
+- ✅ Reduces release process time
+- ✅ Professional, standard Keep a Changelog format
+- ✅ Integrates with existing CI/CD and versioning
+
+**Requirements:**
+
+- Commits must follow Conventional Commits format
+- Version tags must follow `vX.Y.Z` pattern
+- git-cliff installed for local changelog generation (optional)
+
+See [docs/contributing/commit-messages.md](docs/contributing/commit-messages.md) for conventional commit guidelines.
+
 ### Development Versions
 
 **Between Releases:**

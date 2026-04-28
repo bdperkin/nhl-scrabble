@@ -4,7 +4,7 @@ The NHL Scrabble project includes a comprehensive, self-documenting Makefile to 
 
 ## Overview
 
-The Makefile provides **55 documented targets** organized in **16 logical groupings** with color-coded output for better readability. All targets are self-documenting and can be viewed with `make help` (the default target). The Makefile features a dynamic pattern rule (`tox-%`) that automatically handles any tox environment, making it future-proof and maintainable.
+The Makefile provides **58 documented targets** organized in **16 logical groupings** with color-coded output for better readability. All targets are self-documenting and can be viewed with `make help` (the default target). The Makefile features a dynamic pattern rule (`tox-%`) that automatically handles any tox environment, making it future-proof and maintainable.
 
 ### Key Features
 
@@ -45,7 +45,7 @@ The `make help` command displays all 55 targets organized in 16 logical grouping
 
 ## Target Categories
 
-The 55 Makefile targets are organized into 16 logical groupings:
+The 58 Makefile targets are organized into 16 logical groupings:
 
 1. **Setup & Installation** (6 targets)
 1. **Cleaning** (6 targets)
@@ -58,7 +58,7 @@ The 55 Makefile targets are organized into 16 logical groupings:
 1. **Documentation** (2 targets)
 1. **Running** (3 targets)
 1. **Development** (4 targets)
-1. **Release Management** (2 targets)
+1. **Release Management** (5 targets)
 1. **All-in-one** (1 target)
 1. **CI/CD Simulation** (1 target)
 1. **Utility** (2 targets)
@@ -325,9 +325,35 @@ make release
 
 # Show current version (via tox)
 make version
+
+# Preview unreleased changelog entries
+make changelog-preview
+
+# Update CHANGELOG.md with all releases
+make changelog-update
+
+# Generate changelog for specific tag
+make changelog-tag TAG=v1.0.0
 ```
 
 The `make release` target runs all verification checks and provides a checklist for release steps. The `make version` target uses tox internally to display the package version.
+
+**Changelog Targets** (requires [git-cliff](https://git-cliff.org/)):
+
+- `changelog-preview` - Preview unreleased changes that will appear in next release
+- `changelog-update` - Generate/update CHANGELOG.md with all releases from git history
+- `changelog-tag` - Generate changelog for a specific version tag
+
+**Installation:**
+
+```bash
+# Install git-cliff (required for changelog targets)
+cargo install git-cliff
+# or
+brew install git-cliff
+```
+
+**Note:** CHANGELOG.md is automatically generated and committed by CI/CD on release (version tag push). Local changelog generation is optional for previewing changes before release.
 
 ## Cleaning
 
