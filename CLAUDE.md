@@ -1441,10 +1441,18 @@ The project uses automated PyPI publishing via GitHub Actions. Releases are trig
    - Environment: `pypi`
    - Production release
 
-1. **GitHub Release** (~5s)
+1. **Generate CHANGELOG** (~10s)
 
-   - Extracts release notes from CHANGELOG.md
-   - Creates GitHub Release
+   - Uses git-cliff to auto-generate changelog
+   - Extracts commit history since last tag
+   - Commits updated CHANGELOG.md
+
+1. **GitHub Release** (~10s)
+
+   - Extracts release notes from tag annotation (primary)
+   - Combines with auto-generated changelog (detailed)
+   - Creates GitHub Release with both
+   - Auto-detects pre-releases (rc, beta, alpha)
    - Attaches distribution artifacts
 
 **Total Time:** ~3-4 minutes
@@ -1469,18 +1477,83 @@ Trusted Publishing (OIDC):
 **Quick Release:**
 
 ```bash
-# 1. Update CHANGELOG.md
-vim CHANGELOG.md
-git add CHANGELOG.md
-git commit -m "docs(changelog): Add v2.1.0 release notes"
-git push origin main
+# 1. Create annotated tag with release notes
+git tag -a v2.1.0 -m "$(cat <<'EOF'
+Release v2.1.0
 
-# 2. Create and push version tag
-git tag -a v2.1.0 -m "Release version 2.1.0"
+## What's Changed
+
+### Features
+- Add interactive mode (#133)
+- Add REST API server (#150)
+
+### Bug Fixes
+- Fix API error handling (#40)
+
+## Breaking Changes
+
+None
+
+**Full Changelog**: https://github.com/bdperkin/nhl-scrabble/compare/v2.0.0...v2.1.0
+EOF
+)"
+
+# 2. Push tag
 git push --tags
 
 # Everything else is automatic!
+# - CHANGELOG.md auto-generated from commits
+# - GitHub release created with tag annotation + changelog
+# - Package published to PyPI
 ```
+
+**Tag Annotation Best Practices:**
+
+**Good Annotations:**
+
+```bash
+# Structured release (recommended)
+git tag -a v2.1.0 -m "Release v2.1.0
+
+## What's Changed
+
+### Features
+- Add feature X (#123)
+
+### Bug Fixes
+- Fix bug Y (#456)
+
+## Breaking Changes
+
+None"
+
+# Minimal (auto-generated changelog supplements)
+git tag -a v2.1.0 -m "Release v2.1.0
+
+See detailed changelog below."
+
+# Pre-release (auto-detected)
+git tag -a v2.1.0-rc1 -m "Release Candidate 1 for v2.1.0
+
+## Testing Focus
+- New caching system
+
+**Do not use in production**"
+```
+
+**Pre-release Detection:**
+
+Tags are automatically marked as pre-release if they contain:
+
+- `-rc` (release candidate): `v2.1.0-rc1`
+- `-beta` (beta release): `v2.1.0-beta1`
+- `-alpha` (alpha release): `v2.1.0-alpha1`
+
+**Release Notes Structure:**
+
+- **Tag Annotation**: High-level summary (what's changed, breaking changes)
+- **Auto-generated Changelog**: Detailed commit-by-commit history
+- **Combined**: Tag annotation appears first, followed by detailed changelog
 
 **Documentation:**
 
