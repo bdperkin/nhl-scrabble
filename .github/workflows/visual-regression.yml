@@ -128,7 +128,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: baseline-screenshots
-          path: qa/web/tests/visual/snapshots/**/*.png
+          path: qa/web/tests/visual/__snapshots__/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
@@ -199,8 +199,8 @@ jobs:
         id: check-baselines
         if: steps.visual-tests.outcome == 'failure'
         run: |
-          if [[ -d "qa/web/tests/visual/snapshots" ]] && \
-             [[ -n "$(find qa/web/tests/visual/snapshots -name '*.png' 2>/dev/null)" ]]; then
+          if [[ -d "qa/web/tests/visual/__snapshots__" ]] && \
+             [[ -n "$(find qa/web/tests/visual/__snapshots__ -name '*.png' 2>/dev/null)" ]]; then
             echo "baselines_exist=true" >> $GITHUB_OUTPUT
           else
             echo "baselines_exist=false" >> $GITHUB_OUTPUT
@@ -240,7 +240,7 @@ jobs:
       - name: Check if baseline screenshots exist
         id: baseline-check
         run: |
-          SNAPSHOTS_DIR="qa/web/tests/visual/snapshots"
+          SNAPSHOTS_DIR="qa/web/tests/visual/__snapshots__"
           if [[ -d "$SNAPSHOTS_DIR" ]] && \
              [[ -n "$(find "$SNAPSHOTS_DIR" -name '*.png')" ]]; then
             echo "baselines_exist=true" >> $GITHUB_OUTPUT
@@ -268,7 +268,7 @@ jobs:
             \`\`\`bash
             cd qa/web
             pytest tests/visual/ --update-snapshots
-            git add tests/visual/snapshots/
+            git add tests/visual/__snapshots__/
             git commit -m "test(visual): Add baseline screenshots"
             \`\`\`
 

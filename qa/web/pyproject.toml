@@ -81,13 +81,15 @@ classifiers = [
 # pytest-xdist: Parallel test execution (significantly faster)
 # ============================================================================
 dependencies = [
-  "axe-playwright-python>=0.1.7", # Accessibility testing (WCAG 2.1, ARIA, color contrast)
+  "axe-playwright-python>=0.1.7",  # Accessibility testing (WCAG 2.1, ARIA, color contrast)
   "locust>=2.43.4",
   "pillow>=12.2",
+  "pixelmatch>=0.2.3",             # Image comparison for visual regression
   "playwright>=1.58",
   "pytest>=9.0.3",
   "pytest-html>=4.2",
   "pytest-playwright>=0.7.2",
+  "pytest-playwright-snapshot>=1", # Visual regression testing
   "pytest-xdist>=3.8",
 ]
 # ============================================================================

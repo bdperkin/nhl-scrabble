@@ -1,10 +1,16 @@
 # Visual Regression Tests
 
-Visual regression tests for the NHL Scrabble web application using Playwright's screenshot comparison.
+Visual regression tests for the NHL Scrabble web application using Playwright screenshot capture and pytest-playwright-snapshot for comparison.
 
 ## Overview
 
 Visual regression testing captures screenshots of UI components and pages, then compares them against baseline images to detect unintended visual changes, layout shifts, and styling errors.
+
+**Technology Stack:**
+
+- **Playwright**: Browser automation and screenshot capture
+- **pytest-playwright-snapshot**: Snapshot comparison with pixelmatch
+- **pixelmatch**: Pixel-level image comparison with configurable threshold
 
 ## Test Structure
 
@@ -16,10 +22,12 @@ visual/
 ├── test_page_screenshots.py        # Full page screenshot tests
 ├── test_component_screenshots.py   # Component-level screenshot tests
 ├── test_cross_browser_visual.py    # Cross-browser visual tests
-└── snapshots/                      # Baseline screenshot images (generated)
-    ├── test_page_screenshots.py/
-    ├── test_component_screenshots.py/
-    └── test_cross_browser_visual.py/
+└── __snapshots__/                  # Baseline screenshot images (generated)
+    └── chromium/                   # Browser-specific snapshots
+        └── linux/                  # Platform-specific snapshots
+            ├── index-page-full.png
+            ├── teams-page-full.png
+            └── ...
 ```
 
 ## Test Coverage
@@ -136,19 +144,19 @@ Before committing updated baselines:
 1. **Review diffs**:
 
    ```bash
-   git diff qa/web/tests/visual/snapshots/
+   git diff qa/web/tests/visual/__snapshots__/
    ```
 
 1. **Visually inspect new screenshots**:
 
-   - Located in `qa/web/tests/visual/snapshots/`
-   - Organized by test file and test name
+   - Located in `qa/web/tests/visual/__snapshots__/`
+   - Organized by browser name and platform
    - PNG format
 
 1. **Commit baselines**:
 
    ```bash
-   git add qa/web/tests/visual/snapshots/
+   git add qa/web/tests/visual/__snapshots__/
    git commit -m "test(visual): Update baselines for <reason>"
    ```
 
