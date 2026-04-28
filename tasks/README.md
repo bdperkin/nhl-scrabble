@@ -54,7 +54,7 @@ Each task includes:
 
 | ID  | Title | Priority | Effort | Status | GitHub Issue | Notes |
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
-| 011 | Monitor and Fix CVE-2026-3219 When pip Patch is Available | MEDIUM | Unknown | Active | - | - |
+| 011 | Monitor and Fix CVE-2026-3219 When pip Patch is Available | MEDIUM | Unknown | Active | [#375](https://github.com/bdperkin/nhl-scrabble/issues/375) | - |
 | 012 | Add Local CodeQL Scanning Integration | MEDIUM | 4-6 hours (actual: ~1.5h) | Completed | [#389](https://github.com/bdperkin/nhl-scrabble/issues/389) | PR [#423](https://github.com/bdperkin/nhl-scrabble/pull/423), completed 2026-04-28 |
 | 001 | Add pip-licenses for Dependency License Compliance | MEDIUM | 30-60 minutes (actual: 45 minutes) | Completed | [#126](https://github.com/bdperkin/nhl-scrabble/issues/126) | PR [#164](https://github.com/bdperkin/nhl-scrabble/pull/164), completed 2026-04-17 |
 | 001 | Add GitHub Dependabot Configuration | CRITICAL | 30 minutes (actual: ~25 minutes) | Completed | [#39](https://github.com/bdperkin/nhl-scrabble/issues/39) | PR [#65](https://github.com/bdperkin/nhl-scrabble/pull/65), completed 2026-04-16 |
@@ -94,11 +94,12 @@ Each task includes:
 | ID  | Title | Priority | Effort | Status | GitHub Issue | Notes |
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
 | 022 | Comprehensive GitHub Workflows Enhancement | MEDIUM | 24-32 hours (main task coordination + sub-tasks) | Completed | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | - |
-| 023 | Extend Sphinx Builder Functionality | LOW | 4-6 hours | Completed | - | - |
-| 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours | Completed | - | - |
-| 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | Unknown | Active | - | - |
-| 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Completed | - | - |
-| 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | - | - |
+| 023 | Extend Sphinx Builder Functionality | LOW | 4-6 hours | Completed | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | - |
+| 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours | Completed | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | - |
+| 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | Unknown | Active | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | - |
+| 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | - |
+| 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
+| 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours | Active | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | - |
 | 001 | Implement HTML Output Format | MEDIUM | 4-6 hours (actual: ~4h) | Completed | [#46](https://github.com/bdperkin/nhl-scrabble/issues/46) | PR [#92](https://github.com/bdperkin/nhl-scrabble/pull/92), completed 2026-04-16 |
 | 001 | Add Progress Bars for Long Operations | MEDIUM | 2-3 hours (actual: ~3 hours) | Completed | [#132](https://github.com/bdperkin/nhl-scrabble/issues/132) | PR [#172](https://github.com/bdperkin/nhl-scrabble/pull/172), completed 2026-04-17 |
 | 002 | Add Interactive Mode (REPL) | MEDIUM | 4-6 hours (actual: Implementation was already complete on this branch) | Completed | [#133](https://github.com/bdperkin/nhl-scrabble/issues/133) | completed 2026-04-17 |
