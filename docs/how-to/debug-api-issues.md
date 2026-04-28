@@ -89,5 +89,5 @@ nhl-scrabble analyze --verbose --no-cache
 ## Related
 
 - [Configure API Settings](configure-api-settings.md) - API configuration
-- [NHL API Reference](../reference/nhl-api.md) - API endpoints
+- NHL API Reference - API endpoints
 - [NHL API Strategy](../explanation/nhl-api-strategy.md) - How we use the API

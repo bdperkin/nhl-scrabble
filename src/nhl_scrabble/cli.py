@@ -199,6 +199,19 @@ def generate_excel_report(
 
     Raises:
         ImportError: If openpyxl is not installed
+
+    Example:
+        >>> from pathlib import Path
+        >>> generate_excel_report(
+        ...     team_scores={"TOR": team_score},
+        ...     all_players=[player1, player2],
+        ...     division_standings={"Atlantic": div_standings},
+        ...     conference_standings={"Eastern": conf_standings},
+        ...     playoff_standings={"Eastern": [team1, team2]},
+        ...     output=Path("report.xlsx"),
+        ...     sheets=["Teams", "Players"],  # Optional: limit sheets
+        ... )
+        # Creates report.xlsx with Teams and Players sheets
     """
     try:
         exporter = ExcelExporter()

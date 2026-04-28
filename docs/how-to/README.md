@@ -35,6 +35,20 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Run with tox (multi-Python)
   - Parallel testing
 
+- **[Run Benchmarks](run-benchmarks.md)** - Performance benchmarking with pytest-benchmark
+
+  - Run performance tests
+  - Compare benchmark results
+  - Generate benchmark reports
+  - Analyze performance regressions
+
+- **[Build Documentation](build-documentation.md)** - Generate Sphinx documentation
+
+  - Build HTML documentation
+  - Build PDF documentation
+  - Build man pages
+  - Serve documentation locally
+
 - **[Setup Pre-commit Hooks](setup-pre-commit-hooks.md)** - Configure automated quality checks
 
   - Install hooks
@@ -49,6 +63,13 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Use UV with tox
   - Manage dependencies
   - Lock file management
+
+- **[Security Audits](security-audits.md)** - Run security scans and audits
+
+  - Run pip-audit
+  - Run bandit security checks
+  - Review security findings
+  - Update vulnerable dependencies
 
 - **[Contribute Code](contribute-code.md)** - Submit code contributions
 
@@ -83,6 +104,22 @@ How-to guides are **problem-oriented** recipes that guide you through solving sp
   - Import into Excel/Sheets
   - Use with Python/JavaScript
   - Query JSON with jq
+
+### Web Interface
+
+- **[Use Web Interface](use-web-interface.md)** - Access NHL Scrabble via web browser
+
+  - Start web server
+  - Navigate the interface
+  - View live standings
+  - Export reports
+
+- **[Deploy Web Interface](deploy-web-interface.md)** - Deploy web server to production
+
+  - Production configuration
+  - Reverse proxy setup
+  - SSL/TLS configuration
+  - Process management
 
 ### Troubleshooting
 

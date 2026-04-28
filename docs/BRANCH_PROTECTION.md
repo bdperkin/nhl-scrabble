@@ -356,10 +356,10 @@ grep -A 10 "is_ci()" .git-hooks/check-branch-protection.sh
 
 ## Related Documentation
 
-- [Git Workflow](./GIT_WORKFLOW.md)
+- Git Workflow
 - [Contributing Guide](../CONTRIBUTING.md)
 - [Pre-commit Hooks](../README.md#pre-commit-hooks)
-- [CI/CD Pipeline](./CI_CD.md)
+- CI/CD Pipeline
 
 ## Summary
 

@@ -336,7 +336,7 @@ nhl-scrabble analyze --top-players 10 --top-team-players 3
 
 - [CLI Reference](../reference/cli.md) - Complete command-line reference
 - [Configuration Reference](../reference/configuration.md) - All configuration options
-- [Understanding Output](understanding-output.md) - Interpreting report data
+- Understanding Output - Interpreting report data
 - [Web Interface Guide](../how-to/use-web-interface.md) - Using the web UI
 
 ## Troubleshooting

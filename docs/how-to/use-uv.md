@@ -62,5 +62,5 @@ uv pip install --upgrade -r requirements.txt
 ## Related
 
 - [Installation Guide](installation.md) - Installation methods
-- [UV Ecosystem Explanation](../explanation/uv-ecosystem.md) - Why we use UV
-- [Tox Reference](../reference/tox.md) - Tox with UV
+- [UV Ecosystem Explanation](../../docs/UV-ECOSYSTEM.md) - Why we use UV
+- [Tox Reference](../../docs/TOX.md) - Tox with UV

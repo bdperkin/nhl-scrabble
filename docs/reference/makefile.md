@@ -708,10 +708,10 @@ The Makefile uses ANSI color codes. If colors aren't displaying:
 
 ## Resources
 
-- **Project README**: [../README.md](../README.md)
-- **Contributing Guide**: [../CONTRIBUTING.md](../CONTRIBUTING.md)
-- **UV Documentation**: [UV.md](UV.md)
-- **Tox Documentation**: [TOX.md](TOX.md) and [TOX-UV.md](TOX-UV.md)
+- **Project README**: [../README.md](../../docs/explanation/README.md)
+- **Contributing Guide**: [../CONTRIBUTING.md](../../CONTRIBUTING.md)
+- **UV Documentation**: [UV.md](../../docs/UV.md)
+- **Tox Documentation**: [TOX.md](../../docs/TOX.md) and [TOX-UV.md](../../docs/TOX-UV.md)
 - **Makefile Source**: [../Makefile](../Makefile)
 
 ## Summary

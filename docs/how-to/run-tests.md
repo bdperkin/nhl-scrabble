@@ -158,7 +158,7 @@ tox -p auto
 - `mypy` - Type checking
 - `coverage` - Coverage report
 
-See [Tox Reference](../reference/tox.md) for details.
+See [Tox Reference](../../docs/TOX.md) for details.
 
 ### Method 7: Run tests on file change (watch mode)
 
@@ -420,6 +420,6 @@ which python  # Should point to .venv/bin/python
 ## Related
 
 - [First Contribution Tutorial](../tutorials/03-first-contribution.md) - Testing workflow
-- [Tox Reference](../reference/tox.md) - Tox configuration details
+- [Tox Reference](../../docs/TOX.md) - Tox configuration details
 - [Coverage Requirements](../reference/coverage.md) - Coverage standards
 - [Contributing Guide](../../CONTRIBUTING.md) - Testing guidelines

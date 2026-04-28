@@ -86,4 +86,4 @@ cat report.json | jq '.teams | to_entries | sort_by(.value.total) | reverse | .[
 
 - [JSON Schema Reference](../reference/json-schema.md) - Complete JSON structure
 - [CLI Reference](../reference/cli.md) - CLI options
-- [Python API](../reference/code-api.md) - Use programmatically
+- Python API - Use programmatically

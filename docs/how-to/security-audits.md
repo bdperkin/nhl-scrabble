@@ -323,5 +323,5 @@ safety check
 ## See Also
 
 - [Running Tests](run-tests.md)
-- [Pre-commit Hooks](../reference/pre-commit-hooks.md)
+- [Pre-commit Hooks](../../docs/contributing/pre-commit-hooks.md)
 - [CI/CD Pipeline](../explanation/ci-cd-pipeline.md)

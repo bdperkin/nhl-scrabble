@@ -634,4 +634,4 @@ Could reduce runtime to 3-5 seconds.
 - [Why Scrabble Scoring?](why-scrabble-scoring.md) - The concept
 - [NHL API Strategy](nhl-api-strategy.md) - API integration details
 - [Testing Philosophy](testing-philosophy.md) - Testing approach
-- [Python API Reference](../reference/code-api.md) - API documentation
+- Python API Reference - API documentation

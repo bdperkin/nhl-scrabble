@@ -25,6 +25,22 @@ Tutorials are **learning-oriented** lessons that take you by the hand through a 
    - Player scores
    - *Time: ~20 minutes*
 
+1. **[Using the CLI](using-the-cli.md)** - Complete command-line interface guide
+
+   - All CLI commands
+   - Command options
+   - Advanced usage
+   - Output formats
+   - *Time: ~25 minutes*
+
+1. **[Interactive Mode](04-interactive-mode.md)** - Explore data interactively
+
+   - Launch interactive shell
+   - Query teams and players
+   - Filter and search
+   - Export selections
+   - *Time: ~20 minutes*
+
 1. **[First Contribution](03-first-contribution.md)** - Make your first code contribution
 
    - Set up development environment

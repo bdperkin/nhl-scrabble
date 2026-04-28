@@ -49,14 +49,24 @@ Reference documentation is **information-oriented** material that describes the 
   - Testing targets
   - Quality check targets
   - Build targets
-  - 55 documented targets
+  - 110+ documented targets
 
-- **[Tox Reference](tox.md)** - Tox environment reference
+- **[Tox Reference](../../TOX.md)** - Tox environment reference
 
   - Python version environments
   - Quality check environments
   - Coverage environments
   - Configuration options
+
+### Project Statistics
+
+- **[Project Statistics](project-stats.md)** - Detailed project metrics
+
+  - Lines of code
+  - Test coverage
+  - Documentation coverage
+  - Dependency count
+  - File statistics
 
 ### APIs & Data Formats
 
@@ -67,42 +77,6 @@ Reference documentation is **information-oriented** material that describes the 
   - All modules, classes, and functions
   - Type hints and signatures
   - Interactive HTML documentation
-
-- **[Python API Reference (Manual)](code-api.md)** - Using NHL Scrabble as a library
-
-  - Getting started with the API
-  - Common usage patterns
-  - Integration examples
-  - Best practices
-
-- **[NHL API Reference](nhl-api.md)** - NHL API endpoints used
-
-  - Standings endpoint
-  - Roster endpoint
-  - Response formats
-  - Rate limits
-
-- **[Scrabble Values](scrabble-values.md)** - Letter values and scoring rules
-
-  - Letter point values
-  - Scoring algorithm
-  - Edge cases
-  - Examples
-
-### Output Formats
-
-- **[JSON Schema Reference](json-schema.md)** - JSON output structure
-
-  - Complete schema
-  - Field descriptions
-  - Examples
-  - Validation
-
-- **[Text Report Format](text-report-format.md)** - Text output structure
-
-  - Report sections
-  - Formatting rules
-  - Indicators and symbols
 
 ## How to use reference documentation
 

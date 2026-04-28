@@ -239,6 +239,6 @@ More efficient - fetch exactly what we need.
 ## Related
 
 - [Architecture Overview](architecture.md) - Overall system design
-- [API Client Reference](../reference/nhl-api.md) - API endpoints
+- API Client Reference - API endpoints
 - [Debug API Issues](../how-to/debug-api-issues.md) - Troubleshooting
 - [Configure API Settings](../how-to/configure-api-settings.md) - Configuration

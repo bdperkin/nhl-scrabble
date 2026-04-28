@@ -317,7 +317,7 @@ A: NHL rosters change frequently due to trades, injuries, call-ups, and send-dow
 
 **Q: Can I filter by specific criteria?**
 
-A: Not currently via CLI, but you can use JSON output and filter with custom scripts. See [Code API Reference](../reference/code-api.md).
+A: Not currently via CLI, but you can use JSON output and filter with custom scripts. See Code API Reference.
 
 **Q: What about special characters (é, ö, etc.)?**
 

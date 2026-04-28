@@ -123,7 +123,7 @@ pytest --cov=src/nhl_scrabble/reports/your_report.py
 
 Add entry to docs:
 
-- Document in [Python API Reference](../reference/code-api.md)
+- Document in Python API Reference
 - Add example to tutorials if appropriate
 - Update [Architecture Explanation](../explanation/architecture.md) if significant
 

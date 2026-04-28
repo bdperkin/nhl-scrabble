@@ -304,4 +304,4 @@ The best part? It makes people smile while showcasing serious skills.
 - [Architecture Overview](architecture.md) - How the system is built
 - [NHL API Strategy](nhl-api-strategy.md) - API integration approach
 - [Getting Started Tutorial](../tutorials/01-getting-started.md) - Try it yourself
-- [Python API Reference](../reference/code-api.md) - Use it in your code
+- Python API Reference - Use it in your code

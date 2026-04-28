@@ -17,12 +17,26 @@ Explanations are **understanding-oriented** discussions that clarify and illumin
   - What it demonstrates
   - Real-world applications
 
+- **[How Scrabble Scoring Works](how-scrabble-scoring-works.md)** - Technical implementation details
+
+  - Letter value calculations
+  - Name parsing logic
+  - Scoring algorithms
+  - Special cases handling
+
 - **[Architecture Overview](architecture.md)** - System design and structure
 
   - High-level architecture
   - Component responsibilities
   - Design decisions
   - Trade-offs made
+
+- **[Web Architecture](web-architecture.md)** - Web interface design
+
+  - FastAPI integration
+  - Frontend architecture
+  - API endpoints
+  - Real-time features
 
 ### Technical Decisions
 
@@ -40,35 +54,14 @@ Explanations are **understanding-oriented** discussions that clarify and illumin
   - Coverage targets
   - Mocking strategies
 
-- **[UV Ecosystem](uv-ecosystem.md)** - Why and how we use UV
+### Development Tools
 
-  - Benefits of UV
+- **[UV Ecosystem](../../UV-ECOSYSTEM.md)** - Why and how we use UV
+
+  - Benefits of UV (10-100x speedup)
   - Integration with tox
   - Performance improvements
-  - Migration from pip
-
-### Development Practices
-
-- **[Development Workflow](development-workflow.md)** - How we work on the project
-
-  - Branch workflow
-  - PR process
-  - Review standards
-  - Release process
-
-- **[Report System Architecture](report-system.md)** - How reports work
-
-  - Report generator design
-  - Plugin architecture
-  - Extensibility
-  - Future plans
-
-- **[Type Safety Approach](type-safety.md)** - Why we use type hints
-
-  - Benefits of type safety
-  - MyPy strict mode
-  - Pydantic for data
-  - Gradual typing approach
+  - Migration from pip/poetry
 
 ## How to use explanations
 

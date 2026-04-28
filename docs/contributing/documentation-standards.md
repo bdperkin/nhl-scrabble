@@ -582,7 +582,7 @@ ______________________________________________________________________
 
 **Rules**:
 
-1. **Use relative links for internal docs**: `[Guide](../how-to/guide.md)`
+1. **Use relative links for internal docs**: `Guide`
 1. **Use absolute URLs for external links**: `[NHL API](https://api.nhle.com/)`
 1. **Check links regularly** (monthly) or use automated link checker
 1. **Use descriptive link text** - avoid "click here"
@@ -602,7 +602,7 @@ Consult the [Python Style Guide](https://google.github.io/styleguide/pyguide.htm
 for coding conventions.
 
 <!-- Bad: Generic link text -->
-Click [here](../how-to/guide.md) for more info.
+Click here for more info.
 
 <!-- Bad: Absolute path for internal link -->
 See [Guide](https://github.com/user/repo/blob/main/docs/how-to/guide.md)
@@ -830,7 +830,7 @@ source .venv/bin/activate
 uv pip install nhl-scrabble
 ```
 
-See [UV Documentation](../explanation/uv-ecosystem.md) for more details.
+See [UV Documentation](../../docs/UV-ECOSYSTEM.md) for more details.
 
 ### Development Install
 
@@ -885,8 +885,8 @@ pip install -e ".[dev]"
 ## Related Documentation
 
 - [Getting Started Tutorial](../tutorials/01-getting-started.md)
-- [Configuration Guide](configure-api-settings.md)
-- [Development Setup](../reference/development.md)
+- [Configuration Guide](../../docs/how-to/configure-api-settings.md)
+- [Development Setup](../../docs/DEVELOPMENT.md)
 
 ````
 
