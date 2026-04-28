@@ -24,10 +24,6 @@ jobs:
     name: Generate SBOM
     runs-on: ubuntu-latest
 
-    env:
-      # Use Node.js 24 for all actions
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -173,9 +169,7 @@ jobs:
             sbom-cyclonedx.xml
             sbom-spdx.json
             sbom-metadata.txt
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Vulnerability scan with Grype
         id: grype-scan
         uses: anchore/scan-action@v6
