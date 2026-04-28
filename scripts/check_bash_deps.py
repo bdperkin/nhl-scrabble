@@ -11,9 +11,8 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import TypeAlias
 
-CommandUsage: TypeAlias = dict[str, list[int]]  # command -> line numbers
+type CommandUsage = dict[str, list[int]]  # command -> line numbers
 
 # Bash built-ins and common commands that don't need checking
 COMMON_COMMANDS = {

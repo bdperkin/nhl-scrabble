@@ -12,12 +12,11 @@ This script validates that Bash scripts follow documentation best practices:
 import re
 import sys
 from pathlib import Path
-from typing import TypeAlias
 
-Issues: TypeAlias = list[str]
+type Issues = list[str]
 
 
-def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
+def check_bash_documentation(script_path: Path) -> Issues:
     """Check Bash script documentation completeness.
 
     Complexity justified: Must check 7 different documentation requirements
@@ -45,21 +44,20 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
 
     # Check 3: Purpose/Description
     header_text = "\n".join(lines[:20])
-    if not re.search(r"#.*(?:Purpose|Description):", header_text, re.I):
+    if not re.search(r"#.*(?:Purpose|Description):", header_text, re.IGNORECASE):
         issues.append("Missing Purpose/Description in header")
 
     # Check 4: Usage documentation (if script accepts arguments)
     uses_args = bool(re.search(r"\$\{?\d+\}?|\$@|\$\*", content))
-    if uses_args:
-        if not re.search(r"#.*(?:Usage|Arguments?):", header_text, re.I):
-            issues.append("Script accepts arguments but missing Usage documentation")
+    if uses_args and not re.search(r"#.*(?:Usage|Arguments?):", header_text, re.IGNORECASE):
+        issues.append("Script accepts arguments but missing Usage documentation")
 
     # Check 5: Function documentation
-    functions = re.findall(r"^(?:function\s+)?(\w+)\s*\(\)", content, re.M)
+    functions = re.findall(r"^(?:function\s+)?(\w+)\s*\(\)", content, re.MULTILINE)
     for func_name in functions:
         # Look for comment before function
         func_pattern = rf"^(?:function\s+)?{re.escape(func_name)}\s*\(\)"
-        match = re.search(func_pattern, content, re.M)
+        match = re.search(func_pattern, content, re.MULTILINE)
         if match:
             lines_before = content[: match.start()].split("\n")[-5:]
             has_comment = any(line.strip().startswith("#") for line in lines_before)
@@ -69,9 +67,12 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
     # Check 6: Exit code documentation
     has_exit = "exit" in content
     has_nonzero_exit = bool(re.search(r"exit\s+[1-9]", content))
-    if has_exit and has_nonzero_exit:
-        if not re.search(r"#.*(?:Exit [Cc]odes?|Returns?):", header_text):
-            issues.append("Script uses non-zero exit codes but missing exit code documentation")
+    if (
+        has_exit
+        and has_nonzero_exit
+        and not re.search(r"#.*(?:Exit [Cc]odes?|Returns?):", header_text)
+    ):
+        issues.append("Script uses non-zero exit codes but missing exit code documentation")
 
     # Check 7: Dependency documentation
     external_cmds = set(
@@ -82,12 +83,15 @@ def check_bash_documentation(script_path: Path) -> Issues:  # noqa: C901
             content,
         ),
     )
-    if external_cmds:
-        if not re.search(r"#.*(?:Dependencies|Requires?):", header_text, re.I):
-            issues.append(
-                f"Uses external commands but missing dependency documentation: "
-                f"{', '.join(sorted(external_cmds))}",
-            )
+    if external_cmds and not re.search(
+        r"#.*(?:Dependencies|Requires?):",
+        header_text,
+        re.IGNORECASE,
+    ):
+        issues.append(
+            f"Uses external commands but missing dependency documentation: "
+            f"{', '.join(sorted(external_cmds))}",
+        )
 
     return issues
 

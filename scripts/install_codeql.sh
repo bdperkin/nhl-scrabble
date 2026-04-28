@@ -46,7 +46,7 @@ rm "codeql-${PLATFORM}.zip"
 
 # Download CodeQL queries
 echo "⬇️  Downloading CodeQL query packs..."
-if [ ! -d "$INSTALL_DIR/codeql-repo" ]; then
+if [[ ! -d "$INSTALL_DIR/codeql-repo" ]]; then
   git clone --depth 1 https://github.com/github/codeql.git "$INSTALL_DIR/codeql-repo"
 fi
 

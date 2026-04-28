@@ -805,7 +805,7 @@ repos:
           and has more consistent behavior than [ ].
           Modern: [[ "$var" == "value" ]]
           Old: [ "$var" = "value" ]
-        entry: '(?<!#).*\[\s+[^\[]'
+        entry: '(?<!#)(?<!\[)\[\s+'
         language: pygrep
         files: \.sh$
 

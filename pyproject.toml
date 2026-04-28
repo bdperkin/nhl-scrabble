@@ -1037,6 +1037,7 @@ exclude = [
     "*.egg-info",
     "__pycache__",
     "tests",
+    "scripts",
     ".scratch",
     "src/nhl_scrabble/_version.py",
 ]
