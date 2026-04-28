@@ -15,6 +15,11 @@ jobs:
   welcome:
     name: Welcome New Contributor
     runs-on: ubuntu-latest
+    # Skip for repository owner and bots
+    if: |
+      github.actor != github.repository_owner &&
+      github.actor != 'dependabot[bot]' &&
+      github.actor != 'pre-commit-ci[bot]'
 
     steps:
       - name: Welcome first-time PR contributors
