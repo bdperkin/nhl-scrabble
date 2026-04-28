@@ -223,6 +223,43 @@ jobs:
             CHANGELOG.md > changelog_section.md || \
             echo "" > changelog_section.md
 
+      - name: Generate release summary
+        id: generate_summary
+        run: |
+          {
+            echo "## 📦 Distribution Files"
+            echo ""
+            echo "This release includes:"
+            echo ""
+            for file in dist/*; do
+              if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                size=$(ls -lh "$file" | awk '{print $5}')
+                echo "- \`$filename\` ($size)"
+              fi
+            done
+            echo ""
+            echo "## 📥 Installation"
+            echo ""
+            echo "\`\`\`bash"
+            echo "# Install from PyPI"
+            echo "pip install nhl-scrabble==${{ steps.get_version.outputs.VERSION }}"
+            echo ""
+            echo "# Upgrade existing installation"
+            echo "pip install --upgrade nhl-scrabble"
+            echo "\`\`\`"
+            echo ""
+            echo "## 📚 Documentation"
+            echo ""
+            REPO="${{ github.repository }}"
+            VERSION="${{ steps.get_version.outputs.VERSION }}"
+            echo "- [📖 Documentation](https://bdperkin.github.io/nhl-scrabble/)"
+            echo "- [📋 CHANGELOG](https://github.com/$REPO/blob/main/CHANGELOG.md)"
+            echo "- [📦 PyPI Package](https://pypi.org/project/nhl-scrabble/$VERSION/)"
+            echo "- [🐛 Issue Tracker](https://github.com/$REPO/issues)"
+            echo "- [💬 Discussions](https://github.com/$REPO/discussions)"
+          } > summary.md
+
       - name: Combine release notes
         run: |
           # Start with tag annotation (primary release notes)
@@ -233,6 +270,10 @@ jobs:
             echo -e "\n\n---\n\n## Detailed Changelog\n" >> release_notes.md
             cat changelog_section.md >> release_notes.md
           fi
+
+          # Add release summary (distribution files, installation, docs)
+          echo -e "\n\n---\n" >> release_notes.md
+          cat summary.md >> release_notes.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
