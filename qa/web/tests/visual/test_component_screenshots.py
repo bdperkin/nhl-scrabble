@@ -158,7 +158,7 @@ def test_conference_section_visual(conferences_page: ConferencesPage) -> None:
 
     # Conference section component screenshot
     conference_section = conferences_page.page.locator(
-        ".conference, .conference-group, section.conference"
+        ".conference, .conference-group, section.conference",
     )
     if conference_section.count() > 0:
         expect(conference_section.first).to_have_screenshot("component-conference-section.png")
