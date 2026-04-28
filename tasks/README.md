@@ -133,7 +133,7 @@ Each task includes:
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | : 1-2 weeks (ongoing monitoring + final decision) | Active | [#355](https://github.com/bdperkin/nhl-scrabble/issues/355) | PR [#324](https://github.com/bdperkin/nhl-scrabble/pull/324) |
 | 030 | Automate CHANGELOG Generation from Git Tags and Commits | MEDIUM | 4-6 hours | Active | - | - |
 | 031 | Add Version Validation in Pre-commit Hooks | MEDIUM | 1-2 hours (actual: 1.5 hours) | Completed | [#380](https://github.com/bdperkin/nhl-scrabble/issues/380) | PR [#411](https://github.com/bdperkin/nhl-scrabble/pull/411), completed 2026-04-27, 68th pre-commit hook, validates hatch-vcs dynamic versioning |
-| 032 | Create GitHub Release Notes from Tag Annotations | MEDIUM | 2-3 hours | Active | [#123](https://github.com/bdperkin/nhl-scrabble/issues/123) | - |
+| 032 | Create GitHub Release Notes from Tag Annotations | MEDIUM | 2-3 hours (actual: 1.5 hours) | Completed | [#381](https://github.com/bdperkin/nhl-scrabble/issues/381) | PR [#412](https://github.com/bdperkin/nhl-scrabble/pull/412), completed 2026-04-27, integrated with CHANGELOG automation |
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Active | - | - |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Active | - | - |
 | 035 | Implement pre-commit.ci GitHub Automation | MEDIUM | 1-2 hours | Completed | [#391](https://github.com/bdperkin/nhl-scrabble/issues/391) | PR [#5](https://github.com/bdperkin/nhl-scrabble/pull/5) |
@@ -268,11 +268,11 @@ Each task includes:
 | Bug Fixes | 0 | 11 | 11 |
 | Security | 2 | 14 | 16 |
 | Optimization | 0 | 13 | 13 |
-| Enhancement | 12 | 36 | 48 |
+| Enhancement | 11 | 37 | 48 |
 | Testing | 8 | 23 | 31 |
 | New Features | 34 | 9 | 43 |
 | Refactoring | 1 | 29 | 30 |
-| **TOTAL** | **57** | **135** | **192** |
+| **TOTAL** | **56** | **136** | **192** |
 
 ### Completion Progress
 
@@ -281,11 +281,11 @@ Each task includes:
 | Bug Fixes | 100.0% |
 | Security | 87.5% |
 | Optimization | 100.0% |
-| Enhancement | 75.0% |
+| Enhancement | 77.1% |
 | Testing | 74.2% |
 | New Features | 20.9% |
 | Refactoring | 96.7% |
-| **OVERALL** | **70.3%** |
+| **OVERALL** | **70.8%** |
 
 ## Total Project Roadmap
 
