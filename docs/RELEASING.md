@@ -81,9 +81,14 @@ The `.github/workflows/publish.yml` workflow executes in this order:
 **Stage 5: GitHub Release** (~5 seconds)
 
 - Extracts version from tag
+- Extracts tag annotation (release summary)
 - Extracts release notes from CHANGELOG.md
+- Generates release summary:
+  - Lists distribution files with sizes
+  - Adds installation instructions
+  - Adds documentation links
 - Creates GitHub Release
-- Attaches distribution artifacts
+- Attaches distribution artifacts (sdist + wheel)
 
 **Total Time:** 3-4 minutes
 
@@ -182,7 +187,59 @@ The workflow extracts the current version section automatically:
 awk '/^## \[2.1.0\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md
 ```
 
-This becomes the GitHub Release description.
+**GitHub Release Format:**
+
+Each release includes:
+
+1. **Tag Annotation** - Release summary from the git tag message
+1. **Detailed Changelog** - Extracted from CHANGELOG.md for this version
+1. **Distribution Files** - List of build artifacts with sizes
+1. **Installation Instructions** - Commands to install the specific version
+1. **Documentation Links** - Links to docs, CHANGELOG, PyPI, issues, discussions
+
+**Example Release:**
+
+````markdown
+Release version 2.1.0
+
+---
+
+## Detailed Changelog
+
+### Added
+- New feature X
+- Feature Y
+
+### Fixed
+- Bug Z
+
+---
+
+## 📦 Distribution Files
+
+This release includes:
+
+- `nhl_scrabble-2.1.0.tar.gz` (45K)
+- `nhl_scrabble-2.1.0-py3-none-any.whl` (32K)
+
+## 📥 Installation
+
+```bash
+# Install from PyPI
+pip install nhl-scrabble==2.1.0
+
+# Upgrade existing installation
+pip install --upgrade nhl-scrabble
+```
+
+## 📚 Documentation
+
+- [📖 Documentation](https://bdperkin.github.io/nhl-scrabble/)
+- [📋 CHANGELOG](https://github.com/bdperkin/nhl-scrabble/blob/main/CHANGELOG.md)
+- [📦 PyPI Package](https://pypi.org/project/nhl-scrabble/2.1.0/)
+- [🐛 Issue Tracker](https://github.com/bdperkin/nhl-scrabble/issues)
+- [💬 Discussions](https://github.com/bdperkin/nhl-scrabble/discussions)
+````
 
 ## Security: PyPI Trusted Publishing
 
