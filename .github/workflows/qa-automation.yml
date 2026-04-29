@@ -1,0 +1,454 @@
+name: QA Automation Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/nhl_scrabble/web/**"
+      - "qa/web/**"
+      - ".github/workflows/qa-automation.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/nhl_scrabble/web/**"
+      - "qa/web/**"
+
+  schedule:
+    - cron: "0 2 * * *"  # Nightly at 2 AM UTC
+
+  workflow_dispatch:  # Allow manual triggering
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        type: choice
+        options:
+          - all
+          - functional
+          - visual
+          - performance
+          - accessibility
+        default: all
+      browsers:
+        description: 'Browsers to test (comma-separated: chromium,firefox,webkit)'
+        required: false
+        type: string
+        default: 'chromium,firefox,webkit'
+
+# Workflow-level permissions
+permissions:
+  contents: read
+  pull-requests: write  # Allow commenting on PRs
+  actions: read  # Allow reading workflow runs
+
+jobs:
+  qa-tests:
+    name: QA Tests (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    strategy:
+      fail-fast: false  # Continue testing other browsers even if one fails
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Full history for version detection
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - name: Install project dependencies
+        run: |
+          uv pip install -e ".[dev,web]" --system
+
+      - name: Install QA web dependencies
+        run: |
+          cd qa/web
+          uv pip install -e . --system
+
+      - name: Install Playwright browsers
+        run: |
+          # Install only the browser we're testing
+          playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Start web server in background
+        run: |
+          nhl-scrabble serve --host 0.0.0.0 --port 5000 &
+          echo $! > server.pid
+
+          # Wait for server to be ready (max 60 seconds)
+          echo "Waiting for server to start..."
+          for i in {1..60}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "✓ Server is ready"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "✗ Server failed to start within 60 seconds"
+              cat server.log || true
+              exit 1
+            fi
+            sleep 1
+          done
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      - name: Determine test suite
+        id: test-suite
+        run: |
+          # Use manual input if workflow_dispatch, otherwise run all tests
+          TEST_SUITE="${{ github.event.inputs.test_suite }}"
+          if [[ -z "$TEST_SUITE" ]]; then
+            TEST_SUITE="all"
+          fi
+          echo "suite=$TEST_SUITE" >> $GITHUB_OUTPUT
+          echo "Running test suite: $TEST_SUITE"
+
+      - name: Run functional tests
+        id: functional-tests
+        if: |
+          steps.test-suite.outputs.suite == 'all' ||
+          steps.test-suite.outputs.suite == 'functional'
+        run: |
+          cd qa/web
+          pytest tests/functional/ \
+            --browser=${{ matrix.browser }} \
+            --verbose \
+            --tb=short \
+            --maxfail=10 \
+            --junit-xml=reports/functional-${{ matrix.browser }}.xml \
+            --html=reports/functional-${{ matrix.browser }}.html \
+            --self-contained-html
+        continue-on-error: true
+
+      - name: Run visual regression tests
+        id: visual-tests
+        if: |
+          steps.test-suite.outputs.suite == 'all' ||
+          steps.test-suite.outputs.suite == 'visual'
+        run: |
+          cd qa/web
+          pytest tests/visual/ \
+            --browser=${{ matrix.browser }} \
+            --verbose \
+            --tb=short \
+            --maxfail=5 \
+            --junit-xml=reports/visual-${{ matrix.browser }}.xml
+        continue-on-error: true
+
+      - name: Run performance tests
+        id: performance-tests
+        if: |
+          steps.test-suite.outputs.suite == 'all' ||
+          steps.test-suite.outputs.suite == 'performance'
+        run: |
+          cd qa/web
+          pytest tests/performance/ \
+            --browser=${{ matrix.browser }} \
+            --verbose \
+            --tb=short \
+            --junit-xml=reports/performance-${{ matrix.browser }}.xml \
+            --html=reports/performance-${{ matrix.browser }}.html \
+            --self-contained-html \
+            --benchmark-only \
+            --benchmark-json=reports/benchmark-${{ matrix.browser }}.json
+        continue-on-error: true
+
+      - name: Run accessibility tests
+        id: accessibility-tests
+        if: |
+          steps.test-suite.outputs.suite == 'all' ||
+          steps.test-suite.outputs.suite == 'accessibility'
+        run: |
+          cd qa/web
+          pytest tests/accessibility/ \
+            --browser=${{ matrix.browser }} \
+            --verbose \
+            --tb=short \
+            --maxfail=10 \
+            --junit-xml=reports/accessibility-${{ matrix.browser }}.xml \
+            --html=reports/accessibility-${{ matrix.browser }}.html \
+            --self-contained-html
+        continue-on-error: true
+
+      - name: Stop web server
+        if: always()
+        run: |
+          if [[ -f server.pid ]]; then
+            kill $(cat server.pid) || true
+            rm server.pid
+          fi
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-reports-${{ matrix.browser }}
+          path: |
+            qa/web/reports/*.xml
+            qa/web/reports/*.html
+            qa/web/reports/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: |
+            qa/web/screenshots/**/*.png
+            qa/web/test-results/**/*.png
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Upload visual diffs
+        if: |
+          always() &&
+          (steps.test-suite.outputs.suite == 'all' ||
+           steps.test-suite.outputs.suite == 'visual')
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs-${{ matrix.browser }}
+          path: |
+            qa/web/test-results/**/*-diff.png
+            qa/web/test-results/**/*-actual.png
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Upload performance metrics
+        if: |
+          always() &&
+          (steps.test-suite.outputs.suite == 'all' ||
+           steps.test-suite.outputs.suite == 'performance')
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-metrics-${{ matrix.browser }}
+          path: qa/web/reports/benchmark-${{ matrix.browser }}.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Check test results
+        if: always()
+        run: |
+          cd qa/web/reports
+
+          # Count test failures
+          FAILURES=0
+
+          if [[ -f "functional-${{ matrix.browser }}.xml" ]]; then
+            FILE="functional-${{ matrix.browser }}.xml"
+            FUNC_FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+              grep -o '[0-9]*' || echo "0")
+            FAILURES=$((FAILURES + FUNC_FAILURES))
+          fi
+
+          if [[ -f "visual-${{ matrix.browser }}.xml" ]]; then
+            FILE="visual-${{ matrix.browser }}.xml"
+            VIS_FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+              grep -o '[0-9]*' || echo "0")
+            FAILURES=$((FAILURES + VIS_FAILURES))
+          fi
+
+          if [[ -f "performance-${{ matrix.browser }}.xml" ]]; then
+            FILE="performance-${{ matrix.browser }}.xml"
+            PERF_FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+              grep -o '[0-9]*' || echo "0")
+            FAILURES=$((FAILURES + PERF_FAILURES))
+          fi
+
+          if [[ -f "accessibility-${{ matrix.browser }}.xml" ]]; then
+            FILE="accessibility-${{ matrix.browser }}.xml"
+            A11Y_FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+              grep -o '[0-9]*' || echo "0")
+            FAILURES=$((FAILURES + A11Y_FAILURES))
+          fi
+
+          echo "Total failures for ${{ matrix.browser }}: $FAILURES"
+
+          if [[ $FAILURES -gt 0 ]]; then
+            echo "❌ Tests failed for ${{ matrix.browser }}"
+            exit 1
+          else
+            echo "✅ All tests passed for ${{ matrix.browser }}"
+          fi
+
+  qa-summary:
+    name: QA Test Summary
+    runs-on: ubuntu-latest
+    needs: qa-tests
+    if: always()
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Download all test reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: qa-reports-*
+          path: reports/
+          merge-multiple: true
+
+      - name: Generate test summary
+        id: summary
+        run: |
+          echo "## 🧪 QA Automation Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          for browser in chromium firefox webkit; do
+            echo "### 🌐 $browser" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # Functional tests
+            if [[ -f "reports/functional-${browser}.xml" ]]; then
+              FILE="reports/functional-${browser}.xml"
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              PASSED=$((TESTS - FAILURES - ERRORS))
+              echo "- **Functional**: $PASSED/$TESTS passed" >> \
+                $GITHUB_STEP_SUMMARY
+            fi
+
+            # Visual tests
+            if [[ -f "reports/visual-${browser}.xml" ]]; then
+              FILE="reports/visual-${browser}.xml"
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              PASSED=$((TESTS - FAILURES - ERRORS))
+              echo "- **Visual**: $PASSED/$TESTS passed" >> \
+                $GITHUB_STEP_SUMMARY
+            fi
+
+            # Performance tests
+            if [[ -f "reports/performance-${browser}.xml" ]]; then
+              FILE="reports/performance-${browser}.xml"
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              PASSED=$((TESTS - FAILURES - ERRORS))
+              echo "- **Performance**: $PASSED/$TESTS passed" >> \
+                $GITHUB_STEP_SUMMARY
+            fi
+
+            # Accessibility tests
+            if [[ -f "reports/accessibility-${browser}.xml" ]]; then
+              FILE="reports/accessibility-${browser}.xml"
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
+                grep -o '[0-9]*' || echo "0")
+              PASSED=$((TESTS - FAILURES - ERRORS))
+              echo "- **Accessibility**: $PASSED/$TESTS passed" >> \
+                $GITHUB_STEP_SUMMARY
+            fi
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+          done
+
+          echo "### 📊 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Test reports for each browser" >> $GITHUB_STEP_SUMMARY
+          echo "- Screenshots (on failure)" >> $GITHUB_STEP_SUMMARY
+          echo "- Visual diffs (if applicable)" >> $GITHUB_STEP_SUMMARY
+          echo "- Performance metrics (if applicable)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment PR with test summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            let comment = `## 🧪 QA Automation Test Results\n\n`;
+
+            const browsers = ['chromium', 'firefox', 'webkit'];
+            let hasFailures = false;
+
+            for (const browser of browsers) {
+              comment += `### 🌐 ${browser}\n\n`;
+
+              const reportTypes = [
+                'functional',
+                'visual',
+                'performance',
+                'accessibility'
+              ];
+
+              for (const type of reportTypes) {
+                const reportFile = `reports/${type}-${browser}.xml`;
+
+                if (fs.existsSync(reportFile)) {
+                  const content = fs.readFileSync(reportFile, 'utf8');
+                  const testsMatch = content.match(/tests="(\d+)"/);
+                  const failuresMatch = content.match(/failures="(\d+)"/);
+                  const errorsMatch = content.match(/errors="(\d+)"/);
+
+                  const tests = testsMatch ? parseInt(testsMatch[1]) : 0;
+                  const failures = failuresMatch ? parseInt(failuresMatch[1]) : 0;
+                  const errors = errorsMatch ? parseInt(errorsMatch[1]) : 0;
+                  const passed = tests - failures - errors;
+
+                  const icon = (failures + errors) > 0 ? '❌' : '✅';
+                  comment += `- ${icon} **${type}**: ${passed}/${tests} passed\n`;
+
+                  if ((failures + errors) > 0) {
+                    hasFailures = true;
+                  }
+                }
+              }
+
+              comment += `\n`;
+            }
+
+            comment += `### 📊 Artifacts\n\n`;
+            const runUrl = `https://github.com/${context.repo.owner}/${
+              context.repo.repo}/actions/runs/${context.runId}`;
+            comment += `- [Download Test Reports](${runUrl})\n`;
+
+            if (hasFailures) {
+              comment += `- [Download Screenshots](${runUrl})\n`;
+            }
+
+            comment += `\n---\n`;
+            comment += `*Automated comment from QA Automation Tests workflow*\n`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
