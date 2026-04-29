@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12] - 2026-04-29
+
 ### Added
 
 - **QA Automation Framework** (#311) - **COMPLETED**
@@ -481,5 +483,9 @@ Initial pre-release version with core NHL Scrabble functionality.
 - CVE-2026-3219 (pip vulnerability) - Monitoring for patch availability (Issue #375)
 
 [0.0.1]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.1
+[0.0.12]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.12
 [0.0.2]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.2
-[unreleased]: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.2...HEAD
+[0.0.3]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.3
+[0.0.4]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.4
+[0.0.5]: https://github.com/bdperkin/nhl-scrabble/releases/tag/v0.0.5
+[unreleased]: https://github.com/bdperkin/nhl-scrabble/compare/v0.0.12...HEAD
