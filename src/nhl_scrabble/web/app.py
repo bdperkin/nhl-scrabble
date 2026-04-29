@@ -425,16 +425,16 @@ async def analyze_get(
     request: Request,
     top_players: Annotated[
         int,
-        Query(default=20, ge=1, le=100, description="Number of top players to include"),
-    ],
+        Query(ge=1, le=100, description="Number of top players to include"),
+    ] = 20,
     top_team_players: Annotated[
         int,
-        Query(default=5, ge=1, le=30, description="Top players per team"),
-    ],
+        Query(ge=1, le=30, description="Top players per team"),
+    ] = 5,
     use_cache: Annotated[
         bool,
-        Query(default=True, description="Use cached results if available"),
-    ],
+        Query(description="Use cached results if available"),
+    ] = True,
 ) -> HTMLResponse | dict[str, Any]:
     """Run NHL Scrabble analysis (GET endpoint for HTMX).
 
