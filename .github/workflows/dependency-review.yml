@@ -26,7 +26,8 @@ jobs:
           fail-on-severity: moderate
           fail-on-scopes: runtime
           # Allow common OSI-approved licenses
-          # Added Artistic/GPL for QA deps (Locust → python-slugify → text-unidecode)
+          # Added for QA deps: Artistic/GPL (text-unidecode), MPL-2.0 (bidict,
+          # pytest-base-url), PSF-2.0 (pywin32)
           allow-licenses: >-
             MIT,
             Apache-2.0,
@@ -34,12 +35,27 @@ jobs:
             BSD-2-Clause,
             ISC,
             Python-2.0,
+            PSF-2.0,
             Artistic-1.0,
             Artistic-2.0,
             GPL-2.0,
             GPL-2.0+,
-            GPL-2.0-or-later
+            GPL-2.0-or-later,
+            MPL-2.0
           comment-summary-in-pr: always
+          # Allow QA dependencies with undetected/missing license metadata
+          # These are verified OSI-approved: BSD-3 (Werkzeug), Apache-2 (Locust),
+          # MIT (playwright, python-socketio, etc), ZPL-2.1 (zope.*)
+          allow-dependencies-licenses: >-
+            pkg:pypi/geventhttpclient,
+            pkg:pypi/greenlet,
+            pkg:pypi/locust,
+            pkg:pypi/playwright,
+            pkg:pypi/python-engineio,
+            pkg:pypi/python-socketio,
+            pkg:pypi/werkzeug,
+            pkg:pypi/zope-event,
+            pkg:pypi/zope-interface
           # Allow lower OpenSSF Scorecard for QA deps
           # text-unidecode: score 2.2 < threshold 3.0 (dev-only, acceptable)
           warn-on-openssf-scorecard-level: low
