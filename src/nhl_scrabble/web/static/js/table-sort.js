@@ -67,6 +67,10 @@ class TableSort {
             header.setAttribute('role', 'button');
             header.setAttribute('tabindex', '0');
 
+            // Add descriptive aria-label for screen readers
+            const columnName = header.textContent.trim();
+            header.setAttribute('aria-label', `Sort by ${columnName}`);
+
             // Add click handler
             header.addEventListener('click', () => this.handleHeaderClick(header));
 

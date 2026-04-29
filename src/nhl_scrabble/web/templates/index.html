@@ -32,6 +32,7 @@
                            min="1"
                            max="100"
                            value="20"
+                           aria-label="Number of top-scoring players to display (1-100)"
                            aria-describedby="topPlayersHelp"
                            required>
                 </div>
@@ -47,20 +48,28 @@
                            min="1"
                            max="30"
                            value="5"
+                           aria-label="Number of top players to show per team (1-30)"
                            aria-describedby="topTeamPlayersHelp"
                            required>
                 </div>
 
                 <div class="form-group">
                     <label for="useCache">
-                        <input type="checkbox" id="useCache" name="use_cache" checked>
+                        <input type="checkbox"
+                               id="useCache"
+                               name="use_cache"
+                               aria-label="Use cached results for faster loading"
+                               checked>
                         Use Cached Results (faster)
                     </label>
                 </div>
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary" id="analyzeBtn">
+                <button type="submit"
+                        class="btn btn-primary"
+                        id="analyzeBtn"
+                        aria-label="Analyze NHL player Scrabble scores">
                     <span class="btn-text">Analyze</span>
                     <span class="btn-loading" hidden>
                         <span class="spinner"></span>

@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Web Accessibility (WCAG 2.1 AA Compliance)** (#440)
+  - Fixed all keyboard navigation violations
+    - Added visible focus indicators to all interactive elements (2px solid outline)
+    - Removed `outline: none` from form inputs
+    - Added high contrast mode support for focus indicators
+    - Ensured all interactive elements are keyboard accessible
+  - Enhanced ARIA attributes for better screen reader support
+    - Added descriptive `aria-label` to all buttons (analyze, export)
+    - Added `aria-label` to all form inputs with context
+    - Added sortable header labels ("Sort by {column}")
+    - Marked decorative icons with `aria-hidden="true"`
+  - Improved semantic HTML structure
+    - Added explicit ARIA landmark roles (`role="banner"`, `role="contentinfo"`)
+    - Maintained proper heading hierarchy (h1 → h2 → h3 → h4)
+    - Used semantic elements (header, nav, main, footer)
+  - Verified WCAG AA color contrast compliance (≥4.5:1 for normal text)
+  - All 30 accessibility test violations across 3 browsers now resolved
+
 ## [0.0.12] - 2026-04-29
 
 ### Added
