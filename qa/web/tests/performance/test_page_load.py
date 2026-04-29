@@ -3,16 +3,24 @@
 Measures page load times and ensures they meet performance thresholds.
 """
 
+import shutil
 import time
 
 import pytest
-from pages.conferences_page import ConferencesPage
-from pages.divisions_page import DivisionsPage
-from pages.index_page import IndexPage
-from pages.playoffs_page import PlayoffsPage
-from pages.stats_page import StatsPage
-from pages.teams_page import TeamsPage
-from playwright.sync_api import Page
+
+# Skip all tests in this module if Playwright is not available
+pytestmark = pytest.mark.skipif(
+    shutil.which("playwright") is None,
+    reason="Playwright not found (install with: playwright install)",
+)
+
+from pages.conferences_page import ConferencesPage  # noqa: E402
+from pages.divisions_page import DivisionsPage  # noqa: E402
+from pages.index_page import IndexPage  # noqa: E402
+from pages.playoffs_page import PlayoffsPage  # noqa: E402
+from pages.stats_page import StatsPage  # noqa: E402
+from pages.teams_page import TeamsPage  # noqa: E402
+from playwright.sync_api import Page  # noqa: E402
 
 # Performance thresholds (in seconds)
 PAGE_LOAD_THRESHOLD = 2.0

@@ -3,13 +3,21 @@
 Measures API response times and page rendering performance.
 """
 
+import shutil
 import time
 
-import httpx
 import pytest
-from pages.index_page import IndexPage
-from pages.teams_page import TeamsPage
-from playwright.sync_api import Page
+
+# Skip all tests in this module if Playwright is not available
+pytestmark = pytest.mark.skipif(
+    shutil.which("playwright") is None,
+    reason="Playwright not found (install with: playwright install)",
+)
+
+import httpx  # noqa: E402
+from pages.index_page import IndexPage  # noqa: E402
+from pages.teams_page import TeamsPage  # noqa: E402
+from playwright.sync_api import Page  # noqa: E402
 
 # Response time thresholds (in seconds)
 API_RESPONSE_THRESHOLD = 1.0
