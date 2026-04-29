@@ -31,9 +31,14 @@ permissions:
 
 jobs:
   visual-tests:
-    name: Visual Regression Tests
+    name: Visual Regression Tests (${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    strategy:
+      fail-fast: false  # Test all browsers even if one fails
+      matrix:
+        browser: [chromium, firefox, webkit]
 
     env:
       # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
@@ -103,8 +108,8 @@ jobs:
         run: |
           # Create output file with correct permissions for Docker
           mkdir -p qa/web
-          touch qa/web/visual-test-results.xml
-          chmod 666 qa/web/visual-test-results.xml
+          touch qa/web/visual-${{ matrix.browser }}-results.xml
+          chmod 666 qa/web/visual-${{ matrix.browser }}-results.xml
 
       - name: Run visual regression tests
         id: visual-tests
@@ -113,16 +118,18 @@ jobs:
           if [[ "${{ github.event.inputs.update_baselines }}" == "true" ]]; then
             echo "🔄 Generating baseline screenshots..."
             PYTEST_ARGS="tests/visual/ \
+              --browser=${{ matrix.browser }} \
               --update-snapshots \
               --verbose \
               --tb=short \
-              --junit-xml=visual-test-results.xml"
+              --junit-xml=visual-${{ matrix.browser }}-results.xml"
           else
             PYTEST_ARGS="tests/visual/ \
+              --browser=${{ matrix.browser }} \
               --verbose \
               --tb=short \
               --maxfail=5 \
-              --junit-xml=visual-test-results.xml"
+              --junit-xml=visual-${{ matrix.browser }}-results.xml"
           fi
 
           # Run pytest in Docker container with GHCR Playwright image
@@ -170,15 +177,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-test-results
-          path: qa/web/visual-test-results.xml
+          name: visual-test-results-${{ matrix.browser }}
+          path: qa/web/visual-${{ matrix.browser }}-results.xml
           retention-days: 30
 
       - name: Upload visual diff screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-diffs
+          name: visual-diffs-${{ matrix.browser }}
           path: |
             qa/web/test-results/**/*-diff.png
             qa/web/test-results/**/*-actual.png
@@ -189,16 +196,16 @@ jobs:
         if: github.event.inputs.update_baselines == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: generated-baselines
-          path: qa/web/tests/visual/__snapshots__/
+          name: generated-baselines-${{ matrix.browser }}
+          path: qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/
           retention-days: 7
 
       - name: Upload baseline screenshots (on first run)
         if: failure() && github.event.inputs.update_baselines != 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: baseline-screenshots
-          path: qa/web/tests/visual/__snapshots__/**/*.png
+          name: baseline-screenshots-${{ matrix.browser }}
+          path: qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
@@ -235,19 +242,21 @@ jobs:
               findDiffs(testResultsDir);
             }
 
-            const comment = `## 🔍 Visual Regression Test Results
+            const comment = `## 🔍 Visual Regression Test Results (${{ matrix.browser }})
 
             ⚠️ **Visual differences detected**: ${diffCount} screenshot(s) differ from baseline
 
             ### Details
+            - **Browser**: ${{ matrix.browser }}
             - **Diff Screenshots**: ${diffCount}
             - **Artifacts**: Visual diff images uploaded to workflow artifacts
 
             ### Next Steps
-            1. Download the \`visual-diffs\` artifact from this workflow run
+            1. Download the \`visual-diffs-${{ matrix.browser }}\` artifact from this workflow run
             2. Review the diff images to verify if changes are intentional
             3. If changes are intentional:
-               - Run \`cd qa/web && pytest tests/visual/ --update-snapshots\`
+               - Run \`cd qa/web && pytest tests/visual/ \\\`
+               - \`  --browser=${{ matrix.browser }} --update-snapshots\`
                - Commit the updated baseline screenshots
             4. If changes are unintentional:
                - Fix the styling/layout issues
