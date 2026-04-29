@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-04-28 (Comprehensive re-analysis with optimal ordering)
-**Total Tasks**: 40 active tasks
-**Estimated Total Effort**: 233.0 hours
+**Total Tasks**: 43 active tasks
+**Estimated Total Effort**: 245.5 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -13,8 +13,8 @@ This file provides the **optimal** implementation order for all active tasks, ba
 
 ## Analysis Summary
 
-- **HIGH Priority**: 1 tasks (immediate action)
-- **MEDIUM Priority**: 6 tasks (current sprint)
+- **HIGH Priority**: 3 tasks (immediate action)
+- **MEDIUM Priority**: 7 tasks (current sprint)
 - **LOW Priority**: 33 tasks (future backlog)
 
 **Recommendation**: Focus on HIGH and MEDIUM priority tasks first for maximum impact.
@@ -31,20 +31,35 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 
 ## Phase 1: HIGH Priority
 
-**Effort**: 2.5 hours | **Tasks**: 1
+**Effort**: 10.5 hours | **Tasks**: 3
 **Focus**: Critical bugs and accessibility issues - immediate action required
+
+```bash
+# Add Missing Web Application Routes (MUST BE FIRST - routes needed for tests)
+/implement-task bug-fixes/002-missing-web-routes.md  # 2.5h, Issue #456
+```
+
+```bash
+# Fix QA Automation Test Failures (Functional and Accessibility)
+/implement-task bug-fixes/001-qa-test-failures.md  # 5.0h, Issue #454
+```
 
 ```bash
 # Fix WCAG 2.1 AA Accessibility Violations in Web App
 /implement-task bug-fixes/013-fix-wcag-accessibility-violations.md  # 2.5h, Issue #440
 ```
 
-**Rationale**: Accessibility issues affect all users and should be fixed immediately.
+**Rationale**: Missing routes must be added first (task 002) before fixing tests that depend on those routes (task 001). Accessibility issues affect all users and should be fixed immediately.
 
 ## Phase 2: MEDIUM Priority
 
-**Effort**: 43.5 hours | **Tasks**: 6
+**Effort**: 48.5 hours | **Tasks**: 7
 **Focus**: Important improvements and testing enhancements - prioritize in current sprint
+
+```bash
+# Comprehensive Route Tests (Integration and QA Functional)
+/implement-task testing/024-comprehensive-route-tests.md  # 5.0h, Issue #457
+```
 
 ```bash
 # Monitor and Fix CVE-2026-3219 When pip Patch is Available
