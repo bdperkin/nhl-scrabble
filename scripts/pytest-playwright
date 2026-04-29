@@ -91,24 +91,27 @@ else
     WORKDIR="/work"
 fi
 
-# Install project dependencies in container
-# We need to ensure pytest and dependencies are available
-INSTALL_CMD="cd /work && pip install --quiet --no-cache-dir -e '.[dev,web]' && cd /work/qa/web && pip install --quiet --no-cache-dir -e ."
+# Generate _version.py file if it doesn't exist for the main package
+# All QA dependencies are pre-installed in the Docker image
+INSTALL_CMD="python3 -c \"import pathlib; p = pathlib.Path('/work/src/nhl_scrabble/_version.py'); p.parent.mkdir(parents=True, exist_ok=True); p.touch() if not p.exists() else None; p.write_text('__version__ = \\\"0.0.0+local\\\"\\n') if p.stat().st_size == 0 else None\""
 
 # Build Docker run command
+# Use :z flag for SELinux systems to allow container write access
+# Run as root to avoid Firefox permission issues in Docker
+# Note: Files in /work will be owned by root, but this is acceptable for CI/test scenarios
 DOCKER_CMD=(
     docker run
     --rm                                    # Remove container after exit
     --interactive                           # Keep STDIN open
     --network host                          # Access host network (for localhost:5000)
-    --user "$(id -u):$(id -g)"             # Run as current user (avoid root-owned files)
-    --volume "${REPO_ROOT}:/work"          # Mount repository
-    --volume "${HOME}/.cache:/home/pwuser/.cache"  # Mount cache directory
+    --volume "${REPO_ROOT}:/work:z"        # Mount repository (with SELinux label)
+    --shm-size=2gb                          # Increase shared memory for Firefox
     --workdir "${WORKDIR}"                 # Set working directory
     --env "HOME=/home/pwuser"              # Set HOME for Playwright
-    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache
+    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache (in image)
     --env "BASE_URL=${WEB_SERVER_URL}"     # Override base URL for tests
     --env "PYTHONUNBUFFERED=1"             # Unbuffered Python output
+    --env "PYTHONPATH=/work/src:/work/qa/web"  # Add project sources to Python path
 )
 
 # Add TTY flag only if running in a terminal
@@ -149,7 +152,8 @@ log "${BLUE}" "Image: ${PLAYWRIGHT_IMAGE}"
 log "${BLUE}" "Working directory: ${WORKDIR}"
 log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
 
-# Run the command with bash to allow installing dependencies first
+# Run the command with bash to allow setup
+# All dependencies are pre-installed in the Docker image
 "${DOCKER_CMD[@]}" \
     "${PLAYWRIGHT_IMAGE}" \
     bash -c "${INSTALL_CMD} && pytest $*"

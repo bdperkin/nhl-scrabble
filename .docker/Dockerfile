@@ -20,8 +20,22 @@ LABEL org.opencontainers.image.source="https://github.com/bdperkin/nhl-scrabble"
 LABEL org.opencontainers.image.description="Playwright testing environment for NHL Scrabble"
 LABEL org.opencontainers.image.licenses="MIT"
 
-# Install Playwright
-RUN pip install --no-cache-dir playwright
+# Install Playwright and QA test dependencies
+# All test dependencies are pre-installed in the image to avoid
+# reinstalling them on every CI run, making workflows faster and simpler.
+RUN pip install --no-cache-dir \
+    playwright \
+    axe-playwright-python>=0.1.7 \
+    httpx>=0.28 \
+    locust>=2.43.4 \
+    pillow>=12.2 \
+    pixelmatch>=0.2.3 \
+    pytest>=9.0.3 \
+    pytest-benchmark>=5.2.3 \
+    pytest-html>=4.2 \
+    pytest-playwright>=0.7.2 \
+    pytest-playwright-snapshot>=1 \
+    pytest-xdist>=3.8
 
 # Install system dependencies for browsers (requires root)
 # This installs all OS packages needed for chromium, firefox, and webkit

@@ -83,22 +83,41 @@ WCAG 2.1 AA compliance:
 
 ## Setup
 
-### Prerequisites
+### Recommended: Docker (Fedora/any OS)
 
-- Python 3.12+
-- Node.js (for Playwright browsers)
-
-### Installation
+The project includes a custom Docker image with Playwright and all dependencies pre-installed:
 
 ```bash
+# Run tests with Docker wrapper (recommended for Fedora)
+./scripts/pytest-playwright qa/web/tests/visual/ --browser=chromium
+
+# All dependencies and browsers are pre-installed in the image
+# No local Playwright installation needed!
+```
+
+**Image**: `ghcr.io/bdperkin/nhl-scrabble-playwright:latest`
+**Includes**: Playwright, all browsers, all QA dependencies (pytest, httpx, locust, etc.)
+**See**: `scripts/README.md` for details
+
+### Alternative: Local Installation
+
+For non-Fedora systems, you can install locally:
+
+```bash
+# Prerequisites
+# - Python 3.12+
+# - Node.js (for Playwright browsers)
+
 # From project root
 make qa-install
 
 # Or manually
 cd qa/web
 pip install -e .
-playwright install
+playwright install --with-deps
 ```
+
+**Note**: Fedora users should use Docker due to WebKit dependency compatibility issues.
 
 ## Running Tests
 
