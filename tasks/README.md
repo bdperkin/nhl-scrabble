@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 198 tasks (39 active, 159 completed)
+**Total Tasks**: 199 tasks (40 active, 159 completed)
 
 ## Overview
 
@@ -52,6 +52,7 @@ Each task includes:
 | 012 | Debug Functional Test Failures in QA Suite | MEDIUM | 1-2 hours (actual: ~1.5h) | Completed | [#438](https://github.com/bdperkin/nhl-scrabble/issues/438) | PR [#450](https://github.com/bdperkin/nhl-scrabble/pull/450), completed 2026-04-29 |
 | 013 | Fix WCAG 2.1 AA Accessibility Violations in Web App | HIGH | 2-3 hours (actual: ~3.5h) | Completed | [#440](https://github.com/bdperkin/nhl-scrabble/issues/440) | PR [#449](https://github.com/bdperkin/nhl-scrabble/pull/449), completed 2026-04-29 |
 | 014 | Fix QA Automation Test Failures (Functional and Accessibility) | HIGH | 4-6 hours | Active | [#454](https://github.com/bdperkin/nhl-scrabble/issues/454) | 2 functional test failures (CSP violations), 4-5 accessibility test failures |
+| 015 | Add Missing Web Application Routes | HIGH | 2-3 hours | Active | [#456](https://github.com/bdperkin/nhl-scrabble/issues/456) | 5 routes missing (/teams, /divisions, /conferences, /playoffs, /stats) causing 404 errors |
 
 ### Security
 
