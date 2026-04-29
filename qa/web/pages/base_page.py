@@ -170,6 +170,21 @@ class BasePage:
         except TimeoutError:
             return False
 
+    def is_hidden(self, selector: str, timeout: int = 1000) -> bool:
+        """Check if element is hidden.
+
+        Args:
+            selector: CSS selector or text selector
+            timeout: Maximum wait time in milliseconds (default: 1s)
+
+        Returns:
+            True if element is hidden, False otherwise
+        """
+        try:
+            return self.page.locator(selector).is_hidden(timeout=timeout)
+        except TimeoutError:
+            return True  # If timeout, consider it hidden
+
     def count_elements(self, selector: str) -> int:
         """Count number of elements matching selector.
 

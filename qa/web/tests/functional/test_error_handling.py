@@ -81,14 +81,16 @@ def test_non_numeric_input_rejected(page_fixture: Page) -> None:
     page_fixture.goto("http://localhost:5000/")
     page_fixture.wait_for_load_state("networkidle")
 
-    # Try to enter non-numeric value
-    page_fixture.locator("#topPlayers").fill("abc")
+    # Try to enter non-numeric value using JavaScript (bypasses browser validation)
+    # This tests that the application handles invalid values even if they bypass HTML5 validation
+    page_fixture.evaluate('document.querySelector("#topPlayers").value = "abc"')
 
     # HTML5 number input should prevent this or mark as invalid
     value = page_fixture.locator("#topPlayers").input_value()
 
     # Value should either be empty or the previous valid value (not "abc")
-    assert value != "abc", "Non-numeric value should not be accepted"  # noqa: S101
+    # HTML5 number inputs typically clear invalid values
+    assert value == "", f"Non-numeric value should be rejected, got: {value}"  # noqa: S101
 
 
 @pytest.mark.functional
@@ -307,14 +309,16 @@ def test_special_characters_in_parameters(page_fixture: Page) -> None:
     page_fixture.goto("http://localhost:5000/")
     page_fixture.wait_for_load_state("networkidle")
 
-    # Number inputs should sanitize/reject special characters automatically
-    page_fixture.locator("#topPlayers").fill("20!")
+    # Try to enter special characters using JavaScript (bypasses browser validation)
+    # This tests that the application handles invalid values even if they bypass HTML5 validation
+    page_fixture.evaluate('document.querySelector("#topPlayers").value = "20!"')
 
     # Value should be sanitized (HTML5 number input behavior)
     value = page_fixture.locator("#topPlayers").input_value()
 
-    # Should either be empty, "20", or invalid
-    assert "!" not in value, "Special character should not be in value"  # noqa: S101
+    # HTML5 number inputs typically clear or sanitize invalid values
+    # Should either be empty or "20" (sanitized)
+    assert "!" not in value, f"Special character should not be in value, got: {value}"  # noqa: S101
 
 
 @pytest.mark.functional

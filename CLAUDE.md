@@ -243,6 +243,19 @@ NHL_SCRABBLE_VERBOSE=true
 - Uses pytest-benchmark with 5+ rounds and warmup
 - Results uploaded as artifacts for historical tracking
 
+**QA Automation Workflow:**
+
+- Comprehensive web application testing across multiple browsers
+- Cross-browser matrix: chromium, firefox, webkit
+- Test suites: functional, visual regression, performance, accessibility
+- Triggers: PRs/pushes to main (filtered paths), nightly at 2 AM UTC, manual dispatch
+- Manual dispatch options: test suite selection, browser filtering
+- Automated server startup/shutdown with health checks
+- Artifact management: test reports (XML/HTML/JSON), screenshots on failure, visual diffs, performance metrics
+- PR comments with test summary and failure details
+- 45-minute timeout per browser, fail-fast disabled for complete coverage
+- 30-day artifact retention for debugging
+
 ### Publishing
 
 Triggered by version tags (`v*`):

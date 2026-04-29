@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **QA CI/CD Integration** (#315)
+
+  - Implemented comprehensive QA automation workflow for GitHub Actions
+  - Cross-browser testing matrix: chromium, firefox, webkit
+  - Automated test suites: functional, visual, performance, accessibility
+  - Nightly scheduled runs at 2 AM UTC
+  - Manual workflow dispatch with test suite and browser selection
+  - Artifact management: test reports (XML/HTML/JSON), screenshots, visual diffs, performance metrics
+  - PR commenting with test summary and failure details
+  - GitHub Actions job summary for quick test result overview
+  - 45-minute timeout per browser to prevent hanging tests
+  - Fail-fast disabled to ensure all browsers are tested
+  - Conditional test suite execution based on workflow inputs
+  - Automated server startup/shutdown with health checks
+  - Workflow file: `.github/workflows/qa-automation.yml`
+
 ## [0.0.5] - 2026-04-27
 
 ### Added
