@@ -387,11 +387,12 @@ input[type="checkbox"] {
 
 .site-footer a {
     color: var(--color-accent);
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .site-footer a:hover {
     text-decoration: underline;
+    opacity: 0.9;
 }
 
 /* ===== Responsive Design ===== */
