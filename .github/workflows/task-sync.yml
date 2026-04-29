@@ -1,0 +1,265 @@
+name: Weekly Task Sync
+
+on:
+  schedule:
+    # Weekly task sync (Mondays at 9 AM ET / 1 PM UTC)
+    - cron: "0 13 * * 1"
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      create_pr:
+        description: "Create PR if discrepancies found"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write # For creating commits and branches
+  pull-requests: write # For creating PRs
+  issues: read # For fetching issue data
+
+jobs:
+  sync-tasks:
+    name: Synchronize Task Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Full history for git operations
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run validation script
+        id: validate
+        continue-on-error: true
+        run: |
+          python scripts/validate_task_docs.py > validation-output.txt 2>&1
+          exit_code=$?
+          echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
+          cat validation-output.txt
+          exit $exit_code
+
+      - name: Check if sync needed
+        id: check_sync
+        run: |
+          if [ "${{ steps.validate.outputs.exit_code }}" != "0" ]; then
+            echo "sync_needed=true" >> $GITHUB_OUTPUT
+            echo "📊 Validation failed - sync needed"
+          else
+            echo "sync_needed=false" >> $GITHUB_OUTPUT
+            echo "✅ Validation passed - no sync needed"
+          fi
+
+      - name: Count task files
+        id: count_tasks
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          # Count active tasks per category
+          find_pattern='tasks/%s -maxdepth 1 -type f -name "[0-9]*.md" 2>/dev/null'
+
+          bug_fixes=$(find tasks/bug-fixes -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+          security=$(find tasks/security -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+          optimization=$(find tasks/optimization -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+          enhancement=$(find tasks/enhancement -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+          testing=$(find tasks/testing -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+          new_features=$(find tasks/new-features -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+          refactoring=$(find tasks/refactoring -maxdepth 1 -type f \
+            -name "[0-9]*.md" 2>/dev/null | wc -l)
+
+          active_total=$((bug_fixes + security + optimization + \
+            enhancement + testing + new_features + refactoring))
+          completed=$(find tasks/completed -type f -name "[0-9]*.md" \
+            2>/dev/null | wc -l)
+          grand_total=$((active_total + completed))
+
+          echo "active_total=$active_total" >> $GITHUB_OUTPUT
+          echo "completed=$completed" >> $GITHUB_OUTPUT
+          echo "grand_total=$grand_total" >> $GITHUB_OUTPUT
+
+          echo "📊 Filesystem counts:"
+          echo "  Active: $active_total"
+          echo "  Completed: $completed"
+          echo "  Total: $grand_total"
+
+      - name: Create sync branch
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          branch_name="chore/weekly-task-sync-$(date +%Y%m%d)"
+          git checkout -b "$branch_name"
+          echo "SYNC_BRANCH=$branch_name" >> $GITHUB_ENV
+
+      - name: Update README.md counts
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          active=${{ steps.count_tasks.outputs.active_total }}
+          completed=${{ steps.count_tasks.outputs.completed }}
+          total=${{ steps.count_tasks.outputs.grand_total }}
+
+          # Update total count in README.md
+          pattern='\*\*Total Tasks\*\*: [0-9]* tasks ([0-9]* active, [0-9]* completed)'
+          replacement="**Total Tasks**: $total tasks ($active active, $completed completed)"
+          sed -i "s/$pattern/$replacement/" tasks/README.md
+
+          echo "✅ Updated README.md: $total tasks ($active active, $completed completed)"
+
+      - name: Update IMPLEMENTATION_SEQUENCE.md counts
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          active=${{ steps.count_tasks.outputs.active_total }}
+          today=$(date +%Y-%m-%d)
+
+          # Update active count
+          pattern1='\*\*Total Tasks\*\*: [0-9]* active tasks'
+          replacement1="**Total Tasks**: $active active tasks"
+          sed -i "s/$pattern1/$replacement1/" tasks/IMPLEMENTATION_SEQUENCE.md
+
+          # Update generation date
+          pattern2='\*\*Generated\*\*: [0-9-]*'
+          replacement2="**Generated**: $today (Weekly automated sync)"
+          sed -i "s/$pattern2/$replacement2/" tasks/IMPLEMENTATION_SEQUENCE.md
+
+          echo "✅ Updated IMPLEMENTATION_SEQUENCE.md with $active active tasks"
+
+      - name: Update TASK_ANALYSIS.md counts
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          active=${{ steps.count_tasks.outputs.active_total }}
+
+          # Update total count in TASK_ANALYSIS.md
+          sed -i "s/\*\*Total Tasks\*\*: [0-9]*/**Total Tasks**: $active/" tasks/TASK_ANALYSIS.md
+
+          # Update generation date
+          today=$(date +%Y-%m-%d)
+          sed -i "s/\*\*Generated\*\*: [0-9-]*/**Generated**: $today/" tasks/TASK_ANALYSIS.md
+
+          echo "✅ Updated TASK_ANALYSIS.md with $active tasks"
+
+      - name: Run validation again
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          echo "📋 Running validation after updates..."
+          python scripts/validate_task_docs.py
+
+      - name: Commit changes
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add tasks/README.md tasks/IMPLEMENTATION_SEQUENCE.md tasks/TASK_ANALYSIS.md
+
+          cat > /tmp/commit-msg << 'COMMIT_EOF'
+          chore(tasks): Weekly automated task sync
+
+          Synchronized task documentation with filesystem state:
+          - Active tasks: ${{ steps.count_tasks.outputs.active_total }}
+          - Completed tasks: ${{ steps.count_tasks.outputs.completed }}
+          - Total tasks: ${{ steps.count_tasks.outputs.grand_total }}
+
+          Updated files:
+          - tasks/README.md (totals)
+          - tasks/IMPLEMENTATION_SEQUENCE.md (totals and date)
+          - tasks/TASK_ANALYSIS.md (totals and date)
+
+          Triggered by: Weekly automated sync (schedule)
+          Validation: All checks passed after sync
+          COMMIT_EOF
+
+          git commit -F /tmp/commit-msg
+
+      - name: Push branch
+        if: steps.check_sync.outputs.sync_needed == 'true'
+        run: |
+          git push origin "$SYNC_BRANCH"
+
+      - name: Create Pull Request
+        if: >-
+          steps.check_sync.outputs.sync_needed == 'true' &&
+          (github.event.inputs.create_pr != 'false' ||
+           github.event_name == 'schedule')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat > /tmp/pr-body.md << 'PR_EOF'
+          ## Weekly Task Sync
+
+          This PR synchronizes task documentation with the current filesystem state.
+
+          ### Summary
+
+          - **Active Tasks**: ${{ steps.count_tasks.outputs.active_total }}
+          - **Completed Tasks**: ${{ steps.count_tasks.outputs.completed }}
+          - **Total Tasks**: ${{ steps.count_tasks.outputs.grand_total }}
+
+          ### Changes
+
+          - Updated `tasks/README.md` with current task counts
+          - Updated `tasks/IMPLEMENTATION_SEQUENCE.md` with active count and timestamp
+          - Updated `tasks/TASK_ANALYSIS.md` with active count and timestamp
+
+          ### Validation
+
+          All validation checks passed after synchronization
+
+          ### Next Steps
+
+          1. Review the changes to ensure accuracy
+          2. Merge this PR to update task documentation
+          3. Monitor for any additional discrepancies
+
+          **Triggered by**: Weekly automated sync (Monday 9 AM ET)
+          **Branch**: `$SYNC_BRANCH`
+          PR_EOF
+
+          gh pr create \
+            --title "chore: Weekly automated task documentation sync" \
+            --body-file /tmp/pr-body.md \
+            --label "documentation,automated" \
+            --base main \
+            --head "$SYNC_BRANCH"
+
+      - name: Upload validation output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-output
+          path: validation-output.txt
+          retention-days: 30
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Task Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.check_sync.outputs.sync_needed }}" == "true" ]; then
+            echo "### ⚠️ Sync Required" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Task documentation was out of sync with filesystem state." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Updated Counts:**" >> $GITHUB_STEP_SUMMARY
+            echo "- Active: ${{ steps.count_tasks.outputs.active_total }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Completed: ${{ steps.count_tasks.outputs.completed }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Total: ${{ steps.count_tasks.outputs.grand_total }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Actions Taken:**" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Created branch: \`$SYNC_BRANCH\`" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Updated documentation files" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Created pull request" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ✅ No Sync Needed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Task documentation is in sync with filesystem." \
+              >> $GITHUB_STEP_SUMMARY
+          fi

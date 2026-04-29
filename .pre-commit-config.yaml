@@ -682,6 +682,28 @@ repos:
         stages: [pre-commit]
 
   # ============================================================================
+  # Task Documentation Validation - Consistency Checks
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: validate-task-docs
+        name: Validate task documentation consistency
+        # Ensures task counts match across README.md, IMPLEMENTATION_SEQUENCE.md, and filesystem
+        description: |
+          Validate task documentation consistency:
+          - Filesystem task counts match tasks/README.md
+          - tasks/IMPLEMENTATION_SEQUENCE.md matches filesystem
+          - No orphaned or duplicate task files
+          - Prevents documentation drift
+        entry: python scripts/validate_task_docs.py
+        language: python
+        pass_filenames: false
+        # Only run if task files or documentation changed
+        files: ^tasks/(README\.md|IMPLEMENTATION_SEQUENCE\.md|TASK_ANALYSIS\.md|[^/]+/[0-9]+.*\.md|completed/.*/[0-9]+.*\.md)$
+        stages: [pre-commit]
+
+  # ============================================================================
   # Shell Script Quality - Formatting & Linting
   # ============================================================================
 

@@ -128,6 +128,7 @@ jobs:
           - pyroma
           - pyproject-fmt
           - validate-pyproject
+          - validate-task-docs
           - tox-ini-fmt
           - yamllint
           - deptry

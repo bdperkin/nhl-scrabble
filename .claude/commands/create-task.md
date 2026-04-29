@@ -51,9 +51,11 @@ This command automates the complete task creation workflow:
 
 1. **Determine Task ID**
 
-   - Read existing tasks in the category directory
-   - Find highest numbered task file (e.g., 001, 002, 003)
-   - Assign next sequential number
+   - Read existing tasks in the category directory (`tasks/{category}/`)
+   - Read completed tasks in the same category (`tasks/completed/{category}/`)
+   - Find highest numbered task file across BOTH directories (e.g., 001, 002, 003)
+   - Assign next sequential number to avoid ID conflicts
+   - **CRITICAL**: Never reuse IDs from completed tasks - always increment from the highest ID found in either active or completed directories
 
 1. **Create Task File**
 
@@ -262,8 +264,8 @@ just logs a warning."
 3. Prioritize: HIGH (incorrect error handling)
 4. Estimate: 1-2h (simple fix, add tests)
 5. Create plan with code examples
-6. Assign ID: 007 (next in bug-fixes/)
-7. Create: tasks/bug-fixes/007-api-404-handling.md
+6. Assign ID: Check tasks/bug-fixes/ (highest: 002) AND tasks/completed/bug-fixes/ (highest: 013) → Use 014
+7. Create: tasks/bug-fixes/014-api-404-handling.md
 8. Update: tasks/README.md
 9. Create: GitHub issue with "bug" label
 10. Link: Issue number in task file and README
@@ -283,8 +285,8 @@ include OpenAPI docs, and handle authentication."
 3. Prioritize: LOW (nice to have, not core)
 4. Estimate: 16-24h (complex, many components)
 5. Create detailed plan with FastAPI examples
-6. Assign ID: 002 (next in new-features/)
-7. Create: tasks/new-features/002-rest-api-server.md
+6. Assign ID: Check tasks/new-features/ (highest: 043) AND tasks/completed/new-features/ (highest: 073) → Use 074
+7. Create: tasks/new-features/074-rest-api-server.md
 8. Update: tasks/README.md
 9. Create: GitHub issue with "enhancement" label
 10. Link: Issue number in task file and README
@@ -324,9 +326,9 @@ Example output:
 Category: bug-fixes
 Priority: HIGH
 Effort: 1-2h
-ID: 007
+ID: 014 (checked active + completed directories)
 
-Task File: tasks/bug-fixes/007-api-404-handling.md
+Task File: tasks/bug-fixes/014-api-404-handling.md
 GitHub Issue: #52 - https://github.com/user/repo/issues/52
 
 Task Summary:
@@ -349,7 +351,8 @@ The command will validate:
 - ✅ tasks/ directory structure exists
 - ✅ tasks/README.md exists and is readable
 - ✅ GitHub CLI (`gh`) is available for issue creation
-- ✅ Task files use sequential numbering
+- ✅ Task files use sequential numbering (checking both active and completed directories)
+- ✅ No ID conflicts with completed tasks
 
 If errors occur:
 
@@ -357,6 +360,7 @@ If errors occur:
 - 🔴 Cannot determine category → Ask user to clarify
 - 🔴 Directory doesn't exist → Create it
 - 🔴 GitHub CLI fails → Still create task file, note manual issue creation needed
+- 🔴 ID conflict detected → Increment to next available ID across both active and completed directories
 
 ## Best Practices
 
@@ -419,7 +423,9 @@ If errors occur:
 ## Notes
 
 - Task numbering is per-category (bug-fixes/001, security/001, etc.)
+- **CRITICAL**: IDs are assigned based on the highest ID found in BOTH active (`tasks/{category}/`) AND completed (`tasks/completed/{category}/`) directories to avoid conflicts
 - Tasks are never deleted, only marked complete
-- Completed tasks can be moved to tasks/completed/
+- Completed tasks are moved to tasks/completed/ but retain their original IDs
+- Never reuse IDs from completed tasks - always increment from the highest ID found
 - Update tasks/README.md when completing tasks
 - Link PRs in task files when implemented
