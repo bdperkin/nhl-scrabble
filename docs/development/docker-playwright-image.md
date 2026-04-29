@@ -481,7 +481,7 @@ ______________________________________________________________________
 
 ## Resources
 
-- **Dockerfile**: `Dockerfile.playwright`
+- **Dockerfile**: `.docker/Dockerfile`
 - **Build Workflow**: `.github/workflows/docker-playwright.yml`
 - **Build Script**: `scripts/build-playwright-image`
 - **Wrapper Scripts**: `scripts/playwright`, `scripts/pytest-playwright`

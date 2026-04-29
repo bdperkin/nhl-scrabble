@@ -141,11 +141,11 @@ ______________________________________________________________________
 
 ## Key Files
 
-- **Dockerfile**: `Dockerfile.playwright`
+- **Dockerfile**: `.docker/Dockerfile`
 - **Build Workflow**: `.github/workflows/docker-playwright.yml`
 - **Build Script**: `scripts/build-playwright-image`
 - **Wrapper Scripts**: `scripts/playwright`, `scripts/pytest-playwright`
-- **Documentation**: `scripts/README.md`, `DOCKER-IMAGE-APPROACH.md`
+- **Documentation**: `scripts/README.md`, `docs/development/docker-playwright-image.md`
 
 ______________________________________________________________________
 
@@ -245,7 +245,7 @@ ______________________________________________________________________
 ## See Also
 
 - **Full documentation**: `scripts/README.md`
-- **Technical details**: `DOCKER-IMAGE-APPROACH.md`
-- **Implementation summary**: `CUSTOM-DOCKER-IMAGE-SUMMARY.md`
+- **Technical details**: `docs/development/docker-playwright-image.md`
+- **Implementation summary**: `docs/development/docker-implementation-summary.md`
 - **Playwright docs**: https://playwright.dev/docs/docker
 - **GHCR docs**: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry

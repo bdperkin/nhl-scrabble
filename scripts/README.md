@@ -12,11 +12,11 @@ The project maintains a custom Playwright Docker image at `ghcr.io/bdperkin/nhl-
 - **Pre-installed**: Playwright with all browsers (chromium, firefox, webkit) and system dependencies
 - **User**: Runs as `pwuser` (non-root) for security
 - **Updates**: Rebuilt weekly via GitHub Actions to get latest Playwright versions
-- **Source**: `Dockerfile.playwright` in repository root
+- **Source**: `.docker/Dockerfile` in repository
 
 The image is automatically built and pushed to GHCR on:
 
-- Pushes to main branch affecting `Dockerfile.playwright`
+- Pushes to main branch affecting `.docker/Dockerfile`
 - Weekly schedule (Mondays at 6 AM UTC) for Playwright updates
 - Manual workflow dispatch for custom builds
 

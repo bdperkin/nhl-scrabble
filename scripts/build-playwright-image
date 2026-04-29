@@ -113,10 +113,10 @@ GHCR_IMAGE_TAG="${REGISTRY}/${REPO_OWNER}/${IMAGE_NAME}:${IMAGE_TAG}"
 # Build image
 log "${BLUE}" "Building Docker image..."
 log "${BLUE}" "Image: ${LOCAL_IMAGE}"
-log "${BLUE}" "Dockerfile: ${REPO_ROOT}/Dockerfile.playwright"
+log "${BLUE}" "Dockerfile: ${REPO_ROOT}/.docker/Dockerfile"
 
 if ! docker build \
-    -f "${REPO_ROOT}/Dockerfile.playwright" \
+    -f "${REPO_ROOT}/.docker/Dockerfile" \
     -t "${LOCAL_IMAGE}" \
     -t "${GHCR_IMAGE_LATEST}" \
     -t "${GHCR_IMAGE_DATE}" \

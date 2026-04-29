@@ -10,7 +10,7 @@ ______________________________________________________________________
 
 ### New Files Created
 
-1. **`Dockerfile.playwright`**
+1. **`.docker/Dockerfile`**
 
    - Custom Dockerfile for Playwright testing environment
    - Base: `python:3.12-bookworm`
@@ -44,7 +44,7 @@ ______________________________________________________________________
    - Excludes: git, cache, tests, docs, IDE files
    - Reduces build context size and time
 
-1. **`DOCKER-IMAGE-APPROACH.md`**
+1. **`docs/development/docker-playwright-image.md`**
 
    - Comprehensive documentation (600+ lines)
    - Sections:
@@ -56,7 +56,7 @@ ______________________________________________________________________
      - Comparison tables
      - Migration path and rollback
 
-1. **`CUSTOM-DOCKER-IMAGE-SUMMARY.md`** (this file)
+1. **`docs/development/docker-implementation-summary.md`** (this file)
 
    - Quick reference for all changes
    - File-by-file breakdown
@@ -199,7 +199,7 @@ ______________________________________________________________________
 ### Automatic Updates
 
 - **Weekly**: Every Monday at 6 AM UTC
-- **On Changes**: When `Dockerfile.playwright` modified
+- **On Changes**: When `.docker/Dockerfile` modified
 - **Manual**: Workflow dispatch for emergency updates
 
 ### Manual Push (Emergency)
@@ -297,12 +297,12 @@ ______________________________________________________________________
 
 **New files**:
 
-- `Dockerfile.playwright`: ~40 lines
+- `.docker/Dockerfile`: ~40 lines
 - `.github/workflows/docker-playwright.yml`: ~70 lines
 - `scripts/build-playwright-image`: ~230 lines
 - `.dockerignore`: ~40 lines
-- `DOCKER-IMAGE-APPROACH.md`: ~600 lines
-- `CUSTOM-DOCKER-IMAGE-SUMMARY.md`: ~350 lines
+- `docs/development/docker-playwright-image.md`: ~600 lines
+- `docs/development/docker-implementation-summary.md`: ~350 lines
 
 **Total new**: ~1,330 lines
 
@@ -320,7 +320,7 @@ ______________________________________________________________________
 
 ### Before Merge
 
-1. ✅ Create Dockerfile.playwright
+1. ✅ Create .docker/Dockerfile
 1. ✅ Create GitHub Actions workflow
 1. ✅ Create build script
 1. ✅ Update wrapper scripts
@@ -355,9 +355,9 @@ ______________________________________________________________________
 
 ## Documentation
 
-- ✅ **Technical documentation**: DOCKER-IMAGE-APPROACH.md (comprehensive)
+- ✅ **Technical documentation**: docs/development/docker-playwright-image.md (comprehensive)
 - ✅ **User documentation**: scripts/README.md (updated)
-- ✅ **Summary**: CUSTOM-DOCKER-IMAGE-SUMMARY.md (this file)
+- ✅ **Summary**: docs/development/docker-implementation-summary.md (this file)
 - ⏳ **Main README**: Update with GHCR image reference (after merge)
 - ⏳ **Contributing guide**: Add Docker image build notes (after merge)
 
