@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 193 tasks (41 active, 152 completed)
+**Total Tasks**: 197 tasks (45 active, 152 completed)
 
 ## Overview
 
@@ -49,6 +49,8 @@ Each task includes:
 | 009 | Verify and Validate Caching is Enabled by Default | MEDIUM | 2-3 hours (actual: ~2.5 hours) | Completed | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | PR [#368](https://github.com/bdperkin/nhl-scrabble/pull/368), completed 2026-04-24 |
 | 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH | 30 minutes - 1 hour (actual: ~1 hour 15 minutes) | Completed | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | PR [#385](https://github.com/bdperkin/nhl-scrabble/pull/385), completed 2026-04-25 |
 | 011 | Use Platform-Specific Cache Directory with Permission Checking | MEDIUM | 3-4 hours (actual: ~3.5 hours) | Completed | [#369](https://github.com/bdperkin/nhl-scrabble/issues/369) | PR [#373](https://github.com/bdperkin/nhl-scrabble/pull/373), completed 2026-04-25 |
+| 012 | Debug Functional Test Failures in QA Suite | MEDIUM | 1-2 hours | Active | [#438](https://github.com/bdperkin/nhl-scrabble/issues/438) | - |
+| 013 | Fix WCAG 2.1 AA Accessibility Violations in Web App | HIGH | 2-3 hours | Active | [#440](https://github.com/bdperkin/nhl-scrabble/issues/440) | - |
 
 ### Security
 
@@ -178,6 +180,8 @@ Each task includes:
 | 011 | Coverage Audit and Finalization | MEDIUM | 2-3 hours | Completed | [#260](https://github.com/bdperkin/nhl-scrabble/issues/260) | completed 2026-04-21 |
 | 013 | QA Infrastructure Setup | MEDIUM | 4-6 hours | Completed | [#312](https://github.com/bdperkin/nhl-scrabble/issues/312) | - |
 | 020 | Implement Flaky Test Retry Mechanisms | MEDIUM | 6-10 hours (actual: ~4 hours) | Completed | [#322](https://github.com/bdperkin/nhl-scrabble/issues/322) | PR [#323](https://github.com/bdperkin/nhl-scrabble/pull/323), completed 2026-04-22 |
+| 022 | Generate Visual Regression Test Baselines | MEDIUM | 30 minutes | Active | [#437](https://github.com/bdperkin/nhl-scrabble/issues/437) | - |
+| 023 | Make QA Workflow Blocking After All Tests Pass | LOW | 15 minutes | Active | [#439](https://github.com/bdperkin/nhl-scrabble/issues/439) | - |
 
 ### New Features
 
