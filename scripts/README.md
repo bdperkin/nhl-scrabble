@@ -9,9 +9,11 @@ These wrapper scripts execute Playwright commands inside a custom Docker contain
 The project maintains a custom Playwright Docker image at `ghcr.io/bdperkin/nhl-scrabble-playwright:latest`. This image:
 
 - **Base**: Python 3.12 on Debian Bookworm
-- **Pre-installed**: Playwright with all browsers (chromium, firefox, webkit) and system dependencies
+- **Pre-installed Browsers**: Chromium, Firefox, WebKit with all system dependencies
+- **Pre-installed QA Dependencies**: pytest, pytest-playwright, httpx, locust, pillow, pixelmatch, pytest-benchmark, pytest-html, pytest-xdist, axe-playwright-python
 - **User**: Runs as `pwuser` (non-root) for security
-- **Updates**: Rebuilt weekly via GitHub Actions to get latest Playwright versions
+- **Size**: ~3.2 GB (all dependencies included)
+- **Updates**: Rebuilt weekly via GitHub Actions to get latest Playwright and dependency versions
 - **Source**: `.docker/Dockerfile` in repository
 
 The image is automatically built and pushed to GHCR on:
@@ -95,8 +97,7 @@ Runs any Playwright CLI command in a Docker container.
 
 **Environment Variables:**
 
-- `PLAYWRIGHT_VERSION` - Playwright version (default: `latest`). Examples: `latest`, `1.49.0`
-- `PLAYWRIGHT_IMAGE` - Docker image to use (default: `mcr.microsoft.com/playwright/python:latest`)
+- `PLAYWRIGHT_IMAGE` - Docker image to use (default: `ghcr.io/bdperkin/nhl-scrabble-playwright:latest`)
 - `PLAYWRIGHT_NO_PULL` - Skip pulling image if set to `true`
 
 ### 3. `pytest-playwright` - Pytest Wrapper for Playwright Tests
@@ -138,10 +139,9 @@ Runs pytest with Playwright tests in a Docker container.
 
 **Environment Variables:**
 
-- `PLAYWRIGHT_VERSION` - Playwright version (default: `latest`). Examples: `latest`, `1.49.0`
-- `PLAYWRIGHT_IMAGE` - Docker image to use (default: `mcr.microsoft.com/playwright/python:latest`)
+- `PLAYWRIGHT_IMAGE` - Docker image to use (default: `ghcr.io/bdperkin/nhl-scrabble-playwright:latest`)
 - `PLAYWRIGHT_NO_PULL` - Skip pulling image if set to `true`
-- `WEB_SERVER_URL` - Override web server URL (default: `http://host.docker.internal:5000`)
+- `WEB_SERVER_URL` - Override web server URL (default: `http://localhost:5000`)
 
 ## How It Works
 
@@ -153,23 +153,24 @@ Runs pytest with Playwright tests in a Docker container.
 │  ┌─────────────────────────────────────────────────┐   │
 │  │  Wrapper Script (scripts/playwright)            │   │
 │  │  - Validates Docker is available                │   │
-│  │  - Pulls Playwright Docker image if needed      │   │
-│  │  - Mounts repository and cache directories      │   │
+│  │  - Pulls GHCR Playwright image if needed        │   │
+│  │  - Mounts repository (SELinux :z label)         │   │
 │  │  - Forwards arguments to container              │   │
 │  └──────────────────┬──────────────────────────────┘   │
 │                     │                                   │
 │  ┌──────────────────▼──────────────────────────────┐   │
-│  │  Docker Container (Ubuntu-based)                │   │
+│  │  Docker Container (Debian Bookworm)             │   │
 │  │  ┌────────────────────────────────────────────┐ │   │
-│  │  │  Playwright + Browsers                     │ │   │
+│  │  │  GHCR Image (pre-installed)                │ │   │
 │  │  │  - Chromium, Firefox, WebKit               │ │   │
-│  │  │  - System dependencies pre-installed       │ │   │
-│  │  │  - Runs as current user (not root)         │ │   │
+│  │  │  - System dependencies                     │ │   │
+│  │  │  - All QA dependencies (pytest, etc.)      │ │   │
+│  │  │  - Runs as root for Firefox compatibility  │ │   │
 │  │  └────────────────────────────────────────────┘ │   │
 │  │                                                  │   │
 │  │  Volumes:                                        │   │
-│  │  - /work ← Repository                           │   │
-│  │  - /home/pwuser/.cache ← Host cache             │   │
+│  │  - /work ← Repository (read-write)              │   │
+│  │  - Browser cache in image (/home/pwuser/.cache) │   │
 │  │                                                  │   │
 │  │  Network: host (access localhost:5000)          │   │
 │  └──────────────────────────────────────────────────┘   │

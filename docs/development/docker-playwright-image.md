@@ -69,11 +69,12 @@ Using the official Microsoft Playwright Python images (`mcr.microsoft.com/playwr
    - Always gets latest Playwright versions
    - No manual intervention required
 
-1. **Faster Builds**:
+1. **Faster CI Runs**:
 
+   - All QA dependencies pre-installed (no runtime pip install)
    - Optimized for project needs
    - Better layer caching
-   - Reduced image size
+   - Saves 30-40 seconds per test job
 
 ______________________________________________________________________
 
@@ -85,16 +86,31 @@ ______________________________________________________________________
 **Distribution**: Debian 12 (Bookworm)
 **Playwright**: Latest version (installed via pip)
 **Browsers**: Chromium, Firefox, WebKit (with system dependencies)
+**QA Dependencies**: Pre-installed (pytest, pytest-playwright, httpx, locust, etc.)
 **User**: `pwuser` (non-root, UID/GID overridden at runtime)
-**Size**: ~2.5 GB (image + browsers)
+**Size**: ~3.2 GB (image + browsers + dependencies)
 
 ### Dockerfile Structure
 
 ```dockerfile
 FROM python:3.12-bookworm
 
-# Install Playwright
-RUN pip install --no-cache-dir playwright
+# Install Playwright and QA test dependencies
+# All test dependencies are pre-installed in the image to avoid
+# reinstalling them on every CI run, making workflows faster and simpler.
+RUN pip install --no-cache-dir \
+    playwright \
+    axe-playwright-python>=0.1.7 \
+    httpx>=0.28 \
+    locust>=2.43.4 \
+    pillow>=12.2 \
+    pixelmatch>=0.2.3 \
+    pytest>=9.0.3 \
+    pytest-benchmark>=5.2.3 \
+    pytest-html>=4.2 \
+    pytest-playwright>=0.7.2 \
+    pytest-playwright-snapshot>=1 \
+    pytest-xdist>=3.8
 
 # Install system dependencies for browsers (requires root)
 RUN playwright install-deps chromium firefox webkit
@@ -212,7 +228,7 @@ ______________________________________________________________________
 
 ## Wrapper Script Changes
 
-### Before (Microsoft Image)
+### Before (Microsoft Image with Runtime Pip Install)
 
 ```bash
 # Complex version detection
@@ -226,22 +242,35 @@ else
     PLAYWRIGHT_PIP_SPEC="playwright==${PLAYWRIGHT_VERSION}"
 fi
 
-# Install Playwright in container on first use
-INSTALL_PLAYWRIGHT="pip list | grep -q '^playwright ' || pip install ${PLAYWRIGHT_PIP_SPEC}"
-docker run ... bash -c "${INSTALL_PLAYWRIGHT} && playwright $*"
+# Install Playwright and all QA dependencies in virtualenv
+INSTALL_CMD="python3 -m venv --system-site-packages /tmp/qa-venv && \
+  /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
+    'axe-playwright-python>=0.1.7' 'httpx>=0.28' 'locust>=2.43.4' \
+    'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
+    'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
+    'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+  source /tmp/qa-venv/bin/activate"
+
+docker run ... bash -c "${INSTALL_CMD} && pytest $*"
 ```
 
-### After (Custom GHCR Image)
+### After (Custom GHCR Image with Pre-installed Dependencies)
 
 ```bash
 # Simple configuration
 PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-ghcr.io/bdperkin/nhl-scrabble-playwright:latest}"
 
-# Playwright already installed - just run command
-docker run ... playwright "$@"
+# All dependencies pre-installed - just run pytest directly
+docker run ... bash -c "pytest $*"
 ```
 
-**Simplification**: 60% less code, no version detection logic, no runtime pip installs
+**Simplification**:
+
+- 70% less code in wrapper scripts
+- No version detection logic
+- No runtime pip installs (30-40s saved per run)
+- All QA dependencies baked into image
+- Simpler CI workflows
 
 ______________________________________________________________________
 
@@ -289,11 +318,13 @@ ______________________________________________________________________
 | **Base OS**            | Ubuntu 24.04 (Noble)                         | Debian 12 (Bookworm)                       |
 | **Language Support**   | Python + Node.js                             | Python only                                |
 | **Playwright Install** | Pre-installed (specific version)             | Pre-installed (latest via pip)             |
+| **QA Dependencies**    | Runtime install (30-40s overhead)            | Pre-installed (0s overhead)                |
 | **User**               | `pwuser` (UID 1000)                          | `pwuser` (UID overridden at runtime)       |
-| **Size**               | ~3 GB                                        | ~2.5 GB                                    |
+| **Size**               | ~3 GB                                        | ~3.2 GB (with all QA deps)                 |
 | **Updates**            | Manual (Microsoft schedule)                  | Weekly auto-rebuild                        |
 | **Version Tags**       | Multiple formats (`latest`, `v1.49.0-noble`) | Simple (`latest`, `YYYY-MM-DD`)            |
 | **Wrapper Complexity** | High (version detection, pip install)        | Low (direct command execution)             |
+| **CI Speed**           | Slower (runtime dependency installation)     | Faster (all deps pre-installed)            |
 | **Cache Path**         | `/root/.cache` (permission issues)           | `/home/pwuser/.cache` (consistent)         |
 | **Control**            | External (Microsoft)                         | Internal (project-managed)                 |
 | **Integration**        | Generic                                      | Project-optimized                          |
@@ -334,14 +365,36 @@ The image build workflow (`.github/workflows/docker-playwright.yml`) handles:
 
 ### QA Automation Workflow
 
-No changes needed - wrapper scripts transparently use GHCR image:
+Both local wrapper scripts and CI workflows use the GHCR image with pre-installed dependencies:
+
+**Local Development** (via wrapper script):
+
+```bash
+./scripts/pytest-playwright qa/web/tests/visual/ --browser=chromium
+```
+
+**CI Workflow** (direct Docker execution):
 
 ```yaml
 - name: Run visual regression tests
   run: |
-    ./scripts/pytest-playwright qa/web/tests/visual/ \
-      --browser=${{ matrix.browser }}
+    docker run --rm \
+      --network host \
+      --volume "${{ github.workspace }}:/work:rw" \
+      --shm-size=2gb \
+      --workdir /work/qa/web \
+      --env "BASE_URL=http://localhost:5000" \
+      --env "PYTHONPATH=/work/src:/work/qa/web" \
+      ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+      bash -c "pytest tests/visual/ --browser=${{ matrix.browser }}"
 ```
+
+**Key Benefits:**
+
+- No runtime dependency installation (all pre-installed in image)
+- Consistent environment between local and CI
+- Faster CI execution (~30-40s saved per job)
+- Simpler workflow configuration
 
 ______________________________________________________________________
 
@@ -498,15 +551,18 @@ The custom Docker image approach provides:
 - ✅ **Simplified configuration**: Single image tag, no version detection
 - ✅ **Better control**: Project-managed updates and versions
 - ✅ **Automated maintenance**: Weekly rebuilds for latest Playwright
-- ✅ **Optimized for project**: Python-only, minimal dependencies
+- ✅ **Optimized for project**: Python-only, all QA dependencies pre-installed
+- ✅ **Faster CI runs**: No runtime dependency installation (30-40s saved per job)
+- ✅ **Cleaner workflows**: ~50 lines of pip install code removed
 - ✅ **Transparent migration**: No breaking changes for users
 - ✅ **Easy rollback**: Environment variable override available
 
-**Status**: ✅ Implemented and ready for use
+**Status**: ✅ Fully implemented and in production
 
-**Next Steps**:
+**Completed Milestones**:
 
-1. Build and push initial image (automatic via GitHub Actions)
-1. Test wrapper scripts with GHCR image
-1. Generate WebKit baselines using new image
-1. Document in main README.md
+1. ✅ Build and push image with pre-installed dependencies (automatic via GitHub Actions)
+1. ✅ Update wrapper scripts to use GHCR image
+1. ✅ Generate all browser baselines (Chromium, Firefox, WebKit)
+1. ✅ Migrate CI workflows to use Docker containers
+1. ✅ Document in main README.md and development docs
