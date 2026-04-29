@@ -82,6 +82,9 @@ class MobileNav {
         this.navToggle.setAttribute('aria-expanded', 'false');
         this.navToggle.setAttribute('aria-controls', this.options.menuId);
         this.navMenu.setAttribute('aria-hidden', 'true');
+
+        // Make links unfocusable when menu is hidden
+        this.setLinksTabindex('-1');
     }
 
     /**
@@ -108,6 +111,9 @@ class MobileNav {
         this.navToggle.setAttribute('aria-expanded', 'true');
         this.navMenu.setAttribute('aria-hidden', 'false');
 
+        // Make links focusable when menu is open
+        this.setLinksTabindex('0');
+
         // Trap focus in menu
         this.trapFocus();
     }
@@ -125,8 +131,28 @@ class MobileNav {
         this.navToggle.setAttribute('aria-expanded', 'false');
         this.navMenu.setAttribute('aria-hidden', 'true');
 
+        // Make links unfocusable when menu is hidden
+        this.setLinksTabindex('-1');
+
         // Release focus trap
         this.releaseFocus();
+    }
+
+    /**
+     * Set tabindex on all links in the menu.
+     * Prevents keyboard focus on hidden menu links.
+     *
+     * @param {string} value - Tabindex value ('0' or '-1')
+     */
+    setLinksTabindex(value) {
+        const links = this.navMenu.querySelectorAll('a');
+        links.forEach(link => {
+            if (value === '-1') {
+                link.setAttribute('tabindex', '-1');
+            } else {
+                link.removeAttribute('tabindex');
+            }
+        });
     }
 
     /**
