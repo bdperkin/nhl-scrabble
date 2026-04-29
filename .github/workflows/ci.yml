@@ -243,7 +243,14 @@ jobs:
 
       - name: Install pre-commit dependencies
         run: |
-          uv pip install docformatter pyroma pyproject-fmt deptry pydocstyle refurb safety --system
+          uv pip install --system \
+            docformatter==1.7.7 \
+            pyroma \
+            pyproject-fmt \
+            deptry \
+            pydocstyle \
+            refurb \
+            safety
 
       - name: Run pre-commit with UV
         uses: pre-commit/action@v3.0.1
