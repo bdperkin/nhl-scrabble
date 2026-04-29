@@ -99,6 +99,13 @@ jobs:
         env:
           PYTHONUNBUFFERED: "1"
 
+      - name: Prepare test output directory
+        run: |
+          # Create output file with correct permissions for Docker
+          mkdir -p qa/web
+          touch qa/web/visual-test-results.xml
+          chmod 666 qa/web/visual-test-results.xml
+
       - name: Run visual regression tests
         id: visual-tests
         run: |
@@ -121,7 +128,7 @@ jobs:
           # Run pytest in Docker container with GHCR Playwright image
           docker run --rm \
             --network host \
-            --volume "${{ github.workspace }}:/work" \
+            --volume "${{ github.workspace }}:/work:rw" \
             --shm-size=2gb \
             --workdir /work/qa/web \
             --env "HOME=/home/pwuser" \

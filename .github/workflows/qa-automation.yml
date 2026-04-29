@@ -142,6 +142,20 @@ jobs:
           echo "suite=$TEST_SUITE" >> $GITHUB_OUTPUT
           echo "Running test suite: $TEST_SUITE"
 
+      - name: Prepare test output directory
+        run: |
+          # Create output directory and files with correct permissions for Docker
+          mkdir -p qa/web/reports
+          touch qa/web/reports/functional-${{ matrix.browser }}.xml
+          touch qa/web/reports/functional-${{ matrix.browser }}.html
+          touch qa/web/reports/visual-${{ matrix.browser }}.xml
+          touch qa/web/reports/performance-${{ matrix.browser }}.xml
+          touch qa/web/reports/performance-${{ matrix.browser }}.html
+          touch qa/web/reports/benchmark-${{ matrix.browser }}.json
+          touch qa/web/reports/accessibility-${{ matrix.browser }}.xml
+          touch qa/web/reports/accessibility-${{ matrix.browser }}.html
+          chmod -R 666 qa/web/reports/
+
       - name: Run functional tests
         id: functional-tests
         if: |
