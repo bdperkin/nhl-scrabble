@@ -20,6 +20,9 @@ screenshots/*-diff.png
 # Performance test results
 *.log
 locust-*.csv
+tests/performance/results/
+tests/performance/reports/
+.benchmarks/
 
 # Virtual environments
 .venv/

@@ -87,6 +87,7 @@ repos:
       - id: debug-statements
       - id: name-tests-test
         args: [--pytest-test-first]
+        exclude: locustfile\.py  # Locust load testing script, not a pytest file
 
       # Security checks
       - id: detect-private-key

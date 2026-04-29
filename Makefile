@@ -49,7 +49,7 @@ NC := \033[0m # No Color
         run run-verbose run-json \
         shell watch init info status version \
         changelog-preview changelog-update changelog-tag \
-        qa-install qa-test qa-functional qa-visual qa-performance qa-accessibility qa-clean \
+        qa-install qa-test qa-functional qa-visual qa-performance qa-load-test qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
         deps-check deps-update deps-update-full \
         licenses-check licenses-update licenses-validate \
@@ -850,6 +850,17 @@ qa-performance: ## Run performance tests only
 	@printf "$(BLUE)Running performance tests...$(NC)\n"
 	@cd qa/web && pytest -m performance
 	@printf "$(GREEN)✓ Performance tests complete$(NC)\n"
+
+qa-load-test: ## Run Locust load tests (requires app running on localhost:5000)
+	@printf "$(BLUE)Running Locust load tests...$(NC)\n"
+	@printf "$(YELLOW)⚠  Ensure application is running on http://localhost:5000$(NC)\n"
+	@locust -f qa/web/tests/performance/locustfile.py \
+		--host http://localhost:5000 \
+		--users 50 \
+		--spawn-rate 5 \
+		--run-time 1m \
+		--headless
+	@printf "$(GREEN)✓ Load tests complete$(NC)\n"
 
 qa-accessibility: ## Run accessibility tests only
 	@printf "$(BLUE)Running accessibility tests...$(NC)\n"
