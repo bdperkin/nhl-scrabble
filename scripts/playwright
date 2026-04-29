@@ -17,20 +17,9 @@
 set -euo pipefail
 
 # Configuration
-# PLAYWRIGHT_VERSION can be:
-#   - "latest" (default) - uses latest Docker image and latest pip package
-#   - "1.49.0" - uses v1.49.0 Docker image and playwright==1.49.0 pip package
-PLAYWRIGHT_VERSION="${PLAYWRIGHT_VERSION:-latest}"
-
-# Build Docker image tag from version
-if [[ "${PLAYWRIGHT_VERSION}" == "latest" ]]; then
-    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:latest}"
-    PLAYWRIGHT_PIP_SPEC="playwright"  # Install latest via pip
-else
-    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:v${PLAYWRIGHT_VERSION}-noble}"
-    PLAYWRIGHT_PIP_SPEC="playwright==${PLAYWRIGHT_VERSION}"  # Install specific version
-fi
-
+# Use custom GHCR image by default (has Playwright pre-installed)
+# Can override with PLAYWRIGHT_IMAGE environment variable for testing
+PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-ghcr.io/bdperkin/nhl-scrabble-playwright:latest}"
 PLAYWRIGHT_NO_PULL="${PLAYWRIGHT_NO_PULL:-false}"
 
 # Detect repository root (script is in scripts/ subdirectory)
@@ -89,10 +78,9 @@ else
     WORKDIR="/work"
 fi
 
-# Playwright CLI wrapper always runs as root for simplicity
-# - Installing browsers requires root for system dependencies
-# - Installing Python packages is easier as root in throwaway container
-# - This is safe because container is ephemeral
+# Run as current user to avoid permission issues
+# Custom image has pwuser created, but we override to match host UID/GID
+# This ensures generated files are owned by the current user
 
 # Build Docker run command
 DOCKER_CMD=(
@@ -100,10 +88,12 @@ DOCKER_CMD=(
     --rm                                    # Remove container after exit
     --interactive                           # Keep STDIN open
     --network host                          # Access host network (for localhost:5000)
+    --user "$(id -u):$(id -g)"             # Run as current user
     --volume "${REPO_ROOT}:/work"          # Mount repository
-    --volume "${HOME}/.cache:/root/.cache"  # Mount cache directory
+    --volume "${HOME}/.cache:/home/pwuser/.cache"  # Mount cache directory
     --workdir "${WORKDIR}"                 # Set working directory
-    --env "PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright"  # Browser cache
+    --env "HOME=/home/pwuser"              # Set HOME for Playwright
+    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache
 )
 
 # Add TTY flag only if running in a terminal
@@ -137,23 +127,14 @@ log "${GREEN}" "Running: playwright $*"
 log "${BLUE}" "Image: ${PLAYWRIGHT_IMAGE}"
 log "${BLUE}" "Working directory: ${WORKDIR}"
 
-# Python Playwright package needs to be installed
-# For 'install' commands or initial setup, install playwright package first
-INSTALL_PLAYWRIGHT="pip list 2>/dev/null | grep -q '^playwright ' || pip install --quiet ${PLAYWRIGHT_PIP_SPEC}"
-
 if [[ "${1:-}" == "install" ]]; then
-    log "${BLUE}" "Installing Python Playwright (${PLAYWRIGHT_VERSION}) and browsers..."
-
-    # Run the command (ensure playwright is installed, then run playwright install)
-    "${DOCKER_CMD[@]}" \
-        "${PLAYWRIGHT_IMAGE}" \
-        bash -c "${INSTALL_PLAYWRIGHT} && playwright $*"
-else
-    # For other commands, ensure playwright is installed, then run command
-    "${DOCKER_CMD[@]}" \
-        "${PLAYWRIGHT_IMAGE}" \
-        bash -c "${INSTALL_PLAYWRIGHT} && playwright $*"
+    log "${BLUE}" "Installing browsers (Playwright already in image)..."
 fi
+
+# Run playwright command (Playwright already installed in custom image)
+"${DOCKER_CMD[@]}" \
+    "${PLAYWRIGHT_IMAGE}" \
+    playwright "$@"
 
 EXIT_CODE=$?
 

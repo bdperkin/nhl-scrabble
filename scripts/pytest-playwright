@@ -19,18 +19,9 @@
 set -euo pipefail
 
 # Configuration
-# PLAYWRIGHT_VERSION can be:
-#   - "latest" (default) - uses latest Docker image
-#   - "1.49.0" - uses v1.49.0 Docker image
-PLAYWRIGHT_VERSION="${PLAYWRIGHT_VERSION:-latest}"
-
-# Build Docker image tag from version
-if [[ "${PLAYWRIGHT_VERSION}" == "latest" ]]; then
-    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:latest}"
-else
-    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:v${PLAYWRIGHT_VERSION}-noble}"
-fi
-
+# Use custom GHCR image by default (has Playwright pre-installed)
+# Can override with PLAYWRIGHT_IMAGE environment variable for testing
+PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-ghcr.io/bdperkin/nhl-scrabble-playwright:latest}"
 PLAYWRIGHT_NO_PULL="${PLAYWRIGHT_NO_PULL:-false}"
 WEB_SERVER_URL="${WEB_SERVER_URL:-http://localhost:5000}"
 

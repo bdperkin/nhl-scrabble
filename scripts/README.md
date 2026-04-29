@@ -2,7 +2,23 @@
 
 Playwright does not officially support Fedora as a host OS. Browser engines like WebKit require system dependencies (`libjpeg-turbo8` and others) that are not available or compatible with Fedora's package management.
 
-These wrapper scripts execute Playwright commands inside the official Microsoft Playwright Docker container, bypassing local dependency issues while maintaining full functionality.
+These wrapper scripts execute Playwright commands inside a custom Docker container hosted on GitHub Container Registry (GHCR), bypassing local dependency issues while maintaining full functionality.
+
+## Custom Docker Image
+
+The project maintains a custom Playwright Docker image at `ghcr.io/bdperkin/nhl-scrabble-playwright:latest`. This image:
+
+- **Base**: Python 3.12 on Debian Bookworm
+- **Pre-installed**: Playwright with all browsers (chromium, firefox, webkit) and system dependencies
+- **User**: Runs as `pwuser` (non-root) for security
+- **Updates**: Rebuilt weekly via GitHub Actions to get latest Playwright versions
+- **Source**: `Dockerfile.playwright` in repository root
+
+The image is automatically built and pushed to GHCR on:
+
+- Pushes to main branch affecting `Dockerfile.playwright`
+- Weekly schedule (Mondays at 6 AM UTC) for Playwright updates
+- Manual workflow dispatch for custom builds
 
 ## Quick Start
 
@@ -19,7 +35,39 @@ These wrapper scripts execute Playwright commands inside the official Microsoft 
 
 ## Available Scripts
 
-### 1. `playwright` - Playwright CLI Wrapper
+### 1. `build-playwright-image` - Build Custom Docker Image
+
+Builds the custom Playwright Docker image for local testing or pushes to GHCR.
+
+**Usage:**
+
+```bash
+# Build locally
+./scripts/build-playwright-image
+
+# Build and test
+./scripts/build-playwright-image --test
+
+# Build and push to GHCR (requires GITHUB_TOKEN)
+GITHUB_TOKEN=$GH_TOKEN ./scripts/build-playwright-image --push
+```
+
+**Environment Variables:**
+
+- `GITHUB_TOKEN` - GitHub Personal Access Token with `write:packages` scope (required for `--push`)
+- `IMAGE_TAG` - Custom tag for the image (default: `latest`)
+
+**Examples:**
+
+```bash
+# Build with custom tag
+IMAGE_TAG=dev ./scripts/build-playwright-image
+
+# Build, test, and push
+GITHUB_TOKEN=$GH_TOKEN ./scripts/build-playwright-image --test --push
+```
+
+### 2. `playwright` - Playwright CLI Wrapper
 
 Runs any Playwright CLI command in a Docker container.
 
@@ -51,7 +99,7 @@ Runs any Playwright CLI command in a Docker container.
 - `PLAYWRIGHT_IMAGE` - Docker image to use (default: `mcr.microsoft.com/playwright/python:latest`)
 - `PLAYWRIGHT_NO_PULL` - Skip pulling image if set to `true`
 
-### 2. `pytest-playwright` - Pytest Wrapper for Playwright Tests
+### 3. `pytest-playwright` - Pytest Wrapper for Playwright Tests
 
 Runs pytest with Playwright tests in a Docker container.
 
@@ -410,21 +458,55 @@ cd qa/web
 
 ## Advanced Usage
 
-### Custom Docker Image
+### Building Custom Docker Image Locally
 
-Use a different Playwright version or Docker image:
+For development or testing custom image changes:
 
 ```bash
-# Use specific Playwright version
-PLAYWRIGHT_VERSION=1.49.0 \
-  ./scripts/playwright install --with-deps chromium
+# Build locally
+docker build -f Dockerfile.playwright -t nhl-scrabble-playwright:local .
 
-# Or override the Docker image directly
-PLAYWRIGHT_IMAGE=mcr.microsoft.com/playwright/python:v1.48.0 \
+# Test locally-built image
+PLAYWRIGHT_IMAGE=nhl-scrabble-playwright:local ./scripts/playwright --version
+
+# Run tests with local image
+PLAYWRIGHT_IMAGE=nhl-scrabble-playwright:local \
+  ./scripts/pytest-playwright qa/web/tests/visual/
+```
+
+### Manually Pushing to GHCR
+
+To manually build and push to GitHub Container Registry:
+
+```bash
+# Login to GHCR (use GitHub Personal Access Token with packages scope)
+echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+
+# Build and tag
+docker build -f Dockerfile.playwright \
+  -t ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+  -t ghcr.io/bdperkin/nhl-scrabble-playwright:$(date +%Y-%m-%d) \
+  .
+
+# Push both tags
+docker push ghcr.io/bdperkin/nhl-scrabble-playwright:latest
+docker push ghcr.io/bdperkin/nhl-scrabble-playwright:$(date +%Y-%m-%d)
+```
+
+**Note**: GitHub Actions automatically builds and pushes the image. Manual pushes are only needed for emergency updates.
+
+### Using Different Docker Images
+
+Override the default GHCR image for testing:
+
+```bash
+# Use Microsoft's official image
+PLAYWRIGHT_IMAGE=mcr.microsoft.com/playwright/python:latest \
   ./scripts/playwright --version
 
-# Use latest (default)
-./scripts/playwright --version  # Uses latest Playwright
+# Use specific version tag
+PLAYWRIGHT_IMAGE=ghcr.io/bdperkin/nhl-scrabble-playwright:2026-04-29 \
+  ./scripts/pytest-playwright qa/web/tests/visual/
 ```
 
 ### Skip Image Pull
@@ -471,9 +553,9 @@ PWDEBUG=1 ./scripts/pytest-playwright qa/web/tests/visual/ \
 
 ## Comparison: Native vs Docker
 
-| Feature                 | Native Install                  | Docker Wrapper                |
+| Feature                 | Native Install                  | Docker Wrapper (GHCR)         |
 | ----------------------- | ------------------------------- | ----------------------------- |
-| **Fedora Support**      | ❌ Not officially supported     | ✅ Works via Ubuntu container |
+| **Fedora Support**      | ❌ Not officially supported     | ✅ Works via Debian container |
 | **System Dependencies** | ❌ Manual installation required | ✅ Pre-installed              |
 | **WebKit Support**      | ❌ Requires libjpeg-turbo8      | ✅ Full support               |
 | **Setup Complexity**    | ⚠️ High (dependency conflicts)  | ✅ Low (pull image)           |
@@ -481,6 +563,8 @@ PWDEBUG=1 ./scripts/pytest-playwright qa/web/tests/visual/ \
 | **Performance**         | ✅ Native speed                 | ⚠️ Slight overhead (~5%)      |
 | **Isolation**           | ❌ System-wide installation     | ✅ Containerized              |
 | **CI Consistency**      | ⚠️ Environment differences      | ✅ Identical environment      |
+| **Image Source**        | N/A                             | Custom GHCR (auto-updated)    |
+| **Playwright Updates**  | Manual pip install              | Weekly auto-rebuild           |
 
 ## Performance Considerations
 
