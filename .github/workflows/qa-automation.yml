@@ -93,10 +93,17 @@ jobs:
           cd qa/web
           uv pip install -e . --system
 
-      - name: Install Playwright browsers
+      - name: Log in to GitHub Container Registry
         run: |
-          # Install only the browser we're testing
-          playwright install --with-deps ${{ matrix.browser }}
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io \
+              -u ${{ github.actor }} \
+              --password-stdin
+
+      - name: Pull Playwright Docker image
+        run: |
+          docker pull \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest
 
       - name: Start web server in background
         run: |
@@ -137,15 +144,37 @@ jobs:
           steps.test-suite.outputs.suite == 'all' ||
           steps.test-suite.outputs.suite == 'functional'
         run: |
-          cd qa/web
-          pytest tests/functional/ \
-            --browser=${{ matrix.browser }} \
-            --verbose \
-            --tb=short \
-            --maxfail=10 \
-            --junit-xml=reports/functional-${{ matrix.browser }}.xml \
-            --html=reports/functional-${{ matrix.browser }}.html \
-            --self-contained-html
+          # Run tests in Docker container using GHCR Playwright image
+          docker run --rm \
+            --network host \
+            --volume "${{ github.workspace }}:/work" \
+            --shm-size=2gb \
+            --workdir /work/qa/web \
+            --env "HOME=/home/pwuser" \
+            --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright" \
+            --env "BASE_URL=http://localhost:5000" \
+            --env "PYTHONUNBUFFERED=1" \
+            --env "PYTHONPATH=/work/src:/work/qa/web" \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+            bash -c "python3 -c 'import pathlib; \
+              p = pathlib.Path(\"/work/src/nhl_scrabble/_version.py\"); \
+              p.parent.mkdir(parents=True, exist_ok=True); \
+              p.touch() if not p.exists() else None; \
+              p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
+                if p.stat().st_size == 0 else None' && \
+              python3 -m venv --system-site-packages /tmp/qa-venv && \
+              /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
+                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
+                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
+                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
+                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+              source /tmp/qa-venv/bin/activate && \
+              pytest tests/functional/ \
+                --browser=${{ matrix.browser }} \
+                --verbose --tb=short --maxfail=10 \
+                --junit-xml=reports/functional-${{ matrix.browser }}.xml \
+                --html=reports/functional-${{ matrix.browser }}.html \
+                --self-contained-html"
         continue-on-error: true
 
       - name: Run visual regression tests
@@ -154,13 +183,36 @@ jobs:
           steps.test-suite.outputs.suite == 'all' ||
           steps.test-suite.outputs.suite == 'visual'
         run: |
-          cd qa/web
-          pytest tests/visual/ \
-            --browser=${{ matrix.browser }} \
-            --verbose \
-            --tb=short \
-            --maxfail=5 \
-            --junit-xml=reports/visual-${{ matrix.browser }}.xml
+          # Run tests in Docker container using GHCR Playwright image
+          # This ensures browser versions match the baselines
+          docker run --rm \
+            --network host \
+            --volume "${{ github.workspace }}:/work" \
+            --shm-size=2gb \
+            --workdir /work/qa/web \
+            --env "HOME=/home/pwuser" \
+            --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright" \
+            --env "BASE_URL=http://localhost:5000" \
+            --env "PYTHONUNBUFFERED=1" \
+            --env "PYTHONPATH=/work/src:/work/qa/web" \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+            bash -c "python3 -c 'import pathlib; \
+              p = pathlib.Path(\"/work/src/nhl_scrabble/_version.py\"); \
+              p.parent.mkdir(parents=True, exist_ok=True); \
+              p.touch() if not p.exists() else None; \
+              p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
+                if p.stat().st_size == 0 else None' && \
+              python3 -m venv --system-site-packages /tmp/qa-venv && \
+              /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
+                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
+                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
+                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
+                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+              source /tmp/qa-venv/bin/activate && \
+              pytest tests/visual/ \
+                --browser=${{ matrix.browser }} \
+                --verbose --tb=short --maxfail=5 \
+                --junit-xml=reports/visual-${{ matrix.browser }}.xml"
         continue-on-error: true
 
       - name: Run performance tests
@@ -169,16 +221,39 @@ jobs:
           steps.test-suite.outputs.suite == 'all' ||
           steps.test-suite.outputs.suite == 'performance'
         run: |
-          cd qa/web
-          pytest tests/performance/ \
-            --browser=${{ matrix.browser }} \
-            --verbose \
-            --tb=short \
-            --junit-xml=reports/performance-${{ matrix.browser }}.xml \
-            --html=reports/performance-${{ matrix.browser }}.html \
-            --self-contained-html \
-            --benchmark-only \
-            --benchmark-json=reports/benchmark-${{ matrix.browser }}.json
+          # Run tests in Docker container using GHCR Playwright image
+          docker run --rm \
+            --network host \
+            --volume "${{ github.workspace }}:/work" \
+            --shm-size=2gb \
+            --workdir /work/qa/web \
+            --env "HOME=/home/pwuser" \
+            --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright" \
+            --env "BASE_URL=http://localhost:5000" \
+            --env "PYTHONUNBUFFERED=1" \
+            --env "PYTHONPATH=/work/src:/work/qa/web" \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+            bash -c "python3 -c 'import pathlib; \
+              p = pathlib.Path(\"/work/src/nhl_scrabble/_version.py\"); \
+              p.parent.mkdir(parents=True, exist_ok=True); \
+              p.touch() if not p.exists() else None; \
+              p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
+                if p.stat().st_size == 0 else None' && \
+              python3 -m venv --system-site-packages /tmp/qa-venv && \
+              /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
+                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
+                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
+                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
+                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' \
+                'pytest-benchmark>=5.2.3' && \
+              source /tmp/qa-venv/bin/activate && \
+              pytest tests/performance/ \
+                --browser=${{ matrix.browser }} \
+                --verbose --tb=short \
+                --junit-xml=reports/performance-${{ matrix.browser }}.xml \
+                --html=reports/performance-${{ matrix.browser }}.html \
+                --self-contained-html --benchmark-only \
+                --benchmark-json=reports/benchmark-${{ matrix.browser }}.json"
         continue-on-error: true
 
       - name: Run accessibility tests
@@ -187,15 +262,37 @@ jobs:
           steps.test-suite.outputs.suite == 'all' ||
           steps.test-suite.outputs.suite == 'accessibility'
         run: |
-          cd qa/web
-          pytest tests/accessibility/ \
-            --browser=${{ matrix.browser }} \
-            --verbose \
-            --tb=short \
-            --maxfail=10 \
-            --junit-xml=reports/accessibility-${{ matrix.browser }}.xml \
-            --html=reports/accessibility-${{ matrix.browser }}.html \
-            --self-contained-html
+          # Run tests in Docker container using GHCR Playwright image
+          docker run --rm \
+            --network host \
+            --volume "${{ github.workspace }}:/work" \
+            --shm-size=2gb \
+            --workdir /work/qa/web \
+            --env "HOME=/home/pwuser" \
+            --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright" \
+            --env "BASE_URL=http://localhost:5000" \
+            --env "PYTHONUNBUFFERED=1" \
+            --env "PYTHONPATH=/work/src:/work/qa/web" \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+            bash -c "python3 -c 'import pathlib; \
+              p = pathlib.Path(\"/work/src/nhl_scrabble/_version.py\"); \
+              p.parent.mkdir(parents=True, exist_ok=True); \
+              p.touch() if not p.exists() else None; \
+              p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
+                if p.stat().st_size == 0 else None' && \
+              python3 -m venv --system-site-packages /tmp/qa-venv && \
+              /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
+                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
+                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
+                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
+                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+              source /tmp/qa-venv/bin/activate && \
+              pytest tests/accessibility/ \
+                --browser=${{ matrix.browser }} \
+                --verbose --tb=short --maxfail=10 \
+                --junit-xml=reports/accessibility-${{ matrix.browser }}.xml \
+                --html=reports/accessibility-${{ matrix.browser }}.html \
+                --self-contained-html"
         continue-on-error: true
 
       - name: Stop web server
