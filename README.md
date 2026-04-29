@@ -60,9 +60,47 @@ A [Python](https://www.python.org/) application that fetches current NHL roster 
 - 📈 **Progress Tracking** - Real-time progress bars for long operations
 - 🎯 **Flexible Output** - Text, JSON, or HTML format
 - 🎨 **Colorized Logging** - Color-coded log levels with TTY detection and NO_COLOR support
-- 🧪 **Well-Tested** - >90% coverage on core modules with 170+ tests
+- 🧪 **Comprehensive Testing** - >90% code coverage with 170+ unit/integration tests
+  - Playwright-based E2E testing (40+ browser tests)
+  - Visual regression testing across browsers (Chromium, Firefox, WebKit)
+  - Performance and load testing with benchmarks
+  - WCAG 2.1 AA accessibility compliance testing
+  - Automated cross-browser QA in CI/CD
 - ⚡ **Lightning Fast** - [UV](https://docs.astral.sh/uv/) support for 10-100x faster installation
 - 🔒 **Production-Ready** - Security headers, CORS, caching, deployment guides
+
+## Quality Assurance
+
+This project includes comprehensive automated QA testing beyond unit/integration tests:
+
+- **Framework**: Playwright with Page Object Model architecture
+- **Test Coverage**: 40+ end-to-end tests across 4 categories
+- **Browser Support**: Automated testing on Chromium, Firefox, and WebKit
+- **Test Types**:
+  - **Functional** - User workflows, interactions, navigation (15 tests)
+  - **Visual Regression** - Screenshot comparison across browsers (10 tests)
+  - **Performance** - Page load times, API response benchmarks (8 tests)
+  - **Accessibility** - WCAG 2.1 AA compliance validation (7 tests)
+- **Documentation**: See [qa/README.md](qa/README.md) for detailed QA framework documentation
+- **CI Integration**: Automated runs on PRs, commits to main, and nightly schedule (2 AM UTC)
+
+**Run QA tests locally**:
+
+```bash
+make qa-install      # Install QA dependencies (Playwright, browsers)
+make qa-test         # Run all QA tests (~5-7 minutes)
+make qa-functional   # Run functional tests only
+make qa-visual       # Run visual regression tests
+make qa-performance  # Run performance tests
+make qa-accessibility # Run accessibility tests
+```
+
+**CI/CD Workflow**: `.github/workflows/qa-automation.yml`
+
+- Cross-browser matrix testing (parallel execution)
+- Artifact uploads (reports, screenshots, visual diffs, performance metrics)
+- PR comments with test summaries and failure details
+- Manual workflow dispatch with test suite and browser selection
 
 ## Screenshots
 
