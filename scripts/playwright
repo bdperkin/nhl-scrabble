@@ -83,15 +83,15 @@ fi
 # This ensures generated files are owned by the current user
 
 # Build Docker run command
-# Note: Do NOT mount host cache directory - use browsers pre-installed in the image
 # Use :z flag for SELinux systems to allow container write access
+# Run as root to avoid Firefox permission issues in Docker
 DOCKER_CMD=(
     docker run
     --rm                                    # Remove container after exit
     --interactive                           # Keep STDIN open
     --network host                          # Access host network (for localhost:5000)
-    --user "$(id -u):$(id -g)"             # Run as current user
     --volume "${REPO_ROOT}:/work:z"        # Mount repository (with SELinux label)
+    --shm-size=2gb                          # Increase shared memory for Firefox
     --workdir "${WORKDIR}"                 # Set working directory
     --env "HOME=/home/pwuser"              # Set HOME for Playwright
     --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache (in image)
