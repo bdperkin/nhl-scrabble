@@ -62,6 +62,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
     strategy:
       fail-fast: false  # Continue testing other browsers even if one fails
       matrix:
@@ -414,6 +418,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: qa-tests
     if: always()
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
       - name: Download all test reports
