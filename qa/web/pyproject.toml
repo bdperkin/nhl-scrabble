@@ -109,6 +109,8 @@ optional-dependencies.dev = [
 [tool.setuptools]
 # Test-only package - include pages, fixtures, tests, scripts directories
 packages = [ "pages", "fixtures", "tests", "scripts" ]
+# Include standalone Python modules
+py-modules = [ "utilities", "conftest", "playwright_config" ]
 
 # ============================================================================
 # Ruff Configuration - Linting and Code Quality
