@@ -153,7 +153,7 @@ Each task includes:
 | 016 | Visual Regression Tests | MEDIUM | 4-6 hours (actual: ~3h) | Completed | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | PR [#432](https://github.com/bdperkin/nhl-scrabble/pull/432), completed 2026-04-28 |
 | 017 | Performance and Load Tests | MEDIUM | 4-6 hours (actual: ~6.5h) | Completed | [#314](https://github.com/bdperkin/nhl-scrabble/issues/314) | PR [#434](https://github.com/bdperkin/nhl-scrabble/pull/434), completed 2026-04-28 |
 | 018 | Accessibility Tests | MEDIUM | 2-4 hours (actual: ~2.5h) | Completed | [#318](https://github.com/bdperkin/nhl-scrabble/issues/318) | PR [#431](https://github.com/bdperkin/nhl-scrabble/pull/431), completed 2026-04-28 |
-| 019 | QA CI/CD Integration | MEDIUM | 2-4 hours | Completed | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | - |
+| 019 | QA CI/CD Integration | MEDIUM | 2-4 hours (actual: ~2h) | Completed | [#315](https://github.com/bdperkin/nhl-scrabble/issues/315) | PR [#436](https://github.com/bdperkin/nhl-scrabble/pull/436), completed 2026-04-28 |
 | 021 | Test Analytics and Coverage Analysis Tool | MEDIUM | 4-6 hours | Completed | [#359](https://github.com/bdperkin/nhl-scrabble/issues/359) | - |
 | 001 | Add pytest-timeout to Prevent Hanging Tests | MEDIUM | 30-60 minutes (actual: ~45 minutes) | Completed | [#119](https://github.com/bdperkin/nhl-scrabble/issues/119) | PR [#168](https://github.com/bdperkin/nhl-scrabble/pull/168), completed 2026-04-17 |
 | 001 | Implement Codecov Test Analytics in CI | MEDIUM | 2-3 hours (actual: ~2.5 hours) | Completed | [#211](https://github.com/bdperkin/nhl-scrabble/issues/211) | PR [#272](https://github.com/bdperkin/nhl-scrabble/pull/272), completed 2026-04-20 |

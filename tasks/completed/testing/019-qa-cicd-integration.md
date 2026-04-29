@@ -98,7 +98,7 @@ jobs:
 
 **Implemented**: 2026-04-28
 **Branch**: testing/019-qa-cicd-integration
-**PR**: TBD
+**PR**: #436 - https://github.com/bdperkin/nhl-scrabble/pull/436
 
 ### Actual Implementation
 
