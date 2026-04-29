@@ -158,8 +158,13 @@ if [[ "${HAS_TEST_PATH}" == "false" ]]; then
     log "${BLUE}" "No test path specified, defaulting to qa/web/tests/"
 fi
 
+# Disable pytest cache to avoid permission warnings when running in Docker
+# The cache plugin tries to write to .pytest_cache which has permission issues
+# when the container user doesn't match the host user
+PYTEST_CACHE_FLAG="-p no:cacheprovider"
+
 # Execute pytest command in container
-log "${GREEN}" "Running: pytest ${PYTEST_ARGS[*]}"
+log "${GREEN}" "Running: pytest ${PYTEST_CACHE_FLAG} ${PYTEST_ARGS[*]}"
 log "${BLUE}" "Image: ${PLAYWRIGHT_IMAGE}"
 log "${BLUE}" "Working directory: ${WORKDIR}"
 log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
@@ -168,7 +173,7 @@ log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
 # All dependencies are pre-installed in the Docker image
 "${DOCKER_CMD[@]}" \
     "${PLAYWRIGHT_IMAGE}" \
-    bash -c "${INSTALL_CMD} && pytest ${PYTEST_ARGS[*]}"
+    bash -c "${INSTALL_CMD} && pytest ${PYTEST_CACHE_FLAG} ${PYTEST_ARGS[*]}"
 
 EXIT_CODE=$?
 
