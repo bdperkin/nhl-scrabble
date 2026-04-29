@@ -147,7 +147,7 @@ Each task includes:
 
 | ID  | Title | Priority | Effort | Status | GitHub Issue | Notes |
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
-| 012 | QA Automation Framework | MEDIUM | 30-40 hours (main task coordination + sub-tasks) | Completed | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | - |
+| 012 | QA Automation Framework | MEDIUM | 30-40 hours (actual: ~30h across 7 sub-tasks) | Completed | [#311](https://github.com/bdperkin/nhl-scrabble/issues/311) | All sub-tasks #013-#019 completed, final integration PR [#436](https://github.com/bdperkin/nhl-scrabble/pull/436), completed 2026-04-28 |
 | 014 | Playwright Framework Setup | MEDIUM | 6-8 hours (actual: ~4h) | Completed | [#313](https://github.com/bdperkin/nhl-scrabble/issues/313) | PR [#430](https://github.com/bdperkin/nhl-scrabble/pull/430), completed 2026-04-28 |
 | 015 | Functional Web Tests | MEDIUM | 6-8 hours (actual: ~4h) | Completed | [#316](https://github.com/bdperkin/nhl-scrabble/issues/316) | PR [#435](https://github.com/bdperkin/nhl-scrabble/pull/435), completed 2026-04-28 |
 | 016 | Visual Regression Tests | MEDIUM | 4-6 hours (actual: ~3h) | Completed | [#317](https://github.com/bdperkin/nhl-scrabble/issues/317) | PR [#432](https://github.com/bdperkin/nhl-scrabble/pull/432), completed 2026-04-28 |
