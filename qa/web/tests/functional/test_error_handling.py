@@ -172,7 +172,12 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
     # Run second analysis with different count
     page_fixture.fill("#topPlayers", "5")
     page_fixture.click("#analyzeBtn")
-    page_fixture.wait_for_timeout(1000)
+
+    # Wait for results to update with proper wait condition
+    page_fixture.wait_for_function(
+        "document.querySelectorAll('#playersTable tbody tr').length === 5",
+        timeout=30000,
+    )
 
     # Count rows from second submission - should be different
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()
@@ -286,15 +291,32 @@ def test_concurrent_submissions_handled(page_fixture: Page) -> None:
     page_fixture.fill("#topPlayers", "10")
     page_fixture.click("#analyzeBtn")
 
-    # Immediately start second submission (may or may not complete first)
-    page_fixture.fill("#topPlayers", "20")
-
-    # Wait for results from whichever completes
+    # Wait for FIRST request to complete
     page_fixture.wait_for_selector("#results", state="visible", timeout=30000)
+    page_fixture.wait_for_selector("#playersTable tbody tr", state="visible", timeout=30000)
 
-    # Verify we got some results
+    # Verify first submission has 10 rows
+    first_rows = page_fixture.locator("#playersTable tbody tr").count()
+    assert first_rows == 10, f"First submission should have 10 rows, got {first_rows}"  # noqa: S101
+
+    # Start second submission
+    page_fixture.fill("#topPlayers", "20")
+    page_fixture.click("#analyzeBtn")  # Actually submit the second request
+
+    # Wait for results to update with proper wait condition
+    page_fixture.wait_for_function(
+        "document.querySelectorAll('#playersTable tbody tr').length === 20",
+        timeout=30000,
+    )
+
+    # Verify we got updated results (20 rows)
     results = page_fixture.locator("#results")
     expect(results).to_be_visible()
+
+    second_rows = page_fixture.locator("#playersTable tbody tr").count()
+    assert (
+        second_rows == 20
+    ), f"Second submission should have 20 rows, got {second_rows}"  # noqa: S101
 
 
 @pytest.mark.functional

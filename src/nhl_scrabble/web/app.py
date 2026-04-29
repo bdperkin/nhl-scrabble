@@ -10,9 +10,9 @@ import logging
 import operator
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Annotated, Any
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -423,16 +423,27 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 @app.get("/api/analyze", response_model=None)
 async def analyze_get(
     request: Request,
-    top_players: int = 20,
-    top_team_players: int = 5,
-    use_cache: bool = True,
+    top_players: Annotated[
+        int,
+        Query(ge=1, le=100, description="Number of top players to include"),
+    ] = 20,
+    top_team_players: Annotated[
+        int,
+        Query(ge=1, le=30, description="Top players per team"),
+    ] = 5,
+    use_cache: Annotated[
+        bool,
+        Query(description="Use cached results if available"),
+    ] = True,
 ) -> HTMLResponse | dict[str, Any]:
     """Run NHL Scrabble analysis (GET endpoint for HTMX).
 
+    Validates input parameters and returns 422 on invalid values.
+
     Args:
         request: FastAPI request object
-        top_players: Number of top players to include
-        top_team_players: Top players per team
+        top_players: Number of top players to include (1-100)
+        top_team_players: Top players per team (1-30)
         use_cache: Use cached results if available
 
     Returns:

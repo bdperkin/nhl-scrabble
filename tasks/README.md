@@ -49,7 +49,7 @@ Each task includes:
 | 009 | Verify and Validate Caching is Enabled by Default | MEDIUM | 2-3 hours (actual: ~2.5 hours) | Completed | [#365](https://github.com/bdperkin/nhl-scrabble/issues/365) | PR [#368](https://github.com/bdperkin/nhl-scrabble/pull/368), completed 2026-04-24 |
 | 010 | Fix Output Format Validation Mismatch Between CLI and Config | HIGH | 30 minutes - 1 hour (actual: ~1 hour 15 minutes) | Completed | [#366](https://github.com/bdperkin/nhl-scrabble/issues/366) | PR [#385](https://github.com/bdperkin/nhl-scrabble/pull/385), completed 2026-04-25 |
 | 011 | Use Platform-Specific Cache Directory with Permission Checking | MEDIUM | 3-4 hours (actual: ~3.5 hours) | Completed | [#369](https://github.com/bdperkin/nhl-scrabble/issues/369) | PR [#373](https://github.com/bdperkin/nhl-scrabble/pull/373), completed 2026-04-25 |
-| 012 | Debug Functional Test Failures in QA Suite | MEDIUM | 1-2 hours | Active | [#438](https://github.com/bdperkin/nhl-scrabble/issues/438) | - |
+| 012 | Debug Functional Test Failures in QA Suite | MEDIUM | 1-2 hours (actual: ~1.5h) | Completed | [#438](https://github.com/bdperkin/nhl-scrabble/issues/438) | PR [#450](https://github.com/bdperkin/nhl-scrabble/pull/450), completed 2026-04-29 |
 | 013 | Fix WCAG 2.1 AA Accessibility Violations in Web App | HIGH | 2-3 hours (actual: ~3.5h) | Completed | [#440](https://github.com/bdperkin/nhl-scrabble/issues/440) | PR [#449](https://github.com/bdperkin/nhl-scrabble/pull/449), completed 2026-04-29 |
 
 ### Security
