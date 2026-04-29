@@ -150,7 +150,7 @@ jobs:
               p.touch() if not p.exists() else None; \
               p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
                 if p.stat().st_size == 0 else None' && \
-              pytest $PYTEST_ARGS"
+              pytest -p no:cacheprovider $PYTEST_ARGS"
         continue-on-error: true
 
       - name: Stop web server

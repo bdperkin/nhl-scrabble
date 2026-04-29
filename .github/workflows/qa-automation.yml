@@ -180,7 +180,7 @@ jobs:
               p.touch() if not p.exists() else None; \
               p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
                 if p.stat().st_size == 0 else None' && \
-              pytest tests/functional/ \
+              pytest -p no:cacheprovider tests/functional/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=10 \
                 --junit-xml=reports/functional-${{ matrix.browser }}.xml \
@@ -213,7 +213,7 @@ jobs:
               p.touch() if not p.exists() else None; \
               p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
                 if p.stat().st_size == 0 else None' && \
-              pytest tests/visual/ \
+              pytest -p no:cacheprovider tests/visual/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
                 --junit-xml=reports/visual-${{ matrix.browser }}.xml"
@@ -243,7 +243,7 @@ jobs:
               p.touch() if not p.exists() else None; \
               p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
                 if p.stat().st_size == 0 else None' && \
-              pytest tests/performance/ \
+              pytest -p no:cacheprovider tests/performance/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short \
                 --junit-xml=reports/performance-${{ matrix.browser }}.xml \
@@ -276,7 +276,7 @@ jobs:
               p.touch() if not p.exists() else None; \
               p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
                 if p.stat().st_size == 0 else None' && \
-              pytest tests/accessibility/ \
+              pytest -p no:cacheprovider tests/accessibility/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=10 \
                 --junit-xml=reports/accessibility-${{ matrix.browser }}.xml \
