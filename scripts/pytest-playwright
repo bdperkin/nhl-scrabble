@@ -91,24 +91,29 @@ else
     WORKDIR="/work"
 fi
 
-# Install project dependencies in container
-# We need to ensure pytest and dependencies are available
-INSTALL_CMD="cd /work && pip install --quiet --no-cache-dir -e '.[dev,web]' && cd /work/qa/web && pip install --quiet --no-cache-dir -e ."
+# Install project dependencies in container using a virtualenv
+# The Docker image has playwright with browsers in system site-packages.
+# Create virtualenv in /tmp with --system-site-packages to inherit playwright.
+# Then install additional QA dependencies into the virtualenv.
+# First, generate a _version.py file if it doesn't exist for the main package
+INSTALL_CMD="python3 -c \"import pathlib; p = pathlib.Path('/work/src/nhl_scrabble/_version.py'); p.parent.mkdir(parents=True, exist_ok=True); p.touch() if not p.exists() else None; p.write_text('__version__ = \\\"0.0.0+local\\\"\\n') if p.stat().st_size == 0 else None\" && python3 -m venv --system-site-packages /tmp/qa-venv && /tmp/qa-venv/bin/pip install --quiet --no-cache-dir 'axe-playwright-python>=0.1.7' 'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' 'pytest-html>=4.2' 'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8'"
 
 # Build Docker run command
+# Note: Do NOT mount host cache directory - use browsers pre-installed in the image
+# Use :z flag for SELinux systems to allow container write access
 DOCKER_CMD=(
     docker run
     --rm                                    # Remove container after exit
     --interactive                           # Keep STDIN open
     --network host                          # Access host network (for localhost:5000)
     --user "$(id -u):$(id -g)"             # Run as current user (avoid root-owned files)
-    --volume "${REPO_ROOT}:/work"          # Mount repository
-    --volume "${HOME}/.cache:/home/pwuser/.cache"  # Mount cache directory
+    --volume "${REPO_ROOT}:/work:z"        # Mount repository (with SELinux label)
     --workdir "${WORKDIR}"                 # Set working directory
     --env "HOME=/home/pwuser"              # Set HOME for Playwright
-    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache
+    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache (in image)
     --env "BASE_URL=${WEB_SERVER_URL}"     # Override base URL for tests
     --env "PYTHONUNBUFFERED=1"             # Unbuffered Python output
+    --env "PYTHONPATH=/work/src:/work/qa/web"  # Add project sources to Python path
 )
 
 # Add TTY flag only if running in a terminal
@@ -150,9 +155,10 @@ log "${BLUE}" "Working directory: ${WORKDIR}"
 log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
 
 # Run the command with bash to allow installing dependencies first
+# Activate virtualenv and use its pytest (which inherits system playwright)
 "${DOCKER_CMD[@]}" \
     "${PLAYWRIGHT_IMAGE}" \
-    bash -c "${INSTALL_CMD} && pytest $*"
+    bash -c "${INSTALL_CMD} && source /tmp/qa-venv/bin/activate && pytest $*"
 
 EXIT_CODE=$?
 

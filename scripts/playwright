@@ -83,17 +83,18 @@ fi
 # This ensures generated files are owned by the current user
 
 # Build Docker run command
+# Note: Do NOT mount host cache directory - use browsers pre-installed in the image
+# Use :z flag for SELinux systems to allow container write access
 DOCKER_CMD=(
     docker run
     --rm                                    # Remove container after exit
     --interactive                           # Keep STDIN open
     --network host                          # Access host network (for localhost:5000)
     --user "$(id -u):$(id -g)"             # Run as current user
-    --volume "${REPO_ROOT}:/work"          # Mount repository
-    --volume "${HOME}/.cache:/home/pwuser/.cache"  # Mount cache directory
+    --volume "${REPO_ROOT}:/work:z"        # Mount repository (with SELinux label)
     --workdir "${WORKDIR}"                 # Set working directory
     --env "HOME=/home/pwuser"              # Set HOME for Playwright
-    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache
+    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache (in image)
 )
 
 # Add TTY flag only if running in a terminal
