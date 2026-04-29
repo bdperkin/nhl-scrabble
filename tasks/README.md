@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 197 tasks (45 active, 152 completed)
+**Total Tasks**: 197 tasks (40 active, 157 completed)
 
 ## Overview
 
