@@ -154,7 +154,7 @@ jobs:
           touch qa/web/reports/benchmark-${{ matrix.browser }}.json
           touch qa/web/reports/accessibility-${{ matrix.browser }}.xml
           touch qa/web/reports/accessibility-${{ matrix.browser }}.html
-          chmod -R 666 qa/web/reports/
+          chmod -R a+w qa/web/reports/
 
       - name: Run functional tests
         id: functional-tests
