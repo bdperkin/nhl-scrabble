@@ -25,9 +25,6 @@ def performance_report_dir() -> Generator[Path, None, None]:
     yield report_dir
 
     # Cleanup is optional - keep reports for analysis
-    # Uncomment to clean up after tests:
-    # if report_dir.exists():
-    #     shutil.rmtree(report_dir)
 
 
 @pytest.fixture(scope="session")
