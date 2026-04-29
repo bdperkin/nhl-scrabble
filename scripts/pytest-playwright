@@ -7,14 +7,15 @@
 #
 # Usage:
 #   ./scripts/pytest-playwright [pytest-args...]
+#   ./scripts/pytest-playwright                              # Defaults to qa/web/tests/
 #   ./scripts/pytest-playwright qa/web/tests/visual/
 #   ./scripts/pytest-playwright qa/web/tests/visual/ --browser=firefox
 #   ./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots
 #
 # Environment Variables:
-#   PLAYWRIGHT_IMAGE    Docker image to use (default: mcr.microsoft.com/playwright:v1.49.1-noble)
+#   PLAYWRIGHT_IMAGE    Docker image to use (default: ghcr.io/bdperkin/nhl-scrabble-playwright:latest)
 #   PLAYWRIGHT_NO_PULL  Skip pulling image if set to 'true'
-#   WEB_SERVER_URL      Override web server URL (default: http://host.docker.internal:5000)
+#   WEB_SERVER_URL      Override web server URL (default: http://localhost:5000)
 
 set -euo pipefail
 
@@ -133,12 +134,16 @@ for env_var in "${PYTEST_ENVS[@]}"; do
     fi
 done
 
-# Check if --update-snapshots is in arguments
+# Check if --update-snapshots is in arguments and if test path is provided
 UPDATE_SNAPSHOTS=false
+HAS_TEST_PATH=false
+
 for arg in "$@"; do
     if [[ "${arg}" == "--update-snapshots" ]]; then
         UPDATE_SNAPSHOTS=true
-        break
+    elif [[ ! "${arg}" =~ ^- ]]; then
+        # Argument doesn't start with -, so it's a test path
+        HAS_TEST_PATH=true
     fi
 done
 
@@ -146,8 +151,20 @@ if [[ "${UPDATE_SNAPSHOTS}" == "true" ]]; then
     log "${YELLOW}" "Running with --update-snapshots: Baselines will be regenerated"
 fi
 
+# Default to qa/web/tests/ if no test path provided
+PYTEST_ARGS=("$@")
+if [[ "${HAS_TEST_PATH}" == "false" ]]; then
+    PYTEST_ARGS=("qa/web/tests/" "$@")
+    log "${BLUE}" "No test path specified, defaulting to qa/web/tests/"
+fi
+
+# Disable pytest cache to avoid permission warnings when running in Docker
+# The cache plugin tries to write to .pytest_cache which has permission issues
+# when the container user doesn't match the host user
+PYTEST_CACHE_FLAG="-p no:cacheprovider"
+
 # Execute pytest command in container
-log "${GREEN}" "Running: pytest $*"
+log "${GREEN}" "Running: pytest ${PYTEST_CACHE_FLAG} ${PYTEST_ARGS[*]}"
 log "${BLUE}" "Image: ${PLAYWRIGHT_IMAGE}"
 log "${BLUE}" "Working directory: ${WORKDIR}"
 log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
@@ -156,7 +173,7 @@ log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
 # All dependencies are pre-installed in the Docker image
 "${DOCKER_CMD[@]}" \
     "${PLAYWRIGHT_IMAGE}" \
-    bash -c "${INSTALL_CMD} && pytest $*"
+    bash -c "${INSTALL_CMD} && pytest ${PYTEST_CACHE_FLAG} ${PYTEST_ARGS[*]}"
 
 EXIT_CODE=$?
 

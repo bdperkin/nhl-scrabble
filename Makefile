@@ -833,22 +833,22 @@ qa-install: ## Install QA web testing dependencies
 
 qa-test: ## Run all QA web tests
 	@printf "$(BLUE)Running all QA web tests...$(NC)\n"
-	@cd qa/web && pytest
+	@PYTHONPATH="$(PWD)/src:$(PWD)/qa/web:$$PYTHONPATH" $(UV) run pytest qa/web/tests
 	@printf "$(GREEN)✓ QA tests complete$(NC)\n"
 
 qa-functional: ## Run functional web tests only
 	@printf "$(BLUE)Running functional web tests...$(NC)\n"
-	@cd qa/web && pytest -m functional
+	@PYTHONPATH="$(PWD)/src:$(PWD)/qa/web:$$PYTHONPATH" $(UV) run pytest qa/web/tests/functional/
 	@printf "$(GREEN)✓ Functional tests complete$(NC)\n"
 
 qa-visual: ## Run visual regression tests only
 	@printf "$(BLUE)Running visual regression tests...$(NC)\n"
-	@cd qa/web && pytest -m visual
+	@PYTHONPATH="$(PWD)/src:$(PWD)/qa/web:$$PYTHONPATH" $(UV) run pytest qa/web/tests/visual/
 	@printf "$(GREEN)✓ Visual tests complete$(NC)\n"
 
 qa-performance: ## Run performance tests only
 	@printf "$(BLUE)Running performance tests...$(NC)\n"
-	@cd qa/web && pytest -m performance
+	@PYTHONPATH="$(PWD)/src:$(PWD)/qa/web:$$PYTHONPATH" $(UV) run pytest qa/web/tests/performance/
 	@printf "$(GREEN)✓ Performance tests complete$(NC)\n"
 
 qa-load-test: ## Run Locust load tests (requires app running on localhost:5000)
@@ -864,7 +864,7 @@ qa-load-test: ## Run Locust load tests (requires app running on localhost:5000)
 
 qa-accessibility: ## Run accessibility tests only
 	@printf "$(BLUE)Running accessibility tests...$(NC)\n"
-	@cd qa/web && pytest -m accessibility
+	@PYTHONPATH="$(PWD)/src:$(PWD)/qa/web:$$PYTHONPATH" $(UV) run pytest qa/web/tests/accessibility/
 	@printf "$(GREEN)✓ Accessibility tests complete$(NC)\n"
 
 qa-clean: ## Clean QA test artifacts
