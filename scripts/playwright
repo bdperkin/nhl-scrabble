@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+# Playwright Docker Wrapper for Fedora
+#
+# Playwright does not officially support Fedora as a host OS. This wrapper
+# executes Playwright commands inside the official Microsoft Playwright Docker
+# container, bypassing local dependency issues while maintaining functionality.
+#
+# Usage:
+#   ./scripts/playwright [playwright-args...]
+#   ./scripts/playwright install
+#   ./scripts/playwright install --with-deps chromium firefox webkit
+#
+# Environment Variables:
+#   PLAYWRIGHT_IMAGE    Docker image to use (default: mcr.microsoft.com/playwright:v1.49.1-noble)
+#   PLAYWRIGHT_NO_PULL  Skip pulling image if set to 'true'
+
+set -euo pipefail
+
+# Configuration
+# PLAYWRIGHT_VERSION can be:
+#   - "latest" (default) - uses latest Docker image and latest pip package
+#   - "1.49.0" - uses v1.49.0 Docker image and playwright==1.49.0 pip package
+PLAYWRIGHT_VERSION="${PLAYWRIGHT_VERSION:-latest}"
+
+# Build Docker image tag from version
+if [[ "${PLAYWRIGHT_VERSION}" == "latest" ]]; then
+    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:latest}"
+    PLAYWRIGHT_PIP_SPEC="playwright"  # Install latest via pip
+else
+    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:v${PLAYWRIGHT_VERSION}-noble}"
+    PLAYWRIGHT_PIP_SPEC="playwright==${PLAYWRIGHT_VERSION}"  # Install specific version
+fi
+
+PLAYWRIGHT_NO_PULL="${PLAYWRIGHT_NO_PULL:-false}"
+
+# Detect repository root (script is in scripts/ subdirectory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Print colored message
+log() {
+    local color="$1"
+    shift
+    echo -e "${color}[playwright-docker]${NC} $*"
+}
+
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    log "${RED}" "ERROR: Docker is not installed or not in PATH"
+    log "${YELLOW}" "Install Docker: https://docs.docker.com/get-docker/"
+    exit 1
+fi
+
+# Check if Docker daemon is running
+if ! docker info &> /dev/null; then
+    log "${RED}" "ERROR: Docker daemon is not running"
+    log "${YELLOW}" "Start Docker: sudo systemctl start docker"
+    exit 1
+fi
+
+# Pull Playwright image if needed
+if [[ "${PLAYWRIGHT_NO_PULL}" != "true" ]]; then
+    if ! docker images "${PLAYWRIGHT_IMAGE}" --format '{{.Repository}}:{{.Tag}}' | grep -q "${PLAYWRIGHT_IMAGE}"; then
+        log "${BLUE}" "Pulling Playwright Docker image: ${PLAYWRIGHT_IMAGE}"
+        if ! docker pull "${PLAYWRIGHT_IMAGE}"; then
+            log "${RED}" "ERROR: Failed to pull Docker image"
+            exit 1
+        fi
+    fi
+fi
+
+# Determine working directory relative to repo root
+# If called from qa/web, maintain that context
+CURRENT_DIR="$(pwd)"
+if [[ "${CURRENT_DIR}" == "${REPO_ROOT}"* ]]; then
+    # Inside repo, calculate relative path
+    REL_PATH="${CURRENT_DIR#${REPO_ROOT}}"
+    REL_PATH="${REL_PATH#/}" # Remove leading slash
+    WORKDIR="/work/${REL_PATH}"
+else
+    # Outside repo, use /work as working directory
+    WORKDIR="/work"
+fi
+
+# Playwright CLI wrapper always runs as root for simplicity
+# - Installing browsers requires root for system dependencies
+# - Installing Python packages is easier as root in throwaway container
+# - This is safe because container is ephemeral
+
+# Build Docker run command
+DOCKER_CMD=(
+    docker run
+    --rm                                    # Remove container after exit
+    --interactive                           # Keep STDIN open
+    --network host                          # Access host network (for localhost:5000)
+    --volume "${REPO_ROOT}:/work"          # Mount repository
+    --volume "${HOME}/.cache:/root/.cache"  # Mount cache directory
+    --workdir "${WORKDIR}"                 # Set working directory
+    --env "PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright"  # Browser cache
+)
+
+# Add TTY flag only if running in a terminal
+if [[ -t 1 ]]; then
+    DOCKER_CMD+=(--tty)
+fi
+
+# Add environment variables for Playwright from host
+# This allows overriding Playwright settings via environment
+declare -a PLAYWRIGHT_ENVS=(
+    "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD"
+    "PLAYWRIGHT_BROWSERS_PATH"
+    "DEBUG"
+    "PWDEBUG"
+)
+
+for env_var in "${PLAYWRIGHT_ENVS[@]}"; do
+    if [[ -n "${!env_var:-}" ]]; then
+        DOCKER_CMD+=(--env "${env_var}=${!env_var}")
+    fi
+done
+
+# Special handling for 'install' command to ensure browsers are cached
+if [[ "${1:-}" == "install" ]]; then
+    log "${BLUE}" "Installing Playwright browsers in Docker container"
+    log "${YELLOW}" "Browsers will be cached in: ${HOME}/.cache/ms-playwright"
+fi
+
+# Execute Playwright command in container
+log "${GREEN}" "Running: playwright $*"
+log "${BLUE}" "Image: ${PLAYWRIGHT_IMAGE}"
+log "${BLUE}" "Working directory: ${WORKDIR}"
+
+# Python Playwright package needs to be installed
+# For 'install' commands or initial setup, install playwright package first
+INSTALL_PLAYWRIGHT="pip list 2>/dev/null | grep -q '^playwright ' || pip install --quiet ${PLAYWRIGHT_PIP_SPEC}"
+
+if [[ "${1:-}" == "install" ]]; then
+    log "${BLUE}" "Installing Python Playwright (${PLAYWRIGHT_VERSION}) and browsers..."
+
+    # Run the command (ensure playwright is installed, then run playwright install)
+    "${DOCKER_CMD[@]}" \
+        "${PLAYWRIGHT_IMAGE}" \
+        bash -c "${INSTALL_PLAYWRIGHT} && playwright $*"
+else
+    # For other commands, ensure playwright is installed, then run command
+    "${DOCKER_CMD[@]}" \
+        "${PLAYWRIGHT_IMAGE}" \
+        bash -c "${INSTALL_PLAYWRIGHT} && playwright $*"
+fi
+
+EXIT_CODE=$?
+
+if [[ ${EXIT_CODE} -eq 0 ]]; then
+    log "${GREEN}" "Command completed successfully"
+else
+    log "${RED}" "Command failed with exit code ${EXIT_CODE}"
+fi
+
+exit ${EXIT_CODE}

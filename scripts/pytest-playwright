@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+# Pytest Playwright Docker Wrapper for Fedora
+#
+# Runs pytest with Playwright tests inside the official Microsoft Playwright
+# Docker container. This bypasses Fedora compatibility issues while maintaining
+# full Playwright functionality.
+#
+# Usage:
+#   ./scripts/pytest-playwright [pytest-args...]
+#   ./scripts/pytest-playwright qa/web/tests/visual/
+#   ./scripts/pytest-playwright qa/web/tests/visual/ --browser=firefox
+#   ./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots
+#
+# Environment Variables:
+#   PLAYWRIGHT_IMAGE    Docker image to use (default: mcr.microsoft.com/playwright:v1.49.1-noble)
+#   PLAYWRIGHT_NO_PULL  Skip pulling image if set to 'true'
+#   WEB_SERVER_URL      Override web server URL (default: http://host.docker.internal:5000)
+
+set -euo pipefail
+
+# Configuration
+# PLAYWRIGHT_VERSION can be:
+#   - "latest" (default) - uses latest Docker image
+#   - "1.49.0" - uses v1.49.0 Docker image
+PLAYWRIGHT_VERSION="${PLAYWRIGHT_VERSION:-latest}"
+
+# Build Docker image tag from version
+if [[ "${PLAYWRIGHT_VERSION}" == "latest" ]]; then
+    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:latest}"
+else
+    PLAYWRIGHT_IMAGE="${PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright/python:v${PLAYWRIGHT_VERSION}-noble}"
+fi
+
+PLAYWRIGHT_NO_PULL="${PLAYWRIGHT_NO_PULL:-false}"
+WEB_SERVER_URL="${WEB_SERVER_URL:-http://localhost:5000}"
+
+# Detect repository root (script is in scripts/ subdirectory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Print colored message
+log() {
+    local color="$1"
+    shift
+    echo -e "${color}[pytest-playwright]${NC} $*"
+}
+
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    log "${RED}" "ERROR: Docker is not installed or not in PATH"
+    log "${YELLOW}" "Install Docker: https://docs.docker.com/get-docker/"
+    exit 1
+fi
+
+# Check if Docker daemon is running
+if ! docker info &> /dev/null; then
+    log "${RED}" "ERROR: Docker daemon is not running"
+    log "${YELLOW}" "Start Docker: sudo systemctl start docker"
+    exit 1
+fi
+
+# Check if web server is running on localhost:5000
+if command -v curl &> /dev/null; then
+    if ! curl -s -f -m 2 http://localhost:5000 > /dev/null 2>&1; then
+        log "${YELLOW}" "WARNING: Web server not detected on localhost:5000"
+        log "${YELLOW}" "Start server: nhl-scrabble serve --host 0.0.0.0 --port 5000"
+        log "${YELLOW}" "Tests will fail without a running web server"
+    else
+        log "${GREEN}" "Web server detected on localhost:5000"
+    fi
+fi
+
+# Pull Playwright image if needed
+if [[ "${PLAYWRIGHT_NO_PULL}" != "true" ]]; then
+    if ! docker images "${PLAYWRIGHT_IMAGE}" --format '{{.Repository}}:{{.Tag}}' | grep -q "${PLAYWRIGHT_IMAGE}"; then
+        log "${BLUE}" "Pulling Playwright Docker image: ${PLAYWRIGHT_IMAGE}"
+        if ! docker pull "${PLAYWRIGHT_IMAGE}"; then
+            log "${RED}" "ERROR: Failed to pull Docker image"
+            exit 1
+        fi
+    fi
+fi
+
+# Determine working directory relative to repo root
+CURRENT_DIR="$(pwd)"
+if [[ "${CURRENT_DIR}" == "${REPO_ROOT}"* ]]; then
+    # Inside repo, calculate relative path
+    REL_PATH="${CURRENT_DIR#${REPO_ROOT}}"
+    REL_PATH="${REL_PATH#/}" # Remove leading slash
+    WORKDIR="/work/${REL_PATH}"
+else
+    # Outside repo, use /work as working directory
+    WORKDIR="/work"
+fi
+
+# Install project dependencies in container
+# We need to ensure pytest and dependencies are available
+INSTALL_CMD="cd /work && pip install --quiet --no-cache-dir -e '.[dev,web]' && cd /work/qa/web && pip install --quiet --no-cache-dir -e ."
+
+# Build Docker run command
+DOCKER_CMD=(
+    docker run
+    --rm                                    # Remove container after exit
+    --interactive                           # Keep STDIN open
+    --network host                          # Access host network (for localhost:5000)
+    --user "$(id -u):$(id -g)"             # Run as current user (avoid root-owned files)
+    --volume "${REPO_ROOT}:/work"          # Mount repository
+    --volume "${HOME}/.cache:/home/pwuser/.cache"  # Mount cache directory
+    --workdir "${WORKDIR}"                 # Set working directory
+    --env "HOME=/home/pwuser"              # Set HOME for Playwright
+    --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache
+    --env "BASE_URL=${WEB_SERVER_URL}"     # Override base URL for tests
+    --env "PYTHONUNBUFFERED=1"             # Unbuffered Python output
+)
+
+# Add TTY flag only if running in a terminal
+if [[ -t 1 ]]; then
+    DOCKER_CMD+=(--tty)
+fi
+
+# Add environment variables from host
+declare -a PYTEST_ENVS=(
+    "DEBUG"
+    "PWDEBUG"
+    "CI"
+    "PYTEST_CURRENT_TEST"
+)
+
+for env_var in "${PYTEST_ENVS[@]}"; do
+    if [[ -n "${!env_var:-}" ]]; then
+        DOCKER_CMD+=(--env "${env_var}=${!env_var}")
+    fi
+done
+
+# Check if --update-snapshots is in arguments
+UPDATE_SNAPSHOTS=false
+for arg in "$@"; do
+    if [[ "${arg}" == "--update-snapshots" ]]; then
+        UPDATE_SNAPSHOTS=true
+        break
+    fi
+done
+
+if [[ "${UPDATE_SNAPSHOTS}" == "true" ]]; then
+    log "${YELLOW}" "Running with --update-snapshots: Baselines will be regenerated"
+fi
+
+# Execute pytest command in container
+log "${GREEN}" "Running: pytest $*"
+log "${BLUE}" "Image: ${PLAYWRIGHT_IMAGE}"
+log "${BLUE}" "Working directory: ${WORKDIR}"
+log "${BLUE}" "Web server URL: ${WEB_SERVER_URL}"
+
+# Run the command with bash to allow installing dependencies first
+"${DOCKER_CMD[@]}" \
+    "${PLAYWRIGHT_IMAGE}" \
+    bash -c "${INSTALL_CMD} && pytest $*"
+
+EXIT_CODE=$?
+
+if [[ ${EXIT_CODE} -eq 0 ]]; then
+    log "${GREEN}" "Tests completed successfully"
+else
+    log "${RED}" "Tests failed with exit code ${EXIT_CODE}"
+fi
+
+exit ${EXIT_CODE}
