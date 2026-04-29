@@ -172,6 +172,121 @@ async def root(request: Request) -> HTMLResponse:
     )
 
 
+@app.get("/teams", response_class=HTMLResponse)
+async def teams_page(request: Request) -> HTMLResponse:
+    """Serve the teams standings page.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered index.html template with teams view
+
+    Raises:
+        HTTPException: If templates not configured
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"view": "teams"},
+    )
+
+
+@app.get("/divisions", response_class=HTMLResponse)
+async def divisions_page(request: Request) -> HTMLResponse:
+    """Serve the divisions standings page.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered index.html template with divisions view
+
+    Raises:
+        HTTPException: If templates not configured
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"view": "divisions"},
+    )
+
+
+@app.get("/conferences", response_class=HTMLResponse)
+async def conferences_page(request: Request) -> HTMLResponse:
+    """Serve the conferences standings page.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered index.html template with conferences view
+
+    Raises:
+        HTTPException: If templates not configured
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"view": "conferences"},
+    )
+
+
+@app.get("/playoffs", response_class=HTMLResponse)
+async def playoffs_page(request: Request) -> HTMLResponse:
+    """Serve the playoff bracket page.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered index.html template with playoffs view
+
+    Raises:
+        HTTPException: If templates not configured
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"view": "playoffs"},
+    )
+
+
+@app.get("/stats", response_class=HTMLResponse)
+async def stats_page(request: Request) -> HTMLResponse:
+    """Serve the statistics page.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered index.html template with stats view
+
+    Raises:
+        HTTPException: If templates not configured
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"view": "stats"},
+    )
+
+
 @app.get("/favicon.svg")
 async def favicon() -> HTMLResponse:
     """Serve favicon as SVG.
