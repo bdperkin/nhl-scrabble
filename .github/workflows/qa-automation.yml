@@ -182,10 +182,11 @@ jobs:
                 if p.stat().st_size == 0 else None' && \
               python3 -m venv --system-site-packages /tmp/qa-venv && \
               /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
-                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
-                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
-                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
-                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+                'axe-playwright-python>=0.1.7' 'httpx>=0.28' \
+                'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' \
+                'pytest>=9.0.3' 'pytest-html>=4.2' \
+                'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' \
+                'pytest-xdist>=3.8' && \
               source /tmp/qa-venv/bin/activate && \
               pytest tests/functional/ \
                 --browser=${{ matrix.browser }} \
@@ -222,10 +223,11 @@ jobs:
                 if p.stat().st_size == 0 else None' && \
               python3 -m venv --system-site-packages /tmp/qa-venv && \
               /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
-                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
-                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
-                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
-                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+                'axe-playwright-python>=0.1.7' 'httpx>=0.28' \
+                'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' \
+                'pytest>=9.0.3' 'pytest-html>=4.2' \
+                'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' \
+                'pytest-xdist>=3.8' && \
               source /tmp/qa-venv/bin/activate && \
               pytest tests/visual/ \
                 --browser=${{ matrix.browser }} \
@@ -259,11 +261,11 @@ jobs:
                 if p.stat().st_size == 0 else None' && \
               python3 -m venv --system-site-packages /tmp/qa-venv && \
               /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
-                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
-                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
-                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
-                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' \
-                'pytest-benchmark>=5.2.3' && \
+                'axe-playwright-python>=0.1.7' 'httpx>=0.28' \
+                'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' \
+                'pytest>=9.0.3' 'pytest-html>=4.2' \
+                'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' \
+                'pytest-xdist>=3.8' 'pytest-benchmark>=5.2.3' && \
               source /tmp/qa-venv/bin/activate && \
               pytest tests/performance/ \
                 --browser=${{ matrix.browser }} \
@@ -300,10 +302,11 @@ jobs:
                 if p.stat().st_size == 0 else None' && \
               python3 -m venv --system-site-packages /tmp/qa-venv && \
               /tmp/qa-venv/bin/pip install --quiet --no-cache-dir \
-                'axe-playwright-python>=0.1.7' 'locust>=2.43.4' \
-                'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' \
-                'pytest-html>=4.2' 'pytest-playwright>=0.7.2' \
-                'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8' && \
+                'axe-playwright-python>=0.1.7' 'httpx>=0.28' \
+                'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' \
+                'pytest>=9.0.3' 'pytest-html>=4.2' \
+                'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' \
+                'pytest-xdist>=3.8' && \
               source /tmp/qa-venv/bin/activate && \
               pytest tests/accessibility/ \
                 --browser=${{ matrix.browser }} \

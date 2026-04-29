@@ -96,7 +96,7 @@ fi
 # Create virtualenv in /tmp with --system-site-packages to inherit playwright.
 # Then install additional QA dependencies into the virtualenv.
 # First, generate a _version.py file if it doesn't exist for the main package
-INSTALL_CMD="python3 -c \"import pathlib; p = pathlib.Path('/work/src/nhl_scrabble/_version.py'); p.parent.mkdir(parents=True, exist_ok=True); p.touch() if not p.exists() else None; p.write_text('__version__ = \\\"0.0.0+local\\\"\\n') if p.stat().st_size == 0 else None\" && python3 -m venv --system-site-packages /tmp/qa-venv && /tmp/qa-venv/bin/pip install --quiet --no-cache-dir 'axe-playwright-python>=0.1.7' 'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' 'pytest-html>=4.2' 'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8'"
+INSTALL_CMD="python3 -c \"import pathlib; p = pathlib.Path('/work/src/nhl_scrabble/_version.py'); p.parent.mkdir(parents=True, exist_ok=True); p.touch() if not p.exists() else None; p.write_text('__version__ = \\\"0.0.0+local\\\"\\n') if p.stat().st_size == 0 else None\" && python3 -m venv --system-site-packages /tmp/qa-venv && /tmp/qa-venv/bin/pip install --quiet --no-cache-dir 'axe-playwright-python>=0.1.7' 'httpx>=0.28' 'locust>=2.43.4' 'pillow>=12.2' 'pixelmatch>=0.2.3' 'pytest>=9.0.3' 'pytest-html>=4.2' 'pytest-playwright>=0.7.2' 'pytest-playwright-snapshot>=1' 'pytest-xdist>=3.8'"
 
 # Build Docker run command
 # Use :z flag for SELinux systems to allow container write access
