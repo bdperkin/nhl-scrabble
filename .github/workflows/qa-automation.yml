@@ -52,10 +52,6 @@ jobs:
       matrix:
         browser: [chromium, firefox, webkit]
 
-    env:
-      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -294,10 +290,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: qa-tests
     if: always()
-
-    env:
-      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
       - name: Download all test reports
