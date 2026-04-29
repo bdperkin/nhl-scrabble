@@ -173,14 +173,12 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
     page_fixture.fill("#topPlayers", "5")
     page_fixture.click("#analyzeBtn")
 
-    # Wait for results to update with proper wait condition
-    page_fixture.wait_for_function(
-        "document.querySelectorAll('#playersTable tbody tr').length === 5",
-        timeout=30000,
-    )
+    # Wait for results to update without string-evaluated JavaScript, which violates CSP.
+    rows = page_fixture.locator("#playersTable tbody tr")
+    expect(rows).to_have_count(5, timeout=30000)
 
     # Count rows from second submission - should be different
-    rows_2 = page_fixture.locator("#playersTable tbody tr").count()
+    rows_2 = rows.count()
     assert rows_2 == 5, "Second submission should have 5 rows (replaced previous)"  # noqa: S101
 
 
@@ -303,17 +301,15 @@ def test_concurrent_submissions_handled(page_fixture: Page) -> None:
     page_fixture.fill("#topPlayers", "20")
     page_fixture.click("#analyzeBtn")  # Actually submit the second request
 
-    # Wait for results to update with proper wait condition
-    page_fixture.wait_for_function(
-        "document.querySelectorAll('#playersTable tbody tr').length === 20",
-        timeout=30000,
-    )
+    # Wait for results to update without string-evaluated JavaScript, which violates CSP.
+    rows = page_fixture.locator("#playersTable tbody tr")
+    expect(rows).to_have_count(20, timeout=30000)
 
     # Verify we got updated results (20 rows)
     results = page_fixture.locator("#results")
     expect(results).to_be_visible()
 
-    second_rows = page_fixture.locator("#playersTable tbody tr").count()
+    second_rows = rows.count()
     assert (
         second_rows == 20
     ), f"Second submission should have 20 rows, got {second_rows}"  # noqa: S101

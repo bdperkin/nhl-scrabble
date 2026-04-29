@@ -75,8 +75,8 @@ class BasePage:
         else:
             # Wait for any URL change
             current_url = self.page.url
-            self.page.wait_for_function(
-                f'window.location.href !== "{current_url}"',
+            self.page.wait_for_url(
+                lambda target_url: str(target_url) != current_url,
                 timeout=timeout,
             )
 
