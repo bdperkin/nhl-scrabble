@@ -417,13 +417,18 @@ async def teams_page(request: Request) -> HTMLResponse:
         analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
         data = await analyze_post(analysis_request)
 
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+
         return templates.TemplateResponse(
             request=request,
             name="teams.html",
             context={
                 "team_standings": data["team_standings"],
                 "stats": data["stats"],
-                "timestamp": data["timestamp"],
+                "timestamp": formatted_timestamp,
             },
         )
     except NHLApiError as e:
@@ -455,13 +460,18 @@ async def divisions_page(request: Request) -> HTMLResponse:
         analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
         data = await analyze_post(analysis_request)
 
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+
         return templates.TemplateResponse(
             request=request,
             name="divisions.html",
             context={
                 "division_standings": data["division_standings"],
                 "stats": data["stats"],
-                "timestamp": data["timestamp"],
+                "timestamp": formatted_timestamp,
             },
         )
     except NHLApiError as e:
@@ -493,13 +503,18 @@ async def conferences_page(request: Request) -> HTMLResponse:
         analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
         data = await analyze_post(analysis_request)
 
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+
         return templates.TemplateResponse(
             request=request,
             name="conferences.html",
             context={
                 "conference_standings": data["conference_standings"],
                 "stats": data["stats"],
-                "timestamp": data["timestamp"],
+                "timestamp": formatted_timestamp,
             },
         )
     except NHLApiError as e:
@@ -534,6 +549,11 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         # Calculate total playoff teams
         playoff_teams_count = sum(len(teams) for teams in data["playoff_bracket"].values())
 
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+
         return templates.TemplateResponse(
             request=request,
             name="playoffs.html",
@@ -541,7 +561,7 @@ async def playoffs_page(request: Request) -> HTMLResponse:
                 "playoff_bracket": data["playoff_bracket"],
                 "playoff_teams_count": playoff_teams_count,
                 "stats": data["stats"],
-                "timestamp": data["timestamp"],
+                "timestamp": formatted_timestamp,
             },
         )
     except NHLApiError as e:
@@ -573,13 +593,18 @@ async def stats_page(request: Request) -> HTMLResponse:
         analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
         data = await analyze_post(analysis_request)
 
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+
         return templates.TemplateResponse(
             request=request,
             name="stats.html",
             context={
                 "stats": data["stats"],
                 "top_players": data["top_players"],
-                "timestamp": data["timestamp"],
+                "timestamp": formatted_timestamp,
             },
         )
     except NHLApiError as e:
