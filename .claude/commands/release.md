@@ -9,7 +9,8 @@ Automate the complete release process for the nhl-scrabble package.
 ## Status
 
 **Phase 1 Complete**: Pre-Release Validation ✅
-**Phase 2-7**: Coming in future tasks (see tasks/new-features/019-comprehensive-release-automation-skill.md)
+**Phase 2 Complete**: Version Bumping ✅
+**Phase 3-7**: Coming in future tasks (see tasks/new-features/019-comprehensive-release-automation-skill.md)
 
 ## Usage
 
@@ -442,16 +443,407 @@ To proceed manually:
 See tasks/new-features/019-comprehensive-release-automation-skill.md for full automation roadmap.
 ```
 
-### Phase 2-7: Coming Soon
+### Phase 2: Version Bumping ✅
+
+Update CHANGELOG.md with new version and generate changelog entries from git commit history using conventional commits format.
+
+**Important**: This project uses **hatch-vcs for dynamic versioning** from git tags. Version is NOT manually set in `pyproject.toml` or `__init__.py` - it's automatically derived from git tags. The version files will be updated by the git tag in Phase 4 (Publish).
+
+**Step 1: Generate Changelog Entry from Commits**
+
+Parse conventional commits since last release and generate changelog entry:
+
+```bash
+# Get latest version tag
+latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+# Get commits since last tag (or all commits if no tags)
+if [ -z "$latest_tag" ]; then
+    commit_range="HEAD"
+    echo "No previous release found - generating changelog from all commits"
+else
+    commit_range="$latest_tag..HEAD"
+    echo "Generating changelog from $latest_tag to HEAD"
+fi
+
+# Parse conventional commits by type
+# Format: type(scope): subject
+# Example: feat(api): Add new endpoint
+
+# Extract features (feat:)
+features=$(git log $commit_range --oneline --grep="^feat" --grep="^feat(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- feat: /- /' | \
+    sed 's/^- feat(/- (/')
+
+# Extract bug fixes (fix:)
+fixes=$(git log $commit_range --oneline --grep="^fix" --grep="^fix(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- fix: /- /' | \
+    sed 's/^- fix(/- (/')
+
+# Extract documentation changes (docs:)
+docs=$(git log $commit_range --oneline --grep="^docs" --grep="^docs(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- docs: /- /' | \
+    sed 's/^- docs(/- (/')
+
+# Extract performance improvements (perf:)
+perf=$(git log $commit_range --oneline --grep="^perf" --grep="^perf(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- perf: /- /' | \
+    sed 's/^- perf(/- (/')
+
+# Extract refactoring (refactor:)
+refactor=$(git log $commit_range --oneline --grep="^refactor" --grep="^refactor(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- refactor: /- /' | \
+    sed 's/^- refactor(/- (/')
+
+# Extract tests (test:)
+tests=$(git log $commit_range --oneline --grep="^test" --grep="^test(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- test: /- /' | \
+    sed 's/^- test(/- (/')
+
+# Extract build/CI changes (build:, ci:)
+build=$(git log $commit_range --oneline --grep="^build" --grep="^build(" --grep="^ci" --grep="^ci(" | \
+    sed 's/^[a-f0-9]* /- /' | \
+    sed 's/^- build: /- /' | \
+    sed 's/^- build(/- (/' | \
+    sed 's/^- ci: /- /' | \
+    sed 's/^- ci(/- (/')
+
+# Check for breaking changes
+breaking=$(git log $commit_range --grep="BREAKING CHANGE" | \
+    grep -A 1 "BREAKING CHANGE:" | \
+    grep -v "^--$" | \
+    sed 's/BREAKING CHANGE: //')
+
+# Count total commits
+commit_count=$(git log $commit_range --oneline | wc -l)
+```
+
+**Requirements:**
+- Parse all commits since last release tag
+- Extract commits by conventional commit type (feat, fix, docs, etc.)
+- Identify breaking changes (BREAKING CHANGE in commit body)
+- Format entries for Keep a Changelog style
+- Include PR numbers if present (#123)
+
+**Output Format:**
+Each section should contain bulleted list of changes:
+- One bullet per commit
+- Remove conventional commit prefix (feat:, fix:)
+- Keep scope in parentheses if present
+- Keep PR number if present
+
+**Step 2: Build CHANGELOG Entry**
+
+Construct the new changelog section using Keep a Changelog format:
+
+```bash
+# Get today's date
+release_date=$(date +%Y-%m-%d)
+
+# Build changelog entry
+changelog_entry="## [$new_version] - $release_date
+
+"
+
+# Add sections in order (only if non-empty)
+
+# Breaking Changes (if any)
+if [ -n "$breaking" ]; then
+    changelog_entry+="### ⚠️ BREAKING CHANGES
+
+$breaking
+
+"
+fi
+
+# Added (features)
+if [ -n "$features" ]; then
+    changelog_entry+="### Added
+
+$features
+
+"
+fi
+
+# Changed (refactoring, performance)
+if [ -n "$refactor" ] || [ -n "$perf" ]; then
+    changelog_entry+="### Changed
+
+"
+    [ -n "$refactor" ] && changelog_entry+="$refactor
+"
+    [ -n "$perf" ] && changelog_entry+="$perf
+"
+fi
+
+# Fixed (bug fixes)
+if [ -n "$fixes" ]; then
+    changelog_entry+="### Fixed
+
+$fixes
+
+"
+fi
+
+# Documentation
+if [ -n "$docs" ]; then
+    changelog_entry+="### Documentation
+
+$docs
+
+"
+fi
+
+# Tests
+if [ -n "$tests" ]; then
+    changelog_entry+="### Tests
+
+$tests
+
+"
+fi
+
+# Build/CI
+if [ -n "$build" ]; then
+    changelog_entry+="### Build / CI
+
+$build
+
+"
+fi
+
+echo "$changelog_entry"
+```
+
+**Requirements:**
+- Follow Keep a Changelog section order:
+  1. ⚠️ BREAKING CHANGES (if any)
+  2. Added (features)
+  3. Changed (refactoring, performance)
+  4. Fixed (bug fixes)
+  5. Documentation
+  6. Tests
+  7. Build / CI
+- Use proper markdown formatting
+- Include version and date in header
+- Only include non-empty sections
+
+**Step 3: Update CHANGELOG.md**
+
+Insert new version section into CHANGELOG.md:
+
+```bash
+# Read current CHANGELOG.md
+changelog_file="CHANGELOG.md"
+
+# Find line number of [Unreleased] section
+unreleased_line=$(grep -n "## \[Unreleased\]" $changelog_file | cut -d: -f1)
+
+# Create temporary file with new content
+{
+    # Keep everything up to and including [Unreleased]
+    head -n $unreleased_line $changelog_file
+
+    # Add empty line after [Unreleased]
+    echo ""
+
+    # Add new version section
+    echo "$changelog_entry"
+
+    # Add rest of file (skip [Unreleased] line and empty line after it)
+    tail -n +$((unreleased_line + 2)) $changelog_file
+} > "${changelog_file}.new"
+
+# Replace original with new file
+mv "${changelog_file}.new" "$changelog_file"
+
+echo "✅ CHANGELOG.md updated with version $new_version"
+```
+
+**Requirements:**
+- Insert new version after `## [Unreleased]` header
+- Preserve existing changelog entries
+- Maintain proper markdown formatting
+- Keep `## [Unreleased]` section empty for future changes
+
+**Step 4: Preview Changes**
+
+Show user what will be committed:
+
+```bash
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📝 Changelog Preview"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "$changelog_entry"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Modified files:"
+echo "  - CHANGELOG.md"
+echo ""
+echo "Commit count: $commit_count commits since $latest_tag"
+echo ""
+
+# Show git diff for CHANGELOG.md
+git diff CHANGELOG.md
+```
+
+**Requirements:**
+- Display formatted changelog entry
+- Show git diff of modified files
+- Show summary of changes (commit count)
+- Clear visual separation
+
+**Step 5: Confirm Version Bump**
+
+Prompt user to confirm before committing:
+
+```bash
+echo ""
+read -p "Proceed with version bump to v$new_version? [y/N]: " confirm
+
+if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+    echo ""
+    echo "❌ Version bump cancelled by user"
+    echo ""
+    echo "Reverting changes..."
+    git checkout CHANGELOG.md
+    echo "✅ Changes reverted"
+    exit 1
+fi
+```
+
+**Requirements:**
+- Require explicit confirmation (y/Y)
+- Default to NO (any other input cancels)
+- Provide option to revert changes
+- Clear messaging about what will happen
+
+**Error Handling:**
+- If user declines:
+  - Revert all file modifications (`git checkout CHANGELOG.md`)
+  - Display cancellation message
+  - Exit cleanly with non-zero status
+  - Provide instructions for manual process
+
+**Step 6: Create Version Bump Commit**
+
+Create git commit with version bump:
+
+```bash
+# Stage CHANGELOG.md
+git add CHANGELOG.md
+
+# Create commit message
+commit_message="chore(release): Prepare release v$new_version
+
+- Update CHANGELOG.md with $commit_count changes
+- Categorized by conventional commit types
+- Release date: $release_date
+
+This commit prepares the release but does not create the git tag.
+The tag will be created in Phase 4 (Publish) after build validation.
+"
+
+# Create commit
+git commit -m "$commit_message"
+
+echo ""
+echo "✅ Version bump commit created"
+echo ""
+git log -1 --stat
+```
+
+**Requirements:**
+- Stage only CHANGELOG.md
+- Use conventional commit format: `chore(release): Prepare release vX.Y.Z`
+- Include commit summary in message body
+- Explain that tag creation happens in Phase 4
+- Show commit details after creation
+
+**Error Handling:**
+- If commit fails:
+  - Display git error message
+  - Show what files were staged
+  - Suggest checking git status
+  - Do not proceed to next phase
+  - Exit with failure
+
+**Step 7: Version Bump Summary**
+
+Display summary of version bump phase:
+
+```
+✅ Phase 2: Version Bumping Complete
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version:
+  Current: 0.0.12
+  Next: 0.0.13
+  Type: patch
+
+Changes Included:
+  Total commits: 3
+  Features: 1
+  Bug fixes: 2
+  Documentation: 0
+  Breaking changes: 0
+
+Files Modified:
+  ✅ CHANGELOG.md updated
+
+Git Commit:
+  ✅ Created: chore(release): Prepare release v0.0.13
+  📝 Commit SHA: abc123d
+  ⚠️  Not pushed yet (will push in Phase 4)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Note: Version files (pyproject.toml, __init__.py) use dynamic versioning
+      from git tags (hatch-vcs). They will update automatically when
+      the git tag is created in Phase 4 (Publish).
+
+Next Steps (Phase 3+):
+  - Build and Validate (not yet implemented)
+  - Publish to PyPI (not yet implemented)
+  - Create GitHub Release (not yet implemented)
+  - Post-Release Tasks (not yet implemented)
+
+⚠️  Note: Only Phases 1-2 are currently implemented.
+    Future phases will be added in subsequent tasks.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To continue manually:
+1. Review commit: git show HEAD
+2. Build packages: python -m build
+3. Test install: pip install dist/*.whl
+4. Create tag: git tag -a v0.0.13 -m "Release version 0.0.13"
+5. Push: git push && git push v0.0.13
+6. Wait for CI to publish to PyPI
+7. Create GitHub release: gh release create v0.0.13 --generate-notes
+
+See tasks/new-features/019-comprehensive-release-automation-skill.md for full automation roadmap.
+```
+
+### Phase 3-7: Coming Soon
 
 Future phases will be implemented in subsequent tasks:
 
-- **Phase 2**: Version Bumping (task 026)
 - **Phase 3**: Build and Validate (task 027)
 - **Phase 4**: Publish (task 028)
-- **Phase 5**: Documentation Deployment (task 029)
-- **Phase 6**: Post-Release Tasks (task 030)
-- **Phase 7**: Verification and Cleanup (task 031)
+- **Phase 5**: Post-Release Tasks (task 029)
+- **Phase 6**: Verification and Cleanup (task 030)
+- **Phase 7**: Release Orchestration CLI (task 031)
 
 See parent task: `tasks/new-features/019-comprehensive-release-automation-skill.md`
 
@@ -491,14 +883,24 @@ All validation steps include comprehensive error handling:
 
 ## Safety Features
 
-Phase 1 focuses on validation only - no destructive actions:
-
+**Phase 1** (Validation):
 - ✅ Read-only git operations
 - ✅ No file modifications
 - ✅ No commits or tags created
+- ✅ Safe to run anytime
+
+**Phase 2** (Version Bumping):
+- ✅ Modifies only CHANGELOG.md (reversible)
+- ✅ Creates local commit (not pushed)
+- ✅ Requires user confirmation before committing
+- ✅ Can be reverted with git reset
+- ✅ No git tags created yet
 - ✅ No pushes to remote
 - ✅ No publishing actions
-- ✅ Safe to run anytime
+
+**Future Phases** (3-7):
+- ⚠️ Will include builds, tags, pushes, and publishing
+- ⚠️ Will require careful testing before use
 
 ## Usage Examples
 
@@ -554,7 +956,7 @@ Phase 1 focuses on validation only - no destructive actions:
 
 **Manual Testing Checklist:**
 
-Phase 1 validation can be tested with various repository states:
+**Phase 1** (Validation) - can be tested safely:
 
 - [ ] Test with clean working directory
 - [ ] Test with uncommitted changes (should fail)
@@ -568,12 +970,25 @@ Phase 1 validation can be tested with various repository states:
 - [ ] Test with no previous tags (first release)
 - [ ] Test with existing version tag (should fail)
 
-**Safe Testing:**
+**Phase 2** (Version Bumping) - test carefully:
 
-Since Phase 1 is read-only, it's safe to test on the real repository:
+- [ ] Test changelog generation from conventional commits
+- [ ] Test with feat commits only
+- [ ] Test with fix commits only
+- [ ] Test with mixed commit types
+- [ ] Test with breaking changes (BREAKING CHANGE in commit body)
+- [ ] Test with PR numbers (#123) in commits
+- [ ] Test with no commits since last tag (should still work)
+- [ ] Test preview and confirmation prompt
+- [ ] Test cancellation (should revert CHANGELOG.md)
+- [ ] Test commit creation
+- [ ] Verify commit message format
 
+**Testing Approach:**
+
+**Phase 1** (Safe - Read-only):
 ```bash
-# Test in current state
+# Test validation in current state
 /release
 
 # Test with uncommitted changes
@@ -586,6 +1001,31 @@ git checkout -b test-branch
 /release  # Should fail
 git checkout main
 git branch -D test-branch
+```
+
+**Phase 2** (Caution - Creates commits):
+```bash
+# OPTION 1: Test on feature branch (recommended)
+git checkout -b test-release-026
+# Make some conventional commits
+git commit --allow-empty -m "feat: test feature"
+git commit --allow-empty -m "fix: test bugfix"
+/release  # Should generate changelog and create commit
+# Review result
+git log -1
+git show HEAD
+# Clean up
+git checkout main
+git branch -D test-release-026
+
+# OPTION 2: Test with dry-run (future feature)
+# /release --dry-run  # Not yet implemented
+
+# OPTION 3: Test and reset
+/release  # Go through the process
+# If you want to undo:
+git reset --soft HEAD~1  # Undo commit
+git checkout CHANGELOG.md  # Revert CHANGELOG.md
 ```
 
 ## Troubleshooting
@@ -671,16 +1111,38 @@ This initial implementation provides comprehensive pre-release validation:
 - Interactive prompts for user decisions
 - Comprehensive validation summary
 
-**Future Phases**: Will be implemented in tasks 026-031 as sub-tasks of the parent task (#247).
+**Phase 2 Complete**: 2026-04-30
+
+This phase implements automated version bumping and changelog generation:
+
+- Conventional commits parsing (feat, fix, docs, perf, refactor, test, build, ci)
+- Changelog generation from git commit history
+- Keep a Changelog format support
+- Categorization by commit type
+- Breaking change detection (BREAKING CHANGE in commit body)
+- CHANGELOG.md update with proper section insertion
+- Preview of changelog before committing
+- User confirmation before making changes
+- Git commit creation with conventional format
+- Important: Version files use hatch-vcs dynamic versioning (updated by git tag)
+
+**Future Phases**: Will be implemented in tasks 027-031 as sub-tasks of the parent task (#247).
 
 **Design Decisions**:
 
 1. **Read-Only Phase 1**: Deliberately made validation non-destructive to allow safe testing
-1. **Interactive Prompts**: Provide user control over decisions (version bump type, handling warnings)
+1. **Interactive Prompts**: Provide user control over decisions (version bump type, handling warnings, confirmation)
 1. **Comprehensive Error Messages**: Include context, suggestions, and options for all failures
 1. **Staleness Detection**: Warn about old CI runs to prevent releasing with stale validation
 1. **Version Validation**: Prevent common versioning errors (non-semver, duplicate tags, downgrades)
+1. **Conventional Commits**: Parse standard commit format for automatic changelog generation
+1. **Keep a Changelog**: Follow established changelog format for consistency
+1. **Dynamic Versioning**: Respect hatch-vcs; version files updated by git tag, not manual edits
+1. **User Confirmation**: Require explicit approval before creating version bump commit
+1. **Reversible Changes**: Only modify CHANGELOG.md; easily reversed with git checkout
 
-**Testing Approach**: All validation logic can be safely tested on the live repository since no modifications are made.
+**Testing Approach**:
+- Phase 1: Safe to test on live repository (read-only)
+- Phase 2: Test on feature branches or with understanding that commits can be reset
 
-**Next Steps**: Implement Phase 2 (Version Bumping) in task 026.
+**Next Steps**: Implement Phase 3 (Build and Validate) in task 027.
