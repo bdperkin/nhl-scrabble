@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}NHL Scrabble Analyzer - Team Standings{% endblock %}
+
+{% block content %}
+    <!-- Top Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>Total Teams</h4>
+            <p class="stat-value">{{ stats.total_teams }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Top Team</h4>
+            <p class="stat-value">{{ stats.highest_team_score }}</p>
+            <p class="stat-detail">{{ stats.highest_team }} ({{ stats.highest_team_name }})</p>
+        </div>
+        <div class="stat-card">
+            <h4>Total Players</h4>
+            <p class="stat-value">{{ stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Highest Player</h4>
+            <p class="stat-value">{{ stats.highest_score }}</p>
+            <p class="stat-detail">{{ stats.highest_player_name }}</p>
+        </div>
+    </div>
+
+    <!-- Team Standings Table -->
+    <section class="results-section fade-on-scroll">
+        <h3>Team Standings by Total Scrabble Score</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-teamsTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="Export team standings table to CSV format">
+                <span class="icon" aria-hidden="true">📊</span> Export CSV
+            </button>
+            <button id="export-teamsTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="Export team standings table to JSON format">
+                <span class="icon" aria-hidden="true">📄</span> Export JSON
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="teamsTable"
+                   class="results-table standings-table sortable"
+                   role="table"
+                   aria-label="Team standings">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">Team</th>
+                        <th scope="col" data-sort="division" data-sort-type="string">Division</th>
+                        <th scope="col" data-sort="conference" data-sort-type="string">Conference</th>
+                        <th scope="col" data-sort="total" data-sort-type="number">Total Score</th>
+                        <th scope="col" data-sort="avg" data-sort-type="number">Avg Score</th>
+                        <th scope="col" data-sort="players" data-sort-type="number">Players</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in team_standings %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="team-name" data-value="{{ team.name }}">{{ team.name }}</td>
+                            <td data-value="{{ team.division }}">{{ team.division }}</td>
+                            <td data-value="{{ team.conference }}">{{ team.conference }}</td>
+                            <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
+                            <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
+                            <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
