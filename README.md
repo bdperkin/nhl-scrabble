@@ -24,12 +24,19 @@
 
 <!-- Package Info -->
 
-[![PyPI version](https://img.shields.io/pypi/v/nhl-scrabble.svg)](https://pypi.org/project/nhl-scrabble/)
+<!-- Version badges auto-update via shields.io from:
+     - PyPI: Published package version (primary source for installation)
+     - GitHub Releases: Created automatically from git tags via .github/workflows/release.yml
+     - Badges refresh within ~5 minutes of new releases (shields.io CDN cache)
+     - See CLAUDE.md#versioning for dynamic versioning strategy (hatch-vcs)
+-->
+
+[![PyPI version](https://img.shields.io/pypi/v/nhl-scrabble.svg?label=PyPI&color=blue)](https://pypi.org/project/nhl-scrabble/)
+[![GitHub Release](https://img.shields.io/github/v/release/bdperkin/nhl-scrabble?include_prereleases&label=GitHub&color=green)](https://github.com/bdperkin/nhl-scrabble/releases)
 [![PyPI downloads](https://img.shields.io/pypi/dm/nhl-scrabble.svg)](https://pypi.org/project/nhl-scrabble/)
 [![Python 3.12-3.14](https://img.shields.io/badge/python-3.12--3.14-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Powered by UV](https://img.shields.io/badge/powered%20by-uv-black?logo=astral)](https://github.com/astral-sh/uv)
-[![Latest Release](https://img.shields.io/github/v/release/bdperkin/nhl-scrabble?include_prereleases)](https://github.com/bdperkin/nhl-scrabble/releases)
 
 <!-- Community & Activity -->
 

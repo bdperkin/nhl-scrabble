@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-04-30 (Updated after task 021 completion)
-**Total Tasks**: 36 active tasks
-**Estimated Total Effort**: 225.5 hours
+**Generated**: 2026-04-30 (Updated after task 033 completion)
+**Total Tasks**: 35 active tasks
+**Estimated Total Effort**: 225 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -69,11 +69,6 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 ```bash
 # Make 'ty' Blocking After Validation Period
 /implement-task refactoring/024-make-ty-blocking.md  # 1.0h, Issue #355
-```
-
-```bash
-# Enhance Version Badge Display in README
-/implement-task enhancement/033-enhance-version-badge-display.md  # 1.0h, Issue #382
 ```
 
 ```bash
