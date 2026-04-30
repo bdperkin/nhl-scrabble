@@ -73,8 +73,8 @@ def release(version, type, dry_run, skip_tests, skip_pypi):
 
 **Implemented**: 2026-04-30
 **Branch**: new-features/031-release-orchestration-cli
-**PR**: TBD
-**Commits**: TBD
+**PR**: #472 - https://github.com/bdperkin/nhl-scrabble/pull/472
+**Commits**: 6eb11c9
 
 ### Actual Implementation
 
@@ -187,7 +187,7 @@ None - clear requirements and well-defined phase interfaces made orchestration s
 
 ### Related PRs
 
-- TBD - This PR
+- #472 - Main implementation
 
 ### Next Steps
 
