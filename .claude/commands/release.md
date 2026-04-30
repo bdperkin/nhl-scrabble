@@ -10,7 +10,8 @@ Automate the complete release process for the nhl-scrabble package.
 
 **Phase 1 Complete**: Pre-Release Validation ✅
 **Phase 2 Complete**: Version Bumping ✅
-**Phase 3-7**: Coming in future tasks (see tasks/new-features/019-comprehensive-release-automation-skill.md)
+**Phase 3 Complete**: Build and Validate ✅
+**Phase 4-7**: Coming in future tasks (see tasks/new-features/019-comprehensive-release-automation-skill.md)
 
 ## Usage
 
@@ -835,11 +836,399 @@ To continue manually:
 See tasks/new-features/019-comprehensive-release-automation-skill.md for full automation roadmap.
 ```
 
-### Phase 3-7: Coming Soon
+### Phase 3: Build and Validate ✅
+
+Build Python packages (wheel and sdist), validate with twine, and test installation in an isolated environment to ensure the package is ready for publishing.
+
+**Step 1: Clean Previous Builds**
+
+Remove old build artifacts before creating new packages:
+
+```bash
+# Remove dist directory if it exists
+if [ -d "dist" ]; then
+    echo "🧹 Cleaning old build artifacts..."
+    rm -rf dist/
+    echo "✅ Removed dist/"
+fi
+
+# Remove build directory if it exists
+if [ -d "build" ]; then
+    rm -rf build/
+    echo "✅ Removed build/"
+fi
+
+# Remove .egg-info directories
+find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+```
+
+**Requirements:**
+- Remove dist/ directory (old packages)
+- Remove build/ directory (build cache)
+- Remove *.egg-info directories
+- Continue even if directories don't exist
+
+**Step 2: Build Packages**
+
+Build both wheel and source distribution:
+
+```bash
+echo ""
+echo "📦 Building packages..."
+echo ""
+
+# Build using python -m build (PEP 517)
+python -m build
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Package build failed"
+    echo ""
+    echo "Common issues:"
+    echo "  - Missing build dependencies (install: pip install build)"
+    echo "  - Syntax errors in setup files"
+    echo "  - Missing required files (README.md, LICENSE, etc.)"
+    echo ""
+    exit 1
+fi
+
+echo ""
+echo "✅ Packages built successfully"
+echo ""
+
+# List built packages
+ls -lh dist/
+```
+
+**Requirements:**
+- Use `python -m build` (PEP 517 compliant)
+- Build both wheel (.whl) and sdist (.tar.gz)
+- Check build exit code
+- Display built packages with sizes
+
+**Error Handling:**
+- If build fails:
+  - Display build error output
+  - Suggest common fixes (install build, check syntax, check manifest)
+  - Show current working directory
+  - Exit with failure
+- If no packages created:
+  - Error: "No packages found in dist/"
+  - Show dist/ directory contents
+  - Exit with failure
+
+**Step 3: Validate with Twine**
+
+Check packages for common issues using twine:
+
+```bash
+echo ""
+echo "🔍 Validating packages with twine..."
+echo ""
+
+# Run twine check on all packages
+twine check dist/*
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Package validation failed"
+    echo ""
+    echo "Twine found issues with the packages."
+    echo "Review the errors above and fix before releasing."
+    echo ""
+    exit 1
+fi
+
+echo ""
+echo "✅ Packages passed twine validation"
+```
+
+**Requirements:**
+- Run `twine check` on all dist/* files
+- Check for PyPI compatibility
+- Validate package metadata
+- Validate long_description rendering
+
+**Error Handling:**
+- If twine check fails:
+  - Display twine error details
+  - Common issues:
+    - Invalid RST/Markdown in README
+    - Missing required metadata fields
+    - Invalid version format
+    - Malformed MANIFEST.in
+  - Suggest: "Fix issues and re-run build"
+  - Exit with failure
+- If twine not installed:
+  - Error: "twine not found"
+  - Suggest: "pip install twine"
+  - Exit with failure
+
+**Step 4: Check Package Contents**
+
+Verify wheel contents with check-wheel-contents:
+
+```bash
+echo ""
+echo "🔍 Checking wheel contents..."
+echo ""
+
+# Find wheel file
+wheel_file=$(ls dist/*.whl 2>/dev/null | head -1)
+
+if [ -z "$wheel_file" ]; then
+    echo "❌ No wheel file found in dist/"
+    exit 1
+fi
+
+# Run check-wheel-contents
+check-wheel-contents "$wheel_file"
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "⚠️  Wheel contents check found issues"
+    echo ""
+    echo "Review warnings above. Some warnings may be acceptable."
+    echo ""
+    read -p "Continue anyway? [y/N]: " continue_check
+
+    if [ "$continue_check" != "y" ] && [ "$continue_check" != "Y" ]; then
+        echo "❌ Build validation cancelled"
+        exit 1
+    fi
+fi
+
+echo ""
+echo "✅ Wheel contents validated"
+```
+
+**Requirements:**
+- Check wheel file exists
+- Run `check-wheel-contents` on wheel
+- Validate:
+  - No duplicate files
+  - LICENSE and README included
+  - No .pyc files
+  - No __pycache__ directories
+  - Proper file permissions
+
+**Error Handling:**
+- If no wheel found:
+  - Error: "No .whl file in dist/"
+  - List dist/ contents
+  - Exit with failure
+- If check-wheel-contents not available:
+  - Warning: "check-wheel-contents not found (optional)"
+  - Suggest: "pip install check-wheel-contents"
+  - Continue (not required, but recommended)
+- If issues found:
+  - Display issues
+  - Prompt user to continue or cancel
+  - Default to cancel
+
+**Step 5: Test Installation in Isolated Environment**
+
+Create temporary venv and test package installation:
+
+```bash
+echo ""
+echo "🧪 Testing installation in isolated environment..."
+echo ""
+
+# Create temporary directory for venv
+test_venv_dir=$(mktemp -d)
+echo "📁 Created temp venv: $test_venv_dir"
+
+# Create virtual environment
+python -m venv "$test_venv_dir/test-install"
+
+# Check if venv created successfully
+if [ ! -d "$test_venv_dir/test-install" ]; then
+    echo "❌ Failed to create test venv"
+    rm -rf "$test_venv_dir"
+    exit 1
+fi
+
+echo "✅ Virtual environment created"
+
+# Activate venv
+source "$test_venv_dir/test-install/bin/activate"
+
+# Upgrade pip
+pip install --upgrade pip --quiet
+
+# Find wheel file
+wheel_file=$(ls dist/*.whl | head -1)
+
+# Install package from wheel
+echo "📦 Installing package from wheel..."
+pip install "$wheel_file" --quiet
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo "❌ Installation failed"
+    deactivate
+    rm -rf "$test_venv_dir"
+    exit 1
+fi
+
+echo "✅ Package installed successfully"
+
+# Test that package is importable
+echo "🧪 Testing package import..."
+python -c "import nhl_scrabble; print(f'Version: {nhl_scrabble.__version__}')"
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo "❌ Package import failed"
+    deactivate
+    rm -rf "$test_venv_dir"
+    exit 1
+fi
+
+echo "✅ Package import successful"
+
+# Test CLI command
+echo "🧪 Testing CLI command..."
+nhl-scrabble --version
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo "❌ CLI command failed"
+    deactivate
+    rm -rf "$test_venv_dir"
+    exit 1
+fi
+
+echo "✅ CLI command works"
+
+# Deactivate and cleanup
+deactivate
+rm -rf "$test_venv_dir"
+
+echo ""
+echo "✅ Installation test passed"
+```
+
+**Requirements:**
+- Create temporary venv
+- Install package from wheel (not sdist)
+- Test import: `import nhl_scrabble`
+- Test CLI: `nhl-scrabble --version`
+- Cleanup venv after test
+
+**Error Handling:**
+- If venv creation fails:
+  - Error: "Failed to create virtual environment"
+  - Suggest: "Check Python installation"
+  - Exit with failure
+- If installation fails:
+  - Display pip error
+  - Common issues:
+    - Missing dependencies in setup
+    - Syntax errors in package
+    - Incompatible Python version
+  - Cleanup venv
+  - Exit with failure
+- If import fails:
+  - Error: "Package import failed"
+  - Show Python error
+  - Cleanup venv
+  - Exit with failure
+- If CLI fails:
+  - Error: "CLI command not found or failed"
+  - Check entry_points in setup
+  - Cleanup venv
+  - Exit with failure
+
+**Step 6: Verify Package Metadata**
+
+Extract and display package metadata for review:
+
+```bash
+echo ""
+echo "📋 Package Metadata:"
+echo ""
+
+# Extract metadata from wheel
+wheel_file=$(ls dist/*.whl | head -1)
+
+# Show package info using pip
+python -m venv temp-meta-venv --quiet
+source temp-meta-venv/bin/activate
+pip install "$wheel_file" --quiet
+pip show nhl-scrabble
+
+deactivate
+rm -rf temp-meta-venv
+
+echo ""
+```
+
+**Requirements:**
+- Display package name, version, summary
+- Show author, license
+- List dependencies
+- Show package location
+
+**Step 7: Build Validation Summary**
+
+Display comprehensive summary of build validation:
+
+```
+✅ Phase 3: Build and Validate Complete
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build Artifacts:
+  ✅ dist/nhl_scrabble-0.0.13-py3-none-any.whl (45 KB)
+  ✅ dist/nhl_scrabble-0.0.13.tar.gz (38 KB)
+
+Validation:
+  ✅ Twine check: Passed
+  ✅ Wheel contents: Validated
+  ✅ Installation test: Successful
+  ✅ Package import: Working
+  ✅ CLI command: Working
+
+Package Metadata:
+  Name: nhl-scrabble
+  Version: 0.0.13
+  Author: Brandon Perkins
+  License: MIT
+  Python: >=3.12
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Next Steps (Phase 4+):
+  - Publish to PyPI (not yet implemented)
+  - Create GitHub Release (not yet implemented)
+  - Post-Release Tasks (not yet implemented)
+
+⚠️  Note: Only Phases 1-3 are currently implemented.
+    Future phases will be added in subsequent tasks.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Packages are ready for publishing!
+
+To continue manually:
+1. Review packages: ls -lh dist/
+2. Create tag: git tag -a v0.0.13 -m "Release version 0.0.13"
+3. Push: git push && git push v0.0.13
+4. Wait for CI to publish to PyPI (or publish manually: twine upload dist/*)
+5. Create GitHub release: gh release create v0.0.13 --generate-notes
+
+See tasks/new-features/019-comprehensive-release-automation-skill.md for full automation roadmap.
+```
+
+### Phase 4-7: Coming Soon
 
 Future phases will be implemented in subsequent tasks:
 
-- **Phase 3**: Build and Validate (task 027)
 - **Phase 4**: Publish (task 028)
 - **Phase 5**: Post-Release Tasks (task 029)
 - **Phase 6**: Verification and Cleanup (task 030)
@@ -898,8 +1287,17 @@ All validation steps include comprehensive error handling:
 - ✅ No pushes to remote
 - ✅ No publishing actions
 
-**Future Phases** (3-7):
-- ⚠️ Will include builds, tags, pushes, and publishing
+**Phase 3** (Build and Validate):
+- ✅ Creates local build artifacts in dist/ (can be deleted)
+- ✅ Tests in isolated venv (auto-cleanup)
+- ✅ No modifications to source code
+- ✅ No git commits or tags
+- ✅ No pushes to remote
+- ✅ No publishing to PyPI
+- ✅ Safe to run multiple times
+
+**Future Phases** (4-7):
+- ⚠️ Will include git tags, pushes, and publishing
 - ⚠️ Will require careful testing before use
 
 ## Usage Examples
@@ -984,6 +1382,20 @@ All validation steps include comprehensive error handling:
 - [ ] Test commit creation
 - [ ] Verify commit message format
 
+**Phase 3** (Build and Validate) - test carefully:
+
+- [ ] Test package building (wheel and sdist)
+- [ ] Test with clean dist/ directory
+- [ ] Test with existing dist/ directory (should clean first)
+- [ ] Test twine check validation
+- [ ] Test check-wheel-contents (if available)
+- [ ] Test installation in isolated venv
+- [ ] Test package import
+- [ ] Test CLI command execution
+- [ ] Verify metadata display
+- [ ] Test cleanup of temporary venv
+- [ ] Test with missing build dependencies (should fail gracefully)
+
 **Testing Approach:**
 
 **Phase 1** (Safe - Read-only):
@@ -1026,6 +1438,33 @@ git branch -D test-release-026
 # If you want to undo:
 git reset --soft HEAD~1  # Undo commit
 git checkout CHANGELOG.md  # Revert CHANGELOG.md
+```
+
+**Phase 3** (Safe - Creates build artifacts):
+```bash
+# Test on feature branch (recommended)
+git checkout -b test-release-027
+
+# Go through phases 1-2 first (or continue from existing branch)
+# ...
+
+# Phase 3 will:
+# - Build packages in dist/
+# - Validate with twine
+# - Test installation
+# All changes are local and can be cleaned up
+
+# Review build artifacts
+ls -lh dist/
+
+# Clean up
+rm -rf dist/ build/ *.egg-info
+git checkout main
+git branch -D test-release-027
+
+# Or test build phase standalone (no prior phases needed)
+/release  # Run all phases including build
+# Clean artifacts: rm -rf dist/
 ```
 
 ## Troubleshooting
@@ -1126,7 +1565,21 @@ This phase implements automated version bumping and changelog generation:
 - Git commit creation with conventional format
 - Important: Version files use hatch-vcs dynamic versioning (updated by git tag)
 
-**Future Phases**: Will be implemented in tasks 027-031 as sub-tasks of the parent task (#247).
+**Phase 3 Complete**: 2026-04-30
+
+This phase implements package building and validation:
+
+- Clean build artifacts (dist/, build/, *.egg-info)
+- Build packages using `python -m build` (PEP 517 compliant)
+- Create both wheel (.whl) and source distribution (.tar.gz)
+- Validate with twine check (PyPI compatibility)
+- Check wheel contents with check-wheel-contents
+- Test installation in isolated temporary venv
+- Verify package import and CLI command
+- Display package metadata for review
+- Auto-cleanup of test environment
+
+**Future Phases**: Will be implemented in tasks 028-031 as sub-tasks of the parent task (#247).
 
 **Design Decisions**:
 
