@@ -54,8 +54,8 @@ def verify_release(version):
 
 **Implemented**: 2026-04-30
 **Branch**: new-features/030-release-verification
-**PR**: TBD
-**Commits**: TBD
+**PR**: #471 - https://github.com/bdperkin/nhl-scrabble/pull/471
+**Commits**: b3d3953
 
 ### Actual Implementation
 
@@ -122,7 +122,7 @@ None - straightforward markdown documentation task with clear verification steps
 
 ### Related PRs
 
-- TBD - This PR
+- #471 - Main implementation
 
 ### Next Steps
 
