@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-04-30 (Updated after task 014 completion)
-**Total Tasks**: 37 active tasks
-**Estimated Total Effort**: 230.5 hours
+**Generated**: 2026-04-30 (Updated after task 021 completion)
+**Total Tasks**: 36 active tasks
+**Estimated Total Effort**: 225.5 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -52,11 +52,6 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 ```bash
 # Generate Visual Regression Test Baselines
 /implement-task testing/022-generate-visual-regression-baselines.md  # 4.0h, Issue #437
-```
-
-```bash
-# Test Analytics and Coverage Analysis Tool
-/implement-task testing/021-test-analytics-coverage-tool.md  # 5.0h, Issue #359
 ```
 
 ```bash
