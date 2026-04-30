@@ -68,7 +68,55 @@ Additional responsive tests:
 
 ## Usage
 
-### Prerequisites
+### Recommended: Docker-Based Workflow
+
+**⚠️ IMPORTANT**: Always use the Docker-based workflow for updating baselines to ensure all browsers (especially WebKit) work correctly.
+
+The project provides `scripts/pytest-playwright`, a Docker wrapper that runs tests in a pre-configured container with all browser dependencies installed:
+
+```bash
+# Update all baselines (recommended)
+./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots --browser chromium --browser firefox --browser webkit
+
+# Run all visual tests
+./scripts/pytest-playwright qa/web/tests/visual/
+
+# Run specific test file
+./scripts/pytest-playwright qa/web/tests/visual/test_page_screenshots.py
+
+# Run specific test
+./scripts/pytest-playwright qa/web/tests/visual/test_page_screenshots.py::test_index_page_visual
+```
+
+**Why Docker-based workflow?**
+
+- ✅ **WebKit support**: WebKit requires system dependencies (libjpeg-turbo8, etc.) that aren't available on all Linux distributions (e.g., Fedora)
+- ✅ **Consistency**: Same environment across all developers and CI
+- ✅ **Pre-installed browsers**: chromium, firefox, and webkit pre-installed in container
+- ✅ **No local setup**: No need to install Playwright browsers locally
+- ✅ **SELinux compatible**: Container runs with correct SELinux labels (:z flag)
+
+**How it works**:
+
+- Uses custom Docker image: `ghcr.io/bdperkin/nhl-scrabble-playwright:latest`
+- Mounts repo at `/work` with SELinux labels
+- Network host mode to access `localhost:5000` web server
+- Runs as non-root user (`pwuser`) for security
+- Auto-installs QA dependencies before running tests
+
+**Starting the web application**:
+
+Before running visual tests, start the web application in a separate terminal:
+
+```bash
+# From project root
+nhl-scrabble serve
+# Server starts on http://localhost:5000
+```
+
+The Docker container uses `--network host` to access the application running on your local machine.
+
+### Prerequisites (Alternative: Local Workflow)
 
 1. **Install dependencies**:
 
@@ -118,14 +166,19 @@ pytest tests/visual/test_cross_browser_visual.py
 
 #### Generate New Baselines
 
+**⚠️ CRITICAL**: Always use the Docker workflow (`scripts/pytest-playwright`) when updating baselines to ensure all browsers work correctly!
+
 When running tests for the first time or when intentional UI changes are made:
 
 ```bash
-# Generate baselines for all visual tests
-pytest tests/visual/ --update-snapshots
+# ✅ RECOMMENDED: Update baselines using Docker (works for all browsers)
+./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots --browser chromium --browser firefox --browser webkit
 
-# Generate baselines for specific test file
-pytest tests/visual/test_page_screenshots.py --update-snapshots
+# ✅ Update baselines for specific test file
+./scripts/pytest-playwright qa/web/tests/visual/test_page_screenshots.py --update-snapshots --browser chromium --browser firefox --browser webkit
+
+# ❌ AVOID: Local pytest (WebKit will fail on Fedora/RHEL due to missing system dependencies)
+# pytest tests/visual/ --update-snapshots
 ```
 
 **Important**: Only update baselines when you've verified the UI changes are intentional!
@@ -133,8 +186,11 @@ pytest tests/visual/test_page_screenshots.py --update-snapshots
 #### Update Specific Baselines
 
 ```bash
-# Update single test baseline
-pytest tests/visual/test_page_screenshots.py::test_index_page_visual --update-snapshots
+# ✅ RECOMMENDED: Update single test baseline using Docker
+./scripts/pytest-playwright qa/web/tests/visual/test_page_screenshots.py::test_index_page_visual --update-snapshots --browser chromium --browser firefox --browser webkit
+
+# ❌ AVOID: Local pytest (will fail for webkit)
+# pytest tests/visual/test_page_screenshots.py::test_index_page_visual --update-snapshots
 ```
 
 #### Review Baseline Changes
@@ -285,17 +341,17 @@ Tests are optimized for consistency:
 
 ### GitHub Actions
 
-Visual tests can run in CI with headless browsers:
+Visual tests run in CI using the same Docker image as local development:
 
 ```yaml
-- name: Install Playwright browsers
-  run: playwright install --with-deps
-
 - name: Run visual regression tests
   run: |
-    cd qa/web
-    pytest tests/visual/ --headed=false
+    # Uses scripts/pytest-playwright with custom GHCR image
+    # Same environment as local development
+    ./scripts/pytest-playwright qa/web/tests/visual/ --browser chromium --browser firefox --browser webkit
 ```
+
+**Consistency**: Using the Docker workflow locally (`./scripts/pytest-playwright`) ensures your tests run in the exact same environment as CI, eliminating "works locally but fails in CI" issues.
 
 ### Baseline Storage
 
@@ -320,10 +376,27 @@ On visual test failure in CI:
 
 **Solution**:
 
+1. **Use Docker workflow**: `./scripts/pytest-playwright` ensures same environment as CI
 1. Use exact browser versions in CI and locally
 1. Install system fonts in CI environment
 1. Adjust `playwright_max_diff_pixel_ratio` threshold
-1. Generate baselines in CI environment
+1. Generate baselines in CI environment (or using Docker workflow)
+
+### WebKit Tests Fail Locally
+
+**Cause**: Missing WebKit system dependencies on Fedora/RHEL
+
+**Error**: `ImportError: libjpeg-turbo8.so.8: cannot open shared object file`
+
+**Solution**:
+
+✅ **Use Docker workflow** (recommended):
+
+```bash
+./scripts/pytest-playwright qa/web/tests/visual/ --browser webkit
+```
+
+❌ **Local pytest will fail** for WebKit on Fedora/RHEL due to missing system dependencies
 
 ### Screenshots Are Blank
 

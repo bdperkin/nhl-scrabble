@@ -1,16 +1,32 @@
 #!/usr/bin/env bash
-# Pytest Playwright Docker Wrapper for Fedora
+# Pytest Playwright Docker Wrapper
 #
-# Runs pytest with Playwright tests inside the official Microsoft Playwright
-# Docker container. This bypasses Fedora compatibility issues while maintaining
-# full Playwright functionality.
+# ⚠️ RECOMMENDED WORKFLOW: Always use this script for visual regression testing
+# and baseline updates instead of running pytest locally.
+#
+# Why use this script?
+# - ✅ WebKit support: WebKit requires system dependencies not available on Fedora/RHEL
+# - ✅ Consistency: Same environment as CI (no "works locally but fails in CI" issues)
+# - ✅ Pre-installed browsers: chromium, firefox, and webkit ready to use
+# - ✅ No local setup: No need to install Playwright browsers locally
+#
+# Runs pytest with Playwright tests inside a custom Docker container with all
+# browser dependencies pre-installed. This bypasses Fedora compatibility issues
+# while maintaining full Playwright functionality.
 #
 # Usage:
 #   ./scripts/pytest-playwright [pytest-args...]
 #   ./scripts/pytest-playwright                              # Defaults to qa/web/tests/
 #   ./scripts/pytest-playwright qa/web/tests/visual/
-#   ./scripts/pytest-playwright qa/web/tests/visual/ --browser=firefox
+#   ./scripts/pytest-playwright qa/web/tests/visual/ --browser firefox
 #   ./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots
+#
+# Update Visual Regression Baselines (RECOMMENDED):
+#   ./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots --browser chromium --browser firefox --browser webkit
+#
+# Prerequisites:
+#   - Docker installed and running: docker info
+#   - Web server running on localhost:5000: nhl-scrabble serve
 #
 # Environment Variables:
 #   PLAYWRIGHT_IMAGE    Docker image to use (default: ghcr.io/bdperkin/nhl-scrabble-playwright:latest)
