@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 200 tasks (30 active, 170 completed)
+**Total Tasks**: 200 tasks (29 active, 171 completed)
 
 ## Overview
 
@@ -201,7 +201,7 @@ Each task includes:
 | 016 | Internationalization and Localization (i18n/l10n) | LOW | 32-48 hours | Active | [#218](https://github.com/bdperkin/nhl-scrabble/issues/218) | - |
 | 017 | Free Python Hosting and Deployment Infrastructure | LOW | 8-12 hours | Active | [#219](https://github.com/bdperkin/nhl-scrabble/issues/219) | - |
 | 018 | Automated Python Package Building and Publishing | MEDIUM | 4-6 hours (actual: ~8h total with enhancements) | Completed | [#224](https://github.com/bdperkin/nhl-scrabble/issues/224) | PR [#405](https://github.com/bdperkin/nhl-scrabble/pull/405), completed 2026-04-27 |
-| 019 | Create Comprehensive Release Automation Skill | LOW | 8-12 hours | Completed | [#247](https://github.com/bdperkin/nhl-scrabble/issues/247) | - |
+| 019 | Create Comprehensive Release Automation Skill | LOW | 8-12 hours (actual: ~10.5h) | Completed | [#247](https://github.com/bdperkin/nhl-scrabble/issues/247) | PR [#473](https://github.com/bdperkin/nhl-scrabble/pull/473), completed 2026-04-30, parent task coordinating 7 sub-tasks (025-031) |
 | 020 | CLI Internationalization Implementation | LOW | 4-6 hours | Completed | [#248](https://github.com/bdperkin/nhl-scrabble/issues/248) | - |
 | 021 | Web Interface Internationalization Implementation | LOW | 6-8 hours | Completed | [#249](https://github.com/bdperkin/nhl-scrabble/issues/249) | - |
 | 022 | TUI/Interactive Mode Internationalization | LOW | 3-4 hours | Completed | [#250](https://github.com/bdperkin/nhl-scrabble/issues/250) | - |

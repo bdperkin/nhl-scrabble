@@ -751,8 +751,8 @@ After initial implementation:
 
 **Implemented**: 2026-04-30
 **Branch**: Multiple feature branches (one per sub-task)
-**PR**: TBD (completion documentation)
-**Commits**: Multiple (across 7 sub-tasks)
+**PR**: #473 - https://github.com/bdperkin/nhl-scrabble/pull/473 (completion documentation)
+**Commits**: ca950eb (completion doc) + multiple across 7 sub-tasks (PRs #467, #468, #470, #471, #472)
 
 ### Implementation Approach
 
