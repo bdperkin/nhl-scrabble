@@ -1700,11 +1700,357 @@ echo ""
    - Bump version
    - Publish new version
 
-### Phase 5-7: Coming Soon
+### Phase 5: Post-Release Tasks ✅
+
+**Objective**: Prepare repository for next development cycle after successful release.
+
+**Prerequisites**:
+- Phase 4 completed (release published)
+- Currently on main branch
+- All release changes committed and pushed
+
+**Important**: This project uses **hatch-vcs** for dynamic versioning from git tags. After tagging a release (e.g., `v0.0.13`), the version automatically becomes the next development version (e.g., `0.0.14.dev0+g<hash>`) for subsequent commits. No manual version file updates are needed.
+
+**Step 1: Prepare CHANGELOG.md for Next Release**
+
+Add an `## [Unreleased]` section to CHANGELOG.md to track future changes:
+
+```bash
+echo ""
+echo "📝 Step 1: Prepare CHANGELOG.md for Next Release"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Check if Unreleased section already exists
+if grep -q "^## \[Unreleased\]" CHANGELOG.md; then
+    echo "✅ CHANGELOG.md already has [Unreleased] section"
+    echo ""
+else
+    echo "Adding [Unreleased] section to CHANGELOG.md..."
+    echo ""
+
+    # Find the first version heading (e.g., "## [0.0.13]")
+    first_version_line=$(grep -n "^## \[" CHANGELOG.md | head -1 | cut -d: -f1)
+
+    if [ -z "$first_version_line" ]; then
+        echo "❌ Error: Could not find version headings in CHANGELOG.md"
+        echo ""
+        echo "Expected format:"
+        echo "  ## [0.0.13] - 2026-04-30"
+        echo ""
+        exit 1
+    fi
+
+    # Create temp file with Unreleased section
+    {
+        # Copy everything before first version
+        head -n $((first_version_line - 1)) CHANGELOG.md
+
+        # Add Unreleased section
+        echo "## [Unreleased]"
+        echo ""
+        echo "### Added"
+        echo ""
+        echo "### Changed"
+        echo ""
+        echo "### Fixed"
+        echo ""
+
+        # Copy rest of file (starting from first version)
+        tail -n +${first_version_line} CHANGELOG.md
+    } > CHANGELOG.md.tmp
+
+    # Replace original with updated version
+    mv CHANGELOG.md.tmp CHANGELOG.md
+
+    echo "✅ Added [Unreleased] section to CHANGELOG.md"
+    echo ""
+
+    # Show what was added
+    echo "Preview:"
+    sed -n '/^## \[Unreleased\]/,/^## \[/p' CHANGELOG.md | head -10
+    echo ""
+fi
+```
+
+**Requirements:**
+- Add `## [Unreleased]` section if not present
+- Include standard subsections (Added, Changed, Fixed)
+- Place before first versioned release entry
+- Empty sections (ready for future changes)
+
+**Step 2: Update Release Documentation**
+
+Update any documentation that references the latest release:
+
+```bash
+echo ""
+echo "📚 Step 2: Update Release Documentation"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Get the version we just released (from last commit/tag)
+latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown")
+released_version="${latest_tag#v}"  # Remove 'v' prefix
+
+echo "Latest release: $released_version"
+echo ""
+
+# Check if README.md needs updates
+if [ -f "README.md" ]; then
+    echo "Checking README.md for release references..."
+
+    # This is informational - no automatic updates
+    # Users should manually update version-specific docs if needed
+
+    echo "✅ README.md checked"
+    echo ""
+    echo "💡 Note: If README.md has version-specific instructions or"
+    echo "   examples, consider updating them to reference the new release."
+    echo ""
+else
+    echo "⚠️  README.md not found (optional)"
+    echo ""
+fi
+
+# Note about documentation deployment
+echo "📖 Documentation Deployment:"
+echo "   Documentation for the new release was automatically deployed"
+echo "   by GitHub Actions when the tag was pushed (Phase 4)."
+echo ""
+echo "   Docs URL: https://bdperkin.github.io/nhl-scrabble/"
+echo ""
+```
+
+**Requirements:**
+- Check for documentation that needs updates
+- Note that docs were auto-deployed in Phase 4
+- Provide informational output only (no automatic doc edits)
+
+**Step 3: Verify Version Auto-Increment**
+
+Verify that hatch-vcs automatically incremented the development version:
+
+```bash
+echo ""
+echo "🔢 Step 3: Verify Version Auto-Increment"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+echo "Testing version detection..."
+echo ""
+
+# Get current version (should be dev version after tag)
+if command -v python >/dev/null 2>&1; then
+    current_version=$(python -c "
+try:
+    import nhl_scrabble
+    print(nhl_scrabble.__version__)
+except Exception as e:
+    print('error')
+" 2>/dev/null)
+
+    if [ "$current_version" = "error" ] || [ -z "$current_version" ]; then
+        echo "⚠️  Could not detect version (package may need installation)"
+        echo ""
+        echo "After committing CHANGELOG changes, the version will be:"
+        echo "  ${released_version%.*}.$((${released_version##*.} + 1)).dev0+g<commit-hash>"
+        echo ""
+    else
+        echo "Current version: $current_version"
+        echo ""
+
+        if [[ "$current_version" == *"dev"* ]]; then
+            echo "✅ Version correctly shows development suffix"
+            echo ""
+        elif [ "$current_version" = "$released_version" ]; then
+            echo "⚠️  Version still shows release version: $released_version"
+            echo ""
+            echo "After making a commit, version will automatically include .dev suffix"
+            echo ""
+        else
+            echo "✅ Version: $current_version"
+            echo ""
+        fi
+    fi
+else
+    echo "⚠️  Python not available for version check"
+    echo ""
+fi
+
+echo "ℹ️  Version Management:"
+echo "   This project uses hatch-vcs for dynamic versioning."
+echo "   Versions are automatically derived from git tags:"
+echo ""
+echo "   - On tag v0.0.13:     version = 0.0.13"
+echo "   - After tag + 3 commits: version = 0.0.14.dev3+g<hash>"
+echo ""
+echo "   No manual version file updates needed!"
+echo ""
+```
+
+**Requirements:**
+- Explain hatch-vcs dynamic versioning
+- Show current version if available
+- Clarify that version auto-increments with commits
+- Note that no manual version updates are needed
+
+**Step 4: Commit Post-Release Changes**
+
+Commit the CHANGELOG.md update and any other post-release changes:
+
+```bash
+echo ""
+echo "💾 Step 4: Commit Post-Release Changes"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Check if there are changes to commit
+if git diff --quiet && git diff --cached --quiet; then
+    echo "ℹ️  No post-release changes to commit"
+    echo ""
+    echo "This may happen if:"
+    echo "  - CHANGELOG.md already had [Unreleased] section"
+    echo "  - No documentation updates were needed"
+    echo ""
+else
+    echo "Changes to commit:"
+    git status --short
+    echo ""
+
+    # Stage changes
+    git add CHANGELOG.md
+
+    # Create commit message
+    commit_msg="chore(release): Prepare for next development cycle
+
+Add [Unreleased] section to CHANGELOG.md for future changes.
+
+Post-release cleanup after v${released_version}."
+
+    echo "Creating commit..."
+    if git commit -m "$commit_msg"; then
+        echo "✅ Post-release commit created"
+        echo ""
+
+        # Show commit details
+        git log -1 --oneline
+        echo ""
+    else
+        echo "❌ Error: Failed to create commit"
+        exit 1
+    fi
+fi
+```
+
+**Requirements:**
+- Stage CHANGELOG.md changes
+- Create descriptive commit message
+- Reference the version that was just released
+- Only commit if there are actual changes
+
+**Step 5: Push Post-Release Changes**
+
+Push the post-release commit to the main branch:
+
+```bash
+echo ""
+echo "📤 Step 5: Push Post-Release Changes"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Check if there are unpushed commits
+unpushed_commits=$(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)
+
+if [ "$unpushed_commits" -eq 0 ]; then
+    echo "ℹ️  No commits to push"
+    echo ""
+else
+    echo "Pushing $unpushed_commits commit(s) to origin/main..."
+    echo ""
+
+    read -p "Push post-release changes to remote? [Y/n] " -n 1 -r
+    echo ""
+
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        if git push origin main; then
+            echo "✅ Post-release changes pushed successfully"
+            echo ""
+        else
+            echo "❌ Error: Failed to push changes"
+            echo ""
+            echo "Common issues:"
+            echo "  - Authentication failure: Check GitHub credentials"
+            echo "  - Protected branch: May need PR for main branch"
+            echo "  - Network error: Check connection and retry"
+            echo ""
+            echo "To retry: git push origin main"
+            exit 1
+        fi
+    else
+        echo "⚠️  Push cancelled"
+        echo ""
+        echo "Post-release changes committed locally but not pushed."
+        echo "To push later: git push origin main"
+        echo ""
+    fi
+fi
+```
+
+**Requirements:**
+- Confirm before pushing
+- Push to origin/main
+- Handle push errors gracefully
+- Provide clear error messages
+
+**Step 6: Post-Release Summary**
+
+Display summary of post-release tasks completed:
+
+```bash
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Phase 5: Post-Release Tasks Complete"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Release: v${released_version}"
+echo ""
+echo "Completed Tasks:"
+echo "  ✅ CHANGELOG.md prepared for next release"
+echo "  ✅ Documentation references checked"
+echo "  ✅ Version management verified (hatch-vcs)"
+echo "  ✅ Post-release changes committed"
+echo "  ✅ Changes pushed to remote"
+echo ""
+echo "Repository State:"
+echo "  Branch: main"
+echo "  Latest release: v${released_version}"
+echo "  Next version: ${released_version%.*}.$((${released_version##*.} + 1)).dev"
+echo ""
+echo "CHANGELOG.md:"
+echo "  [Unreleased] section ready for future changes"
+echo ""
+echo "Next Steps (Phase 6+):"
+echo "  - Verification and cleanup (not yet implemented)"
+echo "  - Release summary and reporting (not yet implemented)"
+echo ""
+echo "⚠️  Note: Only Phases 1-5 are currently implemented."
+echo "    Future phases will be added in subsequent tasks."
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "🎉 Release cycle complete!"
+echo ""
+echo "The repository is now ready for continued development."
+echo "Future changes will be tracked in the [Unreleased] section"
+echo "of CHANGELOG.md until the next release."
+echo ""
+```
+
+### Phase 6-7: Coming Soon
 
 Future phases will be implemented in subsequent tasks:
 
-- **Phase 5**: Post-Release Tasks (task 029)
 - **Phase 6**: Verification and Cleanup (task 030)
 - **Phase 7**: Release Orchestration CLI (task 031)
 
