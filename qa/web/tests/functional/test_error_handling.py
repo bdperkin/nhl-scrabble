@@ -173,11 +173,9 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
     page_fixture.fill("#topPlayers", "5")
     page_fixture.click("#analyzeBtn")
 
-    # Wait for results to update with proper wait condition
-    page_fixture.wait_for_function(
-        "document.querySelectorAll('#playersTable tbody tr').length === 5",
-        timeout=30000,
-    )
+    # Wait for results to update - use locator-based wait instead of string evaluation
+    # This avoids CSP violation from wait_for_function with string
+    expect(page_fixture.locator("#playersTable tbody tr")).to_have_count(5, timeout=30000)
 
     # Count rows from second submission - should be different
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()
@@ -303,11 +301,9 @@ def test_concurrent_submissions_handled(page_fixture: Page) -> None:
     page_fixture.fill("#topPlayers", "20")
     page_fixture.click("#analyzeBtn")  # Actually submit the second request
 
-    # Wait for results to update with proper wait condition
-    page_fixture.wait_for_function(
-        "document.querySelectorAll('#playersTable tbody tr').length === 20",
-        timeout=30000,
-    )
+    # Wait for results to update - use locator-based wait instead of string evaluation
+    # This avoids CSP violation from wait_for_function with string
+    expect(page_fixture.locator("#playersTable tbody tr")).to_have_count(20, timeout=30000)
 
     # Verify we got updated results (20 rows)
     results = page_fixture.locator("#results")

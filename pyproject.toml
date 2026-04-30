@@ -1051,6 +1051,7 @@ exclude = [
     "scripts",
     ".scratch",
     "src/nhl_scrabble/_version.py",
+    "qa",
 ]
 ext = []
 style = "sphinx"

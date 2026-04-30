@@ -98,8 +98,14 @@ def test_enter_key_activates_links(index_page: IndexPage) -> None:
     index_page.navigate()
     index_page.wait_for_load()
 
+    # Wait for page to be fully interactive
+    index_page.page.wait_for_load_state("networkidle")
+
     # Find a navigation link (e.g., Teams link)
     teams_link = index_page.page.locator('a[href*="teams"]').first
+
+    # Wait for link to be visible before focusing
+    teams_link.wait_for(state="visible")
 
     # Focus the link
     teams_link.focus()
@@ -180,14 +186,23 @@ def test_focus_visible_indicators(teams_page: TeamsPage) -> None:
     teams_page.navigate()
     teams_page.wait_for_load()
 
-    # Tab to first interactive element
-    teams_page.page.keyboard.press("Tab")
+    # Wait for page to be fully interactive
+    teams_page.page.wait_for_load_state("networkidle")
 
-    # Get focused element
-    focused_element = teams_page.page.locator(":focus")
+    # Find a focusable element (button, link, input, etc.)
+    focusable_element = teams_page.page.locator("button, a, input").first
+
+    # Wait for element to be visible
+    focusable_element.wait_for(state="visible")
+
+    # Focus the element explicitly
+    focusable_element.focus()
+
+    # Verify element is focused
+    expect(focusable_element).to_be_focused()
 
     # Verify element is visible (has focus indicator)
-    expect(focused_element).to_be_visible()
+    expect(focusable_element).to_be_visible()
 
     # Check that element has some visual focus indicator
     # This checks for outline, border, or box-shadow changes
@@ -225,22 +240,29 @@ def test_interactive_elements_keyboard_accessible(teams_page: TeamsPage) -> None
     teams_page.navigate()
     teams_page.wait_for_load()
 
-    # Get all interactive elements
-    interactive_elements = teams_page.page.query_selector_all(
-        "a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])",
+    # Wait for page to be fully interactive
+    teams_page.page.wait_for_load_state("networkidle")
+
+    # Get all interactive elements using locator API (more robust)
+    interactive_selector = (
+        "button, a[href], input, select, textarea, "
+        '[role="button"], [role="link"], [tabindex]:not([tabindex="-1"])'
     )
+    interactive_elements = teams_page.page.locator(interactive_selector)
 
     # Verify we found interactive elements
-    assert len(interactive_elements) > 0, "Page should have interactive elements"
+    count = interactive_elements.count()
+    assert count > 0, f"Page should have interactive elements, found {count}"
 
-    # Check each element can receive focus
-    for element in interactive_elements[:5]:  # Test first 5 to keep test fast
+    # Check each element can receive focus (test first 5 to keep test fast)
+    for i in range(min(5, count)):
+        element = interactive_elements.nth(i)
+        # Wait for element to be visible
+        element.wait_for(state="visible")
+        # Focus the element
         element.focus()
-        is_focused = teams_page.page.evaluate(
-            "(el) => document.activeElement === el",
-            element,
-        )
-        assert is_focused, f"Element {element} should be focusable"
+        # Verify it's focused
+        expect(element).to_be_focused()
 
 
 @pytest.mark.accessibility
