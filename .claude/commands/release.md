@@ -1225,11 +1225,485 @@ To continue manually:
 See tasks/new-features/019-comprehensive-release-automation-skill.md for full automation roadmap.
 ```
 
-### Phase 4-7: Coming Soon
+### Phase 4: Publish ✅
+
+**Objective**: Create git tag, publish GitHub release, and trigger automated PyPI publishing.
+
+**Prerequisites**:
+- Phase 3 completed (packages built and validated)
+- Working tree is clean
+- All changes committed
+- Ready to publish version
+
+**Important**: This project uses automated PyPI publishing via GitHub Actions. When you push a version tag (`v*`), the `publish.yml` workflow automatically builds and publishes to PyPI using OIDC authentication (no manual tokens needed).
+
+**Step 1: Create Git Tag**
+
+Create an annotated git tag with the new version:
+
+```bash
+echo ""
+echo "📍 Step 1: Create Git Tag"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Get version from user (already set in Phase 2)
+new_version="$new_version"  # From Phase 2
+tag_name="v$new_version"
+
+# Check if tag already exists
+if git rev-parse "$tag_name" >/dev/null 2>&1; then
+    echo "❌ Error: Tag $tag_name already exists!"
+    echo ""
+    echo "Options:"
+    echo "  1. Delete existing tag: git tag -d $tag_name && git push origin :refs/tags/$tag_name"
+    echo "  2. Use a different version number"
+    echo "  3. Abort release"
+    echo ""
+    read -p "Abort release? [Y/n] " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        echo "❌ Release aborted."
+        exit 1
+    fi
+fi
+
+# Create annotated tag with release notes
+echo "Creating tag: $tag_name"
+echo ""
+
+# Generate tag message from changelog entry (from Phase 2)
+tag_message="Release version $new_version
+
+$(sed -n "/^## \[$new_version\]/,/^## \[/p" CHANGELOG.md | sed '1d;$d' | sed '/^$/d')
+
+See CHANGELOG.md for full details."
+
+# Create the tag
+git tag -a "$tag_name" -m "$tag_message"
+
+# Verify tag created
+if git rev-parse "$tag_name" >/dev/null 2>&1; then
+    echo "✅ Tag created successfully: $tag_name"
+    echo ""
+    echo "Tag details:"
+    git show "$tag_name" --quiet
+    echo ""
+else
+    echo "❌ Error: Failed to create tag $tag_name"
+    exit 1
+fi
+```
+
+**Requirements:**
+- Create annotated tag (not lightweight)
+- Include release notes in tag message
+- Extract notes from CHANGELOG.md
+- Verify tag creation
+
+**Step 2: Push Tag to Remote**
+
+Push the git tag to GitHub to trigger automated publishing:
+
+```bash
+echo ""
+echo "📤 Step 2: Push Tag to Remote"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+echo "⚠️  IMPORTANT: Pushing this tag will trigger:"
+echo "   - Automated PyPI publishing workflow"
+echo "   - Package build and upload to PyPI"
+echo "   - SBOM and SLSA provenance generation"
+echo ""
+echo "This action cannot be easily undone. PyPI releases cannot be deleted,"
+echo "only yanked (hidden from pip install but still accessible)."
+echo ""
+read -p "Push tag $tag_name to origin? [y/N] " -n 1 -r
+echo ""
+
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "❌ Tag push cancelled."
+    echo ""
+    echo "Tag created locally but not pushed."
+    echo "To push later: git push origin $tag_name"
+    echo "To delete local tag: git tag -d $tag_name"
+    exit 1
+fi
+
+# Push tag to origin
+echo "Pushing tag to origin..."
+if git push origin "$tag_name"; then
+    echo "✅ Tag pushed successfully: $tag_name"
+    echo ""
+    echo "GitHub Actions workflows triggered:"
+    echo "  - PyPI Publishing (publish.yml)"
+    echo "  - GitHub Release Creation"
+    echo "  - SBOM Generation"
+    echo "  - SLSA Provenance"
+    echo ""
+else
+    echo "❌ Error: Failed to push tag $tag_name"
+    echo ""
+    echo "Common issues:"
+    echo "  - Authentication failure: Check GitHub credentials"
+    echo "  - Network error: Check connection and retry"
+    echo "  - Protected tags: Check repository settings"
+    echo ""
+    echo "To retry: git push origin $tag_name"
+    echo "To delete local tag: git tag -d $tag_name"
+    exit 1
+fi
+
+# Wait a moment for GitHub to process the tag
+sleep 2
+```
+
+**Requirements:**
+- Confirm before pushing (cannot be undone)
+- Warn about automated publishing
+- Push tag to origin
+- Verify push succeeded
+- Handle authentication errors
+
+**Step 3: Monitor Automated Publishing**
+
+Monitor the GitHub Actions workflows triggered by the tag push:
+
+```bash
+echo ""
+echo "🔍 Step 3: Monitor Automated Publishing"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+echo "Checking for triggered workflows..."
+echo ""
+
+# Get the workflow run triggered by this tag
+# Wait a few seconds for GitHub to create the run
+sleep 5
+
+# Find the publish workflow run for this tag
+run_id=$(gh run list --workflow=publish.yml --json databaseId,headBranch,status \
+    --jq ".[] | select(.headBranch == \"$tag_name\") | .databaseId" | head -1)
+
+if [ -z "$run_id" ]; then
+    echo "⚠️  Warning: Could not find workflow run for tag $tag_name"
+    echo ""
+    echo "The workflow may still be starting. Check manually:"
+    echo "  gh run list --workflow=publish.yml"
+    echo ""
+    read -p "Continue anyway? [y/N] " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+else
+    echo "Found workflow run: $run_id"
+    echo ""
+    echo "Monitoring publish workflow (this may take 5-10 minutes)..."
+    echo "  - Building package for multiple Python versions"
+    echo "  - Running tests on multiple platforms"
+    echo "  - Publishing to PyPI via OIDC"
+    echo "  - Generating SBOM and provenance"
+    echo ""
+
+    # Watch the workflow run
+    echo "View workflow: https://github.com/bdperkin/nhl-scrabble/actions/runs/$run_id"
+    echo ""
+    read -p "Watch workflow progress in terminal? [Y/n] " -n 1 -r
+    echo ""
+
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        # Watch the run (auto-updates)
+        gh run watch "$run_id"
+
+        # Check final status
+        status=$(gh run view "$run_id" --json conclusion --jq '.conclusion')
+
+        if [ "$status" = "success" ]; then
+            echo ""
+            echo "✅ Publish workflow completed successfully!"
+            echo ""
+        else
+            echo ""
+            echo "❌ Publish workflow failed: $status"
+            echo ""
+            echo "View logs: gh run view $run_id --log-failed"
+            echo ""
+            read -p "Continue anyway? [y/N] " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                echo "See ROLLBACK section below for recovery steps."
+                exit 1
+            fi
+        fi
+    fi
+fi
+```
+
+**Requirements:**
+- Find the workflow run triggered by tag
+- Display workflow URL
+- Offer to watch progress
+- Check final status
+- Handle workflow failures
+
+**Step 4: Create GitHub Release**
+
+Create a GitHub release with auto-generated release notes:
+
+```bash
+echo ""
+echo "🎉 Step 4: Create GitHub Release"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+echo "Creating GitHub release for $tag_name..."
+echo ""
+
+# Generate release notes from changelog
+release_notes="$(sed -n "/^## \[$new_version\]/,/^## \[/p" CHANGELOG.md | sed '1d;$d')"
+
+# Create release with gh CLI
+if gh release create "$tag_name" \
+    --title "Release $new_version" \
+    --notes "$release_notes" \
+    --latest \
+    dist/*.whl dist/*.tar.gz; then
+
+    echo "✅ GitHub release created successfully!"
+    echo ""
+    echo "Release URL: https://github.com/bdperkin/nhl-scrabble/releases/tag/$tag_name"
+    echo ""
+    echo "Attached artifacts:"
+    ls -lh dist/*.whl dist/*.tar.gz | awk '{print "  - " $9 " (" $5 ")"}'
+    echo ""
+else
+    echo "❌ Error: Failed to create GitHub release"
+    echo ""
+    echo "Common issues:"
+    echo "  - Release already exists: Delete it first with 'gh release delete $tag_name'"
+    echo "  - Network error: Retry the command"
+    echo "  - Permission error: Check GitHub token permissions"
+    echo ""
+    echo "To retry:"
+    echo "  gh release create $tag_name --title \"Release $new_version\" \\"
+    echo "    --notes \"$release_notes\" --latest dist/*.whl dist/*.tar.gz"
+    echo ""
+    read -p "Continue anyway? [y/N] " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "See ROLLBACK section below for recovery steps."
+        exit 1
+    fi
+fi
+```
+
+**Requirements:**
+- Extract release notes from CHANGELOG.md
+- Create release with gh CLI
+- Attach build artifacts (wheel and sdist)
+- Mark as latest release
+- Handle errors (duplicate release, network, permissions)
+
+**Step 5: Verify PyPI Publication**
+
+Verify that the package was successfully published to PyPI:
+
+```bash
+echo ""
+echo "✅ Step 5: Verify PyPI Publication"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+echo "Waiting for PyPI to index the new version (this may take 1-2 minutes)..."
+sleep 30
+
+# Check if package is on PyPI
+echo "Checking PyPI for nhl-scrabble $new_version..."
+echo ""
+
+# Try to fetch package info from PyPI
+max_attempts=6
+attempt=1
+found=false
+
+while [ $attempt -le $max_attempts ]; do
+    if curl -s "https://pypi.org/pypi/nhl-scrabble/json" | grep -q "\"version\": \"$new_version\""; then
+        found=true
+        break
+    fi
+
+    echo "Attempt $attempt/$max_attempts: Not yet available, waiting 30s..."
+    sleep 30
+    ((attempt++))
+done
+
+if [ "$found" = true ]; then
+    echo "✅ Package found on PyPI!"
+    echo ""
+    echo "PyPI URL: https://pypi.org/project/nhl-scrabble/$new_version/"
+    echo ""
+
+    # Test installation in temporary venv
+    echo "Testing installation from PyPI..."
+    temp_venv=$(mktemp -d)/pypi-test-venv
+    python -m venv "$temp_venv" --quiet
+    source "$temp_venv/bin/activate"
+
+    if pip install "nhl-scrabble==$new_version" --quiet; then
+        installed_version=$(python -c "import nhl_scrabble; print(nhl_scrabble.__version__)")
+        if [ "$installed_version" = "$new_version" ]; then
+            echo "✅ Installation test passed!"
+            echo "   Installed version: $installed_version"
+            echo ""
+        else
+            echo "⚠️  Warning: Version mismatch!"
+            echo "   Expected: $new_version"
+            echo "   Got: $installed_version"
+            echo ""
+        fi
+    else
+        echo "❌ Error: Failed to install from PyPI"
+        echo ""
+    fi
+
+    deactivate
+    rm -rf "$temp_venv"
+else
+    echo "⚠️  Warning: Package not found on PyPI after $max_attempts attempts"
+    echo ""
+    echo "Possible reasons:"
+    echo "  - PyPI indexing is slow (can take 5-10 minutes)"
+    echo "  - Publish workflow is still running"
+    echo "  - Publish workflow failed"
+    echo ""
+    echo "Check workflow status: gh run list --workflow=publish.yml"
+    echo "Check PyPI: https://pypi.org/project/nhl-scrabble/"
+    echo ""
+fi
+```
+
+**Requirements:**
+- Wait for PyPI to index new version
+- Check PyPI API for version
+- Retry with backoff (up to 6 attempts)
+- Test installation from PyPI
+- Verify installed version matches
+
+**Step 6: Publish Summary**
+
+Display comprehensive summary of what was published:
+
+```bash
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Phase 4: Publish Complete"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Release: $new_version"
+echo "Tag: $tag_name"
+echo ""
+echo "Published To:"
+echo "  ✅ Git: Tag pushed to origin"
+echo "  ✅ GitHub: Release created with artifacts"
+echo "  ✅ PyPI: Package published (or publishing)"
+echo ""
+echo "URLs:"
+echo "  🏷️  Tag: https://github.com/bdperkin/nhl-scrabble/releases/tag/$tag_name"
+echo "  📦 PyPI: https://pypi.org/project/nhl-scrabble/$new_version/"
+echo "  📄 Docs: https://bdperkin.github.io/nhl-scrabble/"
+echo ""
+echo "Artifacts:"
+ls -lh dist/ | grep -E '\.(whl|tar\.gz)$' | awk '{print "  - " $9 " (" $5 ")"}'
+echo ""
+echo "Next Steps (Phase 5+):"
+echo "  - Post-release tasks (not yet implemented)"
+echo "  - Verification and cleanup (not yet implemented)"
+echo ""
+echo "⚠️  Note: Only Phases 1-4 are currently implemented."
+echo "    Future phases will be added in subsequent tasks."
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "🎉 Release $new_version published successfully!"
+echo ""
+```
+
+**Step 7: Rollback Support**
+
+If something goes wrong during publishing, here's how to rollback:
+
+```bash
+echo ""
+echo "🔄 ROLLBACK: If Something Goes Wrong"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "If you need to rollback the release:"
+echo ""
+echo "1. Delete GitHub Release:"
+echo "   gh release delete $tag_name --yes"
+echo ""
+echo "2. Delete Git Tag (Local):"
+echo "   git tag -d $tag_name"
+echo ""
+echo "3. Delete Git Tag (Remote):"
+echo "   git push origin :refs/tags/$tag_name"
+echo ""
+echo "4. PyPI Package:"
+echo "   ⚠️  CANNOT DELETE - Can only yank (hide from pip install)"
+echo "   pip install twine"
+echo "   twine upload --skip-existing dist/*  # if you need to re-upload"
+echo "   # Or use PyPI web interface to yank the release"
+echo ""
+echo "5. Revert CHANGELOG.md (if committed):"
+echo "   git revert <commit-sha>"
+echo "   # Or manually edit and commit"
+echo ""
+echo "⚠️  Important Notes:"
+echo "  - PyPI releases cannot be deleted, only yanked"
+echo "  - Yanked releases are hidden but still accessible"
+echo "  - Version numbers cannot be reused on PyPI"
+echo "  - If you need to fix issues, bump to a new version (e.g., 0.0.14)"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+```
+
+**Rollback Scenarios:**
+
+1. **Tag created but not pushed**:
+   - Simple: `git tag -d $tag_name`
+   - No remote impact
+
+2. **Tag pushed but GitHub release failed**:
+   - Delete remote tag: `git push origin :refs/tags/$tag_name`
+   - Delete local tag: `git tag -d $tag_name`
+   - Fix issue and retry
+
+3. **GitHub release created but PyPI publish failed**:
+   - Delete GitHub release: `gh release delete $tag_name --yes`
+   - Delete tags (local and remote)
+   - Check workflow logs: `gh run view $run_id --log-failed`
+   - Fix issue and retry
+
+4. **PyPI published but package is broken**:
+   - **Cannot delete from PyPI!**
+   - Yank the release (hides from pip install)
+   - Bump version to fix (e.g., 0.0.14)
+   - Publish fixed version
+
+5. **Everything published but needs changes**:
+   - Leave published version as-is
+   - Make fixes
+   - Bump version
+   - Publish new version
+
+### Phase 5-7: Coming Soon
 
 Future phases will be implemented in subsequent tasks:
 
-- **Phase 4**: Publish (task 028)
 - **Phase 5**: Post-Release Tasks (task 029)
 - **Phase 6**: Verification and Cleanup (task 030)
 - **Phase 7**: Release Orchestration CLI (task 031)
