@@ -820,10 +820,14 @@ The CLI tool is the simplest starting point and most aligned with the existing C
 
 ## Implementation Notes
 
-**Implemented**: 2026-04-29
+**Implemented**: 2026-04-29 (initial), 2026-04-30 (fixes and additional tests)
 **Branch**: testing/021-test-analytics-coverage-tool
 **PR**: #463 - https://github.com/bdperkin/nhl-scrabble/pull/463
-**Commit**: e618095
+**Commits**:
+- e618095 - feat(analytics): Add test analytics and coverage analysis tool (2026-04-29)
+- 1cd1282 - fix(analytics): Update lockfile and resolve code quality issues (2026-04-30)
+- ada9c1c - fix(cli): Map --format option to output_format parameter (2026-04-30)
+- 6b35572 - test(analytics): Add comprehensive formatter tests (2026-04-30)
 
 ### Actual Implementation
 
@@ -886,10 +890,18 @@ Successfully implemented all components as specified in the proposed solution:
 
 ### Testing Coverage
 
+**Initial Implementation** (2026-04-29):
 - **Codecov Client**: 98.67% coverage (61 statements, 0 missed)
 - **Analyzer**: 97.44% coverage (62 statements, 1 missed)
-- **Formatters**: 47.18% coverage (focus on core formatting logic)
+- **Formatters**: 44.58% coverage (insufficient for PR merge)
 - **Total**: 42 tests, all passing
+
+**After Formatter Tests** (2026-04-30):
+- **Codecov Client**: 98.67% coverage (unchanged)
+- **Analyzer**: 97.44% coverage (unchanged)
+- **Formatters**: 99.49% coverage (30 new tests added)
+- **Total**: 72 tests, all passing
+- **Codecov Patch Coverage**: >80% (passed codecov/patch check)
 
 ### Challenges Encountered
 
@@ -909,16 +921,37 @@ Successfully implemented all components as specified in the proposed solution:
    - Challenge: Testing context manager behavior
    - Solution: Proper mocking of `__enter__` and `__exit__` methods
 
+5. **Test Analytics Integration Tests** (2026-04-30):
+   - Challenge: All 7 test_analytics integration tests failing with "unexpected keyword argument 'format'"
+   - Root Cause: Parameter renamed from `format` to `output_format` (avoid shadowing builtin), but Click still passed `format`
+   - Solution: Added Click parameter mapping: `@click.option("--format", "output_format", ...)`
+
+6. **Codecov Patch Coverage** (2026-04-30):
+   - Challenge: Patch coverage at 71.51%, below 80% threshold (formatters.py at 44.58%)
+   - Solution: Created comprehensive test suite with 30 new tests covering:
+     - All TextFormatter methods (13 tests)
+     - All JSONFormatter methods (10 tests)
+     - All HTMLFormatter methods (17 tests)
+     - Edge cases: empty data, truncation, missing fields
+   - Result: Formatters.py coverage improved from 44.58% → 99.49%
+
+7. **UV Lock File** (2026-04-30):
+   - Challenge: uv-lock pre-commit hook failing due to playwright version mismatch
+   - Solution: Ran `uv lock --upgrade` to update lockfile with playwright v1.59.0
+
 ### Actual vs Estimated Effort
 
 - **Estimated**: 4-6 hours
-- **Actual**: ~4.5 hours
+- **Actual**: ~6.5 hours
 - **Breakdown**:
-  - Core implementation: 2 hours
-  - Testing: 1.5 hours
-  - Quality fixes: 1 hour
+  - Core implementation: 2 hours (2026-04-29)
+  - Initial testing: 1.5 hours (2026-04-29)
+  - Quality fixes: 1 hour (2026-04-29)
+  - Integration test fixes: 0.5 hours (2026-04-30)
+  - Comprehensive formatter tests: 1.5 hours (2026-04-30)
 
-**Variance**: On target. Good estimation.
+**Variance**: Slightly over estimate due to additional test coverage requirements (codecov patch >80%).
+**Actual work aligned with upper bound of estimate (6 hours).**
 
 ### Lessons Learned
 
