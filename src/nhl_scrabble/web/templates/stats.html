@@ -99,3 +99,26 @@
         </div>
     </section>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prepare team standings data for chart
+        const teamStandings = {{ team_standings|tojson }};
+
+        // Prepare player data for distribution chart
+        const topPlayers = {{ top_players|tojson }};
+
+        // Create team scores chart
+        if (teamStandings && teamStandings.length > 0) {
+            createTeamScoresChart(teamStandings);
+        }
+
+        // Create player distribution chart
+        if (topPlayers && topPlayers.length > 0) {
+            createPlayerDistributionChart(topPlayers);
+        }
+    });
+</script>
+{% endblock %}

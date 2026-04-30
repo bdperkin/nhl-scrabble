@@ -613,6 +613,7 @@ async def stats_page(request: Request) -> HTMLResponse:
             context={
                 "stats": data["stats"],
                 "top_players": data["top_players"],
+                "team_standings": data["team_standings"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
             },
