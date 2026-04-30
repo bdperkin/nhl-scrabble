@@ -228,7 +228,7 @@ __pycache__/
 /*.db
 
 # Generated reports
-/sync-report.md
+/sync-report*.md
 /reports/
 /bandit-report.html
 /bandit-report.json
