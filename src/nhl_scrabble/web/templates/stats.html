@@ -41,7 +41,10 @@
         </div>
         <div class="stat-card">
             <h4>Data As Of</h4>
-            <p class="stat-value" style="font-size: 0.9rem;">{{ timestamp|default('Now') }}</p>
+            <p class="stat-value" style="font-size: 0.85rem; line-height: 1.4;">
+                {{ timestamp_date|default('Unknown') }}<br>
+                {{ timestamp_time|default('') }}
+            </p>
         </div>
     </div>
 

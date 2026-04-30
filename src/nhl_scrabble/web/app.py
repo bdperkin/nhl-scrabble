@@ -420,7 +420,8 @@ async def teams_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
         return templates.TemplateResponse(
             request=request,
@@ -428,7 +429,8 @@ async def teams_page(request: Request) -> HTMLResponse:
             context={
                 "team_standings": data["team_standings"],
                 "stats": data["stats"],
-                "timestamp": formatted_timestamp,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
             },
         )
     except NHLApiError as e:
@@ -463,7 +465,8 @@ async def divisions_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
         return templates.TemplateResponse(
             request=request,
@@ -471,7 +474,8 @@ async def divisions_page(request: Request) -> HTMLResponse:
             context={
                 "division_standings": data["division_standings"],
                 "stats": data["stats"],
-                "timestamp": formatted_timestamp,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
             },
         )
     except NHLApiError as e:
@@ -506,7 +510,8 @@ async def conferences_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
         return templates.TemplateResponse(
             request=request,
@@ -514,7 +519,8 @@ async def conferences_page(request: Request) -> HTMLResponse:
             context={
                 "conference_standings": data["conference_standings"],
                 "stats": data["stats"],
-                "timestamp": formatted_timestamp,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
             },
         )
     except NHLApiError as e:
@@ -552,7 +558,8 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
         return templates.TemplateResponse(
             request=request,
@@ -561,7 +568,8 @@ async def playoffs_page(request: Request) -> HTMLResponse:
                 "playoff_bracket": data["playoff_bracket"],
                 "playoff_teams_count": playoff_teams_count,
                 "stats": data["stats"],
-                "timestamp": formatted_timestamp,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
             },
         )
     except NHLApiError as e:
@@ -596,7 +604,8 @@ async def stats_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        formatted_timestamp = timestamp_dt.strftime("%B %d, %Y at %I:%M %p UTC")
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
         return templates.TemplateResponse(
             request=request,
@@ -604,7 +613,8 @@ async def stats_page(request: Request) -> HTMLResponse:
             context={
                 "stats": data["stats"],
                 "top_players": data["top_players"],
-                "timestamp": formatted_timestamp,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
             },
         )
     except NHLApiError as e:
