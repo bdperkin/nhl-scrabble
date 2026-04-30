@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 201 tasks (28 active, 173 completed)
+**Total Tasks**: 201 tasks (27 active, 174 completed)
 
 ## Overview
 
@@ -53,7 +53,7 @@ Each task includes:
 | 013 | Fix WCAG 2.1 AA Accessibility Violations in Web App | HIGH | 2-3 hours (actual: ~3.5h) | Completed | [#440](https://github.com/bdperkin/nhl-scrabble/issues/440) | PR [#449](https://github.com/bdperkin/nhl-scrabble/pull/449), completed 2026-04-29 |
 | 014 | Fix QA Automation Test Failures (Functional and Accessibility) | HIGH | 4-6 hours (actual: ~2.5h) | Completed | [#454](https://github.com/bdperkin/nhl-scrabble/issues/454) | PR [#461](https://github.com/bdperkin/nhl-scrabble/pull/461), completed 2026-04-30 |
 | 015 | Add Missing Web Application Routes | HIGH | 2-3 hours (actual: ~1.5h) | Completed | [#456](https://github.com/bdperkin/nhl-scrabble/issues/456) | PR [#458](https://github.com/bdperkin/nhl-scrabble/pull/458), completed 2026-04-29 |
-| 016 | Fix Web Interface Routes Showing Same Page | HIGH | 2-3 hours | Active | [#474](https://github.com/bdperkin/nhl-scrabble/issues/474) | - |
+| 016 | Fix Web Interface Routes Showing Same Page | HIGH | 2-3 hours (actual: ~1.5h) | Completed | [#474](https://github.com/bdperkin/nhl-scrabble/issues/474) | PR [#475](https://github.com/bdperkin/nhl-scrabble/pull/475), completed 2026-04-30 |
 
 ### Security
 
