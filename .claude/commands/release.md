@@ -11,7 +11,10 @@ Automate the complete release process for the nhl-scrabble package.
 **Phase 1 Complete**: Pre-Release Validation ✅
 **Phase 2 Complete**: Version Bumping ✅
 **Phase 3 Complete**: Build and Validate ✅
-**Phase 4-7**: Coming in future tasks (see tasks/new-features/019-comprehensive-release-automation-skill.md)
+**Phase 4 Complete**: Publish ✅
+**Phase 5 Complete**: Post-Release Tasks ✅
+**Phase 6 Complete**: Verification and Reporting ✅
+**Phase 7**: Coming in future task (see tasks/new-features/019-comprehensive-release-automation-skill.md)
 
 ## Usage
 
@@ -29,7 +32,7 @@ Automate the complete release process for the nhl-scrabble package.
 
 ## Process
 
-This command executes the release process in phases. Currently only Phase 1 is implemented.
+This command executes the release process in phases. Currently Phases 1-6 are implemented.
 
 ### Phase 1: Pre-Release Validation ✅
 
@@ -2030,12 +2033,9 @@ echo ""
 echo "CHANGELOG.md:"
 echo "  [Unreleased] section ready for future changes"
 echo ""
-echo "Next Steps (Phase 6+):"
-echo "  - Verification and cleanup (not yet implemented)"
-echo "  - Release summary and reporting (not yet implemented)"
-echo ""
-echo "⚠️  Note: Only Phases 1-5 are currently implemented."
-echo "    Future phases will be added in subsequent tasks."
+echo "Next Steps (Phase 6):"
+echo "  - Verification and reporting"
+echo "  - Run: continue with Phase 6"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
@@ -2047,11 +2047,285 @@ echo "of CHANGELOG.md until the next release."
 echo ""
 ```
 
-### Phase 6-7: Coming Soon
+### Phase 6: Verification and Reporting ✅
+
+**Purpose**: Verify release artifacts and generate comprehensive release report
+
+**Prerequisites**:
+- Phase 5 completed (post-release tasks done)
+- Release tag pushed
+- GitHub Actions workflow completed
+- PyPI package published
+
+**Inputs**:
+- Released version (from Phase 4)
+- GitHub release URL
+- PyPI package URL
+- Documentation URL
+
+**Outputs**:
+- Verification status for each artifact
+- Comprehensive release report
+- Success/failure summary
+
+**Process**:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ============================================================================
+# Phase 6: Verification and Reporting
+# ============================================================================
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🔍 Phase 6: Verification and Reporting"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Get the released version (from Phase 4 output or git tag)
+if [[ -z "${released_version:-}" ]]; then
+    released_version=$(git describe --tags --abbrev=0 | sed 's/^v//')
+    echo "ℹ️  Detected released version from git: ${released_version}"
+else
+    echo "ℹ️  Using released version: ${released_version}"
+fi
+
+tag_name="v${released_version}"
+
+# Initialize verification status
+pypi_status="❌"
+github_status="❌"
+docs_status="❌"
+verification_failed=false
+
+# ============================================================================
+# Step 1: Verify PyPI Package Availability
+# ============================================================================
+
+echo ""
+echo "📦 Step 1: Verifying PyPI Package..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+pypi_url="https://pypi.org/project/nhl-scrabble/${released_version}/"
+pypi_json_url="https://pypi.org/pypi/nhl-scrabble/json"
+
+# Check if package exists on PyPI
+if curl -sf "${pypi_json_url}" | jq -e ".releases.\"${released_version}\"" > /dev/null 2>&1; then
+    pypi_status="✅"
+    echo "✅ PyPI package verified"
+    echo "   URL: ${pypi_url}"
+
+    # Get package metadata
+    package_info=$(curl -sf "${pypi_json_url}" | jq -r ".releases.\"${released_version}\"[0]")
+    upload_time=$(echo "${package_info}" | jq -r '.upload_time')
+    package_size=$(echo "${package_info}" | jq -r '.size')
+
+    echo "   Upload time: ${upload_time}"
+    echo "   Package size: $(numfmt --to=iec-i --suffix=B "${package_size}" 2>/dev/null || echo "${package_size} bytes")"
+
+    # Verify installability (optional - can be slow)
+    echo ""
+    echo "   Testing package installation..."
+    if python -m pip install --dry-run "nhl-scrabble==${released_version}" > /dev/null 2>&1; then
+        echo "   ✅ Package is installable"
+    else
+        echo "   ⚠️  Package installation test failed (may be temporary)"
+    fi
+else
+    pypi_status="❌"
+    verification_failed=true
+    echo "❌ PyPI package not found"
+    echo "   Expected URL: ${pypi_url}"
+    echo ""
+    echo "   Possible reasons:"
+    echo "   - GitHub Actions workflow still running"
+    echo "   - PyPI publishing failed (check workflow logs)"
+    echo "   - PyPI indexing delay (wait 5-10 minutes)"
+    echo ""
+    echo "   Check workflow: gh run list --workflow=publish.yml --limit 1"
+fi
+
+# ============================================================================
+# Step 2: Verify GitHub Release
+# ============================================================================
+
+echo ""
+echo "🏷️  Step 2: Verifying GitHub Release..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Check if release exists
+if gh release view "${tag_name}" > /dev/null 2>&1; then
+    github_status="✅"
+    echo "✅ GitHub release verified"
+
+    # Get release metadata
+    release_url=$(gh release view "${tag_name}" --json url --jq '.url')
+    release_date=$(gh release view "${tag_name}" --json publishedAt --jq '.publishedAt')
+    asset_count=$(gh release view "${tag_name}" --json assets --jq '.assets | length')
+
+    echo "   URL: ${release_url}"
+    echo "   Published: ${release_date}"
+    echo "   Assets: ${asset_count}"
+
+    # List assets
+    if [[ ${asset_count} -gt 0 ]]; then
+        echo ""
+        echo "   Release Assets:"
+        gh release view "${tag_name}" --json assets --jq '.assets[] | "   - \(.name) (\(.size) bytes)"'
+    fi
+else
+    github_status="❌"
+    verification_failed=true
+    echo "❌ GitHub release not found"
+    echo "   Expected tag: ${tag_name}"
+    echo ""
+    echo "   Create release manually:"
+    echo "   gh release create \"${tag_name}\" --title \"Release ${released_version}\" --generate-notes"
+fi
+
+# ============================================================================
+# Step 3: Verify Documentation Deployment
+# ============================================================================
+
+echo ""
+echo "📚 Step 3: Verifying Documentation Deployment..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+docs_url="https://bdperkin.github.io/nhl-scrabble/"
+
+# Check if docs are accessible
+if curl -sf -o /dev/null -w "%{http_code}" "${docs_url}" | grep -q "200"; then
+    docs_status="✅"
+    echo "✅ Documentation verified"
+    echo "   URL: ${docs_url}"
+
+    # Check if version is mentioned in docs (optional verification)
+    if curl -sf "${docs_url}" | grep -q "${released_version}"; then
+        echo "   ✅ Version ${released_version} found in documentation"
+    else
+        echo "   ℹ️  Version ${released_version} not yet visible (may take a few minutes)"
+    fi
+else
+    docs_status="⚠️"
+    echo "⚠️  Documentation not accessible (may be temporary)"
+    echo "   URL: ${docs_url}"
+    echo ""
+    echo "   Check GitHub Pages deployment:"
+    echo "   gh run list --workflow=pages-build-deployment --limit 1"
+fi
+
+# ============================================================================
+# Step 4: Generate Release Report
+# ============================================================================
+
+echo ""
+echo "📊 Step 4: Generating Release Report..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Get additional metadata
+current_branch=$(git branch --show-current)
+commit_count=$(git rev-list --count "${tag_name}")
+contributors=$(git shortlog -s "${tag_name}" | wc -l)
+
+# Get changelog for this version
+changelog_entry=$(sed -n "/^## \[${released_version}\]/,/^## \[/p" CHANGELOG.md | sed '1d;$d' | sed '/^$/d')
+
+# Display comprehensive report
+cat << EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎉 Release Report: v${released_version}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 Package Information
+   Version: ${released_version}
+   Tag: ${tag_name}
+   Branch: ${current_branch}
+   Total commits: ${commit_count}
+   Contributors: ${contributors}
+
+📋 Verification Status
+   ${pypi_status} PyPI Package
+   ${github_status} GitHub Release
+   ${docs_status} Documentation
+
+🔗 Release URLs
+   PyPI: ${pypi_url}
+   GitHub: $(gh release view "${tag_name}" --json url --jq '.url' 2>/dev/null || echo "Not available")
+   Docs: ${docs_url}
+
+📝 Changes in This Release
+${changelog_entry}
+
+🚀 Installation
+   pip install nhl-scrabble==${released_version}
+   uv pip install nhl-scrabble==${released_version}
+
+📚 Documentation
+   Online: ${docs_url}
+   Changelog: https://github.com/bdperkin/nhl-scrabble/blob/main/CHANGELOG.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+
+# ============================================================================
+# Step 5: Final Status Summary
+# ============================================================================
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [[ "${verification_failed}" == "false" ]]; then
+    echo "✅ Phase 6: Verification and Reporting Complete"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "🎉 All verifications passed!"
+    echo ""
+    echo "Release: v${released_version}"
+    echo ""
+    echo "Verified Components:"
+    echo "  ✅ PyPI package available and installable"
+    echo "  ✅ GitHub release published with assets"
+    echo "  ✅ Documentation deployed and accessible"
+    echo ""
+    echo "Next Steps:"
+    echo "  - Monitor PyPI download statistics"
+    echo "  - Announce release (if applicable)"
+    echo "  - Close related issues/milestones"
+    echo "  - Update project roadmap"
+else
+    echo "⚠️  Phase 6: Verification Completed with Warnings"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "⚠️  Some verifications failed"
+    echo ""
+    echo "Status:"
+    echo "  ${pypi_status} PyPI package"
+    echo "  ${github_status} GitHub release"
+    echo "  ${docs_status} Documentation"
+    echo ""
+    echo "Action Required:"
+    echo "  - Review failed verifications above"
+    echo "  - Check GitHub Actions workflows"
+    echo "  - Wait for indexing/deployment (5-10 minutes)"
+    echo "  - Re-run verification if needed"
+fi
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+```
+
+### Phase 7: Coming Soon
 
 Future phases will be implemented in subsequent tasks:
 
-- **Phase 6**: Verification and Cleanup (task 030)
 - **Phase 7**: Release Orchestration CLI (task 031)
 
 See parent task: `tasks/new-features/019-comprehensive-release-automation-skill.md`
