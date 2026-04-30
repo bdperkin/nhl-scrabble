@@ -443,23 +443,31 @@ def test_landmark_regions_present(
     page.navigate()
     page.wait_for_load()
 
-    # Check for landmarks
-    has_header = (
-        page.page.locator("header").count() > 0 or page.page.locator("[role='banner']").count() > 0
-    )
-    has_nav = (
-        page.page.locator("nav").count() > 0 or page.page.locator("[role='navigation']").count() > 0
-    )
-    has_main = (
-        page.page.locator("main").count() > 0 or page.page.locator("[role='main']").count() > 0
-    )
-    has_footer = (
-        page.page.locator("footer").count() > 0
-        or page.page.locator("[role='contentinfo']").count() > 0
-    )
+    # Wait for page to be fully interactive
+    page.page.wait_for_load_state("networkidle")
 
-    # Assert landmarks exist
+    # Check for landmarks with proper waits - verify landmarks are actually present and visible
+
+    # Check for header/banner landmark
+    header_locator = page.page.locator("header, [role='banner']")
+    header_locator.first.wait_for(state="attached", timeout=5000)
+    has_header = header_locator.count() > 0
     assert has_header, "Page should have header or banner landmark"
+
+    # Check for nav/navigation landmark
+    nav_locator = page.page.locator("nav, [role='navigation']")
+    nav_locator.first.wait_for(state="attached", timeout=5000)
+    has_nav = nav_locator.count() > 0
     assert has_nav, "Page should have nav or navigation landmark"
+
+    # Check for main landmark
+    main_locator = page.page.locator("main, [role='main']")
+    main_locator.first.wait_for(state="attached", timeout=5000)
+    has_main = main_locator.count() > 0
     assert has_main, "Page should have main landmark"
+
+    # Check for footer/contentinfo landmark
+    footer_locator = page.page.locator("footer, [role='contentinfo']")
+    footer_locator.first.wait_for(state="attached", timeout=5000)
+    has_footer = footer_locator.count() > 0
     assert has_footer, "Page should have footer or contentinfo landmark"
