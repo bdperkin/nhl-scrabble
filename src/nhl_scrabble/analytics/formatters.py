@@ -183,7 +183,7 @@ class TextFormatter:
                 self._format_trends(
                     data["coverage_trend"],
                     data.get("coverage_history", []),
-                )
+                ),
             )
 
         return "\n\n".join(output)
@@ -435,7 +435,7 @@ class HTMLFormatter:
                 self._format_trends_html(
                     data["coverage_trend"],
                     data.get("coverage_history", []),
-                )
+                ),
             )
 
         html_parts.extend(["</body>", "</html>"])

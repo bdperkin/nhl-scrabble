@@ -117,9 +117,9 @@ class TestCodecovClient:
                         "name": "test_example",
                         "avg_duration": 1.5,
                         "failure_rate": 0.1,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }
 
         mock_client = Mock()
@@ -198,8 +198,8 @@ class TestCodecovClient:
                 {
                     "name": "src/example.py",
                     "totals": {"coverage": 75.0, "lines": 100, "hits": 75},
-                }
-            ]
+                },
+            ],
         }
 
         mock_client = Mock()
@@ -256,7 +256,7 @@ class TestCodecovClient:
                     "totals": {"coverage": 86.0},
                     "author": {"username": "testuser2"},
                 },
-            ]
+            ],
         }
 
         mock_client = Mock()
@@ -294,7 +294,7 @@ class TestCodecovClient:
                     "totals": {"coverage": None},  # Null coverage
                     "author": {"username": "testuser2"},
                 },
-            ]
+            ],
         }
 
         mock_client = Mock()

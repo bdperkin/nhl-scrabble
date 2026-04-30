@@ -110,7 +110,7 @@ class TestAnalyzer:
                         target_coverage=target_coverage,
                         lines_needed=max(0, needed),  # Ensure non-negative
                         priority=priority,
-                    )
+                    ),
                 )
 
         return sorted(gaps, key=lambda g: g.current_coverage)

@@ -67,7 +67,7 @@ class TestTestAnalyzer:
                     "name": "src/high_coverage.py",
                     "totals": {"coverage": 95.0, "lines": 100, "hits": 95},
                 },
-            ]
+            ],
         }
 
     @pytest.fixture
@@ -97,8 +97,8 @@ class TestTestAnalyzer:
                         "min_duration": 0.5,
                         "failure_rate": 0.5,  # 50% failure = very flaky
                     },
-                ]
-            }
+                ],
+            },
         }
 
     def test_analyzer_initialization(self, sample_coverage_data: dict) -> None:
@@ -159,7 +159,7 @@ class TestTestAnalyzer:
                     "name": "low_priority.py",
                     "totals": {"coverage": 85.0, "lines": 100, "hits": 85},
                 },  # 5% gap = low
-            ]
+            ],
         }
 
         analyzer = TestAnalyzer(data)
@@ -183,7 +183,7 @@ class TestTestAnalyzer:
                     "name": "great_coverage.py",
                     "totals": {"coverage": 95.0, "lines": 100, "hits": 95},
                 },
-            ]
+            ],
         }
 
         analyzer = TestAnalyzer(data)

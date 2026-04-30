@@ -1759,9 +1759,9 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
 )
 @click.help_option("-h", "--help")
 @click.pass_context
-def test_analytics(
+def test_analytics(  # noqa: PLR0913, PLR0915  # CLI function with many options and statements
     ctx: click.Context,
-    format: str,
+    output_format: str,
     output: str | None,
     target_coverage: float,
     show_gaps: bool,
@@ -1859,10 +1859,11 @@ def test_analytics(
         console.print("[green]✓ Analysis complete[/green]")
 
         # Format output
-        if format == "json":
+        formatter: JSONFormatter | HTMLFormatter | TextFormatter
+        if output_format == "json":
             formatter = JSONFormatter()
             output_text = formatter.format(report_data)
-        elif format == "html":
+        elif output_format == "html":
             formatter = HTMLFormatter()
             output_text = formatter.format(report_data)
         else:

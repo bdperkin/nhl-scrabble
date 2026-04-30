@@ -47,11 +47,11 @@ class TestTestAnalyticsCommand:
                 {
                     "name": "src/example.py",
                     "totals": {"coverage": 75.0, "lines": 100, "hits": 75},
-                }
-            ]
+                },
+            ],
         }
         mock_client.get_coverage_trends.return_value = [
-            {"commit": "abc123", "timestamp": "2024-01-01", "coverage": 85.0}
+            {"commit": "abc123", "timestamp": "2024-01-01", "coverage": 85.0},
         ]
 
         mock_client_class.return_value = mock_client
@@ -83,8 +83,8 @@ class TestTestAnalyticsCommand:
                 {
                     "name": "src/low_coverage.py",
                     "totals": {"coverage": 50.0, "lines": 100, "hits": 50},
-                }
-            ]
+                },
+            ],
         }
         mock_client.get_coverage_trends.return_value = []
 
@@ -113,7 +113,7 @@ class TestTestAnalyticsCommand:
         mock_client.get_test_analytics.return_value = {"test_analytics": {"tests": []}}
         mock_client.get_coverage_report.return_value = {"files": []}
         mock_client.get_coverage_trends.return_value = [
-            {"commit": "abc123", "timestamp": "2024-01-01", "coverage": 85.0}
+            {"commit": "abc123", "timestamp": "2024-01-01", "coverage": 85.0},
         ]
 
         mock_client_class.return_value = mock_client
@@ -144,7 +144,7 @@ class TestTestAnalyticsCommand:
         mock_client.get_test_analytics.return_value = {"test_analytics": {"tests": []}}
         mock_client.get_coverage_report.return_value = {"files": []}
         mock_client.get_coverage_trends.return_value = [
-            {"commit": "abc123", "timestamp": "2024-01-01", "coverage": 85.0}
+            {"commit": "abc123", "timestamp": "2024-01-01", "coverage": 85.0},
         ]
 
         mock_client_class.return_value = mock_client
@@ -178,8 +178,8 @@ class TestTestAnalyticsCommand:
                 {
                     "name": "src/example.py",
                     "totals": {"coverage": 85.0, "lines": 100, "hits": 85},
-                }
-            ]
+                },
+            ],
         }
         mock_client.get_coverage_trends.return_value = []
 

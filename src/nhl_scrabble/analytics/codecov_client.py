@@ -170,7 +170,7 @@ class CodecovClient:
                         "timestamp": commit["timestamp"],
                         "coverage": coverage,
                         "author": commit.get("author", {}).get("username"),
-                    }
+                    },
                 )
 
         return trends
@@ -192,7 +192,9 @@ class CodecovClient:
         """Exit context manager and close HTTP client.
 
         Args:
-            *args: Exception information (unused).
+            exc_type: Exception type if an exception was raised, None otherwise.
+            exc_val: Exception instance if an exception was raised, None otherwise.
+            exc_tb: Traceback object if an exception was raised, None otherwise.
         """
         if self._client is not None:
             self._client.close()
