@@ -55,8 +55,8 @@ def publish_release(version):
 
 **Implemented**: 2026-04-30
 **Branch**: new-features/028-release-publish
-**PR**: TBD
-**Commits**: TBD
+**PR**: #468 - https://github.com/bdperkin/nhl-scrabble/pull/468
+**Commits**: fbd2f8d
 
 ### Actual Implementation
 
