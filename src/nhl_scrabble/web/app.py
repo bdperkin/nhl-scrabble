@@ -531,11 +531,15 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
         data = await analyze_post(analysis_request)
 
+        # Calculate total playoff teams
+        playoff_teams_count = sum(len(teams) for teams in data["playoff_bracket"].values())
+
         return templates.TemplateResponse(
             request=request,
             name="playoffs.html",
             context={
                 "playoff_bracket": data["playoff_bracket"],
+                "playoff_teams_count": playoff_teams_count,
                 "stats": data["stats"],
                 "timestamp": data["timestamp"],
             },
