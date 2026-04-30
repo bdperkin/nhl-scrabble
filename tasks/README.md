@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 200 tasks (38 active, 162 completed)
+**Total Tasks**: 200 tasks (37 active, 163 completed)
 
 ## Overview
 
@@ -184,7 +184,7 @@ Each task includes:
 | 020 | Implement Flaky Test Retry Mechanisms | MEDIUM | 6-10 hours (actual: ~4 hours) | Completed | [#322](https://github.com/bdperkin/nhl-scrabble/issues/322) | PR [#323](https://github.com/bdperkin/nhl-scrabble/pull/323), completed 2026-04-22 |
 | 022 | Generate Visual Regression Test Baselines | MEDIUM | 30 minutes (actual: ~45 minutes) | Completed | [#437](https://github.com/bdperkin/nhl-scrabble/issues/437) | Chromium + Firefox baselines generated (28 snapshots), WebKit deferred to CI, completed 2026-04-29 |
 | 023 | Make QA Workflow Blocking After All Tests Pass | LOW | 15 minutes | Active | [#439](https://github.com/bdperkin/nhl-scrabble/issues/439) | - |
-| 024 | Add Comprehensive Web Application Route Tests | MEDIUM | 4-6 hours | Active | [#457](https://github.com/bdperkin/nhl-scrabble/issues/457) | Integration + QA functional tests for all 12+ routes (HTML, API, static, docs) |
+| 024 | Add Comprehensive Web Application Route Tests | MEDIUM | 4-6 hours (actual: ~2.5 hours) | Completed | [#457](https://github.com/bdperkin/nhl-scrabble/issues/457) | PR [#462](https://github.com/bdperkin/nhl-scrabble/pull/462), 38 new tests (33 integration + 5 functional), all browsers passing, completed 2026-04-29 |
 
 ### New Features
 

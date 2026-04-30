@@ -1,7 +1,7 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-04-30 (Updated after task 014 completion)
-**Total Tasks**: 38 active tasks
+**Total Tasks**: 37 active tasks
 **Estimated Total Effort**: 230.5 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
@@ -33,11 +33,6 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 
 **Effort**: 43.5 hours | **Tasks**: 6
 **Focus**: Important improvements and testing enhancements - prioritize in current sprint
-
-```bash
-# Comprehensive Route Tests (Integration and QA Functional)
-/implement-task testing/024-comprehensive-route-tests.md  # 5.0h, Issue #457
-```
 
 ```bash
 # Monitor and Fix CVE-2026-3219 When pip Patch is Available
