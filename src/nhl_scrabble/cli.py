@@ -1721,6 +1721,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
 @cli.command()
 @click.option(
     "--format",
+    "output_format",
     type=click.Choice(["text", "json", "html"], case_sensitive=False),
     default="text",
     help="Output format (default: text)",
