@@ -246,7 +246,7 @@ def test_benchmark_your_function(benchmark):
 **Detailed guides:**
 
 - [How to Run Benchmarks](docs/how-to/run-benchmarks.md) - Performance testing
-- [Benchmark Workflow](docs/contributing/benchmark-workflow.md) - CI integration
+- [Benchmark Workflow](.github/workflows/benchmark.yml) - CI integration (see also CLAUDE.md#cicd)
 
 ### Multi-Environment Testing with Tox
 
