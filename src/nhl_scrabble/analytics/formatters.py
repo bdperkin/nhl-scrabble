@@ -409,8 +409,7 @@ class HTMLFormatter:
             ".high { color: red; font-weight: bold; }",
             ".medium { color: orange; font-weight: bold; }",
             ".low { color: green; font-weight: bold; }",
-            ".trend { padding: 20px; background-color: #e7f3ff; "
-            + "border-left: 4px solid #2196F3; margin: 20px 0; }",
+            ".trend { padding: 20px; background-color: #e7f3ff; border-left: 4px solid #2196F3; margin: 20px 0; }",
             "</style>",
             "</head>",
             "<body>",
