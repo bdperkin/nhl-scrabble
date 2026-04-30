@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 200 tasks (33 active, 167 completed)
+**Total Tasks**: 200 tasks (32 active, 168 completed)
 
 ## Overview
 
@@ -211,7 +211,7 @@ Each task includes:
 | 026 | Release Automation: Version Bumping Phase | LOW | 1-2 hours | Completed | [#262](https://github.com/bdperkin/nhl-scrabble/issues/262) | - |
 | 027 | Release Automation: Build and Validate Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#263](https://github.com/bdperkin/nhl-scrabble/issues/263) | PR [#467](https://github.com/bdperkin/nhl-scrabble/pull/467), completed 2026-04-30 |
 | 028 | Release Automation: Publish Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#264](https://github.com/bdperkin/nhl-scrabble/issues/264) | PR [#468](https://github.com/bdperkin/nhl-scrabble/pull/468), completed 2026-04-30 |
-| 029 | Release Automation: Post-Release Phase | LOW | 1-2 hours | Completed | [#265](https://github.com/bdperkin/nhl-scrabble/issues/265) | - |
+| 029 | Release Automation: Post-Release Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#265](https://github.com/bdperkin/nhl-scrabble/issues/265) | PR [#470](https://github.com/bdperkin/nhl-scrabble/pull/470), completed 2026-04-30 |
 | 030 | Release Automation: Verification and Reporting Phase | LOW | 1-2 hours | Completed | [#266](https://github.com/bdperkin/nhl-scrabble/issues/266) | - |
 | 031 | Release Automation: Orchestration and CLI Interface | LOW | 2-3 hours | Completed | [#267](https://github.com/bdperkin/nhl-scrabble/issues/267) | - |
 | 034 | Docker Container Build and Publish Workflow | LOW | 3-4 hours | Completed | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | - |

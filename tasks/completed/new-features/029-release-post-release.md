@@ -53,8 +53,8 @@ def post_release(version):
 
 **Implemented**: 2026-04-30
 **Branch**: new-features/029-release-post-release
-**PR**: TBD
-**Commits**: TBD
+**PR**: #470 - https://github.com/bdperkin/nhl-scrabble/pull/470
+**Commits**: 2cc97a8
 
 ### Actual Implementation
 
@@ -152,7 +152,7 @@ None - straightforward markdown documentation task with clear understanding of h
 
 ### Related PRs
 
-- TBD - This PR
+- #470 - Main implementation
 
 ### Next Steps
 
