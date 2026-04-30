@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-04-30 (Updated after moving tasks 025-026 to completed)
-**Total Tasks**: 27 active tasks
-**Estimated Total Effort**: 203.5 hours
+**Generated**: 2026-04-30 (Updated after adding bug-fixes/016)
+**Total Tasks**: 28 active tasks
+**Estimated Total Effort**: 206.0 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -13,11 +13,11 @@ This file provides the **optimal** implementation order for all active tasks, ba
 
 ## Analysis Summary
 
-- **HIGH Priority**: 0 tasks
+- **HIGH Priority**: 1 task (critical web interface bug)
 - **MEDIUM Priority**: 6 tasks (current sprint)
-- **LOW Priority**: 24 tasks (future backlog)
+- **LOW Priority**: 21 tasks (future backlog)
 
-**Recommendation**: Focus on MEDIUM priority tasks first for maximum impact.
+**Recommendation**: Fix HIGH priority web interface bug first, then focus on MEDIUM priority tasks.
 
 ## Usage
 
@@ -28,6 +28,18 @@ Execute tasks in the order shown using the `/implement-task` command:
 ```
 
 Tasks are grouped into phases for logical progression. Each phase represents a natural implementation checkpoint.
+
+## Phase 0: HIGH Priority
+
+**Effort**: 2.5 hours | **Tasks**: 1
+**Focus**: Critical web interface bug - implement immediately
+
+```bash
+# Fix Web Interface Routes Showing Same Page
+/implement-task bug-fixes/016-fix-web-routes-show-same-page.md  # 2.5h, Issue #474
+```
+
+**Rationale**: Web interface navigation is completely broken - all routes show the same homepage instead of their specific views. This makes the web app essentially unusable and blocks user testing. Must be fixed before other web features can be tested.
 
 ## Phase 1: MEDIUM Priority
 
