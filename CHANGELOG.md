@@ -7,9 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.13] - 2026-04-30
+
+### Added
+
+- **Test Analytics and Coverage Analysis Tool** (#463)
+
+  - CLI tool for analyzing Codecov test analytics and coverage data
+  - Identifies coverage gaps with target threshold analysis
+  - Analyzes slow and flaky tests
+  - Detects test performance trends
+  - Multiple output formats: text, JSON, HTML
+  - Command: `nhl-scrabble test-analytics`
+
+- **Comprehensive Route Test Coverage** (#462)
+
+  - Added route tests for all 8 web application pages
+  - Tests verify route registration, response codes, and content types
+  - Covers: home, analyze, dashboard, history, about, help, debug, docs
+  - Validates redirect handling and error cases
+  - Ensures all routes are properly configured and functional
+
+- **Missing Web Page Routes** (#458)
+
+  - Added 5 missing page routes: about, help, debug, history, docs
+  - Implemented route handlers with proper templates
+  - Added navigation links in base template
+  - Improved web application navigation completeness
+
+- **Custom GHCR Playwright Docker Image** (#452)
+
+  - Custom Docker image hosted on GitHub Container Registry
+  - Pre-built with all QA dependencies for faster CI runs
+  - Reduces QA workflow time from 8-10 minutes to 5-7 minutes
+  - Includes Playwright browsers and system dependencies
+  - Auto-builds on dependency changes via dedicated workflow
+
 ### Fixed
 
-- **Web Accessibility (WCAG 2.1 AA Compliance)** (#440)
+- **Web Accessibility (WCAG 2.1 AA Compliance)** (#440, #449)
+
   - Fixed all keyboard navigation violations
     - Added visible focus indicators to all interactive elements (2px solid outline)
     - Removed `outline: none` from form inputs
@@ -26,6 +63,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Used semantic elements (header, nav, main, footer)
   - Verified WCAG AA color contrast compliance (≥4.5:1 for normal text)
   - All 30 accessibility test violations across 3 browsers now resolved
+
+- **QA Automation Test Failures** (#461, #450, #453)
+
+  - Fixed functional test failures in QA suite
+  - Debugged and resolved async timing issues
+  - Updated visual regression baselines for new routes
+  - Regenerated baselines with GHCR Docker image
+  - Fixed Docker wrapper script for Playwright execution
+  - All 40+ QA tests now passing across all browsers
+
+### Changed
+
+- **Documentation Improvements**
+  - Enhanced version badge display with clearer labels (#464)
+  - Fixed broken benchmark workflow link in CONTRIBUTING.md
+  - Updated task documentation to track completed work
+  - Improved README.md badge formatting and clarity
 
 ## [0.0.12] - 2026-04-29
 
