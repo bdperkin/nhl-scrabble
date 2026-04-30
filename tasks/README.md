@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 200 tasks (36 active, 164 completed)
+**Total Tasks**: 200 tasks (35 active, 165 completed)
 
 ## Overview
 
@@ -101,7 +101,7 @@ Each task includes:
 | 023 | Extend Sphinx Builder Functionality | LOW | 4-6 hours | Completed | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | - |
 | 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours | Completed | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | - |
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | Unknown | Active | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | - |
-| 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | - |
+| 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour (actual: ~25 minutes) | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | PR [#464](https://github.com/bdperkin/nhl-scrabble/pull/464), completed 2026-04-29 |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
 | 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | PR [#429](https://github.com/bdperkin/nhl-scrabble/pull/429), completed 2026-04-28 |
 | 001 | Implement HTML Output Format | MEDIUM | 4-6 hours (actual: ~4h) | Completed | [#46](https://github.com/bdperkin/nhl-scrabble/issues/46) | PR [#92](https://github.com/bdperkin/nhl-scrabble/pull/92), completed 2026-04-16 |
