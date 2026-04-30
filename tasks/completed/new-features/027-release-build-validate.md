@@ -55,8 +55,8 @@ def build_and_validate():
 
 **Implemented**: 2026-04-30
 **Branch**: new-features/027-release-build-validate
-**PR**: TBD
-**Commits**: TBD
+**PR**: #467 - https://github.com/bdperkin/nhl-scrabble/pull/467
+**Commits**: bff28c8
 
 ### Actual Implementation
 
