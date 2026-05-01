@@ -431,6 +431,50 @@ On visual test failure in CI:
 1. Exclude dynamic content areas
 1. Stabilize test data
 
+## Known Limitations
+
+### Live API Data Variability
+
+**Issue**: Visual regression tests capture screenshots of pages displaying live NHL API data (player stats, scores, standings). This data changes constantly, causing baseline mismatches even when the UI is correct.
+
+**Impact**:
+
+- ⚠️ Visual tests may fail in CI due to data differences (not UI bugs)
+- Baselines generated locally show different data than CI sees
+- Tests are marked as `continue-on-error: true` in CI (non-blocking)
+
+**Example Failures**:
+
+```
+AssertionError: Snapshots does not match
+E   assert 163185 == 0  # 163,185 pixels differ due to different player names/scores
+```
+
+**Why This Happens**:
+
+1. Baselines generated at time T₁ with player data from NHL API
+1. CI runs at time T₂ with updated NHL API data
+1. Player stats, team scores, and standings have changed
+1. Screenshots differ pixel-by-pixel despite identical UI rendering
+
+**Current Status**:
+
+- Visual tests are **non-blocking** in CI (`continue-on-error: true`)
+- Functional QA tests verify UI works correctly (these are blocking)
+- Visual tests still useful for detecting major layout/styling regressions
+
+**Workarounds**:
+
+1. **Accept visual test failures** when only data differs (not UI)
+1. **Regenerate baselines frequently** when making UI changes
+1. **Focus on functional tests** for critical validation
+
+**Future Improvement** (see task `enhancement/044-implement-mocked-api-data-visual-tests.md`, issue [#476](https://github.com/bdperkin/nhl-scrabble/issues/476)):
+
+- Implement mocked/fixed NHL API data for visual tests
+- Use snapshot fixtures for consistent test data
+- Make visual tests deterministic and reliable
+
 ## Resources
 
 - [Playwright Visual Comparisons](https://playwright.dev/docs/test-snapshots)
