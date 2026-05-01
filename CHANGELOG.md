@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.14] - 2026-05-01
+
+### Added
+
+- (tasks): Create enhancement/044 - Implement mocked API data for visual tests (#477)
+- (tasks): Create bug-fixes/016 - Fix web routes showing same page
+- (commands): Add release automation Phase 5 (post-release tasks) (#470)
+- (commands): Add release automation Phase 4 (publish) (#468)
+- (commands): Add release automation Phase 3 (build and validate) (#467)
+- (commands): Add release automation Phase 2 (version bumping) (#466)
+- (commands): Add release automation Phase 1 (pre-release validation) (#465)
+- (commands): add GitHub maintainer PR review protocol
+- (release): Implement Phase 7 (Complete Release Orchestration) (#472)
+- (release): Implement Phase 6 (Verification and Reporting) (#471)
+
+### Fixed
+
+- (web): Fix web routes showing same page for all views (#475)
+- add web navigation links (#469)
+
+### Documentation
+
+- (tasks): Move completed sub-tasks 025-026 to completed directory
+- (tasks): Complete task 019 (Comprehensive Release Automation Skill)
+- (tasks): Complete parent task 019 (Comprehensive Release Automation Skill) (#473)
+- (tasks): Complete task 031 (Release Orchestration)
+- (tasks): Complete task 030 (Release Verification)
+- (tasks): Complete task 029 (Release Post-Release)
+- (tasks): Complete task 028 (Release Publish)
+- (tasks): Complete task 027 (Release Build and Validate)
+
+### Tests
+
+- (visual): Update all visual regression baselines using Docker
+- (visual): Update visual regression baselines for chromium and firefox
+
+### Build / CI
+
+- update .gitignore to exclude timestamped sync reports
+- Synchronize tasks with GitHub project state
+
 ## [0.0.13] - 2026-04-30
 
 ### Added
