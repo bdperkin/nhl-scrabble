@@ -1,6 +1,6 @@
 # Consolidate Exporters and Formatters Architecture
 
-**GitHub Issue**: TBD (create issue)
+**GitHub Issue**: N/A (completed directly via PR #377 without tracking issue)
 
 ## Priority
 
