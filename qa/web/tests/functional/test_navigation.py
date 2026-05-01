@@ -215,3 +215,132 @@ def test_health_endpoint(page_fixture: Page) -> None:
     # Should return 200 OK
     assert response is not None, "Response should not be None"  # noqa: S101
     assert response.ok, "Health endpoint should return 200 OK"  # noqa: S101
+
+
+@pytest.mark.functional
+@pytest.mark.navigation
+def test_teams_page_shows_teams_data(page_fixture: Page) -> None:
+    """Test /teams route shows teams standings data.
+
+    Args:
+        page_fixture: Playwright page fixture
+    """
+    # Navigate to teams page
+    page_fixture.goto("http://localhost:5000/teams")
+    page_fixture.wait_for_load_state("networkidle")
+
+    # Should NOT show homepage hero section
+    hero = page_fixture.locator(".hero")
+    expect(hero).not_to_be_visible()
+
+    # Should NOT show analysis form
+    form = page_fixture.locator("#analysisForm")
+    expect(form).not_to_be_visible()
+
+    # Should show teams table
+    teams_table = page_fixture.locator("#teamsTable")
+    expect(teams_table).to_be_visible()
+
+    # Should show team standings heading
+    heading = page_fixture.locator("h3").filter(has_text="Team Standings")
+    expect(heading).to_be_visible()
+
+
+@pytest.mark.functional
+@pytest.mark.navigation
+def test_divisions_page_shows_divisions_data(page_fixture: Page) -> None:
+    """Test /divisions route shows division standings data.
+
+    Args:
+        page_fixture: Playwright page fixture
+    """
+    # Navigate to divisions page
+    page_fixture.goto("http://localhost:5000/divisions")
+    page_fixture.wait_for_load_state("networkidle")
+
+    # Should NOT show homepage form
+    form = page_fixture.locator("#analysisForm")
+    expect(form).not_to_be_visible()
+
+    # Should show division standings heading
+    heading = page_fixture.locator("h3").filter(has_text="Division Standings")
+    expect(heading).to_be_visible()
+
+    # Should show division cards
+    division_cards = page_fixture.locator(".division-card")
+    expect(division_cards.first).to_be_visible()
+
+
+@pytest.mark.functional
+@pytest.mark.navigation
+def test_conferences_page_shows_conferences_data(page_fixture: Page) -> None:
+    """Test /conferences route shows conference standings data.
+
+    Args:
+        page_fixture: Playwright page fixture
+    """
+    # Navigate to conferences page
+    page_fixture.goto("http://localhost:5000/conferences")
+    page_fixture.wait_for_load_state("networkidle")
+
+    # Should NOT show homepage form
+    form = page_fixture.locator("#analysisForm")
+    expect(form).not_to_be_visible()
+
+    # Should show conference standings heading
+    heading = page_fixture.locator("h3").filter(has_text="Conference Standings")
+    expect(heading).to_be_visible()
+
+    # Should show conference cards (using same division-card class)
+    conference_cards = page_fixture.locator(".division-card")
+    expect(conference_cards.first).to_be_visible()
+
+
+@pytest.mark.functional
+@pytest.mark.navigation
+def test_playoffs_page_shows_playoffs_data(page_fixture: Page) -> None:
+    """Test /playoffs route shows playoff bracket data.
+
+    Args:
+        page_fixture: Playwright page fixture
+    """
+    # Navigate to playoffs page
+    page_fixture.goto("http://localhost:5000/playoffs")
+    page_fixture.wait_for_load_state("networkidle")
+
+    # Should NOT show homepage form
+    form = page_fixture.locator("#analysisForm")
+    expect(form).not_to_be_visible()
+
+    # Should show playoff bracket heading
+    heading = page_fixture.locator("h3").filter(has_text="Playoff Bracket")
+    expect(heading).to_be_visible()
+
+    # Should show playoff container
+    playoff_container = page_fixture.locator(".playoff-container")
+    expect(playoff_container).to_be_visible()
+
+
+@pytest.mark.functional
+@pytest.mark.navigation
+def test_stats_page_shows_stats_data(page_fixture: Page) -> None:
+    """Test /stats route shows statistics and visualizations.
+
+    Args:
+        page_fixture: Playwright page fixture
+    """
+    # Navigate to stats page
+    page_fixture.goto("http://localhost:5000/stats")
+    page_fixture.wait_for_load_state("networkidle")
+
+    # Should NOT show homepage form
+    form = page_fixture.locator("#analysisForm")
+    expect(form).not_to_be_visible()
+
+    # Should show stats summary
+    stats_summary = page_fixture.locator(".stats-summary")
+    expect(stats_summary.first).to_be_visible()
+
+    # Should show visualizations section
+    visualizations = page_fixture.locator(".visualizations")
+    expect(visualizations).to_be_visible()

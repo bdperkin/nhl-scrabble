@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}NHL Scrabble Analyzer - Statistics{% endblock %}
+
+{% block content %}
+    <!-- Top Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>Total Players</h4>
+            <p class="stat-value">{{ stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Highest Score</h4>
+            <p class="stat-value">{{ stats.highest_score }}</p>
+            <p class="stat-detail">{{ stats.highest_player_name }} ({{ stats.highest_player_team }})</p>
+        </div>
+        <div class="stat-card">
+            <h4>Average Score</h4>
+            <p class="stat-value">{{ stats.avg_score|round(1) }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Lowest Score</h4>
+            <p class="stat-value">{{ stats.lowest_score }}</p>
+        </div>
+    </div>
+
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>Total Teams</h4>
+            <p class="stat-value">{{ stats.total_teams }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Top Team</h4>
+            <p class="stat-value">{{ stats.highest_team_score }}</p>
+            <p class="stat-detail">{{ stats.highest_team }} ({{ stats.highest_team_name }})</p>
+        </div>
+        <div class="stat-card">
+            <h4>Lowest Team</h4>
+            <p class="stat-value">{{ stats.lowest_team }}</p>
+            <p class="stat-detail">{{ stats.lowest_team_name }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Data As Of</h4>
+            <p class="stat-value" style="font-size: 0.85rem; line-height: 1.4;">
+                {{ timestamp_date|default('Unknown') }}<br>
+                {{ timestamp_time|default('') }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Visualizations -->
+    <section class="visualizations fade-on-scroll">
+        <h3>Score Visualizations</h3>
+
+        <div class="chart-container">
+            <h4>Team Scores</h4>
+            <div class="chart-wrapper">
+                <canvas id="teamScoresChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h4>Player Score Distribution</h4>
+            <div class="chart-wrapper">
+                <canvas id="playerDistributionChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Players Preview -->
+    <section class="results-section fade-on-scroll">
+        <h3>Top 10 Players by Scrabble Score</h3>
+        <div class="table-container">
+            <table id="playersTable"
+                   class="results-table sortable"
+                   role="table"
+                   aria-label="Top players by Scrabble score">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
+                        <th scope="col" data-sort="name" data-sort-type="string">Player Name</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">Team</th>
+                        <th scope="col" data-sort="score" data-sort-type="number">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in top_players[:10] %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
+                                {{ player.first_name }} {{ player.last_name }}
+                            </td>
+                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
+                            <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prepare team standings data for chart
+        const teamStandings = {{ team_standings|tojson }};
+
+        // Prepare player data for distribution chart
+        const topPlayers = {{ top_players|tojson }};
+
+        // Create team scores chart
+        if (teamStandings && teamStandings.length > 0) {
+            createTeamScoresChart(teamStandings);
+        }
+
+        // Create player distribution chart
+        if (topPlayers && topPlayers.length > 0) {
+            createPlayerDistributionChart(topPlayers);
+        }
+    });
+</script>
+{% endblock %}

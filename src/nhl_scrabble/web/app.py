@@ -172,145 +172,6 @@ async def root(request: Request) -> HTMLResponse:
     )
 
 
-@app.get("/teams", response_class=HTMLResponse)
-async def teams_page(request: Request) -> HTMLResponse:
-    """Serve the teams standings page.
-
-    Args:
-        request: FastAPI request object
-
-    Returns:
-        Rendered index.html template with teams view
-
-    Raises:
-        HTTPException: If templates not configured
-    """
-    if templates is None:
-        raise HTTPException(status_code=500, detail="Templates not configured")
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"view": "teams"},
-    )
-
-
-@app.get("/divisions", response_class=HTMLResponse)
-async def divisions_page(request: Request) -> HTMLResponse:
-    """Serve the divisions standings page.
-
-    Args:
-        request: FastAPI request object
-
-    Returns:
-        Rendered index.html template with divisions view
-
-    Raises:
-        HTTPException: If templates not configured
-    """
-    if templates is None:
-        raise HTTPException(status_code=500, detail="Templates not configured")
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"view": "divisions"},
-    )
-
-
-@app.get("/conferences", response_class=HTMLResponse)
-async def conferences_page(request: Request) -> HTMLResponse:
-    """Serve the conferences standings page.
-
-    Args:
-        request: FastAPI request object
-
-    Returns:
-        Rendered index.html template with conferences view
-
-    Raises:
-        HTTPException: If templates not configured
-    """
-    if templates is None:
-        raise HTTPException(status_code=500, detail="Templates not configured")
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"view": "conferences"},
-    )
-
-
-@app.get("/playoffs", response_class=HTMLResponse)
-async def playoffs_page(request: Request) -> HTMLResponse:
-    """Serve the playoff bracket page.
-
-    Args:
-        request: FastAPI request object
-
-    Returns:
-        Rendered index.html template with playoffs view
-
-    Raises:
-        HTTPException: If templates not configured
-    """
-    if templates is None:
-        raise HTTPException(status_code=500, detail="Templates not configured")
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"view": "playoffs"},
-    )
-
-
-@app.get("/stats", response_class=HTMLResponse)
-async def stats_page(request: Request) -> HTMLResponse:
-    """Serve the statistics page.
-
-    Args:
-        request: FastAPI request object
-
-    Returns:
-        Rendered index.html template with stats view
-
-    Raises:
-        HTTPException: If templates not configured
-    """
-    if templates is None:
-        raise HTTPException(status_code=500, detail="Templates not configured")
-
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"view": "stats"},
-    )
-
-
-@app.get("/favicon.svg")
-async def favicon() -> HTMLResponse:
-    """Serve favicon as SVG.
-
-    Returns:
-        SVG favicon with hockey emoji
-    """
-    svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-    <text y="0.9em" font-size="90">🏒</text>
-</svg>"""
-    return HTMLResponse(content=svg_content, media_type="image/svg+xml")
-
-
-@app.get("/robots.txt")
-async def robots_txt() -> FileResponse:
-    """Serve robots.txt file.
-
-    Returns:
-        robots.txt file for web crawlers
-    """
-    robots_file = STATIC_DIR / "robots.txt"
-    return FileResponse(robots_file, media_type="text/plain")
-
-
 def _convert_players_to_dict(
     players: list[PlayerScore],
 ) -> list[dict[str, str | int | float]]:
@@ -533,6 +394,260 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
             status_code=500,
             detail=f"Analysis failed: {e!s}",
         ) from e
+
+
+@app.get("/teams", response_class=HTMLResponse)
+async def teams_page(request: Request) -> HTMLResponse:
+    """Serve the teams standings page with data.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered teams.html template with standings data
+
+    Raises:
+        HTTPException: If templates not configured or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        return templates.TemplateResponse(
+            request=request,
+            name="teams.html",
+            context={
+                "team_standings": data["team_standings"],
+                "stats": data["stats"],
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch teams data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
+@app.get("/divisions", response_class=HTMLResponse)
+async def divisions_page(request: Request) -> HTMLResponse:
+    """Serve the divisions standings page with data.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered divisions.html template with standings data
+
+    Raises:
+        HTTPException: If templates not configured or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        return templates.TemplateResponse(
+            request=request,
+            name="divisions.html",
+            context={
+                "division_standings": data["division_standings"],
+                "stats": data["stats"],
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch divisions data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
+@app.get("/conferences", response_class=HTMLResponse)
+async def conferences_page(request: Request) -> HTMLResponse:
+    """Serve the conferences standings page with data.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered conferences.html template with standings data
+
+    Raises:
+        HTTPException: If templates not configured or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        return templates.TemplateResponse(
+            request=request,
+            name="conferences.html",
+            context={
+                "conference_standings": data["conference_standings"],
+                "stats": data["stats"],
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch conferences data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
+@app.get("/playoffs", response_class=HTMLResponse)
+async def playoffs_page(request: Request) -> HTMLResponse:
+    """Serve the playoff bracket page with data.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered playoffs.html template with bracket data
+
+    Raises:
+        HTTPException: If templates not configured or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Calculate total playoff teams
+        playoff_teams_count = sum(len(teams) for teams in data["playoff_bracket"].values())
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        return templates.TemplateResponse(
+            request=request,
+            name="playoffs.html",
+            context={
+                "playoff_bracket": data["playoff_bracket"],
+                "playoff_teams_count": playoff_teams_count,
+                "stats": data["stats"],
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch playoffs data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
+@app.get("/stats", response_class=HTMLResponse)
+async def stats_page(request: Request) -> HTMLResponse:
+    """Serve the statistics page with data.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered stats.html template with statistics and visualizations
+
+    Raises:
+        HTTPException: If templates not configured or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        return templates.TemplateResponse(
+            request=request,
+            name="stats.html",
+            context={
+                "stats": data["stats"],
+                "top_players": data["top_players"],
+                "team_standings": data["team_standings"],
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch stats data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
+@app.get("/favicon.svg")
+async def favicon() -> HTMLResponse:
+    """Serve favicon as SVG.
+
+    Returns:
+        SVG favicon with hockey emoji
+    """
+    svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <text y="0.9em" font-size="90">🏒</text>
+</svg>"""
+    return HTMLResponse(content=svg_content, media_type="image/svg+xml")
+
+
+@app.get("/robots.txt")
+async def robots_txt() -> FileResponse:
+    """Serve robots.txt file.
+
+    Returns:
+        robots.txt file for web crawlers
+    """
+    robots_file = STATIC_DIR / "robots.txt"
+    return FileResponse(robots_file, media_type="text/plain")
 
 
 @app.get("/api/analyze", response_model=None)

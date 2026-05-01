@@ -1278,16 +1278,27 @@ def serve(host: str, port: int, reload: bool, log_file: Path | None, verbose: bo
         click.echo(f"Logging to: {log_file}")
     click.echo("Press CTRL+C to stop")
 
-    # Import here to avoid loading FastAPI when not needed
-    from nhl_scrabble.web.app import app
+    # When reload is enabled, pass import string for uvicorn to reload properly
+    # When reload is disabled, import app directly for faster startup
+    if reload:
+        uvicorn.run(
+            "nhl_scrabble.web.app:app",
+            host=host,
+            port=port,
+            reload=reload,
+            log_level="info",
+        )
+    else:
+        # Import here to avoid loading FastAPI when not needed
+        from nhl_scrabble.web.app import app
 
-    uvicorn.run(
-        app,
-        host=host,
-        port=port,
-        reload=reload,
-        log_level="info",
-    )
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            reload=reload,
+            log_level="info",
+        )
 
 
 def fetch_dashboard_data(

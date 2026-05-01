@@ -1,7 +1,7 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-04-30 (Updated after adding bug-fixes/016)
-**Total Tasks**: 28 active tasks
+**Generated**: 2026-04-30 (Updated after completing bug-fixes/016)
+**Total Tasks**: 27 active tasks
 **Estimated Total Effort**: 206.0 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
@@ -28,18 +28,6 @@ Execute tasks in the order shown using the `/implement-task` command:
 ```
 
 Tasks are grouped into phases for logical progression. Each phase represents a natural implementation checkpoint.
-
-## Phase 0: HIGH Priority
-
-**Effort**: 2.5 hours | **Tasks**: 1
-**Focus**: Critical web interface bug - implement immediately
-
-```bash
-# Fix Web Interface Routes Showing Same Page
-/implement-task bug-fixes/016-fix-web-routes-show-same-page.md  # 2.5h, Issue #474
-```
-
-**Rationale**: Web interface navigation is completely broken - all routes show the same homepage instead of their specific views. This makes the web app essentially unusable and blocks user testing. Must be fixed before other web features can be tested.
 
 ## Phase 1: MEDIUM Priority
 
