@@ -18,8 +18,10 @@ Fixtures are saved to:
 import argparse
 import json
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
+
+import requests
 
 from nhl_scrabble.api.nhl_client import NHLApiClient
 
@@ -48,8 +50,6 @@ def capture_nhl_fixtures(output_dir: Path) -> None:
         standings_endpoint = f"{client.base_url}/standings/now"
 
         # Make raw request to get complete standings data
-        import requests
-
         response = requests.get(
             standings_endpoint,
             timeout=client.timeout,
@@ -83,10 +83,12 @@ def capture_nhl_fixtures(output_dir: Path) -> None:
                 logger.info(f"[{i}/{len(teams)}] Fetching roster for {team_abbrev}...")
                 roster = client.get_team_roster(team_abbrev)
                 rosters_data[team_abbrev] = roster
-                logger.info(f"  ✓ {team_abbrev}: {len(roster.get('forwards', []))}F, "
-                           f"{len(roster.get('defensemen', []))}D, "
-                           f"{len(roster.get('goalies', []))}G")
-            except Exception as e:
+                logger.info(
+                    f"  ✓ {team_abbrev}: {len(roster.get('forwards', []))}F, "
+                    f"{len(roster.get('defensemen', []))}D, "
+                    f"{len(roster.get('goalies', []))}G",
+                )
+            except (OSError, ValueError, KeyError) as e:  # Network errors, data errors
                 logger.warning(f"  ✗ Failed to fetch roster for {team_abbrev}: {e}")
                 # Continue with other teams
                 continue
@@ -116,7 +118,7 @@ of current NHL standings, rosters, or game outcomes.
 
 ## Data Snapshot
 
-- **Captured**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+- **Captured**: {datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")}
 - **Teams**: {len(rosters_data)} teams
 - **Total Players**: {sum(len(roster.get('forwards', [])) + len(roster.get('defensemen', [])) + len(roster.get('goalies', [])) for roster in rosters_data.values())} players
 - **Season**: 2024-2025 (current)
@@ -205,8 +207,8 @@ using mocked data.
 ## Maintenance
 
 - **Review Period**: Annually
-- **Last Updated**: {datetime.now().strftime("%Y-%m-%d")}
-- **Next Review**: {datetime.now().year + 1}-01-01
+- **Last Updated**: {datetime.now(UTC).strftime("%Y-%m-%d")}
+- **Next Review**: {datetime.now(UTC).year + 1}-01-01
 """
         with open(readme_file, "w") as f:
             f.write(readme_content)
@@ -228,7 +230,7 @@ using mocked data.
 
 
 def main() -> None:
-    """Main entry point."""
+    """Run the fixture capture script."""
     parser = argparse.ArgumentParser(
         description="Capture NHL API data for visual test fixtures",
     )

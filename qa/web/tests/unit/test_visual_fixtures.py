@@ -6,8 +6,6 @@ Tests fixture file loading, structure validation, and data completeness.
 import json
 from pathlib import Path
 
-import pytest
-
 FIXTURES_DIR = Path(__file__).parent.parent / "visual" / "fixtures"
 
 
