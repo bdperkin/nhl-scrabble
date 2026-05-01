@@ -108,9 +108,10 @@ else
     WORKDIR="/work"
 fi
 
-# Generate _version.py file if it doesn't exist for the main package
-# All QA dependencies are pre-installed in the Docker image
-INSTALL_CMD="python3 -c \"import pathlib; p = pathlib.Path('/work/src/nhl_scrabble/_version.py'); p.parent.mkdir(parents=True, exist_ok=True); p.touch() if not p.exists() else None; p.write_text('__version__ = \\\"0.0.0+local\\\"\\n') if p.stat().st_size == 0 else None\""
+# Install main package dependencies to user location (avoids /work permission issues)
+# All QA test dependencies are pre-installed in the Docker image
+# PYTHONPATH already includes /work/src and /work/qa/web, so imports will work
+INSTALL_CMD="pip install --user -q certifi click colorlog dicttoxml fastapi httpx jinja2 platformdirs prompt-toolkit pydantic pydantic-settings pyyaml requests requests-cache rich starlette unidecode uvicorn"
 
 # Build Docker run command
 # Use :z flag for SELinux systems to allow container write access
