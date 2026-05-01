@@ -1,0 +1,255 @@
+#!/usr/bin/env python3
+"""Capture NHL API data for visual test fixtures.
+
+This script fetches current NHL standings and roster data from the live API
+and saves it as JSON fixtures for use in visual regression tests.
+
+Usage:
+    ./scripts/capture-nhl-fixtures [--output-dir DIR]
+
+The generated fixtures are deterministic and should be checked into version
+control to ensure consistent visual test baselines across environments.
+
+Fixtures are saved to:
+    - qa/web/tests/visual/fixtures/nhl_standings.json
+    - qa/web/tests/visual/fixtures/nhl_rosters.json
+"""
+
+import argparse
+import json
+import logging
+from datetime import datetime
+from pathlib import Path
+
+from nhl_scrabble.api.nhl_client import NHLApiClient
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+def capture_nhl_fixtures(output_dir: Path) -> None:
+    """Capture NHL API data and save as fixture files.
+
+    Args:
+        output_dir: Directory to save fixture files
+    """
+    # Ensure output directory exists
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    logger.info("Capturing NHL API data...")
+
+    with NHLApiClient() as client:
+        # Fetch standings data
+        logger.info("Fetching standings data...")
+        standings_endpoint = f"{client.base_url}/standings/now"
+
+        # Make raw request to get complete standings data
+        import requests
+
+        response = requests.get(
+            standings_endpoint,
+            timeout=client.timeout,
+            verify=client.ca_bundle,
+        )
+        response.raise_for_status()
+        standings_data = response.json()
+
+        # Save standings data
+        standings_file = output_dir / "nhl_standings.json"
+        with open(standings_file, "w") as f:
+            json.dump(standings_data, f, indent=2)
+        logger.info(f"✓ Saved standings data to {standings_file}")
+
+        # Fetch roster data for all teams
+        logger.info("Fetching roster data for all teams...")
+        rosters_data = {}
+
+        # Get team list from standings
+        teams = []
+        for team in standings_data.get("standings", []):
+            team_abbrev = team.get("teamAbbrev", {}).get("default")
+            if team_abbrev:
+                teams.append(team_abbrev)
+
+        logger.info(f"Found {len(teams)} teams")
+
+        # Fetch rosters for each team
+        for i, team_abbrev in enumerate(teams, 1):
+            try:
+                logger.info(f"[{i}/{len(teams)}] Fetching roster for {team_abbrev}...")
+                roster = client.get_team_roster(team_abbrev)
+                rosters_data[team_abbrev] = roster
+                logger.info(f"  ✓ {team_abbrev}: {len(roster.get('forwards', []))}F, "
+                           f"{len(roster.get('defensemen', []))}D, "
+                           f"{len(roster.get('goalies', []))}G")
+            except Exception as e:
+                logger.warning(f"  ✗ Failed to fetch roster for {team_abbrev}: {e}")
+                # Continue with other teams
+                continue
+
+        # Save rosters data
+        rosters_file = output_dir / "nhl_rosters.json"
+        with open(rosters_file, "w") as f:
+            json.dump(rosters_data, f, indent=2)
+        logger.info(f"✓ Saved roster data to {rosters_file}")
+
+        # Create README documenting fixtures
+        readme_file = output_dir / "README.md"
+        readme_content = f"""# NHL API Test Fixtures
+
+Mocked NHL API data for visual regression tests.
+
+## Overview
+
+These fixtures contain snapshots of NHL API data captured at a specific point in time.
+They are used by visual regression tests to ensure deterministic test results regardless
+of current NHL standings, rosters, or game outcomes.
+
+## Files
+
+- **nhl_standings.json**: Team standings data from `/standings/now` endpoint
+- **nhl_rosters.json**: Player roster data for all teams from `/roster/{{team}}/current` endpoints
+
+## Data Snapshot
+
+- **Captured**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+- **Teams**: {len(rosters_data)} teams
+- **Total Players**: {sum(len(roster.get('forwards', [])) + len(roster.get('defensemen', [])) + len(roster.get('goalies', [])) for roster in rosters_data.values())} players
+- **Season**: 2024-2025 (current)
+
+## Structure
+
+### nhl_standings.json
+
+Contains standings data with the following structure:
+
+```json
+{{
+  "standings": [
+    {{
+      "teamAbbrev": {{"default": "TOR"}},
+      "teamName": {{"default": "Maple Leafs"}},
+      "divisionName": "Atlantic",
+      "conferenceName": "Eastern",
+      "wins": 50,
+      "losses": 20,
+      "points": 110,
+      ...
+    }}
+  ]
+}}
+```
+
+### nhl_rosters.json
+
+Contains roster data for each team with the following structure:
+
+```json
+{{
+  "TOR": {{
+    "forwards": [
+      {{
+        "id": 12345,
+        "firstName": {{"default": "Auston"}},
+        "lastName": {{"default": "Matthews"}},
+        ...
+      }}
+    ],
+    "defensemen": [...],
+    "goalies": [...]
+  }},
+  "MTL": {{...}}
+}}
+```
+
+## Updating Fixtures
+
+Fixtures should be updated when:
+
+1. **NHL season changes** (rosters and standings reset)
+2. **Major UI changes** affect data display format
+3. **API schema changes** (new fields, structure changes)
+4. **Annually at minimum** to keep data realistic
+
+### How to Update
+
+Run the capture script:
+
+```bash
+./scripts/capture-nhl-fixtures
+```
+
+This will:
+1. Fetch current standings from NHL API
+2. Fetch current rosters for all teams
+3. Save data to this directory
+4. Regenerate baselines if needed
+
+After updating fixtures, regenerate visual test baselines:
+
+```bash
+./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots \\
+  --browser chromium --browser firefox --browser webkit
+```
+
+## Testing with Fixtures
+
+Visual tests automatically use these fixtures via mocking in `conftest.py`.
+The mocking is transparent to test code - tests don't need to know they're
+using mocked data.
+
+## Maintenance
+
+- **Review Period**: Annually
+- **Last Updated**: {datetime.now().strftime("%Y-%m-%d")}
+- **Next Review**: {datetime.now().year + 1}-01-01
+"""
+        with open(readme_file, "w") as f:
+            f.write(readme_content)
+        logger.info(f"✓ Created {readme_file}")
+
+    logger.info("")
+    logger.info("=" * 70)
+    logger.info("Fixture capture complete!")
+    logger.info(f"  Standings: {standings_file}")
+    logger.info(f"  Rosters:   {rosters_file}")
+    logger.info(f"  README:    {readme_file}")
+    logger.info("=" * 70)
+    logger.info("")
+    logger.info("Next steps:")
+    logger.info("  1. Review generated fixtures for accuracy")
+    logger.info("  2. Commit fixtures to version control")
+    logger.info("  3. Regenerate visual test baselines:")
+    logger.info("     ./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots")
+
+
+def main() -> None:
+    """Main entry point."""
+    parser = argparse.ArgumentParser(
+        description="Capture NHL API data for visual test fixtures",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("qa/web/tests/visual/fixtures"),
+        help="Output directory for fixture files (default: qa/web/tests/visual/fixtures)",
+    )
+
+    args = parser.parse_args()
+
+    try:
+        capture_nhl_fixtures(args.output_dir)
+    except KeyboardInterrupt:
+        logger.info("\nCapture cancelled by user")
+        return
+    except Exception as e:
+        logger.error(f"Failed to capture fixtures: {e}")
+        raise
+
+
+if __name__ == "__main__":
+    main()

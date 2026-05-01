@@ -2,18 +2,19 @@ name: QA Automation Tests
 
 # QA automation testing workflow for web application
 #
-# Current Status (Initial Implementation):
+# Current Status:
+# - ✅ Visual tests: Now deterministic with mocked API data (blocking)
 # - ✅ Functional tests: Mostly passing (1-2 known failures)
-# - ⚠️  Visual tests: Expected failures (baselines not yet generated)
 # - ⚠️  Accessibility tests: Real WCAG violations to fix
 # - ⚠️  Performance tests: Passing
 #
-# Known Issues:
-# 1. Visual regression baselines need generation (run: pytest tests/visual/ --update-snapshots)
-# 2. Accessibility violations need HTML/CSS fixes (WCAG 2.1 AA compliance)
-# 3. Some functional tests need investigation
+# Visual Tests Update (2026-05-01):
+# Visual regression tests now use mocked NHL API data for deterministic results.
+# Baselines are stable across environments and test runs are now blocking in CI.
 #
-# Tests run as warnings (non-blocking) until issues are resolved.
+# Known Issues:
+# 1. Accessibility violations need HTML/CSS fixes (WCAG 2.1 AA compliance)
+# 2. Some functional tests need investigation
 
 on:
   pull_request:
@@ -196,6 +197,7 @@ jobs:
         run: |
           # Run tests in Docker container using GHCR Playwright image
           # This ensures browser versions match the baselines
+          # Visual tests now use mocked NHL API data for deterministic results
           docker run --rm \
             --network host \
             --volume "${{ github.workspace }}:/work" \
@@ -217,7 +219,6 @@ jobs:
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
                 --junit-xml=reports/visual-${{ matrix.browser }}.xml"
-        continue-on-error: true
 
       - name: Run performance tests
         id: performance-tests

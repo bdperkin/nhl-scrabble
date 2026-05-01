@@ -4,10 +4,14 @@ Provides fixtures and configuration specific to visual testing:
 - Screenshot comparison settings
 - Baseline management
 - Diff threshold configuration
+- Mocked NHL API data for deterministic tests
 """
 
+import json
 from collections.abc import Generator
+from pathlib import Path
 from typing import Any
+from unittest.mock import MagicMock, patch
 
 import pytest
 from pages.conferences_page import ConferencesPage
@@ -168,3 +172,100 @@ def playoffs_page(page_fixture: Page, base_url: str) -> PlayoffsPage:
 def stats_page(page_fixture: Page, base_url: str) -> StatsPage:
     """Fixture providing a StatsPage instance."""
     return StatsPage(page_fixture, base_url)
+
+
+# ============================================================================
+# NHL API Mocking for Visual Tests
+# ============================================================================
+
+FIXTURES_DIR = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture(scope="session")
+def nhl_standings_data() -> dict[str, Any]:
+    """Load NHL standings fixture data.
+
+    Returns:
+        Standings data from fixtures/nhl_standings.json
+    """
+    fixture_file = FIXTURES_DIR / "nhl_standings.json"
+    with open(fixture_file) as f:
+        return json.load(f)  # type: ignore[no-any-return]
+
+
+@pytest.fixture(scope="session")
+def nhl_rosters_data() -> dict[str, Any]:
+    """Load NHL rosters fixture data.
+
+    Returns:
+        Rosters data from fixtures/nhl_rosters.json
+    """
+    fixture_file = FIXTURES_DIR / "nhl_rosters.json"
+    with open(fixture_file) as f:
+        return json.load(f)  # type: ignore[no-any-return]
+
+
+@pytest.fixture(autouse=True)
+def mock_nhl_api_client(
+    nhl_standings_data: dict[str, Any],
+    nhl_rosters_data: dict[str, Any],
+) -> Generator[MagicMock, None, None]:
+    """Mock NHLApiClient with fixed fixture data for visual tests.
+
+    This fixture automatically applies to all visual tests (autouse=True),
+    ensuring deterministic API responses for consistent screenshots.
+
+    The mock client returns fixture data instead of making real API calls,
+    which ensures:
+    - Consistent data across test runs
+    - Fast test execution (no network calls)
+    - Reliable baselines regardless of live NHL data changes
+
+    Args:
+        nhl_standings_data: Standings fixture data
+        nhl_rosters_data: Rosters fixture data
+
+    Yields:
+        Mocked NHLApiClient instance configured with fixture data
+    """
+    # Create mock client instance
+    mock_client_instance = MagicMock()
+
+    # Configure get_teams() to return teams from standings
+    def mock_get_teams(season: str | None = None) -> dict[str, dict[str, str]]:
+        """Extract teams from standings fixture data."""
+        teams_info: dict[str, dict[str, str]] = {}
+        for team in nhl_standings_data["standings"]:
+            team_abbrev = team["teamAbbrev"]["default"]
+            team_name = team.get("teamName", {}).get("default", team_abbrev)
+            teams_info[team_abbrev] = {
+                "name": team_name,
+                "division": team.get("divisionName", "Unknown"),
+                "conference": team.get("conferenceName", "Unknown"),
+            }
+        return teams_info
+
+    mock_client_instance.get_teams.side_effect = mock_get_teams
+
+    # Configure get_team_roster() to return roster from fixtures
+    def mock_get_team_roster(
+        team_abbrev: str,
+        season: str | None = None,
+    ) -> dict[str, Any]:
+        """Return roster from fixture data."""
+        if team_abbrev not in nhl_rosters_data:
+            # Return empty roster if team not found (shouldn't happen with valid fixtures)
+            return {"forwards": [], "defensemen": [], "goalies": []}
+        return nhl_rosters_data[team_abbrev]
+
+    mock_client_instance.get_team_roster.side_effect = mock_get_team_roster
+
+    # Mock context manager methods
+    mock_client_instance.__enter__.return_value = mock_client_instance
+    mock_client_instance.__exit__.return_value = None
+
+    # Patch NHLApiClient class to return our mock instance
+    with patch("nhl_scrabble.api.nhl_client.NHLApiClient", return_value=mock_client_instance):
+        # Also patch imports in web app module
+        with patch("nhl_scrabble.web.app.NHLApiClient", return_value=mock_client_instance):
+            yield mock_client_instance
