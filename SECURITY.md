@@ -363,21 +363,7 @@ pip install nhl_scrabble-2.1.0-py3-none-any.whl
 
 ### Active CVE Tracking
 
-The project actively monitors and tracks known vulnerabilities:
-
-**CVE-2026-3219** (pip)
-
-- **Status**: No fix available (as of April 2026)
-- **Severity**: MEDIUM
-- **Description**: pip handles concatenated tar and ZIP files as ZIP files regardless of filename
-- **Impact**: Could result in confusing installation behavior
-- **Mitigation**: Temporarily ignored in pip-audit workflow (`.github/workflows/security.yml`)
-- **Tracking**: Issue #375
-- **Action Plan**:
-  1. Monitor pip releases monthly for security patches
-  1. Remove `--ignore-vuln CVE-2026-3219` flag when fix is available
-  1. Verify resolution with pip-audit
-  1. Close tracking issue
+The project actively monitors and tracks known vulnerabilities. No active CVEs at this time.
 
 ### CVE Monitoring Process
 
@@ -419,4 +405,5 @@ We would like to thank the following individuals for responsibly disclosing secu
 
 ## Version History
 
+- **2026-05-01**: CVE-2026-3219 resolved (pip upgraded to 26.1)
 - **2024-04-16**: Initial security policy published (v2.0.0)
