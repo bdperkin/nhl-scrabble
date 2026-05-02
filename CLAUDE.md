@@ -248,6 +248,11 @@ NHL_SCRABBLE_VERBOSE=true
 - Comprehensive web application testing across multiple browsers
 - Cross-browser matrix: chromium, firefox, webkit
 - Test suites: functional, visual regression, performance, accessibility
+- **Visual Tests**: Deterministic with mocked NHL API data (blocking in CI since 2026-05-01)
+  - Mocked API data ensures pixel-perfect baseline matches
+  - Fixtures in `qa/web/tests/visual/fixtures/` (standings, rosters)
+  - Update fixtures with `./scripts/capture-nhl-fixtures`
+  - 100% reliable, no flakiness from live API data changes
 - Triggers: PRs/pushes to main (filtered paths), nightly at 2 AM UTC, manual dispatch
 - Manual dispatch options: test suite selection, browser filtering
 - Automated server startup/shutdown with health checks

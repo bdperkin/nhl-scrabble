@@ -94,6 +94,7 @@ repos:
 
       # Git checks
       - id: check-added-large-files
+        exclude: ^qa/web/tests/visual/fixtures/  # Allow large fixture files (NHL API data)
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: destroyed-symlinks

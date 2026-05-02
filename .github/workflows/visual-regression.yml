@@ -63,7 +63,7 @@ jobs:
 
       - name: Install project dependencies
         run: |
-          uv pip install -e ".[dev,web]" --system
+          uv pip install -e ".[dev]" --system
 
       - name: Install QA web dependencies
         run: |

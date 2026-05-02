@@ -16,9 +16,13 @@ Visual regression testing captures screenshots of UI components and pages, then 
 
 ```
 visual/
-├── conftest.py                     # Visual test configuration
+├── conftest.py                     # Visual test configuration with API mocking
 ├── pytest.ini                      # Pytest settings for visual tests
 ├── README.md                       # This file
+├── fixtures/                       # Mocked NHL API data (deterministic)
+│   ├── nhl_standings.json          # Fixed standings data
+│   ├── nhl_rosters.json            # Fixed roster data
+│   └── README.md                   # Fixture documentation
 ├── test_page_screenshots.py        # Full page screenshot tests
 ├── test_component_screenshots.py   # Component-level screenshot tests
 ├── test_cross_browser_visual.py    # Cross-browser visual tests
@@ -359,13 +363,26 @@ Visual tests run in CI using the same Docker image as local development:
 - **Diff artifacts**: Uploaded on test failure
 - **Retention**: Keep diffs for 30 days
 
+### Test Status in CI
+
+**Current Status**: ✅ **Blocking** - Visual tests must pass for PR to merge
+
+Visual tests are now reliable and deterministic thanks to mocked API data:
+
+- Tests run with fixed NHL data from `fixtures/` directory
+- 100% pixel-perfect match expected
+- Failures indicate actual UI regressions (not data changes)
+- No more `continue-on-error: true` in CI workflow
+
 ### Failure Handling
 
 On visual test failure in CI:
 
+1. **Investigate cause** - Failures now indicate real UI bugs (not data variance)
 1. **Review diff artifacts** in CI logs
 1. **Download diff images** from artifacts
-1. **Investigate locally** before updating baselines
+1. **Reproduce locally** using Docker workflow
+1. **Fix UI bug** or update baselines if change is intentional
 1. **Update baselines** only after verification
 
 ## Troubleshooting
@@ -411,14 +428,27 @@ On visual test failure in CI:
 
 ### Flaky Visual Tests
 
-**Cause**: Dynamic content, animations, or loading states
+**Status**: ✅ **Resolved** - Visual tests now use mocked NHL API data for deterministic results.
 
-**Solution**:
+**Historical Causes** (before mocking):
 
-1. Wait for content to load: `page.wait_for_load_state("networkidle")`
-1. Disable animations in conftest.py
-1. Mock dynamic content (timestamps, random data)
+- Dynamic NHL API data (player stats, standings)
+- Live data changes between test runs
+- Pixel differences due to data, not UI
+
+**Current Implementation**:
+
+- ✅ Mocked API data in `fixtures/` directory
+- ✅ Automatic mocking via `conftest.py`
+- ✅ 100% consistent test data across all runs
+- ✅ Zero flakiness from dynamic content
+
+**If tests are still flaky** (rare):
+
+1. Check animations are disabled (already configured in conftest.py)
+1. Wait for network idle: `page.wait_for_load_state("networkidle")`
 1. Use `wait_for_selector()` for dynamic elements
+1. Check for JavaScript errors in console
 
 ### Too Many False Positives
 
@@ -431,49 +461,80 @@ On visual test failure in CI:
 1. Exclude dynamic content areas
 1. Stabilize test data
 
-## Known Limitations
+## Mocked API Data for Deterministic Tests
 
-### Live API Data Variability
+**Implementation**: Visual regression tests now use mocked NHL API data instead of live API calls, ensuring 100% deterministic and reliable test results.
 
-**Issue**: Visual regression tests capture screenshots of pages displaying live NHL API data (player stats, scores, standings). This data changes constantly, causing baseline mismatches even when the UI is correct.
+### How It Works
 
-**Impact**:
+**Automatic Mocking** (transparent to tests):
 
-- ⚠️ Visual tests may fail in CI due to data differences (not UI bugs)
-- Baselines generated locally show different data than CI sees
-- Tests are marked as `continue-on-error: true` in CI (non-blocking)
+1. **Fixture Files**: Fixed NHL API data stored in `fixtures/` directory
 
-**Example Failures**:
+   - `nhl_standings.json` - Team standings snapshot
+   - `nhl_rosters.json` - Player roster data for all 32 teams
 
+1. **Auto-Applied Mock**: `conftest.py` automatically mocks `NHLApiClient` for all visual tests
+
+   - No test code changes required
+   - Tests run exactly as before, but with fixed data
+   - Mock applied via `autouse=True` pytest fixture
+
+1. **Benefits**:
+
+   - ✅ **Pixel-perfect consistency**: Same data every test run
+   - ✅ **Fast execution**: No network calls, instant responses
+   - ✅ **Reliable baselines**: Screenshots identical across all environments
+   - ✅ **Blocking in CI**: Tests are now blocking (failures indicate real UI bugs)
+   - ✅ **Environment-independent**: Works identically in local, Docker, and CI
+
+### Fixture Management
+
+**When to Update Fixtures**:
+
+- NHL season changes (rosters/standings reset)
+- Major UI changes affect data display
+- API schema changes
+- Annually at minimum (keep data realistic)
+
+**How to Update Fixtures**:
+
+```bash
+# Capture fresh NHL API data
+./scripts/capture-nhl-fixtures
+
+# This will:
+# 1. Fetch current standings from NHL API
+# 2. Fetch current rosters for all teams
+# 3. Save to fixtures/ directory
+# 4. Update README with capture date
+
+# After updating fixtures, regenerate baselines:
+./scripts/pytest-playwright qa/web/tests/visual/ --update-snapshots \
+  --browser chromium --browser firefox --browser webkit
 ```
-AssertionError: Snapshots does not match
-E   assert 163185 == 0  # 163,185 pixels differ due to different player names/scores
-```
 
-**Why This Happens**:
+**Fixture Structure**:
 
-1. Baselines generated at time T₁ with player data from NHL API
-1. CI runs at time T₂ with updated NHL API data
-1. Player stats, team scores, and standings have changed
-1. Screenshots differ pixel-by-pixel despite identical UI rendering
+See `fixtures/README.md` for detailed documentation of fixture format, update procedures, and maintenance schedule.
 
-**Current Status**:
+### Migration from Live API
 
-- Visual tests are **non-blocking** in CI (`continue-on-error: true`)
-- Functional QA tests verify UI works correctly (these are blocking)
-- Visual tests still useful for detecting major layout/styling regressions
+**Before** (unreliable):
 
-**Workarounds**:
+- Tests used live NHL API data
+- Baselines failed due to data changes
+- Visual tests non-blocking in CI
+- Pixel diffs: 163,185-217,302 pixels on data-heavy pages
 
-1. **Accept visual test failures** when only data differs (not UI)
-1. **Regenerate baselines frequently** when making UI changes
-1. **Focus on functional tests** for critical validation
+**After** (deterministic):
 
-**Future Improvement** (see task `enhancement/044-implement-mocked-api-data-visual-tests.md`, issue [#476](https://github.com/bdperkin/nhl-scrabble/issues/476)):
+- Tests use fixed mock data
+- Baselines stable (pixel-perfect matches)
+- Visual tests blocking in CI
+- Pixel diffs: 0 (100% match expected)
 
-- Implement mocked/fixed NHL API data for visual tests
-- Use snapshot fixtures for consistent test data
-- Make visual tests deterministic and reliable
+**Completed**: 2026-05-01 (task `enhancement/044-implement-mocked-api-data-visual-tests.md`, issue [#476](https://github.com/bdperkin/nhl-scrabble/issues/476))
 
 ## Resources
 
