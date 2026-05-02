@@ -30,6 +30,7 @@ RUN pip install --no-cache-dir \
     locust>=2.43.4 \
     pillow>=12.2 \
     pixelmatch>=0.2.3 \
+    platformdirs>=4.0.0 \
     pytest>=9.0.3 \
     pytest-benchmark>=5.2.3 \
     pytest-html>=4.2 \
