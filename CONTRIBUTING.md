@@ -531,6 +531,75 @@ The workflow automatically adds labels based on:
 | `size/L`          | 501-1000 lines changed                                   |
 | `size/XL`         | 1000+ lines changed                                      |
 
+### PR Size Guidelines
+
+**Recommended PR Sizes:**
+
+- **< 100 lines**: ✅ Excellent - Fast review, low risk
+- **100-500 lines**: ✅ Good - Manageable review size
+- **500-1000 lines**: ⚠️ Large - Consider splitting if possible
+- **> 1000 lines**: 🚫 Very Large - Strongly recommend splitting
+
+**Automated Size Checking:**
+
+The PR Size Checker workflow automatically comments on pull requests:
+
+- **Large PRs (500-1000 lines)**: Gentle reminder about ideal PR size
+- **Very Large PRs (>1000 lines)**: Warning with splitting suggestions and benefits
+- **Well-Sized PRs (100-500 lines)**: Occasional positive reinforcement (10% chance)
+
+**Benefits of Smaller PRs:**
+
+- ✅ Faster review cycles
+- ✅ Easier to understand changes
+- ✅ Lower chance of bugs
+- ✅ Easier to revert if needed
+- ✅ Better git history
+- ✅ Less context switching for reviewers
+
+**Strategies for Splitting Large PRs:**
+
+**By Feature:**
+
+```
+Large PR: "Add user authentication system"
+
+Split into:
+1. "Add authentication models"
+2. "Add authentication API endpoints"
+3. "Add authentication UI"
+4. "Add authentication tests"
+```
+
+**By Layer:**
+
+```
+Large PR: "Implement caching system"
+
+Split into:
+1. "Add caching infrastructure"
+2. "Integrate caching in API layer"
+3. "Add cache invalidation"
+4. "Add caching documentation"
+```
+
+**When Large PRs Are Acceptable:**
+
+Some PRs legitimately need to be large:
+
+- Generated code updates (lock files, auto-generated API clients)
+- Major refactoring that must be atomic
+- Database migrations with extensive schema changes
+- Dependency updates affecting many files
+- Documentation overhauls
+
+**For these cases:**
+
+- Add detailed PR description explaining scope
+- Explain why splitting isn't feasible
+- Request specific review focus areas
+- Consider breaking review into multiple passes
+
 ### Submitting
 
 1. Push your branch: `git push origin feature/your-feature-name`

@@ -274,6 +274,21 @@ NHL_SCRABBLE_VERBOSE=true
 - Configuration: `.github/labeler.yml` for path-to-label mappings
 - Benefits: Consistent labeling, easier PR filtering, quick scope understanding
 
+**PR Size Checker Workflow:**
+
+- Automatically comments on pull requests to guide optimal PR size
+- **Size thresholds**:
+  - < 100 lines: Excellent (occasional positive comment)
+  - 100-500 lines: Good (no comment)
+  - 500-1000 lines: Large (gentle reminder)
+  - \> 1000 lines: Very large (strong warning with splitting suggestions)
+- **Smart commenting**: Updates existing bot comments instead of creating duplicates
+- **Actionable guidance**: Provides splitting strategies and explains benefits of smaller PRs
+- **Statistics**: Shows lines added, deleted, files changed, and total changes
+- Triggers: PRs opened, synchronized, reopened
+- Benefits: Faster review cycles, lower bug risk, better git history
+- Configuration: `.github/workflows/pr-size.yml`
+
 ### Publishing
 
 Triggered by version tags (`v*`):
