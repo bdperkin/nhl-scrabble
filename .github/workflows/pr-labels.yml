@@ -1,0 +1,88 @@
+name: PR Auto-Labeling
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: write  # Required to add labels
+
+jobs:
+  label:
+    name: Auto-Label Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Label based on changed files
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+          sync-labels: true
+
+      - name: Label based on PR size
+        uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: size/XS
+          xs_max_size: 10
+          s_label: size/S
+          s_max_size: 100
+          m_label: size/M
+          m_max_size: 500
+          l_label: size/L
+          l_max_size: 1000
+          xl_label: size/XL
+          fail_if_xl: false
+          message_if_xl: ''
+          github_api_url: https://api.github.com
+
+      - name: Label based on PR title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prTitle = context.payload.pull_request.title.toLowerCase();
+            const labels = [];
+
+            // Conventional commit prefixes
+            if (prTitle.startsWith('feat:') || prTitle.startsWith('feature:')) {
+              labels.push('enhancement');
+            }
+            if (prTitle.startsWith('fix:') || prTitle.startsWith('bugfix:')) {
+              labels.push('bug');
+            }
+            if (prTitle.startsWith('docs:') || prTitle.startsWith('documentation:')) {
+              labels.push('documentation');
+            }
+            if (prTitle.startsWith('test:') || prTitle.startsWith('tests:')) {
+              labels.push('testing');
+            }
+            if (prTitle.startsWith('refactor:')) {
+              labels.push('refactoring');
+            }
+            if (prTitle.startsWith('perf:') || prTitle.startsWith('performance:')) {
+              labels.push('performance');
+            }
+            if (prTitle.startsWith('ci:') || prTitle.startsWith('chore:')) {
+              labels.push('ci/cd');
+            }
+            if (prTitle.startsWith('security:')) {
+              labels.push('security');
+            }
+            if (prTitle.includes('breaking') || prTitle.includes('!:')) {
+              labels.push('breaking-change');
+            }
+
+            // Add labels if any found
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: labels
+              });
+            }
