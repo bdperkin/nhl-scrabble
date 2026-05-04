@@ -455,87 +455,85 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
         if failed_teams:
             logger.warning("Failed to fetch %d teams: %s", len(failed_teams), failed_teams)
 
-            # Convert player objects to dicts and sort by score
-            all_players = _convert_players_to_dict(all_players_objects)
-            all_players.sort(key=operator.itemgetter("score"), reverse=True)
+        # Convert player objects to dicts and sort by score
+        all_players = _convert_players_to_dict(all_players_objects)
+        all_players.sort(key=operator.itemgetter("score"), reverse=True)
 
-            # Calculate playoff standings
-            playoff_calc = PlayoffCalculator()
-            playoff_standings = playoff_calc.calculate_playoff_standings(team_scores_dict)
+        # Calculate playoff standings
+        playoff_calc = PlayoffCalculator()
+        playoff_standings = playoff_calc.calculate_playoff_standings(team_scores_dict)
 
-            # Convert team scores to dict format for response
-            teams_data = _convert_teams_to_dict(team_scores_dict, request.top_team_players)
+        # Convert team scores to dict format for response
+        teams_data = _convert_teams_to_dict(team_scores_dict, request.top_team_players)
 
-            # Group by division and conference
-            divisions, conferences = _group_teams_by_grouping(teams_data)
+        # Group by division and conference
+        divisions, conferences = _group_teams_by_grouping(teams_data)
 
-            # Calculate stats
-            total_score: int | float = (
-                sum(int(p["score"]) for p in all_players) if all_players else 0
-            )
+        # Calculate stats
+        total_score: int | float = sum(int(p["score"]) for p in all_players) if all_players else 0
 
-            # Get highest player's team name
-            highest_player_team_name = None
-            if all_players:
-                highest_player_abbrev = all_players[0]["team"]
-                for team in teams_data:
-                    if team["abbrev"] == highest_player_abbrev:
-                        highest_player_team_name = team["name"]
-                        break
+        # Get highest player's team name
+        highest_player_team_name = None
+        if all_players:
+            highest_player_abbrev = all_players[0]["team"]
+            for team in teams_data:
+                if team["abbrev"] == highest_player_abbrev:
+                    highest_player_team_name = team["name"]
+                    break
 
-            stats = {
-                "total_players": len(all_players),
-                "total_teams": len(teams_data),
-                "highest_score": all_players[0]["score"] if all_players else 0,
-                "highest_player_name": all_players[0]["full_name"] if all_players else None,
-                "highest_player_team": highest_player_team_name,
-                "lowest_score": all_players[-1]["score"] if all_players else 0,
-                "avg_score": total_score / len(all_players) if all_players else 0,
-                "highest_team": teams_data[0]["abbrev"] if teams_data else None,
-                "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
-                "highest_team_name": teams_data[0]["name"] if teams_data else None,
-                "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
-                "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
-            }
+        stats = {
+            "total_players": len(all_players),
+            "total_teams": len(teams_data),
+            "highest_score": all_players[0]["score"] if all_players else 0,
+            "highest_player_name": all_players[0]["full_name"] if all_players else None,
+            "highest_player_team": highest_player_team_name,
+            "lowest_score": all_players[-1]["score"] if all_players else 0,
+            "avg_score": total_score / len(all_players) if all_players else 0,
+            "highest_team": teams_data[0]["abbrev"] if teams_data else None,
+            "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
+            "highest_team_name": teams_data[0]["name"] if teams_data else None,
+            "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
+            "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
+        }
 
-            # Convert playoff standings to dict format
-            playoff_bracket = {}
-            for conference, teams in playoff_standings.items():
-                playoff_bracket[conference] = [
-                    {
-                        "abbrev": team.abbrev,
-                        "total": team.total,
-                        "players": team.players,
-                        "avg": team.avg,
-                        "conference": team.conference,
-                        "division": team.division,
-                        "status_indicator": team.status_indicator,
-                        "seed_type": team.seed_type,
-                        "in_playoffs": team.in_playoffs,
-                        "division_rank": team.division_rank,
-                    }
-                    for team in teams
-                ]
+        # Convert playoff standings to dict format
+        playoff_bracket = {}
+        for conference, teams in playoff_standings.items():
+            playoff_bracket[conference] = [
+                {
+                    "abbrev": team.abbrev,
+                    "total": team.total,
+                    "players": team.players,
+                    "avg": team.avg,
+                    "conference": team.conference,
+                    "division": team.division,
+                    "status_indicator": team.status_indicator,
+                    "seed_type": team.seed_type,
+                    "in_playoffs": team.in_playoffs,
+                    "division_rank": team.division_rank,
+                }
+                for team in teams
+            ]
 
-            # Build response
-            result = {
-                "timestamp": datetime.now(UTC).isoformat(),
-                "cache_hit": False,
-                "top_players": all_players[: request.top_players],
-                "team_standings": teams_data,
-                "division_standings": divisions,
-                "conference_standings": conferences,
-                "playoff_bracket": playoff_bracket,
-                "stats": stats,
-            }
+        # Build response
+        result = {
+            "timestamp": datetime.now(UTC).isoformat(),
+            "cache_hit": False,
+            "top_players": all_players[: request.top_players],
+            "team_standings": teams_data,
+            "division_standings": divisions,
+            "conference_standings": conferences,
+            "playoff_bracket": playoff_bracket,
+            "stats": stats,
+        }
 
-            # Cache result
-            _analysis_cache[cache_key] = {
-                "cached_at": datetime.now(UTC).isoformat(),
-                "data": result,
-            }
+        # Cache result
+        _analysis_cache[cache_key] = {
+            "cached_at": datetime.now(UTC).isoformat(),
+            "data": result,
+        }
 
-            return result
+        return result
 
     except NHLApiError as e:
         raise HTTPException(
