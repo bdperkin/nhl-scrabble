@@ -131,6 +131,7 @@ jobs:
           done
         env:
           PYTHONUNBUFFERED: "1"
+          NHL_SCRABBLE_TEST_MODE: "1"  # Use mocked fixture data for deterministic visual tests
 
       - name: Determine test suite
         id: test-suite

@@ -6,8 +6,10 @@ results via browser instead of CLI.
 
 from __future__ import annotations
 
+import json
 import logging
 import operator
+import os
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any
@@ -108,6 +110,144 @@ if TEMPLATES_DIR.exists():
 
 # Cache storage (in-memory for now)
 _analysis_cache: dict[str, dict[str, Any]] = {}
+
+# Test mode: Use mocked data from fixtures instead of live NHL API
+TEST_MODE = os.getenv("NHL_SCRABBLE_TEST_MODE", "0") == "1"
+
+
+def _load_fixture_data() -> tuple[dict[str, Any], dict[str, Any]]:
+    """Load NHL API fixture data from JSON files for test mode.
+
+    Returns:
+        Tuple of (standings_data, rosters_data)
+
+    Raises:
+        FileNotFoundError: If fixture files not found
+        json.JSONDecodeError: If fixture files are invalid JSON
+    """
+    # Look for fixtures in common locations
+    fixture_paths = [
+        Path("qa/web/tests/visual/fixtures"),  # CI and local (from project root)
+        Path(__file__).parent.parent.parent.parent
+        / "qa/web/tests/visual/fixtures",  # Relative to this file
+    ]
+
+    fixture_dir = None
+    for path in fixture_paths:
+        if path.exists():
+            fixture_dir = path
+            break
+
+    if fixture_dir is None:
+        raise FileNotFoundError(
+            f"Fixture directory not found. Tried: {[str(p) for p in fixture_paths]}",
+        )
+
+    standings_file = fixture_dir / "nhl_standings.json"
+    rosters_file = fixture_dir / "nhl_rosters.json"
+
+    if not standings_file.exists():
+        raise FileNotFoundError(f"Standings fixture not found: {standings_file}")
+    if not rosters_file.exists():
+        raise FileNotFoundError(f"Rosters fixture not found: {rosters_file}")
+
+    with standings_file.open() as f:
+        standings_data = json.load(f)
+
+    with rosters_file.open() as f:
+        rosters_data = json.load(f)
+
+    logger.info(
+        "Loaded fixture data: %d teams, %d rosters",
+        len(standings_data.get("standings", [])),
+        len(rosters_data),
+    )
+
+    return standings_data, rosters_data
+
+
+def _process_fixture_data(
+    scorer: ScrabbleScorer,
+) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
+    """Process fixture data the same way as TeamProcessor would process live API data.
+
+    Args:
+        scorer: ScrabbleScorer instance
+
+    Returns:
+        Tuple of (team_scores_dict, all_players, failed_teams)
+    """
+    standings_data, rosters_data = _load_fixture_data()
+
+    team_scores: dict[str, TeamScore] = {}
+    all_players: list[PlayerScore] = []
+    failed_teams: list[str] = []
+
+    # Extract team metadata from standings
+    teams_info: dict[str, dict[str, str]] = {}
+    for team in standings_data.get("standings", []):
+        team_abbrev = team["teamAbbrev"]["default"]
+        teams_info[team_abbrev] = {
+            "name": team.get("teamName", {}).get("default", team_abbrev),
+            "division": team.get("divisionName", "Unknown"),
+            "conference": team.get("conferenceName", "Unknown"),
+        }
+
+    # Process each team's roster
+    for team_abbrev, team_info in teams_info.items():
+        if team_abbrev not in rosters_data:
+            logger.warning("No roster data for team: %s", team_abbrev)
+            failed_teams.append(team_abbrev)
+            continue
+
+        roster = rosters_data[team_abbrev]
+        team_players: list[PlayerScore] = []
+
+        # Process all positions
+        for position_group in ("forwards", "defensemen", "goalies"):
+            for player_data in roster.get(position_group, []):
+                first_name = player_data.get("firstName", {}).get("default", "")
+                last_name = player_data.get("lastName", {}).get("default", "")
+
+                if not first_name or not last_name:
+                    continue
+
+                # Calculate scores
+                first_score = scorer.calculate_score(first_name)
+                last_score = scorer.calculate_score(last_name)
+                full_name = f"{first_name} {last_name}"
+                full_score = first_score + last_score
+
+                player = PlayerScore(
+                    first_name=first_name,
+                    last_name=last_name,
+                    full_name=full_name,
+                    first_score=first_score,
+                    last_score=last_score,
+                    full_score=full_score,
+                    team=team_abbrev,
+                    division=team_info["division"],
+                    conference=team_info["conference"],
+                )
+                team_players.append(player)
+                all_players.append(player)
+
+        # Create TeamScore
+        if team_players:
+            total_score = sum(p.full_score for p in team_players)
+            team_score = TeamScore(
+                abbrev=team_abbrev,
+                name=team_info["name"],
+                total=total_score,
+                players=team_players,
+                division=team_info["division"],
+                conference=team_info["conference"],
+            )
+            team_scores[team_abbrev] = team_score
+
+    logger.info("Processed %d teams with %d total players", len(team_scores), len(all_players))
+
+    return team_scores, all_players, failed_teams
 
 
 class AnalysisRequest(BaseModel):
@@ -297,15 +437,23 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 
     # Run analysis
     try:
-        with NHLApiClient() as client:
-            # Process all teams using TeamProcessor
-            scorer = ScrabbleScorer()
-            team_processor = TeamProcessor(client, scorer)
-            team_scores_dict, all_players_objects, failed_teams = team_processor.process_all_teams()
+        scorer = ScrabbleScorer()
 
-            # Log failed teams
-            if failed_teams:
-                logger.warning("Failed to fetch %d teams: %s", len(failed_teams), failed_teams)
+        # Use fixture data in test mode, otherwise use live API
+        if TEST_MODE:
+            logger.info("TEST_MODE enabled - using fixture data")
+            team_scores_dict, all_players_objects, failed_teams = _process_fixture_data(scorer)
+        else:
+            with NHLApiClient() as client:
+                # Process all teams using TeamProcessor
+                team_processor = TeamProcessor(client, scorer)
+                team_scores_dict, all_players_objects, failed_teams = (
+                    team_processor.process_all_teams()
+                )
+
+        # Log failed teams
+        if failed_teams:
+            logger.warning("Failed to fetch %d teams: %s", len(failed_teams), failed_teams)
 
             # Convert player objects to dicts and sort by score
             all_players = _convert_players_to_dict(all_players_objects)
