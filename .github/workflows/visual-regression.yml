@@ -117,6 +117,11 @@ jobs:
           mkdir -p qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/linux
           chmod -R 777 qa/web/tests/visual/__snapshots__
 
+          # Create test-results directory for visual diff screenshots
+          # Enhanced assert_snapshot fixture saves actual/baseline/diff images here on failure
+          mkdir -p qa/web/test-results
+          chmod -R 777 qa/web/test-results
+
       - name: Run visual regression tests
         id: visual-tests
         run: |
