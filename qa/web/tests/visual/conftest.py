@@ -265,7 +265,6 @@ def mock_nhl_api_client(
     mock_client_instance.__exit__.return_value = None
 
     # Patch NHLApiClient class to return our mock instance
+    # This patches at the source (nhl_scrabble.api.nhl_client), so all imports get the mock
     with patch("nhl_scrabble.api.nhl_client.NHLApiClient", return_value=mock_client_instance):
-        # Also patch imports in web app module
-        with patch("nhl_scrabble.web.app.NHLApiClient", return_value=mock_client_instance):
-            yield mock_client_instance
+        yield mock_client_instance

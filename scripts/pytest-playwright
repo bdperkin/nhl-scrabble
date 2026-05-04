@@ -111,21 +111,23 @@ fi
 # Install main package dependencies to user location (avoids /work permission issues)
 # All QA test dependencies are pre-installed in the Docker image
 # PYTHONPATH already includes /work/src and /work/qa/web, so imports will work
-INSTALL_CMD="pip install --user -q certifi click colorlog dicttoxml fastapi httpx jinja2 platformdirs prompt-toolkit pydantic pydantic-settings pyyaml requests requests-cache rich starlette unidecode uvicorn"
+# Note: Running as root in container, so pip warnings about root user are suppressed
+INSTALL_CMD="pip install --user -q --no-cache-dir --no-warn-script-location --disable-pip-version-check --root-user-action=ignore certifi click colorlog dicttoxml fastapi httpx jinja2 platformdirs prompt-toolkit pydantic pydantic-settings pyyaml requests requests-cache rich starlette unidecode uvicorn"
 
 # Build Docker run command
 # Use :z flag for SELinux systems to allow container write access
-# Run as root to avoid Firefox permission issues in Docker
-# Note: Files in /work will be owned by root, but this is acceptable for CI/test scenarios
+# Run as root to avoid Firefox permission issues and file ownership conflicts
+# Note: Files created in /work will be owned by root, but this is acceptable for CI/test scenarios
 DOCKER_CMD=(
     docker run
     --rm                                    # Remove container after exit
     --interactive                           # Keep STDIN open
+    --user root                             # Run as root for file permissions
     --network host                          # Access host network (for localhost:5000)
     --volume "${REPO_ROOT}:/work:z"        # Mount repository (with SELinux label)
     --shm-size=2gb                          # Increase shared memory for Firefox
     --workdir "${WORKDIR}"                 # Set working directory
-    --env "HOME=/home/pwuser"              # Set HOME for Playwright
+    --env "HOME=/root"                     # Set HOME to /root (required for Firefox when running as root)
     --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright"  # Browser cache (in image)
     --env "BASE_URL=${WEB_SERVER_URL}"     # Override base URL for tests
     --env "PYTHONUNBUFFERED=1"             # Unbuffered Python output
