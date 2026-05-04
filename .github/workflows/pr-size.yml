@@ -1,0 +1,133 @@
+name: PR Size Checker
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-size:
+    name: Check PR Size
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR size and comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const additions = pr.additions;
+            const deletions = pr.deletions;
+            const changedFiles = pr.changed_files;
+            const totalChanges = additions + deletions;
+
+            // Size thresholds
+            const SMALL = 100;
+            const MEDIUM = 500;
+            const LARGE = 1000;
+
+            let message = '';
+            let shouldComment = false;
+
+            if (totalChanges > LARGE) {
+              shouldComment = true;
+              message = `## ⚠️ Very Large PR (${totalChanges} lines changed)
+
+            This PR is very large and may be difficult to review effectively.
+
+            **Statistics:**
+            - 📝 Lines added: ${additions}
+            - 🗑️ Lines deleted: ${deletions}
+            - 📁 Files changed: ${changedFiles}
+            - 📊 Total changes: ${totalChanges}
+
+            **Recommendations:**
+            1. **Consider splitting** this PR into smaller, focused PRs
+            2. Each PR should ideally be **< 500 lines** for optimal review
+            3. Group related changes together
+            4. Create a tracking issue linking multiple PRs if needed
+
+            **Benefits of smaller PRs:**
+            - ✅ Faster review cycles
+            - ✅ Easier to understand changes
+            - ✅ Lower chance of bugs
+            - ✅ Easier to revert if needed
+            - ✅ Better git history
+
+            **If this PR cannot be split:**
+            - Add detailed description explaining the scope
+            - Consider scheduling a review session
+            - Break review into multiple passes
+
+            ---
+            *This is an automated message to help improve code review quality.*`;
+            } else if (totalChanges > MEDIUM) {
+              shouldComment = true;
+              message = `## 📏 Large PR (${totalChanges} lines changed)
+
+            This PR is getting large. Consider if it can be split for easier review.
+
+            **Statistics:**
+            - 📝 Lines added: ${additions}
+            - 🗑️ Lines deleted: ${deletions}
+            - 📁 Files changed: ${changedFiles}
+            - 📊 Total changes: ${totalChanges}
+
+            **Suggestions:**
+            - Ideal PR size: **< 500 lines**
+            - Current size: **${totalChanges} lines**
+            - Consider splitting if possible
+
+            ---
+            *This is an automated reminder about PR best practices.*`;
+            } else if (totalChanges > SMALL && totalChanges <= MEDIUM) {
+              // Good size - post positive comment occasionally
+              if (Math.random() < 0.1) {  // 10% of the time
+                shouldComment = true;
+                message = `## ✅ Well-Sized PR (${totalChanges} lines changed)
+
+            Great! This PR is a good size for review.
+
+            **Statistics:**
+            - 📝 Lines added: ${additions}
+            - 🗑️ Lines deleted: ${deletions}
+            - 📁 Files changed: ${changedFiles}
+
+            Keep up the good work! 🎉`;
+              }
+            }
+
+            if (shouldComment) {
+              // Check if we already commented
+              const comments = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number
+              });
+
+              const botComment = comments.data.find(comment =>
+                comment.user.type === 'Bot' &&
+                (comment.body.includes('PR Size') || comment.body.includes('lines changed'))
+              );
+
+              if (botComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: message
+                });
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: message
+                });
+              }
+            }

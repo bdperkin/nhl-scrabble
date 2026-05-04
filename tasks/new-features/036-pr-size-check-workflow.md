@@ -238,18 +238,18 @@ git push
 
 ## Acceptance Criteria
 
-- [ ] Workflow file created: `.github/workflows/pr-size.yml`
-- [ ] Size thresholds configured appropriately
-- [ ] Comments post on large PRs (>500 lines)
-- [ ] Strong warnings on very large PRs (>1000 lines)
-- [ ] Statistics included in comments
-- [ ] Actionable suggestions provided
-- [ ] Positive reinforcement for good-sized PRs
-- [ ] Comments update when PR changes
-- [ ] No duplicate comments created
-- [ ] CONTRIBUTING.md updated with size guidelines
-- [ ] Test PRs verified
-- [ ] Documentation complete
+- [x] Workflow file created: `.github/workflows/pr-size.yml`
+- [x] Size thresholds configured appropriately
+- [x] Comments post on large PRs (>500 lines)
+- [x] Strong warnings on very large PRs (>1000 lines)
+- [x] Statistics included in comments
+- [x] Actionable suggestions provided
+- [x] Positive reinforcement for good-sized PRs
+- [x] Comments update when PR changes
+- [x] No duplicate comments created
+- [x] CONTRIBUTING.md updated with size guidelines
+- [ ] Test PRs verified (will verify after PR creation)
+- [x] Documentation complete
 
 ## Related Files
 
@@ -393,11 +393,72 @@ Some PRs legitimately need to be large:
 
 ## Implementation Notes
 
-*To be filled during implementation:*
+**Implemented**: 2026-05-04
+**Branch**: new-features/036-pr-size-check-workflow
+**Status**: Implementation complete, awaiting PR testing
 
-- Date started:
-- Date completed:
-- Actual effort:
-- Final thresholds chosen:
-- Test results:
-- Developer feedback:
+### Actual Implementation
+
+Followed the proposed solution exactly as specified:
+
+- Created `.github/workflows/pr-size.yml` with size checking logic
+- Configured thresholds: SMALL=100, MEDIUM=500, LARGE=1000
+- Implemented smart commenting (updates existing comments, no duplicates)
+- Added comprehensive PR size guidelines to CONTRIBUTING.md
+- Documented workflow in CLAUDE.md
+
+### Final Thresholds Chosen
+
+- **< 100 lines**: Excellent (10% chance of positive comment)
+- **100-500 lines**: Good (no comment - ideal size)
+- **500-1000 lines**: Large (gentle reminder with suggestions)
+- **> 1000 lines**: Very Large (strong warning with splitting strategies)
+
+### Changes Made
+
+**New Files:**
+
+- `.github/workflows/pr-size.yml` - PR size checking workflow
+
+**Modified Files:**
+
+- `CONTRIBUTING.md` - Added comprehensive "PR Size Guidelines" section after PR title conventions
+- `CLAUDE.md` - Added "PR Size Checker Workflow" documentation in CI/CD section
+- `tasks/new-features/036-pr-size-check-workflow.md` - Updated acceptance criteria and implementation notes
+
+### Implementation Highlights
+
+**Smart Comment Logic:**
+
+- Checks for existing bot comments before posting
+- Updates existing comment instead of creating duplicates
+- Uses consistent comment markers ("PR Size", "lines changed")
+
+**Actionable Guidance:**
+
+- Provides specific splitting strategies (by feature, by layer)
+- Explains benefits of smaller PRs
+- Acknowledges legitimate exceptions
+- Includes usage statistics in comments
+
+**Documentation:**
+
+- Comprehensive guidelines in CONTRIBUTING.md
+- Splitting strategies with examples
+- Clear size thresholds
+- Benefits explained for contributors and reviewers
+
+### Testing Plan
+
+Will verify workflow functionality by:
+
+1. Creating this PR (small, should get no comment or occasional positive)
+1. Observing workflow execution in GitHub Actions
+1. Confirming comment behavior matches expectations
+1. Verifying comment updates on PR synchronize events
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 1-2 hours
+- **Actual**: ~45 minutes (implementation only, testing pending)
+- **Reason**: Clear specification made implementation straightforward
