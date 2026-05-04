@@ -112,6 +112,11 @@ jobs:
           touch qa/web/visual-${{ matrix.browser }}-results.xml
           chmod 666 qa/web/visual-${{ matrix.browser }}-results.xml
 
+          # Create snapshot directory with correct permissions for Docker
+          # This allows the Docker container (running as pwuser) to write baseline screenshots
+          mkdir -p qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/linux
+          chmod -R 777 qa/web/tests/visual/__snapshots__
+
       - name: Run visual regression tests
         id: visual-tests
         run: |
