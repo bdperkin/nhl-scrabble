@@ -114,6 +114,15 @@ _analysis_cache: dict[str, dict[str, Any]] = {}
 # Test mode: Use mocked data from fixtures instead of live NHL API
 TEST_MODE = os.getenv("NHL_SCRABBLE_TEST_MODE", "0") == "1"
 
+# Log TEST_MODE status at module initialization
+if TEST_MODE:
+    logger.warning(
+        "⚠️  TEST_MODE ENABLED - Server will use fixture data instead of live NHL API. "
+        "Set NHL_SCRABBLE_TEST_MODE=0 to disable.",
+    )
+else:
+    logger.info("TEST_MODE disabled - Server will use live NHL API")
+
 
 def _load_fixture_data() -> tuple[dict[str, Any], dict[str, Any]]:
     """Load NHL API fixture data from JSON files for test mode.
@@ -125,42 +134,79 @@ def _load_fixture_data() -> tuple[dict[str, Any], dict[str, Any]]:
         FileNotFoundError: If fixture files not found
         json.JSONDecodeError: If fixture files are invalid JSON
     """
+    # Get current working directory for debugging
+    cwd = Path.cwd()
+    logger.info("Current working directory: %s", cwd)
+
     # Look for fixtures in common locations
     fixture_paths = [
         Path("qa/web/tests/visual/fixtures"),  # CI and local (from project root)
         Path(__file__).parent.parent.parent.parent
         / "qa/web/tests/visual/fixtures",  # Relative to this file
+        cwd / "qa/web/tests/visual/fixtures",  # Explicit from CWD
     ]
+
+    logger.info("Searching for fixture directory in %d locations:", len(fixture_paths))
+    for i, path in enumerate(fixture_paths, 1):
+        resolved = path.resolve()
+        exists = path.exists()
+        logger.info("  %d. %s (resolved: %s, exists: %s)", i, path, resolved, exists)
 
     fixture_dir = None
     for path in fixture_paths:
         if path.exists():
             fixture_dir = path
+            logger.info("✅ Found fixture directory: %s", fixture_dir.resolve())
             break
 
     if fixture_dir is None:
-        raise FileNotFoundError(
-            f"Fixture directory not found. Tried: {[str(p) for p in fixture_paths]}",
+        error_msg = (
+            f"Fixture directory not found. CWD: {cwd}. "
+            f"Tried: {[str(p.resolve()) for p in fixture_paths]}"
         )
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
 
     standings_file = fixture_dir / "nhl_standings.json"
     rosters_file = fixture_dir / "nhl_rosters.json"
 
+    logger.info("Looking for fixture files:")
+    logger.info("  - Standings: %s (exists: %s)", standings_file, standings_file.exists())
+    logger.info("  - Rosters: %s (exists: %s)", rosters_file, rosters_file.exists())
+
     if not standings_file.exists():
-        raise FileNotFoundError(f"Standings fixture not found: {standings_file}")
+        error_msg = f"Standings fixture not found: {standings_file.resolve()}"
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
     if not rosters_file.exists():
-        raise FileNotFoundError(f"Rosters fixture not found: {rosters_file}")
+        error_msg = f"Rosters fixture not found: {rosters_file.resolve()}"
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
 
-    with standings_file.open() as f:
-        standings_data = json.load(f)
+    try:
+        with standings_file.open() as f:
+            standings_data = json.load(f)
+        logger.info("✅ Loaded standings fixture: %d bytes", standings_file.stat().st_size)
+    except json.JSONDecodeError as e:
+        error_msg = f"Invalid JSON in standings fixture {standings_file}: {e}"
+        logger.error(error_msg)
+        raise
 
-    with rosters_file.open() as f:
-        rosters_data = json.load(f)
+    try:
+        with rosters_file.open() as f:
+            rosters_data = json.load(f)
+        logger.info("✅ Loaded rosters fixture: %d bytes", rosters_file.stat().st_size)
+    except json.JSONDecodeError as e:
+        error_msg = f"Invalid JSON in rosters fixture {rosters_file}: {e}"
+        logger.error(error_msg)
+        raise
 
+    num_standings = len(standings_data.get("standings", []))
+    num_rosters = len(rosters_data)
     logger.info(
-        "Loaded fixture data: %d teams, %d rosters",
-        len(standings_data.get("standings", [])),
-        len(rosters_data),
+        "✅ Fixture data loaded successfully: %d teams in standings, %d team rosters",
+        num_standings,
+        num_rosters,
     )
 
     return standings_data, rosters_data
@@ -441,8 +487,32 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 
         # Use fixture data in test mode, otherwise use live API
         if TEST_MODE:
-            logger.info("TEST_MODE enabled - using fixture data")
-            team_scores_dict, all_players_objects, failed_teams = _process_fixture_data(scorer)
+            logger.info("🧪 TEST_MODE enabled - using fixture data instead of live NHL API")
+            try:
+                team_scores_dict, all_players_objects, failed_teams = _process_fixture_data(scorer)
+                logger.info(
+                    "✅ Fixture processing complete: %d teams, %d players",
+                    len(team_scores_dict),
+                    len(all_players_objects),
+                )
+            except FileNotFoundError as e:
+                logger.error("❌ Fixture loading failed: %s", e)
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"TEST_MODE enabled but fixture data not found: {e}",
+                ) from e
+            except json.JSONDecodeError as e:
+                logger.error("❌ Fixture parsing failed: %s", e)
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"TEST_MODE enabled but fixture data is invalid JSON: {e}",
+                ) from e
+            except Exception as e:
+                logger.exception("❌ Unexpected error processing fixture data")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"TEST_MODE enabled but fixture processing failed: {e}",
+                ) from e
         else:
             with NHLApiClient() as client:
                 # Process all teams using TeamProcessor

@@ -363,7 +363,9 @@ max-complexity = 10
     "ANN401", # API response validation uses dict[str, Any]
 ]
 "src/nhl_scrabble/web/app.py" = [
-    "ANN401", # FastAPI/Pydantic response models use dict[str, Any]
+    "ANN401",  # FastAPI/Pydantic response models use dict[str, Any]
+    "C901",
+    "PLR0912",
 ]
 "src/nhl_scrabble/exporters/excel_exporter.py" = [
     "ANN401", # Excel export methods accept dict[str, Any] for flexibility
