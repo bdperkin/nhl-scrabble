@@ -105,17 +105,34 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
         result_dir = Path("test-results") / test_name
         result_dir.mkdir(parents=True, exist_ok=True)
 
+        # Debug: Print absolute paths
+        cwd = Path.cwd()
+        abs_result_dir = result_dir.resolve()
+        print("\n🔍 DEBUG: Saving diff images")
+        print(f"  CWD: {cwd}")
+        print(f"  Relative result_dir: {result_dir}")
+        print(f"  Absolute result_dir: {abs_result_dir}")
+        print(f"  Directory exists: {abs_result_dir.exists()}")
+
         # Save actual screenshot (what the test captured)
         actual_path = result_dir / name.replace(".png", "-actual.png")
         actual_path.write_bytes(img)
+        print(f"  Wrote actual: {actual_path.resolve()} (exists: {actual_path.exists()})")
 
         # Save baseline for easy comparison
         baseline_path = result_dir / name.replace(".png", "-baseline.png")
         baseline_image.save(baseline_path)
+        print(f"  Wrote baseline: {baseline_path.resolve()} (exists: {baseline_path.exists()})")
 
         # Save diff image (highlights differences)
         diff_path = result_dir / name.replace(".png", "-diff.png")
         diff_image.save(diff_path)
+        print(f"  Wrote diff: {diff_path.resolve()} (exists: {diff_path.exists()})")
+
+        # List all files in result_dir
+        if abs_result_dir.exists():
+            files = list(abs_result_dir.glob("*"))
+            print(f"  Files in directory: {[f.name for f in files]}")
 
         # Fail with detailed diagnostic info
         pytest.fail(
