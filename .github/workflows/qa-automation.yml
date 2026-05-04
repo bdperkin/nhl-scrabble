@@ -227,13 +227,27 @@ jobs:
                 --junit-xml=reports/visual-${{ matrix.browser }}.xml; \
               echo ''; \
               echo '🔍 DEBUG: Listing test-results INSIDE Docker container after pytest'; \
-              echo '  CWD: '$(pwd); \
+              echo '  CWD: '\$(pwd); \
+              echo '  Looking for test-results in CWD...'; \
               if [ -d test-results ]; then \
-                echo '  ✓ test-results exists'; \
-                find test-results -type f -name '*.png' | head -20 || echo '  No PNG files found'; \
-                ls -la test-results/ || true; \
+                echo '    ✓ test-results exists in CWD'; \
+                find test-results -type f -name '*.png' | head -5 || echo '    No PNG files'; \
               else \
-                echo '  ✗ test-results does NOT exist'; \
+                echo '    ✗ test-results does NOT exist in CWD'; \
+              fi; \
+              echo '  Looking for test-results at /work/...'; \
+              if [ -d /work/test-results ]; then \
+                echo '    ✓ /work/test-results exists!'; \
+                find /work/test-results -type f -name '*.png' | head -5 || echo '    No files'; \
+              else \
+                echo '    ✗ /work/test-results does NOT exist'; \
+              fi; \
+              echo '  Looking for test-results at /work/qa/web/...'; \
+              if [ -d /work/qa/web/test-results ]; then \
+                echo '    ✓ /work/qa/web/test-results exists!'; \
+                ls -la /work/qa/web/test-results/ | head -10; \
+              else \
+                echo '    ✗ /work/qa/web/test-results does NOT exist'; \
               fi"
         continue-on-error: true
 
