@@ -2,66 +2,85 @@
 
 # Source code changes
 python:
-  - '**/*.py'
+  - changed-files:
+      - any-glob-to-any-file: '**/*.py'
 
 # Documentation changes
 documentation:
-  - docs/**/*
-  - '**/*.md'
-  - README.md
-  - CONTRIBUTING.md
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/**/*'
+          - '**/*.md'
+          - 'README.md'
+          - 'CONTRIBUTING.md'
 
 # Testing changes
 testing:
-  - tests/**/*
-  - '**/*test*.py'
-  - pytest.ini
-  - conftest.py
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tests/**/*'
+          - '**/*test*.py'
+          - 'pytest.ini'
+          - 'conftest.py'
 
 # CI/CD changes
 ci/cd:
-  - .github/workflows/**
-  - .github/**/*.yml
-  - tox.ini
-  - .pre-commit-config.yaml
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+          - '.github/**/*.yml'
+          - 'tox.ini'
+          - '.pre-commit-config.yaml'
 
 # Configuration changes
 configuration:
-  - pyproject.toml
-  - setup.py
-  - setup.cfg
-  - '*.ini'
-  - '*.cfg'
-  - '*.toml'
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'pyproject.toml'
+          - 'setup.py'
+          - 'setup.cfg'
+          - '*.ini'
+          - '*.cfg'
+          - '*.toml'
 
 # Dependencies
 dependencies:
-  - pyproject.toml
-  - requirements*.txt
-  - uv.lock
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'pyproject.toml'
+          - 'requirements*.txt'
+          - 'uv.lock'
 
 # Web interface
 web:
-  - src/nhl_scrabble/web/**
-  - '**/*.html'
-  - '**/*.css'
-  - '**/*.js'
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/nhl_scrabble/web/**'
+          - '**/*.html'
+          - '**/*.css'
+          - '**/*.js'
 
 # API changes
 api:
-  - src/nhl_scrabble/api/**
+  - changed-files:
+      - any-glob-to-any-file: 'src/nhl_scrabble/api/**'
 
 # CLI changes
 cli:
-  - src/nhl_scrabble/cli.py
-  - src/nhl_scrabble/__main__.py
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/nhl_scrabble/cli.py'
+          - 'src/nhl_scrabble/__main__.py'
 
 # Security
 security:
-  - SECURITY.md
-  - .github/workflows/security.yml
-  - .github/workflows/codeql.yml
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'SECURITY.md'
+          - '.github/workflows/security.yml'
+          - '.github/workflows/codeql.yml'
 
 # Tasks
 tasks:
-  - tasks/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'tasks/**/*'
