@@ -261,6 +261,19 @@ NHL_SCRABBLE_VERBOSE=true
 - 45-minute timeout per browser, fail-fast disabled for complete coverage
 - 30-day artifact retention for debugging
 
+**PR Auto-Labeling Workflow:**
+
+- Automatically labels pull requests based on changes, title, and size
+- **Path-based labeling**: Labels added based on changed files (`.py` → `python`, `docs/` → `documentation`, etc.)
+- **Size labeling**: Adds size labels based on lines changed (XS: 0-10, S: 11-100, M: 101-500, L: 501-1000, XL: 1000+)
+- **Title-based labeling**: Recognizes conventional commit prefixes (`feat:` → `enhancement`, `fix:` → `bug`, etc.)
+- **Label synchronization**: Updates labels when PR is edited or synchronized
+- **Multiple labels**: Can apply multiple labels per PR for accurate categorization
+- Triggers: PRs opened, synchronized, reopened, or edited
+- Uses: `actions/labeler@v5` (path-based), `codelytv/pr-size-labeler@v1` (size), `actions/github-script@v7` (title)
+- Configuration: `.github/labeler.yml` for path-to-label mappings
+- Benefits: Consistent labeling, easier PR filtering, quick scope understanding
+
 ### Publishing
 
 Triggered by version tags (`v*`):

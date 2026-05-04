@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-05-01 (Updated after completing enhancement/044)
-**Total Tasks**: 26 active tasks
-**Estimated Total Effort**: 205.0 hours
+**Generated**: 2026-05-01 (Updated after completing new-features/035)
+**Total Tasks**: 25 active tasks
+**Estimated Total Effort**: 203.5 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -15,7 +15,7 @@ This file provides the **optimal** implementation order for all active tasks, ba
 
 - **HIGH Priority**: 0 tasks
 - **MEDIUM Priority**: 5 tasks (current sprint)
-- **LOW Priority**: 21 tasks (future backlog)
+- **LOW Priority**: 20 tasks (future backlog)
 
 **Recommendation**: Focus on MEDIUM priority tasks first, then LOW priority backlog.
 
@@ -72,11 +72,6 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 
 **Effort**: 5.5 hours | **Tasks**: 3
 **Focus**: Feature development and enhancements - schedule for future sprints
-
-```bash
-# PR Auto-Labeling Workflow
-/implement-task new-features/035-pr-auto-label-workflow.md  # 1.5h, Issue #302 [PARENT]
-```
 
 ```bash
 # PR Size Checker Workflow

@@ -465,11 +465,78 @@ Checklist before creating a PR:
 1. ✅ Commit messages are clear
 1. ✅ Branch is up-to-date with main
 
+### PR Title Conventions
+
+Use **conventional commit format** for PR titles. The automated labeling workflow uses PR titles to apply appropriate labels:
+
+```
+feat: Add new feature
+fix: Fix bug
+docs: Update documentation
+test: Add tests
+refactor: Refactor code
+perf: Performance improvement
+ci: CI/CD changes
+chore: Maintenance
+security: Security fix
+```
+
+**Examples:**
+
+```
+feat: Add interactive mode for CLI
+fix: Fix API 404 error handling
+docs: Update installation guide
+test: Add integration tests for caching
+refactor: Simplify report generation logic
+perf: Optimize Scrabble scoring algorithm
+ci: Add automated PR labeling workflow
+security: Fix XSS vulnerability in web interface
+```
+
+**Breaking Changes:**
+
+For breaking changes, use `!:` or include `breaking` in the title:
+
+```
+feat!: Change API response format (breaking)
+refactor: Major restructure (breaking change)
+```
+
+**Automated Labels:**
+
+The workflow automatically adds labels based on:
+
+- **PR Title**: `feat:` → `enhancement`, `fix:` → `bug`, `docs:` → `documentation`, etc.
+- **Changed Files**: `.py` → `python`, `docs/` → `documentation`, `tests/` → `testing`, etc.
+- **PR Size**: Lines changed → `size/XS`, `size/S`, `size/M`, `size/L`, `size/XL`
+
+**Label Reference:**
+
+| Label             | Applied When                                             |
+| ----------------- | -------------------------------------------------------- |
+| `enhancement`     | PR title starts with `feat:`/`feature:`                  |
+| `bug`             | PR title starts with `fix:`/`bugfix:`                    |
+| `documentation`   | PR title starts with `docs:`, `.md` files changed        |
+| `testing`         | PR title starts with `test:`, `tests/` files changed     |
+| `refactoring`     | PR title starts with `refactor:`                         |
+| `performance`     | PR title starts with `perf:`                             |
+| `ci/cd`           | PR title starts with `ci:`/`chore:`, `.github/` changed  |
+| `security`        | PR title starts with `security:`, security files changed |
+| `breaking-change` | Title includes `!:` or `breaking`                        |
+| `python`          | `.py` files changed                                      |
+| `size/XS`         | 0-10 lines changed                                       |
+| `size/S`          | 11-100 lines changed                                     |
+| `size/M`          | 101-500 lines changed                                    |
+| `size/L`          | 501-1000 lines changed                                   |
+| `size/XL`         | 1000+ lines changed                                      |
+
 ### Submitting
 
 1. Push your branch: `git push origin feature/your-feature-name`
 1. Create pull request on GitHub
 1. Fill out the PR template
+1. **Use conventional commit format for PR title** (see above for auto-labeling)
 1. Address review feedback
 
 See [docs/contributing/pull-requests.md](docs/contributing/pull-requests.md) for complete PR process, review criteria, Dependabot PR handling, and stale issue/PR policy.

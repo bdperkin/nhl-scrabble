@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 202 tasks (26 active, 176 completed)
+**Total Tasks**: 202 tasks (25 active, 177 completed)
 
 ## Overview
 
@@ -217,7 +217,7 @@ Each task includes:
 | 030 | Release Automation: Verification and Reporting Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#266](https://github.com/bdperkin/nhl-scrabble/issues/266) | PR [#471](https://github.com/bdperkin/nhl-scrabble/pull/471), completed 2026-04-30 |
 | 031 | Release Automation: Orchestration and CLI Interface | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#267](https://github.com/bdperkin/nhl-scrabble/issues/267) | PR [#472](https://github.com/bdperkin/nhl-scrabble/pull/472), completed 2026-04-30 |
 | 034 | Docker Container Build and Publish Workflow | LOW | 3-4 hours | Completed | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | - |
-| 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours | Completed | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | - |
+| 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | PR [#485](https://github.com/bdperkin/nhl-scrabble/pull/485), completed 2026-05-03 |
 | 036 | PR Size Checker Workflow | LOW | 1-2 hours | Completed | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | - |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | - |
 | 001 | Build Web Interface with FastAPI | MEDIUM | 16-24 hours (actual: <15 min (web interface already implemented, only needed task documentation)) | Completed | [#50](https://github.com/bdperkin/nhl-scrabble/issues/50) | completed 2026-04-26 |

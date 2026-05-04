@@ -1,0 +1,86 @@
+# Auto-label based on changed files
+
+# Source code changes
+python:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.py'
+
+# Documentation changes
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/**/*'
+          - '**/*.md'
+          - 'README.md'
+          - 'CONTRIBUTING.md'
+
+# Testing changes
+testing:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tests/**/*'
+          - '**/*test*.py'
+          - 'pytest.ini'
+          - 'conftest.py'
+
+# CI/CD changes
+ci/cd:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+          - '.github/**/*.yml'
+          - 'tox.ini'
+          - '.pre-commit-config.yaml'
+
+# Configuration changes
+configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'pyproject.toml'
+          - 'setup.py'
+          - 'setup.cfg'
+          - '*.ini'
+          - '*.cfg'
+          - '*.toml'
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'pyproject.toml'
+          - 'requirements*.txt'
+          - 'uv.lock'
+
+# Web interface
+web:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/nhl_scrabble/web/**'
+          - '**/*.html'
+          - '**/*.css'
+          - '**/*.js'
+
+# API changes
+api:
+  - changed-files:
+      - any-glob-to-any-file: 'src/nhl_scrabble/api/**'
+
+# CLI changes
+cli:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/nhl_scrabble/cli.py'
+          - 'src/nhl_scrabble/__main__.py'
+
+# Security
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'SECURITY.md'
+          - '.github/workflows/security.yml'
+          - '.github/workflows/codeql.yml'
+
+# Tasks
+tasks:
+  - changed-files:
+      - any-glob-to-any-file: 'tasks/**/*'
