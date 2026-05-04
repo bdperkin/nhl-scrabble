@@ -224,7 +224,17 @@ jobs:
               pytest -p no:cacheprovider tests/visual/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
-                --junit-xml=reports/visual-${{ matrix.browser }}.xml"
+                --junit-xml=reports/visual-${{ matrix.browser }}.xml; \
+              echo ''; \
+              echo '🔍 DEBUG: Listing test-results INSIDE Docker container after pytest'; \
+              echo '  CWD: '$(pwd); \
+              if [ -d test-results ]; then \
+                echo '  ✓ test-results exists'; \
+                find test-results -type f -name '*.png' | head -20 || echo '  No PNG files found'; \
+                ls -la test-results/ || true; \
+              else \
+                echo '  ✗ test-results does NOT exist'; \
+              fi"
         continue-on-error: true
 
       - name: Run performance tests
