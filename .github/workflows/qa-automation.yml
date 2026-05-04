@@ -302,6 +302,25 @@ jobs:
             rm server.pid
           fi
 
+      - name: Debug - List test-results directory
+        if: always()
+        run: |
+          echo "=== Checking for test-results directory ==="
+          if [[ -d "qa/web/test-results" ]]; then
+            echo "✓ test-results directory exists"
+            echo ""
+            echo "=== Directory structure ==="
+            find qa/web/test-results -type f -name "*.png" | head -20 || echo "No PNG files found"
+            echo ""
+            echo "=== Directory permissions ==="
+            ls -la qa/web/test-results/ || true
+          else
+            echo "✗ test-results directory does NOT exist"
+            echo ""
+            echo "=== Contents of qa/web/ ==="
+            ls -la qa/web/ || true
+          fi
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
