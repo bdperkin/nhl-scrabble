@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.15] - 2026-05-04
+
+### Added
+
+- (ci): Add PR size checker workflow (#486)
+- (ci): Add automated PR labeling workflow
+- (qa): Implement mocked NHL API data for deterministic visual tests (#479)
+
+### Fixed
+
+- (qa): Fix visual regression tests and Docker permissions
+- (deps): Add unidecode to Docker and QA dependencies
+- (deps): Add requests-cache to Docker and QA dependencies (#480)
+
+### Security
+
+- (deps): Fix CVE-2026-3219 by upgrading pip to 26.1 (#478)
+- CVE-2026-3219 fix available - pip 26.1 released
+
+### Documentation
+
+- (tasks): Mark task 036 as completed with implementation notes
+- (tasks): Mark task 044 as completed with implementation notes
+
+### Tests
+
+- (qa): Update visual baselines from CI workflow
+
 ## [0.0.14] - 2026-05-01
 
 ### Added
