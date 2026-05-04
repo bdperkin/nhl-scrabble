@@ -8,7 +8,9 @@ Provides fixtures and configuration specific to visual testing:
 """
 
 import json
-from collections.abc import Generator
+import sys
+from collections.abc import Callable, Generator
+from io import BytesIO
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -20,7 +22,112 @@ from pages.index_page import IndexPage
 from pages.playoffs_page import PlayoffsPage
 from pages.stats_page import StatsPage
 from pages.teams_page import TeamsPage
+from PIL import Image
+from pixelmatch.contrib.PIL import pixelmatch
 from playwright.sync_api import Page
+
+
+@pytest.fixture
+def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Callable:
+    """Enhanced snapshot comparison fixture that saves diff images on failure.
+
+    This fixture overrides pytest-playwright-snapshot's assert_snapshot to add
+    visual diff generation when snapshots don't match. When a test fails, it saves:
+    - actual.png: The screenshot that was captured
+    - baseline.png: The expected baseline screenshot
+    - diff.png: Visual diff highlighting pixel differences in red
+
+    Files are saved to test-results/{test_name}/ for artifact upload.
+
+    Args:
+        pytestconfig: Pytest config object
+        request: Pytest request object
+        browser_name: Name of the browser being tested
+
+    Returns:
+        Comparison function that asserts snapshot matches and saves diffs on failure
+    """
+
+    def compare(img: bytes, name: str, *, threshold: float = 0.1) -> None:
+        """Compare screenshot to baseline, generating diff images on failure.
+
+        Args:
+            img: Screenshot bytes to compare
+            name: Snapshot filename
+            threshold: Pixel difference threshold (0.0-1.0)
+
+        Raises:
+            pytest.fail: If baseline doesn't exist
+            AssertionError: If snapshots don't match
+        """
+        update_snapshot = pytestconfig.getoption("--update-snapshots")
+
+        # Determine snapshot path (matches pytest-playwright-snapshot behavior)
+        filepath = (
+            Path(request.node.fspath).parent.resolve()
+            / "__snapshots__"
+            / browser_name
+            / sys.platform
+        )
+        filepath.mkdir(parents=True, exist_ok=True)
+        file = filepath / name
+
+        # Update mode: save new baseline
+        if update_snapshot:
+            file.write_bytes(img)
+            return
+
+        # Baseline doesn't exist
+        if not file.exists():
+            pytest.fail(f"Snapshot not found: {file}, use --update-snapshots to create it.")
+
+        # Load images for comparison
+        actual_image = Image.open(BytesIO(img))
+        baseline_image = Image.open(file)
+
+        # Create diff image (same size as actual)
+        diff_image = Image.new("RGBA", actual_image.size)
+
+        # Compare images using pixelmatch
+        diff_pixels = pixelmatch(
+            actual_image,
+            baseline_image,
+            diff_image,
+            threshold=threshold,
+        )
+
+        # If snapshots match, we're done
+        if diff_pixels == 0:
+            return
+
+        # Snapshots don't match - save diagnostic images for debugging
+        test_name = request.node.name.replace("[", "-").replace("]", "")
+        result_dir = Path("test-results") / test_name
+        result_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save actual screenshot (what the test captured)
+        actual_path = result_dir / name.replace(".png", "-actual.png")
+        actual_path.write_bytes(img)
+
+        # Save baseline for easy comparison
+        baseline_path = result_dir / name.replace(".png", "-baseline.png")
+        baseline_image.save(baseline_path)
+
+        # Save diff image (highlights differences)
+        diff_path = result_dir / name.replace(".png", "-diff.png")
+        diff_image.save(diff_path)
+
+        # Fail with detailed diagnostic info
+        pytest.fail(
+            f"Snapshots does not match\n"
+            f"  Diff pixels: {diff_pixels}\n"
+            f"  Threshold: {threshold}\n"
+            f"  Actual: {actual_path}\n"
+            f"  Baseline: {baseline_path}\n"
+            f"  Diff: {diff_path}",
+        )
+
+    return compare
 
 
 @pytest.fixture(scope="session")

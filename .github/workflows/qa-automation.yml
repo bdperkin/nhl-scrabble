@@ -158,6 +158,11 @@ jobs:
           touch qa/web/reports/accessibility-${{ matrix.browser }}.html
           chmod -R a+w qa/web/reports/
 
+          # Create test-results directory for visual diff screenshots
+          # Enhanced assert_snapshot fixture saves actual/baseline/diff images here on failure
+          mkdir -p qa/web/test-results
+          chmod -R 777 qa/web/test-results
+
       - name: Run functional tests
         id: functional-tests
         if: |
