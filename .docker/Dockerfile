@@ -37,7 +37,8 @@ RUN pip install --no-cache-dir \
     pytest-playwright>=0.7.2 \
     pytest-playwright-snapshot>=1 \
     pytest-xdist>=3.8 \
-    requests-cache>=1.3.1
+    requests-cache>=1.3.1 \
+    unidecode>=1.3.0
 
 # Install system dependencies for browsers (requires root)
 # This installs all OS packages needed for chromium, firefox, and webkit
