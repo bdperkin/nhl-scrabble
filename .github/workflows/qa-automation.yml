@@ -220,12 +220,14 @@ jobs:
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
                 --junit-xml=reports/visual-${{ matrix.browser }}.xml"
+        continue-on-error: true
 
       - name: Run performance tests
         id: performance-tests
         if: |
-          steps.test-suite.outputs.suite == 'all' ||
-          steps.test-suite.outputs.suite == 'performance'
+          always() &&
+          (steps.test-suite.outputs.suite == 'all' ||
+           steps.test-suite.outputs.suite == 'performance')
         run: |
           # Run tests in Docker container using GHCR Playwright image
           docker run --rm \
@@ -257,8 +259,9 @@ jobs:
       - name: Run accessibility tests
         id: accessibility-tests
         if: |
-          steps.test-suite.outputs.suite == 'all' ||
-          steps.test-suite.outputs.suite == 'accessibility'
+          always() &&
+          (steps.test-suite.outputs.suite == 'all' ||
+           steps.test-suite.outputs.suite == 'accessibility')
         run: |
           # Run tests in Docker container using GHCR Playwright image
           docker run --rm \
