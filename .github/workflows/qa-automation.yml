@@ -225,30 +225,15 @@ jobs:
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
                 --junit-xml=reports/visual-${{ matrix.browser }}.xml; \
-              echo ''; \
-              echo '🔍 DEBUG: Listing test-results INSIDE Docker container after pytest'; \
-              echo '  CWD: '\$(pwd); \
-              echo '  Looking for test-results in CWD...'; \
-              if [ -d test-results ]; then \
-                echo '    ✓ test-results exists in CWD'; \
-                find test-results -type f -name '*.png' | head -5 || echo '    No PNG files'; \
+              TEST_EXIT_CODE=\$?; \
+              if [ -d test-results ] && [ \"\$(ls -A test-results 2>/dev/null)\" ]; then \
+                echo '✅ Visual test-results found - setting permissions for host access'; \
+                chmod -R 777 test-results/; \
+                ls -la test-results/; \
               else \
-                echo '    ✗ test-results does NOT exist in CWD'; \
+                echo 'ℹ️  No visual test-results directory or empty (all tests passed)'; \
               fi; \
-              echo '  Looking for test-results at /work/...'; \
-              if [ -d /work/test-results ]; then \
-                echo '    ✓ /work/test-results exists!'; \
-                find /work/test-results -type f -name '*.png' | head -5 || echo '    No files'; \
-              else \
-                echo '    ✗ /work/test-results does NOT exist'; \
-              fi; \
-              echo '  Looking for test-results at /work/qa/web/...'; \
-              if [ -d /work/qa/web/test-results ]; then \
-                echo '    ✓ /work/qa/web/test-results exists!'; \
-                ls -la /work/qa/web/test-results/ | head -10; \
-              else \
-                echo '    ✗ /work/qa/web/test-results does NOT exist'; \
-              fi"
+              exit \$TEST_EXIT_CODE"
         continue-on-error: true
 
       - name: Run performance tests
