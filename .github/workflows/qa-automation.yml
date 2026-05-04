@@ -158,10 +158,9 @@ jobs:
           touch qa/web/reports/accessibility-${{ matrix.browser }}.html
           chmod -R a+w qa/web/reports/
 
-          # Create test-results directory for visual diff screenshots
-          # Enhanced assert_snapshot fixture saves actual/baseline/diff images here on failure
-          mkdir -p qa/web/test-results
-          chmod -R 777 qa/web/test-results
+          # NOTE: Do NOT pre-create qa/web/test-results/
+          # Pre-creating it prevents Docker from syncing subdirectories to the volume mount.
+          # Let Docker create it fresh so files properly persist to the host.
 
       - name: Run functional tests
         id: functional-tests
