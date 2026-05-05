@@ -57,9 +57,22 @@ class BasePage:
         # Wait for fonts to fully load for consistent visual rendering
         self.page.evaluate("() => document.fonts.ready")
 
-        # Additional small delay to ensure font metrics are fully calculated
-        # This helps prevent chromium/firefox font rendering variations
-        self.page.wait_for_timeout(100)
+        # Wait for layout to stabilize after font loading
+        # Use double requestAnimationFrame to ensure layout is fully painted
+        # This is critical for chromium viewport screenshots which can capture mid-reflow
+        self.page.evaluate("""
+            () => new Promise(resolve => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        resolve();
+                    });
+                });
+            })
+        """)
+
+        # Additional delay to ensure all layout calculations complete
+        # Chromium needs more time for flexbox/grid layout stabilization in viewport mode
+        self.page.wait_for_timeout(200)
 
     def wait_for_selector(self, selector: str, timeout: int = 10000) -> None:
         """Wait for element matching selector to appear.
