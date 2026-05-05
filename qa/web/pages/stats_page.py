@@ -24,6 +24,38 @@ class StatsPage(BasePage):
         """Navigate to the stats page."""
         super().navigate(self.url)
 
+    def wait_for_load(self) -> None:
+        """Wait for stats page to fully load, including charts.
+
+        Waits for:
+        - Network idle
+        - Chart canvases to be present
+        - Chart.js to finish rendering
+        """
+        # Wait for network idle first
+        super().wait_for_load("networkidle")
+
+        # Wait for both chart canvases to be present
+        self.page.wait_for_selector("#teamScoresChart", state="attached", timeout=10000)
+        self.page.wait_for_selector("#playerDistributionChart", state="attached", timeout=10000)
+
+        # Wait for Chart.js to finish rendering (check that canvas has non-zero dimensions)
+        self.page.wait_for_function(
+            """
+            () => {
+                const teamChart = document.getElementById('teamScoresChart');
+                const playerChart = document.getElementById('playerDistributionChart');
+                return teamChart && playerChart &&
+                       teamChart.width > 0 && teamChart.height > 0 &&
+                       playerChart.width > 0 && playerChart.height > 0;
+            }
+        """,
+            timeout=10000,
+        )
+
+        # Small additional delay to ensure fonts are fully rendered
+        self.page.wait_for_timeout(500)
+
     def get_page_title(self) -> str:
         """Get the page title/header.
 
