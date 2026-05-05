@@ -102,7 +102,7 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
 
         # Snapshots don't match - save diagnostic images for debugging
         test_name = request.node.name.replace("[", "-").replace("]", "")
-        result_dir = Path("test-results") / test_name
+        result_dir = Path("reports") / "visual-diffs" / browser_name / test_name
         result_dir.mkdir(parents=True, exist_ok=True)
 
         # Debug: Print absolute paths

@@ -156,11 +156,11 @@ jobs:
           touch qa/web/reports/benchmark-${{ matrix.browser }}.json
           touch qa/web/reports/accessibility-${{ matrix.browser }}.xml
           touch qa/web/reports/accessibility-${{ matrix.browser }}.html
-          chmod -R a+w qa/web/reports/
 
-          # NOTE: Do NOT pre-create qa/web/test-results/
-          # Pre-creating it prevents Docker from syncing subdirectories to the volume mount.
-          # Let Docker create it fresh so files properly persist to the host.
+          # Pre-create visual-diffs directory for custom assert_snapshot fixture
+          # The fixture saves diff images directly to reports/visual-diffs/{browser}/{test}/
+          mkdir -p qa/web/reports/visual-diffs
+          chmod -R a+w qa/web/reports/
 
       - name: Run functional tests
         id: functional-tests
@@ -223,16 +223,7 @@ jobs:
               pytest -p no:cacheprovider tests/visual/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
-                --junit-xml=reports/visual-${{ matrix.browser }}.xml; \
-              TEST_EXIT=\$?; \
-              if [ -d test-results ] && [ \"\$(ls -A test-results 2>/dev/null)\" ]; then \
-                echo '📦 Copying visual diffs to reports/ for host access'; \
-                DEST='reports/visual-diffs-${{ matrix.browser }}'; \
-                mkdir -p \$DEST; \
-                cp -r test-results/* \$DEST/ 2>/dev/null || true; \
-                ls -la \$DEST/ | head -20; \
-              fi; \
-              exit \$TEST_EXIT"
+                --junit-xml=reports/visual-${{ matrix.browser }}.xml"
         continue-on-error: true
 
       - name: Run performance tests
@@ -310,23 +301,24 @@ jobs:
             rm server.pid
           fi
 
-      - name: Debug - List test-results directory
+      - name: Debug - List visual diffs directory
         if: always()
         run: |
-          echo "=== Checking for test-results directory ==="
-          if [[ -d "qa/web/test-results" ]]; then
-            echo "✓ test-results directory exists"
+          echo "=== Checking for visual-diffs directory ==="
+          if [[ -d "qa/web/reports/visual-diffs" ]]; then
+            echo "✓ visual-diffs directory exists"
             echo ""
             echo "=== Directory structure ==="
-            find qa/web/test-results -type f -name "*.png" | head -20 || echo "No PNG files found"
+            find qa/web/reports/visual-diffs -type f -name "*.png" | head -20 || \
+              echo "No PNG files found"
             echo ""
             echo "=== Directory permissions ==="
-            ls -la qa/web/test-results/ || true
+            ls -la qa/web/reports/visual-diffs/ || true
           else
-            echo "✗ test-results directory does NOT exist"
+            echo "✗ visual-diffs directory does NOT exist"
             echo ""
-            echo "=== Contents of qa/web/ ==="
-            ls -la qa/web/ || true
+            echo "=== Contents of qa/web/reports/ ==="
+            ls -la qa/web/reports/ || true
           fi
 
       - name: Upload test reports
@@ -346,9 +338,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-${{ matrix.browser }}
-          path: |
-            qa/web/screenshots/**/*.png
-            qa/web/test-results/**/*.png
+          path: qa/web/screenshots/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
@@ -360,7 +350,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-diffs-${{ matrix.browser }}
-          path: qa/web/reports/visual-diffs-${{ matrix.browser }}/**/*.png
+          path: qa/web/reports/visual-diffs/${{ matrix.browser }}/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
