@@ -312,16 +312,34 @@ input[type="checkbox"] {
     text-align: center;
 }
 
+.stat-card h4 {
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    font-family: var(--font-family-heading);
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+}
+
 .stat-value {
     font-size: 2rem;
     font-weight: 700;
     color: var(--color-primary);
+    line-height: 1.2;
+    margin: 0;
+    font-family: var(--font-family-heading);
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
 }
 
 .stat-detail {
     font-size: 0.9rem;
     color: var(--color-gray);
     margin-top: var(--spacing-xs);
+    margin-bottom: 0;
+    line-height: 1.4;
+    font-family: var(--font-family-base);
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* ===== Info Section ===== */
