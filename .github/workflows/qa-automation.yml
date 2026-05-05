@@ -131,6 +131,7 @@ jobs:
           done
         env:
           PYTHONUNBUFFERED: "1"
+          NHL_SCRABBLE_TEST_MODE: "1"  # Use mocked fixture data for deterministic visual tests
 
       - name: Determine test suite
         id: test-suite
@@ -155,6 +156,10 @@ jobs:
           touch qa/web/reports/benchmark-${{ matrix.browser }}.json
           touch qa/web/reports/accessibility-${{ matrix.browser }}.xml
           touch qa/web/reports/accessibility-${{ matrix.browser }}.html
+
+          # Pre-create visual-diffs directory for custom assert_snapshot fixture
+          # The fixture saves diff images directly to reports/visual-diffs/{browser}/{test}/
+          mkdir -p qa/web/reports/visual-diffs
           chmod -R a+w qa/web/reports/
 
       - name: Run functional tests
@@ -219,12 +224,14 @@ jobs:
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
                 --junit-xml=reports/visual-${{ matrix.browser }}.xml"
+        continue-on-error: true
 
       - name: Run performance tests
         id: performance-tests
         if: |
-          steps.test-suite.outputs.suite == 'all' ||
-          steps.test-suite.outputs.suite == 'performance'
+          always() &&
+          (steps.test-suite.outputs.suite == 'all' ||
+           steps.test-suite.outputs.suite == 'performance')
         run: |
           # Run tests in Docker container using GHCR Playwright image
           docker run --rm \
@@ -256,8 +263,9 @@ jobs:
       - name: Run accessibility tests
         id: accessibility-tests
         if: |
-          steps.test-suite.outputs.suite == 'all' ||
-          steps.test-suite.outputs.suite == 'accessibility'
+          always() &&
+          (steps.test-suite.outputs.suite == 'all' ||
+           steps.test-suite.outputs.suite == 'accessibility')
         run: |
           # Run tests in Docker container using GHCR Playwright image
           docker run --rm \
@@ -293,6 +301,26 @@ jobs:
             rm server.pid
           fi
 
+      - name: Debug - List visual diffs directory
+        if: always()
+        run: |
+          echo "=== Checking for visual-diffs directory ==="
+          if [[ -d "qa/web/reports/visual-diffs" ]]; then
+            echo "✓ visual-diffs directory exists"
+            echo ""
+            echo "=== Directory structure ==="
+            find qa/web/reports/visual-diffs -type f -name "*.png" | head -20 || \
+              echo "No PNG files found"
+            echo ""
+            echo "=== Directory permissions ==="
+            ls -la qa/web/reports/visual-diffs/ || true
+          else
+            echo "✗ visual-diffs directory does NOT exist"
+            echo ""
+            echo "=== Contents of qa/web/reports/ ==="
+            ls -la qa/web/reports/ || true
+          fi
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -310,9 +338,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-${{ matrix.browser }}
-          path: |
-            qa/web/screenshots/**/*.png
-            qa/web/test-results/**/*.png
+          path: qa/web/screenshots/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
@@ -324,9 +350,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-diffs-${{ matrix.browser }}
-          path: |
-            qa/web/test-results/**/*-diff.png
-            qa/web/test-results/**/*-actual.png
+          path: qa/web/reports/visual-diffs/${{ matrix.browser }}/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 

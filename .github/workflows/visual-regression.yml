@@ -103,6 +103,7 @@ jobs:
           done
         env:
           PYTHONUNBUFFERED: "1"
+          NHL_SCRABBLE_TEST_MODE: "1"  # Use mocked fixture data for deterministic visual tests
 
       - name: Prepare test output directory
         run: |
@@ -110,6 +111,16 @@ jobs:
           mkdir -p qa/web
           touch qa/web/visual-${{ matrix.browser }}-results.xml
           chmod 666 qa/web/visual-${{ matrix.browser }}-results.xml
+
+          # Create snapshot directory with correct permissions for Docker
+          # This allows the Docker container (running as pwuser) to write baseline screenshots
+          mkdir -p qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/linux
+          chmod -R 777 qa/web/tests/visual/__snapshots__
+
+          # Create reports/visual-diffs directory for visual diff screenshots
+          # Enhanced assert_snapshot fixture saves actual/baseline/diff images here on failure
+          mkdir -p qa/web/reports/visual-diffs
+          chmod -R 777 qa/web/reports/visual-diffs
 
       - name: Run visual regression tests
         id: visual-tests
@@ -174,9 +185,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-diffs-${{ matrix.browser }}
-          path: |
-            qa/web/test-results/**/*-diff.png
-            qa/web/test-results/**/*-actual.png
+          path: qa/web/reports/visual-diffs/${{ matrix.browser }}/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 

@@ -96,7 +96,7 @@ email = "bdperkin@gmail.com"
 text = "MIT"
 [project.optional-dependencies]
 test = [
-    "beautifulsoup4>=4.14.3",
+    "beautifulsoup4",
     "diff-cover>=10.2.0",
     "pytest>=9.0.3",
     "pytest-benchmark>=5.2.3",
@@ -363,7 +363,9 @@ max-complexity = 10
     "ANN401", # API response validation uses dict[str, Any]
 ]
 "src/nhl_scrabble/web/app.py" = [
-    "ANN401", # FastAPI/Pydantic response models use dict[str, Any]
+    "ANN401",  # FastAPI/Pydantic response models use dict[str, Any]
+    "C901",
+    "PLR0912",
 ]
 "src/nhl_scrabble/exporters/excel_exporter.py" = [
     "ANN401", # Excel export methods accept dict[str, Any] for flexibility
@@ -434,6 +436,7 @@ per-file-ignores = [
     "src/nhl_scrabble/validators.py:C901",
     "src/nhl_scrabble/cli.py:TC003,C901",
     "src/nhl_scrabble/config_validators.py:C901",
+    "src/nhl_scrabble/web/app.py:C901",
     "scripts/update_dependencies.py:C901",
 ]
 max-complexity = 10

@@ -100,11 +100,14 @@ function createTeamScoresChart(teams, canvasId = 'teamScoresChart') {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            devicePixelRatio: 1,  // Force consistent pixel ratio for visual tests
+            animation: false,  // Disable animations for deterministic rendering
             plugins: {
                 title: {
                     display: true,
                     text: 'NHL Teams by Scrabble Score',
                     font: {
+                        family: 'system-ui, -apple-system, sans-serif',
                         size: 18,
                         weight: 'bold'
                     }
@@ -129,13 +132,29 @@ function createTeamScoresChart(teams, canvasId = 'teamScoresChart') {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Total Scrabble Score'
+                        text: 'Total Scrabble Score',
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Team'
+                        text: 'Team',
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
                     }
                 }
             }
@@ -208,11 +227,14 @@ function createPlayerDistributionChart(players, canvasId = 'playerDistributionCh
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            devicePixelRatio: 1,  // Force consistent pixel ratio for visual tests
+            animation: false,  // Disable animations for deterministic rendering
             plugins: {
                 title: {
                     display: true,
                     text: 'Player Score Distribution',
                     font: {
+                        family: 'system-ui, -apple-system, sans-serif',
                         size: 18,
                         weight: 'bold'
                     }
@@ -230,17 +252,31 @@ function createPlayerDistributionChart(players, canvasId = 'playerDistributionCh
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Number of Players'
+                        text: 'Number of Players',
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
                     },
                     ticks: {
                         stepSize: 10,
-                        precision: 0
+                        precision: 0,
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Score Range'
+                        text: 'Score Range',
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            family: 'system-ui, -apple-system, sans-serif'
+                        }
                     }
                 }
             }

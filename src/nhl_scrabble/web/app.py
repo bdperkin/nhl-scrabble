@@ -6,8 +6,10 @@ results via browser instead of CLI.
 
 from __future__ import annotations
 
+import json
 import logging
 import operator
+import os
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any
@@ -108,6 +110,190 @@ if TEMPLATES_DIR.exists():
 
 # Cache storage (in-memory for now)
 _analysis_cache: dict[str, dict[str, Any]] = {}
+
+# Test mode: Use mocked data from fixtures instead of live NHL API
+TEST_MODE = os.getenv("NHL_SCRABBLE_TEST_MODE", "0") == "1"
+
+# Log TEST_MODE status at module initialization
+if TEST_MODE:
+    logger.warning(
+        "⚠️  TEST_MODE ENABLED - Server will use fixture data instead of live NHL API. "
+        "Set NHL_SCRABBLE_TEST_MODE=0 to disable.",
+    )
+else:
+    logger.info("TEST_MODE disabled - Server will use live NHL API")
+
+
+def _load_fixture_data() -> tuple[dict[str, Any], dict[str, Any]]:
+    """Load NHL API fixture data from JSON files for test mode.
+
+    Returns:
+        Tuple of (standings_data, rosters_data)
+
+    Raises:
+        FileNotFoundError: If fixture files not found
+        json.JSONDecodeError: If fixture files are invalid JSON
+    """
+    # Get current working directory for debugging
+    cwd = Path.cwd()
+    logger.info("Current working directory: %s", cwd)
+
+    # Look for fixtures in common locations
+    fixture_paths = [
+        Path("qa/web/tests/visual/fixtures"),  # CI and local (from project root)
+        Path(__file__).parent.parent.parent.parent
+        / "qa/web/tests/visual/fixtures",  # Relative to this file
+        cwd / "qa/web/tests/visual/fixtures",  # Explicit from CWD
+    ]
+
+    logger.info("Searching for fixture directory in %d locations:", len(fixture_paths))
+    for i, path in enumerate(fixture_paths, 1):
+        resolved = path.resolve()
+        exists = path.exists()
+        logger.info("  %d. %s (resolved: %s, exists: %s)", i, path, resolved, exists)
+
+    fixture_dir = None
+    for path in fixture_paths:
+        if path.exists():
+            fixture_dir = path
+            logger.info("✅ Found fixture directory: %s", fixture_dir.resolve())
+            break
+
+    if fixture_dir is None:
+        error_msg = (
+            f"Fixture directory not found. CWD: {cwd}. "
+            f"Tried: {[str(p.resolve()) for p in fixture_paths]}"
+        )
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
+
+    standings_file = fixture_dir / "nhl_standings.json"
+    rosters_file = fixture_dir / "nhl_rosters.json"
+
+    logger.info("Looking for fixture files:")
+    logger.info("  - Standings: %s (exists: %s)", standings_file, standings_file.exists())
+    logger.info("  - Rosters: %s (exists: %s)", rosters_file, rosters_file.exists())
+
+    if not standings_file.exists():
+        error_msg = f"Standings fixture not found: {standings_file.resolve()}"
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
+    if not rosters_file.exists():
+        error_msg = f"Rosters fixture not found: {rosters_file.resolve()}"
+        logger.error(error_msg)
+        raise FileNotFoundError(error_msg)
+
+    try:
+        with standings_file.open() as f:
+            standings_data = json.load(f)
+        logger.info("✅ Loaded standings fixture: %d bytes", standings_file.stat().st_size)
+    except json.JSONDecodeError as e:
+        error_msg = f"Invalid JSON in standings fixture {standings_file}: {e}"
+        logger.error(error_msg)
+        raise
+
+    try:
+        with rosters_file.open() as f:
+            rosters_data = json.load(f)
+        logger.info("✅ Loaded rosters fixture: %d bytes", rosters_file.stat().st_size)
+    except json.JSONDecodeError as e:
+        error_msg = f"Invalid JSON in rosters fixture {rosters_file}: {e}"
+        logger.error(error_msg)
+        raise
+
+    num_standings = len(standings_data.get("standings", []))
+    num_rosters = len(rosters_data)
+    logger.info(
+        "✅ Fixture data loaded successfully: %d teams in standings, %d team rosters",
+        num_standings,
+        num_rosters,
+    )
+
+    return standings_data, rosters_data
+
+
+def _process_fixture_data(
+    scorer: ScrabbleScorer,
+) -> tuple[dict[str, TeamScore], list[PlayerScore], list[str]]:
+    """Process fixture data the same way as TeamProcessor would process live API data.
+
+    Args:
+        scorer: ScrabbleScorer instance
+
+    Returns:
+        Tuple of (team_scores_dict, all_players, failed_teams)
+    """
+    standings_data, rosters_data = _load_fixture_data()
+
+    team_scores: dict[str, TeamScore] = {}
+    all_players: list[PlayerScore] = []
+    failed_teams: list[str] = []
+
+    # Extract team metadata from standings
+    teams_info: dict[str, dict[str, str]] = {}
+    for team in standings_data.get("standings", []):
+        team_abbrev = team["teamAbbrev"]["default"]
+        teams_info[team_abbrev] = {
+            "name": team.get("teamName", {}).get("default", team_abbrev),
+            "division": team.get("divisionName", "Unknown"),
+            "conference": team.get("conferenceName", "Unknown"),
+        }
+
+    # Process each team's roster
+    for team_abbrev, team_info in teams_info.items():
+        if team_abbrev not in rosters_data:
+            logger.warning("No roster data for team: %s", team_abbrev)
+            failed_teams.append(team_abbrev)
+            continue
+
+        roster = rosters_data[team_abbrev]
+        team_players: list[PlayerScore] = []
+
+        # Process all positions
+        for position_group in ("forwards", "defensemen", "goalies"):
+            for player_data in roster.get(position_group, []):
+                first_name = player_data.get("firstName", {}).get("default", "")
+                last_name = player_data.get("lastName", {}).get("default", "")
+
+                if not first_name or not last_name:
+                    continue
+
+                # Calculate scores
+                first_score = scorer.calculate_score(first_name)
+                last_score = scorer.calculate_score(last_name)
+                full_name = f"{first_name} {last_name}"
+                full_score = first_score + last_score
+
+                player = PlayerScore(
+                    first_name=first_name,
+                    last_name=last_name,
+                    full_name=full_name,
+                    first_score=first_score,
+                    last_score=last_score,
+                    full_score=full_score,
+                    team=team_abbrev,
+                    division=team_info["division"],
+                    conference=team_info["conference"],
+                )
+                team_players.append(player)
+                all_players.append(player)
+
+        # Create TeamScore
+        if team_players:
+            total_score = sum(p.full_score for p in team_players)
+            team_score = TeamScore(
+                abbrev=team_abbrev,
+                name=team_info["name"],
+                total=total_score,
+                players=team_players,
+                division=team_info["division"],
+                conference=team_info["conference"],
+            )
+            team_scores[team_abbrev] = team_score
+
+    logger.info("Processed %d teams with %d total players", len(team_scores), len(all_players))
+
+    return team_scores, all_players, failed_teams
 
 
 class AnalysisRequest(BaseModel):
@@ -297,97 +483,130 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
 
     # Run analysis
     try:
-        with NHLApiClient() as client:
-            # Process all teams using TeamProcessor
-            scorer = ScrabbleScorer()
-            team_processor = TeamProcessor(client, scorer)
-            team_scores_dict, all_players_objects, failed_teams = team_processor.process_all_teams()
+        scorer = ScrabbleScorer()
 
-            # Log failed teams
-            if failed_teams:
-                logger.warning("Failed to fetch %d teams: %s", len(failed_teams), failed_teams)
+        # Use fixture data in test mode, otherwise use live API
+        if TEST_MODE:
+            logger.info("🧪 TEST_MODE enabled - using fixture data instead of live NHL API")
+            try:
+                team_scores_dict, all_players_objects, failed_teams = _process_fixture_data(scorer)
+                logger.info(
+                    "✅ Fixture processing complete: %d teams, %d players",
+                    len(team_scores_dict),
+                    len(all_players_objects),
+                )
+            except FileNotFoundError as e:
+                logger.error("❌ Fixture loading failed: %s", e)
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"TEST_MODE enabled but fixture data not found: {e}",
+                ) from e
+            except json.JSONDecodeError as e:
+                logger.error("❌ Fixture parsing failed: %s", e)
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"TEST_MODE enabled but fixture data is invalid JSON: {e}",
+                ) from e
+            except Exception as e:
+                logger.exception("❌ Unexpected error processing fixture data")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"TEST_MODE enabled but fixture processing failed: {e}",
+                ) from e
+        else:
+            with NHLApiClient() as client:
+                # Process all teams using TeamProcessor
+                team_processor = TeamProcessor(client, scorer)
+                team_scores_dict, all_players_objects, failed_teams = (
+                    team_processor.process_all_teams()
+                )
 
-            # Convert player objects to dicts and sort by score
-            all_players = _convert_players_to_dict(all_players_objects)
-            all_players.sort(key=operator.itemgetter("score"), reverse=True)
+        # Log failed teams
+        if failed_teams:
+            logger.warning("Failed to fetch %d teams: %s", len(failed_teams), failed_teams)
 
-            # Calculate playoff standings
-            playoff_calc = PlayoffCalculator()
-            playoff_standings = playoff_calc.calculate_playoff_standings(team_scores_dict)
+        # Convert player objects to dicts and sort by score
+        all_players = _convert_players_to_dict(all_players_objects)
+        all_players.sort(key=operator.itemgetter("score"), reverse=True)
 
-            # Convert team scores to dict format for response
-            teams_data = _convert_teams_to_dict(team_scores_dict, request.top_team_players)
+        # Calculate playoff standings
+        playoff_calc = PlayoffCalculator()
+        playoff_standings = playoff_calc.calculate_playoff_standings(team_scores_dict)
 
-            # Group by division and conference
-            divisions, conferences = _group_teams_by_grouping(teams_data)
+        # Convert team scores to dict format for response
+        teams_data = _convert_teams_to_dict(team_scores_dict, request.top_team_players)
 
-            # Calculate stats
-            total_score: int | float = (
-                sum(int(p["score"]) for p in all_players) if all_players else 0
-            )
+        # Group by division and conference
+        divisions, conferences = _group_teams_by_grouping(teams_data)
 
-            # Get highest player's team name
-            highest_player_team_name = None
-            if all_players:
-                highest_player_abbrev = all_players[0]["team"]
-                for team in teams_data:
-                    if team["abbrev"] == highest_player_abbrev:
-                        highest_player_team_name = team["name"]
-                        break
+        # Calculate stats
+        total_score: int | float = sum(int(p["score"]) for p in all_players) if all_players else 0
 
-            stats = {
-                "total_players": len(all_players),
-                "total_teams": len(teams_data),
-                "highest_score": all_players[0]["score"] if all_players else 0,
-                "highest_player_name": all_players[0]["full_name"] if all_players else None,
-                "highest_player_team": highest_player_team_name,
-                "lowest_score": all_players[-1]["score"] if all_players else 0,
-                "avg_score": total_score / len(all_players) if all_players else 0,
-                "highest_team": teams_data[0]["abbrev"] if teams_data else None,
-                "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
-                "highest_team_name": teams_data[0]["name"] if teams_data else None,
-                "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
-                "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
-            }
+        # Get highest player's team name
+        highest_player_team_name = None
+        if all_players:
+            highest_player_abbrev = all_players[0]["team"]
+            for team in teams_data:
+                if team["abbrev"] == highest_player_abbrev:
+                    highest_player_team_name = team["name"]
+                    break
 
-            # Convert playoff standings to dict format
-            playoff_bracket = {}
-            for conference, teams in playoff_standings.items():
-                playoff_bracket[conference] = [
-                    {
-                        "abbrev": team.abbrev,
-                        "total": team.total,
-                        "players": team.players,
-                        "avg": team.avg,
-                        "conference": team.conference,
-                        "division": team.division,
-                        "status_indicator": team.status_indicator,
-                        "seed_type": team.seed_type,
-                        "in_playoffs": team.in_playoffs,
-                        "division_rank": team.division_rank,
-                    }
-                    for team in teams
-                ]
+        stats = {
+            "total_players": len(all_players),
+            "total_teams": len(teams_data),
+            "highest_score": all_players[0]["score"] if all_players else 0,
+            "highest_player_name": all_players[0]["full_name"] if all_players else None,
+            "highest_player_team": highest_player_team_name,
+            "lowest_score": all_players[-1]["score"] if all_players else 0,
+            "avg_score": total_score / len(all_players) if all_players else 0,
+            "highest_team": teams_data[0]["abbrev"] if teams_data else None,
+            "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
+            "highest_team_name": teams_data[0]["name"] if teams_data else None,
+            "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
+            "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
+        }
 
-            # Build response
-            result = {
-                "timestamp": datetime.now(UTC).isoformat(),
-                "cache_hit": False,
-                "top_players": all_players[: request.top_players],
-                "team_standings": teams_data,
-                "division_standings": divisions,
-                "conference_standings": conferences,
-                "playoff_bracket": playoff_bracket,
-                "stats": stats,
-            }
+        # Convert playoff standings to dict format
+        playoff_bracket = {}
+        for conference, teams in playoff_standings.items():
+            playoff_bracket[conference] = [
+                {
+                    "abbrev": team.abbrev,
+                    "total": team.total,
+                    "players": team.players,
+                    "avg": team.avg,
+                    "conference": team.conference,
+                    "division": team.division,
+                    "status_indicator": team.status_indicator,
+                    "seed_type": team.seed_type,
+                    "in_playoffs": team.in_playoffs,
+                    "division_rank": team.division_rank,
+                }
+                for team in teams
+            ]
 
-            # Cache result
-            _analysis_cache[cache_key] = {
-                "cached_at": datetime.now(UTC).isoformat(),
-                "data": result,
-            }
+        # Build response
+        # Use fixed timestamp in TEST_MODE for deterministic visual tests
+        timestamp = "2026-01-15T12:00:00+00:00" if TEST_MODE else datetime.now(UTC).isoformat()
 
-            return result
+        result = {
+            "timestamp": timestamp,
+            "cache_hit": False,
+            "top_players": all_players[: request.top_players],
+            "team_standings": teams_data,
+            "division_standings": divisions,
+            "conference_standings": conferences,
+            "playoff_bracket": playoff_bracket,
+            "stats": stats,
+        }
+
+        # Cache result
+        _analysis_cache[cache_key] = {
+            "cached_at": datetime.now(UTC).isoformat(),
+            "data": result,
+        }
+
+        return result
 
     except NHLApiError as e:
         raise HTTPException(

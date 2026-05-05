@@ -249,6 +249,8 @@ NHL_SCRABBLE_VERBOSE=true
 - Cross-browser matrix: chromium, firefox, webkit
 - Test suites: functional, visual regression, performance, accessibility
 - **Visual Tests**: Deterministic with mocked NHL API data (blocking in CI since 2026-05-01)
+  - Web server runs in TEST_MODE with fixture data (NHL_SCRABBLE_TEST_MODE=1)
+  - Server-side fixture loading ensures deterministic responses across all tests
   - Mocked API data ensures pixel-perfect baseline matches
   - Fixtures in `qa/web/tests/visual/fixtures/` (standings, rosters)
   - Update fixtures with `./scripts/capture-nhl-fixtures`
