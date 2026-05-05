@@ -117,10 +117,10 @@ jobs:
           mkdir -p qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/linux
           chmod -R 777 qa/web/tests/visual/__snapshots__
 
-          # Create test-results directory for visual diff screenshots
+          # Create reports/visual-diffs directory for visual diff screenshots
           # Enhanced assert_snapshot fixture saves actual/baseline/diff images here on failure
-          mkdir -p qa/web/test-results
-          chmod -R 777 qa/web/test-results
+          mkdir -p qa/web/reports/visual-diffs
+          chmod -R 777 qa/web/reports/visual-diffs
 
       - name: Run visual regression tests
         id: visual-tests
@@ -185,9 +185,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-diffs-${{ matrix.browser }}
-          path: |
-            qa/web/test-results/**/*-diff.png
-            qa/web/test-results/**/*-actual.png
+          path: qa/web/reports/visual-diffs/${{ matrix.browser }}/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
