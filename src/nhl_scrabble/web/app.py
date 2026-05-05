@@ -586,8 +586,11 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
             ]
 
         # Build response
+        # Use fixed timestamp in TEST_MODE for deterministic visual tests
+        timestamp = "2026-01-15T12:00:00+00:00" if TEST_MODE else datetime.now(UTC).isoformat()
+
         result = {
-            "timestamp": datetime.now(UTC).isoformat(),
+            "timestamp": timestamp,
             "cache_hit": False,
             "top_players": all_players[: request.top_players],
             "team_standings": teams_data,

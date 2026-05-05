@@ -100,6 +100,7 @@ function createTeamScoresChart(teams, canvasId = 'teamScoresChart') {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            devicePixelRatio: 1,  // Force consistent pixel ratio for visual tests
             plugins: {
                 title: {
                     display: true,
@@ -208,6 +209,7 @@ function createPlayerDistributionChart(players, canvasId = 'playerDistributionCh
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            devicePixelRatio: 1,  // Force consistent pixel ratio for visual tests
             plugins: {
                 title: {
                     display: true,
