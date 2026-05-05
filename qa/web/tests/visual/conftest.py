@@ -206,6 +206,11 @@ def visual_page(page: Page) -> Generator[Page, None, None]:
             }
         `;
         document.head.appendChild(style);
+
+        // Wait for fonts to fully load and metrics to stabilize
+        document.fonts.ready.then(() => {
+            console.log('Fonts loaded');
+        });
     """)
 
     # Set default timeout

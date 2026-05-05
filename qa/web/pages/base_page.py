@@ -54,6 +54,13 @@ class BasePage:
         """
         self.page.wait_for_load_state(state)
 
+        # Wait for fonts to fully load for consistent visual rendering
+        self.page.evaluate("() => document.fonts.ready")
+
+        # Additional small delay to ensure font metrics are fully calculated
+        # This helps prevent chromium/firefox font rendering variations
+        self.page.wait_for_timeout(100)
+
     def wait_for_selector(self, selector: str, timeout: int = 10000) -> None:
         """Wait for element matching selector to appear.
 
