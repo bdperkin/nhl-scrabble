@@ -14,10 +14,11 @@ from pages.teams_page import TeamsPage
 from playwright.sync_api import Page
 
 
-def test_index_page_chromium(index_page: IndexPage, assert_snapshot: Callable) -> None:
-    """Test index page rendering in Chromium.
+def test_index_page_cross_browser(index_page: IndexPage, assert_snapshot: Callable) -> None:
+    """Test index page rendering across browsers.
 
-    Verifies consistent rendering of the home page in Chromium browser.
+    Verifies consistent rendering of the home page across all browsers.
+    Runs on chromium, firefox, and webkit via pytest parameterization.
 
     Args:
         index_page: IndexPage fixture instance
@@ -26,15 +27,16 @@ def test_index_page_chromium(index_page: IndexPage, assert_snapshot: Callable) -
     index_page.navigate()
     index_page.wait_for_load()
 
-    # Browser-specific screenshot
+    # Cross-browser screenshot
     screenshot = index_page.page.screenshot(full_page=True)
-    assert_snapshot(screenshot, "index-page-chromium.png", threshold=0.05)
+    assert_snapshot(screenshot, "index-page-cross-browser.png", threshold=0.05)
 
 
-def test_teams_page_chromium(teams_page: TeamsPage, assert_snapshot: Callable) -> None:
-    """Test teams page rendering in Chromium.
+def test_teams_page_cross_browser(teams_page: TeamsPage, assert_snapshot: Callable) -> None:
+    """Test teams page rendering across browsers.
 
-    Verifies consistent table rendering in Chromium browser.
+    Verifies consistent table rendering across all browsers.
+    Runs on chromium, firefox, and webkit via pytest parameterization.
 
     Args:
         teams_page: TeamsPage fixture instance
@@ -43,19 +45,21 @@ def test_teams_page_chromium(teams_page: TeamsPage, assert_snapshot: Callable) -
     teams_page.navigate()
     teams_page.wait_for_load()
 
-    # Browser-specific screenshot
+    # Cross-browser screenshot
     screenshot = teams_page.page.screenshot(full_page=True)
-    assert_snapshot(screenshot, "teams-page-chromium.png", threshold=0.05)
+    assert_snapshot(screenshot, "teams-page-cross-browser.png", threshold=0.05)
 
 
-def test_table_component_chromium(teams_page: TeamsPage, assert_snapshot: Callable) -> None:
-    """Test table component rendering in Chromium.
+def test_table_component_cross_browser(teams_page: TeamsPage, assert_snapshot: Callable) -> None:
+    """Test table component rendering across browsers.
 
-    Verifies consistent table styling in Chromium to detect:
+    Verifies consistent table styling across all browsers to detect:
     - Border rendering differences
     - Cell padding variations
     - Font rendering differences
     - Spacing inconsistencies
+
+    Runs on chromium, firefox, and webkit via pytest parameterization.
 
     Args:
         teams_page: TeamsPage fixture instance
@@ -68,7 +72,7 @@ def test_table_component_chromium(teams_page: TeamsPage, assert_snapshot: Callab
     table = teams_page.page.locator("table")
     if table.count() > 0:
         screenshot = table.first.screenshot()
-        assert_snapshot(screenshot, "table-component-chromium.png", threshold=0.05)
+        assert_snapshot(screenshot, "table-component-cross-browser.png", threshold=0.05)
 
 
 def test_responsive_mobile_viewport(
