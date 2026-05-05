@@ -223,37 +223,17 @@ jobs:
               pytest -p no:cacheprovider tests/visual/ \
                 --browser=${{ matrix.browser }} \
                 --verbose --tb=short --maxfail=5 \
-                --junit-xml=reports/visual-${{ matrix.browser }}.xml"
+                --junit-xml=reports/visual-${{ matrix.browser }}.xml; \
+              TEST_EXIT=\$?; \
+              if [ -d test-results ] && [ \"\$(ls -A test-results 2>/dev/null)\" ]; then \
+                echo '📦 Copying visual diffs to reports/ for host access'; \
+                DEST='reports/visual-diffs-${{ matrix.browser }}'; \
+                mkdir -p \$DEST; \
+                cp -r test-results/* \$DEST/ 2>/dev/null || true; \
+                ls -la \$DEST/ | head -20; \
+              fi; \
+              exit \$TEST_EXIT"
         continue-on-error: true
-
-      # Copy visual diff images from Docker volume to host for artifact upload
-      # The enhanced assert_snapshot fixture creates diff images inside the container,
-      # but they need to be accessible to the host runner for artifact upload
-      - name: Extract visual diffs from Docker volume
-        if: |
-          always() &&
-          (steps.test-suite.outputs.suite == 'all' ||
-           steps.test-suite.outputs.suite == 'visual')
-        run: |
-          # Create host directory for diffs
-          mkdir -p qa/web/visual-diffs-${{ matrix.browser }}
-
-          # Copy test-results from container volume if it exists
-          if [ -d qa/web/test-results ]; then
-            echo "✅ Copying visual diff images from test-results/"
-            cp -r qa/web/test-results/* \
-              qa/web/visual-diffs-${{ matrix.browser }}/ 2>/dev/null || true
-
-            # List what was copied
-            if [ "$(ls -A qa/web/visual-diffs-${{ matrix.browser }} 2>/dev/null)" ]; then
-              echo "Files copied:"
-              find qa/web/visual-diffs-${{ matrix.browser }} -name "*.png" | head -20
-            else
-              echo "ℹ️  No diff images found (all visual tests passed)"
-            fi
-          else
-            echo "ℹ️  No test-results directory (all visual tests passed)"
-          fi
 
       - name: Run performance tests
         id: performance-tests
@@ -380,7 +360,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-diffs-${{ matrix.browser }}
-          path: qa/web/visual-diffs-${{ matrix.browser }}/**/*.png
+          path: qa/web/reports/visual-diffs-${{ matrix.browser }}/**/*.png
           retention-days: 30
           if-no-files-found: ignore
 
