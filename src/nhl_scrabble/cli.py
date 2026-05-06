@@ -1158,7 +1158,7 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
     try:
         # Fetch player data
         if not quiet:
-            console.print(_("\n[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n"))  # noqa: F823
+            console.print(_("\n[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n"))
             console.print(_("=") * 80)
 
         # Initialize components using dependency injection
@@ -1173,7 +1173,7 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
             )
 
             # Process all teams (progress handled internally by TeamProcessor)
-            _, all_players, failed_teams = team_processor.process_all_teams()
+            _team_scores, all_players, failed_teams = team_processor.process_all_teams()
 
             # Display summary (only if not quiet)
             if not quiet and failed_teams:
