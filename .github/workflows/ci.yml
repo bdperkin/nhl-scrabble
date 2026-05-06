@@ -56,12 +56,6 @@ jobs:
         run: |
           uv pip install -e ".[dev]" --system
 
-      - name: Compile translations
-        run: |
-          python -m babel.messages.frontend compile -d src/nhl_scrabble/locales
-        # Compile .po translation files to .mo before running tests
-        # .mo files are excluded from git but needed for i18n tests
-
       # NOTE: Format checking is handled by pre-commit job (with black 24.10)
       # Removed redundant format check here to avoid version conflicts
       # between ruff-format and black
