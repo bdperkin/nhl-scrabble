@@ -64,28 +64,28 @@
                     <nav id="navMenu" class="main-nav" aria-label="{% trans %}Main navigation{% endtrans %}">
                         <ul>
                             <li>
-                                <a href="/">{% trans %}Home{% endtrans %}</a>
+                                <a href="/?lang={{ locale }}">{% trans %}Home{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/teams">{% trans %}Teams{% endtrans %}</a>
+                                <a href="/teams?lang={{ locale }}">{% trans %}Teams{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/divisions">{% trans %}Divisions{% endtrans %}</a>
+                                <a href="/divisions?lang={{ locale }}">{% trans %}Divisions{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/conferences">{% trans %}Conferences{% endtrans %}</a>
+                                <a href="/conferences?lang={{ locale }}">{% trans %}Conferences{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/playoffs">{% trans %}Playoffs{% endtrans %}</a>
+                                <a href="/playoffs?lang={{ locale }}">{% trans %}Playoffs{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/stats">{% trans %}Stats{% endtrans %}</a>
+                                <a href="/stats?lang={{ locale }}">{% trans %}Stats{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/docs">{% trans %}API Docs{% endtrans %}</a>
+                                <a href="/docs?lang={{ locale }}">{% trans %}API Docs{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/redoc">ReDoc</a>
+                                <a href="/redoc?lang={{ locale }}">ReDoc</a>
                             </li>
                             <li>
                                 <a href="https://bdperkin.github.io/nhl-scrabble/" target="_blank">{% trans %}Documentation{% endtrans %}</a>
@@ -131,7 +131,7 @@
                 <p>
                     &copy; 2026 {% trans %}NHL Scrabble Analyzer{% endtrans %} |
                     <a href="https://github.com/bdperkin/nhl-scrabble">{% trans %}Open Source{% endtrans %}</a> |
-                    <a href="/health">{% trans %}Status{% endtrans %}</a>
+                    <a href="/health?lang={{ locale }}">{% trans %}Status{% endtrans %}</a>
                 </p>
             </div>
         </footer>

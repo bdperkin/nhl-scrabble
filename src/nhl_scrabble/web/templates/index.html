@@ -19,6 +19,8 @@
               hx-target="#results"
               hx-indicator="#loading"
               hx-trigger="submit">
+            <!-- Hidden field to preserve locale in HTMX requests -->
+            <input type="hidden" name="lang" value="{{ locale }}">
             <div class="form-row">
                 <div class="form-group">
                     <label for="topPlayers">
