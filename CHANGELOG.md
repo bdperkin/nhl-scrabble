@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- (ci): QA automation workflow now blocking - enforces test quality on all PRs
+
 ## [0.0.15] - 2026-05-04
 
 ### Added

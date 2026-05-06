@@ -245,10 +245,16 @@ NHL_SCRABBLE_VERBOSE=true
 
 **QA Automation Workflow:**
 
+- **Status**: ✅ ENFORCING - All test failures block PR merges (since 2026-05-06)
 - Comprehensive web application testing across multiple browsers
 - Cross-browser matrix: chromium, firefox, webkit
 - Test suites: functional, visual regression, performance, accessibility
-- **Visual Tests**: Deterministic with mocked NHL API data (blocking in CI since 2026-05-01)
+- **All Test Suites Blocking**: Every test failure prevents PR merge
+  - ✅ Functional tests: All passing
+  - ✅ Visual regression: Deterministic with mocked NHL API data
+  - ✅ Accessibility: WCAG 2.1 AA compliant
+  - ✅ Performance: Meeting benchmarks
+- **Visual Tests**: Deterministic with mocked NHL API data (blocking since 2026-05-01)
   - Web server runs in TEST_MODE with fixture data (NHL_SCRABBLE_TEST_MODE=1)
   - Server-side fixture loading ensures deterministic responses across all tests
   - Mocked API data ensures pixel-perfect baseline matches
