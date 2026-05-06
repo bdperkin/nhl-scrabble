@@ -1,6 +1,5 @@
 """Hatch build hook to compile translation files during package build."""
 
-# ruff: noqa: T201, S603, S607
 # T201: print() is appropriate for build-time output
 # S603/S607: subprocess call to pybabel is trusted build tool
 
