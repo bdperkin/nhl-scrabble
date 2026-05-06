@@ -6,6 +6,7 @@ results via browser instead of CLI.
 
 from __future__ import annotations
 
+import gettext
 import json
 import logging
 import operator
@@ -24,6 +25,7 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api import NHLApiClient, NHLApiError
+from nhl_scrabble.i18n import DEFAULT_LOCALE, LOCALES_DIR, SUPPORTED_LOCALES
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors import PlayoffCalculator, TeamProcessor
@@ -108,8 +110,103 @@ templates: Jinja2Templates | None = None
 if TEMPLATES_DIR.exists():
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
+    # Enable Jinja2 i18n extension for template translations
+    templates.env.add_extension("jinja2.ext.i18n")
+
+    # Configure i18n with gettext using default locale
+    try:
+        default_translation = gettext.translation(
+            "messages",
+            localedir=str(LOCALES_DIR),
+            languages=[DEFAULT_LOCALE],
+        )
+        templates.env.install_gettext_translations(default_translation, newstyle=True)
+    except FileNotFoundError:
+        # Fallback to NullTranslations if .mo files not found
+        null_translation = gettext.NullTranslations()
+        templates.env.install_gettext_translations(null_translation, newstyle=True)
+
 # Cache storage (in-memory for now)
 _analysis_cache: dict[str, dict[str, Any]] = {}
+
+
+def get_request_locale(request: Request) -> str:
+    """Detect locale from request.
+
+    Priority order:
+    1. ?lang= query parameter
+    2. Accept-Language header
+    3. Default locale (en_US)
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Locale code (e.g., 'en_US', 'fr_CA')
+    """
+    # Try URL parameter first
+    lang_param = request.query_params.get("lang")
+    if lang_param and lang_param in SUPPORTED_LOCALES:
+        return str(lang_param)
+
+    # Try Accept-Language header
+    accept_language = request.headers.get("Accept-Language", "")
+    if accept_language:
+        # Parse Accept-Language header (format: "en-US,en;q=0.9,fr-CA;q=0.8")
+        for lang in accept_language.split(","):
+            # Extract language code before quality value
+            lang_code = lang.split(";")[0].strip()
+
+            # Convert from HTTP format (en-US) to our format (en_US)
+            normalized = lang_code.replace("-", "_")
+
+            # Check if this locale is supported
+            if normalized in SUPPORTED_LOCALES:
+                return str(normalized)
+
+            # Try language part only (e.g., "en" from "en-GB")
+            if "_" not in normalized and "-" not in lang_code:
+                # Find first matching locale with this language
+                for locale in SUPPORTED_LOCALES:
+                    if locale.startswith(normalized + "_"):
+                        return locale
+
+    # Default locale
+    return "en_US"
+
+
+def setup_template_locale(request: Request) -> dict[str, Any]:
+    """Set up template context with locale-specific translator.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Template context with locale and gettext function
+    """
+    locale = get_request_locale(request)
+
+    # Update Jinja2 environment with locale-specific translator
+    if templates:
+        try:
+            translation = gettext.translation(
+                "messages",
+                localedir=str(LOCALES_DIR),
+                languages=[locale],
+            )
+            templates.env.install_gettext_translations(translation, newstyle=True)
+        except FileNotFoundError:
+            # Fallback to NullTranslations if locale not found
+            null_translation = gettext.NullTranslations()
+            templates.env.install_gettext_translations(null_translation, newstyle=True)
+
+    return {
+        "request": request,
+        "locale": locale,
+        "get_locale": lambda: locale,
+        "SUPPORTED_LOCALES": SUPPORTED_LOCALES,
+    }
+
 
 # Test mode: Use mocked data from fixtures instead of live NHL API
 TEST_MODE = os.getenv("NHL_SCRABBLE_TEST_MODE", "0") == "1"
@@ -352,9 +449,11 @@ async def root(request: Request) -> HTMLResponse:
     if templates is None:
         raise HTTPException(status_code=500, detail="Templates not configured")
 
+    context = setup_template_locale(request)
     return templates.TemplateResponse(
         request=request,
         name="index.html",
+        context=context,
     )
 
 
@@ -642,15 +741,19 @@ async def teams_page(request: Request) -> HTMLResponse:
         timestamp_date = timestamp_dt.strftime("%B %d, %Y")
         timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
-        return templates.TemplateResponse(
-            request=request,
-            name="teams.html",
-            context={
+        context = setup_template_locale(request)
+        context.update(
+            {
                 "team_standings": data["team_standings"],
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
             },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="teams.html",
+            context=context,
         )
     except NHLApiError as e:
         logger.error("Failed to fetch teams data: %s", e)
@@ -687,15 +790,19 @@ async def divisions_page(request: Request) -> HTMLResponse:
         timestamp_date = timestamp_dt.strftime("%B %d, %Y")
         timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
-        return templates.TemplateResponse(
-            request=request,
-            name="divisions.html",
-            context={
+        context = setup_template_locale(request)
+        context.update(
+            {
                 "division_standings": data["division_standings"],
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
             },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="divisions.html",
+            context=context,
         )
     except NHLApiError as e:
         logger.error("Failed to fetch divisions data: %s", e)
@@ -732,15 +839,19 @@ async def conferences_page(request: Request) -> HTMLResponse:
         timestamp_date = timestamp_dt.strftime("%B %d, %Y")
         timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
-        return templates.TemplateResponse(
-            request=request,
-            name="conferences.html",
-            context={
+        context = setup_template_locale(request)
+        context.update(
+            {
                 "conference_standings": data["conference_standings"],
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
             },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="conferences.html",
+            context=context,
         )
     except NHLApiError as e:
         logger.error("Failed to fetch conferences data: %s", e)
@@ -780,16 +891,20 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         timestamp_date = timestamp_dt.strftime("%B %d, %Y")
         timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
-        return templates.TemplateResponse(
-            request=request,
-            name="playoffs.html",
-            context={
+        context = setup_template_locale(request)
+        context.update(
+            {
                 "playoff_bracket": data["playoff_bracket"],
                 "playoff_teams_count": playoff_teams_count,
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
             },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="playoffs.html",
+            context=context,
         )
     except NHLApiError as e:
         logger.error("Failed to fetch playoffs data: %s", e)
@@ -826,16 +941,20 @@ async def stats_page(request: Request) -> HTMLResponse:
         timestamp_date = timestamp_dt.strftime("%B %d, %Y")
         timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
 
-        return templates.TemplateResponse(
-            request=request,
-            name="stats.html",
-            context={
+        context = setup_template_locale(request)
+        context.update(
+            {
                 "stats": data["stats"],
                 "top_players": data["top_players"],
                 "team_standings": data["team_standings"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
             },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="stats.html",
+            context=context,
         )
     except NHLApiError as e:
         logger.error("Failed to fetch stats data: %s", e)
@@ -916,11 +1035,9 @@ async def analyze_get(
 
     if is_htmx and templates is not None:
         # Return HTML fragment for HTMX
-        return templates.TemplateResponse(
-            request=request,
-            name="results.html",
-            context={
-                "request": request,
+        context = setup_template_locale(request)
+        context.update(
+            {
                 "top_players": data["top_players"],
                 "team_standings": data["team_standings"],
                 "division_standings": data["division_standings"],
@@ -928,6 +1045,11 @@ async def analyze_get(
                 "playoff_bracket": data["playoff_bracket"],
                 "stats": data["stats"],
             },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="results.html",
+            context=context,
         )
 
     # Return JSON for regular API calls

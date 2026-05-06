@@ -1,18 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}NHL Scrabble Analyzer - Home{% endblock %}
+{% block title %}{% trans %}NHL Scrabble Analyzer - Home{% endtrans %}{% endblock %}
 
 {% block content %}
     <div class="hero">
-        <h2>Analyze NHL Player Names by Scrabble Score</h2>
+        <h2>{% trans %}Analyze NHL Player Names by Scrabble Score{% endtrans %}</h2>
         <p class="hero-subtitle">
-            Calculate Scrabble scores for NHL player names and see team standings,
-            playoff brackets, and statistics based on letter values.
+            {% trans %}Calculate Scrabble scores for NHL player names and see team standings, playoff brackets, and statistics based on letter values.{% endtrans %}
         </p>
     </div>
 
     <section class="analysis-form-section">
-        <h3>Run Analysis</h3>
+        <h3>{% trans %}Run Analysis{% endtrans %}</h3>
 
         <form id="analysisForm"
               class="analysis-form"
@@ -23,8 +22,8 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="topPlayers">
-                        Top Players to Display
-                        <span class="help-text">Number of top-scoring players (1-100)</span>
+                        {% trans %}Top Players to Display{% endtrans %}
+                        <span class="help-text">{% trans %}Number of top-scoring players (1-100){% endtrans %}</span>
                     </label>
                     <input type="number"
                            id="topPlayers"
@@ -32,15 +31,15 @@
                            min="1"
                            max="100"
                            value="20"
-                           aria-label="Number of top-scoring players to display (1-100)"
+                           aria-label="{% trans %}Number of top-scoring players to display (1-100){% endtrans %}"
                            aria-describedby="topPlayersHelp"
                            required>
                 </div>
 
                 <div class="form-group">
                     <label for="topTeamPlayers">
-                        Top Players per Team
-                        <span class="help-text">Players per team in results (1-30)</span>
+                        {% trans %}Top Players per Team{% endtrans %}
+                        <span class="help-text">{% trans %}Players per team in results (1-30){% endtrans %}</span>
                     </label>
                     <input type="number"
                            id="topTeamPlayers"
@@ -48,7 +47,7 @@
                            min="1"
                            max="30"
                            value="5"
-                           aria-label="Number of top players to show per team (1-30)"
+                           aria-label="{% trans %}Number of top players to show per team (1-30){% endtrans %}"
                            aria-describedby="topTeamPlayersHelp"
                            required>
                 </div>
@@ -58,9 +57,9 @@
                         <input type="checkbox"
                                id="useCache"
                                name="use_cache"
-                               aria-label="Use cached results for faster loading"
+                               aria-label="{% trans %}Use cached results for faster loading{% endtrans %}"
                                checked>
-                        Use Cached Results (faster)
+                        {% trans %}Use Cached Results (faster){% endtrans %}
                     </label>
                 </div>
             </div>
@@ -69,18 +68,18 @@
                 <button type="submit"
                         class="btn btn-primary"
                         id="analyzeBtn"
-                        aria-label="Analyze NHL player Scrabble scores">
-                    <span class="btn-text">Analyze</span>
+                        aria-label="{% trans %}Analyze NHL player Scrabble scores{% endtrans %}">
+                    <span class="btn-text">{% trans %}Analyze{% endtrans %}</span>
                     <span class="btn-loading" hidden>
                         <span class="spinner"></span>
-                        Fetching NHL data...
+                        {% trans %}Fetching NHL data...{% endtrans %}
                     </span>
                 </button>
 
                 <!-- HTMX loading indicator -->
                 <div id="loading" class="htmx-indicator" hidden>
                     <span class="spinner"></span>
-                    Loading NHL data...
+                    {% trans %}Loading NHL data...{% endtrans %}
                 </div>
             </div>
         </form>
@@ -97,43 +96,40 @@
     </div>
 
     <section class="info-section">
-        <h3>About</h3>
+        <h3>{% trans %}About{% endtrans %}</h3>
         <p>
-            NHL Scrabble Analyzer calculates Scrabble scores for all NHL players
-            using standard Scrabble letter point values. Teams are ranked by their
-            total roster score, creating an alternative playoff bracket based on
-            alphabetical prowess rather than on-ice performance.
+            {% trans %}NHL Scrabble Analyzer calculates Scrabble scores for all NHL players using standard Scrabble letter point values. Teams are ranked by their total roster score, creating an alternative playoff bracket based on alphabetical prowess rather than on-ice performance.{% endtrans %}
         </p>
 
-        <h4>Scrabble Letter Values</h4>
+        <h4>{% trans %}Scrabble Letter Values{% endtrans %}</h4>
         <div class="scrabble-values">
             <div class="value-group">
-                <strong>1 point:</strong> A, E, I, O, U, L, N, S, T, R
+                <strong>{% trans %}1 point:{% endtrans %}</strong> A, E, I, O, U, L, N, S, T, R
             </div>
             <div class="value-group">
-                <strong>2 points:</strong> D, G
+                <strong>{% trans %}2 points:{% endtrans %}</strong> D, G
             </div>
             <div class="value-group">
-                <strong>3 points:</strong> B, C, M, P
+                <strong>{% trans %}3 points:{% endtrans %}</strong> B, C, M, P
             </div>
             <div class="value-group">
-                <strong>4 points:</strong> F, H, V, W, Y
+                <strong>{% trans %}4 points:{% endtrans %}</strong> F, H, V, W, Y
             </div>
             <div class="value-group">
-                <strong>5 points:</strong> K
+                <strong>{% trans %}5 points:{% endtrans %}</strong> K
             </div>
             <div class="value-group">
-                <strong>8 points:</strong> J, X
+                <strong>{% trans %}8 points:{% endtrans %}</strong> J, X
             </div>
             <div class="value-group">
-                <strong>10 points:</strong> Q, Z
+                <strong>{% trans %}10 points:{% endtrans %}</strong> Q, Z
             </div>
         </div>
 
         <p class="references">
-            <strong>References:</strong>
-            <a href="https://en.wikipedia.org/wiki/Scrabble#Letter_distribution" target="_blank">Scrabble Letter Values</a> |
-            <a href="https://en.wikipedia.org/wiki/Scrabble_letter_distributions" target="_blank">Letter Distributions</a>
+            <strong>{% trans %}References:{% endtrans %}</strong>
+            <a href="https://en.wikipedia.org/wiki/Scrabble#Letter_distribution" target="_blank">{% trans %}Scrabble Letter Values{% endtrans %}</a> |
+            <a href="https://en.wikipedia.org/wiki/Scrabble_letter_distributions" target="_blank">{% trans %}Letter Distributions{% endtrans %}</a>
         </p>
     </section>
 {% endblock %}
