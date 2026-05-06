@@ -368,121 +368,123 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:67
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 #: src/nhl_scrabble/web/templates/base.html:70
 msgid "Teams"
-msgstr ""
+msgstr "Équipes"
 
 #: src/nhl_scrabble/web/templates/base.html:73
 msgid "Divisions"
-msgstr ""
+msgstr "Divisions"
 
 #: src/nhl_scrabble/web/templates/base.html:76
 msgid "Conferences"
-msgstr ""
+msgstr "Conférences"
 
 #: src/nhl_scrabble/web/templates/base.html:79
 msgid "Playoffs"
-msgstr ""
+msgstr "Séries éliminatoires"
 
 #: src/nhl_scrabble/web/templates/base.html:82
 msgid "Stats"
-msgstr ""
+msgstr "Statistiques"
 
 #: src/nhl_scrabble/web/templates/base.html:85
 msgid "API Docs"
-msgstr ""
+msgstr "Documentation API"
 
 #: src/nhl_scrabble/web/templates/base.html:91
 msgid "Documentation"
-msgstr ""
+msgstr "Documentation"
 
 #: src/nhl_scrabble/web/templates/base.html:101
 msgid "Select Language"
-msgstr ""
+msgstr "Sélectionner la langue"
 
 #: src/nhl_scrabble/web/templates/base.html:102
 msgid "Select language"
-msgstr ""
+msgstr "Sélectionner la langue"
 
 #: src/nhl_scrabble/web/templates/base.html:133
 msgid "Open Source"
-msgstr ""
+msgstr "Open Source"
 
 #: src/nhl_scrabble/web/templates/base.html:134
 msgid "Status"
-msgstr ""
+msgstr "État"
 
 #: src/nhl_scrabble/web/templates/index.html:3
 msgid "NHL Scrabble Analyzer - Home"
-msgstr ""
+msgstr "Analyseur Scrabble NHL - Accueil"
 
 #: src/nhl_scrabble/web/templates/index.html:7
 msgid "Analyze NHL Player Names by Scrabble Score"
-msgstr ""
+msgstr "Analyser les noms de joueurs NHL par score Scrabble"
 
 #: src/nhl_scrabble/web/templates/index.html:9
 msgid ""
 "Calculate Scrabble scores for NHL player names and see team standings, "
 "playoff brackets, and statistics based on letter values."
 msgstr ""
+"Calculez les scores Scrabble pour les noms de joueurs NHL et voyez les "
+"classements d'équipes, les séries éliminatoires et les statistiques basées sur les valeurs des lettres."
 
 #: src/nhl_scrabble/web/templates/index.html:14
 msgid "Run Analysis"
-msgstr ""
+msgstr "Lancer l'analyse"
 
 #: src/nhl_scrabble/web/templates/index.html:25
 msgid "Top Players to Display"
-msgstr ""
+msgstr "Meilleurs joueurs à afficher"
 
 #: src/nhl_scrabble/web/templates/index.html:26
 msgid "Number of top-scoring players (1-100)"
-msgstr ""
+msgstr "Nombre de meilleurs joueurs (1-100)"
 
 #: src/nhl_scrabble/web/templates/index.html:34
 msgid "Number of top-scoring players to display (1-100)"
-msgstr ""
+msgstr "Nombre de meilleurs joueurs à afficher (1-100)"
 
 #: src/nhl_scrabble/web/templates/index.html:41
 msgid "Top Players per Team"
-msgstr ""
+msgstr "Meilleurs joueurs par équipe"
 
 #: src/nhl_scrabble/web/templates/index.html:42
 msgid "Players per team in results (1-30)"
-msgstr ""
+msgstr "Joueurs par équipe dans les résultats (1-30)"
 
 #: src/nhl_scrabble/web/templates/index.html:50
 msgid "Number of top players to show per team (1-30)"
-msgstr ""
+msgstr "Nombre de meilleurs joueurs à afficher par équipe (1-30)"
 
 #: src/nhl_scrabble/web/templates/index.html:60
 msgid "Use cached results for faster loading"
-msgstr ""
+msgstr "Utiliser les résultats mis en cache pour un chargement plus rapide"
 
 #: src/nhl_scrabble/web/templates/index.html:62
 msgid "Use Cached Results (faster)"
-msgstr ""
+msgstr "Utiliser les résultats mis en cache (plus rapide)"
 
 #: src/nhl_scrabble/web/templates/index.html:71
 msgid "Analyze NHL player Scrabble scores"
-msgstr ""
+msgstr "Analyser les scores Scrabble des joueurs NHL"
 
 #: src/nhl_scrabble/web/templates/index.html:72
 msgid "Analyze"
-msgstr ""
+msgstr "Analyser"
 
 #: src/nhl_scrabble/web/templates/index.html:75
 msgid "Fetching NHL data..."
-msgstr ""
+msgstr "Récupération des données NHL..."
 
 #: src/nhl_scrabble/web/templates/index.html:82
 msgid "Loading NHL data..."
-msgstr ""
+msgstr "Chargement des données NHL..."
 
 #: src/nhl_scrabble/web/templates/index.html:99
 msgid "About"
-msgstr ""
+msgstr "À propos"
 
 #: src/nhl_scrabble/web/templates/index.html:101
 msgid ""
@@ -491,6 +493,11 @@ msgid ""
 "total roster score, creating an alternative playoff bracket based on "
 "alphabetical prowess rather than on-ice performance."
 msgstr ""
+"L'Analyseur Scrabble NHL calcule les scores Scrabble pour tous les joueurs "
+"NHL en utilisant les valeurs standard des lettres Scrabble. Les équipes sont "
+"classées selon le score total de leur effectif, créant une grille de séries "
+"éliminatoires alternative basée sur la prouesse alphabétique plutôt que sur "
+"les performances sur la glace."
 
 #: src/nhl_scrabble/web/templates/index.html:104
 #: src/nhl_scrabble/web/templates/index.html:131
