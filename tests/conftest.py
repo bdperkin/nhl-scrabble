@@ -12,6 +12,14 @@ from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.scoring.scrabble import ScrabbleScorer
 
 
+def pytest_configure(config: pytest.Config) -> None:
+    """Configure pytest with custom markers."""
+    config.addinivalue_line(
+        "markers",
+        "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    )
+
+
 @pytest.fixture
 def fixtures_dir() -> Path:
     """Return the path to the fixtures directory."""

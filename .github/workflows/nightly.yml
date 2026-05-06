@@ -1,0 +1,208 @@
+name: Nightly Comprehensive Testing
+
+on:
+  schedule:
+    # Run every night at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  comprehensive-test:
+    name: Test on ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.12', '3.13', '3.14']
+        experimental: [false]
+        include:
+          - os: ubuntu-latest
+            python-version: '3.15-dev'
+            experimental: true
+
+    continue-on-error: ${{ matrix.experimental }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Required for hatch-vcs version detection
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache tool directories
+        uses: actions/cache@v5
+        with:
+          path: |
+            .pytest_cache
+            .mypy_cache
+            .ruff_cache
+          key: >-
+            tools-${{ runner.os }}-py${{ matrix.python-version }}-
+            ${{ hashFiles('src/**/*.py', 'tests/**/*.py') }}
+          restore-keys: |
+            tools-${{ runner.os }}-py${{ matrix.python-version }}-
+            tools-${{ runner.os }}-
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv pip install -e ".[dev]" --system
+
+      - name: Run full test suite
+        run: |
+          pytest -v --cov --cov-report=xml --cov-report=term
+
+      - name: Run integration tests with slow tests
+        run: |
+          pytest tests/integration/ -v -m slow --cov --cov-append
+
+      - name: Upload coverage to Codecov
+        if: success()
+        uses: codecov/codecov-action@v6
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: nightly-${{ matrix.os }}-py${{ matrix.python-version }}
+          name: nightly-${{ matrix.os }}-py${{ matrix.python-version }}
+
+  performance-test:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv pip install -e ".[dev]" --system
+
+      - name: Run benchmark tests
+        run: |
+          pytest tests/benchmarks/ --benchmark-only --benchmark-autosave --benchmark-min-rounds=5
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: .benchmarks/
+          retention-days: 30
+
+  dependency-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv pip install -e ".[dev]" --system
+
+      - name: Run pip-audit
+        run: |
+          uv pip install pip-audit
+          pip-audit --desc --require uv.lock
+
+      - name: Run safety check
+        continue-on-error: true
+        run: |
+          uv pip install safety
+          safety check
+
+  notify-failures:
+    name: Notify on Failure
+    needs: [comprehensive-test, performance-test, dependency-audit]
+    if: failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create issue on failure
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+            const title = `🌙 Nightly Test Failure - ${date}`;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/` +
+                           `${context.repo.repo}/actions/runs/${context.runId}`;
+
+            // Check if an issue already exists for today
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'nightly-failure',
+              state: 'open',
+              per_page: 100
+            });
+
+            const todayIssue = existingIssues.data.find(issue => issue.title === title);
+
+            if (todayIssue) {
+              // Update existing issue with new run info
+              let commentBody = '🔄 Another failure in this nightly run:\n\n';
+              commentBody += `**Workflow Run:** ${runUrl}`;
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: todayIssue.number,
+                body: commentBody
+              });
+            } else {
+              // Build issue body
+              let issueBody = 'Nightly comprehensive tests failed.\n\n';
+              issueBody += `**Workflow Run:** ${runUrl}\n\n`;
+              issueBody += `**Date:** ${date}\n\n`;
+              issueBody += '## Failed Jobs\n\n';
+              issueBody += 'Please check the workflow run for details on which jobs failed:\n';
+              issueBody += '- Comprehensive Tests (multi-platform, multi-version)\n';
+              issueBody += '- Performance Benchmarks\n';
+              issueBody += '- Dependency Security Audit\n\n';
+              issueBody += '## Investigation Steps\n\n';
+              issueBody += '1. Review the workflow logs\n';
+              issueBody += '2. Check if this is a transient failure (retry workflow)\n';
+              issueBody += '3. Verify environment-specific issues\n';
+              issueBody += '4. Check for dependency updates that may have broken compatibility\n';
+              issueBody += '5. Fix the issue and close this issue\n\n';
+              issueBody += '## Next Steps\n\n';
+              issueBody += '- [ ] Identify root cause\n';
+              issueBody += '- [ ] Fix the issue\n';
+              issueBody += '- [ ] Verify fix with manual workflow dispatch\n';
+              issueBody += '- [ ] Close this issue';
+
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: issueBody,
+                labels: ['ci/cd', 'nightly-failure', 'bug']
+              });
+            }

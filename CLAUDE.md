@@ -291,6 +291,22 @@ NHL_SCRABBLE_VERBOSE=true
 - Benefits: Faster review cycles, lower bug risk, better git history
 - Configuration: `.github/workflows/pr-size.yml`
 
+**Nightly Comprehensive Testing Workflow:**
+
+- Comprehensive testing across multiple platforms and Python versions
+- **Test Matrix**: ubuntu-latest, macos-latest, windows-latest × Python 3.12-3.14 (3.15-dev experimental)
+- **Test Suites**:
+  - Full unit and integration test suite
+  - Slow tests (marked with `@pytest.mark.slow`)
+  - Performance benchmarks with pytest-benchmark
+  - Dependency security audits (pip-audit, safety check)
+- **Coverage Tracking**: Uploads per-platform/version coverage to Codecov with nightly flags
+- **Failure Notification**: Automatically creates GitHub issues on test failures with investigation steps
+- **Triggers**: Nightly at 2 AM UTC (scheduled), manual dispatch
+- **Benefits**: Catches environment-specific bugs, comprehensive quality assurance, early issue detection
+- **Artifact Retention**: Benchmark results retained 30 days
+- Configuration: `.github/workflows/nightly.yml`
+
 ### Publishing
 
 Triggered by version tags (`v*`):
