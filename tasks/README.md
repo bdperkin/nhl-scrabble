@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 204 tasks (18 active, 186 completed)
+**Total Tasks**: 204 tasks (17 active, 187 completed)
 
 ## Overview
 
@@ -209,7 +209,7 @@ Each task includes:
 | 021 | Web Interface Internationalization Implementation | LOW | 6-8 hours (actual: ~6.5h) | Completed | [#249](https://github.com/bdperkin/nhl-scrabble/issues/249) | PR [#502](https://github.com/bdperkin/nhl-scrabble/pull/502), completed 2026-05-06, sub-task 3 of #218 |
 | 022 | TUI/Interactive Mode Internationalization | LOW | 3-4 hours (actual: ~3.5h) | Completed | [#250](https://github.com/bdperkin/nhl-scrabble/issues/250) | PR [#505](https://github.com/bdperkin/nhl-scrabble/pull/505), completed 2026-05-06, sub-task 4 of #218 |
 | 023 | Create Initial Translation File Structure | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#251](https://github.com/bdperkin/nhl-scrabble/issues/251) | PR [#506](https://github.com/bdperkin/nhl-scrabble/pull/506), completed 2026-05-06, sub-task 5 of #218 |
-| 024 | Translate to Priority Languages | LOW | 8-12 hours | Completed | [#252](https://github.com/bdperkin/nhl-scrabble/issues/252) | - |
+| 024 | Translate to Priority Languages | LOW | 8-12 hours (actual: ~3h) | Completed | [#252](https://github.com/bdperkin/nhl-scrabble/issues/252) | PR [#508](https://github.com/bdperkin/nhl-scrabble/pull/508), completed 2026-05-06 |
 | 025 | Release Automation: Pre-Release Validation Phase | LOW | 1-2 hours | Completed | [#261](https://github.com/bdperkin/nhl-scrabble/issues/261) | - |
 | 026 | Release Automation: Version Bumping Phase | LOW | 1-2 hours | Completed | [#262](https://github.com/bdperkin/nhl-scrabble/issues/262) | - |
 | 027 | Release Automation: Build and Validate Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#263](https://github.com/bdperkin/nhl-scrabble/issues/263) | PR [#467](https://github.com/bdperkin/nhl-scrabble/pull/467), completed 2026-04-30 |
