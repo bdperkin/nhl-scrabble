@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 203 tasks (17 active, 186 completed)
+**Total Tasks**: 204 tasks (18 active, 186 completed)
 
 ## Overview
 
@@ -105,6 +105,7 @@ Each task includes:
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour (actual: ~25 minutes) | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | PR [#464](https://github.com/bdperkin/nhl-scrabble/pull/464), completed 2026-04-29 |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
 | 044 | Implement Mocked API Data for Visual Regression Tests | LOW | 6-8 hours (actual: ~6h) | Completed | [#476](https://github.com/bdperkin/nhl-scrabble/issues/476) | PR [#479](https://github.com/bdperkin/nhl-scrabble/pull/479), completed 2026-05-02 |
+| 045 | Add Country Flag Icons to Locale Dropdown | LOW | 2-3 hours | Active | [#507](https://github.com/bdperkin/nhl-scrabble/issues/507) | - |
 | 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | PR [#429](https://github.com/bdperkin/nhl-scrabble/pull/429), completed 2026-04-28 |
 | 001 | Implement HTML Output Format | MEDIUM | 4-6 hours (actual: ~4h) | Completed | [#46](https://github.com/bdperkin/nhl-scrabble/issues/46) | PR [#92](https://github.com/bdperkin/nhl-scrabble/pull/92), completed 2026-04-16 |
 | 001 | Add Progress Bars for Long Operations | MEDIUM | 2-3 hours (actual: ~3 hours) | Completed | [#132](https://github.com/bdperkin/nhl-scrabble/issues/132) | PR [#172](https://github.com/bdperkin/nhl-scrabble/pull/172), completed 2026-04-17 |
