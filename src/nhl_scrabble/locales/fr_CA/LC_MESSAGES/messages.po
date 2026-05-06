@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-06 13:35-0400\n"
-"PO-Revision-Date: 2026-05-05 23:01-0400\n"
+"POT-Creation-Date: 2026-05-06 13:58-0400\n"
+"PO-Revision-Date: 2026-05-06 14:03-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_CA\n"
 "Language-Team: fr_CA <LL@li.org>\n"
@@ -48,43 +48,39 @@ msgstr ""
 #: src/nhl_scrabble/cli.py:434 src/nhl_scrabble/cli.py:1024
 #: src/nhl_scrabble/cli.py:1598 src/nhl_scrabble/cli.py:1790
 msgid "Output format (default: text)"
-msgstr "Format de sortie (défaut: texte)"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:440 src/nhl_scrabble/cli.py:1030
 #: src/nhl_scrabble/cli.py:1796
 msgid "Output file path (default: stdout)"
-msgstr "Chemin du fichier de sortie (défaut: stdout)"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:445
 msgid "Custom template file path (required for --format template)"
-msgstr "Chemin du fichier de modèle personnalisé (requis pour --format template)"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:450
 msgid ""
 "Comma-separated list of sheets for Excel export "
 "(teams,players,divisions,conferences,playoffs)"
 msgstr ""
-"Liste séparée par des virgules des feuilles pour l'export Excel "
-"(équipes,joueurs,divisions,conférences,séries)"
 
 #: src/nhl_scrabble/cli.py:458 src/nhl_scrabble/cli.py:837
 #: src/nhl_scrabble/cli.py:1037 src/nhl_scrabble/cli.py:1268
 #: src/nhl_scrabble/cli.py:1423 src/nhl_scrabble/cli.py:1605
 msgid "Enable verbose logging"
-msgstr "Activer la journalisation détaillée"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:464 src/nhl_scrabble/cli.py:1043
 #: src/nhl_scrabble/cli.py:1611
 msgid "Suppress progress bars and status messages"
-msgstr "Supprimer les barres de progression et les messages d'état"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:470 src/nhl_scrabble/cli.py:842
 #: src/nhl_scrabble/cli.py:1048 src/nhl_scrabble/cli.py:1435
 #: src/nhl_scrabble/cli.py:1617
 msgid "Disable API response caching (always fetch fresh data)"
 msgstr ""
-"Désactiver la mise en cache des réponses API (toujours récupérer de "
-"nouvelles données)"
 
 #: src/nhl_scrabble/cli.py:475
 msgid "Clear API cache before running"
@@ -284,9 +280,8 @@ msgid "Path to log file (enables file-based logging with rotation)"
 msgstr ""
 
 #: src/nhl_scrabble/cli.py:1429
-#, fuzzy
 msgid "Suppress progress bars and status messages during data fetching"
-msgstr "Supprimer les barres de progression et les messages d'état"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:1441
 msgid "Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)"
@@ -331,7 +326,7 @@ msgstr ""
 #: src/nhl_scrabble/interactive/shell.py:74
 #: src/nhl_scrabble/web/templates/index.html:77
 msgid "Fetching NHL data..."
-msgstr "Récupération des données NHL..."
+msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:114
 msgid "Data loaded successfully!"
@@ -342,23 +337,21 @@ msgid "Warning: Failed to fetch"
 msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:118
-#, fuzzy
 msgid "teams"
-msgstr "Équipes"
+msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:140
-#, fuzzy
 msgid "NHL Scrabble Interactive Mode"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:141
 #: src/nhl_scrabble/interactive/shell.py:142
-#: src/nhl_scrabble/interactive/shell.py:199
+#: src/nhl_scrabble/interactive/shell.py:202
 msgid "Type"
 msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:141
-#: src/nhl_scrabble/interactive/shell.py:199
+#: src/nhl_scrabble/interactive/shell.py:202
 msgid "for available commands"
 msgstr ""
 
@@ -370,83 +363,81 @@ msgstr ""
 msgid "Error: Invalid command syntax"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:169
-#: src/nhl_scrabble/interactive/shell.py:491
+#: src/nhl_scrabble/interactive/shell.py:170
+#: src/nhl_scrabble/interactive/shell.py:500
 msgid "No data loaded. Use"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:169
-#: src/nhl_scrabble/interactive/shell.py:491
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:170
+#: src/nhl_scrabble/interactive/shell.py:500
 msgid "to fetch data."
-msgstr "Récupération des données NHL..."
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:198
+#: src/nhl_scrabble/interactive/shell.py:200
 msgid "Unknown command"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:206
+#: src/nhl_scrabble/interactive/shell.py:210
 msgid "Goodbye!"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:250
-#: src/nhl_scrabble/interactive/shell.py:278
-#: src/nhl_scrabble/interactive/shell.py:406
+#: src/nhl_scrabble/interactive/shell.py:254
+#: src/nhl_scrabble/interactive/shell.py:282
+#: src/nhl_scrabble/interactive/shell.py:414
 msgid "Attribute"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:251
-#: src/nhl_scrabble/interactive/shell.py:279
-#: src/nhl_scrabble/interactive/shell.py:626
+#: src/nhl_scrabble/interactive/shell.py:255
+#: src/nhl_scrabble/interactive/shell.py:283
+#: src/nhl_scrabble/interactive/shell.py:638
 msgid "Value"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:253
-#: src/nhl_scrabble/interactive/shell.py:528
+#: src/nhl_scrabble/interactive/shell.py:257
+#: src/nhl_scrabble/interactive/shell.py:538
 #: src/nhl_scrabble/web/templates/playoffs.html:33
 #: src/nhl_scrabble/web/templates/results.html:117
 #: src/nhl_scrabble/web/templates/teams.html:56
 msgid "Conference"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:254
-#: src/nhl_scrabble/interactive/shell.py:529
-#: src/nhl_scrabble/interactive/shell.py:581
-#: src/nhl_scrabble/interactive/shell.py:594
+#: src/nhl_scrabble/interactive/shell.py:258
+#: src/nhl_scrabble/interactive/shell.py:539
+#: src/nhl_scrabble/interactive/shell.py:593
+#: src/nhl_scrabble/interactive/shell.py:606
 #: src/nhl_scrabble/web/templates/results.html:116
 #: src/nhl_scrabble/web/templates/teams.html:55
 msgid "Division"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:255
-#: src/nhl_scrabble/interactive/shell.py:630
+#: src/nhl_scrabble/interactive/shell.py:259
+#: src/nhl_scrabble/interactive/shell.py:642
 #: src/nhl_scrabble/web/templates/results.html:118
 #: src/nhl_scrabble/web/templates/teams.html:57
 msgid "Total Score"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:256
+#: src/nhl_scrabble/interactive/shell.py:260
 #: src/nhl_scrabble/web/templates/results.html:120
 #: src/nhl_scrabble/web/templates/teams.html:59
 msgid "Players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:257
+#: src/nhl_scrabble/interactive/shell.py:261
 #: src/nhl_scrabble/web/templates/results.html:13
 #: src/nhl_scrabble/web/templates/stats.html:18
 msgid "Average Score"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:265
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:269
 msgid "Top 10 Players"
-msgstr "Meilleurs joueurs par équipe"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:266
-#: src/nhl_scrabble/interactive/shell.py:337
-#: src/nhl_scrabble/interactive/shell.py:364
-#: src/nhl_scrabble/interactive/shell.py:428
-#: src/nhl_scrabble/interactive/shell.py:526
+#: src/nhl_scrabble/interactive/shell.py:270
+#: src/nhl_scrabble/interactive/shell.py:345
+#: src/nhl_scrabble/interactive/shell.py:372
+#: src/nhl_scrabble/interactive/shell.py:436
+#: src/nhl_scrabble/interactive/shell.py:536
 #: src/nhl_scrabble/web/templates/results.html:67
 #: src/nhl_scrabble/web/templates/results.html:114
 #: src/nhl_scrabble/web/templates/stats.html:80
@@ -454,35 +445,35 @@ msgstr "Meilleurs joueurs par équipe"
 msgid "Rank"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:267
-#: src/nhl_scrabble/interactive/shell.py:338
-#: src/nhl_scrabble/interactive/shell.py:365
-#: src/nhl_scrabble/interactive/shell.py:507
+#: src/nhl_scrabble/interactive/shell.py:271
+#: src/nhl_scrabble/interactive/shell.py:346
+#: src/nhl_scrabble/interactive/shell.py:373
+#: src/nhl_scrabble/interactive/shell.py:517
 msgid "Player"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:268
-#: src/nhl_scrabble/interactive/shell.py:340
-#: src/nhl_scrabble/interactive/shell.py:367
-#: src/nhl_scrabble/interactive/shell.py:430
-#: src/nhl_scrabble/interactive/shell.py:509
-#: src/nhl_scrabble/interactive/shell.py:530
-#: src/nhl_scrabble/interactive/shell.py:582
-#: src/nhl_scrabble/interactive/shell.py:595
+#: src/nhl_scrabble/interactive/shell.py:272
+#: src/nhl_scrabble/interactive/shell.py:348
+#: src/nhl_scrabble/interactive/shell.py:375
+#: src/nhl_scrabble/interactive/shell.py:438
+#: src/nhl_scrabble/interactive/shell.py:519
+#: src/nhl_scrabble/interactive/shell.py:540
+#: src/nhl_scrabble/interactive/shell.py:594
+#: src/nhl_scrabble/interactive/shell.py:607
 #: src/nhl_scrabble/web/templates/results.html:70
 #: src/nhl_scrabble/web/templates/stats.html:83
 msgid "Score"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:281
-#: src/nhl_scrabble/interactive/shell.py:339
-#: src/nhl_scrabble/interactive/shell.py:366
-#: src/nhl_scrabble/interactive/shell.py:410
-#: src/nhl_scrabble/interactive/shell.py:429
-#: src/nhl_scrabble/interactive/shell.py:508
-#: src/nhl_scrabble/interactive/shell.py:527
-#: src/nhl_scrabble/interactive/shell.py:580
-#: src/nhl_scrabble/interactive/shell.py:593
+#: src/nhl_scrabble/interactive/shell.py:285
+#: src/nhl_scrabble/interactive/shell.py:347
+#: src/nhl_scrabble/interactive/shell.py:374
+#: src/nhl_scrabble/interactive/shell.py:418
+#: src/nhl_scrabble/interactive/shell.py:437
+#: src/nhl_scrabble/interactive/shell.py:518
+#: src/nhl_scrabble/interactive/shell.py:537
+#: src/nhl_scrabble/interactive/shell.py:592
+#: src/nhl_scrabble/interactive/shell.py:605
 #: src/nhl_scrabble/web/templates/results.html:69
 #: src/nhl_scrabble/web/templates/results.html:115
 #: src/nhl_scrabble/web/templates/stats.html:82
@@ -490,189 +481,182 @@ msgstr ""
 msgid "Team"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:282
+#: src/nhl_scrabble/interactive/shell.py:286
 msgid "First Name"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:283
+#: src/nhl_scrabble/interactive/shell.py:287
 msgid "Last Name"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:284
-#: src/nhl_scrabble/interactive/shell.py:411
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:288
+#: src/nhl_scrabble/interactive/shell.py:419
 msgid "Scrabble Score"
-msgstr "Open Source"
-
-#: src/nhl_scrabble/interactive/shell.py:291
-#: src/nhl_scrabble/interactive/shell.py:318
-msgid "Usage: show team <abbrev> | show player <name>"
 msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:296
+#: src/nhl_scrabble/interactive/shell.py:325
+msgid "Usage: show team <abbrev> | show player <name>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:302
 msgid "Usage: show team <abbrev>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:304
+#: src/nhl_scrabble/interactive/shell.py:310
 msgid "Team not found"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:308
+#: src/nhl_scrabble/interactive/shell.py:314
 msgid "Usage: show player <name>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:316
-#: src/nhl_scrabble/interactive/shell.py:394
-#: src/nhl_scrabble/interactive/shell.py:401
+#: src/nhl_scrabble/interactive/shell.py:322
+#: src/nhl_scrabble/interactive/shell.py:402
+#: src/nhl_scrabble/interactive/shell.py:409
 msgid "Player not found"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:325
-#: src/nhl_scrabble/interactive/shell.py:352
+#: src/nhl_scrabble/interactive/shell.py:333
+#: src/nhl_scrabble/interactive/shell.py:360
 msgid "Error: N must be a number"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:336
-#, fuzzy, python-brace-format
+#: src/nhl_scrabble/interactive/shell.py:344
+#, python-brace-format
 msgid "Top {} Players"
-msgstr "Meilleurs joueurs par équipe"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:363
+#: src/nhl_scrabble/interactive/shell.py:371
 #, python-brace-format
 msgid "Bottom {} Players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:377
+#: src/nhl_scrabble/interactive/shell.py:385
 msgid "Usage: compare <player1> <player2>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:405
+#: src/nhl_scrabble/interactive/shell.py:413
 msgid "Player Comparison"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:414
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:422
 msgid "Difference"
-msgstr "Conférences"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:419
-#: src/nhl_scrabble/interactive/shell.py:421
+#: src/nhl_scrabble/interactive/shell.py:427
+#: src/nhl_scrabble/interactive/shell.py:429
 msgid "has a higher score"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:423
+#: src/nhl_scrabble/interactive/shell.py:431
 msgid "Tied!"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:441
-#: src/nhl_scrabble/interactive/shell.py:481
+#: src/nhl_scrabble/interactive/shell.py:449
+#: src/nhl_scrabble/interactive/shell.py:489
 msgid "Usage: filter division <div> | filter conference <conf>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:449
+#: src/nhl_scrabble/interactive/shell.py:457
 msgid "Usage: filter division <div>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:456
+#: src/nhl_scrabble/interactive/shell.py:464
 msgid "No teams found in division"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:459
-#, fuzzy, python-brace-format
+#: src/nhl_scrabble/interactive/shell.py:467
+#, python-brace-format
 msgid "Teams in {}"
-msgstr "Équipes"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:463
+#: src/nhl_scrabble/interactive/shell.py:471
 msgid "Usage: filter conference <conf>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:474
+#: src/nhl_scrabble/interactive/shell.py:482
 msgid "No teams found in conference"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:477
-#, fuzzy, python-brace-format
+#: src/nhl_scrabble/interactive/shell.py:485
+#, python-brace-format
 msgid "Teams in {} Conference"
-msgstr "Conférences"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:487
+#: src/nhl_scrabble/interactive/shell.py:495
 msgid "Usage: search <query>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:503
+#: src/nhl_scrabble/interactive/shell.py:513
 msgid "No players found matching"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:506
-#, fuzzy, python-brace-format
+#: src/nhl_scrabble/interactive/shell.py:516
+#, python-brace-format
 msgid "Search Results for '{}'"
-msgstr "Utiliser les résultats mis en cache (plus rapide)"
-
-#: src/nhl_scrabble/interactive/shell.py:515
-msgid "Found"
-msgstr ""
-
-#: src/nhl_scrabble/interactive/shell.py:515
-msgid "player(s)"
 msgstr ""
 
 #: src/nhl_scrabble/interactive/shell.py:525
+msgid "Found"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:525
+msgid "player(s)"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:535
 msgid "Team Standings"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:547
-#, fuzzy, python-brace-format
+#: src/nhl_scrabble/interactive/shell.py:557
+#, python-brace-format
 msgid "{} Division"
-msgstr "Divisions"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:554
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:564
 msgid "Eastern Conference"
-msgstr "Conférences"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:559
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:569
 msgid "Western Conference"
-msgstr "Conférences"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:563
+#: src/nhl_scrabble/interactive/shell.py:574
 msgid "Usage: standings [team|division|conference]"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:578
+#: src/nhl_scrabble/interactive/shell.py:590
 msgid "Eastern Conference Playoff Teams"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:579
-#: src/nhl_scrabble/interactive/shell.py:592
+#: src/nhl_scrabble/interactive/shell.py:591
+#: src/nhl_scrabble/interactive/shell.py:604
 msgid "Seed"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:591
+#: src/nhl_scrabble/interactive/shell.py:603
 msgid "Western Conference Playoff Teams"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:624
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:636
 msgid "NHL Scrabble Statistics"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:625
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:637
 msgid "Statistic"
-msgstr "Statistiques"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:628
+#: src/nhl_scrabble/interactive/shell.py:640
 #: src/nhl_scrabble/web/templates/conferences.html:9
 #: src/nhl_scrabble/web/templates/divisions.html:9
 #: src/nhl_scrabble/web/templates/playoffs.html:9
 #: src/nhl_scrabble/web/templates/stats.html:29
 #: src/nhl_scrabble/web/templates/teams.html:9
-#, fuzzy
 msgid "Total Teams"
-msgstr "Équipes"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:629
+#: src/nhl_scrabble/interactive/shell.py:641
 #: src/nhl_scrabble/web/templates/conferences.html:23
 #: src/nhl_scrabble/web/templates/divisions.html:23
 #: src/nhl_scrabble/web/templates/playoffs.html:22
@@ -682,15 +666,15 @@ msgstr "Équipes"
 msgid "Total Players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:631
+#: src/nhl_scrabble/interactive/shell.py:643
 msgid "Average Team Score"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:632
+#: src/nhl_scrabble/interactive/shell.py:644
 msgid "Average Player Score"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:633
+#: src/nhl_scrabble/interactive/shell.py:645
 #: src/nhl_scrabble/web/templates/conferences.html:13
 #: src/nhl_scrabble/web/templates/divisions.html:13
 #: src/nhl_scrabble/web/templates/results.html:17
@@ -699,138 +683,135 @@ msgstr ""
 msgid "Top Team"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:634
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:646
 msgid "Top Player"
-msgstr "Meilleurs joueurs par équipe"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:648
+#: src/nhl_scrabble/interactive/shell.py:660
 msgid "show team <abbrev> | show player <name> - Display details"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:649
+#: src/nhl_scrabble/interactive/shell.py:661
 msgid "top [N] - Show top N players (default: 10)"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:650
+#: src/nhl_scrabble/interactive/shell.py:662
 msgid "bottom [N] - Show bottom N players (default: 10)"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:651
+#: src/nhl_scrabble/interactive/shell.py:663
 msgid "compare <player1> <player2> - Compare two players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:652
+#: src/nhl_scrabble/interactive/shell.py:664
 msgid "filter division <div> | filter conference <conf>"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:653
+#: src/nhl_scrabble/interactive/shell.py:665
 msgid "search <query> - Search players by name"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:654
+#: src/nhl_scrabble/interactive/shell.py:666
 msgid "standings [team|division|conference] - Show standings"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:655
+#: src/nhl_scrabble/interactive/shell.py:667
 msgid "playoff - Show playoff bracket"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:656
+#: src/nhl_scrabble/interactive/shell.py:668
 msgid "stats - Show statistics"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:657
+#: src/nhl_scrabble/interactive/shell.py:669
 msgid "refresh - Re-fetch data from NHL API"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:658
+#: src/nhl_scrabble/interactive/shell.py:670
 msgid "help [command] - Show help"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:659
+#: src/nhl_scrabble/interactive/shell.py:671
 msgid "exit | quit - Exit interactive mode"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:665
+#: src/nhl_scrabble/interactive/shell.py:677
 msgid "No help available for"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:668
+#: src/nhl_scrabble/interactive/shell.py:680
 msgid "Available Commands"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:669
+#: src/nhl_scrabble/interactive/shell.py:681
 msgid "Command"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:670
+#: src/nhl_scrabble/interactive/shell.py:682
 msgid "Description"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:672
+#: src/nhl_scrabble/interactive/shell.py:684
 msgid "Show team details"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:673
+#: src/nhl_scrabble/interactive/shell.py:685
 msgid "Show player details"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:674
+#: src/nhl_scrabble/interactive/shell.py:686
 msgid "Show top N players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:675
+#: src/nhl_scrabble/interactive/shell.py:687
 msgid "Show bottom N players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:676
+#: src/nhl_scrabble/interactive/shell.py:688
 msgid "Compare two players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:677
+#: src/nhl_scrabble/interactive/shell.py:689
 msgid "Filter by division"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:678
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:690
 msgid "Filter by conference"
-msgstr "Conférences"
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:679
+#: src/nhl_scrabble/interactive/shell.py:691
 msgid "Search players"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:680
+#: src/nhl_scrabble/interactive/shell.py:692
 msgid "Show standings"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:681
+#: src/nhl_scrabble/interactive/shell.py:693
 msgid "Show playoff bracket"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:682
+#: src/nhl_scrabble/interactive/shell.py:694
 msgid "Show statistics"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:683
-#, fuzzy
+#: src/nhl_scrabble/interactive/shell.py:695
 msgid "Re-fetch data"
-msgstr "Récupération des données NHL..."
+msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:684
+#: src/nhl_scrabble/interactive/shell.py:696
 msgid "Show help"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:685
+#: src/nhl_scrabble/interactive/shell.py:697
 msgid "Exit"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:689
+#: src/nhl_scrabble/interactive/shell.py:701
 msgid "Tip: Type"
 msgstr ""
 
-#: src/nhl_scrabble/interactive/shell.py:689
+#: src/nhl_scrabble/interactive/shell.py:701
 msgid "for detailed help on a specific command"
 msgstr ""
 
@@ -874,56 +855,55 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:67
 msgid "Home"
-msgstr "Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:70
 msgid "Teams"
-msgstr "Équipes"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:73
 msgid "Divisions"
-msgstr "Divisions"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:76
 msgid "Conferences"
-msgstr "Conférences"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:79
 msgid "Playoffs"
-msgstr "Séries éliminatoires"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:82
 msgid "Stats"
-msgstr "Statistiques"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:85
 msgid "API Docs"
-msgstr "Documentation API"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:91
 msgid "Documentation"
-msgstr "Documentation"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:101
 msgid "Select Language"
-msgstr "Sélectionner la langue"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:102
 msgid "Select language"
-msgstr "Sélectionner la langue"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:133
 msgid "Open Source"
-msgstr "Open Source"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:134
 msgid "Status"
-msgstr "État"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/conferences.html:3
-#, fuzzy
 msgid "NHL Scrabble Analyzer - Conference Standings"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/conferences.html:18
 #: src/nhl_scrabble/web/templates/divisions.html:18
@@ -936,9 +916,8 @@ msgid "Conference Standings by Total Scrabble Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/divisions.html:3
-#, fuzzy
 msgid "NHL Scrabble Analyzer - Division Standings"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/divisions.html:30
 msgid "Division Standings by Total Scrabble Score"
@@ -946,72 +925,69 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:3
 msgid "NHL Scrabble Analyzer - Home"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:7
 msgid "Analyze NHL Player Names by Scrabble Score"
-msgstr "Analyser les noms de joueurs NHL par score Scrabble"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:9
 msgid ""
 "Calculate Scrabble scores for NHL player names and see team standings, "
 "playoff brackets, and statistics based on letter values."
 msgstr ""
-"Calculez les scores Scrabble pour les noms de joueurs NHL et voyez les "
-"classements d'équipes, les séries éliminatoires et les statistiques "
-"basées sur les valeurs des lettres."
 
 #: src/nhl_scrabble/web/templates/index.html:14
 msgid "Run Analysis"
-msgstr "Lancer l'analyse"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:27
 msgid "Top Players to Display"
-msgstr "Meilleurs joueurs à afficher"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:28
 msgid "Number of top-scoring players (1-100)"
-msgstr "Nombre de meilleurs joueurs (1-100)"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:36
 msgid "Number of top-scoring players to display (1-100)"
-msgstr "Nombre de meilleurs joueurs à afficher (1-100)"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:43
 msgid "Top Players per Team"
-msgstr "Meilleurs joueurs par équipe"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:44
 msgid "Players per team in results (1-30)"
-msgstr "Joueurs par équipe dans les résultats (1-30)"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:52
 msgid "Number of top players to show per team (1-30)"
-msgstr "Nombre de meilleurs joueurs à afficher par équipe (1-30)"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:62
 msgid "Use cached results for faster loading"
-msgstr "Utiliser les résultats mis en cache pour un chargement plus rapide"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:64
 msgid "Use Cached Results (faster)"
-msgstr "Utiliser les résultats mis en cache (plus rapide)"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:73
 msgid "Analyze NHL player Scrabble scores"
-msgstr "Analyser les scores Scrabble des joueurs NHL"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:74
 msgid "Analyze"
-msgstr "Analyser"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:84
 msgid "Loading NHL data..."
-msgstr "Chargement des données NHL..."
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:101
 msgid "About"
-msgstr "À propos"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:103
 msgid ""
@@ -1020,11 +996,6 @@ msgid ""
 "total roster score, creating an alternative playoff bracket based on "
 "alphabetical prowess rather than on-ice performance."
 msgstr ""
-"L'Analyseur Scrabble NHL calcule les scores Scrabble pour tous les "
-"joueurs NHL en utilisant les valeurs standard des lettres Scrabble. Les "
-"équipes sont classées selon le score total de leur effectif, créant une "
-"grille de séries éliminatoires alternative basée sur la prouesse "
-"alphabétique plutôt que sur les performances sur la glace."
 
 #: src/nhl_scrabble/web/templates/index.html:106
 #: src/nhl_scrabble/web/templates/index.html:133
@@ -1068,28 +1039,24 @@ msgid "Letter Distributions"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:3
-#, fuzzy
 msgid "NHL Scrabble Analyzer - Playoff Bracket"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:13
-#, fuzzy
 msgid "Playoff Teams"
-msgstr "Séries éliminatoires"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:17
 msgid "Top Seed"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:29
-#, fuzzy
 msgid "Playoff Bracket by Scrabble Score"
-msgstr "Analyser les noms de joueurs NHL par score Scrabble"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:39
-#, fuzzy
 msgid "Division winner"
-msgstr "Divisions"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:41
 msgid "Wild card"
@@ -1112,18 +1079,16 @@ msgid "Wild card teams (top 2 non-division winners)"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:66
-#, fuzzy
 msgid "Conference leader"
-msgstr "Conférences"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:67
 msgid "Presidents' Trophy (best overall record)"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:68
-#, fuzzy
 msgid "Division leader"
-msgstr "Divisions"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:69
 msgid "Clinched playoff spot"
@@ -1214,28 +1179,24 @@ msgid "Division Standings"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/stats.html:3
-#, fuzzy
 msgid "NHL Scrabble Analyzer - Statistics"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/stats.html:22
-#, fuzzy
 msgid "Lowest Score"
-msgstr "Open Source"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/stats.html:43
 msgid "Data As Of"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/stats.html:72
-#, fuzzy
 msgid "Top 10 Players by Scrabble Score"
-msgstr "Analyser les noms de joueurs NHL par score Scrabble"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/teams.html:3
-#, fuzzy
 msgid "NHL Scrabble Analyzer - Team Standings"
-msgstr "Analyseur Scrabble NHL - Accueil"
+msgstr ""
 
 #: src/nhl_scrabble/web/templates/teams.html:22
 msgid "Highest Player"
