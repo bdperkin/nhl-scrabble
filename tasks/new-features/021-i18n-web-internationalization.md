@@ -152,7 +152,7 @@ def get_locale():
 - [x] Flask-Babel installed and configured
 - [x] Jinja2 i18n extension enabled
 - [x] Core template strings wrapped with {% trans %} (base.html, index.html, results.html)
-- [ ] Remaining templates wrapped (teams.html, divisions.html, conferences.html, playoffs.html, stats.html)
+- [x] Remaining templates wrapped (teams.html, divisions.html, conferences.html, playoffs.html, stats.html)
 - [x] Language selector in UI
 - [x] Locale detection from Accept-Language header
 - [x] URL parameter ?lang= support
@@ -176,7 +176,7 @@ def get_locale():
 
 **Implementation Date**: 2026-05-06
 **Branch**: new-features/021-i18n-web-internationalization
-**Status**: Mostly Complete (Core functionality working, some templates pending)
+**Status**: ✅ **COMPLETE** - All templates internationalized, all tests passing
 
 ### What Was Implemented
 
@@ -188,17 +188,17 @@ def get_locale():
   - HTTP Accept-Language header
   - Default fallback to en_US
 
-**2. Template Internationalization** ⚠️ Partially Complete
-- **Completed Templates**:
+**2. Template Internationalization** ✅ **COMPLETE**
+- **All 8 Templates Internationalized**:
   - `base.html` - 24 trans tags (navigation, header, footer, language selector)
   - `index.html` - 29 trans tags (hero section, form labels, help text, info section)
   - `results.html` - 30 trans tags (table headers, buttons, stats labels)
-- **Pending Templates**:
-  - `teams.html` - 0 trans tags (78 lines)
-  - `divisions.html` - 0 trans tags (44 lines)
-  - `conferences.html` - 0 trans tags (44 lines)
-  - `playoffs.html` - 0 trans tags (73 lines)
-  - `stats.html` - 0 trans tags (124 lines)
+  - `teams.html` - 18 trans tags (stats cards, table headers, export buttons)
+  - `divisions.html` - 6 trans tags (stats cards, section heading)
+  - `conferences.html` - 6 trans tags (stats cards, section heading)
+  - `playoffs.html` - 17 trans tags (stats cards, bracket labels, legend)
+  - `stats.html` - 18 trans tags (stats cards, visualizations, table headers)
+- **Total**: 148 {% trans %} tags across all web templates
 
 **3. Language Selector** ✅
 - Dropdown selector in base.html with all 12 supported locales
@@ -255,12 +255,7 @@ def get_locale():
 
 ### Known Issues / Technical Debt
 
-1. **Incomplete Template Coverage**
-   - 5 templates still need {% trans %} tags
-   - Estimated 2-3 hours to complete
-   - Non-blocking: Core functionality works
-
-2. **Translation Coverage**
+1. **Translation Coverage**
    - Only French Canadian has full translations
    - Other locales have structure but English fallback
    - Need translation contributions for: sv_SE, fi_FI, cs_CZ, de_DE, de_CH, it_CH, sk_SK, ru_RU, lv_LV
@@ -277,14 +272,12 @@ def get_locale():
 - Includes Jinja2 template usage
 - Documents locale detection mechanism
 
-### Next Steps
+### Next Steps (Future Enhancements)
 
-To fully complete this task:
-1. Add {% trans %} tags to remaining 5 templates
-2. Extract new strings with `pybabel extract`
-3. Update .po files with `pybabel update`
-4. Get translation contributions for other locales
-5. Re-run visual regression tests if template changes significant
+1. Get translation contributions for other locales (sv_SE, fi_FI, cs_CZ, etc.)
+2. Consider adding more languages based on user demand
+3. Add context comments to .po files for ambiguous strings
+4. Consider implementing pluralization for count-based strings
 
 ### Test Results
 
