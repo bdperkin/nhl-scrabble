@@ -58,7 +58,7 @@ jobs:
 
       - name: Compile translations
         run: |
-          pybabel compile -d src/nhl_scrabble/locales
+          python -m babel.messages.frontend compile -d src/nhl_scrabble/locales
         # Compile .po translation files to .mo before running tests
         # .mo files are excluded from git but needed for i18n tests
 
