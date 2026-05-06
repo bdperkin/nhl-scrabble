@@ -135,12 +135,7 @@ class TestTranslationCompleteness:
         """Test that .mo binary file exists for locale."""
         from pathlib import Path
 
-        mo_file = (
-            Path("src/nhl_scrabble/locales")
-            / locale
-            / "LC_MESSAGES"
-            / "messages.mo"
-        )
+        mo_file = Path("src/nhl_scrabble/locales") / locale / "LC_MESSAGES" / "messages.mo"
         assert mo_file.exists(), f"Missing .mo file for {locale}"
 
     @pytest.mark.parametrize("locale", ["fr_CA", "sv_SE"])
@@ -148,12 +143,7 @@ class TestTranslationCompleteness:
         """Test that .po translation file exists for locale."""
         from pathlib import Path
 
-        po_file = (
-            Path("src/nhl_scrabble/locales")
-            / locale
-            / "LC_MESSAGES"
-            / "messages.po"
-        )
+        po_file = Path("src/nhl_scrabble/locales") / locale / "LC_MESSAGES" / "messages.po"
         assert po_file.exists(), f"Missing .po file for {locale}"
 
     @pytest.mark.parametrize("locale", ["fr_CA", "sv_SE"])
@@ -161,12 +151,7 @@ class TestTranslationCompleteness:
         """Test that locale has actual translations (not all empty)."""
         from pathlib import Path
 
-        po_file = (
-            Path("src/nhl_scrabble/locales")
-            / locale
-            / "LC_MESSAGES"
-            / "messages.po"
-        )
+        po_file = Path("src/nhl_scrabble/locales") / locale / "LC_MESSAGES" / "messages.po"
 
         content = po_file.read_text(encoding="utf-8")
 
@@ -174,13 +159,9 @@ class TestTranslationCompleteness:
         import re
 
         msgstr_pattern = re.compile(r'^msgstr "(.+)"', re.MULTILINE)
-        non_empty_translations = len(
-            [m for m in msgstr_pattern.findall(content) if m]
-        )
+        non_empty_translations = len([m for m in msgstr_pattern.findall(content) if m])
 
-        assert (
-            non_empty_translations > 0
-        ), f"No translations found in {locale}/messages.po"
+        assert non_empty_translations > 0, f"No translations found in {locale}/messages.po"
 
     def test_fr_ca_vs_sv_se_consistency(self):
         """Test that fr_CA and sv_SE have similar translation coverage."""
@@ -199,16 +180,12 @@ class TestTranslationCompleteness:
             sv_result = translator_sv(string)
 
             # Both should be translated (different from English)
-            assert fr_result != string, (
-                f"French did not translate '{string}'"
-            )
-            assert sv_result != string, (
-                f"Swedish did not translate '{string}'"
-            )
+            assert fr_result != string, f"French did not translate '{string}'"
+            assert sv_result != string, f"Swedish did not translate '{string}'"
             # And they should be different from each other
-            assert fr_result != sv_result, (
-                f"French and Swedish produced same translation for '{string}'"
-            )
+            assert (
+                fr_result != sv_result
+            ), f"French and Swedish produced same translation for '{string}'"
 
 
 class TestTranslationQuality:
@@ -228,9 +205,9 @@ class TestTranslationQuality:
 
         for original, expected_preserved in test_cases:
             result = translator(original)
-            assert expected_preserved in result, (
-                f"Placeholder '{expected_preserved}' missing in translation of '{original}'"
-            )
+            assert (
+                expected_preserved in result
+            ), f"Placeholder '{expected_preserved}' missing in translation of '{original}'"
 
     def test_sv_se_no_placeholder_corruption(self):
         """Test that placeholders are not corrupted in Swedish."""
@@ -246,21 +223,16 @@ class TestTranslationQuality:
 
         for original, expected_preserved in test_cases:
             result = translator(original)
-            assert expected_preserved in result, (
-                f"Placeholder '{expected_preserved}' missing in translation of '{original}'"
-            )
+            assert (
+                expected_preserved in result
+            ), f"Placeholder '{expected_preserved}' missing in translation of '{original}'"
 
     @pytest.mark.parametrize("locale", ["fr_CA", "sv_SE"])
     def test_translation_encoding_utf8(self, locale):
         """Test that translation files use UTF-8 encoding."""
         from pathlib import Path
 
-        po_file = (
-            Path("src/nhl_scrabble/locales")
-            / locale
-            / "LC_MESSAGES"
-            / "messages.po"
-        )
+        po_file = Path("src/nhl_scrabble/locales") / locale / "LC_MESSAGES" / "messages.po"
 
         content = po_file.read_text(encoding="utf-8")
-        assert 'charset=utf-8' in content.lower() or 'charset=UTF-8' in content
+        assert "charset=utf-8" in content.lower() or "charset=UTF-8" in content
