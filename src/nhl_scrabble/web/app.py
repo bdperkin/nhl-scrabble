@@ -120,11 +120,11 @@ if TEMPLATES_DIR.exists():
             localedir=str(LOCALES_DIR),
             languages=[DEFAULT_LOCALE],
         )
-        templates.env.install_gettext_translations(default_translation, newstyle=True)
+        templates.env.install_gettext_translations(default_translation, newstyle=True)  # type: ignore[attr-defined]
     except FileNotFoundError:
         # Fallback to NullTranslations if .mo files not found
         null_translation = gettext.NullTranslations()
-        templates.env.install_gettext_translations(null_translation, newstyle=True)
+        templates.env.install_gettext_translations(null_translation, newstyle=True)  # type: ignore[attr-defined]
 
 # Cache storage (in-memory for now)
 _analysis_cache: dict[str, dict[str, Any]] = {}
@@ -194,11 +194,11 @@ def setup_template_locale(request: Request) -> dict[str, Any]:
                 localedir=str(LOCALES_DIR),
                 languages=[locale],
             )
-            templates.env.install_gettext_translations(translation, newstyle=True)
+            templates.env.install_gettext_translations(translation, newstyle=True)  # type: ignore[attr-defined]
         except FileNotFoundError:
             # Fallback to NullTranslations if locale not found
             null_translation = gettext.NullTranslations()
-            templates.env.install_gettext_translations(null_translation, newstyle=True)
+            templates.env.install_gettext_translations(null_translation, newstyle=True)  # type: ignore[attr-defined]
 
     return {
         "request": request,

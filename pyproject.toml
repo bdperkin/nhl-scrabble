@@ -729,6 +729,8 @@ module = [
 # - Generic wrappers and decorators
 # - Pre-existing type inconsistencies
 disallow_any_explicit = false
+# Don't warn about unused type: ignore comments (Jinja2 i18n extension adds methods dynamically)
+warn_unused_ignores = false
 
 [tool.ty.environment]
 python-version = "3.12"
