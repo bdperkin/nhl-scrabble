@@ -6,28 +6,28 @@
 
         <!-- SEO Meta Tags -->
         <meta name="description"
-              content="NHL Scrabble Analyzer - Calculate Scrabble scores for NHL player names. See team standings, playoff brackets, and statistics based on letter values.">
+              content="{% trans %}NHL Scrabble Analyzer - Calculate Scrabble scores for NHL player names. See team standings, playoff brackets, and statistics based on letter values.{% endtrans %}">
         <meta name="keywords"
-              content="NHL, Scrabble, hockey, player names, statistics, analysis">
+              content="{% trans %}NHL, Scrabble, hockey, player names, statistics, analysis{% endtrans %}">
         <meta name="author" content="NHL Scrabble Project">
         <meta name="robots" content="index, follow">
 
         <!-- Open Graph / Social Media Meta Tags -->
         <meta property="og:type" content="website">
         <meta property="og:title"
-              content="{% block og_title %}NHL Scrabble Analyzer{% endblock %}">
+              content="{% block og_title %}{% trans %}NHL Scrabble Analyzer{% endtrans %}{% endblock %}">
         <meta property="og:description"
-              content="Analyze NHL player names by Scrabble score - See team standings and playoff brackets based on letter values">
-        <meta property="og:site_name" content="NHL Scrabble Analyzer">
+              content="{% trans %}Analyze NHL player names by Scrabble score - See team standings and playoff brackets based on letter values{% endtrans %}">
+        <meta property="og:site_name" content="{% trans %}NHL Scrabble Analyzer{% endtrans %}">
 
         <!-- Twitter Card Meta Tags -->
         <meta name="twitter:card" content="summary">
         <meta name="twitter:title"
-              content="{% block twitter_title %}NHL Scrabble Analyzer{% endblock %}">
-        <meta name="twitter:description" content="Analyze NHL player names by Scrabble score">
+              content="{% block twitter_title %}{% trans %}NHL Scrabble Analyzer{% endtrans %}{% endblock %}">
+        <meta name="twitter:description" content="{% trans %}Analyze NHL player names by Scrabble score{% endtrans %}">
 
         <title>
-            {% block title %}NHL Scrabble Analyzer{% endblock %}
+            {% block title %}{% trans %}NHL Scrabble Analyzer{% endtrans %}{% endblock %}
         </title>
 
         <!-- Favicon -->
@@ -48,11 +48,11 @@
             <div class="container">
                 <div class="header-content">
                     <h1 class="site-title">
-                        <a href="/">🏒 NHL Scrabble Analyzer</a>
+                        <a href="/?lang={{ locale }}">🏒 {% trans %}NHL Scrabble Analyzer{% endtrans %}</a>
                     </h1>
 
                     <!-- Mobile navigation toggle -->
-                    <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation menu">
+                    <button id="navToggle" class="nav-toggle" aria-label="{% trans %}Toggle navigation menu{% endtrans %}">
                         <span class="hamburger">
                             <span class="hamburger-line"></span>
                             <span class="hamburger-line"></span>
@@ -61,40 +61,59 @@
                     </button>
 
                     <!-- Navigation menu -->
-                    <nav id="navMenu" class="main-nav" aria-label="Main navigation">
+                    <nav id="navMenu" class="main-nav" aria-label="{% trans %}Main navigation{% endtrans %}">
                         <ul>
                             <li>
-                                <a href="/">Home</a>
+                                <a href="/?lang={{ locale }}">{% trans %}Home{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/teams">Teams</a>
+                                <a href="/teams?lang={{ locale }}">{% trans %}Teams{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/divisions">Divisions</a>
+                                <a href="/divisions?lang={{ locale }}">{% trans %}Divisions{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/conferences">Conferences</a>
+                                <a href="/conferences?lang={{ locale }}">{% trans %}Conferences{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/playoffs">Playoffs</a>
+                                <a href="/playoffs?lang={{ locale }}">{% trans %}Playoffs{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/stats">Stats</a>
+                                <a href="/stats?lang={{ locale }}">{% trans %}Stats{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/docs">API Docs</a>
+                                <a href="/docs?lang={{ locale }}">{% trans %}API Docs{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="/redoc">ReDoc</a>
+                                <a href="/redoc?lang={{ locale }}">ReDoc</a>
                             </li>
                             <li>
-                                <a href="https://bdperkin.github.io/nhl-scrabble/" target="_blank">Documentation</a>
+                                <a href="https://bdperkin.github.io/nhl-scrabble/" target="_blank">{% trans %}Documentation{% endtrans %}</a>
                             </li>
                             <li>
                                 <a href="https://github.com/bdperkin/nhl-scrabble" target="_blank">GitHub</a>
                             </li>
                         </ul>
                     </nav>
+
+                    <!-- Language Selector -->
+                    <div class="language-selector">
+                        <label for="languageSelect" class="sr-only">{% trans %}Select Language{% endtrans %}</label>
+                        <select id="languageSelect" aria-label="{% trans %}Select language{% endtrans %}" onchange="changeLanguage(this.value)">
+                            <option value="en_US" {% if get_locale() == 'en_US' %}selected{% endif %}>English (US)</option>
+                            <option value="en_CA" {% if get_locale() == 'en_CA' %}selected{% endif %}>English (Canada)</option>
+                            <option value="fr_CA" {% if get_locale() == 'fr_CA' %}selected{% endif %}>Français (Canada)</option>
+                            <option value="sv_SE" {% if get_locale() == 'sv_SE' %}selected{% endif %}>Svenska</option>
+                            <option value="fi_FI" {% if get_locale() == 'fi_FI' %}selected{% endif %}>Suomi</option>
+                            <option value="cs_CZ" {% if get_locale() == 'cs_CZ' %}selected{% endif %}>Čeština</option>
+                            <option value="de_DE" {% if get_locale() == 'de_DE' %}selected{% endif %}>Deutsch (Deutschland)</option>
+                            <option value="de_CH" {% if get_locale() == 'de_CH' %}selected{% endif %}>Deutsch (Schweiz)</option>
+                            <option value="it_CH" {% if get_locale() == 'it_CH' %}selected{% endif %}>Italiano (Svizzera)</option>
+                            <option value="sk_SK" {% if get_locale() == 'sk_SK' %}selected{% endif %}>Slovenčina</option>
+                            <option value="ru_RU" {% if get_locale() == 'ru_RU' %}selected{% endif %}>Русский</option>
+                            <option value="lv_LV" {% if get_locale() == 'lv_LV' %}selected{% endif %}>Latviešu</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </header>
@@ -110,9 +129,9 @@
         <footer class="site-footer" role="contentinfo">
             <div class="container">
                 <p>
-                    &copy; 2026 NHL Scrabble Analyzer |
-                    <a href="https://github.com/bdperkin/nhl-scrabble">Open Source</a> |
-                    <a href="/health">Status</a>
+                    &copy; 2026 {% trans %}NHL Scrabble Analyzer{% endtrans %} |
+                    <a href="https://github.com/bdperkin/nhl-scrabble">{% trans %}Open Source{% endtrans %}</a> |
+                    <a href="/health?lang={{ locale }}">{% trans %}Status{% endtrans %}</a>
                 </p>
             </div>
         </footer>
@@ -130,6 +149,15 @@
 
         <!-- Main application -->
         <script src="/static/js/app.js"></script>
+
+        <!-- Language selector -->
+        <script>
+            function changeLanguage(locale) {
+                const url = new URL(window.location);
+                url.searchParams.set('lang', locale);
+                window.location = url;
+            }
+        </script>
 
         {% block extra_js %}{% endblock %}
     </body>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-05 23:34-0400\n"
+"POT-Creation-Date: 2026-05-06 11:50-0400\n"
 "PO-Revision-Date: 2026-05-05 23:01-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv_SE\n"
@@ -18,307 +18,768 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/nhl_scrabble/cli.py:96
+#: src/nhl_scrabble/cli.py:97
 #, python-brace-format
 msgid ""
 "Output directory does not exist: {output_dir}\n"
 "Create it first: mkdir -p {output_dir}"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:102
+#: src/nhl_scrabble/cli.py:105
 #, python-brace-format
 msgid ""
 "Output directory is not writable: {output_dir}\n"
 "Check permissions with: ls -ld {output_dir}"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:109
+#: src/nhl_scrabble/cli.py:114
 #, python-brace-format
 msgid ""
 "Output file exists but is not writable: {output_path}\n"
 "Check permissions with: ls -l {output_path}"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:309 src/nhl_scrabble/cli.py:1151
-#: src/nhl_scrabble/cli.py:1366
+#: src/nhl_scrabble/cli.py:316 src/nhl_scrabble/cli.py:1181
+#: src/nhl_scrabble/cli.py:1400
 #, python-brace-format
 msgid "[yellow]⚠[/yellow]  Failed teams: {teams}"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:424 src/nhl_scrabble/cli.py:995
-#: src/nhl_scrabble/cli.py:1561 src/nhl_scrabble/cli.py:1753
+#: src/nhl_scrabble/cli.py:434 src/nhl_scrabble/cli.py:1024
+#: src/nhl_scrabble/cli.py:1598 src/nhl_scrabble/cli.py:1790
 msgid "Output format (default: text)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:430 src/nhl_scrabble/cli.py:1001
-#: src/nhl_scrabble/cli.py:1759
+#: src/nhl_scrabble/cli.py:440 src/nhl_scrabble/cli.py:1030
+#: src/nhl_scrabble/cli.py:1796
 msgid "Output file path (default: stdout)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:435
+#: src/nhl_scrabble/cli.py:445
 msgid "Custom template file path (required for --format template)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:440
+#: src/nhl_scrabble/cli.py:450
 msgid ""
 "Comma-separated list of sheets for Excel export "
 "(teams,players,divisions,conferences,playoffs)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:448 src/nhl_scrabble/cli.py:808
-#: src/nhl_scrabble/cli.py:1008 src/nhl_scrabble/cli.py:1235
-#: src/nhl_scrabble/cli.py:1386 src/nhl_scrabble/cli.py:1568
+#: src/nhl_scrabble/cli.py:458 src/nhl_scrabble/cli.py:837
+#: src/nhl_scrabble/cli.py:1037 src/nhl_scrabble/cli.py:1268
+#: src/nhl_scrabble/cli.py:1423 src/nhl_scrabble/cli.py:1605
 msgid "Enable verbose logging"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:454 src/nhl_scrabble/cli.py:1014
-#: src/nhl_scrabble/cli.py:1574
+#: src/nhl_scrabble/cli.py:464 src/nhl_scrabble/cli.py:1043
+#: src/nhl_scrabble/cli.py:1611
 msgid "Suppress progress bars and status messages"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:460 src/nhl_scrabble/cli.py:813
-#: src/nhl_scrabble/cli.py:1019 src/nhl_scrabble/cli.py:1398
-#: src/nhl_scrabble/cli.py:1580
+#: src/nhl_scrabble/cli.py:470 src/nhl_scrabble/cli.py:842
+#: src/nhl_scrabble/cli.py:1048 src/nhl_scrabble/cli.py:1435
+#: src/nhl_scrabble/cli.py:1617
 msgid "Disable API response caching (always fetch fresh data)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:465
+#: src/nhl_scrabble/cli.py:475
 msgid "Clear API cache before running"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:470
+#: src/nhl_scrabble/cli.py:480
 msgid "Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:477 src/nhl_scrabble/cli.py:1587
+#: src/nhl_scrabble/cli.py:487 src/nhl_scrabble/cli.py:1624
 msgid "Number of top players to show (default: 20, range: 1-100)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:483 src/nhl_scrabble/cli.py:1593
+#: src/nhl_scrabble/cli.py:493 src/nhl_scrabble/cli.py:1630
 msgid "Number of top players per team to show (default: 5, range: 1-50)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:489 src/nhl_scrabble/cli.py:1599
+#: src/nhl_scrabble/cli.py:499 src/nhl_scrabble/cli.py:1636
 msgid "Generate specific report only (default: all reports)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:496
+#: src/nhl_scrabble/cli.py:506
 msgid "Built-in scoring system to use (default: scrabble)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:501
+#: src/nhl_scrabble/cli.py:511
 msgid "Path to custom scoring configuration JSON file"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:506
+#: src/nhl_scrabble/cli.py:516
 msgid ""
 "Filter by divisions (comma-separated: "
 "Atlantic,Metropolitan,Central,Pacific)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:510
+#: src/nhl_scrabble/cli.py:520
 msgid "Filter by conferences (comma-separated: Eastern,Western)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:514
+#: src/nhl_scrabble/cli.py:524
 msgid "Filter by teams (comma-separated abbreviations: TOR,MTL,BOS)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:518
+#: src/nhl_scrabble/cli.py:528
 msgid "Exclude teams (comma-separated abbreviations: NYR,PHI)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:523
+#: src/nhl_scrabble/cli.py:533
 msgid "Minimum player score to include"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:528
+#: src/nhl_scrabble/cli.py:538
 msgid "Maximum player score to include"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:535
+#: src/nhl_scrabble/cli.py:545
 msgid "Display locale (e.g., fr_CA for Canadian French)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:718
+#: src/nhl_scrabble/cli.py:727
 msgid "🏒 NHL Roster Scrabble Score Analyzer 🏒"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:719 src/nhl_scrabble/cli.py:785
-#: src/nhl_scrabble/cli.py:1133
+#: src/nhl_scrabble/cli.py:728 src/nhl_scrabble/cli.py:814
+#: src/nhl_scrabble/cli.py:1162
 msgid "="
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:741
+#: src/nhl_scrabble/cli.py:750
 msgid "Filters active:"
-msgstr ""
-
-#: src/nhl_scrabble/cli.py:743
-#, python-brace-format
-msgid "  • Divisions: {divisions}"
-msgstr ""
-
-#: src/nhl_scrabble/cli.py:745
-#, python-brace-format
-msgid "  • Conferences: {conferences}"
-msgstr ""
-
-#: src/nhl_scrabble/cli.py:747
-#, python-brace-format
-msgid "  • Teams: {teams}"
-msgstr ""
-
-#: src/nhl_scrabble/cli.py:749
-#, python-brace-format
-msgid "  • Excluded: {excluded}"
-msgstr ""
-
-#: src/nhl_scrabble/cli.py:751
-#, python-brace-format
-msgid "  • Min score: {min_score}"
 msgstr ""
 
 #: src/nhl_scrabble/cli.py:753
 #, python-brace-format
+msgid "  • Divisions: {divisions}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:759
+#, python-brace-format
+msgid "  • Conferences: {conferences}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:765
+#, python-brace-format
+msgid "  • Teams: {teams}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:769
+#, python-brace-format
+msgid "  • Excluded: {excluded}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:775
+#, python-brace-format
+msgid "  • Min score: {min_score}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:779
+#, python-brace-format
 msgid "  • Max score: {max_score}"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:776
+#: src/nhl_scrabble/cli.py:804
 #, python-brace-format
 msgid ""
 "\n"
 "[green]✓[/green] Report saved to: {output}"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:781
+#: src/nhl_scrabble/cli.py:810
 msgid ""
 "\n"
 "[yellow]⚠[/yellow] CSV/Excel formats require --output option"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:785
+#: src/nhl_scrabble/cli.py:814
 msgid "\n"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:786
+#: src/nhl_scrabble/cli.py:815
 msgid "[green]✓ Analysis complete![/green]"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:790
+#: src/nhl_scrabble/cli.py:819
 #, python-brace-format
 msgid ""
 "\n"
 "[red]❌ NHL API Error: {error}[/red]"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:794 src/nhl_scrabble/cli.py:873
-#: src/nhl_scrabble/cli.py:1205 src/nhl_scrabble/cli.py:1529
+#: src/nhl_scrabble/cli.py:823 src/nhl_scrabble/cli.py:902
+#: src/nhl_scrabble/cli.py:1238 src/nhl_scrabble/cli.py:1566
 #, python-brace-format
 msgid ""
 "\n"
 "[red]❌ Unexpected error: {error}[/red]"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:802
+#: src/nhl_scrabble/cli.py:831
 msgid "Skip fetching data from NHL API on startup"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:869
+#: src/nhl_scrabble/cli.py:898
 msgid ""
 "\n"
 "[cyan]Goodbye![/cyan]"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:980
+#: src/nhl_scrabble/cli.py:1009
 msgid "Enable fuzzy matching for approximate name searches"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:987
+#: src/nhl_scrabble/cli.py:1016
 msgid "Maximum number of results to show (default: 20, range: 1-500)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1025
+#: src/nhl_scrabble/cli.py:1054
 msgid "Minimum Scrabble score to include"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1030
+#: src/nhl_scrabble/cli.py:1059
 msgid "Maximum Scrabble score to include"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1035
+#: src/nhl_scrabble/cli.py:1064
 msgid "Filter by team abbreviation (e.g., TOR, MTL)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1040
+#: src/nhl_scrabble/cli.py:1069
 msgid "Filter by division name (e.g., Atlantic, Metropolitan)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1045
+#: src/nhl_scrabble/cli.py:1074
 msgid "Filter by conference name (Eastern or Western)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1132
+#: src/nhl_scrabble/cli.py:1161
 msgid ""
 "\n"
 "[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1213
+#: src/nhl_scrabble/cli.py:1246
 msgid "Host address to bind server (default: 127.0.0.1)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1219
+#: src/nhl_scrabble/cli.py:1252
 msgid "Port to bind to (default: 8000, range: 1-65535)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1224
+#: src/nhl_scrabble/cli.py:1257
 msgid "Enable auto-reload for development (watches for file changes)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1229
+#: src/nhl_scrabble/cli.py:1262
 msgid "Path to log file (enables file-based logging with rotation)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1392
+#: src/nhl_scrabble/cli.py:1429
 msgid "Suppress progress bars and status messages during data fetching"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1404
+#: src/nhl_scrabble/cli.py:1441
 msgid "Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1409
+#: src/nhl_scrabble/cli.py:1446
 msgid "Display static snapshot instead of live dashboard"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1414
+#: src/nhl_scrabble/cli.py:1451
 msgid "Filter by division (e.g., Atlantic, Metropolitan, Central, Pacific)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1418
+#: src/nhl_scrabble/cli.py:1455
 msgid "Filter by conference (Eastern or Western)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1552
+#: src/nhl_scrabble/cli.py:1589
 msgid "Refresh interval in seconds (default: 300 = 5 minutes, range: 1+)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1765
+#: src/nhl_scrabble/cli.py:1802
 msgid "Target coverage percentage (default: 90.0)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1770
+#: src/nhl_scrabble/cli.py:1807
 msgid "Show coverage gaps analysis"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1775
+#: src/nhl_scrabble/cli.py:1812
 msgid "Show slowest tests analysis"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1780
+#: src/nhl_scrabble/cli.py:1817
 msgid "Show flaky tests analysis"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:1785
+#: src/nhl_scrabble/cli.py:1822
 msgid "Show coverage trends analysis"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:9
+msgid ""
+"NHL Scrabble Analyzer - Calculate Scrabble scores for NHL player names. "
+"See team standings, playoff brackets, and statistics based on letter "
+"values."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:11
+msgid "NHL, Scrabble, hockey, player names, statistics, analysis"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:18
+#: src/nhl_scrabble/web/templates/base.html:21
+#: src/nhl_scrabble/web/templates/base.html:26
+#: src/nhl_scrabble/web/templates/base.html:30
+#: src/nhl_scrabble/web/templates/base.html:51
+#: src/nhl_scrabble/web/templates/base.html:132
+msgid "NHL Scrabble Analyzer"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:20
+msgid ""
+"Analyze NHL player names by Scrabble score - See team standings and "
+"playoff brackets based on letter values"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:27
+msgid "Analyze NHL player names by Scrabble score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:55
+msgid "Toggle navigation menu"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:64
+msgid "Main navigation"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:67
+msgid "Home"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:70
+msgid "Teams"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:73
+msgid "Divisions"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:76
+msgid "Conferences"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:79
+msgid "Playoffs"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:82
+msgid "Stats"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:85
+msgid "API Docs"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:91
+msgid "Documentation"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:101
+msgid "Select Language"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:102
+msgid "Select language"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:133
+msgid "Open Source"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:134
+msgid "Status"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:3
+msgid "NHL Scrabble Analyzer - Conference Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:9
+#: src/nhl_scrabble/web/templates/divisions.html:9
+#: src/nhl_scrabble/web/templates/playoffs.html:9
+#: src/nhl_scrabble/web/templates/stats.html:29
+#: src/nhl_scrabble/web/templates/teams.html:9
+msgid "Total Teams"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:13
+#: src/nhl_scrabble/web/templates/divisions.html:13
+#: src/nhl_scrabble/web/templates/results.html:17
+#: src/nhl_scrabble/web/templates/stats.html:33
+#: src/nhl_scrabble/web/templates/teams.html:13
+msgid "Top Team"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:18
+#: src/nhl_scrabble/web/templates/divisions.html:18
+#: src/nhl_scrabble/web/templates/stats.html:38
+msgid "Lowest Team"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:23
+#: src/nhl_scrabble/web/templates/divisions.html:23
+#: src/nhl_scrabble/web/templates/playoffs.html:22
+#: src/nhl_scrabble/web/templates/results.html:4
+#: src/nhl_scrabble/web/templates/stats.html:9
+#: src/nhl_scrabble/web/templates/teams.html:18
+msgid "Total Players"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:30
+msgid "Conference Standings by Total Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/divisions.html:3
+msgid "NHL Scrabble Analyzer - Division Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/divisions.html:30
+msgid "Division Standings by Total Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:3
+msgid "NHL Scrabble Analyzer - Home"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:7
+msgid "Analyze NHL Player Names by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:9
+msgid ""
+"Calculate Scrabble scores for NHL player names and see team standings, "
+"playoff brackets, and statistics based on letter values."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:14
+msgid "Run Analysis"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:27
+msgid "Top Players to Display"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:28
+msgid "Number of top-scoring players (1-100)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:36
+msgid "Number of top-scoring players to display (1-100)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:43
+msgid "Top Players per Team"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:44
+msgid "Players per team in results (1-30)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:52
+msgid "Number of top players to show per team (1-30)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:62
+msgid "Use cached results for faster loading"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:64
+msgid "Use Cached Results (faster)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:73
+msgid "Analyze NHL player Scrabble scores"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:74
+msgid "Analyze"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:77
+msgid "Fetching NHL data..."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:84
+msgid "Loading NHL data..."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:101
+msgid "About"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:103
+msgid ""
+"NHL Scrabble Analyzer calculates Scrabble scores for all NHL players "
+"using standard Scrabble letter point values. Teams are ranked by their "
+"total roster score, creating an alternative playoff bracket based on "
+"alphabetical prowess rather than on-ice performance."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:106
+#: src/nhl_scrabble/web/templates/index.html:133
+msgid "Scrabble Letter Values"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:109
+msgid "1 point:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:112
+msgid "2 points:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:115
+msgid "3 points:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:118
+msgid "4 points:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:121
+msgid "5 points:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:124
+msgid "8 points:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:127
+msgid "10 points:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:132
+msgid "References:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/index.html:134
+msgid "Letter Distributions"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:3
+msgid "NHL Scrabble Analyzer - Playoff Bracket"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:13
+msgid "Playoff Teams"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:17
+msgid "Top Seed"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:29
+msgid "Playoff Bracket by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:33
+#: src/nhl_scrabble/web/templates/results.html:117
+#: src/nhl_scrabble/web/templates/teams.html:56
+msgid "Conference"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:39
+msgid "Division winner"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:41
+msgid "Wild card"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:52
+msgid "avg"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:62
+msgid "Legend:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:64
+msgid "Division winners (automatic qualification)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:65
+msgid "Wild card teams (top 2 non-division winners)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:66
+msgid "Conference leader"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:67
+msgid "Presidents' Trophy (best overall record)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:68
+msgid "Division leader"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:69
+msgid "Clinched playoff spot"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:8
+#: src/nhl_scrabble/web/templates/stats.html:13
+msgid "Highest Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:13
+#: src/nhl_scrabble/web/templates/stats.html:18
+msgid "Average Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:25
+#: src/nhl_scrabble/web/templates/stats.html:53
+msgid "Score Visualizations"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:28
+#: src/nhl_scrabble/web/templates/stats.html:56
+msgid "Team Scores"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:35
+#: src/nhl_scrabble/web/templates/stats.html:63
+msgid "Player Score Distribution"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:44
+#, python-format
+msgid "Top %(count)s Players by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:50
+msgid "Export top players table to CSV format"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:51
+#: src/nhl_scrabble/web/templates/results.html:98
+#: src/nhl_scrabble/web/templates/teams.html:37
+msgid "Export CSV"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:55
+msgid "Export top players table to JSON format"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:56
+#: src/nhl_scrabble/web/templates/results.html:103
+#: src/nhl_scrabble/web/templates/teams.html:42
+msgid "Export JSON"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:64
+#: src/nhl_scrabble/web/templates/stats.html:77
+msgid "Top players by Scrabble score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:67
+#: src/nhl_scrabble/web/templates/results.html:114
+#: src/nhl_scrabble/web/templates/stats.html:80
+#: src/nhl_scrabble/web/templates/teams.html:53
+msgid "Rank"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:68
+#: src/nhl_scrabble/web/templates/stats.html:81
+msgid "Player Name"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:69
+#: src/nhl_scrabble/web/templates/results.html:115
+#: src/nhl_scrabble/web/templates/stats.html:82
+#: src/nhl_scrabble/web/templates/teams.html:54
+msgid "Team"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:70
+#: src/nhl_scrabble/web/templates/stats.html:83
+msgid "Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:91
+#: src/nhl_scrabble/web/templates/teams.html:30
+msgid "Team Standings by Total Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:97
+#: src/nhl_scrabble/web/templates/teams.html:36
+msgid "Export team standings table to CSV format"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:102
+#: src/nhl_scrabble/web/templates/teams.html:41
+msgid "Export team standings table to JSON format"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:111
+#: src/nhl_scrabble/web/templates/teams.html:50
+msgid "Team standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:116
+#: src/nhl_scrabble/web/templates/teams.html:55
+msgid "Division"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:118
+#: src/nhl_scrabble/web/templates/teams.html:57
+msgid "Total Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:119
+#: src/nhl_scrabble/web/templates/teams.html:58
+msgid "Avg Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:120
+#: src/nhl_scrabble/web/templates/teams.html:59
+msgid "Players"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/results.html:142
+msgid "Division Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:3
+msgid "NHL Scrabble Analyzer - Statistics"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:22
+msgid "Lowest Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:43
+msgid "Data As Of"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:72
+msgid "Top 10 Players by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/teams.html:3
+msgid "NHL Scrabble Analyzer - Team Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/teams.html:22
+msgid "Highest Player"
 msgstr ""

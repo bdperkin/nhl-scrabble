@@ -40,6 +40,7 @@
 [build-system]
 build-backend = "hatchling.build"
 requires = [
+    "babel>=2.14.0", # For compiling .po to .mo during build
     "hatch-vcs",
     "hatchling",
 ]
@@ -194,6 +195,10 @@ Repository = "https://github.com/bdperkin/nhl-scrabble"
 Issues = "https://github.com/bdperkin/nhl-scrabble/issues"
 Changelog = "https://github.com/bdperkin/nhl-scrabble/blob/main/CHANGELOG.md"
 
+[tool.hatch.build.hooks.custom]
+# Compile .po translation files to .mo during package build
+# This ensures .mo files are included in the wheel/sdist without committing them to git
+path = "scripts/hatch_build.py"
 [tool.hatch.build.hooks.vcs]
 version-file = "src/nhl_scrabble/_version.py"
 [tool.hatch.build.targets.wheel]
@@ -300,6 +305,7 @@ max-complexity = 10
     "T201",
     "S603",
     "S607",
+    "INP001",
 ]
 "tests/**/*.py" = [
     "ARG",
@@ -636,7 +642,10 @@ exclude_tests = []
 [tool.mypy]
 python_version = "3.12"
 plugins = [ "pydantic.mypy" ]
-exclude = [ "src/nhl_scrabble/_version.py" ]
+exclude = [
+    "src/nhl_scrabble/_version.py",
+    "scripts/",
+]
 strict = true
 warn_unreachable = true
 warn_no_return = true
@@ -729,6 +738,8 @@ module = [
 # - Generic wrappers and decorators
 # - Pre-existing type inconsistencies
 disallow_any_explicit = false
+# Don't warn about unused type: ignore comments (Jinja2 i18n extension adds methods dynamically)
+warn_unused_ignores = false
 
 [tool.ty.environment]
 python-version = "3.12"
