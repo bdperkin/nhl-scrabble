@@ -20,18 +20,20 @@ Supported Locales:
     - lv_LV: Latvian (Latvia)
 
 Usage:
-    Basic translation:
-        >>> from nhl_scrabble.i18n import get_translator
-        >>> _ = get_translator("fr_CA")
-        >>> print(_("Hello, World!"))
-        Bonjour, le monde!
+    Basic translation::
 
-    Environment variable override:
-        >>> import os
-        >>> os.environ["NHL_SCRABBLE_LANG"] = "sv_SE"
-        >>> _ = get_translator()
-        >>> print(_("Team"))
-        Lag
+        from nhl_scrabble.i18n import get_translator
+        _ = get_translator("fr_CA")
+        print(_("Hello, World!"))
+        # Output: Bonjour, le monde! (once translations are compiled)
+
+    Environment variable override::
+
+        import os
+        os.environ["NHL_SCRABBLE_LANG"] = "sv_SE"
+        _ = get_translator()
+        print(_("Team"))
+        # Output: Lag (once translations are compiled)
 
     Number formatting:
         >>> from nhl_scrabble.i18n import format_number
@@ -86,10 +88,6 @@ def get_system_locale() -> str:
     Examples:
         >>> get_system_locale()  # doctest: +SKIP
         'en_US'
-
-        >>> # On French Canadian system:  # doctest: +SKIP
-        >>> get_system_locale()  # doctest: +SKIP
-        'fr_CA'
 
     Notes:
         - Uses locale.getdefaultlocale() which may return None on some systems
