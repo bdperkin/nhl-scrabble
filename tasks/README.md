@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 203 tasks (22 active, 181 completed)
+**Total Tasks**: 203 tasks (21 active, 182 completed)
 
 ## Overview
 
@@ -98,7 +98,7 @@ Each task includes:
 
 | ID  | Title | Priority | Effort | Status | GitHub Issue | Notes |
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
-| 022 | Comprehensive GitHub Workflows Enhancement | MEDIUM | 24-32 hours (main task coordination + sub-tasks) | Completed | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | - |
+| 022 | Comprehensive GitHub Workflows Enhancement | MEDIUM | 24-32 hours (actual: ~23h) | Completed | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | Coordination of 12 sub-tasks (032-043), completed 2026-04-26 to 2026-05-05 |
 | 023 | Extend Sphinx Builder Functionality | LOW | 4-6 hours | Completed | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | - |
 | 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours | Completed | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | - |
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | Unknown | Active | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | - |
