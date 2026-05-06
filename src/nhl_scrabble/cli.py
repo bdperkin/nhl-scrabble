@@ -438,7 +438,9 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 )
 @click.option(
     "--sheets",
-    help=_("Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)"),
+    help=_(
+        "Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
+    ),
 )
 # === Behavior Flags ===
 @click.option(
@@ -1523,7 +1525,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
         seconds: Number of seconds to sleep
         shutdown_flag: Mutable list containing shutdown boolean flag
     """
-    for _ in range(seconds):
+    for _i in range(seconds):
         if shutdown_flag[0]:
             return
         time.sleep(1)
