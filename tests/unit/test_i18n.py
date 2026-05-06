@@ -281,11 +281,13 @@ class TestConvenienceFunction:
 
     def test_convenience_function_uses_system_locale(self):
         """Test _() function uses system locale when no env var set."""
-        with patch("nhl_scrabble.i18n.get_system_locale", return_value="sv_SE"):
-            # Clear any existing env var
-            with patch.dict(os.environ, {}, clear=True):
-                result = _("Test")
-                assert isinstance(result, str)
+        # Clear any existing env var
+        with (
+            patch("nhl_scrabble.i18n.get_system_locale", return_value="sv_SE"),
+            patch.dict(os.environ, {}, clear=True),
+        ):
+            result = _("Test")
+            assert isinstance(result, str)
 
 
 class TestEdgeCases:
