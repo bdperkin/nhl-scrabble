@@ -217,3 +217,34 @@ def format_number(number: float, locale_code: str | None = None) -> str:
     except locale.Error:
         # Fallback to standard formatting
         return f"{number:.2f}"
+
+
+def _(message: str) -> str:
+    """Translate a message using the current locale.
+
+    This is a convenience function that uses the system locale for translation.
+    It's a simpler alternative to calling get_translator() when you don't need
+    explicit locale control.
+
+    Args:
+        message: String to translate.
+
+    Returns:
+        Translated string, or original if translation not available.
+
+    Examples:
+        >>> from nhl_scrabble.i18n import _
+        >>> _("Hello, World!")  # doctest: +SKIP
+        'Bonjour, le monde!'  # If locale is fr_CA and translation exists
+
+        >>> _("Team")  # doctest: +SKIP
+        'Lag'  # If locale is sv_SE and translation exists
+
+    Notes:
+        - Uses NHL_SCRABBLE_LANG environment variable if set
+        - Falls back to system locale if env var not set
+        - Returns original string if translation not found
+        - For explicit locale control, use get_translator(locale_code) instead
+    """
+    translator = get_translator()
+    return translator(message)
