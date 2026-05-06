@@ -301,9 +301,38 @@ Output:
 
 ```
 Translation Statistics:
-src/nhl_scrabble/locales/fr_CA/LC_MESSAGES/messages.po: 150 translated, 104 untranslated.
-src/nhl_scrabble/locales/sv_SE/LC_MESSAGES/messages.po: 0 translated, 254 untranslated.
+src/nhl_scrabble/locales/fr_CA/LC_MESSAGES/messages.po: 254 translated messages.
+src/nhl_scrabble/locales/sv_SE/LC_MESSAGES/messages.po: 254 translated messages.
+src/nhl_scrabble/locales/de_DE/LC_MESSAGES/messages.po: 0 translated, 254 untranslated.
 ```
+
+## Translation Status
+
+Current translation completion as of 2026-05-06:
+
+| Locale | Language               | Status              | Completion | Reviewer Needed |
+| ------ | ---------------------- | ------------------- | ---------- | --------------- |
+| fr_CA  | French (Canada)        | ✅ Complete (DRAFT) | 254/254    | Yes             |
+| sv_SE  | Swedish (Sweden)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
+| en_US  | English (US)           | 🔄 Source language  | -          | -               |
+| en_CA  | English (Canada)       | ⏳ Pending          | 0/254      | Yes             |
+| ru_RU  | Russian (Russia)       | ⏳ Pending          | 0/254      | Yes             |
+| fi_FI  | Finnish (Finland)      | ⏳ Pending          | 0/254      | Yes             |
+| cs_CZ  | Czech (Czech Republic) | ⏳ Pending          | 0/254      | Yes             |
+| de_DE  | German (Germany)       | ⏳ Pending          | 0/254      | Yes             |
+| de_CH  | German (Switzerland)   | ⏳ Pending          | 0/254      | Yes             |
+| it_CH  | Italian (Switzerland)  | ⏳ Pending          | 0/254      | Yes             |
+| sk_SK  | Slovak (Slovakia)      | ⏳ Pending          | 0/254      | Yes             |
+| lv_LV  | Latvian (Latvia)       | ⏳ Pending          | 0/254      | Yes             |
+
+**Note**: French Canadian (fr_CA) and Swedish (sv_SE) translations are machine-translated drafts created with AI assistance. They require review by native speakers to ensure:
+
+- Natural, idiomatic language
+- Proper hockey terminology for each region
+- Cultural appropriateness
+- UI string length compatibility
+
+**Want to help review?** Native speakers of French or Swedish who can verify the translations are welcome to contribute! See the [Contributing](#5-submit-your-translation) section above.
 
 ## Common Issues
 

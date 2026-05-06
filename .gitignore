@@ -294,10 +294,11 @@ __pycache__/
 # Internationalization (I18n)
 # ============================================================================
 
-# Compiled translation files (generated from .po files)
-# .mo files are compiled from .po source files and should be regenerated
-# They will be compiled during package build (see pyproject.toml [tool.hatch.build.hooks])
-*.mo
+# Compiled translation files are now committed for reliability
+# Previously excluded, but small size (~45KB total) and reliability benefits
+# outweigh the typical practice of excluding build artifacts
+# Ensures translations work in all environments without compilation
+# *.mo
 
 # Temporary extraction directory
 /locales/
