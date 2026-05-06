@@ -134,6 +134,10 @@ branding = [
 export = [
     "openpyxl>=3.1.5",
 ]
+i18n = [
+    "babel>=2.14.0",
+    "flask-babel>=4.0.0",
+]
 docs = [
     "blacken-docs>=1.20.0",
     "linkchecker>=10.0.0",
@@ -593,8 +597,10 @@ ty = "ty"
 uvicorn = "uvicorn"
 [tool.deptry.per_rule_ignores]
 DEP002 = [
+    "babel",
     "bashate",
     "beautysh",
+    "flask-babel",
     "locust",
     "pytest-playwright",
 ]
@@ -1142,6 +1148,8 @@ ignore_names = [
     "get_standings",
     "get_team",
     "get_teams",
+    "get_translator",
+    "format_number",
     "test_*",
     "fixture_*",
     "*_fixture",

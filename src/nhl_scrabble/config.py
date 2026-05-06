@@ -64,6 +64,7 @@ class Config(BaseSettings):
         top_team_players_count: Number of top players per team to show
         verbose: Enable verbose logging
         output_format: Output format (text, json, html, csv, excel)
+        locale: Display locale for translations (en_US, fr_CA, sv_SE, etc.)
         sanitize_logs: Sanitize sensitive data from logs (disable only for debugging)
         dos_max_connections: Maximum number of connection pool connections (DoS prevention)
         dos_max_per_host: Maximum connections per host (DoS prevention)
@@ -216,6 +217,13 @@ class Config(BaseSettings):
             description="Output format (text/json/html/csv/excel)",
         ),
     ]
+    locale: Annotated[
+        str,
+        Field(
+            default="en_US",
+            description="Display locale (en_US/fr_CA/sv_SE/etc.)",
+        ),
+    ]
     sanitize_logs: Annotated[
         bool,
         Field(
@@ -299,6 +307,30 @@ class Config(BaseSettings):
         if not isinstance(data, dict):
             return data
 
+        # Helper function to get supported locales from i18n module
+        def _get_supported_locales() -> list[str]:
+            """Import SUPPORTED_LOCALES from i18n module."""
+            try:
+                from nhl_scrabble.i18n import SUPPORTED_LOCALES  # noqa: PLC0415
+
+                return SUPPORTED_LOCALES
+            except ImportError:
+                # Fallback if i18n not available
+                return [
+                    "en_US",
+                    "en_CA",
+                    "fr_CA",
+                    "sv_SE",
+                    "ru_RU",
+                    "fi_FI",
+                    "cs_CZ",
+                    "de_DE",
+                    "de_CH",
+                    "it_CH",
+                    "sk_SK",
+                    "lv_LV",
+                ]
+
         # Helper function to get env var with proper error context
         def get_int(
             key: str,
@@ -372,12 +404,18 @@ class Config(BaseSettings):
             except ConfigValidationError as e:
                 raise ValueError(f"{env_var}: {e}") from e
 
-        def get_enum(key: str, env_var: str, default: str, allowed: set[str]) -> str:
+        def get_enum(
+            key: str,
+            env_var: str,
+            default: str,
+            allowed: set[str],
+            case_sensitive: bool = False,
+        ) -> str:
             """Get and validate enum from environment or data."""
             value_str = str(data[key]) if key in data else os.getenv(env_var, default)
 
             try:
-                return validate_enum(value_str, allowed)
+                return validate_enum(value_str, allowed, case_sensitive=case_sensitive)
             except ConfigValidationError as e:
                 raise ValueError(f"{env_var}: {e}") from e
 
@@ -452,6 +490,13 @@ class Config(BaseSettings):
                     "excel",
                     "template",
                 },
+            ),
+            "locale": get_enum(
+                "locale",
+                "NHL_SCRABBLE_LANG",
+                "en_US",
+                set(_get_supported_locales()),
+                case_sensitive=True,
             ),
             "sanitize_logs": get_bool(
                 "sanitize_logs",

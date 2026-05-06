@@ -13,6 +13,7 @@ Complete list of all environment variables supported by NHL Scrabble.
 | `NHL_SCRABBLE_CACHE_ENABLED`    | bool   | true                      | Enable caching           |
 | `NHL_SCRABBLE_CACHE_EXPIRY`     | int    | 3600                      | Cache duration (seconds) |
 | `NHL_SCRABBLE_OUTPUT_FORMAT`    | string | text                      | Output format            |
+| `NHL_SCRABBLE_LANG`             | string | en_US                     | Display locale           |
 | `NHL_SCRABBLE_TOP_PLAYERS`      | int    | 20                        | Top players count        |
 | `NHL_SCRABBLE_TOP_TEAM_PLAYERS` | int    | 5                         | Per-team players         |
 | `NHL_SCRABBLE_VERBOSE`          | bool   | false                     | Verbose logging          |
@@ -135,6 +136,45 @@ export NHL_SCRABBLE_CACHE_EXPIRY=7200  # 2 hours
 ```bash
 export NHL_SCRABBLE_OUTPUT_FORMAT=json
 ```
+
+### NHL_SCRABBLE_LANG
+
+**Type**: String (locale code)
+**Default**: en_US
+**Description**: Display locale for translations and number formatting.
+
+**Supported Locales**:
+
+| Locale | Language | Region        |
+| ------ | -------- | ------------- |
+| en_US  | English  | United States |
+| en_CA  | English  | Canada        |
+| fr_CA  | French   | Canada        |
+| sv_SE  | Swedish  | Sweden        |
+| ru_RU  | Russian  | Russia        |
+| fi_FI  | Finnish  | Finland       |
+| cs_CZ  | Czech    | Czechia       |
+| de_DE  | German   | Germany       |
+| de_CH  | German   | Switzerland   |
+| it_CH  | Italian  | Switzerland   |
+| sk_SK  | Slovak   | Slovakia      |
+| lv_LV  | Latvian  | Latvia        |
+
+**Examples**:
+
+```bash
+# French Canadian
+export NHL_SCRABBLE_LANG=fr_CA
+
+# Swedish
+export NHL_SCRABBLE_LANG=sv_SE
+
+# Default (US English)
+unset NHL_SCRABBLE_LANG
+```
+
+**Note**: Translations must be compiled with `pybabel compile` before use.
+See [Translation Workflow](../../.github/docs/translation-workflow.md) for details.
 
 ### NHL_SCRABBLE_TOP_PLAYERS
 

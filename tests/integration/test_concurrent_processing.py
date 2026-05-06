@@ -134,21 +134,29 @@ class TestConcurrentProcessingPerformance:
         can be unpredictable in shared/virtualized environments. Run locally
         to verify concurrent performance with different worker counts.
         """
-        standings_response = Mock()
-        standings_response.status_code = 200
-        standings_response.json.return_value = sample_standings_data
 
-        roster_response = Mock()
-        roster_response.status_code = 200
-        roster_response.json.return_value = sample_roster_data
+        # Setup mock responses with delay to simulate network I/O
+        def make_delayed_response(data: dict[str, Any], delay_ms: int = 100) -> Mock:
+            """Create a mock response with simulated network delay."""
+            response = Mock()
+            response.status_code = 200
+
+            def delayed_json() -> dict[str, Any]:
+                time.sleep(delay_ms / 1000.0)  # Convert ms to seconds
+                return data
+
+            response.json = delayed_json
+            return response
 
         num_teams = len(sample_standings_data["standings"])
 
         results = {}
 
         for worker_count in [1, 3, 5, 10]:
-            # Reset mock
-            mock_get.side_effect = [standings_response] + [roster_response] * num_teams
+            # Reset mock with delayed responses for each iteration
+            mock_get.side_effect = [make_delayed_response(sample_standings_data)] + [
+                make_delayed_response(sample_roster_data) for _ in range(num_teams)
+            ]
 
             api_client = NHLApiClient(
                 cache_enabled=False,

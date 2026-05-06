@@ -67,6 +67,7 @@ A [Python](https://www.python.org/) application that fetches current NHL roster 
 - 📈 **Progress Tracking** - Real-time progress bars for long operations
 - 🎯 **Flexible Output** - Text, JSON, or HTML format
 - 🎨 **Colorized Logging** - Color-coded log levels with TTY detection and NO_COLOR support
+- 🌍 **Internationalization** - 12 locales supported (EN, FR, SV, RU, FI, CS, DE, IT, SK, LV) with gettext translations
 - 🧪 **Comprehensive Testing** - >90% code coverage with 170+ unit/integration tests
   - Playwright-based E2E testing (40+ browser tests)
   - Visual regression testing across browsers (Chromium, Firefox, WebKit)
