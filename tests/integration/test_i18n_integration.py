@@ -87,9 +87,10 @@ class TestI18nInfrastructure:
         assert "nhl_scrabble" in str(LOCALES_DIR)
 
     def test_locales_dir_in_package(self):
-        """Test locales directory is in src/nhl_scrabble."""
-        assert "src" in str(LOCALES_DIR.absolute())
-        assert "nhl_scrabble" in str(LOCALES_DIR)
+        """Test locales directory is in nhl_scrabble package."""
+        # Works both in development (src/nhl_scrabble) and installed (.tox/*/site-packages/nhl_scrabble)
+        assert "nhl_scrabble" in str(LOCALES_DIR.absolute())
+        assert LOCALES_DIR.name == "locales"
 
     def test_babel_cfg_exists(self):
         """Test babel.cfg configuration file exists."""
