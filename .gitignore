@@ -295,9 +295,9 @@ __pycache__/
 # ============================================================================
 
 # Compiled translation files (generated from .po files)
-# Ignore .mo files everywhere except in src/nhl_scrabble/locales/
+# .mo files are compiled from .po source files and should be regenerated
+# They will be compiled during package build (see pyproject.toml [tool.hatch.build.hooks])
 *.mo
-!src/nhl_scrabble/locales/**/*.mo
 
 # Temporary extraction directory
 /locales/
