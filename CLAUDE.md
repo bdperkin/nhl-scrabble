@@ -383,9 +383,6 @@ from nhl_scrabble.i18n import _
 
 # Wrap user-facing strings
 console.print(_("Analysis complete!"))
-
-# CLI help text
-@click.option("--verbose", help=_("Enable verbose output"))
 ```
 
 **Supported Locales:** en_US, en_CA, fr_CA, sv_SE, ru_RU, fi_FI, cs_CZ, de_DE, de_CH, it_CH, sk_SK, lv_LV
