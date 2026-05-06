@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-05-01 (Updated 2026-05-06 after completing new-features/021)
-**Total Tasks**: 19 active tasks
-**Estimated Total Effort**: 164.5 hours
+**Generated**: 2026-05-01 (Updated 2026-05-06 after completing new-features/022)
+**Total Tasks**: 18 active tasks
+**Estimated Total Effort**: 161.0 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -15,7 +15,7 @@ This file provides the **optimal** implementation order for all active tasks, ba
 
 - **HIGH Priority**: 0 tasks
 - **MEDIUM Priority**: 4 tasks (current sprint)
-- **LOW Priority**: 17 tasks (future backlog)
+- **LOW Priority**: 16 tasks (future backlog)
 
 **Recommendation**: Focus on MEDIUM priority tasks first, then LOW priority backlog.
 
@@ -82,17 +82,12 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 
 ## Phase 4: LOW Priority
 
-**Effort**: 18.5 hours | **Tasks**: 5
+**Effort**: 15.0 hours | **Tasks**: 4
 **Focus**: Feature development and enhancements - schedule for future sprints
 
 ```bash
 # Add Configuration Profiles
 /implement-task new-features/012-config-profiles.md  # 3.5h, Issue #155
-```
-
-```bash
-# TUI/Interactive Mode Internationalization
-/implement-task new-features/022-i18n-tui-internationalization.md  # 3.5h, Issue #250 [PARENT]
 ```
 
 ```bash
