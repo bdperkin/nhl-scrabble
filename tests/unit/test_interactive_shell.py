@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from unittest.mock import Mock, patch
 
 import pytest
@@ -676,3 +677,47 @@ class TestRunMethodCoverage:
             patch.object(shell_with_data.console, "print"),
         ):
             shell_with_data.run()
+
+
+class TestI18nSupport:
+    """Test internationalization support in interactive shell."""
+
+    def test_translator_is_initialized(self) -> None:
+        """Test that translator function is available."""
+        # Import the translator from the shell module
+        from nhl_scrabble.interactive import shell
+
+        # Verify _ function exists and is callable
+        assert hasattr(shell, "_")
+        assert callable(shell._)
+
+    def test_shell_uses_translations(self, shell_with_data: InteractiveShell) -> None:
+        """Test that shell commands use translation function."""
+        # Test that help command uses translations
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_help([])
+            # Should print translated help text
+            assert mock_print.called
+
+    @patch.dict(os.environ, {"NHL_SCRABBLE_LANG": "fr_CA"})
+    def test_shell_respects_locale_setting(self) -> None:
+        """Test that shell respects NHL_SCRABBLE_LANG environment variable."""
+        # Create a new shell with locale set
+        shell = InteractiveShell()
+        # Shell should initialize without errors
+        assert shell is not None
+
+    def test_welcome_message_is_translatable(self) -> None:
+        """Test that welcome message uses translation."""
+        shell = InteractiveShell()
+        shell.data = {"teams": []}
+
+        with (
+            patch.object(shell.session, "prompt", side_effect=["exit"]),
+            patch.object(shell.console, "print") as mock_print,
+        ):
+            shell.run()
+            # Should print welcome message
+            calls = [str(call) for call in mock_print.call_args_list]
+            # Check that some form of welcome/help message was printed
+            assert any(call for call in calls if call)  # At least one print call

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-06 11:50-0400\n"
+"POT-Creation-Date: 2026-05-06 13:35-0400\n"
 "PO-Revision-Date: 2026-05-05 23:01-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -323,6 +323,498 @@ msgstr ""
 msgid "Show coverage trends analysis"
 msgstr ""
 
+#: src/nhl_scrabble/interactive/shell.py:74
+#: src/nhl_scrabble/web/templates/index.html:77
+msgid "Fetching NHL data..."
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:114
+msgid "Data loaded successfully!"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:118
+msgid "Warning: Failed to fetch"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:118
+msgid "teams"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:140
+msgid "NHL Scrabble Interactive Mode"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:141
+#: src/nhl_scrabble/interactive/shell.py:142
+#: src/nhl_scrabble/interactive/shell.py:199
+msgid "Type"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:141
+#: src/nhl_scrabble/interactive/shell.py:199
+msgid "for available commands"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:142
+msgid "to quit"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:161
+msgid "Error: Invalid command syntax"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:169
+#: src/nhl_scrabble/interactive/shell.py:491
+msgid "No data loaded. Use"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:169
+#: src/nhl_scrabble/interactive/shell.py:491
+msgid "to fetch data."
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:198
+msgid "Unknown command"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:206
+msgid "Goodbye!"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:250
+#: src/nhl_scrabble/interactive/shell.py:278
+#: src/nhl_scrabble/interactive/shell.py:406
+msgid "Attribute"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:251
+#: src/nhl_scrabble/interactive/shell.py:279
+#: src/nhl_scrabble/interactive/shell.py:626
+msgid "Value"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:253
+#: src/nhl_scrabble/interactive/shell.py:528
+#: src/nhl_scrabble/web/templates/playoffs.html:33
+#: src/nhl_scrabble/web/templates/results.html:117
+#: src/nhl_scrabble/web/templates/teams.html:56
+msgid "Conference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:254
+#: src/nhl_scrabble/interactive/shell.py:529
+#: src/nhl_scrabble/interactive/shell.py:581
+#: src/nhl_scrabble/interactive/shell.py:594
+#: src/nhl_scrabble/web/templates/results.html:116
+#: src/nhl_scrabble/web/templates/teams.html:55
+msgid "Division"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:255
+#: src/nhl_scrabble/interactive/shell.py:630
+#: src/nhl_scrabble/web/templates/results.html:118
+#: src/nhl_scrabble/web/templates/teams.html:57
+msgid "Total Score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:256
+#: src/nhl_scrabble/web/templates/results.html:120
+#: src/nhl_scrabble/web/templates/teams.html:59
+msgid "Players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:257
+#: src/nhl_scrabble/web/templates/results.html:13
+#: src/nhl_scrabble/web/templates/stats.html:18
+msgid "Average Score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:265
+msgid "Top 10 Players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:266
+#: src/nhl_scrabble/interactive/shell.py:337
+#: src/nhl_scrabble/interactive/shell.py:364
+#: src/nhl_scrabble/interactive/shell.py:428
+#: src/nhl_scrabble/interactive/shell.py:526
+#: src/nhl_scrabble/web/templates/results.html:67
+#: src/nhl_scrabble/web/templates/results.html:114
+#: src/nhl_scrabble/web/templates/stats.html:80
+#: src/nhl_scrabble/web/templates/teams.html:53
+msgid "Rank"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:267
+#: src/nhl_scrabble/interactive/shell.py:338
+#: src/nhl_scrabble/interactive/shell.py:365
+#: src/nhl_scrabble/interactive/shell.py:507
+msgid "Player"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:268
+#: src/nhl_scrabble/interactive/shell.py:340
+#: src/nhl_scrabble/interactive/shell.py:367
+#: src/nhl_scrabble/interactive/shell.py:430
+#: src/nhl_scrabble/interactive/shell.py:509
+#: src/nhl_scrabble/interactive/shell.py:530
+#: src/nhl_scrabble/interactive/shell.py:582
+#: src/nhl_scrabble/interactive/shell.py:595
+#: src/nhl_scrabble/web/templates/results.html:70
+#: src/nhl_scrabble/web/templates/stats.html:83
+msgid "Score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:281
+#: src/nhl_scrabble/interactive/shell.py:339
+#: src/nhl_scrabble/interactive/shell.py:366
+#: src/nhl_scrabble/interactive/shell.py:410
+#: src/nhl_scrabble/interactive/shell.py:429
+#: src/nhl_scrabble/interactive/shell.py:508
+#: src/nhl_scrabble/interactive/shell.py:527
+#: src/nhl_scrabble/interactive/shell.py:580
+#: src/nhl_scrabble/interactive/shell.py:593
+#: src/nhl_scrabble/web/templates/results.html:69
+#: src/nhl_scrabble/web/templates/results.html:115
+#: src/nhl_scrabble/web/templates/stats.html:82
+#: src/nhl_scrabble/web/templates/teams.html:54
+msgid "Team"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:282
+msgid "First Name"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:283
+msgid "Last Name"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:284
+#: src/nhl_scrabble/interactive/shell.py:411
+msgid "Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:291
+#: src/nhl_scrabble/interactive/shell.py:318
+msgid "Usage: show team <abbrev> | show player <name>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:296
+msgid "Usage: show team <abbrev>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:304
+msgid "Team not found"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:308
+msgid "Usage: show player <name>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:316
+#: src/nhl_scrabble/interactive/shell.py:394
+#: src/nhl_scrabble/interactive/shell.py:401
+msgid "Player not found"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:325
+#: src/nhl_scrabble/interactive/shell.py:352
+msgid "Error: N must be a number"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:336
+#, python-brace-format
+msgid "Top {} Players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:363
+#, python-brace-format
+msgid "Bottom {} Players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:377
+msgid "Usage: compare <player1> <player2>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:405
+msgid "Player Comparison"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:414
+msgid "Difference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:419
+#: src/nhl_scrabble/interactive/shell.py:421
+msgid "has a higher score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:423
+msgid "Tied!"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:441
+#: src/nhl_scrabble/interactive/shell.py:481
+msgid "Usage: filter division <div> | filter conference <conf>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:449
+msgid "Usage: filter division <div>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:456
+msgid "No teams found in division"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:459
+#, python-brace-format
+msgid "Teams in {}"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:463
+msgid "Usage: filter conference <conf>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:474
+msgid "No teams found in conference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:477
+#, python-brace-format
+msgid "Teams in {} Conference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:487
+msgid "Usage: search <query>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:503
+msgid "No players found matching"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:506
+#, python-brace-format
+msgid "Search Results for '{}'"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:515
+msgid "Found"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:515
+msgid "player(s)"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:525
+msgid "Team Standings"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:547
+#, python-brace-format
+msgid "{} Division"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:554
+msgid "Eastern Conference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:559
+msgid "Western Conference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:563
+msgid "Usage: standings [team|division|conference]"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:578
+msgid "Eastern Conference Playoff Teams"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:579
+#: src/nhl_scrabble/interactive/shell.py:592
+msgid "Seed"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:591
+msgid "Western Conference Playoff Teams"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:624
+msgid "NHL Scrabble Statistics"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:625
+msgid "Statistic"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:628
+#: src/nhl_scrabble/web/templates/conferences.html:9
+#: src/nhl_scrabble/web/templates/divisions.html:9
+#: src/nhl_scrabble/web/templates/playoffs.html:9
+#: src/nhl_scrabble/web/templates/stats.html:29
+#: src/nhl_scrabble/web/templates/teams.html:9
+msgid "Total Teams"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:629
+#: src/nhl_scrabble/web/templates/conferences.html:23
+#: src/nhl_scrabble/web/templates/divisions.html:23
+#: src/nhl_scrabble/web/templates/playoffs.html:22
+#: src/nhl_scrabble/web/templates/results.html:4
+#: src/nhl_scrabble/web/templates/stats.html:9
+#: src/nhl_scrabble/web/templates/teams.html:18
+msgid "Total Players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:631
+msgid "Average Team Score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:632
+msgid "Average Player Score"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:633
+#: src/nhl_scrabble/web/templates/conferences.html:13
+#: src/nhl_scrabble/web/templates/divisions.html:13
+#: src/nhl_scrabble/web/templates/results.html:17
+#: src/nhl_scrabble/web/templates/stats.html:33
+#: src/nhl_scrabble/web/templates/teams.html:13
+msgid "Top Team"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:634
+msgid "Top Player"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:648
+msgid "show team <abbrev> | show player <name> - Display details"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:649
+msgid "top [N] - Show top N players (default: 10)"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:650
+msgid "bottom [N] - Show bottom N players (default: 10)"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:651
+msgid "compare <player1> <player2> - Compare two players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:652
+msgid "filter division <div> | filter conference <conf>"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:653
+msgid "search <query> - Search players by name"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:654
+msgid "standings [team|division|conference] - Show standings"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:655
+msgid "playoff - Show playoff bracket"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:656
+msgid "stats - Show statistics"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:657
+msgid "refresh - Re-fetch data from NHL API"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:658
+msgid "help [command] - Show help"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:659
+msgid "exit | quit - Exit interactive mode"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:665
+msgid "No help available for"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:668
+msgid "Available Commands"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:669
+msgid "Command"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:670
+msgid "Description"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:672
+msgid "Show team details"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:673
+msgid "Show player details"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:674
+msgid "Show top N players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:675
+msgid "Show bottom N players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:676
+msgid "Compare two players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:677
+msgid "Filter by division"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:678
+msgid "Filter by conference"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:679
+msgid "Search players"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:680
+msgid "Show standings"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:681
+msgid "Show playoff bracket"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:682
+msgid "Show statistics"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:683
+msgid "Re-fetch data"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:684
+msgid "Show help"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:685
+msgid "Exit"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:689
+msgid "Tip: Type"
+msgstr ""
+
+#: src/nhl_scrabble/interactive/shell.py:689
+msgid "for detailed help on a specific command"
+msgstr ""
+
 #: src/nhl_scrabble/web/templates/base.html:9
 msgid ""
 "NHL Scrabble Analyzer - Calculate Scrabble scores for NHL player names. "
@@ -413,35 +905,10 @@ msgstr ""
 msgid "NHL Scrabble Analyzer - Conference Standings"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/conferences.html:9
-#: src/nhl_scrabble/web/templates/divisions.html:9
-#: src/nhl_scrabble/web/templates/playoffs.html:9
-#: src/nhl_scrabble/web/templates/stats.html:29
-#: src/nhl_scrabble/web/templates/teams.html:9
-msgid "Total Teams"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/conferences.html:13
-#: src/nhl_scrabble/web/templates/divisions.html:13
-#: src/nhl_scrabble/web/templates/results.html:17
-#: src/nhl_scrabble/web/templates/stats.html:33
-#: src/nhl_scrabble/web/templates/teams.html:13
-msgid "Top Team"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/conferences.html:18
 #: src/nhl_scrabble/web/templates/divisions.html:18
 #: src/nhl_scrabble/web/templates/stats.html:38
 msgid "Lowest Team"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/conferences.html:23
-#: src/nhl_scrabble/web/templates/divisions.html:23
-#: src/nhl_scrabble/web/templates/playoffs.html:22
-#: src/nhl_scrabble/web/templates/results.html:4
-#: src/nhl_scrabble/web/templates/stats.html:9
-#: src/nhl_scrabble/web/templates/teams.html:18
-msgid "Total Players"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/conferences.html:30
@@ -512,10 +979,6 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:74
 msgid "Analyze"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/index.html:77
-msgid "Fetching NHL data..."
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:84
@@ -591,12 +1054,6 @@ msgstr ""
 msgid "Playoff Bracket by Scrabble Score"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/playoffs.html:33
-#: src/nhl_scrabble/web/templates/results.html:117
-#: src/nhl_scrabble/web/templates/teams.html:56
-msgid "Conference"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/playoffs.html:39
 msgid "Division winner"
 msgstr ""
@@ -640,11 +1097,6 @@ msgstr ""
 #: src/nhl_scrabble/web/templates/results.html:8
 #: src/nhl_scrabble/web/templates/stats.html:13
 msgid "Highest Score"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/results.html:13
-#: src/nhl_scrabble/web/templates/stats.html:18
-msgid "Average Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:25
@@ -692,28 +1144,9 @@ msgstr ""
 msgid "Top players by Scrabble score"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/results.html:67
-#: src/nhl_scrabble/web/templates/results.html:114
-#: src/nhl_scrabble/web/templates/stats.html:80
-#: src/nhl_scrabble/web/templates/teams.html:53
-msgid "Rank"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/results.html:68
 #: src/nhl_scrabble/web/templates/stats.html:81
 msgid "Player Name"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/results.html:69
-#: src/nhl_scrabble/web/templates/results.html:115
-#: src/nhl_scrabble/web/templates/stats.html:82
-#: src/nhl_scrabble/web/templates/teams.html:54
-msgid "Team"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/results.html:70
-#: src/nhl_scrabble/web/templates/stats.html:83
-msgid "Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:91
@@ -736,24 +1169,9 @@ msgstr ""
 msgid "Team standings"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/results.html:116
-#: src/nhl_scrabble/web/templates/teams.html:55
-msgid "Division"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/results.html:118
-#: src/nhl_scrabble/web/templates/teams.html:57
-msgid "Total Score"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/results.html:119
 #: src/nhl_scrabble/web/templates/teams.html:58
 msgid "Avg Score"
-msgstr ""
-
-#: src/nhl_scrabble/web/templates/results.html:120
-#: src/nhl_scrabble/web/templates/teams.html:59
-msgid "Players"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:142
