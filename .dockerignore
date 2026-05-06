@@ -69,8 +69,9 @@ Thumbs.db
 tasks/
 TASK-*.md
 
-# Scripts (not needed in container)
+# Scripts (not needed in container, except hatch_build.py for i18n compilation)
 scripts/
+!scripts/hatch_build.py
 
 # Templates
 templates/
