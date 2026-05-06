@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 203 tasks (23 active, 180 completed)
+**Total Tasks**: 203 tasks (22 active, 181 completed)
 
 ## Overview
 
@@ -216,7 +216,7 @@ Each task includes:
 | 029 | Release Automation: Post-Release Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#265](https://github.com/bdperkin/nhl-scrabble/issues/265) | PR [#470](https://github.com/bdperkin/nhl-scrabble/pull/470), completed 2026-04-30 |
 | 030 | Release Automation: Verification and Reporting Phase | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#266](https://github.com/bdperkin/nhl-scrabble/issues/266) | PR [#471](https://github.com/bdperkin/nhl-scrabble/pull/471), completed 2026-04-30 |
 | 031 | Release Automation: Orchestration and CLI Interface | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#267](https://github.com/bdperkin/nhl-scrabble/issues/267) | PR [#472](https://github.com/bdperkin/nhl-scrabble/pull/472), completed 2026-04-30 |
-| 034 | Docker Container Build and Publish Workflow | LOW | 3-4 hours | Completed | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | - |
+| 034 | Docker Container Build and Publish Workflow | LOW | 3-4 hours (actual: ~3.5h) | Completed | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | PR [#497](https://github.com/bdperkin/nhl-scrabble/pull/497), completed 2026-05-05 |
 | 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | PR [#485](https://github.com/bdperkin/nhl-scrabble/pull/485), completed 2026-05-03 |
 | 036 | PR Size Checker Workflow | LOW | 1-2 hours (actual: ~45 minutes) | Completed | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | PR [#486](https://github.com/bdperkin/nhl-scrabble/pull/486), completed 2026-05-04 |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | PR [#496](https://github.com/bdperkin/nhl-scrabble/pull/496), completed 2026-05-05 |
