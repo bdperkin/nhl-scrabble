@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-05-01 (Updated 2026-05-05 after completing new-features/034, 043)
-**Total Tasks**: 22 active tasks
-**Estimated Total Effort**: 199.5 hours
+**Generated**: 2026-05-01 (Updated 2026-05-05 after completing enhancement/022)
+**Total Tasks**: 21 active tasks
+**Estimated Total Effort**: 171.5 hours
 
 This file provides the **optimal** implementation order for all active tasks, based on:
 
@@ -14,8 +14,8 @@ This file provides the **optimal** implementation order for all active tasks, ba
 ## Analysis Summary
 
 - **HIGH Priority**: 0 tasks
-- **MEDIUM Priority**: 5 tasks (current sprint)
-- **LOW Priority**: 18 tasks (future backlog)
+- **MEDIUM Priority**: 4 tasks (current sprint)
+- **LOW Priority**: 17 tasks (future backlog)
 
 **Recommendation**: Focus on MEDIUM priority tasks first, then LOW priority backlog.
 
@@ -31,7 +31,7 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 
 ## Phase 1: MEDIUM Priority
 
-**Effort**: 42.5 hours | **Tasks**: 5
+**Effort**: 14.5 hours | **Tasks**: 4
 **Focus**: Important improvements and testing enhancements - prioritize in current sprint
 
 ```bash
@@ -50,8 +50,8 @@ Tasks are grouped into phases for logical progression. Each phase represents a n
 ```
 
 ```bash
-# Comprehensive GitHub Workflows Enhancement
-/implement-task enhancement/022-comprehensive-github-workflows.md  # 28.0h, Issue #298 [PARENT]
+# Migrate to Extended Versioning Scheme
+/implement-task enhancement/025-extended-versioning-scheme.md  # 5.0h, Issue #335
 ```
 
 **Rationale**: Quick wins and critical infrastructure improvements provide foundation for future work.
