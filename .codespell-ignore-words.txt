@@ -2,3 +2,8 @@ aNULL
 intoto
 mis
 THIRDPARTY
+Analysator
+intervall
+som
+Varning
+Attribut

@@ -469,8 +469,8 @@ exclude = [
 check-filenames = true
 check-hidden = true
 skip = """\
-    *.lock,*.json,*.min.js,*.svg,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.pytes\
-    t_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*\
+    *.lock,*.json,*.min.js,*.svg,*.po,htmlcov/*,.git/*,.tox/*,.venv/*,*.egg-info/*,build/*,dist/*,.\
+    pytest_cache/*,.mypy_cache/*,.ruff_cache/*,docs/reference/api,docs/_build/*\
     """
 ignore-words = ".codespell-ignore-words.txt"
 count = true
