@@ -288,8 +288,8 @@ class TestRealWorldScenarios:
 
             assert callable(_)
             result = _("Team")
-            # Without translations, returns original
-            assert result == "Team"
+            # With Swedish translations, should return translated string
+            assert result == "Lag"
 
     def test_number_formatting_scenario(self):
         """Test scenario: Format score for different locales."""
