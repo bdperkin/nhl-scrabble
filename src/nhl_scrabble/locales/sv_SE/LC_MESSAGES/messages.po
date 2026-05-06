@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-05 23:01-0400\n"
+"POT-Creation-Date: 2026-05-05 23:34-0400\n"
 "PO-Revision-Date: 2026-05-05 23:01-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv_SE\n"
@@ -18,33 +18,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/nhl_scrabble/cli.py:426
+#: src/nhl_scrabble/cli.py:96
+#, python-brace-format
+msgid ""
+"Output directory does not exist: {output_dir}\n"
+"Create it first: mkdir -p {output_dir}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:102
+#, python-brace-format
+msgid ""
+"Output directory is not writable: {output_dir}\n"
+"Check permissions with: ls -ld {output_dir}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:109
+#, python-brace-format
+msgid ""
+"Output file exists but is not writable: {output_path}\n"
+"Check permissions with: ls -l {output_path}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:309 src/nhl_scrabble/cli.py:1151
+#: src/nhl_scrabble/cli.py:1366
+#, python-brace-format
+msgid "[yellow]⚠[/yellow]  Failed teams: {teams}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:424 src/nhl_scrabble/cli.py:995
+#: src/nhl_scrabble/cli.py:1561 src/nhl_scrabble/cli.py:1753
 msgid "Output format (default: text)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:432
+#: src/nhl_scrabble/cli.py:430 src/nhl_scrabble/cli.py:1001
+#: src/nhl_scrabble/cli.py:1759
 msgid "Output file path (default: stdout)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:437
+#: src/nhl_scrabble/cli.py:435
 msgid "Custom template file path (required for --format template)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:441
+#: src/nhl_scrabble/cli.py:440
 msgid ""
 "Comma-separated list of sheets for Excel export "
 "(teams,players,divisions,conferences,playoffs)"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:448
+#: src/nhl_scrabble/cli.py:448 src/nhl_scrabble/cli.py:808
+#: src/nhl_scrabble/cli.py:1008 src/nhl_scrabble/cli.py:1235
+#: src/nhl_scrabble/cli.py:1386 src/nhl_scrabble/cli.py:1568
 msgid "Enable verbose logging"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:454
+#: src/nhl_scrabble/cli.py:454 src/nhl_scrabble/cli.py:1014
+#: src/nhl_scrabble/cli.py:1574
 msgid "Suppress progress bars and status messages"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:460
+#: src/nhl_scrabble/cli.py:460 src/nhl_scrabble/cli.py:813
+#: src/nhl_scrabble/cli.py:1019 src/nhl_scrabble/cli.py:1398
+#: src/nhl_scrabble/cli.py:1580
 msgid "Disable API response caching (always fetch fresh data)"
 msgstr ""
 
@@ -52,10 +86,239 @@ msgstr ""
 msgid "Clear API cache before running"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:704
+#: src/nhl_scrabble/cli.py:470
+msgid "Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:477 src/nhl_scrabble/cli.py:1587
+msgid "Number of top players to show (default: 20, range: 1-100)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:483 src/nhl_scrabble/cli.py:1593
+msgid "Number of top players per team to show (default: 5, range: 1-50)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:489 src/nhl_scrabble/cli.py:1599
+msgid "Generate specific report only (default: all reports)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:496
+msgid "Built-in scoring system to use (default: scrabble)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:501
+msgid "Path to custom scoring configuration JSON file"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:506
+msgid ""
+"Filter by divisions (comma-separated: "
+"Atlantic,Metropolitan,Central,Pacific)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:510
+msgid "Filter by conferences (comma-separated: Eastern,Western)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:514
+msgid "Filter by teams (comma-separated abbreviations: TOR,MTL,BOS)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:518
+msgid "Exclude teams (comma-separated abbreviations: NYR,PHI)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:523
+msgid "Minimum player score to include"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:528
+msgid "Maximum player score to include"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:535
+msgid "Display locale (e.g., fr_CA for Canadian French)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:718
 msgid "🏒 NHL Roster Scrabble Score Analyzer 🏒"
 msgstr ""
 
-#: src/nhl_scrabble/cli.py:727
+#: src/nhl_scrabble/cli.py:719 src/nhl_scrabble/cli.py:785
+#: src/nhl_scrabble/cli.py:1133
+msgid "="
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:741
 msgid "Filters active:"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:743
+#, python-brace-format
+msgid "  • Divisions: {divisions}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:745
+#, python-brace-format
+msgid "  • Conferences: {conferences}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:747
+#, python-brace-format
+msgid "  • Teams: {teams}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:749
+#, python-brace-format
+msgid "  • Excluded: {excluded}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:751
+#, python-brace-format
+msgid "  • Min score: {min_score}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:753
+#, python-brace-format
+msgid "  • Max score: {max_score}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:776
+#, python-brace-format
+msgid ""
+"\n"
+"[green]✓[/green] Report saved to: {output}"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:781
+msgid ""
+"\n"
+"[yellow]⚠[/yellow] CSV/Excel formats require --output option"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:785
+msgid "\n"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:786
+msgid "[green]✓ Analysis complete![/green]"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:790
+#, python-brace-format
+msgid ""
+"\n"
+"[red]❌ NHL API Error: {error}[/red]"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:794 src/nhl_scrabble/cli.py:873
+#: src/nhl_scrabble/cli.py:1205 src/nhl_scrabble/cli.py:1529
+#, python-brace-format
+msgid ""
+"\n"
+"[red]❌ Unexpected error: {error}[/red]"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:802
+msgid "Skip fetching data from NHL API on startup"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:869
+msgid ""
+"\n"
+"[cyan]Goodbye![/cyan]"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:980
+msgid "Enable fuzzy matching for approximate name searches"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:987
+msgid "Maximum number of results to show (default: 20, range: 1-500)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1025
+msgid "Minimum Scrabble score to include"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1030
+msgid "Maximum Scrabble score to include"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1035
+msgid "Filter by team abbreviation (e.g., TOR, MTL)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1040
+msgid "Filter by division name (e.g., Atlantic, Metropolitan)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1045
+msgid "Filter by conference name (Eastern or Western)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1132
+msgid ""
+"\n"
+"[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1213
+msgid "Host address to bind server (default: 127.0.0.1)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1219
+msgid "Port to bind to (default: 8000, range: 1-65535)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1224
+msgid "Enable auto-reload for development (watches for file changes)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1229
+msgid "Path to log file (enables file-based logging with rotation)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1392
+msgid "Suppress progress bars and status messages during data fetching"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1404
+msgid "Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1409
+msgid "Display static snapshot instead of live dashboard"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1414
+msgid "Filter by division (e.g., Atlantic, Metropolitan, Central, Pacific)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1418
+msgid "Filter by conference (Eastern or Western)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1552
+msgid "Refresh interval in seconds (default: 300 = 5 minutes, range: 1+)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1765
+msgid "Target coverage percentage (default: 90.0)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1770
+msgid "Show coverage gaps analysis"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1775
+msgid "Show slowest tests analysis"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1780
+msgid "Show flaky tests analysis"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:1785
+msgid "Show coverage trends analysis"
 msgstr ""
