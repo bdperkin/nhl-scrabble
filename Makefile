@@ -53,6 +53,7 @@ NC := \033[0m # No Color
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
         deps-check deps-update deps-update-full \
         licenses-check licenses-update licenses-validate \
+        i18n-extract i18n-init i18n-update i18n-compile i18n-stats \
         count tree all release
 
 ###################
@@ -907,6 +908,44 @@ bash-validate: beautysh-check bashate bash-docs bash-deps ## Shell - run all Bas
 
 bash-fix: beautysh ## Shell - auto-fix Bash quality issues
 	@printf "$(GREEN)✅ Bash scripts auto-formatted$(NC)\n"
+
+###################
+# I18n Management
+###################
+
+i18n-extract: check-venv ## I18n - extract translatable strings to messages.pot
+	@printf "$(BLUE)Extracting translatable strings...$(NC)\n"
+	@$(BIN)/pybabel extract -F babel.cfg -k _ -o locales/messages.pot src/
+	@printf "$(GREEN)✓ Strings extracted to locales/messages.pot$(NC)\n"
+
+i18n-init: check-venv ## I18n - initialize new locale (usage: make i18n-init LOCALE=fr_CA)
+	@if [ -z "$(LOCALE)" ]; then \
+		printf "$(RED)Error: LOCALE not specified.$(NC)\n"; \
+		printf "$(YELLOW)Usage: make i18n-init LOCALE=fr_CA$(NC)\n"; \
+		exit 1; \
+	fi
+	@printf "$(BLUE)Initializing locale: $(LOCALE)...$(NC)\n"
+	@$(BIN)/pybabel init -i locales/messages.pot -d src/nhl_scrabble/locales -l $(LOCALE)
+	@printf "$(GREEN)✓ Locale $(LOCALE) initialized$(NC)\n"
+
+i18n-update: check-venv ## I18n - update existing translation files from messages.pot
+	@printf "$(BLUE)Updating translation files...$(NC)\n"
+	@$(BIN)/pybabel update -i locales/messages.pot -d src/nhl_scrabble/locales
+	@printf "$(GREEN)✓ Translation files updated$(NC)\n"
+
+i18n-compile: check-venv ## I18n - compile .po files to .mo binary files
+	@printf "$(BLUE)Compiling translations...$(NC)\n"
+	@$(BIN)/pybabel compile -d src/nhl_scrabble/locales
+	@printf "$(GREEN)✓ Translations compiled$(NC)\n"
+
+i18n-stats: check-venv ## I18n - show translation completion statistics
+	@printf "$(BLUE)Translation Statistics:$(NC)\n"
+	@for po in src/nhl_scrabble/locales/*/LC_MESSAGES/messages.po; do \
+		if [ -f "$$po" ]; then \
+			printf "$(YELLOW)$$po:$(NC) "; \
+			msgfmt --statistics "$$po" 2>&1 | head -1; \
+		fi \
+	done
 
 ###################
 # All-in-one

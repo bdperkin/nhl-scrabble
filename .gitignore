@@ -289,3 +289,13 @@ __pycache__/
 
 # Scratch/temporary development files
 /.scratch/
+
+# ============================================================================
+# Internationalization (I18n)
+# ============================================================================
+
+# Compiled translation files (generated from .po files)
+*.mo
+
+# Temporary extraction directory
+/locales/

@@ -26,6 +26,7 @@ from nhl_scrabble.di import DependencyContainer
 from nhl_scrabble.exceptions import ValidationError
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
+from nhl_scrabble.i18n import _
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import (
@@ -422,46 +423,48 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
         case_sensitive=False,
     ),
     default="text",
-    help="Output format (default: text)",
+    help=_("Output format (default: text)"),
 )
 @click.option(
     "--output",
     "-o",
     type=click.Path(),
-    help="Output file path (default: stdout)",
+    help=_("Output file path (default: stdout)"),
 )
 @click.option(
     "--template",
     type=click.Path(exists=True, dir_okay=False),
-    help="Custom template file path (required for --format template)",
+    help=_("Custom template file path (required for --format template)"),
 )
 @click.option(
     "--sheets",
-    help="Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
+    help=_(
+        "Comma-separated list of sheets for Excel export (teams,players,divisions,conferences,playoffs)",
+    ),
 )
 # === Behavior Flags ===
 @click.option(
     "--verbose",
     "-v",
     is_flag=True,
-    help="Enable verbose logging",
+    help=_("Enable verbose logging"),
 )
 @click.option(
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars and status messages",
+    help=_("Suppress progress bars and status messages"),
 )
 # === Data Source Options ===
 @click.option(
     "--no-cache",
     is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
+    help=_("Disable API response caching (always fetch fresh data)"),
 )
 @click.option(
     "--clear-cache",
     is_flag=True,
-    help="Clear API cache before running",
+    help=_("Clear API cache before running"),
 )
 @click.option(
     "--season",
@@ -700,7 +703,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     validate_output_path(output)
 
     # Display header
-    console.print("\n[bold cyan]🏒 NHL Roster Scrabble Score Analyzer 🏒[/bold cyan]\n")
+    console.print(f"\n[bold cyan]{_('🏒 NHL Roster Scrabble Score Analyzer 🏒')}[/bold cyan]\n")
     console.print("=" * 80)
 
     try:
@@ -723,7 +726,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         if filters.is_active():
             logger.debug(f"Active filters: {filters}")
             if not quiet:
-                console.print("\n[yellow]Filters active:[/yellow]")
+                console.print(f"\n[yellow]{_('Filters active:')}[/yellow]")
                 if filters.divisions:
                     console.print(f"  • Divisions: {', '.join(sorted(filters.divisions))}")
                 if filters.conferences:
@@ -1522,7 +1525,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
         seconds: Number of seconds to sleep
         shutdown_flag: Mutable list containing shutdown boolean flag
     """
-    for _ in range(seconds):
+    for _i in range(seconds):
         if shutdown_flag[0]:
             return
         time.sleep(1)

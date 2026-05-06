@@ -355,6 +355,40 @@ make serve-docs     # http://localhost:8000
 make docs-api       # Regenerate API docs
 ```
 
+## Internationalization (I18n)
+
+**Supported:** 12 locales covering major hockey markets (North America, Nordic, Central/Eastern Europe)
+
+**Infrastructure:**
+
+- Translation system: babel + gettext
+- Locale detection: Auto-detect system locale
+- Override: `NHL_SCRABBLE_LANG` environment variable
+- Locales directory: `src/nhl_scrabble/locales/`
+
+**Translation Workflow:**
+
+```bash
+make i18n-extract    # Extract translatable strings to messages.pot
+make i18n-init LOCALE=fr_CA  # Initialize new locale
+make i18n-update     # Update existing translation files
+make i18n-compile    # Compile .po to .mo binary files
+make i18n-stats      # Show translation completion
+```
+
+**Usage:**
+
+```python
+from nhl_scrabble.i18n import _
+
+# Wrap user-facing strings
+console.print(_("Analysis complete!"))
+```
+
+**Supported Locales:** en_US, en_CA, fr_CA, sv_SE, ru_RU, fi_FI, cs_CZ, de_DE, de_CH, it_CH, sk_SK, lv_LV
+
+**Documentation:** `docs/reference/i18n.md`
+
 ## Common Tasks
 
 ### Add Dependency

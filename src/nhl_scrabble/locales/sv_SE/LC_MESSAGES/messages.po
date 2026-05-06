@@ -1,0 +1,61 @@
+# Swedish (Sweden) translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-05-05 23:01-0400\n"
+"PO-Revision-Date: 2026-05-05 23:01-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: sv_SE\n"
+"Language-Team: sv_SE <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: src/nhl_scrabble/cli.py:426
+msgid "Output format (default: text)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:432
+msgid "Output file path (default: stdout)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:437
+msgid "Custom template file path (required for --format template)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:441
+msgid ""
+"Comma-separated list of sheets for Excel export "
+"(teams,players,divisions,conferences,playoffs)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:448
+msgid "Enable verbose logging"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:454
+msgid "Suppress progress bars and status messages"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:460
+msgid "Disable API response caching (always fetch fresh data)"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:465
+msgid "Clear API cache before running"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:704
+msgid "🏒 NHL Roster Scrabble Score Analyzer 🏒"
+msgstr ""
+
+#: src/nhl_scrabble/cli.py:727
+msgid "Filters active:"
+msgstr ""
