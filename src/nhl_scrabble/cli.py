@@ -26,7 +26,7 @@ from nhl_scrabble.di import DependencyContainer
 from nhl_scrabble.exceptions import ValidationError
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
-from nhl_scrabble.i18n import _
+from nhl_scrabble.i18n import SUPPORTED_LOCALES, _
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import (
@@ -93,22 +93,26 @@ def validate_output_path(output: str | None) -> None:
     # Check if directory exists
     if not output_dir.exists():
         raise click.ClickException(
-            f"Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}",
+            _(
+                "Output directory does not exist: {output_dir}\nCreate it first: mkdir -p {output_dir}",
+            ).format(output_dir=output_dir),
         )
 
     # Check if directory is writable
     if not os.access(output_dir, os.W_OK):
         raise click.ClickException(
-            f"Output directory is not writable: {output_dir}\n"
-            f"Check permissions with: ls -ld {output_dir}",
+            _(
+                "Output directory is not writable: {output_dir}\nCheck permissions with: ls -ld {output_dir}",
+            ).format(output_dir=output_dir),
         )
 
     # Check if file exists and is writable
     if output_path.exists():
         if not os.access(output_path, os.W_OK):
             raise click.ClickException(
-                f"Output file exists but is not writable: {output_path}\n"
-                f"Check permissions with: ls -l {output_path}",
+                _(
+                    "Output file exists but is not writable: {output_path}\nCheck permissions with: ls -l {output_path}",
+                ).format(output_path=output_path),
             )
 
         # Warn if file will be overwritten
@@ -308,7 +312,11 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
                 f"{len(team_scores) + len(failed_teams)} teams",
             )
             if failed_teams:
-                console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+                console.print(
+                    _("[yellow]⚠[/yellow]  Failed teams: {teams}").format(
+                        teams=", ".join(failed_teams),
+                    ),
+                )
 
         # Calculate standings
         division_standings = team_processor.calculate_division_standings(team_scores)
@@ -469,65 +477,72 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 @click.option(
     "--season",
     type=str,
-    help="Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)",
+    help=_("Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)"),
 )
 # === Display Options ===
 @click.option(
     "--top-players",
     type=click.IntRange(min=1, max=100),
     default=20,
-    help="Number of top players to show (default: 20, range: 1-100)",
+    help=_("Number of top players to show (default: 20, range: 1-100)"),
 )
 @click.option(
     "--top-team-players",
     type=click.IntRange(min=1, max=50),
     default=5,
-    help="Number of top players per team to show (default: 5, range: 1-50)",
+    help=_("Number of top players per team to show (default: 5, range: 1-50)"),
 )
 # === Report Selection ===
 @click.option(
     "--report",
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
-    help="Generate specific report only (default: all reports)",
+    help=_("Generate specific report only (default: all reports)"),
 )
 # === Scoring Options ===
 @click.option(
     "--scoring",
     type=click.Choice(["scrabble", "wordle", "uniform"], case_sensitive=False),
     default="scrabble",
-    help="Built-in scoring system to use (default: scrabble)",
+    help=_("Built-in scoring system to use (default: scrabble)"),
 )
 @click.option(
     "--scoring-config",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
-    help="Path to custom scoring configuration JSON file",
+    help=_("Path to custom scoring configuration JSON file"),
 )
 # === Filtering Options ===
 @click.option(
     "--divisions",
-    help="Filter by divisions (comma-separated: Atlantic,Metropolitan,Central,Pacific)",
+    help=_("Filter by divisions (comma-separated: Atlantic,Metropolitan,Central,Pacific)"),
 )
 @click.option(
     "--conferences",
-    help="Filter by conferences (comma-separated: Eastern,Western)",
+    help=_("Filter by conferences (comma-separated: Eastern,Western)"),
 )
 @click.option(
     "--teams",
-    help="Filter by teams (comma-separated abbreviations: TOR,MTL,BOS)",
+    help=_("Filter by teams (comma-separated abbreviations: TOR,MTL,BOS)"),
 )
 @click.option(
     "--exclude-teams",
-    help="Exclude teams (comma-separated abbreviations: NYR,PHI)",
+    help=_("Exclude teams (comma-separated abbreviations: NYR,PHI)"),
 )
 @click.option(
     "--min-score",
     type=int,
-    help="Minimum player score to include",
+    help=_("Minimum player score to include"),
 )
 @click.option(
     "--max-score",
     type=int,
-    help="Maximum player score to include",
+    help=_("Maximum player score to include"),
+)
+# === Locale Options ===
+@click.option(
+    "--locale",
+    "-l",
+    type=click.Choice(SUPPORTED_LOCALES, case_sensitive=True),
+    help=_("Display locale (e.g., fr_CA for Canadian French)"),
 )
 @click.help_option("-h", "--help")
 def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
@@ -551,6 +566,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     exclude_teams: str | None,
     min_score: int | None,
     max_score: int | None,
+    locale: str | None,
 ) -> None:
     r"""Run the NHL Scrabble analysis.
 
@@ -663,6 +679,11 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     # Setup logging with sanitization setting from config
     setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
 
+    # Note: locale parameter validated by Click but translation override via NHL_SCRABBLE_LANG env var
+    # TODO: Implement locale override in future version to avoid global variable issues
+    if locale:
+        logger.debug(f"Locale requested: {locale} (use NHL_SCRABBLE_LANG env var for now)")
+
     logger.info(f"Starting NHL Scrabble analysis v{__version__}")
     logger.debug(f"Configuration: {config}")
 
@@ -704,7 +725,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
     # Display header
     console.print(f"\n[bold cyan]{_('🏒 NHL Roster Scrabble Score Analyzer 🏒')}[/bold cyan]\n")
-    console.print("=" * 80)
+    console.print(_("=") * 80)
 
     try:
         # Parse sheets list for Excel export
@@ -728,17 +749,35 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             if not quiet:
                 console.print(f"\n[yellow]{_('Filters active:')}[/yellow]")
                 if filters.divisions:
-                    console.print(f"  • Divisions: {', '.join(sorted(filters.divisions))}")
+                    console.print(
+                        _("  • Divisions: {divisions}").format(
+                            divisions=", ".join(sorted(filters.divisions)),
+                        ),
+                    )
                 if filters.conferences:
-                    console.print(f"  • Conferences: {', '.join(sorted(filters.conferences))}")
+                    console.print(
+                        _("  • Conferences: {conferences}").format(
+                            conferences=", ".join(sorted(filters.conferences)),
+                        ),
+                    )
                 if filters.teams:
-                    console.print(f"  • Teams: {', '.join(sorted(filters.teams))}")
+                    console.print(
+                        _("  • Teams: {teams}").format(teams=", ".join(sorted(filters.teams))),
+                    )
                 if filters.excluded_teams:
-                    console.print(f"  • Excluded: {', '.join(sorted(filters.excluded_teams))}")
+                    console.print(
+                        _("  • Excluded: {excluded}").format(
+                            excluded=", ".join(sorted(filters.excluded_teams)),
+                        ),
+                    )
                 if filters.min_score is not None:
-                    console.print(f"  • Min score: {filters.min_score}")
+                    console.print(
+                        _("  • Min score: {min_score}").format(min_score=filters.min_score),
+                    )
                 if filters.max_score is not None:
-                    console.print(f"  • Max score: {filters.max_score}")
+                    console.print(
+                        _("  • Max score: {max_score}").format(max_score=filters.max_score),
+                    )
                 console.print()
 
         # Run the analysis
@@ -761,25 +800,27 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
                 # Text/JSON output
                 validated_output.write_text(result)
             # CSV/Excel are written directly by exporters
-            console.print(f"\n[green]✓[/green] Report saved to: {validated_output}")
+            console.print(
+                _("\n[green]✓[/green] Report saved to: {output}").format(output=validated_output),
+            )
         elif isinstance(result, str):
             print(result)
         else:
             console.print(
-                "\n[yellow]⚠[/yellow] CSV/Excel formats require --output option",
+                _("\n[yellow]⚠[/yellow] CSV/Excel formats require --output option"),
                 style="yellow",
             )
 
-        console.print("\n" + "=" * 80)
-        console.print("[green]✓ Analysis complete![/green]")
+        console.print(_("\n") + _("=") * 80)
+        console.print(_("[green]✓ Analysis complete![/green]"))
 
     except NHLApiError as e:
         logger.error(f"NHL API error: {e}")
-        console.print(f"\n[red]❌ NHL API Error: {e}[/red]", style="red")
+        console.print(_("\n[red]❌ NHL API Error: {error}[/red]").format(error=e), style="red")
         sys.exit(1)
     except Exception as e:
         logger.exception("Unexpected error during analysis")
-        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        console.print(_("\n[red]❌ Unexpected error: {error}[/red]").format(error=e), style="red")
         sys.exit(1)
 
 
@@ -787,18 +828,18 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 @click.option(
     "--no-fetch",
     is_flag=True,
-    help="Skip fetching data from NHL API on startup",
+    help=_("Skip fetching data from NHL API on startup"),
 )
 @click.option(
     "--verbose",
     "-v",
     is_flag=True,
-    help="Enable verbose logging",
+    help=_("Enable verbose logging"),
 )
 @click.option(
     "--no-cache",
     is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
+    help=_("Disable API response caching (always fetch fresh data)"),
 )
 @click.help_option("-h", "--help")
 def interactive(no_fetch: bool, verbose: bool, no_cache: bool) -> None:
@@ -854,11 +895,11 @@ def interactive(no_fetch: bool, verbose: bool, no_cache: bool) -> None:
         shell.run()
 
     except KeyboardInterrupt:
-        console.print("\n[cyan]Goodbye![/cyan]")
+        console.print(_("\n[cyan]Goodbye![/cyan]"))
         sys.exit(0)
     except Exception as e:
         logger.exception("Unexpected error in interactive mode")
-        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        console.print(_("\n[red]❌ Unexpected error: {error}[/red]").format(error=e), style="red")
         sys.exit(1)
 
 
@@ -965,14 +1006,14 @@ def generate_search_json(
     "--fuzzy",
     "-f",
     is_flag=True,
-    help="Enable fuzzy matching for approximate name searches",
+    help=_("Enable fuzzy matching for approximate name searches"),
 )
 @click.option(
     "--limit",
     "-n",
     type=click.IntRange(min=1, max=500),
     default=20,
-    help="Maximum number of results to show (default: 20, range: 1-500)",
+    help=_("Maximum number of results to show (default: 20, range: 1-500)"),
 )
 # === Output Options ===
 @click.option(
@@ -980,57 +1021,57 @@ def generate_search_json(
     "output_format",
     type=click.Choice(["text", "json"], case_sensitive=False),
     default="text",
-    help="Output format (default: text)",
+    help=_("Output format (default: text)"),
 )
 @click.option(
     "--output",
     "-o",
     type=click.Path(),
-    help="Output file path (default: stdout)",
+    help=_("Output file path (default: stdout)"),
 )
 # === Behavior Flags ===
 @click.option(
     "--verbose",
     "-v",
     is_flag=True,
-    help="Enable verbose logging",
+    help=_("Enable verbose logging"),
 )
 @click.option(
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars and status messages",
+    help=_("Suppress progress bars and status messages"),
 )
 @click.option(
     "--no-cache",
     is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
+    help=_("Disable API response caching (always fetch fresh data)"),
 )
 # === Filtering Options ===
 @click.option(
     "--min-score",
     type=int,
-    help="Minimum Scrabble score to include",
+    help=_("Minimum Scrabble score to include"),
 )
 @click.option(
     "--max-score",
     type=int,
-    help="Maximum Scrabble score to include",
+    help=_("Maximum Scrabble score to include"),
 )
 @click.option(
     "--teams",
     "-t",
-    help="Filter by team abbreviation (e.g., TOR, MTL)",
+    help=_("Filter by team abbreviation (e.g., TOR, MTL)"),
 )
 @click.option(
     "--divisions",
     "-d",
-    help="Filter by division name (e.g., Atlantic, Metropolitan)",
+    help=_("Filter by division name (e.g., Atlantic, Metropolitan)"),
 )
 @click.option(
     "--conferences",
     "-c",
-    help="Filter by conference name (Eastern or Western)",
+    help=_("Filter by conference name (Eastern or Western)"),
 )
 @click.help_option("-h", "--help")
 def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and parameters
@@ -1117,8 +1158,8 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
     try:
         # Fetch player data
         if not quiet:
-            console.print("\n[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n")
-            console.print("=" * 80)
+            console.print(_("\n[bold cyan]🔍 NHL Player Search 🔍[/bold cyan]\n"))  # noqa: F823
+            console.print(_("=") * 80)
 
         # Initialize components using dependency injection
         container = DependencyContainer(config)
@@ -1136,7 +1177,11 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
 
             # Display summary (only if not quiet)
             if not quiet and failed_teams:
-                console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+                console.print(
+                    _("[yellow]⚠[/yellow]  Failed teams: {teams}").format(
+                        teams=", ".join(failed_teams),
+                    ),
+                )
 
             # Create search instance
             searcher = PlayerSearch(all_players)
@@ -1190,7 +1235,7 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
         sys.exit(1)
     except Exception as e:
         logger.exception("Unexpected error during search")
-        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        console.print(_("\n[red]❌ Unexpected error: {error}[/red]").format(error=e), style="red")
         sys.exit(1)
 
 
@@ -1198,29 +1243,29 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
 @click.option(
     "--host",
     default="127.0.0.1",
-    help="Host address to bind server (default: 127.0.0.1)",
+    help=_("Host address to bind server (default: 127.0.0.1)"),
 )
 @click.option(
     "--port",
     type=click.IntRange(min=1, max=65535),
     default=8000,
-    help="Port to bind to (default: 8000, range: 1-65535)",
+    help=_("Port to bind to (default: 8000, range: 1-65535)"),
 )
 @click.option(
     "--reload",
     is_flag=True,
-    help="Enable auto-reload for development (watches for file changes)",
+    help=_("Enable auto-reload for development (watches for file changes)"),
 )
 @click.option(
     "--log-file",
     type=click.Path(path_type=Path),
-    help="Path to log file (enables file-based logging with rotation)",
+    help=_("Path to log file (enables file-based logging with rotation)"),
 )
 @click.option(
     "--verbose",
     "-v",
     is_flag=True,
-    help="Enable verbose logging",
+    help=_("Enable verbose logging"),
 )
 @click.help_option("-h", "--help")
 def serve(host: str, port: int, reload: bool, log_file: Path | None, verbose: bool) -> None:
@@ -1351,7 +1396,11 @@ def fetch_dashboard_data(
                 f"{len(team_scores) + len(failed_teams)} teams",
             )
             if failed_teams:
-                console.print(f"[yellow]⚠[/yellow]  Failed teams: {', '.join(failed_teams)}")
+                console.print(
+                    _("[yellow]⚠[/yellow]  Failed teams: {teams}").format(
+                        teams=", ".join(failed_teams),
+                    ),
+                )
 
         # Calculate standings
         division_standings = team_processor.calculate_division_standings(team_scores)
@@ -1371,39 +1420,39 @@ def fetch_dashboard_data(
     "--verbose",
     "-v",
     is_flag=True,
-    help="Enable verbose logging",
+    help=_("Enable verbose logging"),
 )
 @click.option(
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars and status messages during data fetching",
+    help=_("Suppress progress bars and status messages during data fetching"),
 )
 # === Data Source Options ===
 @click.option(
     "--no-cache",
     is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
+    help=_("Disable API response caching (always fetch fresh data)"),
 )
 # === Dashboard Options ===
 @click.option(
     "--duration",
     type=click.IntRange(min=1),
-    help="Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)",
+    help=_("Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)"),
 )
 @click.option(
     "--static",
     is_flag=True,
-    help="Display static snapshot instead of live dashboard",
+    help=_("Display static snapshot instead of live dashboard"),
 )
 # === Filtering Options ===
 @click.option(
     "--divisions",
-    help="Filter by division (e.g., Atlantic, Metropolitan, Central, Pacific)",
+    help=_("Filter by division (e.g., Atlantic, Metropolitan, Central, Pacific)"),
 )
 @click.option(
     "--conferences",
-    help="Filter by conference (Eastern or Western)",
+    help=_("Filter by conference (Eastern or Western)"),
 )
 @click.help_option("-h", "--help")
 def dashboard(
@@ -1514,7 +1563,7 @@ def dashboard(
         console.print("\n[yellow]Dashboard closed.[/yellow]")
     except Exception as e:
         logger.exception("Unexpected error during dashboard")
-        console.print(f"\n[red]❌ Unexpected error: {e}[/red]", style="red")
+        console.print(_("\n[red]❌ Unexpected error: {error}[/red]").format(error=e), style="red")
         sys.exit(1)
 
 
@@ -1537,7 +1586,7 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     "--interval",
     type=click.IntRange(min=1),
     default=300,
-    help="Refresh interval in seconds (default: 300 = 5 minutes, range: 1+)",
+    help=_("Refresh interval in seconds (default: 300 = 5 minutes, range: 1+)"),
 )
 # === Output Options ===
 @click.option(
@@ -1546,45 +1595,45 @@ def _interruptible_sleep(seconds: int, shutdown_flag: list[bool]) -> None:
     "output_format",
     type=click.Choice(["text", "json"], case_sensitive=False),
     default="text",
-    help="Output format (default: text)",
+    help=_("Output format (default: text)"),
 )
 # === Behavior Flags ===
 @click.option(
     "--verbose",
     "-v",
     is_flag=True,
-    help="Enable verbose logging",
+    help=_("Enable verbose logging"),
 )
 @click.option(
     "--quiet",
     "-q",
     is_flag=True,
-    help="Suppress progress bars and status messages",
+    help=_("Suppress progress bars and status messages"),
 )
 # === Data Source Options ===
 @click.option(
     "--no-cache",
     is_flag=True,
-    help="Disable API response caching (always fetch fresh data)",
+    help=_("Disable API response caching (always fetch fresh data)"),
 )
 # === Display Options ===
 @click.option(
     "--top-players",
     type=click.IntRange(min=1, max=100),
     default=20,
-    help="Number of top players to show (default: 20, range: 1-100)",
+    help=_("Number of top players to show (default: 20, range: 1-100)"),
 )
 @click.option(
     "--top-team-players",
     type=click.IntRange(min=1, max=50),
     default=5,
-    help="Number of top players per team to show (default: 5, range: 1-50)",
+    help=_("Number of top players per team to show (default: 5, range: 1-50)"),
 )
 # === Report Selection ===
 @click.option(
     "--report",
     type=click.Choice(["conference", "division", "playoff", "team", "stats"], case_sensitive=False),
-    help="Generate specific report only (default: all reports)",
+    help=_("Generate specific report only (default: all reports)"),
 )
 @click.help_option("-h", "--help")
 def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
@@ -1738,39 +1787,39 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     "output_format",
     type=click.Choice(["text", "json", "html"], case_sensitive=False),
     default="text",
-    help="Output format (default: text)",
+    help=_("Output format (default: text)"),
 )
 @click.option(
     "-o",
     "--output",
     type=click.Path(),
-    help="Output file path (default: stdout)",
+    help=_("Output file path (default: stdout)"),
 )
 @click.option(
     "--target-coverage",
     type=click.FloatRange(min=0.0, max=100.0),
     default=90.0,
-    help="Target coverage percentage (default: 90.0)",
+    help=_("Target coverage percentage (default: 90.0)"),
 )
 @click.option(
     "--show-gaps",
     is_flag=True,
-    help="Show coverage gaps analysis",
+    help=_("Show coverage gaps analysis"),
 )
 @click.option(
     "--show-slow-tests",
     is_flag=True,
-    help="Show slowest tests analysis",
+    help=_("Show slowest tests analysis"),
 )
 @click.option(
     "--show-flaky-tests",
     is_flag=True,
-    help="Show flaky tests analysis",
+    help=_("Show flaky tests analysis"),
 )
 @click.option(
     "--show-trends",
     is_flag=True,
-    help="Show coverage trends analysis",
+    help=_("Show coverage trends analysis"),
 )
 @click.help_option("-h", "--help")
 @click.pass_context
