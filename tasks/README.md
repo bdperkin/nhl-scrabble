@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 202 tasks (24 active, 178 completed)
+**Total Tasks**: 203 tasks (25 active, 178 completed)
 
 ## Overview
 
@@ -220,6 +220,7 @@ Each task includes:
 | 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | PR [#485](https://github.com/bdperkin/nhl-scrabble/pull/485), completed 2026-05-03 |
 | 036 | PR Size Checker Workflow | LOW | 1-2 hours (actual: ~45 minutes) | Completed | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | PR [#486](https://github.com/bdperkin/nhl-scrabble/pull/486), completed 2026-05-04 |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | - |
+| 044 | I18n Infrastructure Setup | LOW | 4-6 hours | Active | [#494](https://github.com/bdperkin/nhl-scrabble/issues/494) | Sub-task 1 of #218, prerequisite for tasks 020-024 |
 | 001 | Build Web Interface with FastAPI | MEDIUM | 16-24 hours (actual: <15 min (web interface already implemented, only needed task documentation)) | Completed | [#50](https://github.com/bdperkin/nhl-scrabble/issues/50) | completed 2026-04-26 |
 | 002 | Add FastAPI Infrastructure and Web Server Foundation | MEDIUM | 3-4 hours (actual: ~3.5 hours) | Completed | [#103](https://github.com/bdperkin/nhl-scrabble/issues/103) | PR [#174](https://github.com/bdperkin/nhl-scrabble/pull/174), completed 2026-04-17 |
 | 003 | Implement Web API Endpoints for NHL Scrabble Analysis | MEDIUM | 4-6 hours | Completed | [#104](https://github.com/bdperkin/nhl-scrabble/issues/104) | - |

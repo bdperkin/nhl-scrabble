@@ -914,6 +914,21 @@ wheels = [
 ]
 
 [[package]]
+name = "flask-babel"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "babel" },
+    { name = "flask" },
+    { name = "jinja2" },
+    { name = "pytz" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/58/1a/4c65e3b90bda699a637bfb7fb96818b0a9bbff7636ea91aade67f6020a31/flask_babel-4.0.0.tar.gz", hash = "sha256:dbeab4027a3f4a87678a11686496e98e1492eb793cbdd77ab50f4e9a2602a593", size = 10178, upload-time = "2023-10-02T01:10:49.914Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/14/c2/e0ab5abe37882e118482884f2ec660cd06da644ddfbceccf5f88f546b574/flask_babel-4.0.0-py3-none-any.whl", hash = "sha256:638194cf91f8b301380f36d70e2034c77ee25b98cb5d80a1626820df9a6d4625", size = 9602, upload-time = "2023-10-02T01:10:48.58Z" },
+]
+
+[[package]]
 name = "flask-cors"
 version = "6.0.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1834,6 +1849,10 @@ docs-gen = [
 export = [
     { name = "openpyxl" },
 ]
+i18n = [
+    { name = "babel" },
+    { name = "flask-babel" },
+]
 lint = [
     { name = "djlint" },
     { name = "refurb" },
@@ -1887,6 +1906,7 @@ watch = [
 
 [package.metadata]
 requires-dist = [
+    { name = "babel", marker = "extra == 'i18n'", specifier = ">=2.14.0" },
     { name = "bandit", extras = ["toml"], marker = "extra == 'dev'", specifier = ">=1.7.5" },
     { name = "bandit", extras = ["toml"], marker = "extra == 'security'", specifier = ">=1.7.5" },
     { name = "bashate", marker = "extra == 'dev'", specifier = ">=2.1.1" },
@@ -1910,6 +1930,7 @@ requires-dist = [
     { name = "djlint", marker = "extra == 'dev'", specifier = ">=1.34.0" },
     { name = "djlint", marker = "extra == 'lint'", specifier = ">=1.34.0" },
     { name = "fastapi" },
+    { name = "flask-babel", marker = "extra == 'i18n'", specifier = ">=4.0.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "linkchecker", marker = "extra == 'dev'", specifier = ">=10.0.0" },
@@ -2007,7 +2028,7 @@ requires-dist = [
     { name = "unidecode", specifier = ">=1.3.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.27.0" },
 ]
-provides-extras = ["branding", "build", "dev", "docs", "docs-gen", "export", "lint", "publish", "qa", "security", "shell", "test", "tox", "type", "watch"]
+provides-extras = ["branding", "build", "dev", "docs", "docs-gen", "export", "i18n", "lint", "publish", "qa", "security", "shell", "test", "tox", "type", "watch"]
 
 [[package]]
 name = "nltk"
@@ -2831,6 +2852,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/52/a0/07907b6ff512674d9b201859f7d212298c44933633c946703a20c25e9d81/pytokens-0.4.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:967cf6e3fd4adf7de8fc73cd3043754ae79c36475c1c11d514fc72cf5490094a", size = 306698, upload-time = "2026-01-30T01:03:29.653Z" },
     { url = "https://files.pythonhosted.org/packages/39/2a/cbbf9250020a4a8dd53ba83a46c097b69e5eb49dd14e708f496f548c6612/pytokens-0.4.1-cp314-cp314t-win_amd64.whl", hash = "sha256:584c80c24b078eec1e227079d56dc22ff755e0ba8654d8383b2c549107528918", size = 116287, upload-time = "2026-01-30T01:03:30.912Z" },
     { url = "https://files.pythonhosted.org/packages/c6/78/397db326746f0a342855b81216ae1f0a32965deccfd7c830a2dbc66d2483/pytokens-0.4.1-py3-none-any.whl", hash = "sha256:26cef14744a8385f35d0e095dc8b3a7583f6c953c2e3d269c7f82484bf5ad2de", size = 13729, upload-time = "2026-01-30T01:03:45.029Z" },
+]
+
+[[package]]
+name = "pytz"
+version = "2026.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ff/46/dd499ec9038423421951e4fad73051febaa13d2df82b4064f87af8b8c0c3/pytz-2026.2.tar.gz", hash = "sha256:0e60b47b29f21574376f218fe21abc009894a2321ea16c6754f3cad6eb7cdd6a", size = 320861, upload-time = "2026-05-04T01:35:29.667Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/dd/96da98f892250475bdf2328112d7468abdd4acc7b902b6af23f4ed958ea0/pytz-2026.2-py2.py3-none-any.whl", hash = "sha256:04156e608bee23d3792fd45c94ae47fae1036688e75032eea2e3bf0323d1f126", size = 510141, upload-time = "2026-05-04T01:35:27.408Z" },
 ]
 
 [[package]]
