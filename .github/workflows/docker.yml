@@ -68,8 +68,23 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             # Tag with major on tags (v1.2.3 -> 1)
             type=semver,pattern={{major}}
-            # Tag with SHA for traceability
-            type=sha,prefix={{branch}}-
+            # Tag with PR number for pull requests
+            type=ref,event=pr,prefix=pr-
+            # Tag with SHA for traceability on branches
+            type=sha,prefix=sha-
+
+      - name: Compute PEP 440 version for build
+        id: version
+        run: |
+          # Extract version from metadata, default to 0.0.0.dev0 for PRs/branches
+          META_VERSION="${{ steps.meta.outputs.version }}"
+          if [[ "$META_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            # Valid semantic version from tag
+            echo "value=$META_VERSION" >> $GITHUB_OUTPUT
+          else
+            # PR or branch build - use dev version
+            echo "value=0.0.0.dev0" >> $GITHUB_OUTPUT
+          fi
 
       - name: Build and push Docker image
         id: build
@@ -83,7 +98,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            VERSION=${{ steps.meta.outputs.version }}
+            VERSION=${{ steps.version.outputs.value }}
 
       - name: Run Trivy security scan
         if: github.event_name != 'pull_request'
