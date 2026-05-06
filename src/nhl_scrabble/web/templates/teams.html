@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}NHL Scrabble Analyzer - Team Standings{% endblock %}
+{% block title %}{% trans %}NHL Scrabble Analyzer - Team Standings{% endtrans %}{% endblock %}
 
 {% block content %}
     <!-- Top Statistics -->
     <div class="stats-summary fade-on-scroll">
         <div class="stat-card">
-            <h4>Total Teams</h4>
+            <h4>{% trans %}Total Teams{% endtrans %}</h4>
             <p class="stat-value">{{ stats.total_teams }}</p>
         </div>
         <div class="stat-card">
-            <h4>Top Team</h4>
+            <h4>{% trans %}Top Team{% endtrans %}</h4>
             <p class="stat-value">{{ stats.highest_team_score }}</p>
             <p class="stat-detail">{{ stats.highest_team }} ({{ stats.highest_team_name }})</p>
         </div>
         <div class="stat-card">
-            <h4>Total Players</h4>
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
             <p class="stat-value">{{ stats.total_players }}</p>
         </div>
         <div class="stat-card">
-            <h4>Highest Player</h4>
+            <h4>{% trans %}Highest Player{% endtrans %}</h4>
             <p class="stat-value">{{ stats.highest_score }}</p>
             <p class="stat-detail">{{ stats.highest_player_name }}</p>
         </div>
@@ -27,19 +27,19 @@
 
     <!-- Team Standings Table -->
     <section class="results-section fade-on-scroll">
-        <h3>Team Standings by Total Scrabble Score</h3>
+        <h3>{% trans %}Team Standings by Total Scrabble Score{% endtrans %}</h3>
 
         <!-- Export buttons -->
         <div class="export-buttons">
             <button id="export-teamsTable-csv"
                     class="btn btn-secondary btn-sm"
-                    aria-label="Export team standings table to CSV format">
-                <span class="icon" aria-hidden="true">📊</span> Export CSV
+                    aria-label="{% trans %}Export team standings table to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
             </button>
             <button id="export-teamsTable-json"
                     class="btn btn-secondary btn-sm"
-                    aria-label="Export team standings table to JSON format">
-                <span class="icon" aria-hidden="true">📄</span> Export JSON
+                    aria-label="{% trans %}Export team standings table to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
             </button>
         </div>
 
@@ -47,16 +47,16 @@
             <table id="teamsTable"
                    class="results-table standings-table sortable"
                    role="table"
-                   aria-label="Team standings">
+                   aria-label="{% trans %}Team standings{% endtrans %}">
                 <thead>
                     <tr>
-                        <th scope="col" data-sort="rank" data-sort-type="number">Rank</th>
-                        <th scope="col" data-sort="team" data-sort-type="string">Team</th>
-                        <th scope="col" data-sort="division" data-sort-type="string">Division</th>
-                        <th scope="col" data-sort="conference" data-sort-type="string">Conference</th>
-                        <th scope="col" data-sort="total" data-sort-type="number">Total Score</th>
-                        <th scope="col" data-sort="avg" data-sort-type="number">Avg Score</th>
-                        <th scope="col" data-sort="players" data-sort-type="number">Players</th>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">{% trans %}Team{% endtrans %}</th>
+                        <th scope="col" data-sort="division" data-sort-type="string">{% trans %}Division{% endtrans %}</th>
+                        <th scope="col" data-sort="conference" data-sort-type="string">{% trans %}Conference{% endtrans %}</th>
+                        <th scope="col" data-sort="total" data-sort-type="number">{% trans %}Total Score{% endtrans %}</th>
+                        <th scope="col" data-sort="avg" data-sort-type="number">{% trans %}Avg Score{% endtrans %}</th>
+                        <th scope="col" data-sort="players" data-sort-type="number">{% trans %}Players{% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>

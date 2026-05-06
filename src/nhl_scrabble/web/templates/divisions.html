@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}NHL Scrabble Analyzer - Division Standings{% endblock %}
+{% block title %}{% trans %}NHL Scrabble Analyzer - Division Standings{% endtrans %}{% endblock %}
 
 {% block content %}
     <!-- Top Statistics -->
     <div class="stats-summary fade-on-scroll">
         <div class="stat-card">
-            <h4>Total Teams</h4>
+            <h4>{% trans %}Total Teams{% endtrans %}</h4>
             <p class="stat-value">{{ stats.total_teams }}</p>
         </div>
         <div class="stat-card">
-            <h4>Top Team</h4>
+            <h4>{% trans %}Top Team{% endtrans %}</h4>
             <p class="stat-value">{{ stats.highest_team_score }}</p>
             <p class="stat-detail">{{ stats.highest_team }} ({{ stats.highest_team_name }})</p>
         </div>
         <div class="stat-card">
-            <h4>Lowest Team</h4>
+            <h4>{% trans %}Lowest Team{% endtrans %}</h4>
             <p class="stat-value">{{ stats.lowest_team }}</p>
             <p class="stat-detail">{{ stats.lowest_team_name }}</p>
         </div>
         <div class="stat-card">
-            <h4>Total Players</h4>
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
             <p class="stat-value">{{ stats.total_players }}</p>
         </div>
     </div>
 
     <!-- Division Standings -->
     <section class="results-section">
-        <h3>Division Standings by Total Scrabble Score</h3>
+        <h3>{% trans %}Division Standings by Total Scrabble Score{% endtrans %}</h3>
         <div class="division-grid">
             {% for division, teams in division_standings.items() %}
                 <div class="division-card">

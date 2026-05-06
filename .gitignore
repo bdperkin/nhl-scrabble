@@ -301,3 +301,5 @@ __pycache__/
 
 # Temporary extraction directory
 /locales/
+# Translation template (generated file)
+messages.pot

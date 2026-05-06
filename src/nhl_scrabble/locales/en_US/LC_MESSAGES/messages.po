@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-06 00:27-0400\n"
+"POT-Creation-Date: 2026-05-06 11:50-0400\n"
 "PO-Revision-Date: 2026-05-05 23:01-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -409,6 +409,53 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: src/nhl_scrabble/web/templates/conferences.html:3
+msgid "NHL Scrabble Analyzer - Conference Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:9
+#: src/nhl_scrabble/web/templates/divisions.html:9
+#: src/nhl_scrabble/web/templates/playoffs.html:9
+#: src/nhl_scrabble/web/templates/stats.html:29
+#: src/nhl_scrabble/web/templates/teams.html:9
+msgid "Total Teams"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:13
+#: src/nhl_scrabble/web/templates/divisions.html:13
+#: src/nhl_scrabble/web/templates/results.html:17
+#: src/nhl_scrabble/web/templates/stats.html:33
+#: src/nhl_scrabble/web/templates/teams.html:13
+msgid "Top Team"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:18
+#: src/nhl_scrabble/web/templates/divisions.html:18
+#: src/nhl_scrabble/web/templates/stats.html:38
+msgid "Lowest Team"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:23
+#: src/nhl_scrabble/web/templates/divisions.html:23
+#: src/nhl_scrabble/web/templates/playoffs.html:22
+#: src/nhl_scrabble/web/templates/results.html:4
+#: src/nhl_scrabble/web/templates/stats.html:9
+#: src/nhl_scrabble/web/templates/teams.html:18
+msgid "Total Players"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/conferences.html:30
+msgid "Conference Standings by Total Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/divisions.html:3
+msgid "NHL Scrabble Analyzer - Division Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/divisions.html:30
+msgid "Division Standings by Total Scrabble Score"
+msgstr ""
+
 #: src/nhl_scrabble/web/templates/index.html:3
 msgid "NHL Scrabble Analyzer - Home"
 msgstr ""
@@ -427,59 +474,59 @@ msgstr ""
 msgid "Run Analysis"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:25
+#: src/nhl_scrabble/web/templates/index.html:27
 msgid "Top Players to Display"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:26
+#: src/nhl_scrabble/web/templates/index.html:28
 msgid "Number of top-scoring players (1-100)"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:34
+#: src/nhl_scrabble/web/templates/index.html:36
 msgid "Number of top-scoring players to display (1-100)"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:41
+#: src/nhl_scrabble/web/templates/index.html:43
 msgid "Top Players per Team"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:42
+#: src/nhl_scrabble/web/templates/index.html:44
 msgid "Players per team in results (1-30)"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:50
+#: src/nhl_scrabble/web/templates/index.html:52
 msgid "Number of top players to show per team (1-30)"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:60
+#: src/nhl_scrabble/web/templates/index.html:62
 msgid "Use cached results for faster loading"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:62
+#: src/nhl_scrabble/web/templates/index.html:64
 msgid "Use Cached Results (faster)"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:71
+#: src/nhl_scrabble/web/templates/index.html:73
 msgid "Analyze NHL player Scrabble scores"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:72
+#: src/nhl_scrabble/web/templates/index.html:74
 msgid "Analyze"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:75
+#: src/nhl_scrabble/web/templates/index.html:77
 msgid "Fetching NHL data..."
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:82
+#: src/nhl_scrabble/web/templates/index.html:84
 msgid "Loading NHL data..."
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:99
+#: src/nhl_scrabble/web/templates/index.html:101
 msgid "About"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:101
+#: src/nhl_scrabble/web/templates/index.html:103
 msgid ""
 "NHL Scrabble Analyzer calculates Scrabble scores for all NHL players "
 "using standard Scrabble letter point values. Teams are ranked by their "
@@ -487,72 +534,131 @@ msgid ""
 "alphabetical prowess rather than on-ice performance."
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:104
-#: src/nhl_scrabble/web/templates/index.html:131
+#: src/nhl_scrabble/web/templates/index.html:106
+#: src/nhl_scrabble/web/templates/index.html:133
 msgid "Scrabble Letter Values"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:107
+#: src/nhl_scrabble/web/templates/index.html:109
 msgid "1 point:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:110
+#: src/nhl_scrabble/web/templates/index.html:112
 msgid "2 points:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:113
+#: src/nhl_scrabble/web/templates/index.html:115
 msgid "3 points:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:116
+#: src/nhl_scrabble/web/templates/index.html:118
 msgid "4 points:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:119
+#: src/nhl_scrabble/web/templates/index.html:121
 msgid "5 points:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:122
+#: src/nhl_scrabble/web/templates/index.html:124
 msgid "8 points:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:125
+#: src/nhl_scrabble/web/templates/index.html:127
 msgid "10 points:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:130
+#: src/nhl_scrabble/web/templates/index.html:132
 msgid "References:"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/index.html:132
+#: src/nhl_scrabble/web/templates/index.html:134
 msgid "Letter Distributions"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/results.html:4
-msgid "Total Players"
+#: src/nhl_scrabble/web/templates/playoffs.html:3
+msgid "NHL Scrabble Analyzer - Playoff Bracket"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:13
+msgid "Playoff Teams"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:17
+msgid "Top Seed"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:29
+msgid "Playoff Bracket by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:33
+#: src/nhl_scrabble/web/templates/results.html:117
+#: src/nhl_scrabble/web/templates/teams.html:56
+msgid "Conference"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:39
+msgid "Division winner"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:41
+msgid "Wild card"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:52
+msgid "avg"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:62
+msgid "Legend:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:64
+msgid "Division winners (automatic qualification)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:65
+msgid "Wild card teams (top 2 non-division winners)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:66
+msgid "Conference leader"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:67
+msgid "Presidents' Trophy (best overall record)"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:68
+msgid "Division leader"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/playoffs.html:69
+msgid "Clinched playoff spot"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:8
+#: src/nhl_scrabble/web/templates/stats.html:13
 msgid "Highest Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:13
+#: src/nhl_scrabble/web/templates/stats.html:18
 msgid "Average Score"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/results.html:17
-msgid "Top Team"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/results.html:25
+#: src/nhl_scrabble/web/templates/stats.html:53
 msgid "Score Visualizations"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:28
+#: src/nhl_scrabble/web/templates/stats.html:56
 msgid "Team Scores"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:35
+#: src/nhl_scrabble/web/templates/stats.html:63
 msgid "Player Score Distribution"
 msgstr ""
 
@@ -567,6 +673,7 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:51
 #: src/nhl_scrabble/web/templates/results.html:98
+#: src/nhl_scrabble/web/templates/teams.html:37
 msgid "Export CSV"
 msgstr ""
 
@@ -576,67 +683,103 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:56
 #: src/nhl_scrabble/web/templates/results.html:103
+#: src/nhl_scrabble/web/templates/teams.html:42
 msgid "Export JSON"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:64
+#: src/nhl_scrabble/web/templates/stats.html:77
 msgid "Top players by Scrabble score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:67
 #: src/nhl_scrabble/web/templates/results.html:114
+#: src/nhl_scrabble/web/templates/stats.html:80
+#: src/nhl_scrabble/web/templates/teams.html:53
 msgid "Rank"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:68
+#: src/nhl_scrabble/web/templates/stats.html:81
 msgid "Player Name"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:69
 #: src/nhl_scrabble/web/templates/results.html:115
+#: src/nhl_scrabble/web/templates/stats.html:82
+#: src/nhl_scrabble/web/templates/teams.html:54
 msgid "Team"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:70
+#: src/nhl_scrabble/web/templates/stats.html:83
 msgid "Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:91
+#: src/nhl_scrabble/web/templates/teams.html:30
 msgid "Team Standings by Total Scrabble Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:97
+#: src/nhl_scrabble/web/templates/teams.html:36
 msgid "Export team standings table to CSV format"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:102
+#: src/nhl_scrabble/web/templates/teams.html:41
 msgid "Export team standings table to JSON format"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:111
+#: src/nhl_scrabble/web/templates/teams.html:50
 msgid "Team standings"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:116
+#: src/nhl_scrabble/web/templates/teams.html:55
 msgid "Division"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/results.html:117
-msgid "Conference"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/results.html:118
+#: src/nhl_scrabble/web/templates/teams.html:57
 msgid "Total Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:119
+#: src/nhl_scrabble/web/templates/teams.html:58
 msgid "Avg Score"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:120
+#: src/nhl_scrabble/web/templates/teams.html:59
 msgid "Players"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/results.html:142
 msgid "Division Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:3
+msgid "NHL Scrabble Analyzer - Statistics"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:22
+msgid "Lowest Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:43
+msgid "Data As Of"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/stats.html:72
+msgid "Top 10 Players by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/teams.html:3
+msgid "NHL Scrabble Analyzer - Team Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/teams.html:22
+msgid "Highest Player"
 msgstr ""
