@@ -450,6 +450,116 @@ make docs-check  # Fails if you forgot to regenerate
 
 See [docs/how-to/build-documentation.md](docs/how-to/build-documentation.md) for complete documentation build guide.
 
+## Translation
+
+NHL Scrabble supports 12 locales covering major hockey markets worldwide. We welcome translation contributions to make the application accessible to hockey fans in their native languages!
+
+### Quick Start
+
+1. **Choose a locale**: See [TRANSLATING.md](TRANSLATING.md) for supported locales
+1. **Edit the .po file**: Find your locale in `src/nhl_scrabble/locales/{locale}/LC_MESSAGES/messages.po`
+1. **Translate strings**: Add your translations to empty `msgstr` entries
+1. **Compile**: Run `make i18n-compile` to generate binary files
+1. **Test**: Verify translations with `NHL_SCRABBLE_LANG={locale} nhl-scrabble analyze`
+1. **Submit**: Create a PR with your translations
+
+### Translation Workflow
+
+```bash
+# Update translation files (if new strings added)
+make i18n-update
+
+# Edit your locale's .po file
+vim src/nhl_scrabble/locales/fr_CA/LC_MESSAGES/messages.po
+
+# Compile translations
+make i18n-compile
+
+# Test your translation
+NHL_SCRABBLE_LANG=fr_CA nhl-scrabble analyze --help
+NHL_SCRABBLE_LANG=fr_CA nhl-scrabble interactive
+
+# Check translation completion
+make i18n-stats
+
+# Submit PR
+git add src/nhl_scrabble/locales/
+git commit -m "feat(i18n): Add French Canadian translations"
+git push origin translation/fr_CA
+```
+
+### Translation Guidelines
+
+**Key Rules:**
+
+- ✅ Preserve placeholders: `{count}`, `{name}`, `%(variable)s`
+- ✅ Keep Rich markup tags: `[green]`, `[/green]`, `[bold]`
+- ✅ Use proper hockey terminology for your locale
+- ✅ Test translations before submitting
+- ❌ Don't translate technical terms: "NHL", "API", "JSON"
+- ❌ Don't modify msgid (source text)
+
+**Supported Locales:**
+
+| Region             | Locales                                     |
+| ------------------ | ------------------------------------------- |
+| **North America**  | `en_US`, `en_CA`, `fr_CA`                   |
+| **Nordic**         | `sv_SE`, `fi_FI`                            |
+| **Central Europe** | `cs_CZ`, `de_DE`, `de_CH`, `it_CH`, `sk_SK` |
+| **Eastern Europe** | `ru_RU`, `lv_LV`                            |
+
+**Tools:**
+
+- **Poedit** (GUI, recommended): https://poedit.net/
+- **Lokalize** (KDE): `sudo dnf install lokalize`
+- **Text Editor**: Any editor works for .po files
+
+### Translation Resources
+
+- **Complete Guide**: [TRANSLATING.md](TRANSLATING.md) - Detailed translation guide
+- **I18n Documentation**: [docs/reference/i18n.md](docs/reference/i18n.md) - Technical i18n details
+- **Hockey Terminology**: Included in translation guide
+- **Examples**: Existing translations in `src/nhl_scrabble/locales/`
+
+### Translation Maintenance
+
+**For Developers:** When adding new user-facing strings:
+
+1. Wrap with translation function:
+
+   ```python
+   from nhl_scrabble.i18n import _
+
+   console.print(_("Your message here"))
+   ```
+
+1. Extract and update:
+
+   ```bash
+   make i18n-extract   # Extract new strings
+   make i18n-update    # Update all .po files
+   ```
+
+1. Commit both code and updated .po files
+
+**Translation Status:**
+
+Check completion for all locales:
+
+```bash
+make i18n-stats
+```
+
+Example output:
+
+```
+Translation Statistics:
+src/nhl_scrabble/locales/fr_CA/LC_MESSAGES/messages.po: 150 translated, 104 untranslated.
+src/nhl_scrabble/locales/sv_SE/LC_MESSAGES/messages.po: 0 translated, 254 untranslated.
+```
+
+See [TRANSLATING.md](TRANSLATING.md) for complete translation guide including tools, workflow, and quality checks.
+
 ## Pull Request Process
 
 ### Before Submitting
