@@ -11,7 +11,6 @@ Output:
     docs/reference/cli-generated.md
 """
 
-# ruff: noqa: INP001
 # INP001: scripts directory is not a package
 # S603/S607: subprocess calls to nhl-scrabble CLI (trusted input)
 # T201: print statements are appropriate for utility script
