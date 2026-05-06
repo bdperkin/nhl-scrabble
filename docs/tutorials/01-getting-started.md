@@ -18,9 +18,39 @@ By the end of this tutorial, you'll be able to:
 
 Before starting, make sure you have:
 
-- Python 3.12 or higher installed
+- **Option A (Standard):** Python 3.12 or higher installed
+- **Option B (Docker):** Docker installed (no Python required)
 - Basic command-line knowledge
 - Internet connection (to fetch NHL roster data)
+
+## Installation Options
+
+Choose one of the following installation methods:
+
+### Option A: Standard Installation (Python)
+
+Continue with Steps 1-2 below for the standard Python installation.
+
+### Option B: Docker Installation (Recommended for Quick Start)
+
+If you have Docker installed, you can skip the Python setup entirely:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/bdperkin/nhl-scrabble:latest
+
+# Run your first analysis
+docker run --rm ghcr.io/bdperkin/nhl-scrabble:latest analyze
+
+# Save results to a file
+docker run --rm -v $(pwd):/output \
+  ghcr.io/bdperkin/nhl-scrabble:latest \
+  analyze --output /output/report.txt
+```
+
+**Using Docker?** Skip to [Step 3: Run your first analysis](#step-3-run-your-first-analysis) and replace `nhl-scrabble` with the full Docker command shown above.
+
+---
 
 ## Step 1: Clone the repository
 

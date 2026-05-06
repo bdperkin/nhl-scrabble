@@ -307,6 +307,27 @@ NHL_SCRABBLE_VERBOSE=true
 - **Artifact Retention**: Benchmark results retained 30 days
 - Configuration: `.github/workflows/nightly.yml`
 
+**Docker Container Build and Publish Workflow:**
+
+- Multi-platform container builds for easy deployment
+- **Platforms**: linux/amd64, linux/arm64
+- **Build Triggers**: Pushes to main, version tags (v\*), PR changes to Dockerfile
+- **Registry**: GitHub Container Registry (GHCR) at ghcr.io/bdperkin/nhl-scrabble
+- **Image Tags**:
+  - `latest` - Latest from main branch
+  - `<version>` - Specific version on tags (e.g., 2.1.0, 2.1, 2)
+  - `<branch>-<sha>` - SHA-based tags for traceability
+- **Security**: Trivy vulnerability scanning, SBOM generation (SPDX format)
+- **Optimization**: Multi-stage build, layer caching (GitHub Actions cache), slim Python base (~200-250MB)
+- **Non-root user**: Runs as UID 1000 (nhlscrabble user)
+- **Health check**: Built-in health check using `--version` command
+- **Usage**:
+  ```bash
+  docker run --rm ghcr.io/bdperkin/nhl-scrabble:latest analyze
+  docker run --rm -v $(pwd):/output ghcr.io/bdperkin/nhl-scrabble:latest analyze --output /output/report.txt
+  ```
+- Configuration: `.github/workflows/docker.yml`, `Dockerfile`, `.dockerignore`
+
 ### Publishing
 
 Triggered by version tags (`v*`):

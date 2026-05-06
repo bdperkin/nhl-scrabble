@@ -155,6 +155,37 @@ make init
 pip install -e ".[dev]"
 ```
 
+### Using Docker
+
+Run the analyzer using Docker without installing Python:
+
+```bash
+# Pull from GitHub Container Registry
+docker pull ghcr.io/bdperkin/nhl-scrabble:latest
+
+# Run analysis
+docker run --rm ghcr.io/bdperkin/nhl-scrabble:latest analyze
+
+# Save output to a file
+docker run --rm -v $(pwd):/output \
+  ghcr.io/bdperkin/nhl-scrabble:latest \
+  analyze --output /output/report.txt
+
+# Use with environment variables
+docker run --rm \
+  -e NHL_SCRABBLE_VERBOSE=true \
+  -e NHL_SCRABBLE_TOP_PLAYERS=50 \
+  ghcr.io/bdperkin/nhl-scrabble:latest analyze
+```
+
+**Available tags:**
+
+- `latest` - Latest stable release from main branch
+- `2.1.0` - Specific version (replace with desired version)
+- `2.1`, `2` - Major.minor and major version tags
+
+**Supported platforms:** linux/amd64, linux/arm64
+
 ### Requirements
 
 - **Supported**: [Python](https://www.python.org/) 3.12, 3.13, 3.14

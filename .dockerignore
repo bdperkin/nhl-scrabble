@@ -27,17 +27,10 @@ wheels/
 MANIFEST
 
 # Virtual environments
-.venv
+.venv/
 venv/
 ENV/
 env/
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
 
 # Testing
 .tox/
@@ -46,11 +39,20 @@ env/
 .cache
 .pytest_cache/
 htmlcov/
-qa/web/tests/visual/__snapshots__/
+.benchmarks/
+qa/
 
 # Documentation
 docs/_build/
+docs/.DS_Store
 site/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
@@ -58,14 +60,38 @@ Thumbs.db
 
 # CI/CD
 .github/
+.pre-commit-config.yaml
 
-# Project specific
+# Claude
+.claude/
+
+# Tasks
+tasks/
+TASK-*.md
+
+# Scripts (not needed in container)
+scripts/
+
+# Templates
+templates/
+
+# Assets
+assets/
+
+# Other project files
+*.md
+!README.md
+LICENSE
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+.editorconfig
+.gitattributes
+Makefile
+tox.ini
+.readthedocs.yml
+.safety-policy.yml
+.linkcheckerrc
 *.log
 .env
 .env.*
-tasks/
-TASK-*.md
-README.md
-CONTRIBUTING.md
-CHANGELOG.md
-LICENSE
