@@ -105,14 +105,14 @@ class TestCLITranslatedStrings:
 
     def test_output_validation_errors_translatable(self):
         """Test that output validation error messages are translatable."""
-        import os
         import tempfile
+        from pathlib import Path
 
         runner = CliRunner()
         with tempfile.TemporaryDirectory() as tmpdir:
             # Test with non-existent output directory
-            nonexistent_dir = os.path.join(tmpdir, "does_not_exist")
-            output_file = os.path.join(nonexistent_dir, "output.txt")
+            nonexistent_dir = Path(tmpdir) / "does_not_exist"
+            output_file = str(nonexistent_dir / "output.txt")
             result = runner.invoke(
                 cli,
                 ["analyze", "--output", output_file],
