@@ -1,24 +1,23 @@
 # French (Canada) translations for NHL Scrabble Score Analyzer.
 # Copyright (C) 2026 Brandon Perkins
-# This file is distributed under the same license as the NHL Scrabble Score Analyzer project.
+# This file is distributed under the same license as the NHL Scrabble Score
+# Analyzer project.
 # Claude AI Assistant, 2026.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.1.0\n"
+"Project-Id-Version:  2.1.0\n"
 "Report-Msgid-Bugs-To: bdperkin@gmail.com\n"
-"POT-Creation-Date: 2026-05-06 13:58-0400\n"
+"POT-Creation-Date: 2026-05-07 13:41-0400\n"
 "PO-Revision-Date: 2026-05-06 15:00-0400\n"
 "Last-Translator: Claude AI <noreply@anthropic.com>\n"
 "Language: fr_CA\n"
 "Language-Team: French (Canada) <fr_CA@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
-"X-Generator: Claude AI\n"
-"X-Translation-Status: DRAFT - Machine translated, requires native speaker review\n"
 
 #: src/nhl_scrabble/cli.py:97
 #, python-brace-format
@@ -44,7 +43,8 @@ msgid ""
 "Output file exists but is not writable: {output_path}\n"
 "Check permissions with: ls -l {output_path}"
 msgstr ""
-"Le fichier de sortie existe mais n'est pas accessible en écriture : {output_path}\n"
+"Le fichier de sortie existe mais n'est pas accessible en écriture : "
+"{output_path}\n"
 "Vérifiez les permissions avec : ls -l {output_path}"
 
 #: src/nhl_scrabble/cli.py:316 src/nhl_scrabble/cli.py:1181
@@ -90,7 +90,9 @@ msgstr "Supprimer les barres de progression et les messages d'état"
 #: src/nhl_scrabble/cli.py:1048 src/nhl_scrabble/cli.py:1435
 #: src/nhl_scrabble/cli.py:1617
 msgid "Disable API response caching (always fetch fresh data)"
-msgstr "Désactiver la mise en cache des réponses API (toujours récupérer des données fraîches)"
+msgstr ""
+"Désactiver la mise en cache des réponses API (toujours récupérer des "
+"données fraîches)"
 
 #: src/nhl_scrabble/cli.py:475
 msgid "Clear API cache before running"
@@ -98,7 +100,9 @@ msgstr "Effacer le cache API avant l'exécution"
 
 #: src/nhl_scrabble/cli.py:480
 msgid "Analyze specific season (format: YYYYYYYY, e.g., 20222023 for 2022-23)"
-msgstr "Analyser une saison spécifique (format : AAAAAAAA, p. ex., 20222023 pour 2022-23)"
+msgstr ""
+"Analyser une saison spécifique (format : AAAAAAAA, p. ex., 20222023 pour "
+"2022-23)"
 
 #: src/nhl_scrabble/cli.py:487 src/nhl_scrabble/cli.py:1624
 msgid "Number of top players to show (default: 20, range: 1-100)"
@@ -106,7 +110,9 @@ msgstr "Nombre de meilleurs joueurs à afficher (par défaut : 20, plage : 1-100
 
 #: src/nhl_scrabble/cli.py:493 src/nhl_scrabble/cli.py:1630
 msgid "Number of top players per team to show (default: 5, range: 1-50)"
-msgstr "Nombre de meilleurs joueurs par équipe à afficher (par défaut : 5, plage : 1-50)"
+msgstr ""
+"Nombre de meilleurs joueurs par équipe à afficher (par défaut : 5, plage "
+": 1-50)"
 
 #: src/nhl_scrabble/cli.py:499 src/nhl_scrabble/cli.py:1636
 msgid "Generate specific report only (default: all reports)"
@@ -297,19 +303,27 @@ msgstr "Port à lier (par défaut : 8000, plage : 1-65535)"
 
 #: src/nhl_scrabble/cli.py:1257
 msgid "Enable auto-reload for development (watches for file changes)"
-msgstr "Activer le rechargement automatique pour le développement (surveille les modifications de fichiers)"
+msgstr ""
+"Activer le rechargement automatique pour le développement (surveille les "
+"modifications de fichiers)"
 
 #: src/nhl_scrabble/cli.py:1262
 msgid "Path to log file (enables file-based logging with rotation)"
-msgstr "Chemin du fichier journal (active la journalisation basée sur des fichiers avec rotation)"
+msgstr ""
+"Chemin du fichier journal (active la journalisation basée sur des "
+"fichiers avec rotation)"
 
 #: src/nhl_scrabble/cli.py:1429
 msgid "Suppress progress bars and status messages during data fetching"
-msgstr "Supprimer les barres de progression et les messages d'état pendant la récupération des données"
+msgstr ""
+"Supprimer les barres de progression et les messages d'état pendant la "
+"récupération des données"
 
 #: src/nhl_scrabble/cli.py:1441
 msgid "Run dashboard for specified seconds (default: until Ctrl+C, range: 1+)"
-msgstr "Exécuter le tableau de bord pendant le nombre de secondes spécifié (par défaut : jusqu'à Ctrl+C, plage : 1+)"
+msgstr ""
+"Exécuter le tableau de bord pendant le nombre de secondes spécifié (par "
+"défaut : jusqu'à Ctrl+C, plage : 1+)"
 
 #: src/nhl_scrabble/cli.py:1446
 msgid "Display static snapshot instead of live dashboard"
@@ -325,7 +339,9 @@ msgstr "Filtrer par conférence (Eastern ou Western)"
 
 #: src/nhl_scrabble/cli.py:1589
 msgid "Refresh interval in seconds (default: 300 = 5 minutes, range: 1+)"
-msgstr "Intervalle de rafraîchissement en secondes (par défaut : 300 = 5 minutes, plage : 1+)"
+msgstr ""
+"Intervalle de rafraîchissement en secondes (par défaut : 300 = 5 minutes,"
+" plage : 1+)"
 
 #: src/nhl_scrabble/cli.py:1802
 msgid "Target coverage percentage (default: 90.0)"
@@ -674,6 +690,7 @@ msgstr "Statistique"
 #: src/nhl_scrabble/interactive/shell.py:640
 #: src/nhl_scrabble/web/templates/conferences.html:9
 #: src/nhl_scrabble/web/templates/divisions.html:9
+#: src/nhl_scrabble/web/templates/league.html:22
 #: src/nhl_scrabble/web/templates/playoffs.html:9
 #: src/nhl_scrabble/web/templates/stats.html:29
 #: src/nhl_scrabble/web/templates/teams.html:9
@@ -683,6 +700,7 @@ msgstr "Total d'équipes"
 #: src/nhl_scrabble/interactive/shell.py:641
 #: src/nhl_scrabble/web/templates/conferences.html:23
 #: src/nhl_scrabble/web/templates/divisions.html:23
+#: src/nhl_scrabble/web/templates/league.html:36
 #: src/nhl_scrabble/web/templates/playoffs.html:22
 #: src/nhl_scrabble/web/templates/results.html:4
 #: src/nhl_scrabble/web/templates/stats.html:9
@@ -701,6 +719,7 @@ msgstr "Score moyen de joueur"
 #: src/nhl_scrabble/interactive/shell.py:645
 #: src/nhl_scrabble/web/templates/conferences.html:13
 #: src/nhl_scrabble/web/templates/divisions.html:13
+#: src/nhl_scrabble/web/templates/league.html:26
 #: src/nhl_scrabble/web/templates/results.html:17
 #: src/nhl_scrabble/web/templates/stats.html:33
 #: src/nhl_scrabble/web/templates/teams.html:13
@@ -845,9 +864,9 @@ msgid ""
 "See team standings, playoff brackets, and statistics based on letter "
 "values."
 msgstr ""
-"Analyseur Scrabble LNH - Calculez les scores Scrabble des noms de joueurs de la LNH. "
-"Consultez le classement des équipes, les tableaux des séries éliminatoires et les statistiques "
-"basées sur les valeurs des lettres."
+"Analyseur Scrabble LNH - Calculez les scores Scrabble des noms de joueurs"
+" de la LNH. Consultez le classement des équipes, les tableaux des séries "
+"éliminatoires et les statistiques basées sur les valeurs des lettres."
 
 #: src/nhl_scrabble/web/templates/base.html:11
 msgid "NHL, Scrabble, hockey, player names, statistics, analysis"
@@ -858,7 +877,7 @@ msgstr "LNH, Scrabble, hockey, noms de joueurs, statistiques, analyse"
 #: src/nhl_scrabble/web/templates/base.html:26
 #: src/nhl_scrabble/web/templates/base.html:30
 #: src/nhl_scrabble/web/templates/base.html:51
-#: src/nhl_scrabble/web/templates/base.html:132
+#: src/nhl_scrabble/web/templates/base.html:135
 msgid "NHL Scrabble Analyzer"
 msgstr "Analyseur Scrabble LNH"
 
@@ -867,8 +886,9 @@ msgid ""
 "Analyze NHL player names by Scrabble score - See team standings and "
 "playoff brackets based on letter values"
 msgstr ""
-"Analysez les noms de joueurs de la LNH par score Scrabble - Consultez le classement des équipes "
-"et les tableaux des séries basés sur les valeurs des lettres"
+"Analysez les noms de joueurs de la LNH par score Scrabble - Consultez le "
+"classement des équipes et les tableaux des séries basés sur les valeurs "
+"des lettres"
 
 #: src/nhl_scrabble/web/templates/base.html:27
 msgid "Analyze NHL player names by Scrabble score"
@@ -899,34 +919,38 @@ msgid "Conferences"
 msgstr "Conférences"
 
 #: src/nhl_scrabble/web/templates/base.html:79
+msgid "League"
+msgstr "Ligue"
+
+#: src/nhl_scrabble/web/templates/base.html:82
 msgid "Playoffs"
 msgstr "Séries éliminatoires"
 
-#: src/nhl_scrabble/web/templates/base.html:82
+#: src/nhl_scrabble/web/templates/base.html:85
 msgid "Stats"
 msgstr "Statistiques"
 
-#: src/nhl_scrabble/web/templates/base.html:85
+#: src/nhl_scrabble/web/templates/base.html:88
 msgid "API Docs"
 msgstr "Documentation API"
 
-#: src/nhl_scrabble/web/templates/base.html:91
+#: src/nhl_scrabble/web/templates/base.html:94
 msgid "Documentation"
 msgstr "Documentation"
 
-#: src/nhl_scrabble/web/templates/base.html:101
+#: src/nhl_scrabble/web/templates/base.html:104
 msgid "Select Language"
 msgstr "Sélectionner la langue"
 
-#: src/nhl_scrabble/web/templates/base.html:102
+#: src/nhl_scrabble/web/templates/base.html:105
 msgid "Select language"
 msgstr "Sélectionner la langue"
 
-#: src/nhl_scrabble/web/templates/base.html:133
+#: src/nhl_scrabble/web/templates/base.html:136
 msgid "Open Source"
 msgstr "Code source"
 
-#: src/nhl_scrabble/web/templates/base.html:134
+#: src/nhl_scrabble/web/templates/base.html:137
 msgid "Status"
 msgstr "Statut"
 
@@ -936,6 +960,7 @@ msgstr "Analyseur Scrabble LNH - Classement des conférences"
 
 #: src/nhl_scrabble/web/templates/conferences.html:18
 #: src/nhl_scrabble/web/templates/divisions.html:18
+#: src/nhl_scrabble/web/templates/league.html:31
 #: src/nhl_scrabble/web/templates/stats.html:38
 msgid "Lowest Team"
 msgstr "Équipe la plus faible"
@@ -965,8 +990,9 @@ msgid ""
 "Calculate Scrabble scores for NHL player names and see team standings, "
 "playoff brackets, and statistics based on letter values."
 msgstr ""
-"Calculez les scores Scrabble des noms de joueurs de la LNH et consultez le classement des équipes, "
-"les tableaux des séries éliminatoires et les statistiques basées sur les valeurs des lettres."
+"Calculez les scores Scrabble des noms de joueurs de la LNH et consultez "
+"le classement des équipes, les tableaux des séries éliminatoires et les "
+"statistiques basées sur les valeurs des lettres."
 
 #: src/nhl_scrabble/web/templates/index.html:14
 msgid "Run Analysis"
@@ -1027,10 +1053,11 @@ msgid ""
 "total roster score, creating an alternative playoff bracket based on "
 "alphabetical prowess rather than on-ice performance."
 msgstr ""
-"L'analyseur Scrabble LNH calcule les scores Scrabble pour tous les joueurs de la LNH "
-"en utilisant les valeurs de points standard des lettres Scrabble. Les équipes sont classées selon "
-"leur score total d'effectif, créant un tableau alternatif des séries éliminatoires basé sur "
-"la prouesse alphabétique plutôt que sur la performance sur la glace."
+"L'analyseur Scrabble LNH calcule les scores Scrabble pour tous les "
+"joueurs de la LNH en utilisant les valeurs de points standard des lettres"
+" Scrabble. Les équipes sont classées selon leur score total d'effectif, "
+"créant un tableau alternatif des séries éliminatoires basé sur la "
+"prouesse alphabétique plutôt que sur la performance sur la glace."
 
 #: src/nhl_scrabble/web/templates/index.html:106
 #: src/nhl_scrabble/web/templates/index.html:133
@@ -1072,6 +1099,69 @@ msgstr "Références :"
 #: src/nhl_scrabble/web/templates/index.html:134
 msgid "Letter Distributions"
 msgstr "Distribution des lettres"
+
+#: src/nhl_scrabble/web/templates/league.html:3
+msgid "NHL Scrabble Analyzer - League Standings"
+msgstr "Analyseur Scrabble LNH - Classement de la ligue"
+
+#: src/nhl_scrabble/web/templates/league.html:5
+#: src/nhl_scrabble/web/templates/league.html:6
+msgid "NHL League Standings by Scrabble Score"
+msgstr "Classement de la ligue LNH par score Scrabble"
+
+#: src/nhl_scrabble/web/templates/league.html:10
+msgid "League Standings by Total Scrabble Score"
+msgstr "Classement de la ligue par score Scrabble total"
+
+#: src/nhl_scrabble/web/templates/league.html:12
+msgid ""
+"Complete NHL standings ranked by total Scrabble score across all teams in"
+" the league."
+msgstr ""
+"Classement complet de la LNH classé par score Scrabble total de toutes les "
+"équipes de la ligue."
+
+#: src/nhl_scrabble/web/templates/league.html:15
+#, fuzzy
+msgid "Data as of"
+msgstr "Données en date du"
+
+#: src/nhl_scrabble/web/templates/league.html:43
+msgid "League Standings"
+msgstr "Classement de la ligue"
+
+#: src/nhl_scrabble/web/templates/league.html:46
+msgid "National Hockey League"
+msgstr "Ligue nationale de hockey"
+
+#: src/nhl_scrabble/web/templates/league.html:65
+msgid "About League Standings"
+msgstr "À propos du classement de la ligue"
+
+#: src/nhl_scrabble/web/templates/league.html:67
+msgid ""
+"Teams are ranked by their total Scrabble score, calculated by summing the"
+" Scrabble letter values of all players' names on each roster. This "
+"league-wide view shows the complete standings without division or "
+"conference groupings."
+msgstr ""
+"Les équipes sont classées selon leur score Scrabble total, calculé en "
+"additionnant les valeurs Scrabble des lettres de tous les noms de joueurs "
+"de chaque formation. Cette vue à l'échelle de la ligue affiche le "
+"classement complet sans regroupement par division ou conférence."
+
+#: src/nhl_scrabble/web/templates/league.html:70
+msgid "For grouped standings, see:"
+msgstr "Pour les classements groupés, voir :"
+
+#: src/nhl_scrabble/web/templates/league.html:71
+#: src/nhl_scrabble/web/templates/results.html:142
+msgid "Division Standings"
+msgstr "Classement des divisions"
+
+#: src/nhl_scrabble/web/templates/league.html:72
+msgid "Conference Standings"
+msgstr "Classement des conférences"
 
 #: src/nhl_scrabble/web/templates/playoffs.html:3
 msgid "NHL Scrabble Analyzer - Playoff Bracket"
@@ -1208,10 +1298,6 @@ msgstr "Classement des équipes"
 #: src/nhl_scrabble/web/templates/teams.html:58
 msgid "Avg Score"
 msgstr "Score moy"
-
-#: src/nhl_scrabble/web/templates/results.html:142
-msgid "Division Standings"
-msgstr "Classement des divisions"
 
 #: src/nhl_scrabble/web/templates/stats.html:3
 msgid "NHL Scrabble Analyzer - Statistics"
