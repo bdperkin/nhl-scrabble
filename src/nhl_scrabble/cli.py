@@ -680,7 +680,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     setup_logging(verbose=verbose, sanitize_logs=config.sanitize_logs)
 
     # Note: locale parameter validated by Click but translation override via NHL_SCRABBLE_LANG env var
-    # TODO: Implement locale override in future version to avoid global variable issues
+    # TODO(#future): Implement locale override to avoid global variable issues (tracked separately)
     if locale:
         logger.debug(f"Locale requested: {locale} (use NHL_SCRABBLE_LANG env var for now)")
 

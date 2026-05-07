@@ -67,8 +67,8 @@ A [Python](https://www.python.org/) application that fetches current NHL roster 
 - 📈 **Progress Tracking** - Real-time progress bars for long operations
 - 🎯 **Flexible Output** - Text, JSON, or HTML format
 - 🎨 **Colorized Logging** - Color-coded log levels with TTY detection and NO_COLOR support
-- 🌍 **Internationalization** - 12 locales supported (EN, FR, SV, RU, FI, CS, DE, IT, SK, LV) with gettext translations
-- 🧪 **Comprehensive Testing** - >90% code coverage with 170+ unit/integration tests
+- 🌍 **Internationalization** - 12 locales available (2 fully translated: fr_CA, sv_SE; 10 available for contribution) with gettext translations
+- 🧪 **Comprehensive Testing** - 90.21% code coverage with 1,722 unit/integration tests
   - Playwright-based E2E testing (40+ browser tests)
   - Visual regression testing across browsers (Chromium, Firefox, WebKit)
   - Performance and load testing with benchmarks
@@ -283,7 +283,7 @@ cd nhl-scrabble
 make init
 source .venv/bin/activate
 
-# View all available commands (57 targets)
+# View all available commands (139 targets)
 make help
 ```
 
@@ -320,7 +320,7 @@ make check
 
 ### Pre-commit Hooks
 
-The project uses 67 comprehensive pre-commit hooks for automatic code quality validation:
+The project uses 87 comprehensive pre-commit hooks for automatic code quality validation:
 
 ```bash
 # Install hooks (one-time)
@@ -336,7 +336,7 @@ pre-commit autoupdate
 **Complete Development Documentation:**
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development guidelines and workflow
-- [Makefile Reference](docs/reference/makefile.md) - All 57 Makefile targets
+- [Makefile Reference](docs/reference/makefile.md) - All 139 Makefile targets
 - [Testing Guide](docs/how-to/run-tests.md) - Test execution and configuration
 - [UV Package Manager](docs/how-to/use-uv.md) - 10-100x faster installation
 
@@ -352,7 +352,7 @@ nhl-scrabble/
 │   ├── reports/               # Report generators
 │   ├── cli.py                 # CLI interface (Click)
 │   └── config.py              # Configuration management
-├── tests/                     # Test suite (170+ tests)
+├── tests/                     # Test suite (1,722 tests)
 │   ├── unit/                  # Unit tests
 │   └── integration/           # Integration tests
 ├── docs/                      # Documentation (Diátaxis framework)
@@ -443,11 +443,11 @@ tox -e licenses
 
 ## Project Statistics
 
-- **Test Coverage**: 49.93% overall, >90% on core modules
-- **Tests**: 170+ tests (100% passing)
-- **Modules**: 15 core modules
-- **Makefile Targets**: 57 documented targets
-- **Pre-commit Hooks**: 67 comprehensive quality checks
+- **Test Coverage**: 90.21% overall
+- **Tests**: 1,722 tests (100% passing)
+- **Python Files**: 76 files across multiple packages
+- **Makefile Targets**: 139 documented targets
+- **Pre-commit Hooks**: 87 comprehensive quality checks
 - **CI/CD**: GitHub Actions on Python 3.12, 3.13, 3.14 (required), 3.15-dev (experimental)
 
 See [Project Stats](docs/reference/project-stats.md) for complete metrics.

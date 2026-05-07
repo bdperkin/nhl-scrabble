@@ -9,16 +9,16 @@ Detailed metrics and statistics for the NHL Scrabble project.
 | **Python Version**   | 3.12-3.14 (supported), 3.15-dev (experimental)  |
 | **Package Version**  | Dynamic (from git tags via hatch-vcs)           |
 | **License**          | MIT                                             |
-| **Test Coverage**    | 49.93% overall, >90% on core modules            |
-| **Pre-commit Hooks** | 67 comprehensive quality checks                 |
+| **Test Coverage**    | 90.21% overall                                  |
+| **Pre-commit Hooks** | 87 comprehensive quality checks                 |
 | **CI/CD**            | GitHub Actions with UV optimization (4x faster) |
 
 ## Codebase Statistics
 
 ### Source Code
 
-- **Lines of Code**: ~1,866 (src)
-- **Python Modules**: 15 core modules
+- **Lines of Code**: ~16,033 (src)
+- **Python Modules**: 76 Python files across multiple packages
 - **Package Structure**: Modern src-layout
 
 **Module Breakdown:**
@@ -33,8 +33,8 @@ Detailed metrics and statistics for the NHL Scrabble project.
 
 ### Test Suite
 
-- **Lines of Tests**: ~680 (tests)
-- **Test Files**: 36 tests
+- **Lines of Tests**: ~18,400 (tests)
+- **Test Files**: 92 test files, 1,722 individual tests
 - **Test Success Rate**: 100% passing
 - **Test Organization**:
   - Unit tests: `tests/unit/`
@@ -45,17 +45,13 @@ Detailed metrics and statistics for the NHL Scrabble project.
 
 | Module                | Coverage |
 | --------------------- | -------- |
+| **Overall**           | 90.21%   |
 | **Core Modules**      | >90%     |
 | `scoring/scrabble.py` | 95%      |
 | `models/*.py`         | 92%      |
 | `processors/*.py`     | 91%      |
-| **Reports**           | ~80%     |
-| `reports/base.py`     | 85%      |
-| `reports/*_report.py` | 78%      |
-| **CLI & Config**      | ~60%     |
-| `cli.py`              | 62%      |
-| `config.py`           | 58%      |
-| **Overall**           | 49.93%   |
+| **Reports**           | ~90%     |
+| **CLI & Config**      | ~90%     |
 
 **Coverage Tracking:**
 
@@ -67,7 +63,7 @@ Detailed metrics and statistics for the NHL Scrabble project.
 
 ### Makefile
 
-- **Total Targets**: 57 documented targets
+- **Total Targets**: 139 documented targets
 - **Logical Groupings**: 16 categories
 - **Self-Documenting**: Yes (via `make help`)
 
@@ -94,7 +90,7 @@ See [Makefile Reference](makefile.md) for complete target documentation.
 
 ### Pre-commit Hooks
 
-- **Total Hooks**: 67 comprehensive quality checks
+- **Total Hooks**: 87 comprehensive quality checks
 - **Hook Categories**: 24 categories
 
 **Hook Breakdown:**
@@ -322,9 +318,9 @@ See [CHANGELOG.md](../../CHANGELOG.md) for complete version history.
 
 ### Test Performance
 
-- **Sequential**: 131s for 170 tests
-- **Parallel** (pytest-xdist): 47s (2.8x speedup on 8 cores)
-- **CI** (2 workers): ~60s (optimized for GitHub Actions 2-core runners)
+- **Sequential**: ~600s for 1,722 tests
+- **Parallel** (pytest-xdist): ~215s (2.8x speedup on 8 cores)
+- **CI** (2 workers): ~300s (optimized for GitHub Actions 2-core runners)
 
 ### Build Performance
 

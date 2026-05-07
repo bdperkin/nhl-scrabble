@@ -11,7 +11,7 @@ NHL Scrabble Score Analyzer is a Python package that fetches NHL roster data and
 - Python 3.12-3.14 (supported), 3.15-dev (experimental)
 - UV for 10-100x faster dependency management
 - Pydantic models, Click CLI, Rich terminal output
-- 80 pre-commit hooks (12 for Bash quality & security), comprehensive CI/CD
+- 87 pre-commit hooks (12 for Bash quality & security), comprehensive CI/CD
 - Dynamic versioning from Git tags (hatch-vcs)
 
 ## Quick Start
@@ -105,7 +105,7 @@ tox -m test          # All tests
 
 ## Critical Rules
 
-### Pre-commit Hooks (80 total)
+### Pre-commit Hooks (87 total)
 
 All hooks run automatically on commit. **Never bypass quality checks.**
 
@@ -203,7 +203,7 @@ NHL_SCRABBLE_VERBOSE=true
 - **Test:** py3.12-3.14 (required), py3.15-dev (experimental, non-blocking)
 - **Quality:** ruff-check, mypy, coverage, pre-commit
 - **Performance:** UV acceleration (12min → 3min pipeline)
-- **Coverage:** Codecov (~50% total), diff-cover (≥80% on PRs)
+- **Coverage:** Codecov (90.21% total), diff-cover (≥80% on PRs)
 
 ### Security
 
@@ -462,16 +462,16 @@ Tiebreaker: Average points per player, then alphabetical.
 
 **Test Performance:**
 
-- 170 tests: 131s sequential → 47s parallel (2.8x on 8 cores)
+- 1,722 tests: 600s sequential → 215s parallel (2.8x on 8 cores)
 - pytest-xdist with `-n auto` for parallel execution
 
 ## Project Stats
 
-- ~1,866 lines of code, ~680 lines of tests
-- 49.93% overall coverage, >90% on core modules
-- 170 tests, 100% passing
-- 117+ Makefile targets in 19 groupings (Shell Scripting section added)
-- 80 pre-commit hooks (12 for Bash quality & security)
+- ~16,033 lines of code, 92 test files with 1,722 individual tests
+- 90.21% overall coverage
+- 1,722 tests, 100% passing
+- 139 Makefile targets in 19 groupings (Shell Scripting section added)
+- 87 pre-commit hooks (12 for Bash quality & security)
 - 1,957-line uv.lock file
 
 ## Resources
