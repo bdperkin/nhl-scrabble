@@ -6,18 +6,24 @@ ensuring consistent visual appearance across browsers and viewports.
 Visual tests run in TEST_MODE with mocked NHL API data for deterministic results.
 """
 
+from collections.abc import Callable
+
 import pytest
 from playwright.sync_api import Page
 
 
 @pytest.mark.visual
-def test_league_page_desktop(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_page_desktop(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture baseline screenshot of league page on desktop.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Page renders consistently on desktop viewport
@@ -37,20 +43,22 @@ def test_league_page_desktop(page: Page, base_url: str, browser_name: str) -> No
     page.wait_for_timeout(500)
 
     # Take and compare full page screenshot with baseline
-    page.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-desktop.png",
-        full_page=True,
-    )
+    screenshot = page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "league-desktop.png")
 
 
 @pytest.mark.visual
-def test_league_page_mobile(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_page_mobile(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture baseline screenshot of league page on mobile.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Page renders consistently on mobile viewport
@@ -71,20 +79,22 @@ def test_league_page_mobile(page: Page, base_url: str, browser_name: str) -> Non
     page.wait_for_timeout(500)
 
     # Take and compare full page screenshot with baseline
-    page.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-mobile.png",
-        full_page=True,
-    )
+    screenshot = page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "league-mobile.png")
 
 
 @pytest.mark.visual
-def test_league_page_tablet(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_page_tablet(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture baseline screenshot of league page on tablet.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Page renders consistently on tablet viewport
@@ -104,20 +114,22 @@ def test_league_page_tablet(page: Page, base_url: str, browser_name: str) -> Non
     page.wait_for_timeout(500)
 
     # Take and compare full page screenshot with baseline
-    page.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-tablet.png",
-        full_page=True,
-    )
+    screenshot = page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "league-tablet.png")
 
 
 @pytest.mark.visual
-def test_league_stats_summary_visual(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_stats_summary_visual(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture stats summary section for visual regression.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Stats cards render consistently
@@ -134,19 +146,22 @@ def test_league_stats_summary_visual(page: Page, base_url: str, browser_name: st
     page.wait_for_timeout(500)
 
     # Capture stats summary section
-    stats_summary.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-stats-summary.png",
-    )
+    screenshot = stats_summary.screenshot()
+    assert_snapshot(screenshot, "league-stats-summary.png")
 
 
 @pytest.mark.visual
-def test_league_team_list_visual(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_team_list_visual(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture team list section for visual regression.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Team list renders consistently
@@ -167,9 +182,8 @@ def test_league_team_list_visual(page: Page, base_url: str, browser_name: str) -
     page.wait_for_timeout(500)
 
     # Capture league card section
-    league_card.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-team-list.png",
-    )
+    screenshot = league_card.screenshot()
+    assert_snapshot(screenshot, "league-team-list.png")
 
 
 @pytest.mark.visual
@@ -177,13 +191,18 @@ def test_league_team_list_visual(page: Page, base_url: str, browser_name: str) -
     "locale",
     ["en_US", "fr_CA", "sv_SE"],
 )
-def test_league_i18n_visual(page: Page, base_url: str, browser_name: str, locale: str) -> None:
+def test_league_i18n_visual(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+    locale: str,
+) -> None:
     """Capture screenshots for different locales.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
         locale: Locale code to test
 
     Verifies:
@@ -198,20 +217,22 @@ def test_league_i18n_visual(page: Page, base_url: str, browser_name: str, locale
     page.wait_for_timeout(500)
 
     # Capture screenshot
-    page.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-{locale}.png",
-        full_page=True,
-    )
+    screenshot = page.screenshot(full_page=True)
+    assert_snapshot(screenshot, f"league-{locale}.png")
 
 
 @pytest.mark.visual
-def test_league_info_section_visual(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_info_section_visual(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture info section for visual regression.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Info section renders consistently
@@ -229,19 +250,22 @@ def test_league_info_section_visual(page: Page, base_url: str, browser_name: str
     page.wait_for_timeout(500)
 
     # Capture info section
-    info_section.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-info-section.png",
-    )
+    screenshot = info_section.screenshot()
+    assert_snapshot(screenshot, "league-info-section.png")
 
 
 @pytest.mark.visual
-def test_league_dark_mode_visual(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_dark_mode_visual(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture league page in dark mode (if supported).
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Dark mode styles apply correctly
@@ -259,20 +283,22 @@ def test_league_dark_mode_visual(page: Page, base_url: str, browser_name: str) -
     page.wait_for_timeout(500)
 
     # Capture dark mode screenshot
-    page.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-dark-mode.png",
-        full_page=True,
-    )
+    screenshot = page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "league-dark-mode.png")
 
 
 @pytest.mark.visual
-def test_league_scrolled_header(page: Page, base_url: str, browser_name: str) -> None:
+def test_league_scrolled_header(
+    page: Page,
+    base_url: str,
+    assert_snapshot: Callable,
+) -> None:
     """Capture page header after scrolling (for sticky/fade effects).
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
-        browser_name: Name of the browser being tested
+        assert_snapshot: Snapshot comparison fixture
 
     Verifies:
         - Header fade-on-scroll effect works
@@ -289,7 +315,5 @@ def test_league_scrolled_header(page: Page, base_url: str, browser_name: str) ->
     page.wait_for_timeout(500)
 
     # Capture scrolled state
-    page.screenshot(
-        path=f"qa/web/tests/visual/__snapshots__/{browser_name}/linux/league-scrolled.png",
-        full_page=True,
-    )
+    screenshot = page.screenshot(full_page=True)
+    assert_snapshot(screenshot, "league-scrolled.png")
