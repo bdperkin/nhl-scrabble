@@ -44,7 +44,7 @@ def test_league_navigation_exists(page: Page, base_url: str) -> None:
 
     # Click and verify navigation
     league_link.click()
-    expect(page).to_have_url(f"{base_url}/league")
+    expect(page).to_have_url(f"{base_url}/league?lang=en_US")
 
 
 def test_league_page_header(page: Page, base_url: str) -> None:
@@ -61,7 +61,7 @@ def test_league_page_header(page: Page, base_url: str) -> None:
     page.goto(f"{base_url}/league")
 
     # Check main heading
-    heading = page.locator("h3")
+    heading = page.locator(".results-section h3")
     expect(heading).to_contain_text("League Standings by Total Scrabble Score")
 
 
@@ -259,7 +259,7 @@ def test_league_language_selector(page: Page, base_url: str) -> None:
     page.wait_for_url(f"{base_url}/league?lang=fr_CA")
 
     # Verify page title updated (French translation)
-    heading = page.locator("h3")
+    heading = page.locator(".results-section h3")
     expect(heading).to_contain_text("Classement de la ligue par score Scrabble total")
 
 
@@ -289,7 +289,7 @@ def test_league_i18n(page: Page, base_url: str, locale: str, expected_title: str
     page.goto(f"{base_url}/league?lang={locale}")
 
     # Check heading translation
-    heading = page.locator("h3")
+    heading = page.locator(".results-section h3")
     expect(heading).to_contain_text(expected_title)
 
     # Verify locale is applied
