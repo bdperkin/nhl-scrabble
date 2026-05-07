@@ -2,11 +2,8 @@
 
 {% block title %}{% trans %}NHL Scrabble Analyzer - League Standings{% endtrans %}{% endblock %}
 
-{% block og_title %}{% trans %}NHL League Standings by Scrabble Score{% endtrans %}{% endblock %}
-{% block twitter_title %}{% trans %}NHL League Standings by Scrabble Score{% endtrans %}{% endblock %}
-
 {% block content %}
-    <!-- Summary Statistics -->
+    <!-- Top Statistics -->
     <div class="stats-summary fade-on-scroll">
         <div class="stat-card">
             <h4>{% trans %}Total Teams{% endtrans %}</h4>
@@ -29,10 +26,10 @@
     </div>
 
     <!-- League Standings -->
-    <section class="results-section fade-on-scroll">
+    <section class="results-section">
         <h3>{% trans %}League Standings by Total Scrabble Score{% endtrans %}</h3>
         <div class="division-grid">
-            <div class="division-card league-card">
+            <div class="division-card">
                 <h4>{% trans %}National Hockey League{% endtrans %}</h4>
                 <ol>
                     {% for team in team_standings %}
@@ -43,16 +40,4 @@
         </div>
     </section>
 
-    <!-- Additional Info Section -->
-    <section class="info-section fade-on-scroll">
-        <h3>{% trans %}About League Standings{% endtrans %}</h3>
-        <p>
-            {% trans %}Teams are ranked by their total Scrabble score, calculated by summing the Scrabble letter values of all players' names on each roster. This league-wide view shows the complete standings without division or conference groupings.{% endtrans %}
-        </p>
-        <p>
-            {% trans %}For grouped standings, see:{% endtrans %}
-            <a href="/divisions?lang={{ locale }}">{% trans %}Division Standings{% endtrans %}</a> |
-            <a href="/conferences?lang={{ locale }}">{% trans %}Conference Standings{% endtrans %}</a>
-        </p>
-    </section>
 {% endblock %}

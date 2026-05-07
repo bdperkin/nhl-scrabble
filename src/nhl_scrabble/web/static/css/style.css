@@ -924,12 +924,6 @@ pre[data-copyable] {
     opacity: 1;
 }
 
-/* ===== League Standings Specific Styles ===== */
-.league-card {
-    min-width: 100%;
-    max-width: 100%;
-}
-
 /* ===== Mobile Responsiveness for New Components ===== */
 @media (max-width: 768px) {
     .toast {
