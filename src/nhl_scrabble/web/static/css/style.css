@@ -369,6 +369,14 @@ input[type="checkbox"] {
     transform: translateZ(0);
 }
 
+.info-section p {
+    transform: translateZ(0);
+}
+
+.info-section a {
+    transform: translateZ(0);
+}
+
 .scrabble-values {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
