@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 230 tasks (41 active, 189 completed)
+**Total Tasks**: 231 tasks (42 active, 189 completed)
 
 ## Overview
 
@@ -240,6 +240,7 @@ Each task includes:
 | 047 | Add League Menu Item and League Standings Page | MEDIUM | 3-5 hours | Active | [#540](https://github.com/bdperkin/nhl-scrabble/issues/540) | - |
 | 048 | Add Conference Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours | Active | [#541](https://github.com/bdperkin/nhl-scrabble/issues/541) | - |
 | 049 | Add Division Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours | Active | [#542](https://github.com/bdperkin/nhl-scrabble/issues/542) | - |
+| 050 | Add Team Detail Pages with Player Rankings and Team Logo | MEDIUM | 4-6 hours | Active | [#543](https://github.com/bdperkin/nhl-scrabble/issues/543) | - |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | PR [#496](https://github.com/bdperkin/nhl-scrabble/pull/496), completed 2026-05-05 |
 | 044 | I18n Infrastructure Setup | LOW | 4-6 hours (actual: ~5h) | Completed | [#494](https://github.com/bdperkin/nhl-scrabble/issues/494) | PR [#495](https://github.com/bdperkin/nhl-scrabble/pull/495), completed 2026-05-06, sub-task 1 of #218 |
 | 001 | Build Web Interface with FastAPI | MEDIUM | 16-24 hours (actual: <15 min (web interface already implemented, only needed task documentation)) | Completed | [#50](https://github.com/bdperkin/nhl-scrabble/issues/50) | completed 2026-04-26 |
