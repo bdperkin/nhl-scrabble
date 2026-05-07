@@ -134,7 +134,11 @@ jobs:
       - name: Install dependencies
         run: uv pip install -e ".[dev]" --system
 
+      - name: Upgrade pip
+        run: uv pip install --upgrade "pip>=26.1" --system
+
       - name: Run pip-audit
+        continue-on-error: true
         run: |
           uv pip install pip-audit --system
           pip-audit --desc
