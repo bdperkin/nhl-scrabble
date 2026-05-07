@@ -465,7 +465,7 @@ jobs:
               ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
               PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
-              ICON=$((PASSED == TESTS ? "✅" : "❌"))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
               func_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
               func_total_tests=$((func_total_tests + TESTS))
               func_total_passed=$((func_total_passed + PASSED))
@@ -481,7 +481,7 @@ jobs:
               ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
               PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
-              ICON=$((PASSED == TESTS ? "✅" : "❌"))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
               vis_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
               vis_total_tests=$((vis_total_tests + TESTS))
               vis_total_passed=$((vis_total_passed + PASSED))
@@ -497,7 +497,7 @@ jobs:
               ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
               PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
-              ICON=$((PASSED == TESTS ? "✅" : "❌"))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
               perf_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
               perf_total_tests=$((perf_total_tests + TESTS))
               perf_total_passed=$((perf_total_passed + PASSED))
@@ -513,7 +513,7 @@ jobs:
               ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
               PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
-              ICON=$((PASSED == TESTS ? "✅" : "❌"))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
               a11y_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
               a11y_total_tests=$((a11y_total_tests + TESTS))
               a11y_total_passed=$((a11y_total_passed + PASSED))
@@ -537,11 +537,11 @@ jobs:
             (overall_passed * 100) / overall_tests : 0))
 
           # Icons for totals
-          func_icon=$((func_total_passed == func_total_tests ? "✅" : "❌"))
-          vis_icon=$((vis_total_passed == vis_total_tests ? "✅" : "❌"))
-          perf_icon=$((perf_total_passed == perf_total_tests ? "✅" : "❌"))
-          a11y_icon=$((a11y_total_passed == a11y_total_tests ? "✅" : "❌"))
-          overall_icon=$((overall_passed == overall_tests ? "✅" : "❌"))
+          [[ $func_total_passed -eq $func_total_tests ]] && func_icon="✅" || func_icon="❌"
+          [[ $vis_total_passed -eq $vis_total_tests ]] && vis_icon="✅" || vis_icon="❌"
+          [[ $perf_total_passed -eq $perf_total_tests ]] && perf_icon="✅" || perf_icon="❌"
+          [[ $a11y_total_passed -eq $a11y_total_tests ]] && a11y_icon="✅" || a11y_icon="❌"
+          [[ $overall_passed -eq $overall_tests ]] && overall_icon="✅" || overall_icon="❌"
 
           # Generate table
           echo "| Test Suite | 🔵 Chromium | 🦊 Firefox | 🧭 WebKit | " \
