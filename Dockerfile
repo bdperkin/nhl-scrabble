@@ -3,6 +3,11 @@
 # Build stage
 FROM python:3.12-slim AS builder
 
+# Update system packages for security
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+
 # Accept version as build argument (provided by workflow or default to 0.0.0+dev)
 ARG VERSION=0.0.0+dev
 
@@ -24,6 +29,11 @@ RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} \
 
 # Runtime stage
 FROM python:3.12-slim
+
+# Update system packages for security
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip to 26.1 to fix CVE-2026-6357, CVE-2025-8869, CVE-2026-1703
 RUN pip install --no-cache-dir --upgrade pip==26.1
