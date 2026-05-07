@@ -1,257 +1,297 @@
 # Task Implementation Sequence
 
-**Generated**: 2026-05-01 (Updated 2026-05-07 after completing testing/026)
-**Total Tasks**: 31 active tasks
-**Estimated Total Effort**: 177.5 hours
+**Generated**: 2026-05-07
+**Total Tasks**: 44 active tasks
+**Total Estimated Effort**: 227-313 hours
 
-This file provides the **optimal** implementation order for all active tasks, based on:
-
-1. **Priority**: CRITICAL → HIGH → MEDIUM → LOW
-2. **Dependencies**: Parent tasks before children
-3. **Strategic Value**: Foundation before features, bugs before enhancements
-4. **Effort**: Quick wins (< 2h) first within same priority level
-
-## Analysis Summary
-
-- **HIGH Priority**: 0 tasks
-- **MEDIUM Priority**: 9 tasks (current sprint)
-- **LOW Priority**: 23 tasks (future backlog)
-
-**Recommendation**: Focus on MEDIUM priority tasks first, then LOW priority backlog.
+This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
 ## Usage
 
-Execute tasks in the order shown using the `/implement-task` command:
+Use the `/implement-task` skill to work on tasks in this order:
 
 ```bash
 /implement-task category/ID-slug.md
 ```
 
-Tasks are grouped into phases for logical progression. Each phase represents a natural implementation checkpoint.
+Each task entry shows:
+- Path to task file
+- Estimated effort range
+- GitHub issue number
+- Dependencies (if any)
 
-## Phase 1: MEDIUM Priority
+---
 
-**Effort**: 30.0 hours | **Tasks**: 8
-**Focus**: Important improvements, i18n enhancements, and testing - prioritize in current sprint
+## Phase 1: HIGH Priority - Critical Fixes (2-3 hours)
 
-```bash
-# Debug Functional Test Failures in QA Suite
-/implement-task bug-fixes/012-debug-functional-test-failures.md  # 1.5h, Issue #438
-```
-
-```bash
-# Track ty Type Checker Validation Period (1-2 weeks)
-/implement-task enhancement/029-track-ty-validation-period.md  # 4.0h, Issue #325
-```
+**Rationale**: Single HIGH priority task addressing data integrity and unicode support on Windows. Must be fixed before other Windows tests can be reliably fixed.
 
 ```bash
-# Generate Visual Regression Test Baselines
-/implement-task testing/022-generate-visual-regression-baselines.md  # 4.0h, Issue #437
+/implement-task testing/030-fix-windows-unicode-encoding.md  # 2-3h, Issue #536
 ```
+
+**Phase Total**: 2-3 hours
+
+---
+
+## Phase 2: MEDIUM Priority - Platform Support (Windows) (13-21 hours)
+
+**Rationale**: Fix remaining Windows test failures to achieve cross-platform compatibility. Task 030 (unicode) is a dependency for these tests, so they follow in Phase 2.
 
 ```bash
-# Migrate to Extended Versioning Scheme
-/implement-task enhancement/025-extended-versioning-scheme.md  # 5.0h, Issue #335
+/implement-task testing/027-fix-windows-test-search-to-file.md  # 2-4h, Issue #533
+/implement-task testing/028-fix-windows-test-i18n-messages.md  # 3-5h, Issue #534
+/implement-task testing/029-fix-windows-permission-tests.md  # 4-6h, Issue #535
+/implement-task testing/031-fix-windows-recovery-logic-test.md  # 2-3h, Issue #537
+/implement-task testing/032-fix-macos-rate-limiter-timing.md  # 3-4h, Issue #538
 ```
+
+**Phase Total**: 14-22 hours
+
+---
+
+## Phase 3: MEDIUM Priority - Web Interface Foundation (29-45 hours)
+
+**Rationale**: Build foundation for web interface with core pages. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy).
 
 ```bash
-# Native Speaker Review of French Canadian (fr_CA) Translations
-/implement-task enhancement/046-native-speaker-review-fr-ca.md  # 3.5h, Issue #509
+/implement-task new-features/047-add-league-menu-and-page.md  # 3-5h, Issue #540
+/implement-task new-features/048-add-conference-detail-pages.md  # 4-6h, Issue #541
+/implement-task new-features/049-add-division-detail-pages.md  # 4-6h, Issue #542
+/implement-task new-features/050-add-team-detail-pages.md  # 4-6h, Issue #543
+/implement-task new-features/046-add-players-menu-and-page.md  # 4-6h, Issue #539
+/implement-task new-features/051-add-player-detail-pages.md  # 6-8h, Issue #544, [Dependency: #539]
+/implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539, #540, #541, #542, #543, #544]
 ```
+
+**Phase Total**: 29-47 hours
+
+---
+
+## Phase 4: MEDIUM Priority - I18n Quality & Testing (14-22 hours)
+
+**Rationale**: Improve internationalization quality and coverage. Translation reviews should happen before comprehensive test suite to validate quality. Date/time formatting complements translation quality improvements.
 
 ```bash
-# Native Speaker Review of Swedish (sv_SE) Translations
-/implement-task enhancement/047-native-speaker-review-sv-se.md  # 3.5h, Issue #510
+/implement-task enhancement/046-native-speaker-review-fr-ca.md  # 3-4h, Issue #509
+/implement-task enhancement/047-native-speaker-review-sv-se.md  # 3-4h, Issue #510
+/implement-task testing/025-comprehensive-i18n-test-suite.md  # 4-6h, Issue #512
+/implement-task enhancement/048-locale-aware-date-time-formatting.md  # 3-4h, Issue #511
+/implement-task enhancement/029-track-ty-validation-period.md  # 1-2 weeks (ongoing monitoring)
 ```
+
+**Phase Total**: 13-18 hours (plus 1-2 weeks ongoing monitoring for ty validation)
+
+---
+
+## Phase 5: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
+
+**Rationale**: Low-effort documentation and tooling improvements. These are quick wins that improve developer experience without blocking other work.
 
 ```bash
-# Locale-Aware Date and Time Formatting
-/implement-task enhancement/048-locale-aware-date-time-formatting.md  # 3.5h, Issue #511
+/implement-task testing/023-make-qa-workflow-blocking.md  # 15min, Issue #439
+/implement-task refactoring/024-make-ty-blocking.md  # 30min-1h, Issue #355, [Dependency: #325 ty validation]
+/implement-task enhancement/023-extend-sphinx-builders.md  # 4-6h, Issue #331
+/implement-task enhancement/024-extend-sphinx-extensions.md  # 3-5h, Issue #332
 ```
+
+**Phase Total**: 8-12.25 hours
+
+---
+
+## Phase 6: LOW Priority - I18n Visual Enhancements (2-3 hours)
+
+**Rationale**: Visual improvements to locale selection. Low priority but enhances user experience. Do after core i18n quality work.
 
 ```bash
-# Comprehensive I18n Test Suite for All Locales
-/implement-task testing/025-comprehensive-i18n-test-suite.md  # 5.0h, Issue #512
+/implement-task enhancement/045-locale-dropdown-flag-icons.md  # 2-3h, Issue #507
 ```
 
-**Rationale**: Quick wins and critical infrastructure improvements provide foundation for future work. I18n review and testing tasks prepare for full multi-language support.
+**Phase Total**: 2-3 hours
 
-## Phase 2: LOW Priority
+---
 
-**Effort**: 1.0 hour | **Tasks**: 1
-**Focus**: Testing infrastructure improvements - schedule for future sprints
+## Phase 7: LOW Priority - Translation Locales (Simple) (1-2 hours)
+
+**Rationale**: Simple locale with minimal differences from en_US. Quick win for expanding locale coverage.
 
 ```bash
-# Make 'ty' Blocking After Validation Period
-/implement-task refactoring/024-make-ty-blocking.md  # 1.0h, Issue #355
+/implement-task new-features/037-translate-to-en-ca.md  # 1-2h, Issue #513
 ```
 
-**Rationale**: Type checker validation provides foundation for robust quality assurance.
+**Phase Total**: 1-2 hours
 
-## Phase 3: LOW Priority (I18n/L10n Completion)
+---
 
-**Effort**: 77.5 hours | **Tasks**: 11
-**Focus**: Complete internationalization and localization support for all 12 locales - schedule for future sprints
+## Phase 8: LOW Priority - Translation Locales (Complex Languages) (42-56 hours)
+
+**Rationale**: Complex translations requiring professional translators. Group by estimated effort (simpler first). Can be parallelized if multiple translators available.
+
+**Simpler Adaptations** (can leverage de_DE):
+```bash
+/implement-task new-features/042-translate-to-de-ch.md  # 4-6h, Issue #518, [Can adapt from de_DE]
+```
+
+**Full Translations** (6-8h each):
+```bash
+/implement-task new-features/038-translate-to-ru-ru.md  # 6-8h, Issue #514
+/implement-task new-features/039-translate-to-fi-fi.md  # 6-8h, Issue #515
+/implement-task new-features/040-translate-to-cs-cz.md  # 6-8h, Issue #516
+/implement-task new-features/041-translate-to-de-de.md  # 6-8h, Issue #517
+/implement-task new-features/043-translate-to-it-ch.md  # 6-8h, Issue #519
+/implement-task new-features/044-translate-to-sk-sk.md  # 6-8h, Issue #520
+/implement-task new-features/045-translate-to-lv-lv.md  # 6-8h, Issue #521
+```
+
+**Phase Total**: 46-62 hours
+
+---
+
+## Phase 9: LOW Priority - I18n Advanced Features (12-18 hours)
+
+**Rationale**: Advanced i18n features that build on completed translations. Community platform enables collaborative translation. Locale-specific scoring adds fairness for international users.
 
 ```bash
-# Translate to English (Canada) - en_CA
-/implement-task new-features/037-translate-to-en-ca.md  # 1.5h, Issue #513
+/implement-task enhancement/049-community-translation-platform.md  # 4-6h, Issue #522
+/implement-task enhancement/050-locale-specific-scrabble-letter-values.md  # 8-12h, Issue #523
 ```
+
+**Phase Total**: 12-18 hours
+
+---
+
+## Phase 10: LOW Priority - Research & Evaluation (14-22 hours)
+
+**Rationale**: Research tasks that inform future decisions. No immediate implementation required, but valuable for strategic planning.
 
 ```bash
-# Translate to German (Switzerland) - de_CH
-/implement-task new-features/042-translate-to-de-ch.md  # 5.0h, Issue #518
+/implement-task enhancement/034-evaluate-semantic-release-automation.md  # 6-10h, Issue #383
+/implement-task new-features/017-free-python-hosting-deployment.md  # 8-12h, Issue #219
 ```
 
+**Phase Total**: 14-22 hours
+
+---
+
+## Phase 11: LOW Priority - New Features (Infrastructure) (40-56 hours)
+
+**Rationale**: Significant new features that add capabilities but aren't blocking current work. Group by complexity (simpler first).
+
+**Simpler Features** (3-8 hours):
 ```bash
-# Set Up Community Translation Platform (Weblate/Crowdin)
-/implement-task enhancement/049-community-translation-platform.md  # 5.0h, Issue #522
+/implement-task new-features/012-config-profiles.md  # 3-4h, Issue #155
+/implement-task new-features/011-offline-mode.md  # 4-5h, Issue #154
+/implement-task new-features/015-data-export-import.md  # 4-5h, Issue #158
+/implement-task new-features/010-player-comparison-tool.md  # 4-6h, Issue #153
+/implement-task new-features/014-docker-support.md  # 4-6h, Issue #157
+/implement-task new-features/009-notification-system.md  # 6-8h, Issue #152
 ```
 
+**Complex Features** (10-16 hours):
 ```bash
-# Translate to Russian (Russia) - ru_RU
-/implement-task new-features/038-translate-to-ru-ru.md  # 7.0h, Issue #514
+/implement-task new-features/013-plugin-system.md  # 10-14h, Issue #156
+/implement-task new-features/008-database-backend.md  # 12-16h, Issue #151
 ```
 
-```bash
-# Translate to Finnish (Finland) - fi_FI
-/implement-task new-features/039-translate-to-fi-fi.md  # 7.0h, Issue #515
+**Phase Total**: 47-64 hours
+
+---
+
+## Summary by Priority
+
+### HIGH Priority: 1 task (2-3 hours)
+- Critical unicode/data integrity fix for Windows platform
+
+### MEDIUM Priority: 18 tasks (85-129 hours)
+- **Platform Support**: 5 Windows tests, 1 macOS test (14-22h)
+- **Web Interface**: 7 page implementations + 1 auto-linking (29-47h)
+- **I18n Quality**: 2 translation reviews, 1 test suite, 1 date/time, 1 monitoring (13-18h + ongoing)
+
+### LOW Priority: 25 tasks (140-181 hours)
+- **Documentation/Tooling**: 4 tasks (8-12h)
+- **Visual Enhancements**: 1 task (2-3h)
+- **Translations**: 8 locales (47-64h)
+- **I18n Advanced**: 2 tasks (12-18h)
+- **Research**: 2 tasks (14-22h)
+- **New Features**: 8 tasks (47-64h)
+
+---
+
+## Dependency Chain Visualization
+
+```
+Phase 1 (HIGH): Unicode Fix #536
+    └─> Phase 2 (MEDIUM): Windows Test Fixes #533, #534, #535, #537
+                          macOS Fix #538
+
+Phase 3 (MEDIUM): Web Interface Pages
+    #540 League (no deps)
+        └─> #541 Conference
+            └─> #542 Division
+                └─> #543 Team
+                    └─> #539 Players
+                        └─> #544 Player Detail
+                            └─> #545 Auto-Linking (depends on all pages)
+
+Phase 4 (MEDIUM): I18n Quality
+    #509, #510 Translation Reviews (no deps, can parallel)
+        └─> #512 Comprehensive i18n Tests
+    #511 Date/Time Formatting (independent)
+    #325 ty Validation Monitoring (ongoing, independent)
+        └─> #355 Make ty Blocking (Phase 5, depends on #325 completion)
+
+Phases 5-11: Mostly independent, can be tackled in any order within priority level
 ```
 
-```bash
-# Translate to Czech (Czech Republic) - cs_CZ
-/implement-task new-features/040-translate-to-cs-cz.md  # 7.0h, Issue #516
-```
+---
 
-```bash
-# Translate to German (Germany) - de_DE
-/implement-task new-features/041-translate-to-de-de.md  # 7.0h, Issue #517
-```
+## Quick Wins (< 2 hours)
 
-```bash
-# Translate to Italian (Switzerland) - it_CH
-/implement-task new-features/043-translate-to-it-ch.md  # 7.0h, Issue #519
-```
+Tasks that can be completed quickly for immediate value:
 
-```bash
-# Translate to Slovak (Slovakia) - sk_SK
-/implement-task new-features/044-translate-to-sk-sk.md  # 7.0h, Issue #520
-```
+1. `testing/023-make-qa-workflow-blocking.md` - 15 minutes, Issue #439
+2. `refactoring/024-make-ty-blocking.md` - 30min-1h, Issue #355 (after #325)
+3. `new-features/037-translate-to-en-ca.md` - 1-2h, Issue #513
 
-```bash
-# Translate to Latvian (Latvia) - lv_LV
-/implement-task new-features/045-translate-to-lv-lv.md  # 7.0h, Issue #521
-```
+**Total Quick Wins**: ~2-3.25 hours
 
-```bash
-# Implement Locale-Specific Scrabble Letter Values
-/implement-task enhancement/050-locale-specific-scrabble-letter-values.md  # 10.0h, Issue #523
-```
+---
 
-**Rationale**: Translation tasks ordered by complexity (en_CA first as simplest, complex languages after community platform setup). Locale-specific scoring completes the i18n/l10n roadmap.
+## Parallelization Opportunities
 
-## Phase 4: LOW Priority
+Tasks that can be worked on simultaneously (no dependencies):
 
-**Effort**: 17.5 hours | **Tasks**: 5
-**Focus**: Feature development and enhancements - schedule for future sprints
+### Within Phase 2 (Windows/macOS fixes):
+- All 5 Windows tasks + macOS task can be parallelized after Phase 1
 
-```bash
-# Add Configuration Profiles
-/implement-task new-features/012-config-profiles.md  # 3.5h, Issue #155
-```
+### Within Phase 3 (Web pages):
+- Must follow dependency chain (league → conference → division → team → players → player detail → auto-link)
 
-```bash
-# Docker Container Build and Publish Workflow
-/implement-task new-features/034-docker-build-publish-workflow.md  # 3.5h, Issue #301 [PARENT]
-```
+### Within Phase 4 (I18n quality):
+- #509 and #510 (translation reviews) can be parallel
+- #511 (date/time) is independent
+- #325 (ty monitoring) is independent but ongoing
 
-```bash
-# Extend Sphinx Extension Functionality
-/implement-task enhancement/024-extend-sphinx-extensions.md  # 4.0h, Issue #332
-```
+### Within Phase 8 (Translations):
+- All 8 translation tasks can be fully parallelized if translators available
 
-```bash
-# Add Country Flag Icons to Locale Dropdown
-/implement-task enhancement/045-locale-dropdown-flag-icons.md  # 2.5h, Issue #507
-```
+### Within Phase 11 (New features):
+- All 8 features are independent and can be parallelized
 
-```bash
-# Make QA Workflow Blocking After All Tests Pass
-/implement-task testing/023-make-qa-workflow-blocking.md  # 4.0h, Issue #439
-```
+---
 
+## Notes
 
-## Phase 5: LOW Priority
+- **Ongoing Task**: `enhancement/029-track-ty-validation-period.md` is a 1-2 week monitoring task that runs in parallel with other work. Decision point at end determines if task 024 (make-ty-blocking) proceeds.
 
-**Effort**: 29.0 hours | **Tasks**: 6
-**Focus**: Feature development and enhancements - schedule for future sprints
+- **Translation Tasks**: Phase 8 translations (37-45) can benefit from task 049 (community platform) but don't strictly depend on it. Consider implementing 049 earlier if prioritizing community engagement.
 
-```bash
-# Add Offline Mode Support
-/implement-task new-features/011-offline-mode.md  # 4.5h, Issue #154
-```
+- **Docker Support**: Task 014 could be useful for task 017 (hosting) but isn't strictly required.
 
-```bash
-# Add Data Export/Import Functionality
-/implement-task new-features/015-data-export-import.md  # 4.5h, Issue #158
-```
+- **Total Effort Range**: 227-313 hours represents approximately 6-8 weeks of full-time work, or 3-6 months of part-time development.
 
-```bash
-# Add Player Comparison Tool
-/implement-task new-features/010-player-comparison-tool.md  # 5.0h, Issue #153
-```
+---
 
-```bash
-# Add Docker Support
-/implement-task new-features/014-docker-support.md  # 5.0h, Issue #157
-```
+## Last Updated
 
-```bash
-# CLI Internationalization Implementation
-/implement-task new-features/020-i18n-cli-internationalization.md  # 5.0h, Issue #248 [PARENT]
-```
-
-```bash
-# Extend Sphinx Builder Functionality
-/implement-task enhancement/023-extend-sphinx-builders.md  # 5.0h, Issue #331
-```
-
-
-## Phase 6: LOW Priority
-
-**Effort**: 25.0 hours | **Tasks**: 3
-**Focus**: Feature development and enhancements - schedule for future sprints
-
-```bash
-# Add Notification System
-/implement-task new-features/009-notification-system.md  # 7.0h, Issue #152
-```
-
-```bash
-# Evaluate semantic-release for Fully Automated Releases
-/implement-task enhancement/034-evaluate-semantic-release-automation.md  # 8.0h, Issue #383 [PARENT]
-```
-
-```bash
-# Free Python Hosting and Deployment Infrastructure
-/implement-task new-features/017-free-python-hosting-deployment.md  # 10.0h, Issue #219
-```
-
-**Rationale**: Release automation and infrastructure tasks provide foundation for future deployment strategies.
-
-## Phase 7: LOW Priority
-
-**Effort**: 26.0 hours | **Tasks**: 2
-**Focus**: Large-scale feature development - schedule for future sprints
-
-```bash
-# Add Plugin System
-/implement-task new-features/013-plugin-system.md  # 12.0h, Issue #156
-```
-
-```bash
-# Add Database Backend for Data Persistence
-/implement-task new-features/008-database-backend.md  # 14.0h, Issue #151
-```
-
-**Rationale**: Foundation features that enable future extensibility and data persistence.
+2026-05-07 - Full regeneration with all 44 active tasks organized optimally
