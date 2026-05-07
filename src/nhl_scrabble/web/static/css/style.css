@@ -887,26 +887,6 @@ pre[data-copyable] {
     max-width: 100%;
 }
 
-.info-section {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-}
-
-.info-section h3 {
-    margin-top: 0;
-}
-
-.info-section a {
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-.info-section a:hover {
-    text-decoration: underline;
-}
-
 /* ===== Mobile Responsiveness for New Components ===== */
 @media (max-width: 768px) {
     .toast {
