@@ -38,6 +38,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install enchant
+
       - name: Cache tool directories
         uses: actions/cache@v5
         with:
@@ -102,7 +106,7 @@ jobs:
             --benchmark-only \
             --benchmark-autosave \
             --benchmark-min-rounds=5 \
-            -p no:xdist
+            -o addopts=""
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
@@ -133,7 +137,7 @@ jobs:
       - name: Run pip-audit
         run: |
           uv pip install pip-audit --system
-          pip-audit --desc --require uv.lock
+          pip-audit --desc --requirement uv.lock
 
       - name: Run safety check
         continue-on-error: true
