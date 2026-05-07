@@ -422,6 +422,10 @@ input[type="checkbox"] {
     margin-left: var(--spacing-md);
 }
 
+.division-card li {
+    transform: translateZ(0);
+}
+
 /* ===== Footer ===== */
 .site-footer {
     background: var(--color-dark);
