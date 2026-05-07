@@ -145,67 +145,6 @@ def test_league_team_item_structure(page: Page, base_url: str) -> None:
     assert "(" in team_text and ")" in team_text, "Team item should contain score in parentheses"
 
 
-def test_league_info_section(page: Page, base_url: str) -> None:
-    """Test that info section is present with links.
-
-    Args:
-        page: Playwright page object
-        base_url: Base URL of the application
-
-    Verifies:
-        - Info section exists
-        - Heading is correct
-        - Description text is present
-        - Links to divisions and conferences pages work
-    """
-    page.goto(f"{base_url}/league")
-
-    # Check info section
-    info_section = page.locator(".info-section")
-    expect(info_section).to_be_visible()
-
-    # Check heading
-    expect(info_section.locator("h3")).to_contain_text("About League Standings")
-
-    # Check links
-    divisions_link = info_section.locator('a:has-text("Division Standings")')
-    conferences_link = info_section.locator('a:has-text("Conference Standings")')
-
-    expect(divisions_link).to_be_visible()
-    expect(conferences_link).to_be_visible()
-
-    # Verify links point to correct pages
-    expect(divisions_link).to_have_attribute("href", "/divisions?lang=en_US")
-    expect(conferences_link).to_have_attribute("href", "/conferences?lang=en_US")
-
-
-def test_league_info_links_navigation(page: Page, base_url: str) -> None:
-    """Test that info section links navigate correctly.
-
-    Args:
-        page: Playwright page object
-        base_url: Base URL of the application
-
-    Verifies:
-        - Division link navigates to divisions page
-        - Conference link navigates to conferences page
-    """
-    page.goto(f"{base_url}/league")
-
-    # Test divisions link
-    divisions_link = page.locator('a:has-text("Division Standings")')
-    divisions_link.click()
-    expect(page).to_have_url(f"{base_url}/divisions?lang=en_US")
-
-    # Navigate back
-    page.goto(f"{base_url}/league")
-
-    # Test conferences link
-    conferences_link = page.locator('a:has-text("Conference Standings")')
-    conferences_link.click()
-    expect(page).to_have_url(f"{base_url}/conferences?lang=en_US")
-
-
 def test_league_responsive_design(page: Page, base_url: str) -> None:
     """Test that page is responsive on mobile devices.
 

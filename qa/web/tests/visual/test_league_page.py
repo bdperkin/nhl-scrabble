@@ -222,39 +222,6 @@ def test_league_i18n_visual(
 
 
 @pytest.mark.visual
-def test_league_info_section_visual(
-    page: Page,
-    base_url: str,
-    assert_snapshot: Callable,
-) -> None:
-    """Capture info section for visual regression.
-
-    Args:
-        page: Playwright page object
-        base_url: Base URL of the application
-        assert_snapshot: Snapshot comparison fixture
-
-    Verifies:
-        - Info section renders consistently
-        - Links display correctly
-        - Text formatting is preserved
-    """
-    page.set_viewport_size({"width": 1920, "height": 1080})
-    page.goto(f"{base_url}/league")
-
-    # Wait for info section
-    info_section = page.locator(".info-section")
-    info_section.wait_for(state="visible")
-
-    # Wait for animations
-    page.wait_for_timeout(500)
-
-    # Capture info section
-    screenshot = info_section.screenshot()
-    assert_snapshot(screenshot, "league-info-section.png")
-
-
-@pytest.mark.visual
 def test_league_dark_mode_visual(
     page: Page,
     base_url: str,
