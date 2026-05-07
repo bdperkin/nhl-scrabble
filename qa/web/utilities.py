@@ -187,7 +187,15 @@ class DataGenerators:
         Returns:
             Random team name
         """
-        cities = ["Boston", "Toronto", "Montreal", "New York", "Chicago", "Detroit", "Vegas"]
+        cities = [
+            "Boston",
+            "Toronto",
+            "Montreal",
+            "New York",
+            "Chicago",
+            "Detroit",
+            "Vegas",
+        ]
         mascots = [
             "Bruins",
             "Maple Leafs",
