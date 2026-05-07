@@ -142,7 +142,7 @@ class TestProtocolTypeChecking:
                 return {"TOR": {"division": "Atlantic", "conference": "Eastern"}}
 
             def get_team_roster(
-                self, team_abbrev: str, season: str | None = None
+                self, team_abbrev: str, season: str | None = None,
             ) -> dict[str, list[dict[str, object]]]:
                 """Mock get_team_roster method."""
                 return {"forwards": [], "defensemen": [], "goalies": []}
