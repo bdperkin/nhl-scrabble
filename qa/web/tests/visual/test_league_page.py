@@ -31,7 +31,7 @@ def test_league_page_desktop(page: Page, base_url: str, browser_name: str) -> No
 
     # Wait for content to load
     page.wait_for_selector(".league-card", state="visible")
-    page.wait_for_selector(".league-team-item", state="visible")
+    page.wait_for_selector(".league-card ol li", state="visible")
 
     # Wait for animations to complete
     page.wait_for_timeout(500)
@@ -65,7 +65,7 @@ def test_league_page_mobile(page: Page, base_url: str, browser_name: str) -> Non
 
     # Wait for content to load
     page.wait_for_selector(".league-card", state="visible")
-    page.wait_for_selector(".league-team-item", state="visible")
+    page.wait_for_selector(".league-card ol li", state="visible")
 
     # Wait for animations to complete
     page.wait_for_timeout(500)
@@ -98,7 +98,7 @@ def test_league_page_tablet(page: Page, base_url: str, browser_name: str) -> Non
 
     # Wait for content to load
     page.wait_for_selector(".league-card", state="visible")
-    page.wait_for_selector(".league-team-item", state="visible")
+    page.wait_for_selector(".league-card ol li", state="visible")
 
     # Wait for animations to complete
     page.wait_for_timeout(500)
@@ -161,7 +161,7 @@ def test_league_team_list_visual(page: Page, base_url: str, browser_name: str) -
     league_card.wait_for(state="visible")
 
     # Wait for all team items
-    page.wait_for_selector(".league-team-item", state="visible")
+    page.wait_for_selector(".league-card ol li", state="visible")
 
     # Wait for animations
     page.wait_for_timeout(500)

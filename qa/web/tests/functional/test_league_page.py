@@ -116,36 +116,33 @@ def test_league_all_teams_displayed(page: Page, base_url: str) -> None:
     expect(league_card.locator("h4")).to_contain_text("National Hockey League")
 
     # Count team items (should be 32 NHL teams)
-    team_items = page.locator(".league-team-item")
+    team_items = page.locator(".league-card ol li")
     expect(team_items).to_have_count(32)
 
 
 def test_league_team_item_structure(page: Page, base_url: str) -> None:
-    """Test that team items have correct structure and data.
+    """Test that team items have correct format.
 
     Args:
         page: Playwright page object
         base_url: Base URL of the application
 
     Verifies:
-        - Team items contain rank
-        - Team name is displayed
-        - Team details (abbrev, division) are shown
-        - Score is displayed
+        - Team items are in ordered list
+        - Team name and score are displayed
+        - Format is: "Team Name (Score)"
     """
     page.goto(f"{base_url}/league")
 
     # Get first team item
-    first_team = page.locator(".league-team-item").first
+    first_team = page.locator(".league-card ol li").first
+    expect(first_team).to_be_visible()
 
-    # Check structure
-    expect(first_team.locator(".team-rank")).to_be_visible()
-    expect(first_team.locator(".team-name")).to_be_visible()
-    expect(first_team.locator(".team-details")).to_be_visible()
-    expect(first_team.locator(".team-score")).to_be_visible()
-
-    # Verify rank format (should be "1.")
-    expect(first_team.locator(".team-rank")).to_contain_text("1.")
+    # Verify format contains team name and score in parentheses
+    # Should match pattern: "Team Name (Score)"
+    team_text = first_team.text_content()
+    assert team_text is not None
+    assert "(" in team_text and ")" in team_text, "Team item should contain score in parentheses"
 
 
 def test_league_info_section(page: Page, base_url: str) -> None:
@@ -233,7 +230,7 @@ def test_league_responsive_design(page: Page, base_url: str) -> None:
     expect(league_card).to_be_visible()
 
     # Check team items are visible
-    team_items = page.locator(".league-team-item")
+    team_items = page.locator(".league-card ol li")
     expect(team_items.first).to_be_visible()
 
 

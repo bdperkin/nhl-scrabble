@@ -34,18 +34,11 @@
         <div class="division-grid">
             <div class="division-card league-card">
                 <h4>{% trans %}National Hockey League{% endtrans %}</h4>
-                <ul class="league-standings-list">
+                <ol>
                     {% for team in team_standings %}
-                        <li class="league-team-item">
-                            <span class="team-rank">{{ loop.index }}.</span>
-                            <span class="team-name">{{ team.name }}</span>
-                            <span class="team-details">
-                                ({{ team.abbrev }} - {{ team.division }})
-                            </span>
-                            <span class="team-score">{{ team.total_score }}</span>
-                        </li>
+                        <li>{{ team.name }} ({{ team.total_score }})</li>
                     {% endfor %}
-                </ul>
+                </ol>
             </div>
         </div>
     </section>
