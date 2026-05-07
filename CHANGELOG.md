@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.16] - 2026-05-06
+
+### Added
+
+- (i18n): create 15 comprehensive i18n/l10n enhancement tasks
+- (i18n): Add French Canadian and Swedish translations (#508)
+- create task 045 - add country flag icons to locale dropdown
+- (i18n): create initial translation file structure (#506)
+- (i18n): internationalize TUI/interactive mode (#505)
+- (i18n): Web Interface Internationalization (#502)
+- (i18n): implement CLI internationalization with locale support (#501)
+- Complete I18n Infrastructure Setup (#500)
+- Docker container build and publish workflow (#497)
+- (ci): add nightly comprehensive testing workflow (#496)
+- (i18n): add infrastructure for internationalization support (#495)
+
+### Fixed
+
+- (ci): resolve nightly test failures across multiple platforms
+- (docker): include hatch_build.py in Docker build context (#504)
+- (qa): Fix visual test failures by implementing server-side test mode
+
+### Security
+
+- (docker): update system packages in base image
+- (deps): upgrade pip to 26.1 to fix CVE-2026-6357, CVE-2025-8869, CVE-2026-1703
+
+### Build / CI
+
+- bump docker/build-push-action from 6.9.0 to 7.1.0 (#492)
+- bump docker/login-action from 3.3.0 to 4.1.0 (#491)
+- bump actions/download-artifact from 4 to 8 (#490)
+- bump softprops/action-gh-release from 2 to 3 (#489)
+- bump anchore/scan-action from 6 to 7 (#488)
+
+### Documentation
+
+- update all i18n/l10n documentation to reflect completed implementation
+- (tasks): mark task 024 as completed with PR #508
+- (tasks): complete task 023 - initial translation file structure
+- (tasks): complete task 022 - TUI internationalization
+- (tasks): complete task 020 - CLI internationalization (#501)
+- (tasks): complete task 022 - comprehensive GitHub workflows enhancement (#499)
+- (tasks): complete task 043 - nightly testing workflow
+- (tasks): complete task 044 - i18n infrastructure setup
+- (ci): rename CI workflow to Continuous Integration
+
 ## [0.0.15] - 2026-05-04
 
 ### Added
