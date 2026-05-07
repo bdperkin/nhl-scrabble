@@ -326,6 +326,7 @@ input[type="checkbox"] {
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     text-align: center;
+    transform: translateZ(0);
 }
 
 .stat-card h4 {
@@ -401,6 +402,7 @@ input[type="checkbox"] {
     background: var(--color-light);
     padding: var(--spacing-md);
     border-radius: var(--border-radius);
+    transform: translateZ(0);
 }
 
 .division-card h4 {
