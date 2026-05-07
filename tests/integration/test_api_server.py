@@ -257,6 +257,16 @@ class TestPlayersEndpoints:
         for player in data["players"]:
             assert player["team"] == team_abbrev
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_get_players_invalid_team(self, client: TestClient) -> None:
+        """Test filtering players by non-existent team returns 404."""
+        response = client.get("/api/v1/players?team=INVALID")
+
+        assert response.status_code == 404
+        data = response.json()
+        assert "detail" in data
+        assert "not found" in data["detail"].lower()
+
 
 class TestStandingsEndpoints:
     """Tests for standings endpoints."""
