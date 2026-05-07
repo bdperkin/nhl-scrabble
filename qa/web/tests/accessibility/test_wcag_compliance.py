@@ -115,7 +115,7 @@ def test_headings_hierarchy(index_page: IndexPage) -> None:
         level_diff = headings[i] - headings[i - 1]
         assert (
             level_diff <= 1
-        ), f"Heading levels should not skip (found h{headings[i-1]} -> h{headings[i]})"
+        ), f"Heading levels should not skip (found h{headings[i - 1]} -> h{headings[i]})"
 
 
 @pytest.mark.accessibility

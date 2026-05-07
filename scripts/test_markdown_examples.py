@@ -179,9 +179,9 @@ def main() -> int:
                 skipped_blocks += 1
 
     # Summary output (CLI script, print is appropriate)
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Markdown Example Test Summary")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Total examples: {total_blocks}")
     print(f"Passed: {total_blocks - failed_blocks - skipped_blocks}")
     print(f"Skipped: {skipped_blocks}")
