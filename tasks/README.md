@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 204 tasks (16 active, 188 completed)
+**Total Tasks**: 219 tasks (31 active, 188 completed)
 
 ## Overview
 
@@ -106,6 +106,11 @@ Each task includes:
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
 | 044 | Implement Mocked API Data for Visual Regression Tests | LOW | 6-8 hours (actual: ~6h) | Completed | [#476](https://github.com/bdperkin/nhl-scrabble/issues/476) | PR [#479](https://github.com/bdperkin/nhl-scrabble/pull/479), completed 2026-05-02 |
 | 045 | Add Country Flag Icons to Locale Dropdown | LOW | 2-3 hours | Active | [#507](https://github.com/bdperkin/nhl-scrabble/issues/507) | - |
+| 046 | Native Speaker Review of French Canadian (fr_CA) Translations | MEDIUM | 3-4 hours | Active | [#509](https://github.com/bdperkin/nhl-scrabble/issues/509) | - |
+| 047 | Native Speaker Review of Swedish (sv_SE) Translations | MEDIUM | 3-4 hours | Active | [#510](https://github.com/bdperkin/nhl-scrabble/issues/510) | - |
+| 048 | Locale-Aware Date and Time Formatting | MEDIUM | 3-4 hours | Active | [#511](https://github.com/bdperkin/nhl-scrabble/issues/511) | - |
+| 049 | Set Up Community Translation Platform (Weblate/Crowdin) | LOW | 4-6 hours | Active | [#522](https://github.com/bdperkin/nhl-scrabble/issues/522) | - |
+| 050 | Implement Locale-Specific Scrabble Letter Values | LOW | 8-12 hours | Active | [#523](https://github.com/bdperkin/nhl-scrabble/issues/523) | - |
 | 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | PR [#429](https://github.com/bdperkin/nhl-scrabble/pull/429), completed 2026-04-28 |
 | 001 | Implement HTML Output Format | MEDIUM | 4-6 hours (actual: ~4h) | Completed | [#46](https://github.com/bdperkin/nhl-scrabble/issues/46) | PR [#92](https://github.com/bdperkin/nhl-scrabble/pull/92), completed 2026-04-16 |
 | 001 | Add Progress Bars for Long Operations | MEDIUM | 2-3 hours (actual: ~3 hours) | Completed | [#132](https://github.com/bdperkin/nhl-scrabble/issues/132) | PR [#172](https://github.com/bdperkin/nhl-scrabble/pull/172), completed 2026-04-17 |
@@ -188,6 +193,7 @@ Each task includes:
 | 022 | Generate Visual Regression Test Baselines | MEDIUM | 30 minutes (actual: ~45 minutes) | Completed | [#437](https://github.com/bdperkin/nhl-scrabble/issues/437) | Chromium + Firefox baselines generated (28 snapshots), WebKit deferred to CI, completed 2026-04-29 |
 | 023 | Make QA Workflow Blocking After All Tests Pass | LOW | 15 minutes | Active | [#439](https://github.com/bdperkin/nhl-scrabble/issues/439) | - |
 | 024 | Add Comprehensive Web Application Route Tests | MEDIUM | 4-6 hours (actual: ~2.5 hours) | Completed | [#457](https://github.com/bdperkin/nhl-scrabble/issues/457) | PR [#462](https://github.com/bdperkin/nhl-scrabble/pull/462), 38 new tests (33 integration + 5 functional), all browsers passing, completed 2026-04-29 |
+| 025 | Comprehensive I18n Test Suite for All Locales | MEDIUM | 4-6 hours | Active | [#512](https://github.com/bdperkin/nhl-scrabble/issues/512) | - |
 
 ### New Features
 
@@ -220,6 +226,15 @@ Each task includes:
 | 034 | Docker Container Build and Publish Workflow | LOW | 3-4 hours (actual: ~3.5h) | Completed | [#301](https://github.com/bdperkin/nhl-scrabble/issues/301) | PR [#497](https://github.com/bdperkin/nhl-scrabble/pull/497), completed 2026-05-05 |
 | 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | PR [#485](https://github.com/bdperkin/nhl-scrabble/pull/485), completed 2026-05-03 |
 | 036 | PR Size Checker Workflow | LOW | 1-2 hours (actual: ~45 minutes) | Completed | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | PR [#486](https://github.com/bdperkin/nhl-scrabble/pull/486), completed 2026-05-04 |
+| 037 | Translate to English (Canada) - en_CA | LOW | 1-2 hours | Active | [#513](https://github.com/bdperkin/nhl-scrabble/issues/513) | - |
+| 038 | Translate to Russian (Russia) - ru_RU | LOW | 6-8 hours | Active | [#514](https://github.com/bdperkin/nhl-scrabble/issues/514) | - |
+| 039 | Translate to Finnish (Finland) - fi_FI | LOW | 6-8 hours | Active | [#515](https://github.com/bdperkin/nhl-scrabble/issues/515) | - |
+| 040 | Translate to Czech (Czech Republic) - cs_CZ | LOW | 6-8 hours | Active | [#516](https://github.com/bdperkin/nhl-scrabble/issues/516) | - |
+| 041 | Translate to German (Germany) - de_DE | LOW | 6-8 hours | Active | [#517](https://github.com/bdperkin/nhl-scrabble/issues/517) | - |
+| 042 | Translate to German (Switzerland) - de_CH | LOW | 4-6 hours | Active | [#518](https://github.com/bdperkin/nhl-scrabble/issues/518) | - |
+| 043 | Translate to Italian (Switzerland) - it_CH | LOW | 6-8 hours | Active | [#519](https://github.com/bdperkin/nhl-scrabble/issues/519) | - |
+| 044 | Translate to Slovak (Slovakia) - sk_SK | LOW | 6-8 hours | Active | [#520](https://github.com/bdperkin/nhl-scrabble/issues/520) | - |
+| 045 | Translate to Latvian (Latvia) - lv_LV | LOW | 6-8 hours | Active | [#521](https://github.com/bdperkin/nhl-scrabble/issues/521) | - |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | PR [#496](https://github.com/bdperkin/nhl-scrabble/pull/496), completed 2026-05-05 |
 | 044 | I18n Infrastructure Setup | LOW | 4-6 hours (actual: ~5h) | Completed | [#494](https://github.com/bdperkin/nhl-scrabble/issues/494) | PR [#495](https://github.com/bdperkin/nhl-scrabble/pull/495), completed 2026-05-06, sub-task 1 of #218 |
 | 001 | Build Web Interface with FastAPI | MEDIUM | 16-24 hours (actual: <15 min (web interface already implemented, only needed task documentation)) | Completed | [#50](https://github.com/bdperkin/nhl-scrabble/issues/50) | completed 2026-04-26 |

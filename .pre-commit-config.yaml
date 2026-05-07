@@ -275,7 +275,8 @@ repos:
     rev: v2.4.2
     hooks:
       - id: codespell
-        args: ['-L', 'aNULL']  # Ignore OpenSSL cipher suite names
+        # Ignore: aNULL (OpenSSL), foreign language words in i18n docs
+        args: ['-L', 'aNULL,Avantage,avantage,Presse,Tre,Januar']
         exclude: ^docs/reference/api/  # Exclude generated API docs
 
   # ============================================================================
