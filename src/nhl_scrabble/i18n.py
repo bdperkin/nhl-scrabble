@@ -90,15 +90,30 @@ def get_system_locale() -> str:
         'en_US'
 
     Notes:
-        - Uses locale.getdefaultlocale() which may return None on some systems
+        - Reads from environment variables (LANG, LC_ALL, LC_CTYPE, LANGUAGE)
         - Only returns locales in SUPPORTED_LOCALES list
         - Safe to call multiple times (no side effects)
     """
-    with contextlib.suppress(ValueError, TypeError):
-        # locale.getdefaultlocale() can raise ValueError or TypeError
-        system_locale, _ = locale.getdefaultlocale()
-        if system_locale and system_locale in SUPPORTED_LOCALES:
-            return system_locale
+    with contextlib.suppress(ValueError, TypeError, locale.Error):
+        # Try environment variables in order of precedence
+        # This replaces the deprecated locale.getdefaultlocale()
+        for env_var in ("LC_ALL", "LC_CTYPE", "LANG", "LANGUAGE"):
+            if localename := os.environ.get(env_var):
+                # Parse locale name (e.g., "en_US.UTF-8" -> "en_US")
+                system_locale = localename.split(".")[0].split("@")[0]
+                if system_locale and system_locale in SUPPORTED_LOCALES:
+                    return system_locale
+
+        # Fallback: use locale.getlocale() (requires setlocale first)
+        saved_locale = locale.setlocale(locale.LC_CTYPE)
+        try:
+            locale.setlocale(locale.LC_CTYPE, "")
+            loc_tuple = locale.getlocale()
+            if loc_tuple[0] and loc_tuple[0] in SUPPORTED_LOCALES:
+                return loc_tuple[0]
+        finally:
+            locale.setlocale(locale.LC_CTYPE, saved_locale)
+
     return DEFAULT_LOCALE
 
 

@@ -60,39 +60,48 @@ class TestGetSystemLocale:
 
     def test_get_system_locale_fallback_none(self):
         """Test get_system_locale returns default when detection fails (None)."""
-        with patch("locale.getdefaultlocale", return_value=(None, None)):
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch("locale.setlocale", side_effect=locale.Error),
+        ):
             assert get_system_locale() == DEFAULT_LOCALE
 
     def test_get_system_locale_fallback_valueerror(self):
         """Test get_system_locale handles ValueError gracefully."""
-        with patch("locale.getdefaultlocale", side_effect=ValueError):
+        with (
+            patch.dict(os.environ, {"LANG": "invalid"}, clear=True),
+            patch("locale.setlocale", side_effect=ValueError),
+        ):
             assert get_system_locale() == DEFAULT_LOCALE
 
     def test_get_system_locale_fallback_typeerror(self):
         """Test get_system_locale handles TypeError gracefully."""
-        with patch("locale.getdefaultlocale", side_effect=TypeError):
+        with (
+            patch.dict(os.environ, {"LANG": "invalid"}, clear=True),
+            patch("locale.setlocale", side_effect=TypeError),
+        ):
             assert get_system_locale() == DEFAULT_LOCALE
 
     def test_get_system_locale_supported(self):
         """Test get_system_locale returns supported locale."""
-        with patch("locale.getdefaultlocale", return_value=("fr_CA", "UTF-8")):
+        with patch.dict(os.environ, {"LANG": "fr_CA.UTF-8"}, clear=True):
             assert get_system_locale() == "fr_CA"
 
     def test_get_system_locale_unsupported(self):
         """Test get_system_locale falls back for unsupported locale."""
-        with patch("locale.getdefaultlocale", return_value=("ja_JP", "UTF-8")):
+        with patch.dict(os.environ, {"LANG": "ja_JP.UTF-8"}, clear=True):
             assert get_system_locale() == DEFAULT_LOCALE
 
     def test_get_system_locale_all_supported_locales(self):
         """Test get_system_locale works for all supported locales."""
         for supported_locale in SUPPORTED_LOCALES:
-            with patch("locale.getdefaultlocale", return_value=(supported_locale, "UTF-8")):
+            with patch.dict(os.environ, {"LANG": f"{supported_locale}.UTF-8"}, clear=True):
                 assert get_system_locale() == supported_locale
 
     def test_get_system_locale_case_sensitive(self):
         """Test get_system_locale is case-sensitive."""
         # en_us (wrong case) should not match en_US
-        with patch("locale.getdefaultlocale", return_value=("en_us", "UTF-8")):
+        with patch.dict(os.environ, {"LANG": "en_us.UTF-8"}, clear=True):
             assert get_system_locale() == DEFAULT_LOCALE
 
 
