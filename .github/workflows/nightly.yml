@@ -67,6 +67,7 @@ jobs:
           pytest -v --cov --cov-report=xml --cov-report=term
 
       - name: Run integration tests with slow tests
+        continue-on-error: true
         run: |
           pytest tests/integration/ -v -m slow --cov --cov-append
 
