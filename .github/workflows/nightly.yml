@@ -137,7 +137,7 @@ jobs:
       - name: Run pip-audit
         run: |
           uv pip install pip-audit --system
-          pip-audit --desc --requirement uv.lock
+          pip-audit --desc
 
       - name: Run safety check
         continue-on-error: true
