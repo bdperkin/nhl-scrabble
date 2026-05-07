@@ -153,6 +153,9 @@ clean-build: ## Remove build artifacts
 	@rm -fr build/
 	@rm -fr dist/
 	@rm -fr .eggs/
+	@rm -fr docs/_build/
+	@rm -fr locales/
+	@rm -f messages.pot
 	@find . -name '*.egg-info' -exec rm -fr {} +
 	@find . -name '*.egg' -exec rm -f {} +
 
@@ -162,6 +165,9 @@ clean-pyc: ## Remove Python file artifacts
 	@find . -name '*.pyo' -exec rm -f {} +
 	@find . -name '*~' -exec rm -f {} +
 	@find . -name '__pycache__' -exec rm -fr {} +
+	@rm -fr .scratch/
+	@rm -fr logs/
+	@rm -f .claude/*.lock
 
 clean-test: ## Remove test and coverage artifacts
 	@printf "$(BLUE)Cleaning test artifacts...$(NC)\n"
@@ -171,7 +177,9 @@ clean-test: ## Remove test and coverage artifacts
 	@rm -fr .pytest_cache
 	@rm -fr .mypy_cache
 	@rm -fr .ruff_cache
+	@rm -fr .benchmarks/
 	@rm -f coverage.xml
+	@rm -f junit*.xml junit-*.xml
 
 clean-venv: ## Remove virtual environment
 	@printf "$(BLUE)Removing virtual environment...$(NC)\n"
@@ -873,6 +881,7 @@ qa-clean: ## Clean QA test artifacts
 	@cd qa/web && rm -rf test-results/ traces/ videos/ reports/*.html reports/*.xml
 	@cd qa/web && find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	@cd qa/web && find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
+	@cd qa/web && find . -type d -name .ruff_cache -exec rm -rf {} + 2>/dev/null || true
 	@printf "$(GREEN)✓ QA artifacts cleaned$(NC)\n"
 
 ####################
