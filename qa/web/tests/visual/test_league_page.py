@@ -36,8 +36,8 @@ def test_league_page_desktop(
     page.goto(f"{base_url}/league")
 
     # Wait for content to load
-    page.wait_for_selector(".league-card", state="visible")
-    page.wait_for_selector(".league-card ol li", state="visible")
+    page.wait_for_selector(".division-card", state="visible")
+    page.wait_for_selector(".division-card ol li", state="visible")
 
     # Wait for animations to complete
     page.wait_for_timeout(500)
@@ -72,8 +72,8 @@ def test_league_page_mobile(
     page.goto(f"{base_url}/league")
 
     # Wait for content to load
-    page.wait_for_selector(".league-card", state="visible")
-    page.wait_for_selector(".league-card ol li", state="visible")
+    page.wait_for_selector(".division-card", state="visible")
+    page.wait_for_selector(".division-card ol li", state="visible")
 
     # Wait for animations to complete
     page.wait_for_timeout(500)
@@ -107,8 +107,8 @@ def test_league_page_tablet(
     page.goto(f"{base_url}/league")
 
     # Wait for content to load
-    page.wait_for_selector(".league-card", state="visible")
-    page.wait_for_selector(".league-card ol li", state="visible")
+    page.wait_for_selector(".division-card", state="visible")
+    page.wait_for_selector(".division-card ol li", state="visible")
 
     # Wait for animations to complete
     page.wait_for_timeout(500)
@@ -172,11 +172,11 @@ def test_league_team_list_visual(
     page.goto(f"{base_url}/league")
 
     # Wait for league card
-    league_card = page.locator(".league-card")
+    league_card = page.locator(".division-card")
     league_card.wait_for(state="visible")
 
     # Wait for all team items
-    page.wait_for_selector(".league-card ol li", state="visible")
+    page.wait_for_selector(".division-card ol li", state="visible")
 
     # Wait for animations
     page.wait_for_timeout(500)
@@ -213,7 +213,7 @@ def test_league_i18n_visual(
     page.goto(f"{base_url}/league?lang={locale}")
 
     # Wait for content
-    page.wait_for_selector(".league-card", state="visible")
+    page.wait_for_selector(".division-card", state="visible")
     page.wait_for_timeout(500)
 
     # Capture screenshot
@@ -246,7 +246,7 @@ def test_league_dark_mode_visual(
     page.goto(f"{base_url}/league")
 
     # Wait for content
-    page.wait_for_selector(".league-card", state="visible")
+    page.wait_for_selector(".division-card", state="visible")
     page.wait_for_timeout(500)
 
     # Capture dark mode screenshot
@@ -275,7 +275,7 @@ def test_league_scrolled_header(
     page.goto(f"{base_url}/league")
 
     # Wait for content
-    page.wait_for_selector(".league-card", state="visible")
+    page.wait_for_selector(".division-card", state="visible")
 
     # Scroll down
     page.evaluate("window.scrollTo(0, 500)")

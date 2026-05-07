@@ -109,14 +109,14 @@ def test_league_all_teams_displayed(page: Page, base_url: str) -> None:
     page.goto(f"{base_url}/league")
 
     # Check that league card exists
-    league_card = page.locator(".league-card")
+    league_card = page.locator(".division-card")
     expect(league_card).to_be_visible()
 
     # Check heading
     expect(league_card.locator("h4")).to_contain_text("National Hockey League")
 
     # Count team items (should be 32 NHL teams)
-    team_items = page.locator(".league-card ol li")
+    team_items = page.locator(".division-card ol li")
     expect(team_items).to_have_count(32)
 
 
@@ -135,7 +135,7 @@ def test_league_team_item_structure(page: Page, base_url: str) -> None:
     page.goto(f"{base_url}/league")
 
     # Get first team item
-    first_team = page.locator(".league-card ol li").first
+    first_team = page.locator(".division-card ol li").first
     expect(first_team).to_be_visible()
 
     # Verify format contains team name and score in parentheses
@@ -165,11 +165,11 @@ def test_league_responsive_design(page: Page, base_url: str) -> None:
     expect(page).to_have_title("NHL Scrabble Analyzer - League Standings")
 
     # Check that content is visible
-    league_card = page.locator(".league-card")
+    league_card = page.locator(".division-card")
     expect(league_card).to_be_visible()
 
     # Check team items are visible
-    team_items = page.locator(".league-card ol li")
+    team_items = page.locator(".division-card ol li")
     expect(team_items.first).to_be_visible()
 
 
