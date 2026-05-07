@@ -6,6 +6,7 @@ parsing, option combinations, error handling, output formats, and environment va
 Target: Improve CLI coverage from ~50% to 90%+
 """
 
+import sys
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -242,6 +243,10 @@ class TestOutputPathValidation:
         with pytest.raises(click.ClickException, match="does not exist"):
             validate_output_path("/nonexistent/directory/file.txt")
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="Unix-specific permission test (Windows has different permission model)",
+    )
     def test_validate_output_path_readonly_directory(self, tmp_path: Path) -> None:
         """Test output path with readonly directory."""
         readonly_dir = tmp_path / "readonly"
@@ -256,6 +261,10 @@ class TestOutputPathValidation:
         # Cleanup: restore permissions
         readonly_dir.chmod(0o755)
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="Unix-specific permission test (Windows has different permission model)",
+    )
     def test_validate_output_path_readonly_file(self, tmp_path: Path) -> None:
         """Test output path with readonly existing file."""
         output_file = tmp_path / "readonly.txt"

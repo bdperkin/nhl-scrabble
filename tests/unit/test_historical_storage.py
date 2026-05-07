@@ -8,6 +8,7 @@ This module tests:
 """
 
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -536,8 +537,9 @@ class TestClearAllEdgeCases:
             protected.chmod(0o644)
 
     @pytest.mark.skipif(
-        __import__("os").geteuid() == 0,
-        reason="Test requires non-root user (root can read any directory)",
+        sys.platform == "win32"
+        or (hasattr(__import__("os"), "geteuid") and __import__("os").geteuid() == 0),
+        reason="Test requires non-root user and Unix-like permissions (not supported on Windows)",
     )
     def test_clear_all_glob_error(self, tmp_path: Path) -> None:
         """Test clear_all when glob operation fails."""

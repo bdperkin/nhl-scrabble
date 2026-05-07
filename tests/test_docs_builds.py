@@ -269,7 +269,7 @@ class TestDocumentationBuilds:
         makefile = PROJECT_ROOT / "Makefile"
         assert makefile.exists(), "Makefile not found"
 
-        makefile_content = makefile.read_text()
+        makefile_content = makefile.read_text(encoding="utf-8")
 
         # Check for new documentation targets
         assert "docs-html:" in makefile_content, "docs-html target not found in Makefile"
@@ -285,7 +285,7 @@ class TestDocumentationBuilds:
         conf_file = PROJECT_ROOT / "docs" / "conf.py"
         assert conf_file.exists(), "docs/conf.py not found"
 
-        conf_content = conf_file.read_text()
+        conf_content = conf_file.read_text(encoding="utf-8")
 
         # Check for format-specific configuration
         assert "man_pages" in conf_content, "man_pages configuration not found"
@@ -300,7 +300,7 @@ class TestDocumentationBuilds:
         gitignore = PROJECT_ROOT / "docs" / ".gitignore"
         assert gitignore.exists(), "docs/.gitignore not found"
 
-        gitignore_content = gitignore.read_text()
+        gitignore_content = gitignore.read_text(encoding="utf-8")
 
         # Check for build artifact exclusions
         assert "_build/" in gitignore_content, "_build/ not excluded"

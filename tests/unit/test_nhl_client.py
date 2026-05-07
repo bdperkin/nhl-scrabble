@@ -1,5 +1,6 @@
 """Unit tests for NHL API client."""
 
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -689,6 +690,10 @@ class TestNHLApiClient:
         client.close()
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="Unix-specific permission test (Windows has different permission model)",
+    )
     def test_cache_directory_permission_error(self) -> None:
         """Test proper error when cache directory is not writable."""
         read_only_dir = "/root/.cache"  # Typically not writable by regular users

@@ -1,5 +1,6 @@
 """Unit tests for configuration validators and injection protection."""
 
+import sys
 import tempfile
 from pathlib import Path
 
@@ -211,11 +212,13 @@ class TestValidateSafePath:
 
     def test_rejects_path_traversal_absolute(self) -> None:
         """Test rejection of absolute path traversal."""
+        # Use platform-specific absolute paths
+        absolute_path = "C:\\Windows\\System32" if sys.platform == "win32" else "/etc/passwd"
         with pytest.raises(
             ConfigValidationError,
             match=r"Absolute paths not allowed",
         ):
-            validate_safe_path("/etc/passwd")
+            validate_safe_path(absolute_path)
 
     def test_allows_absolute_path_when_enabled(self) -> None:
         """Test absolute paths allowed when allow_absolute=True."""

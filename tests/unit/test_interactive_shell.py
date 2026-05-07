@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from unittest.mock import Mock, patch
 
 import pytest
@@ -12,6 +13,12 @@ from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 
 # Allow private member access in tests
+
+# Skip all tests in this module on Windows due to prompt_toolkit requiring console
+pytestmark = pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="prompt_toolkit requires Windows console (not available in GitHub Actions CI)",
+)
 
 
 @pytest.fixture

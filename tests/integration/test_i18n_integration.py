@@ -105,7 +105,7 @@ class TestI18nInfrastructure:
         babel_cfg = project_root / "babel.cfg"
 
         if babel_cfg.exists():
-            content = babel_cfg.read_text()
+            content = babel_cfg.read_text(encoding="utf-8")
             assert "[python:" in content
             assert "[jinja2:" in content
             assert "encoding = utf-8" in content
@@ -131,7 +131,7 @@ class TestI18nInfrastructure:
         docs_path = project_root / ".github" / "docs" / "translation-workflow.md"
 
         if docs_path.exists():
-            content = docs_path.read_text()
+            content = docs_path.read_text(encoding="utf-8")
             # Check for key sections
             assert "pybabel extract" in content
             assert "pybabel init" in content
@@ -215,7 +215,7 @@ class TestDocumentation:
         env_vars_doc = project_root / "docs" / "reference" / "environment-variables.md"
 
         if env_vars_doc.exists():
-            content = env_vars_doc.read_text()
+            content = env_vars_doc.read_text(encoding="utf-8")
             assert "NHL_SCRABBLE_LANG" in content
             assert "locale" in content.lower()
 
@@ -225,7 +225,7 @@ class TestDocumentation:
         readme = project_root / "README.md"
 
         if readme.exists():
-            content = readme.read_text()
+            content = readme.read_text(encoding="utf-8")
             # Should mention i18n or internationalization
             has_i18n = (
                 "i18n" in content.lower()
