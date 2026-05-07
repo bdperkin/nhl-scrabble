@@ -304,3 +304,5 @@ __pycache__/
 /locales/
 # Translation template (generated file)
 messages.pot
+# Stray compiled message catalog in root (legitimate .mo files are in locales/)
+/messages.mo
