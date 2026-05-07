@@ -6,16 +6,6 @@
 {% block twitter_title %}{% trans %}NHL League Standings by Scrabble Score{% endtrans %}{% endblock %}
 
 {% block content %}
-    <div class="page-header fade-on-scroll">
-        <h2>{% trans %}League Standings by Total Scrabble Score{% endtrans %}</h2>
-        <p class="page-description">
-            {% trans %}Complete NHL standings ranked by total Scrabble score across all teams in the league.{% endtrans %}
-        </p>
-        <p class="timestamp">
-            {% trans %}Data as of{% endtrans %}: {{ timestamp_date }} {{ timestamp_time }}
-        </p>
-    </div>
-
     <!-- Summary Statistics -->
     <div class="stats-summary fade-on-scroll">
         <div class="stat-card">
@@ -40,11 +30,11 @@
 
     <!-- League Standings -->
     <section class="results-section fade-on-scroll">
-        <h3>{% trans %}League Standings{% endtrans %}</h3>
+        <h3>{% trans %}League Standings by Total Scrabble Score{% endtrans %}</h3>
         <div class="division-grid">
             <div class="division-card league-card">
                 <h4>{% trans %}National Hockey League{% endtrans %}</h4>
-                <ol class="league-standings-list">
+                <ul class="league-standings-list">
                     {% for team in team_standings %}
                         <li class="league-team-item">
                             <span class="team-rank">{{ loop.index }}.</span>
@@ -55,7 +45,7 @@
                             <span class="team-score">{{ team.total_score }}</span>
                         </li>
                     {% endfor %}
-                </ol>
+                </ul>
             </div>
         </div>
     </section>

@@ -56,23 +56,13 @@ def test_league_page_header(page: Page, base_url: str) -> None:
 
     Verifies:
         - Main heading is present
-        - Page description exists
-        - Timestamp is displayed
+        - Heading text is correct
     """
     page.goto(f"{base_url}/league")
 
     # Check main heading
-    heading = page.locator("h2")
+    heading = page.locator("h3")
     expect(heading).to_contain_text("League Standings by Total Scrabble Score")
-
-    # Check description
-    description = page.locator(".page-description")
-    expect(description).to_be_visible()
-
-    # Check timestamp
-    timestamp = page.locator(".timestamp")
-    expect(timestamp).to_be_visible()
-    expect(timestamp).to_contain_text("Data as of")
 
 
 def test_league_stats_summary(page: Page, base_url: str) -> None:
@@ -272,7 +262,7 @@ def test_league_language_selector(page: Page, base_url: str) -> None:
     page.wait_for_url(f"{base_url}/league?lang=fr_CA")
 
     # Verify page title updated (French translation)
-    heading = page.locator("h2")
+    heading = page.locator("h3")
     expect(heading).to_contain_text("Classement de la ligue par score Scrabble total")
 
 
@@ -302,7 +292,7 @@ def test_league_i18n(page: Page, base_url: str, locale: str, expected_title: str
     page.goto(f"{base_url}/league?lang={locale}")
 
     # Check heading translation
-    heading = page.locator("h2")
+    heading = page.locator("h3")
     expect(heading).to_contain_text(expected_title)
 
     # Verify locale is applied

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/bdperkin/nhl-scrabble/issues\n"
-"POT-Creation-Date: 2026-05-07 13:41-0400\n"
+"POT-Creation-Date: 2026-05-07 13:55-0400\n"
 "PO-Revision-Date: 2026-05-06 18:00-0400\n"
 "Last-Translator: Claude AI Assistant\n"
 "Language: sv_SE\n"
@@ -677,7 +677,7 @@ msgstr "Statistik"
 #: src/nhl_scrabble/interactive/shell.py:640
 #: src/nhl_scrabble/web/templates/conferences.html:9
 #: src/nhl_scrabble/web/templates/divisions.html:9
-#: src/nhl_scrabble/web/templates/league.html:22
+#: src/nhl_scrabble/web/templates/league.html:12
 #: src/nhl_scrabble/web/templates/playoffs.html:9
 #: src/nhl_scrabble/web/templates/stats.html:29
 #: src/nhl_scrabble/web/templates/teams.html:9
@@ -687,7 +687,7 @@ msgstr "Totalt Antal Lag"
 #: src/nhl_scrabble/interactive/shell.py:641
 #: src/nhl_scrabble/web/templates/conferences.html:23
 #: src/nhl_scrabble/web/templates/divisions.html:23
-#: src/nhl_scrabble/web/templates/league.html:36
+#: src/nhl_scrabble/web/templates/league.html:26
 #: src/nhl_scrabble/web/templates/playoffs.html:22
 #: src/nhl_scrabble/web/templates/results.html:4
 #: src/nhl_scrabble/web/templates/stats.html:9
@@ -706,7 +706,7 @@ msgstr "Genomsnittlig Spelarpoäng"
 #: src/nhl_scrabble/interactive/shell.py:645
 #: src/nhl_scrabble/web/templates/conferences.html:13
 #: src/nhl_scrabble/web/templates/divisions.html:13
-#: src/nhl_scrabble/web/templates/league.html:26
+#: src/nhl_scrabble/web/templates/league.html:16
 #: src/nhl_scrabble/web/templates/results.html:17
 #: src/nhl_scrabble/web/templates/stats.html:33
 #: src/nhl_scrabble/web/templates/teams.html:13
@@ -945,7 +945,7 @@ msgstr "NHL Scrabble Analysator - Konferensställning"
 
 #: src/nhl_scrabble/web/templates/conferences.html:18
 #: src/nhl_scrabble/web/templates/divisions.html:18
-#: src/nhl_scrabble/web/templates/league.html:31
+#: src/nhl_scrabble/web/templates/league.html:21
 #: src/nhl_scrabble/web/templates/stats.html:38
 msgid "Lowest Team"
 msgstr "Lägsta Laget"
@@ -1092,36 +1092,19 @@ msgstr "NHL Scrabble Analysator - Ligaställning"
 msgid "NHL League Standings by Scrabble Score"
 msgstr "NHL Ligaställning efter Scrabble-poäng"
 
-#: src/nhl_scrabble/web/templates/league.html:10
+#: src/nhl_scrabble/web/templates/league.html:33
 msgid "League Standings by Total Scrabble Score"
 msgstr "Ligaställning efter Total Scrabble-poäng"
 
-#: src/nhl_scrabble/web/templates/league.html:12
-msgid ""
-"Complete NHL standings ranked by total Scrabble score across all teams in"
-" the league."
-msgstr ""
-"Komplett NHL-ställning rankad efter total Scrabble-poäng för alla lag i "
-"ligan."
-
-#: src/nhl_scrabble/web/templates/league.html:15
-#, fuzzy
-msgid "Data as of"
-msgstr "Data per"
-
-#: src/nhl_scrabble/web/templates/league.html:43
-msgid "League Standings"
-msgstr "Ligaställning"
-
-#: src/nhl_scrabble/web/templates/league.html:46
+#: src/nhl_scrabble/web/templates/league.html:36
 msgid "National Hockey League"
 msgstr "National Hockey League"
 
-#: src/nhl_scrabble/web/templates/league.html:65
+#: src/nhl_scrabble/web/templates/league.html:55
 msgid "About League Standings"
 msgstr "Om Ligaställning"
 
-#: src/nhl_scrabble/web/templates/league.html:67
+#: src/nhl_scrabble/web/templates/league.html:57
 msgid ""
 "Teams are ranked by their total Scrabble score, calculated by summing the"
 " Scrabble letter values of all players' names on each roster. This "
@@ -1133,16 +1116,16 @@ msgstr ""
 "ligaomfattande vy visar den kompletta ställningen utan divisions- eller "
 "konferensgruppering."
 
-#: src/nhl_scrabble/web/templates/league.html:70
+#: src/nhl_scrabble/web/templates/league.html:60
 msgid "For grouped standings, see:"
 msgstr "För grupperade ställningar, se:"
 
-#: src/nhl_scrabble/web/templates/league.html:71
+#: src/nhl_scrabble/web/templates/league.html:61
 #: src/nhl_scrabble/web/templates/results.html:142
 msgid "Division Standings"
 msgstr "Divisionsställning"
 
-#: src/nhl_scrabble/web/templates/league.html:72
+#: src/nhl_scrabble/web/templates/league.html:62
 msgid "Conference Standings"
 msgstr "Konferensställning"
 
@@ -1305,3 +1288,18 @@ msgstr "NHL Scrabble Analysator - Lagställning"
 #: src/nhl_scrabble/web/templates/teams.html:22
 msgid "Highest Player"
 msgstr "Högsta Spelaren"
+
+#~ msgid ""
+#~ "Complete NHL standings ranked by total"
+#~ " Scrabble score across all teams in"
+#~ " the league."
+#~ msgstr ""
+#~ "Komplett NHL-ställning rankad efter "
+#~ "total Scrabble-poäng för alla lag "
+#~ "i ligan."
+
+#~ msgid "Data as of"
+#~ msgstr "Data per"
+
+#~ msgid "League Standings"
+#~ msgstr "Ligaställning"
