@@ -197,6 +197,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Reset file permissions (PNGs should be 644, not 755)
+          find qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/ \
+            -type f -name "*.png" -exec chmod 644 {} \;
+
           # Stage only this browser's baselines
           git add qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/
 
@@ -217,8 +221,12 @@ jobs:
 
             # Push with retry logic for concurrent matrix jobs
             for i in {1..5}; do
+              # Stash any unstaged changes before pull
+              git stash --include-untracked || true
+
               if git pull --rebase origin ${{ github.ref_name }} && git push; then
                 echo "Successfully pushed ${{ matrix.browser }} baselines"
+                git stash pop || true
                 break
               elif [ $i -eq 5 ]; then
                 echo "Failed to push after 5 attempts"
