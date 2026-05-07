@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 219 tasks (31 active, 188 completed)
+**Total Tasks**: 220 tasks (32 active, 188 completed)
 
 ## Overview
 
@@ -194,6 +194,7 @@ Each task includes:
 | 023 | Make QA Workflow Blocking After All Tests Pass | LOW | 15 minutes | Active | [#439](https://github.com/bdperkin/nhl-scrabble/issues/439) | - |
 | 024 | Add Comprehensive Web Application Route Tests | MEDIUM | 4-6 hours (actual: ~2.5 hours) | Completed | [#457](https://github.com/bdperkin/nhl-scrabble/issues/457) | PR [#462](https://github.com/bdperkin/nhl-scrabble/pull/462), 38 new tests (33 integration + 5 functional), all browsers passing, completed 2026-04-29 |
 | 025 | Comprehensive I18n Test Suite for All Locales | MEDIUM | 4-6 hours | Active | [#512](https://github.com/bdperkin/nhl-scrabble/issues/512) | - |
+| 026 | Boost Test Coverage to 90%+ (Priority Files) | MEDIUM | 8-12 hours | Active | [#528](https://github.com/bdperkin/nhl-scrabble/issues/528) | Focus on low-hanging fruit in 10 priority files |
 
 ### New Features
 
