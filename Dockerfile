@@ -8,6 +8,9 @@ ARG VERSION=0.0.0+dev
 
 WORKDIR /build
 
+# Upgrade pip to 26.1 to fix CVE-2026-6357, CVE-2025-8869, CVE-2026-1703
+RUN pip install --no-cache-dir --upgrade pip==26.1
+
 # Install UV for fast dependency installation
 RUN pip install --no-cache-dir uv
 
@@ -21,6 +24,9 @@ RUN SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} \
 
 # Runtime stage
 FROM python:3.12-slim
+
+# Upgrade pip to 26.1 to fix CVE-2026-6357, CVE-2025-8869, CVE-2026-1703
+RUN pip install --no-cache-dir --upgrade pip==26.1
 
 # Set labels
 LABEL org.opencontainers.image.source=https://github.com/bdperkin/nhl-scrabble
