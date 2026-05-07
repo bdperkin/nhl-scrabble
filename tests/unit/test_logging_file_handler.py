@@ -1,10 +1,7 @@
 """Tests for file-based logging functionality."""
 
 import logging
-import shutil
 from pathlib import Path
-
-import pytest
 
 from nhl_scrabble.logging_config import setup_logging
 
@@ -205,10 +202,6 @@ def test_setup_logging_multiple_calls(tmp_path: Path) -> None:
     assert "Message 2" not in log_file1.read_text()
 
 
-@pytest.mark.skipif(
-    shutil.which("sphinx-build") is None,
-    reason="sphinx-build not found (optional dependencies not installed)",
-)
 def test_setup_logging_info_level_by_default(tmp_path: Path) -> None:
     """Test that INFO level is used by default (not DEBUG)."""
     log_file = tmp_path / "test.log"
