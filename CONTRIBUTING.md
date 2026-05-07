@@ -554,8 +554,9 @@ Example output:
 
 ```
 Translation Statistics:
-src/nhl_scrabble/locales/fr_CA/LC_MESSAGES/messages.po: 150 translated, 104 untranslated.
-src/nhl_scrabble/locales/sv_SE/LC_MESSAGES/messages.po: 0 translated, 254 untranslated.
+src/nhl_scrabble/locales/fr_CA/LC_MESSAGES/messages.po: 254 translated messages.
+src/nhl_scrabble/locales/sv_SE/LC_MESSAGES/messages.po: 254 translated messages.
+src/nhl_scrabble/locales/de_DE/LC_MESSAGES/messages.po: 0 translated, 254 untranslated messages.
 ```
 
 See [TRANSLATING.md](TRANSLATING.md) for complete translation guide including tools, workflow, and quality checks.

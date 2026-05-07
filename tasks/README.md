@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 204 tasks (17 active, 187 completed)
+**Total Tasks**: 204 tasks (16 active, 188 completed)
 
 ## Overview
 
@@ -201,7 +201,7 @@ Each task includes:
 | 013 | Add Plugin System | LOW | 10-14 hours | Completed | [#156](https://github.com/bdperkin/nhl-scrabble/issues/156) | - |
 | 014 | Add Docker Support | LOW | 4-6 hours | Completed | [#157](https://github.com/bdperkin/nhl-scrabble/issues/157) | - |
 | 015 | Add Data Export/Import Functionality | LOW | 4-5 hours | Completed | [#158](https://github.com/bdperkin/nhl-scrabble/issues/158) | - |
-| 016 | Internationalization and Localization (i18n/l10n) | LOW | 32-48 hours | Active | [#218](https://github.com/bdperkin/nhl-scrabble/issues/218) | - |
+| 016 | Internationalization and Localization (i18n/l10n) | LOW | 32-48 hours (actual: ~21h) | Completed | [#218](https://github.com/bdperkin/nhl-scrabble/issues/218) | PRs #495, #501, #502, #505, #506, #508 (6 sub-tasks), completed 2026-05-06 |
 | 017 | Free Python Hosting and Deployment Infrastructure | LOW | 8-12 hours | Active | [#219](https://github.com/bdperkin/nhl-scrabble/issues/219) | - |
 | 018 | Automated Python Package Building and Publishing | MEDIUM | 4-6 hours (actual: ~8h total with enhancements) | Completed | [#224](https://github.com/bdperkin/nhl-scrabble/issues/224) | PR [#405](https://github.com/bdperkin/nhl-scrabble/pull/405), completed 2026-04-27 |
 | 019 | Create Comprehensive Release Automation Skill | LOW | 8-12 hours (actual: ~10.5h) | Completed | [#247](https://github.com/bdperkin/nhl-scrabble/issues/247) | PR [#473](https://github.com/bdperkin/nhl-scrabble/pull/473), completed 2026-04-30, parent task coordinating 7 sub-tasks (025-031) |
