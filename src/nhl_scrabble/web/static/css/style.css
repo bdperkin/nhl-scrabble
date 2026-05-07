@@ -335,6 +335,7 @@ input[type="checkbox"] {
     font-family: var(--font-family-heading);
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
 }
 
 .stat-value {
@@ -346,6 +347,7 @@ input[type="checkbox"] {
     font-family: var(--font-family-heading);
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
 }
 
 .stat-detail {
@@ -357,6 +359,7 @@ input[type="checkbox"] {
     font-family: var(--font-family-base);
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
 }
 
 /* ===== Info Section ===== */
