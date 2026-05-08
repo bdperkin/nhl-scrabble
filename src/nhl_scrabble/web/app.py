@@ -880,6 +880,8 @@ async def team_detail_page(
             {
                 "team_name": team_data["name"],
                 "team_abbrev": team_data["abbrev"],
+                "team_division": team_data["division"],
+                "team_conference": team_data["conference"],
                 "team_stats": team_stats,
                 "team_players": team_players,
                 "timestamp_date": timestamp_date,

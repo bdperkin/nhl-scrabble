@@ -106,9 +106,9 @@
         <p>
             <a href="/teams?lang={{ locale }}">{% trans %}← Back to All Teams{% endtrans %}</a>
             |
-            <a href="/divisions/{{ team_stats.team_division }}?lang={{ locale }}">{% trans %}View {{ team_stats.team_division }} Division{% endtrans %}</a>
+            <a href="/divisions/{{ team_division }}?lang={{ locale }}">{% trans %}View {{ team_division }} Division{% endtrans %}</a>
             |
-            <a href="/conferences/{{ team_stats.team_conference }}?lang={{ locale }}">{% trans %}View {{ team_stats.team_conference }} Conference{% endtrans %}</a>
+            <a href="/conferences/{{ team_conference }}?lang={{ locale }}">{% trans %}View {{ team_conference }} Conference{% endtrans %}</a>
         </p>
     </section>
 {% endblock %}
