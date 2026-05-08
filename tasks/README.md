@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (38 active, 197 completed)
+**Total Tasks**: 235 tasks (37 active, 198 completed)
 
 ## Overview
 
@@ -200,6 +200,7 @@ Each task includes:
 | 028 | Fix Windows Test Failure: test_success_messages_translatable | MEDIUM | 3-5 hours (actual: ~1.5h) | Completed | [#534](https://github.com/bdperkin/nhl-scrabble/issues/534) | PR [#555](https://github.com/bdperkin/nhl-scrabble/pull/555), added Windows platform detection to i18n.py, skip setlocale() on Windows, use safe fallbacks, completed 2026-05-08 |
 | 029 | Fix Windows Permission Test Failures in test_historical_storage.py | MEDIUM | 4-6 hours (actual: ~1h) | Completed | [#535](https://github.com/bdperkin/nhl-scrabble/issues/535) | Commit 3c7b0c9, added @pytest.mark.skipif decorators to 5 permission tests (chmod doesn't work on Windows), completed 2026-05-07 |
 | 030 | Fix Windows Test Failure: test_save_season_unicode_data | HIGH | 2-3 hours (actual: ~45 minutes) | Completed | [#536](https://github.com/bdperkin/nhl-scrabble/issues/536) | PR [#553](https://github.com/bdperkin/nhl-scrabble/pull/553), added UTF-8 encoding to 9 write_text() calls in test file, historical.py already had UTF-8 encoding, completed 2026-05-08 |
+| 031 | Fix Windows Test Failure: test_list_continues_after_individual_error | MEDIUM | 2-3 hours (actual: 0h - fixed as part of task 029) | Completed | [#537](https://github.com/bdperkin/nhl-scrabble/issues/537) | Commit 3c7b0c9, fixed preventively during task 029 implementation, added @pytest.mark.skipif decorator (chmod doesn't work on Windows), completed 2026-05-08 |
 
 ### New Features
 
