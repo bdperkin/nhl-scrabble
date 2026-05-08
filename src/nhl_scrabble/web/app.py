@@ -878,6 +878,7 @@ async def team_detail_page(
         context = setup_template_locale(request)
         context.update(
             {
+                "team_name": team_data["name"],
                 "team_stats": team_stats,
                 "team_players": team_players,
                 "timestamp_date": timestamp_date,
