@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-07
-**Total Tasks**: 44 active tasks
-**Total Estimated Effort**: 227-313 hours
+**Total Tasks**: 43 active tasks
+**Total Estimated Effort**: 224-308 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -55,13 +55,12 @@ Each task entry shows:
 **Rationale**: Build foundation for web interface with core pages. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy).
 
 ```bash
-/implement-task new-features/047-add-league-menu-and-page.md  # 3-5h, Issue #540
 /implement-task new-features/048-add-conference-detail-pages.md  # 4-6h, Issue #541
 /implement-task new-features/049-add-division-detail-pages.md  # 4-6h, Issue #542
 /implement-task new-features/050-add-team-detail-pages.md  # 4-6h, Issue #543
 /implement-task new-features/046-add-players-menu-and-page.md  # 4-6h, Issue #539
 /implement-task new-features/051-add-player-detail-pages.md  # 6-8h, Issue #544, [Dependency: #539]
-/implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539, #540, #541, #542, #543, #544]
+/implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539, #541, #542, #543, #544]
 ```
 
 **Phase Total**: 29-47 hours
