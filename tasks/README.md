@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (36 active, 199 completed)
+**Total Tasks**: 235 tasks (35 active, 200 completed)
 
 ## Overview
 
@@ -243,7 +243,7 @@ Each task includes:
 | 043 | Translate to Italian (Switzerland) - it_CH | LOW | 6-8 hours | Active | [#519](https://github.com/bdperkin/nhl-scrabble/issues/519) | - |
 | 044 | Translate to Slovak (Slovakia) - sk_SK | LOW | 6-8 hours | Active | [#520](https://github.com/bdperkin/nhl-scrabble/issues/520) | - |
 | 045 | Translate to Latvian (Latvia) - lv_LV | LOW | 6-8 hours | Active | [#521](https://github.com/bdperkin/nhl-scrabble/issues/521) | - |
-| 046 | Add Players Menu Item and Dedicated Players Page | MEDIUM | 4-6 hours | Active | [#539](https://github.com/bdperkin/nhl-scrabble/issues/539) | - |
+| 046 | Add Players Menu Item and Dedicated Players Page | MEDIUM | 4-6 hours (actual: ~5.5h) | Completed | [#539](https://github.com/bdperkin/nhl-scrabble/issues/539) | PR [#560](https://github.com/bdperkin/nhl-scrabble/pull/560), completed 2026-05-08 |
 | 047 | Add League Menu Item and League Standings Page | MEDIUM | 3-5 hours (actual: ~8h) | Completed | [#540](https://github.com/bdperkin/nhl-scrabble/issues/540) | PR [#546](https://github.com/bdperkin/nhl-scrabble/pull/546), completed 2026-05-07 |
 | 048 | Add Conference Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours | Completed | [#541](https://github.com/bdperkin/nhl-scrabble/issues/541) | PR [#547](https://github.com/bdperkin/nhl-scrabble/pull/547), completed 2026-05-08 |
 | 049 | Add Division Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours (actual: ~5h) | Completed | [#542](https://github.com/bdperkin/nhl-scrabble/issues/542) | PR [#548](https://github.com/bdperkin/nhl-scrabble/pull/548), completed 2026-05-07 |
