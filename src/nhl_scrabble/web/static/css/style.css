@@ -924,6 +924,23 @@ pre[data-copyable] {
     opacity: 1;
 }
 
+/* ===== Conference Detail Pages ===== */
+.conference-link {
+    color: var(--heading-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.conference-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Dual table layout on conference detail pages */
+.results-section + .results-section {
+    margin-top: 3rem;
+}
+
 /* ===== Mobile Responsiveness for New Components ===== */
 @media (max-width: 768px) {
     .toast {
