@@ -528,6 +528,38 @@ jobs:
           perf_total_pct=$((perf_total_tests > 0 ? (perf_total_passed * 100) / perf_total_tests : 0))
           a11y_total_pct=$((a11y_total_tests > 0 ? (a11y_total_passed * 100) / a11y_total_tests : 0))
 
+          # Calculate per-browser totals
+          declare -A browser_total_tests browser_total_passed browser_total_result
+          for browser in chromium firefox webkit; do
+            browser_tests=0
+            browser_passed=0
+
+            # Sum all test types for this browser
+            for file in "functional-${browser}.xml" "visual-${browser}.xml" \
+                        "performance-${browser}.xml" "accessibility-${browser}.xml"; do
+              if [[ -f "reports/$file" ]]; then
+                FILE="reports/$file"
+                TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+                FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+                ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+                PASSED=$((TESTS - FAILURES - ERRORS))
+                browser_tests=$((browser_tests + TESTS))
+                browser_passed=$((browser_passed + PASSED))
+              fi
+            done
+
+            browser_total_tests[$browser]=$browser_tests
+            browser_total_passed[$browser]=$browser_passed
+
+            if [[ $browser_tests -gt 0 ]]; then
+              PCT=$(( (browser_passed * 100) / browser_tests ))
+              [[ $browser_passed -eq $browser_tests ]] && ICON="✅" || ICON="❌"
+              browser_total_result[$browser]="**$ICON $browser_passed/$browser_tests ($PCT%)**"
+            else
+              browser_total_result[$browser]="⚪ N/A"
+            fi
+          done
+
           # Calculate overall total
           overall_tests=$((func_total_tests + vis_total_tests + \
             perf_total_tests + a11y_total_tests))
@@ -564,7 +596,8 @@ jobs:
             "${a11y_results[firefox]} | ${a11y_results[webkit]} | " \
             "$a11y_icon $a11y_total_passed/$a11y_total_tests ($a11y_total_pct%) |" \
             >> $GITHUB_STEP_SUMMARY
-          echo "| **TOTAL** | | | | " \
+          echo "| **TOTAL** | ${browser_total_result[chromium]} | " \
+            "${browser_total_result[firefox]} | ${browser_total_result[webkit]} | " \
             "**$overall_icon $overall_passed/$overall_tests ($overall_pct%)** |" \
             >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -669,9 +702,33 @@ jobs:
               comment += `(${totalPct}%) |\n`;
             }
 
+            // Calculate per-browser totals
+            const browserTotals = {};
+            for (const browser of browsers) {
+              let browserTests = 0;
+              let browserPassed = 0;
+              for (const type of reportTypes) {
+                if (results[browser][type] !== '⚪ N/A') {
+                  const match = results[browser][type].match(/(\d+)\/(\d+)/);
+                  if (match) {
+                    browserPassed += parseInt(match[1]);
+                    browserTests += parseInt(match[2]);
+                  }
+                }
+              }
+              const pct = browserTests > 0 ?
+                Math.floor((browserPassed / browserTests) * 100) : 0;
+              const icon = browserPassed === browserTests ? '✅' : '❌';
+              browserTotals[browser] = browserTests > 0 ?
+                `**${icon} ${browserPassed}/${browserTests} (${pct}%)**` : '⚪ N/A';
+            }
+
             // Add total row
-            comment += `| **TOTAL** | | | | `;
-            comment += `**${overallIcon} ${overallPassed}/${overallTests} `;
+            comment += `| **TOTAL** `;
+            comment += `| ${browserTotals.chromium} `;
+            comment += `| ${browserTotals.firefox} `;
+            comment += `| ${browserTotals.webkit} `;
+            comment += `| **${overallIcon} ${overallPassed}/${overallTests} `;
             comment += `(${overallPct}%)** |\n`;
 
             comment += `\n### 📊 Artifacts\n\n`;
