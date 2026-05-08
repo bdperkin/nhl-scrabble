@@ -77,6 +77,10 @@ class TestHistoricalDataStoreInit:
         ):
             HistoricalDataStore(blocked_path)
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_init_directory_creation_permission_error(self, tmp_path: Path) -> None:
         """Test error when insufficient permissions to create directory."""
         # Use a path that's guaranteed to fail (read-only parent)
@@ -107,7 +111,7 @@ class TestSaveSeasonEdgeCases:
 
         file_path = tmp_path / "20222023.json"
         assert file_path.exists()
-        saved_data = json.loads(file_path.read_text())
+        saved_data = json.loads(file_path.read_text(encoding="utf-8"))
         assert saved_data == data
 
     def test_save_season_empty_data(self, tmp_path: Path) -> None:
@@ -118,7 +122,7 @@ class TestSaveSeasonEdgeCases:
 
         file_path = tmp_path / "20222023.json"
         assert file_path.exists()
-        assert json.loads(file_path.read_text()) == {}
+        assert json.loads(file_path.read_text(encoding="utf-8")) == {}
 
     def test_save_season_complex_nested_data(self, tmp_path: Path) -> None:
         """Test saving deeply nested data structures."""
@@ -139,7 +143,7 @@ class TestSaveSeasonEdgeCases:
         store.save_season("20222023", data)
 
         file_path = tmp_path / "20222023.json"
-        saved_data = json.loads(file_path.read_text())
+        saved_data = json.loads(file_path.read_text(encoding="utf-8"))
         assert saved_data == data
 
     def test_save_season_unicode_data(self, tmp_path: Path) -> None:
@@ -154,7 +158,7 @@ class TestSaveSeasonEdgeCases:
         store.save_season("20222023", data)
 
         file_path = tmp_path / "20222023.json"
-        saved_data = json.loads(file_path.read_text())
+        saved_data = json.loads(file_path.read_text(encoding="utf-8"))
         assert saved_data["teams"]["MTL"]["name"] == "Montréal Canadiens"
 
     def test_save_season_overwrite_existing(self, tmp_path: Path) -> None:
@@ -168,9 +172,13 @@ class TestSaveSeasonEdgeCases:
         store.save_season("20222023", {"version": 2})
 
         file_path = tmp_path / "20222023.json"
-        saved_data = json.loads(file_path.read_text())
+        saved_data = json.loads(file_path.read_text(encoding="utf-8"))
         assert saved_data["version"] == 2
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_save_season_write_fails_permission_denied(self, tmp_path: Path) -> None:
         """Test error when write fails due to permissions."""
         store = HistoricalDataStore(tmp_path)
@@ -273,6 +281,10 @@ class TestLoadSeasonEdgeCases:
         ):
             store.load_season("20222023")
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_load_season_permission_denied(self, tmp_path: Path) -> None:
         """Test error when file exists but can't be read (permissions)."""
         store = HistoricalDataStore(tmp_path)
@@ -386,6 +398,10 @@ class TestListSeasonsEdgeCases:
         assert "20222023" in seasons
         assert "directory" in seasons
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_list_seasons_read_error_returns_empty(self, tmp_path: Path) -> None:
         """Test list_seasons returns empty list on OSError."""
         store = HistoricalDataStore(tmp_path)
@@ -605,6 +621,10 @@ class TestErrorMessages:
         assert "blocked" in str(exc_info.value)
         assert "Failed to create data directory" in str(exc_info.value)
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_save_error_message_includes_season(self, tmp_path: Path) -> None:
         """Test save error message includes season identifier."""
         store = HistoricalDataStore(tmp_path)
@@ -655,6 +675,10 @@ class TestErrorMessages:
 class TestRecoveryLogic:
     """Tests for recovery and graceful degradation."""
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_load_after_save_failure(self, tmp_path: Path) -> None:
         """Test loading after a save failure doesn't corrupt data."""
         store = HistoricalDataStore(tmp_path)
@@ -676,6 +700,10 @@ class TestRecoveryLogic:
         loaded = store.load_season("20222023")
         assert loaded == {"version": 1}
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="chmod doesn't restrict permissions on Windows",
+    )
     def test_list_continues_after_individual_error(self, tmp_path: Path) -> None:
         """Test list_seasons returns empty list on error but doesn't crash."""
         store = HistoricalDataStore(tmp_path)
