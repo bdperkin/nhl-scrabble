@@ -72,7 +72,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
                 "default-src 'self'; "
                 "style-src 'self' 'unsafe-inline'; "
                 "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
-                "img-src 'self' data:; "
+                "img-src 'self' data: https://assets.nhle.com; "
                 "font-src 'self'; "
                 "connect-src 'self'"
             )
@@ -757,6 +757,105 @@ async def teams_page(request: Request) -> HTMLResponse:
         )
     except NHLApiError as e:
         logger.error("Failed to fetch teams data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
+@app.get("/teams/{team_abbrev}", response_class=HTMLResponse)
+async def team_detail_page(
+    request: Request,
+    team_abbrev: str,
+) -> HTMLResponse:
+    """Serve a team detail page with player rankings and team logo.
+
+    Args:
+        request: FastAPI request object
+        team_abbrev: Team abbreviation (e.g., 'TOR', 'MTL', 'BOS')
+
+    Returns:
+        Rendered team_detail.html template with team data
+
+    Raises:
+        HTTPException: If team not found or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=100, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Normalize team abbreviation for comparison
+        team_abbrev_normalized = team_abbrev.strip().upper()
+
+        # Find the team in team_standings
+        team_data = None
+        for team in data["team_standings"]:
+            if team["abbrev"].upper() == team_abbrev_normalized:
+                team_data = team
+                break
+
+        if team_data is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Team '{team_abbrev}' not found",
+            )
+
+        # Get all players for this team and sort by score (descending)
+        team_players = sorted(
+            team_data["players"],
+            key=operator.itemgetter("score"),
+            reverse=True,
+        )
+
+        # Add rank to each player
+        for idx, player in enumerate(team_players, start=1):
+            player["rank"] = idx
+
+        # Calculate team-specific stats
+        team_stats = {
+            "team_abbrev": team_data["abbrev"],
+            "team_name": team_data["name"],
+            "team_division": team_data["division"],
+            "team_conference": team_data["conference"],
+            "total_score": team_data["total_score"],
+            "avg_score": team_data["avg_score"],
+            "total_players": team_data["player_count"],
+            "highest_player_score": team_players[0]["score"] if team_players else 0,
+            "highest_player_name": (
+                f"{team_players[0]['first_name']} {team_players[0]['last_name']}"
+                if team_players
+                else "N/A"
+            ),
+            "logo_url_light": f"https://assets.nhle.com/logos/nhl/svg/{team_data['abbrev']}_light.svg",
+            "logo_url_dark": f"https://assets.nhle.com/logos/nhl/svg/{team_data['abbrev']}_dark.svg",
+        }
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        context = setup_template_locale(request)
+        context.update(
+            {
+                "team_stats": team_stats,
+                "team_players": team_players,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="team_detail.html",
+            context=context,
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch team detail data: %s", e)
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch NHL data: {e!s}",
