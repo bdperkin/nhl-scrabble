@@ -31,7 +31,11 @@
         <div class="division-grid">
             {% for division, teams in division_standings.items() %}
                 <div class="division-card">
-                    <h4>{{ division }}</h4>
+                    <h4>
+                        <a href="/divisions/{{ division }}?lang={{ locale }}" class="division-link">
+                            {{ division }}
+                        </a>
+                    </h4>
                     <ol>
                         {% for team in teams %}
                             <li>{{ team.name }} ({{ team.total_score }})</li>

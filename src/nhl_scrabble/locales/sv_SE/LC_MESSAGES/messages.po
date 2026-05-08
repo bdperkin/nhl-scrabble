@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  2.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/bdperkin/nhl-scrabble/issues\n"
-"POT-Creation-Date: 2026-05-07 22:30-0400\n"
+"POT-Creation-Date: 2026-05-07 22:57-0400\n"
 "PO-Revision-Date: 2026-05-06 18:00-0400\n"
 "Last-Translator: Claude AI Assistant\n"
 "Language: sv_SE\n"
@@ -423,6 +423,7 @@ msgstr "Värde"
 #: src/nhl_scrabble/interactive/shell.py:257
 #: src/nhl_scrabble/interactive/shell.py:538
 #: src/nhl_scrabble/web/templates/conference_detail.html:10
+#: src/nhl_scrabble/web/templates/division_detail.html:44
 #: src/nhl_scrabble/web/templates/playoffs.html:33
 #: src/nhl_scrabble/web/templates/results.html:117
 #: src/nhl_scrabble/web/templates/teams.html:56
@@ -434,6 +435,7 @@ msgstr "Konferens"
 #: src/nhl_scrabble/interactive/shell.py:593
 #: src/nhl_scrabble/interactive/shell.py:606
 #: src/nhl_scrabble/web/templates/conference_detail.html:68
+#: src/nhl_scrabble/web/templates/division_detail.html:10
 #: src/nhl_scrabble/web/templates/results.html:116
 #: src/nhl_scrabble/web/templates/teams.html:55
 msgid "Division"
@@ -442,6 +444,7 @@ msgstr "Division"
 #: src/nhl_scrabble/interactive/shell.py:259
 #: src/nhl_scrabble/interactive/shell.py:642
 #: src/nhl_scrabble/web/templates/conference_detail.html:69
+#: src/nhl_scrabble/web/templates/division_detail.html:76
 #: src/nhl_scrabble/web/templates/results.html:118
 #: src/nhl_scrabble/web/templates/teams.html:57
 msgid "Total Score"
@@ -449,6 +452,7 @@ msgstr "Totalpoäng"
 
 #: src/nhl_scrabble/interactive/shell.py:260
 #: src/nhl_scrabble/web/templates/conference_detail.html:71
+#: src/nhl_scrabble/web/templates/division_detail.html:78
 #: src/nhl_scrabble/web/templates/results.html:120
 #: src/nhl_scrabble/web/templates/teams.html:59
 msgid "Players"
@@ -471,6 +475,8 @@ msgstr "Topp 10 Spelare"
 #: src/nhl_scrabble/interactive/shell.py:536
 #: src/nhl_scrabble/web/templates/conference_detail.html:66
 #: src/nhl_scrabble/web/templates/conference_detail.html:115
+#: src/nhl_scrabble/web/templates/division_detail.html:74
+#: src/nhl_scrabble/web/templates/division_detail.html:121
 #: src/nhl_scrabble/web/templates/results.html:67
 #: src/nhl_scrabble/web/templates/results.html:114
 #: src/nhl_scrabble/web/templates/stats.html:80
@@ -494,6 +500,7 @@ msgstr "Spelare"
 #: src/nhl_scrabble/interactive/shell.py:594
 #: src/nhl_scrabble/interactive/shell.py:607
 #: src/nhl_scrabble/web/templates/conference_detail.html:118
+#: src/nhl_scrabble/web/templates/division_detail.html:124
 #: src/nhl_scrabble/web/templates/results.html:70
 #: src/nhl_scrabble/web/templates/stats.html:83
 msgid "Score"
@@ -510,6 +517,8 @@ msgstr "Poäng"
 #: src/nhl_scrabble/interactive/shell.py:605
 #: src/nhl_scrabble/web/templates/conference_detail.html:67
 #: src/nhl_scrabble/web/templates/conference_detail.html:117
+#: src/nhl_scrabble/web/templates/division_detail.html:75
+#: src/nhl_scrabble/web/templates/division_detail.html:123
 #: src/nhl_scrabble/web/templates/results.html:69
 #: src/nhl_scrabble/web/templates/results.html:115
 #: src/nhl_scrabble/web/templates/stats.html:82
@@ -686,6 +695,7 @@ msgstr "Statistik"
 #: src/nhl_scrabble/interactive/shell.py:640
 #: src/nhl_scrabble/web/templates/conference_detail.html:22
 #: src/nhl_scrabble/web/templates/conferences.html:9
+#: src/nhl_scrabble/web/templates/division_detail.html:22
 #: src/nhl_scrabble/web/templates/divisions.html:9
 #: src/nhl_scrabble/web/templates/league.html:9
 #: src/nhl_scrabble/web/templates/playoffs.html:9
@@ -697,6 +707,7 @@ msgstr "Totalt Antal Lag"
 #: src/nhl_scrabble/interactive/shell.py:641
 #: src/nhl_scrabble/web/templates/conference_detail.html:31
 #: src/nhl_scrabble/web/templates/conferences.html:23
+#: src/nhl_scrabble/web/templates/division_detail.html:31
 #: src/nhl_scrabble/web/templates/divisions.html:23
 #: src/nhl_scrabble/web/templates/league.html:23
 #: src/nhl_scrabble/web/templates/playoffs.html:22
@@ -717,6 +728,7 @@ msgstr "Genomsnittlig Spelarpoäng"
 #: src/nhl_scrabble/interactive/shell.py:645
 #: src/nhl_scrabble/web/templates/conference_detail.html:26
 #: src/nhl_scrabble/web/templates/conferences.html:13
+#: src/nhl_scrabble/web/templates/division_detail.html:26
 #: src/nhl_scrabble/web/templates/divisions.html:13
 #: src/nhl_scrabble/web/templates/league.html:13
 #: src/nhl_scrabble/web/templates/results.html:17
@@ -969,22 +981,26 @@ msgid ""
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:15
+#: src/nhl_scrabble/web/templates/division_detail.html:15
 #, fuzzy
 msgid "Data as of"
 msgstr "Data per"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:35
+#: src/nhl_scrabble/web/templates/division_detail.html:35
 #: src/nhl_scrabble/web/templates/teams.html:22
 msgid "Highest Player"
 msgstr "Högsta Spelaren"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:43
+#: src/nhl_scrabble/web/templates/division_detail.html:51
 #: src/nhl_scrabble/web/templates/results.html:91
 #: src/nhl_scrabble/web/templates/teams.html:30
 msgid "Team Standings by Total Scrabble Score"
 msgstr "Lagställning efter Total Scrabble-poäng"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:49
+#: src/nhl_scrabble/web/templates/division_detail.html:57
 #: src/nhl_scrabble/web/templates/results.html:97
 #: src/nhl_scrabble/web/templates/teams.html:36
 msgid "Export team standings table to CSV format"
@@ -992,6 +1008,8 @@ msgstr "Exportera lagställningstabell till CSV-format"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:50
 #: src/nhl_scrabble/web/templates/conference_detail.html:99
+#: src/nhl_scrabble/web/templates/division_detail.html:58
+#: src/nhl_scrabble/web/templates/division_detail.html:105
 #: src/nhl_scrabble/web/templates/results.html:51
 #: src/nhl_scrabble/web/templates/results.html:98
 #: src/nhl_scrabble/web/templates/teams.html:37
@@ -999,6 +1017,7 @@ msgid "Export CSV"
 msgstr "Exportera CSV"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:54
+#: src/nhl_scrabble/web/templates/division_detail.html:62
 #: src/nhl_scrabble/web/templates/results.html:102
 #: src/nhl_scrabble/web/templates/teams.html:41
 msgid "Export team standings table to JSON format"
@@ -1006,6 +1025,8 @@ msgstr "Exportera lagställningstabell till JSON-format"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:55
 #: src/nhl_scrabble/web/templates/conference_detail.html:104
+#: src/nhl_scrabble/web/templates/division_detail.html:63
+#: src/nhl_scrabble/web/templates/division_detail.html:110
 #: src/nhl_scrabble/web/templates/results.html:56
 #: src/nhl_scrabble/web/templates/results.html:103
 #: src/nhl_scrabble/web/templates/teams.html:42
@@ -1018,22 +1039,26 @@ msgid "Team standings for %(conference_name)s Conference"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:70
+#: src/nhl_scrabble/web/templates/division_detail.html:77
 #: src/nhl_scrabble/web/templates/results.html:119
 #: src/nhl_scrabble/web/templates/teams.html:58
 msgid "Avg Score"
 msgstr "Genomsn. Poäng"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:92
+#: src/nhl_scrabble/web/templates/division_detail.html:98
 #, fuzzy
 msgid "Top 20 Players by Scrabble Score"
 msgstr "Topp 10 Spelare efter Scrabble-poäng"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:98
+#: src/nhl_scrabble/web/templates/division_detail.html:104
 #, fuzzy
 msgid "Export players table to CSV format"
 msgstr "Exportera toppspelarstabell till CSV-format"
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:103
+#: src/nhl_scrabble/web/templates/division_detail.html:109
 #, fuzzy
 msgid "Export players table to JSON format"
 msgstr "Exportera toppspelarstabell till JSON-format"
@@ -1044,6 +1069,7 @@ msgid "Top players for %(conference_name)s Conference"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/conference_detail.html:116
+#: src/nhl_scrabble/web/templates/division_detail.html:122
 #: src/nhl_scrabble/web/templates/results.html:68
 #: src/nhl_scrabble/web/templates/stats.html:81
 msgid "Player Name"
@@ -1068,6 +1094,44 @@ msgstr "Lägsta Laget"
 #: src/nhl_scrabble/web/templates/conferences.html:30
 msgid "Conference Standings by Total Scrabble Score"
 msgstr "Konferensställning efter Total Scrabble-poäng"
+
+#: src/nhl_scrabble/web/templates/division_detail.html:3
+#, fuzzy, python-format
+msgid "NHL Scrabble Analyzer - %(division_name)s Division"
+msgstr "NHL Scrabble Analysator - Divisionsställning"
+
+#: src/nhl_scrabble/web/templates/division_detail.html:5
+#: src/nhl_scrabble/web/templates/division_detail.html:6
+#: src/nhl_scrabble/web/templates/results.html:142
+msgid "Division Standings"
+msgstr "Divisionsställning"
+
+#: src/nhl_scrabble/web/templates/division_detail.html:12
+#, python-format
+msgid ""
+"Team standings and top players from the %(division_name)s Division "
+"(%(parent_conference)s Conference) ranked by Scrabble score."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/division_detail.html:71
+#, python-format
+msgid "Team standings for %(division_name)s Division"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/division_detail.html:118
+#, python-format
+msgid "Top players for %(division_name)s Division"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/division_detail.html:146
+#, fuzzy
+msgid "← Back to All Divisions"
+msgstr "Konferenser"
+
+#: src/nhl_scrabble/web/templates/division_detail.html:148
+#, fuzzy, python-format
+msgid "View %(parent_conference)s Conference"
+msgstr "Västra Konferensen"
 
 #: src/nhl_scrabble/web/templates/divisions.html:3
 msgid "NHL Scrabble Analyzer - Division Standings"
@@ -1308,10 +1372,6 @@ msgstr "Toppspelare efter Scrabble-poäng"
 #: src/nhl_scrabble/web/templates/teams.html:50
 msgid "Team standings"
 msgstr "Lagställning"
-
-#: src/nhl_scrabble/web/templates/results.html:142
-msgid "Division Standings"
-msgstr "Divisionsställning"
 
 #: src/nhl_scrabble/web/templates/stats.html:3
 msgid "NHL Scrabble Analyzer - Statistics"

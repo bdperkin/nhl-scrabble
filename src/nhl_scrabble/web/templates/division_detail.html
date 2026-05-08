@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans %}NHL Scrabble Analyzer - {{ division_name }} Division{% endtrans %}{% endblock %}
+
+{% block og_title %}{{ division_name }} {% trans %}Division Standings{% endtrans %}{% endblock %}
+{% block twitter_title %}{{ division_name }} {% trans %}Division Standings{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="page-header fade-on-scroll">
+        <h2>{{ division_name }} {% trans %}Division{% endtrans %}</h2>
+        <p class="page-description">
+            {% trans %}Team standings and top players from the {{ division_name }} Division ({{ parent_conference }} Conference) ranked by Scrabble score.{% endtrans %}
+        </p>
+        <p class="timestamp">
+            {% trans %}Data as of{% endtrans %}: {{ timestamp_date }} {{ timestamp_time }}
+        </p>
+    </div>
+
+    <!-- Division Summary Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Teams{% endtrans %}</h4>
+            <p class="stat-value">{{ division_stats.total_teams }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Top Team{% endtrans %}</h4>
+            <p class="stat-value">{{ division_stats.highest_team_score }}</p>
+            <p class="stat-detail">{{ division_stats.highest_team }} ({{ division_stats.highest_team_name }})</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
+            <p class="stat-value">{{ division_stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Highest Player{% endtrans %}</h4>
+            <p class="stat-value">{{ division_stats.highest_player_score }}</p>
+            <p class="stat-detail">{{ division_stats.highest_player_name }}</p>
+        </div>
+    </div>
+
+    <!-- Conference Badge -->
+    <section class="info-section fade-on-scroll">
+        <p class="conference-badge">
+            {% trans %}Conference{% endtrans %}:
+            <a href="/conferences/{{ parent_conference }}?lang={{ locale }}">{{ parent_conference }}</a>
+        </p>
+    </section>
+
+    <!-- Team Standings Table -->
+    <section class="results-section fade-on-scroll">
+        <h3>{% trans %}Team Standings by Total Scrabble Score{% endtrans %}</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-divisionTeamsTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export team standings table to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
+            </button>
+            <button id="export-divisionTeamsTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export team standings table to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="divisionTeamsTable"
+                   class="results-table standings-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Team standings for {{ division_name }} Division{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">{% trans %}Team{% endtrans %}</th>
+                        <th scope="col" data-sort="total" data-sort-type="number">{% trans %}Total Score{% endtrans %}</th>
+                        <th scope="col" data-sort="avg" data-sort-type="number">{% trans %}Avg Score{% endtrans %}</th>
+                        <th scope="col" data-sort="players" data-sort-type="number">{% trans %}Players{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in division_teams %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="team-name" data-value="{{ team.name }}">{{ team.name }}</td>
+                            <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
+                            <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
+                            <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Top Players Section -->
+    <section class="results-section fade-on-scroll">
+        <h3>{% trans %}Top 20 Players by Scrabble Score{% endtrans %}</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-divisionPlayersTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export players table to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
+            </button>
+            <button id="export-divisionPlayersTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export players table to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="divisionPlayersTable"
+                   class="results-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Top players for {{ division_name }} Division{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="name" data-sort-type="string">{% trans %}Player Name{% endtrans %}</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">{% trans %}Team{% endtrans %}</th>
+                        <th scope="col" data-sort="score" data-sort-type="number">{% trans %}Score{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in division_players %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
+                                {{ player.first_name }} {{ player.last_name }}
+                            </td>
+                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
+                            <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Navigation Links -->
+    <section class="info-section fade-on-scroll">
+        <p>
+            <a href="/divisions?lang={{ locale }}">{% trans %}← Back to All Divisions{% endtrans %}</a>
+            |
+            <a href="/conferences/{{ parent_conference }}?lang={{ locale }}">{% trans %}View {{ parent_conference }} Conference{% endtrans %}</a>
+        </p>
+    </section>
+{% endblock %}

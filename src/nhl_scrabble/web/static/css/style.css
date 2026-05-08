@@ -936,7 +936,36 @@ pre[data-copyable] {
     text-decoration: underline;
 }
 
-/* Dual table layout on conference detail pages */
+/* ===== Division Detail Pages ===== */
+.division-link {
+    color: var(--heading-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.division-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.conference-badge {
+    font-size: 1.1rem;
+    margin: 1.5rem 0;
+}
+
+.conference-badge a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.conference-badge a:hover {
+    color: var(--heading-color);
+    text-decoration: underline;
+}
+
+/* Dual table layout on conference/division detail pages */
 .results-section + .results-section {
     margin-top: 3rem;
 }
