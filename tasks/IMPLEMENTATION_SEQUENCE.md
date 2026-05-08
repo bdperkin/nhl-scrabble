@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Total Tasks**: 42 active tasks
-**Total Estimated Effort**: 220-302 hours
+**Total Tasks**: 41 active tasks
+**Total Estimated Effort**: 216-296 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -55,15 +55,13 @@ Each task entry shows:
 **Rationale**: Build foundation for web interface with core pages. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy).
 
 ```bash
-/implement-task new-features/048-add-conference-detail-pages.md  # 4-6h, Issue #541
-/implement-task new-features/049-add-division-detail-pages.md  # 4-6h, Issue #542
 /implement-task new-features/050-add-team-detail-pages.md  # 4-6h, Issue #543
 /implement-task new-features/046-add-players-menu-and-page.md  # 4-6h, Issue #539
 /implement-task new-features/051-add-player-detail-pages.md  # 6-8h, Issue #544, [Dependency: #539]
 /implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539, #541, #542, #543, #544]
 ```
 
-**Phase Total**: 29-47 hours
+**Phase Total**: 18-26 hours
 
 ---
 
@@ -201,9 +199,9 @@ Each task entry shows:
 ### HIGH Priority: 1 task (2-3 hours)
 - Critical unicode/data integrity fix for Windows platform
 
-### MEDIUM Priority: 18 tasks (85-129 hours)
+### MEDIUM Priority: 16 tasks (76-113 hours)
 - **Platform Support**: 5 Windows tests, 1 macOS test (14-22h)
-- **Web Interface**: 7 page implementations + 1 auto-linking (29-47h)
+- **Web Interface**: 4 page implementations + 1 auto-linking (18-26h)
 - **I18n Quality**: 2 translation reviews, 1 test suite, 1 date/time, 1 monitoring (13-18h + ongoing)
 
 ### LOW Priority: 25 tasks (140-181 hours)
