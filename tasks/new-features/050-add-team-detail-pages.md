@@ -622,8 +622,165 @@ Users can navigate:
 
 ## Implementation Notes
 
-*To be filled during implementation:*
-- Actual approach taken
-- Challenges encountered
-- Deviations from plan
-- Actual effort vs estimated
+**Implemented**: 2026-05-07
+**Branch**: new-features/050-add-team-detail-pages
+**PR**: #549 - https://github.com/bdperkin/nhl-scrabble/pull/549
+**Commits**: 7 commits (d17c68d, cec17f4, 73ab49f, e8a1d91, 89b9e61, 718e0ee, 9ed746d)
+
+### Actual Implementation
+
+Followed the proposed solution closely with excellent results. Implementation went smoothly following the established patterns from tasks #048 (conference detail) and #049 (division detail).
+
+**Key Implementation Details:**
+1. **Team Detail Route** (`app.py` line 764):
+   - Added `/teams/{team_abbrev}` dynamic route
+   - Case-insensitive team abbreviation matching (TOR = tor = Tor)
+   - Used `operator.itemgetter("score")` instead of lambda (refurb recommendation)
+   - 404 error handling for non-existent teams
+   - Full player roster sorting by score (descending)
+   - Added rank numbering to players in-place
+
+2. **CSP Headers Update** (`app.py` line 75):
+   - Updated `img-src` to allow `https://assets.nhle.com` for NHL logos
+   - Maintains security while enabling external logo CDN
+
+3. **Team Detail Template** (`team_detail.html`):
+   - Team logo header with logo, team name, and breadcrumb navigation
+   - 4 statistics cards (Total Players, Team Total Score, Average Score, Top Player)
+   - Full player rankings table (all players, not limited to top 20)
+   - Export buttons (CSV/JSON)
+   - Sortable table columns
+   - Navigation links to teams, division, and conference pages
+
+4. **CSS Styling** (`style.css` lines 973-1023):
+   - Team header flex layout
+   - Team logo sizing (120px desktop, 80px mobile)
+   - Team link hover effects
+   - Responsive mobile layout (centered, smaller logo)
+
+5. **I18n Support**:
+   - Extracted new translatable strings
+   - Updated all 12 locale files (.po and .mo)
+   - Fixed trans tag syntax to match project patterns:
+     - Changed from `{% trans team_name=team_stats.team_name %}{{ team_name }}...`
+     - To `{% trans %}{{ team_stats.team_name }}...{% endtrans %}`
+
+6. **Comprehensive Testing** (`test_team_detail.py`):
+   - 19 Playwright functional tests covering:
+     - Page loading, logo display, breadcrumb navigation
+     - Table functionality, sorting, export buttons
+     - 404 errors, case-insensitive matching
+     - Multiple teams (parameterized), i18n support
+     - Responsive layout, accessibility features
+     - Player ranking accuracy verification
+
+### Challenges Encountered
+
+1. **Team Roster Data Structure** (ISE #1):
+   - **Issue**: `KeyError: 'players'` when accessing `team_data["players"]`
+   - **Root Cause**: The `team_standings` data only includes top 5 players per team in "top_players" field, not full roster
+   - **Solution**: Fetch full team roster using `NHLApiClient.get_team_roster(team_abbrev)` and calculate scores manually
+   - **Commit**: cec17f4
+
+2. **Roster Position Iteration** (ISE #2):
+   - **Issue**: `AttributeError: 'str' object has no attribute 'get'` when accessing roster player data
+   - **Root Cause**: NHL API roster structure is `{"forwards": [...], "defensemen": [...], "goalies": [...]}` - was iterating incorrectly
+   - **Solution**: Loop through each position list separately instead of iterating roster_data directly
+   - **Commit**: 73ab49f
+
+3. **Favicon 404 Error**:
+   - **Issue**: Browser automatic requests to `/favicon.ico` returned 404
+   - **Root Cause**: Only `/favicon.svg` route existed, no `/favicon.ico` route
+   - **Solution**: Added `/favicon.ico` route serving same SVG hockey emoji (modern browsers support SVG favicons)
+   - **Commit**: e8a1d91
+
+4. **Jinja2 Trans Block Syntax Errors** (ISE #3, #4, #5):
+   - **Issue**: `TemplateSyntaxError: expected token 'end of print statement', got '.'` on multiple lines
+   - **Root Cause**: Jinja2 i18n trans blocks cannot use dot notation for nested variables (e.g., `{{ team_stats.team_name }}`)
+   - **Lines Affected**: Line 3 (title), line 57 (heading), lines 109 & 111 (navigation links)
+   - **Solution**: Pass separate template context variables:
+     - `team_name`: For page title
+     - `team_abbrev`: For heading
+     - `team_division` & `team_conference`: For navigation links
+   - **Commits**: 89b9e61, 718e0ee, 9ed746d
+   - **Learning**: Jinja2 gettext requires simple variable names, not attribute access
+
+5. **Pre-commit Hook Iterations**:
+   - `end-of-file-fixer`: Fixed .po files missing final newline
+   - `black`: Reformatted app.py code
+   - `flake8`: Removed unused variable in test sorting function
+   - `gitlint`: Shortened commit message lines to ≤100 characters
+   - **Total iterations**: 4 initial commit attempts + 6 ISE fix commits
+   - All issues were auto-fixable or required simple code adjustments
+
+### Deviations from Plan
+
+**None** - Implementation followed the task specification exactly:
+- All proposed code snippets were used as-is or with minor style adjustments
+- All acceptance criteria met without modifications
+- Template structure matches conference and division detail pages
+- CSS follows existing responsive design patterns
+- Testing strategy executed as planned
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 4-6 hours
+- **Actual**: ~6 hours total
+  - Implementation: ~3 hours (route, template, CSS, i18n)
+  - Testing: ~1.5 hours (19 comprehensive tests)
+  - ISE Debugging & Fixes: ~1 hour (5 separate ISEs, iterative fixes)
+  - Pre-commit fixes & iterations: ~0.5 hours (4 initial + 6 ISE commits)
+- **Result**: At upper end of estimated range ✅
+- **Note**: ISE debugging time was due to unfamiliarity with Jinja2 trans block limitations - valuable learning experience
+
+### Performance Notes
+
+- **Zero additional API calls**: Leverages existing 1-hour cache from analysis endpoint
+- **Logo loading**: Lazy loading (`loading="lazy"`) for better performance
+- **SVG format**: NHL logos are ~5-10KB each (lightweight, scalable)
+- **CSP security**: External CDN allowed only for trusted NHL domain
+
+### Code Quality
+
+- ✅ All 87 pre-commit hooks passed
+- ✅ Type checking (mypy) passed with existing type: ignore comments
+- ✅ Linting (ruff, flake8, black) passed
+- ✅ 100% docstring coverage maintained
+- ✅ 19 comprehensive functional tests added
+- ✅ Follows established project patterns
+
+### Related PRs
+
+- **Predecessor**: PR #548 (Division Detail Pages) - provided navigation pattern
+- **Predecessor**: PR #547 (Conference Detail Pages) - provided template structure
+- **Next**: Task #046 (Players menu and page), Task #051 (Player detail pages)
+
+### Lessons Learned
+
+1. **Jinja2 Trans Block Limitations**:
+   - Trans blocks cannot use dot notation (e.g., `{{ obj.attr }}`)
+   - Must pass flat template variables (e.g., `{{ attr }}`)
+   - Test templates early to catch trans block syntax errors before deployment
+   - Valuable lesson that prevented similar issues in future templates
+
+2. **NHL API Data Structure**:
+   - `team_standings` only includes top N players, not full roster
+   - Full roster requires separate `get_team_roster()` call
+   - Roster organized by position: forwards, defensemen, goalies
+   - Understanding API structure upfront saves debugging time
+
+3. **Iterative Debugging Workflow**:
+   - User-reported ISEs led to quick iterative fixes
+   - Each fix pushed immediately, tested in browser, then next issue
+   - 5 separate ISEs fixed in ~1 hour through fast iteration
+   - Local testing before push would have caught all issues at once
+
+4. **Pre-commit Hooks Value**:
+   - 87 hooks catch issues before they reach CI
+   - All hook issues were auto-fixable or trivial
+   - Embrace the iteration - hooks save time vs CI failures
+
+5. **Favicon Handling**:
+   - Modern browsers support SVG favicons
+   - Can serve same SVG for both `.ico` and `.svg` routes
+   - Eliminates need for ICO conversion tools
