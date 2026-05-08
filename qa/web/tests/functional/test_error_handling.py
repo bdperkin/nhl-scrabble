@@ -180,6 +180,12 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
         top_players_input.input_value() == "5"
     ), "topPlayers field should be set to 5"  # noqa: S101
 
+    # Trigger change event to ensure form state is synchronized (WebKit)
+    top_players_input.dispatch_event("change")
+
+    # Small wait to ensure form processes the change
+    page_fixture.wait_for_timeout(100)
+
     page_fixture.click("#analyzeBtn")
 
     # Wait for results to update - use locator-based wait instead of string evaluation
@@ -316,6 +322,12 @@ def test_concurrent_submissions_handled(page_fixture: Page) -> None:
     assert (
         top_players_input.input_value() == "20"
     ), "topPlayers field should be set to 20"  # noqa: S101
+
+    # Trigger change event to ensure form state is synchronized (WebKit)
+    top_players_input.dispatch_event("change")
+
+    # Small wait to ensure form processes the change
+    page_fixture.wait_for_timeout(100)
 
     page_fixture.click("#analyzeBtn")  # Actually submit the second request
 
