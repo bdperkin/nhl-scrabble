@@ -50,6 +50,7 @@ import contextlib
 import gettext
 import locale
 import os
+import sys
 from collections.abc import Callable
 from pathlib import Path
 
@@ -93,6 +94,7 @@ def get_system_locale() -> str:
         - Reads from environment variables (LANG, LC_ALL, LC_CTYPE, LANGUAGE)
         - Only returns locales in SUPPORTED_LOCALES list
         - Safe to call multiple times (no side effects)
+        - On Windows, avoids setlocale() which can fail or behave unexpectedly
     """
     with contextlib.suppress(ValueError, TypeError, locale.Error):
         # Try environment variables in order of precedence
@@ -104,7 +106,12 @@ def get_system_locale() -> str:
                 if system_locale and system_locale in SUPPORTED_LOCALES:
                     return system_locale
 
-        # Fallback: use locale.getlocale() (requires setlocale first)
+        # Windows: Skip setlocale("") which can fail or behave unexpectedly
+        # Just return DEFAULT_LOCALE if env vars not set
+        if sys.platform == "win32":
+            return DEFAULT_LOCALE
+
+        # Unix/macOS: Fallback to locale.getlocale() (requires setlocale first)
         saved_locale = locale.setlocale(locale.LC_CTYPE)
         try:
             locale.setlocale(locale.LC_CTYPE, "")
@@ -211,6 +218,7 @@ def format_number(number: float, locale_code: str | None = None) -> str:
         - Falls back to f"{number:.2f}" if locale unavailable
         - Always formats to 2 decimal places
         - Thread-safe (sets locale only for this operation)
+        - On Windows, falls back to standard formatting if locale unavailable
 
     Warning:
         May not work correctly in multi-threaded environments due to
@@ -219,6 +227,10 @@ def format_number(number: float, locale_code: str | None = None) -> str:
     """
     if locale_code is None:
         locale_code = get_system_locale()
+
+    # Windows: setlocale() can fail with locale names, use fallback
+    if sys.platform == "win32":
+        return f"{number:.2f}"
 
     try:
         # Save current locale
@@ -229,7 +241,7 @@ def format_number(number: float, locale_code: str | None = None) -> str:
         finally:
             # Restore previous locale
             locale.setlocale(locale.LC_NUMERIC, current)
-    except locale.Error:
+    except (locale.Error, ValueError, OSError):
         # Fallback to standard formatting
         return f"{number:.2f}"
 
