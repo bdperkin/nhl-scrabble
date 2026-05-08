@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Total Tasks**: 41 active tasks
-**Total Estimated Effort**: 216-296 hours
+**Total Tasks**: 40 active tasks
+**Total Estimated Effort**: 212-290 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -55,13 +55,12 @@ Each task entry shows:
 **Rationale**: Build foundation for web interface with core pages. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy).
 
 ```bash
-/implement-task new-features/050-add-team-detail-pages.md  # 4-6h, Issue #543
 /implement-task new-features/046-add-players-menu-and-page.md  # 4-6h, Issue #539
 /implement-task new-features/051-add-player-detail-pages.md  # 6-8h, Issue #544, [Dependency: #539]
 /implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539, #541, #542, #543, #544]
 ```
 
-**Phase Total**: 18-26 hours
+**Phase Total**: 14-20 hours
 
 ---
 
@@ -199,9 +198,9 @@ Each task entry shows:
 ### HIGH Priority: 1 task (2-3 hours)
 - Critical unicode/data integrity fix for Windows platform
 
-### MEDIUM Priority: 16 tasks (76-113 hours)
+### MEDIUM Priority: 15 tasks (72-107 hours)
 - **Platform Support**: 5 Windows tests, 1 macOS test (14-22h)
-- **Web Interface**: 4 page implementations + 1 auto-linking (18-26h)
+- **Web Interface**: 3 page implementations + 1 auto-linking (14-20h)
 - **I18n Quality**: 2 translation reviews, 1 test suite, 1 date/time, 1 monitoring (13-18h + ongoing)
 
 ### LOW Priority: 25 tasks (140-181 hours)
@@ -225,10 +224,9 @@ Phase 3 (MEDIUM): Web Interface Pages
     #540 League (no deps)
         └─> #541 Conference
             └─> #542 Division
-                └─> #543 Team
-                    └─> #539 Players
-                        └─> #544 Player Detail
-                            └─> #545 Auto-Linking (depends on all pages)
+                └─> #539 Players
+                    └─> #544 Player Detail
+                        └─> #545 Auto-Linking (depends on all pages)
 
 Phase 4 (MEDIUM): I18n Quality
     #509, #510 Translation Reviews (no deps, can parallel)
@@ -285,10 +283,10 @@ Tasks that can be worked on simultaneously (no dependencies):
 
 - **Docker Support**: Task 014 could be useful for task 017 (hosting) but isn't strictly required.
 
-- **Total Effort Range**: 227-313 hours represents approximately 6-8 weeks of full-time work, or 3-6 months of part-time development.
+- **Total Effort Range**: 223-307 hours represents approximately 6-8 weeks of full-time work, or 3-6 months of part-time development.
 
 ---
 
 ## Last Updated
 
-2026-05-07 - Full regeneration with all 44 active tasks organized optimally
+2026-05-08 - Updated to remove completed task 050 (40 active tasks)

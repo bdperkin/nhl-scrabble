@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 233 tasks (41 active, 192 completed)
+**Total Tasks**: 233 tasks (40 active, 193 completed)
 
 ## Overview
 
@@ -241,7 +241,7 @@ Each task includes:
 | 047 | Add League Menu Item and League Standings Page | MEDIUM | 3-5 hours (actual: ~8h) | Completed | [#540](https://github.com/bdperkin/nhl-scrabble/issues/540) | PR [#546](https://github.com/bdperkin/nhl-scrabble/pull/546), completed 2026-05-07 |
 | 048 | Add Conference Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours | Completed | [#541](https://github.com/bdperkin/nhl-scrabble/issues/541) | PR [#547](https://github.com/bdperkin/nhl-scrabble/pull/547), completed 2026-05-08 |
 | 049 | Add Division Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours (actual: ~5h) | Completed | [#542](https://github.com/bdperkin/nhl-scrabble/issues/542) | PR [#548](https://github.com/bdperkin/nhl-scrabble/pull/548), completed 2026-05-07 |
-| 050 | Add Team Detail Pages with Player Rankings and Team Logo | MEDIUM | 4-6 hours | Active | [#543](https://github.com/bdperkin/nhl-scrabble/issues/543) | - |
+| 050 | Add Team Detail Pages with Player Rankings and Team Logo | MEDIUM | 4-6 hours (actual: ~6h) | Completed | [#543](https://github.com/bdperkin/nhl-scrabble/issues/543) | PR [#549](https://github.com/bdperkin/nhl-scrabble/pull/549), completed 2026-05-08 |
 | 051 | Add Player Detail Pages with Comprehensive Player Information | MEDIUM | 6-8 hours | Active | [#544](https://github.com/bdperkin/nhl-scrabble/issues/544) | - |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | PR [#496](https://github.com/bdperkin/nhl-scrabble/pull/496), completed 2026-05-05 |
 | 044 | I18n Infrastructure Setup | LOW | 4-6 hours (actual: ~5h) | Completed | [#494](https://github.com/bdperkin/nhl-scrabble/issues/494) | PR [#495](https://github.com/bdperkin/nhl-scrabble/pull/495), completed 2026-05-06, sub-task 1 of #218 |
