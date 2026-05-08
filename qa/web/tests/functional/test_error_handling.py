@@ -170,7 +170,16 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
     assert rows_1 == 10, "First submission should have 10 rows"  # noqa: S101
 
     # Run second analysis with different count
-    page_fixture.fill("#topPlayers", "5")
+    # Clear and fill to ensure value is updated (WebKit workaround)
+    top_players_input = page_fixture.locator("#topPlayers")
+    top_players_input.clear()
+    top_players_input.fill("5")
+
+    # Verify the value was actually set (WebKit sometimes needs this)
+    assert (
+        top_players_input.input_value() == "5"
+    ), "topPlayers field should be set to 5"  # noqa: S101
+
     page_fixture.click("#analyzeBtn")
 
     # Wait for results to update - use locator-based wait instead of string evaluation
