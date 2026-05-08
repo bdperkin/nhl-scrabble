@@ -804,16 +804,46 @@ async def team_detail_page(
                 detail=f"Team '{team_abbrev}' not found",
             )
 
-        # Get all players for this team and sort by score (descending)
-        team_players = sorted(
-            team_data["players"],
-            key=operator.itemgetter("score"),
-            reverse=True,
-        )
+        # Fetch full team roster and calculate Scrabble scores
+        # The analyze endpoint only returns top N players per team, but we need ALL players
+        scorer = ScrabbleScorer()
+        with NHLApiClient() as client:
+            try:
+                roster_data = client.get_team_roster(team_abbrev_normalized)
+            except NHLApiError as e:
+                logger.error("Failed to fetch roster for team %s: %s", team_abbrev_normalized, e)
+                raise HTTPException(
+                    status_code=503,
+                    detail=f"Failed to fetch team roster: {e!s}",
+                ) from e
 
-        # Add rank to each player
-        for idx, player in enumerate(team_players, start=1):
-            player["rank"] = idx
+        # Process roster and calculate scores
+        team_players: list[dict[str, Any]] = []
+        for roster_player in roster_data:
+            first_name = roster_player.get("firstName", {}).get("default", "")  # type: ignore[attr-defined,union-attr]
+            last_name = roster_player.get("lastName", {}).get("default", "")  # type: ignore[attr-defined,union-attr]
+
+            if not first_name or not last_name:
+                continue
+
+            first_score = scorer.calculate_score(first_name)
+            last_score = scorer.calculate_score(last_name)
+            full_score = first_score + last_score
+
+            team_players.append(
+                {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "score": full_score,
+                    "first_score": first_score,
+                    "last_score": last_score,
+                },
+            )
+
+        # Sort by score (descending) and add rank
+        team_players.sort(key=operator.itemgetter("score"), reverse=True)
+        for idx, player_dict in enumerate(team_players, start=1):
+            player_dict["rank"] = idx
 
         # Calculate team-specific stats
         team_stats = {
@@ -823,7 +853,7 @@ async def team_detail_page(
             "team_conference": team_data["conference"],
             "total_score": team_data["total_score"],
             "avg_score": team_data["avg_score"],
-            "total_players": team_data["player_count"],
+            "total_players": len(team_players),
             "highest_player_score": team_players[0]["score"] if team_players else 0,
             "highest_player_name": (
                 f"{team_players[0]['first_name']} {team_players[0]['last_name']}"
