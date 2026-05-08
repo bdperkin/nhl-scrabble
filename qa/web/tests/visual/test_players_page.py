@@ -257,12 +257,10 @@ def test_players_export_buttons(
 
 
 @pytest.mark.visual
-@pytest.mark.parametrize("browser_name", ["chromium", "firefox", "webkit"])
-def test_players_cross_browser(
+def test_players_full_page_all_browsers(
     page: Page,
     base_url: str,
     assert_snapshot: Callable,
-    browser_name: str,
 ) -> None:
     """Test players page visual consistency across browsers.
 
@@ -270,13 +268,15 @@ def test_players_cross_browser(
         page: Playwright page object
         base_url: Base URL of the application
         assert_snapshot: Snapshot comparison fixture
-        browser_name: Name of the browser (chromium, firefox, webkit)
 
     Verifies:
         - Page renders consistently across different browsers
         - Screenshots match baselines for each browser
+
+    Note:
+        Browsers are parametrized via command line --browser flags.
+        This test will run once per browser (chromium, firefox, webkit).
     """
-    # This test is parameterized by browser in conftest.py
     page.set_viewport_size({"width": 1920, "height": 1080})
     page.goto(f"{base_url}/players")
 
@@ -288,7 +288,8 @@ def test_players_cross_browser(
     # Take screenshot
     screenshot = page.screenshot(full_page=True)
 
-    # Use browser-specific threshold
+    # Use browser-specific threshold (Firefox has slightly more rendering variance)
+    browser_name = page.context.browser.browser_type.name
     threshold = 0.2 if browser_name == "firefox" else 0.1
 
-    assert_snapshot(screenshot, f"players-{browser_name}.png", threshold=threshold)
+    assert_snapshot(screenshot, f"players-full-{browser_name}.png", threshold=threshold)
