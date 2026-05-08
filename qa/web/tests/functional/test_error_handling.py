@@ -307,7 +307,16 @@ def test_concurrent_submissions_handled(page_fixture: Page) -> None:
     assert first_rows == 10, f"First submission should have 10 rows, got {first_rows}"  # noqa: S101
 
     # Start second submission
-    page_fixture.fill("#topPlayers", "20")
+    # Clear and fill to ensure value is updated (WebKit workaround)
+    top_players_input = page_fixture.locator("#topPlayers")
+    top_players_input.clear()
+    top_players_input.fill("20")
+
+    # Verify the value was actually set (WebKit sometimes needs this)
+    assert (
+        top_players_input.input_value() == "20"
+    ), "topPlayers field should be set to 20"  # noqa: S101
+
     page_fixture.click("#analyzeBtn")  # Actually submit the second request
 
     # Wait for results to update - use locator-based wait instead of string evaluation
