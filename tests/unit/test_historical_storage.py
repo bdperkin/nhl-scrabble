@@ -249,7 +249,7 @@ class TestLoadSeasonEdgeCases:
         """Test loading empty JSON object."""
         store = HistoricalDataStore(tmp_path)
         file_path = tmp_path / "20222023.json"
-        file_path.write_text("{}")
+        file_path.write_text("{}", encoding="utf-8")
 
         loaded = store.load_season("20222023")
 
@@ -259,7 +259,7 @@ class TestLoadSeasonEdgeCases:
         """Test error when JSON file is corrupted."""
         store = HistoricalDataStore(tmp_path)
         file_path = tmp_path / "20222023.json"
-        file_path.write_text("{ invalid json")
+        file_path.write_text("{ invalid json", encoding="utf-8")
 
         with pytest.raises(
             HistoricalDataStoreError,
@@ -289,7 +289,7 @@ class TestLoadSeasonEdgeCases:
         """Test error when file exists but can't be read (permissions)."""
         store = HistoricalDataStore(tmp_path)
         file_path = tmp_path / "20222023.json"
-        file_path.write_text("{}")
+        file_path.write_text("{}", encoding="utf-8")
         file_path.chmod(0o000)  # No permissions
 
         try:
@@ -375,8 +375,8 @@ class TestListSeasonsEdgeCases:
         """Test listing ignores non-JSON files."""
         store = HistoricalDataStore(tmp_path)
         store.save_season("20222023", {"teams": {}})
-        (tmp_path / "readme.txt").write_text("info")
-        (tmp_path / "backup.bak").write_text("data")
+        (tmp_path / "readme.txt").write_text("info", encoding="utf-8")
+        (tmp_path / "backup.bak").write_text("data", encoding="utf-8")
 
         seasons = store.list_seasons()
 
@@ -464,7 +464,7 @@ class TestDeleteSeasonEdgeCases:
         """Test deletion when file might be in use (platform-dependent)."""
         store = HistoricalDataStore(tmp_path)
         file_path = tmp_path / "20222023.json"
-        file_path.write_text("{}")
+        file_path.write_text("{}", encoding="utf-8")
 
         # On most systems, this will succeed even with file open
         # But test the scenario regardless
@@ -518,7 +518,7 @@ class TestClearAllEdgeCases:
         store = HistoricalDataStore(tmp_path)
         store.save_season("20222023", {"teams": {}})
         readme = tmp_path / "readme.txt"
-        readme.write_text("info")
+        readme.write_text("info", encoding="utf-8")
 
         count = store.clear_all()
 
@@ -643,7 +643,7 @@ class TestErrorMessages:
         """Test load error message includes season identifier."""
         store = HistoricalDataStore(tmp_path)
         file_path = tmp_path / "20222023.json"
-        file_path.write_text("invalid json")
+        file_path.write_text("invalid json", encoding="utf-8")
 
         with pytest.raises(HistoricalDataStoreError) as exc_info:
             store.load_season("20222023")
@@ -659,7 +659,7 @@ class TestErrorMessages:
         """
         store = HistoricalDataStore(tmp_path)
         file_path = tmp_path / "20222023.json"
-        file_path.write_text("{}")
+        file_path.write_text("{}", encoding="utf-8")
         tmp_path.chmod(0o444)
 
         try:
@@ -728,9 +728,9 @@ class TestRecoveryLogic:
         file2 = tmp_path / "20222023.json"
         file3 = tmp_path / "20232024.json"
 
-        file1.write_text("{}")
-        file2.write_text("{}")
-        file3.write_text("{}")
+        file1.write_text("{}", encoding="utf-8")
+        file2.write_text("{}", encoding="utf-8")
+        file3.write_text("{}", encoding="utf-8")
 
         # Make middle file read-only (on Unix, owner can still delete)
         # This test is platform-dependent
