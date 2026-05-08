@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (40 active, 195 completed)
+**Total Tasks**: 235 tasks (39 active, 196 completed)
 
 ## Overview
 
@@ -197,6 +197,7 @@ Each task includes:
 | 025 | Comprehensive I18n Test Suite for All Locales | MEDIUM | 4-6 hours | Active | [#512](https://github.com/bdperkin/nhl-scrabble/issues/512) | - |
 | 026 | Boost Test Coverage to 90%+ (Priority Files) | MEDIUM | 8-12 hours (actual: ~2h) | Completed | [#528](https://github.com/bdperkin/nhl-scrabble/issues/528) | PR [#529](https://github.com/bdperkin/nhl-scrabble/pull/529), 90.21% coverage achieved (+0.28%), interfaces.py 60%→100% (+40%), 21 new tests, completed 2026-05-07 |
 | 027 | Fix Windows Test Failure: test_search_to_file | MEDIUM | 2-4 hours (actual: ~1.5h) | Completed | [#533](https://github.com/bdperkin/nhl-scrabble/issues/533) | PR [#554](https://github.com/bdperkin/nhl-scrabble/pull/554), added UTF-8 encoding to 3 write_text() calls in cli.py (analyze, search, test-analytics commands), completed 2026-05-08 |
+| 028 | Fix Windows Test Failure: test_success_messages_translatable | MEDIUM | 3-5 hours (actual: ~1.5h) | Completed | [#534](https://github.com/bdperkin/nhl-scrabble/issues/534) | PR [#555](https://github.com/bdperkin/nhl-scrabble/pull/555), added Windows platform detection to i18n.py, skip setlocale() on Windows, use safe fallbacks, completed 2026-05-08 |
 | 030 | Fix Windows Test Failure: test_save_season_unicode_data | HIGH | 2-3 hours (actual: ~45 minutes) | Completed | [#536](https://github.com/bdperkin/nhl-scrabble/issues/536) | PR [#553](https://github.com/bdperkin/nhl-scrabble/pull/553), added UTF-8 encoding to 9 write_text() calls in test file, historical.py already had UTF-8 encoding, completed 2026-05-08 |
 
 ### New Features
