@@ -290,7 +290,12 @@ class TestRateLimiterEdgeCases:
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_fractional_tokens(self) -> None:
-        """Test that fractional token refills work correctly."""
+        """Test that fractional token refills work correctly.
+
+        This test verifies the token bucket refill logic with fractional rates. Timing tolerances
+        account for sleep accuracy variations across platforms (particularly macOS where
+        time.sleep() may overshoot by ~100-200ms).
+        """
         # 3 requests per 2 seconds = 1.5 requests/second
         limiter = RateLimiter(max_requests=3, time_window=2.0)
 
@@ -298,14 +303,16 @@ class TestRateLimiterEdgeCases:
         for _ in range(3):
             limiter.acquire()
 
-        # Wait for partial refill (0.5 seconds = 0.75 tokens)
-        time.sleep(0.6)
+        # Wait for partial refill (0.4 seconds → ~0.6 tokens at 1.5/sec)
+        # Margin: 0.4 token buffer before reaching 1.0 token
+        time.sleep(0.4)
 
         # Should not have a full token yet
         assert limiter.acquire(block=False) is False
 
-        # Wait a bit more (total ~1.2 seconds = ~1.8 tokens)
-        time.sleep(0.7)
+        # Wait more (total 1.2 seconds → ~1.8 tokens at 1.5/sec)
+        # Margin: 0.8 token buffer above 1.0 token threshold
+        time.sleep(0.8)
 
         # Should have at least 1 token now
         assert limiter.acquire(block=False) is True
