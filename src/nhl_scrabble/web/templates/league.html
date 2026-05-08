@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans %}NHL Scrabble Analyzer - League Standings{% endtrans %}{% endblock %}
+
+{% block content %}
+    <!-- Top Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Teams{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.total_teams }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Top Team{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.highest_team_score }}</p>
+            <p class="stat-detail">{{ stats.highest_team }} ({{ stats.highest_team_name }})</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Lowest Team{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.lowest_team }}</p>
+            <p class="stat-detail">{{ stats.lowest_team_name }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.total_players }}</p>
+        </div>
+    </div>
+
+    <!-- League Standings -->
+    <section class="results-section">
+        <h3>{% trans %}League Standings by Total Scrabble Score{% endtrans %}</h3>
+        <div class="division-grid">
+            <div class="division-card">
+                <h4>{% trans %}National Hockey League{% endtrans %}</h4>
+                <ol>
+                    {% for team in team_standings %}
+                        <li>{{ team.name }} ({{ team.total_score }})</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-06 13:58-0400\n"
+"POT-Creation-Date: 2026-05-07 13:55-0400\n"
 "PO-Revision-Date: 2026-05-06 14:03-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -650,6 +650,7 @@ msgstr ""
 #: src/nhl_scrabble/interactive/shell.py:640
 #: src/nhl_scrabble/web/templates/conferences.html:9
 #: src/nhl_scrabble/web/templates/divisions.html:9
+#: src/nhl_scrabble/web/templates/league.html:12
 #: src/nhl_scrabble/web/templates/playoffs.html:9
 #: src/nhl_scrabble/web/templates/stats.html:29
 #: src/nhl_scrabble/web/templates/teams.html:9
@@ -659,6 +660,7 @@ msgstr ""
 #: src/nhl_scrabble/interactive/shell.py:641
 #: src/nhl_scrabble/web/templates/conferences.html:23
 #: src/nhl_scrabble/web/templates/divisions.html:23
+#: src/nhl_scrabble/web/templates/league.html:26
 #: src/nhl_scrabble/web/templates/playoffs.html:22
 #: src/nhl_scrabble/web/templates/results.html:4
 #: src/nhl_scrabble/web/templates/stats.html:9
@@ -677,6 +679,7 @@ msgstr ""
 #: src/nhl_scrabble/interactive/shell.py:645
 #: src/nhl_scrabble/web/templates/conferences.html:13
 #: src/nhl_scrabble/web/templates/divisions.html:13
+#: src/nhl_scrabble/web/templates/league.html:16
 #: src/nhl_scrabble/web/templates/results.html:17
 #: src/nhl_scrabble/web/templates/stats.html:33
 #: src/nhl_scrabble/web/templates/teams.html:13
@@ -831,7 +834,7 @@ msgstr ""
 #: src/nhl_scrabble/web/templates/base.html:26
 #: src/nhl_scrabble/web/templates/base.html:30
 #: src/nhl_scrabble/web/templates/base.html:51
-#: src/nhl_scrabble/web/templates/base.html:132
+#: src/nhl_scrabble/web/templates/base.html:135
 msgid "NHL Scrabble Analyzer"
 msgstr ""
 
@@ -870,34 +873,38 @@ msgid "Conferences"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:79
-msgid "Playoffs"
+msgid "League"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:82
-msgid "Stats"
+msgid "Playoffs"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/base.html:85
+msgid "Stats"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/base.html:88
 msgid "API Docs"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/base.html:91
+#: src/nhl_scrabble/web/templates/base.html:94
 msgid "Documentation"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/base.html:101
+#: src/nhl_scrabble/web/templates/base.html:104
 msgid "Select Language"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/base.html:102
+#: src/nhl_scrabble/web/templates/base.html:105
 msgid "Select language"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/base.html:133
+#: src/nhl_scrabble/web/templates/base.html:136
 msgid "Open Source"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/base.html:134
+#: src/nhl_scrabble/web/templates/base.html:137
 msgid "Status"
 msgstr ""
 
@@ -907,6 +914,7 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/conferences.html:18
 #: src/nhl_scrabble/web/templates/divisions.html:18
+#: src/nhl_scrabble/web/templates/league.html:21
 #: src/nhl_scrabble/web/templates/stats.html:38
 msgid "Lowest Team"
 msgstr ""
@@ -1036,6 +1044,48 @@ msgstr ""
 
 #: src/nhl_scrabble/web/templates/index.html:134
 msgid "Letter Distributions"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:3
+msgid "NHL Scrabble Analyzer - League Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:5
+#: src/nhl_scrabble/web/templates/league.html:6
+msgid "NHL League Standings by Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:33
+msgid "League Standings by Total Scrabble Score"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:36
+msgid "National Hockey League"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:55
+msgid "About League Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:57
+msgid ""
+"Teams are ranked by their total Scrabble score, calculated by summing the"
+" Scrabble letter values of all players' names on each roster. This "
+"league-wide view shows the complete standings without division or "
+"conference groupings."
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:60
+msgid "For grouped standings, see:"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:61
+#: src/nhl_scrabble/web/templates/results.html:142
+msgid "Division Standings"
+msgstr ""
+
+#: src/nhl_scrabble/web/templates/league.html:62
+msgid "Conference Standings"
 msgstr ""
 
 #: src/nhl_scrabble/web/templates/playoffs.html:3
@@ -1174,10 +1224,6 @@ msgstr ""
 msgid "Avg Score"
 msgstr ""
 
-#: src/nhl_scrabble/web/templates/results.html:142
-msgid "Division Standings"
-msgstr ""
-
 #: src/nhl_scrabble/web/templates/stats.html:3
 msgid "NHL Scrabble Analyzer - Statistics"
 msgstr ""
@@ -1201,3 +1247,15 @@ msgstr ""
 #: src/nhl_scrabble/web/templates/teams.html:22
 msgid "Highest Player"
 msgstr ""
+
+#~ msgid ""
+#~ "Complete NHL standings ranked by total"
+#~ " Scrabble score across all teams in"
+#~ " the league."
+#~ msgstr ""
+
+#~ msgid "Data as of"
+#~ msgstr ""
+
+#~ msgid "League Standings"
+#~ msgstr ""

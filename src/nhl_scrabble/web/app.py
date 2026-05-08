@@ -861,6 +861,55 @@ async def conferences_page(request: Request) -> HTMLResponse:
         ) from e
 
 
+@app.get("/league", response_class=HTMLResponse)
+async def league_page(request: Request) -> HTMLResponse:
+    """Serve the league standings page with data.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered league.html template with league-wide standings
+
+    Raises:
+        HTTPException: If templates not configured or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        context = setup_template_locale(request)
+        context.update(
+            {
+                "team_standings": data["team_standings"],
+                "stats": data["stats"],
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="league.html",
+            context=context,
+        )
+    except NHLApiError as e:
+        logger.error("Failed to fetch league data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
 @app.get("/playoffs", response_class=HTMLResponse)
 async def playoffs_page(request: Request) -> HTMLResponse:
     """Serve the playoff bracket page with data.

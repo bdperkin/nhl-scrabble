@@ -447,68 +447,160 @@ jobs:
           echo "## 🧪 QA Automation Test Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          for browser in chromium firefox webkit; do
-            echo "### 🌐 $browser" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
+          # Build arrays to hold test results for table
+          declare -A func_results vis_results perf_results a11y_results
 
+          # Initialize totals
+          func_total_tests=0 func_total_passed=0
+          vis_total_tests=0 vis_total_passed=0
+          perf_total_tests=0 perf_total_passed=0
+          a11y_total_tests=0 a11y_total_passed=0
+
+          for browser in chromium firefox webkit; do
             # Functional tests
             if [[ -f "reports/functional-${browser}.xml" ]]; then
               FILE="reports/functional-${browser}.xml"
-              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
-              echo "- **Functional**: $PASSED/$TESTS passed" >> \
-                $GITHUB_STEP_SUMMARY
+              PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
+              func_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
+              func_total_tests=$((func_total_tests + TESTS))
+              func_total_passed=$((func_total_passed + PASSED))
+            else
+              func_results[$browser]="⚪ N/A"
             fi
 
             # Visual tests
             if [[ -f "reports/visual-${browser}.xml" ]]; then
               FILE="reports/visual-${browser}.xml"
-              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
-              echo "- **Visual**: $PASSED/$TESTS passed" >> \
-                $GITHUB_STEP_SUMMARY
+              PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
+              vis_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
+              vis_total_tests=$((vis_total_tests + TESTS))
+              vis_total_passed=$((vis_total_passed + PASSED))
+            else
+              vis_results[$browser]="⚪ N/A"
             fi
 
             # Performance tests
             if [[ -f "reports/performance-${browser}.xml" ]]; then
               FILE="reports/performance-${browser}.xml"
-              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
-              echo "- **Performance**: $PASSED/$TESTS passed" >> \
-                $GITHUB_STEP_SUMMARY
+              PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
+              perf_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
+              perf_total_tests=$((perf_total_tests + TESTS))
+              perf_total_passed=$((perf_total_passed + PASSED))
+            else
+              perf_results[$browser]="⚪ N/A"
             fi
 
             # Accessibility tests
             if [[ -f "reports/accessibility-${browser}.xml" ]]; then
               FILE="reports/accessibility-${browser}.xml"
-              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
-              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" |
-                grep -o '[0-9]*' || echo "0")
+              TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+              ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
               PASSED=$((TESTS - FAILURES - ERRORS))
-              echo "- **Accessibility**: $PASSED/$TESTS passed" >> \
-                $GITHUB_STEP_SUMMARY
+              PCT=$((TESTS > 0 ? (PASSED * 100) / TESTS : 0))
+              [[ $PASSED -eq $TESTS ]] && ICON="✅" || ICON="❌"
+              a11y_results[$browser]="$ICON $PASSED/$TESTS ($PCT%)"
+              a11y_total_tests=$((a11y_total_tests + TESTS))
+              a11y_total_passed=$((a11y_total_passed + PASSED))
+            else
+              a11y_results[$browser]="⚪ N/A"
             fi
-
-            echo "" >> $GITHUB_STEP_SUMMARY
           done
+
+          # Calculate total percentages
+          func_total_pct=$((func_total_tests > 0 ? (func_total_passed * 100) / func_total_tests : 0))
+          vis_total_pct=$((vis_total_tests > 0 ? (vis_total_passed * 100) / vis_total_tests : 0))
+          perf_total_pct=$((perf_total_tests > 0 ? (perf_total_passed * 100) / perf_total_tests : 0))
+          a11y_total_pct=$((a11y_total_tests > 0 ? (a11y_total_passed * 100) / a11y_total_tests : 0))
+
+          # Calculate per-browser totals
+          declare -A browser_total_tests browser_total_passed browser_total_result
+          for browser in chromium firefox webkit; do
+            browser_tests=0
+            browser_passed=0
+
+            # Sum all test types for this browser
+            for file in "functional-${browser}.xml" "visual-${browser}.xml" \
+                        "performance-${browser}.xml" "accessibility-${browser}.xml"; do
+              if [[ -f "reports/$file" ]]; then
+                FILE="reports/$file"
+                TESTS=$(grep -o 'tests="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+                FAILURES=$(grep -o 'failures="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+                ERRORS=$(grep -o 'errors="[0-9]*"' "$FILE" | grep -o '[0-9]*' || echo "0")
+                PASSED=$((TESTS - FAILURES - ERRORS))
+                browser_tests=$((browser_tests + TESTS))
+                browser_passed=$((browser_passed + PASSED))
+              fi
+            done
+
+            browser_total_tests[$browser]=$browser_tests
+            browser_total_passed[$browser]=$browser_passed
+
+            if [[ $browser_tests -gt 0 ]]; then
+              PCT=$(( (browser_passed * 100) / browser_tests ))
+              [[ $browser_passed -eq $browser_tests ]] && ICON="✅" || ICON="❌"
+              browser_total_result[$browser]="**$ICON $browser_passed/$browser_tests ($PCT%)**"
+            else
+              browser_total_result[$browser]="⚪ N/A"
+            fi
+          done
+
+          # Calculate overall total
+          overall_tests=$((func_total_tests + vis_total_tests + \
+            perf_total_tests + a11y_total_tests))
+          overall_passed=$((func_total_passed + vis_total_passed + \
+            perf_total_passed + a11y_total_passed))
+          overall_pct=$((overall_tests > 0 ? \
+            (overall_passed * 100) / overall_tests : 0))
+
+          # Icons for totals
+          [[ $func_total_passed -eq $func_total_tests ]] && func_icon="✅" || func_icon="❌"
+          [[ $vis_total_passed -eq $vis_total_tests ]] && vis_icon="✅" || vis_icon="❌"
+          [[ $perf_total_passed -eq $perf_total_tests ]] && perf_icon="✅" || perf_icon="❌"
+          [[ $a11y_total_passed -eq $a11y_total_tests ]] && a11y_icon="✅" || a11y_icon="❌"
+          [[ $overall_passed -eq $overall_tests ]] && overall_icon="✅" || overall_icon="❌"
+
+          # Generate table
+          echo "| Test Suite | 🔵 Chromium | 🦊 Firefox | 🧭 WebKit | " \
+            "📊 **Overall** |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|-------------|------------|-----------|" \
+            "---------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Functional** | ${func_results[chromium]} | " \
+            "${func_results[firefox]} | ${func_results[webkit]} | " \
+            "$func_icon $func_total_passed/$func_total_tests ($func_total_pct%) |" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "| **Visual** | ${vis_results[chromium]} | " \
+            "${vis_results[firefox]} | ${vis_results[webkit]} | " \
+            "$vis_icon $vis_total_passed/$vis_total_tests ($vis_total_pct%) |" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "| **Performance** | ${perf_results[chromium]} | " \
+            "${perf_results[firefox]} | ${perf_results[webkit]} | " \
+            "$perf_icon $perf_total_passed/$perf_total_tests ($perf_total_pct%) |" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "| **Accessibility** | ${a11y_results[chromium]} | " \
+            "${a11y_results[firefox]} | ${a11y_results[webkit]} | " \
+            "$a11y_icon $a11y_total_passed/$a11y_total_tests ($a11y_total_pct%) |" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "| **TOTAL** | ${browser_total_result[chromium]} | " \
+            "${browser_total_result[firefox]} | ${browser_total_result[webkit]} | " \
+            "**$overall_icon $overall_passed/$overall_tests ($overall_pct%)** |" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
           echo "### 📊 Artifacts" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -525,22 +617,26 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const path = require('path');
-
-            let comment = `## 🧪 QA Automation Test Results\n\n`;
 
             const browsers = ['chromium', 'firefox', 'webkit'];
+            const browserIcons = {
+              chromium: '🔵',
+              firefox: '🦊',
+              webkit: '🧭'
+            };
+            const reportTypes = ['functional', 'visual', 'performance', 'accessibility'];
+            const results = {};
+            const totals = {
+              functional: { tests: 0, passed: 0 },
+              visual: { tests: 0, passed: 0 },
+              performance: { tests: 0, passed: 0 },
+              accessibility: { tests: 0, passed: 0 }
+            };
             let hasFailures = false;
 
+            // Collect results for all browsers and test types
             for (const browser of browsers) {
-              comment += `### 🌐 ${browser}\n\n`;
-
-              const reportTypes = [
-                'functional',
-                'visual',
-                'performance',
-                'accessibility'
-              ];
+              results[browser] = {};
 
               for (const type of reportTypes) {
                 const reportFile = `reports/${type}-${browser}.xml`;
@@ -555,26 +651,94 @@ jobs:
                   const failures = failuresMatch ? parseInt(failuresMatch[1]) : 0;
                   const errors = errorsMatch ? parseInt(errorsMatch[1]) : 0;
                   const passed = tests - failures - errors;
+                  const pct = tests > 0 ? Math.floor((passed / tests) * 100) : 0;
 
-                  const icon = (failures + errors) > 0 ? '❌' : '✅';
-                  comment += `- ${icon} **${type}**: ${passed}/${tests} passed\n`;
+                  const icon = passed === tests ? '✅' : '❌';
+                  results[browser][type] = `${icon} ${passed}/${tests} (${pct}%)`;
+
+                  // Track totals
+                  totals[type].tests += tests;
+                  totals[type].passed += passed;
 
                   if ((failures + errors) > 0) {
                     hasFailures = true;
                   }
+                } else {
+                  results[browser][type] = '⚪ N/A';
                 }
               }
-
-              comment += `\n`;
             }
 
-            comment += `### 📊 Artifacts\n\n`;
+            // Calculate overall totals
+            const overallTests = Object.values(totals)
+              .reduce((sum, t) => sum + t.tests, 0);
+            const overallPassed = Object.values(totals)
+              .reduce((sum, t) => sum + t.passed, 0);
+            const overallPct = overallTests > 0 ?
+              Math.floor((overallPassed / overallTests) * 100) : 0;
+            const overallIcon = overallPassed === overallTests ? '✅' : '❌';
+
+            // Build table
+            let comment = `## 🧪 QA Automation Test Results\n\n`;
+            comment += `| Test Suite | ${browserIcons.chromium} Chromium | `;
+            comment += `${browserIcons.firefox} Firefox | `;
+            comment += `${browserIcons.webkit} WebKit | 📊 **Overall** |\n`;
+            comment += `|------------|-------------|------------|-----------|`;
+            comment += `---------------|\n`;
+
+            for (const type of reportTypes) {
+              const typeName = type.charAt(0).toUpperCase() + type.slice(1);
+              const totalTests = totals[type].tests;
+              const totalPassed = totals[type].passed;
+              const totalPct = totalTests > 0 ?
+                Math.floor((totalPassed / totalTests) * 100) : 0;
+              const totalIcon = totalPassed === totalTests ? '✅' : '❌';
+
+              comment += `| **${typeName}** `;
+              comment += `| ${results.chromium[type]} `;
+              comment += `| ${results.firefox[type]} `;
+              comment += `| ${results.webkit[type]} `;
+              comment += `| ${totalIcon} ${totalPassed}/${totalTests} `;
+              comment += `(${totalPct}%) |\n`;
+            }
+
+            // Calculate per-browser totals
+            const browserTotals = {};
+            for (const browser of browsers) {
+              let browserTests = 0;
+              let browserPassed = 0;
+              for (const type of reportTypes) {
+                if (results[browser][type] !== '⚪ N/A') {
+                  const match = results[browser][type].match(/(\d+)\/(\d+)/);
+                  if (match) {
+                    browserPassed += parseInt(match[1]);
+                    browserTests += parseInt(match[2]);
+                  }
+                }
+              }
+              const pct = browserTests > 0 ?
+                Math.floor((browserPassed / browserTests) * 100) : 0;
+              const icon = browserPassed === browserTests ? '✅' : '❌';
+              browserTotals[browser] = browserTests > 0 ?
+                `**${icon} ${browserPassed}/${browserTests} (${pct}%)**` : '⚪ N/A';
+            }
+
+            // Add total row
+            comment += `| **TOTAL** `;
+            comment += `| ${browserTotals.chromium} `;
+            comment += `| ${browserTotals.firefox} `;
+            comment += `| ${browserTotals.webkit} `;
+            comment += `| **${overallIcon} ${overallPassed}/${overallTests} `;
+            comment += `(${overallPct}%)** |\n`;
+
+            comment += `\n### 📊 Artifacts\n\n`;
             const runUrl = `https://github.com/${context.repo.owner}/${
               context.repo.repo}/actions/runs/${context.runId}`;
             comment += `- [Download Test Reports](${runUrl})\n`;
 
             if (hasFailures) {
               comment += `- [Download Screenshots](${runUrl})\n`;
+              comment += `- [Download Visual Diffs](${runUrl})\n`;
             }
 
             comment += `\n---\n`;
