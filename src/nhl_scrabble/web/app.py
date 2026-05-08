@@ -861,6 +861,99 @@ async def conferences_page(request: Request) -> HTMLResponse:
         ) from e
 
 
+@app.get("/conferences/{conference_name}", response_class=HTMLResponse)
+async def conference_detail_page(
+    request: Request,
+    conference_name: str,
+) -> HTMLResponse:
+    """Serve a conference detail page with teams and top players.
+
+    Args:
+        request: FastAPI request object
+        conference_name: Conference name (Eastern, Western)
+
+    Returns:
+        Rendered conference_detail.html template with filtered data
+
+    Raises:
+        HTTPException: If conference not found or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data with caching enabled
+        # Increase top_players to ensure we get 20+ per conference
+        analysis_request = AnalysisRequest(top_players=100, top_team_players=5, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Normalize conference name for comparison
+        conference_normalized = conference_name.strip().title()
+
+        # Validate conference exists
+        if conference_normalized not in data["conference_standings"]:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Conference '{conference_name}' not found",
+            )
+
+        # Filter teams for this conference
+        conference_teams = [
+            team for team in data["team_standings"] if team["conference"] == conference_normalized
+        ]
+
+        # Filter top players for this conference (lookup via team for accuracy)
+        conference_team_abbrevs = {team["abbrev"] for team in conference_teams}
+        conference_players = [
+            player for player in data["top_players"] if player["team"] in conference_team_abbrevs
+        ][
+            :20
+        ]  # Top 20 players from this conference
+
+        # Calculate conference-specific stats
+        conference_stats = {
+            "total_teams": len(conference_teams),
+            "total_players": sum(t["player_count"] for t in conference_teams),
+            "highest_team_score": conference_teams[0]["total_score"] if conference_teams else 0,
+            "highest_team": conference_teams[0]["abbrev"] if conference_teams else None,
+            "highest_team_name": conference_teams[0]["name"] if conference_teams else None,
+            "highest_player_score": conference_players[0]["score"] if conference_players else 0,
+            "highest_player_name": (
+                conference_players[0]["full_name"] if conference_players else None
+            ),
+        }
+
+        # Format timestamp for display
+        timestamp_str = data["timestamp"]
+        timestamp_dt = datetime.fromisoformat(timestamp_str)
+        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
+        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+
+        context = setup_template_locale(request)
+        context.update(
+            {
+                "conference_name": conference_normalized,
+                "conference_teams": conference_teams,
+                "conference_players": conference_players,
+                "conference_stats": conference_stats,
+                "timestamp_date": timestamp_date,
+                "timestamp_time": timestamp_time,
+            },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="conference_detail.html",
+            context=context,
+        )
+
+    except NHLApiError as e:
+        logger.error("Failed to fetch conference detail data: %s", e)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch NHL data: {e!s}",
+        ) from e
+
+
 @app.get("/league", response_class=HTMLResponse)
 async def league_page(request: Request) -> HTMLResponse:
     """Serve the league standings page with data.
