@@ -1364,6 +1364,22 @@ async def favicon() -> HTMLResponse:
     return HTMLResponse(content=svg_content, media_type="image/svg+xml")
 
 
+@app.get("/favicon.ico")
+async def favicon_ico() -> HTMLResponse:
+    """Serve favicon.ico (redirects to SVG).
+
+    Modern browsers support SVG favicons, so we return the same SVG content
+    with image/svg+xml media type instead of generating an ICO file.
+
+    Returns:
+        SVG favicon with hockey emoji
+    """
+    svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <text y="0.9em" font-size="90">🏒</text>
+</svg>"""
+    return HTMLResponse(content=svg_content, media_type="image/svg+xml")
+
+
 @app.get("/robots.txt")
 async def robots_txt() -> FileResponse:
     """Serve robots.txt file.
