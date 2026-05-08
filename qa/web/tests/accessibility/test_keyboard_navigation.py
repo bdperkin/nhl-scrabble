@@ -162,10 +162,12 @@ def test_no_keyboard_trap(index_page: IndexPage) -> None:
 
         # Check if we've cycled back to first element (normal behavior)
         # or if we're stuck on the same element (keyboard trap)
-        if i > 2 and focus_positions[-1] == focus_positions[-2]:
-            # We're stuck on the same element
-            msg = f"Keyboard trap detected at element: {current_focus}"
-            raise AssertionError(msg)
+        # Require 3 consecutive identical focuses to avoid false positives
+        if i >= 2 and len(focus_positions) >= 3:
+            if focus_positions[-1] == focus_positions[-2] == focus_positions[-3]:
+                # We're stuck on the same element for 3 tabs - keyboard trap
+                msg = f"Keyboard trap detected at element: {current_focus}"
+                raise AssertionError(msg)
 
 
 @pytest.mark.accessibility

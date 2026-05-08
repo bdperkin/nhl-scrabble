@@ -41,9 +41,9 @@ def test_team_detail_breadcrumb_navigation(page: Page, base_url: str) -> None:
     """Test breadcrumb navigation links."""
     page.goto(f"{base_url}/teams/TOR")
 
-    # Should have links to division and conference
-    division_link = page.locator('a[href*="/divisions/Atlantic"]')
-    conference_link = page.locator('a[href*="/conferences/Eastern"]')
+    # Should have links to division and conference (use .first since there are multiple)
+    division_link = page.locator('a[href*="/divisions/Atlantic"]').first
+    conference_link = page.locator('a[href*="/conferences/Eastern"]').first
 
     expect(division_link).to_be_visible()
     expect(conference_link).to_be_visible()
@@ -88,8 +88,8 @@ def test_team_detail_table_sorting(page: Page, base_url: str) -> None:
     # Get player table
     table = page.locator("#playersTable")
 
-    # Click score header to sort (should toggle order)
-    score_header = table.locator("th").filter(has_text=re.compile(r"^Score$"))
+    # Click score header to sort (use data-sort attribute for reliability)
+    score_header = table.locator('th[data-sort="score"]')
     score_header.click()
 
     # Wait for sort to complete
@@ -283,16 +283,16 @@ def test_team_detail_accessibility(page: Page, base_url: str) -> None:
     table = page.locator("#playersTable")
     expect(table).to_have_attribute("role", "table")
 
-    # Export buttons should have aria-labels
+    # Export buttons should have aria-labels (check for non-empty value)
     csv_button = page.locator("#export-playersTable-csv")
-    expect(csv_button).to_have_attribute("aria-label")
+    expect(csv_button).to_have_attribute("aria-label", re.compile(".+"))
 
     json_button = page.locator("#export-playersTable-json")
-    expect(json_button).to_have_attribute("aria-label")
+    expect(json_button).to_have_attribute("aria-label", re.compile(".+"))
 
-    # Logo should have alt text
+    # Logo should have alt text (check for non-empty value)
     logo = page.locator(".team-logo")
-    expect(logo).to_have_attribute("alt")
+    expect(logo).to_have_attribute("alt", re.compile(".+"))
 
 
 def test_team_detail_all_players_shown(page: Page, base_url: str) -> None:
