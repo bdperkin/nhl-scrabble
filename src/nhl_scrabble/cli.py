@@ -798,7 +798,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
         if validated_output:
             if isinstance(result, str):
                 # Text/JSON output
-                validated_output.write_text(result)
+                validated_output.write_text(result, encoding="utf-8")
             # CSV/Excel are written directly by exporters
             console.print(
                 _("\n[green]✓[/green] Report saved to: {output}").format(output=validated_output),
@@ -1219,7 +1219,7 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
 
             # Output results
             if output:
-                Path(output).write_text(output_text)
+                Path(output).write_text(output_text, encoding="utf-8")
                 if not quiet:
                     console.print(f"\n[green]✓[/green] Results saved to: {output}")
             else:
@@ -1937,7 +1937,7 @@ def test_analytics(  # noqa: PLR0913, PLR0915  # CLI function with many options 
         # Write or display output
         if output:
             output_path = Path(output)
-            output_path.write_text(output_text)
+            output_path.write_text(output_text, encoding="utf-8")
             console.print(f"[green]✓ Analytics report saved to {output}[/green]")
         else:
             console.print("\n" + "=" * 80)
