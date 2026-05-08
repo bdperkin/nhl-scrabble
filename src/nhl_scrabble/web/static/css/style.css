@@ -970,6 +970,58 @@ pre[data-copyable] {
     margin-top: 3rem;
 }
 
+/* Team Detail Page - Logo Header */
+.team-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.team-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.team-header-info h2 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.team-meta {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.team-meta a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.team-meta a:hover {
+    text-decoration: underline;
+}
+
+/* Team link styling on teams page */
+.team-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.team-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
 /* ===== Mobile Responsiveness for New Components ===== */
 @media (max-width: 768px) {
     .toast {
@@ -996,5 +1048,16 @@ pre[data-copyable] {
         width: 45px;
         height: 45px;
         font-size: 20px;
+    }
+
+    .team-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .team-logo {
+        width: 80px;
+        height: 80px;
     }
 }

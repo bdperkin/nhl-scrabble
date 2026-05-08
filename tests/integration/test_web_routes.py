@@ -99,6 +99,64 @@ class TestHTMLRoutes:
             assert response.status_code == 200, f"Route {route} returned {response.status_code}"
             assert "text/html" in response.headers["content-type"]
 
+    def test_team_detail_page_exists(self, client: TestClient) -> None:
+        """Test team detail page returns HTML for valid team.
+
+        Args:
+            client: FastAPI test client
+        """
+        response = client.get("/teams/TOR")
+        assert response.status_code == 200
+        assert "text/html" in response.headers["content-type"]
+        assert "Maple Leafs" in response.text
+
+    def test_team_detail_case_insensitive(self, client: TestClient) -> None:
+        """Test team detail page handles case-insensitive abbreviations.
+
+        Args:
+            client: FastAPI test client
+        """
+        # Uppercase
+        response_upper = client.get("/teams/TOR")
+        assert response_upper.status_code == 200
+
+        # Lowercase
+        response_lower = client.get("/teams/tor")
+        assert response_lower.status_code == 200
+
+        # Mixed case
+        response_mixed = client.get("/teams/Tor")
+        assert response_mixed.status_code == 200
+
+    def test_team_detail_404_for_invalid_team(self, client: TestClient) -> None:
+        """Test team detail page returns 404 for non-existent team.
+
+        Args:
+            client: FastAPI test client
+        """
+        response = client.get("/teams/XXX")
+        assert response.status_code == 404
+
+    def test_division_detail_page_exists(self, client: TestClient) -> None:
+        """Test division detail page returns HTML for valid division.
+
+        Args:
+            client: FastAPI test client
+        """
+        response = client.get("/divisions/Atlantic")
+        assert response.status_code == 200
+        assert "text/html" in response.headers["content-type"]
+
+    def test_conference_detail_page_exists(self, client: TestClient) -> None:
+        """Test conference detail page returns HTML for valid conference.
+
+        Args:
+            client: FastAPI test client
+        """
+        response = client.get("/conferences/Eastern")
+        assert response.status_code == 200
+        assert "text/html" in response.headers["content-type"]
+
 
 class TestAPIRoutes:
     """Tests for API endpoints."""
@@ -177,6 +235,17 @@ class TestStaticRoutes:
             client: FastAPI test client
         """
         response = client.get("/favicon.svg")
+        assert response.status_code == 200
+        assert "image/svg+xml" in response.headers["content-type"]
+        assert "<svg" in response.text
+
+    def test_favicon_ico(self, client: TestClient) -> None:
+        """Test favicon.ico returns SVG.
+
+        Args:
+            client: FastAPI test client
+        """
+        response = client.get("/favicon.ico")
         assert response.status_code == 200
         assert "image/svg+xml" in response.headers["content-type"]
         assert "<svg" in response.text

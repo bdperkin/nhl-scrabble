@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans %}NHL Scrabble Analyzer - {{ team_name }} - Player Rankings{% endtrans %}{% endblock %}
+
+{% block og_title %}{{ team_name }} {% trans %}Player Rankings{% endtrans %}{% endblock %}
+{% block twitter_title %}{{ team_name }} {% trans %}Player Rankings{% endtrans %}{% endblock %}
+
+{% block content %}
+    <!-- Team Header with Logo -->
+    <div class="team-header fade-on-scroll">
+        <img
+            src="{{ team_stats.logo_url_light }}"
+            alt="{{ team_stats.team_name }} logo"
+            class="team-logo"
+            loading="lazy"
+            onerror="this.style.display='none'"
+        />
+        <div class="team-header-info">
+            <h2>{{ team_stats.team_name }}</h2>
+            <p class="team-meta">
+                <a href="/divisions/{{ team_stats.team_division }}?lang={{ locale }}">{{ team_stats.team_division }}</a> {% trans %}Division{% endtrans %} /
+                <a href="/conferences/{{ team_stats.team_conference }}?lang={{ locale }}">{{ team_stats.team_conference }}</a> {% trans %}Conference{% endtrans %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Team Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
+            <p class="stat-value">{{ team_stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Team Total Score{% endtrans %}</h4>
+            <p class="stat-value">{{ team_stats.total_score }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Average Score{% endtrans %}</h4>
+            <p class="stat-value">{{ team_stats.avg_score|round(1) }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Top Player{% endtrans %}</h4>
+            <p class="stat-value">{{ team_stats.highest_player_score }}</p>
+            <p class="stat-detail">{{ team_stats.highest_player_name }}</p>
+        </div>
+    </div>
+
+    <!-- Data Timestamp -->
+    <section class="info-section fade-on-scroll">
+        <p class="timestamp">
+            {% trans %}Data as of{% endtrans %}: {{ timestamp_date }} {{ timestamp_time }}
+        </p>
+    </section>
+
+    <!-- Player Rankings Table -->
+    <section class="results-section fade-on-scroll">
+        <h3>{% trans %}{{ team_abbrev }} Player Rankings by Scrabble Score{% endtrans %}</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-playersTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export player rankings to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
+            </button>
+            <button id="export-playersTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export player rankings to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="playersTable"
+                   class="results-table standings-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Player rankings{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="name" data-sort-type="string">{% trans %}Player{% endtrans %}</th>
+                        <th scope="col" data-sort="score" data-sort-type="number">{% trans %}Score{% endtrans %}</th>
+                        <th scope="col" data-sort="first" data-sort-type="number">{% trans %}First Name{% endtrans %}</th>
+                        <th scope="col" data-sort="last" data-sort-type="number">{% trans %}Last Name{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in team_players %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ player.rank }}">{{ player.rank }}</td>
+                            <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
+                                {{ player.first_name }} {{ player.last_name }}
+                            </td>
+                            <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
+                            <td data-value="{{ player.first_score }}">{{ player.first_score }}</td>
+                            <td data-value="{{ player.last_score }}">{{ player.last_score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Navigation Links -->
+    <section class="info-section fade-on-scroll">
+        <p>
+            <a href="/teams?lang={{ locale }}">{% trans %}← Back to All Teams{% endtrans %}</a>
+            |
+            <a href="/divisions/{{ team_division }}?lang={{ locale }}">{% trans %}View {{ team_division }} Division{% endtrans %}</a>
+            |
+            <a href="/conferences/{{ team_conference }}?lang={{ locale }}">{% trans %}View {{ team_conference }} Conference{% endtrans %}</a>
+        </p>
+    </section>
+{% endblock %}
