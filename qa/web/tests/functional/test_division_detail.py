@@ -27,7 +27,7 @@ DIVISIONS = {
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_division_detail_page_loads(page: Page, division: str) -> None:
     """Test that division detail page loads successfully for all divisions."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Check page title includes division name
     assert division in page.title()
@@ -41,7 +41,7 @@ def test_division_detail_page_loads(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_division_summary_statistics(page: Page, division: str) -> None:
     """Test that division summary statistics are displayed correctly."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Check all stat cards are present
     stat_cards = page.locator(".stat-card")
@@ -61,7 +61,7 @@ def test_division_summary_statistics(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division,parent_conference", DIVISIONS.items())
 def test_conference_badge_displayed(page: Page, division: str, parent_conference: str) -> None:
     """Test that conference badge shows correct parent conference."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Check conference badge is present
     badge = page.locator(".conference-badge")
@@ -81,7 +81,7 @@ def test_conference_badge_displayed(page: Page, division: str, parent_conference
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_team_standings_table_present(page: Page, division: str) -> None:
     """Test that team standings table is present and populated."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Check team standings section
     team_section = page.locator("section.results-section").first
@@ -106,7 +106,7 @@ def test_team_standings_table_present(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_top_players_table_present(page: Page, division: str) -> None:
     """Test that top players table is present and populated."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Check players section
     player_section = page.locator("section.results-section").nth(1)
@@ -132,7 +132,7 @@ def test_top_players_table_present(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_teams_filtered_by_division(page: Page, division: str) -> None:
     """Test that teams are correctly filtered to show only division teams."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Get all team rows
     table = page.locator("#divisionTeamsTable")
@@ -165,7 +165,7 @@ def test_teams_filtered_by_division(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_players_filtered_by_division(page: Page, division: str) -> None:
     """Test that players are correctly filtered to division teams."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Get team abbreviations from team table
     team_table = page.locator("#divisionTeamsTable")
@@ -197,7 +197,7 @@ def test_players_filtered_by_division(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_team_table_sorting(page: Page, division: str) -> None:
     """Test that team standings table can be sorted by columns."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     table = page.locator("#divisionTeamsTable")
 
@@ -217,7 +217,7 @@ def test_team_table_sorting(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_player_table_sorting(page: Page, division: str) -> None:
     """Test that players table can be sorted by columns."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     table = page.locator("#divisionPlayersTable")
 
@@ -237,7 +237,7 @@ def test_player_table_sorting(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_export_buttons_present(page: Page, division: str) -> None:
     """Test that export buttons are present for both tables."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Team table export buttons
     team_csv_btn = page.locator("#export-divisionTeamsTable-csv")
@@ -255,7 +255,7 @@ def test_export_buttons_present(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_navigation_back_to_divisions(page: Page, division: str) -> None:
     """Test navigation link back to all divisions page."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Find back link
     back_link = page.locator("a:has-text('Back to All Divisions')")
@@ -269,7 +269,7 @@ def test_navigation_back_to_divisions(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division,parent_conference", DIVISIONS.items())
 def test_navigation_to_parent_conference(page: Page, division: str, parent_conference: str) -> None:
     """Test navigation link to parent conference page."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Find conference link in navigation
     conf_link = page.locator(f"a:has-text('View {parent_conference} Conference')")
@@ -282,7 +282,7 @@ def test_navigation_to_parent_conference(page: Page, division: str, parent_confe
 
 def test_invalid_division_returns_404(page: Page) -> None:
     """Test that invalid division name returns 404 error."""
-    response = page.goto("http://localhost:8000/divisions/InvalidDivision")
+    response = page.goto("http://localhost:5000/divisions/InvalidDivision")
 
     # Should get 404 status
     assert response
@@ -292,7 +292,7 @@ def test_invalid_division_returns_404(page: Page) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_division_page_locale_parameter(page: Page, division: str) -> None:
     """Test that locale parameter is preserved in navigation links."""
-    page.goto(f"http://localhost:8000/divisions/{division}?lang=fr_CA")
+    page.goto(f"http://localhost:5000/divisions/{division}?lang=fr_CA")
 
     # Check that back link preserves locale
     back_link = page.locator("a:has-text('← Back to All Divisions')")
@@ -309,7 +309,7 @@ def test_division_page_locale_parameter(page: Page, division: str) -> None:
 def test_division_case_insensitive(page: Page, division: str) -> None:
     """Test that division names are case-insensitive in URL."""
     # Try lowercase version
-    page.goto(f"http://localhost:8000/divisions/{division.lower()}")
+    page.goto(f"http://localhost:5000/divisions/{division.lower()}")
 
     # Should still load successfully
     header = page.locator("h2").first
@@ -321,7 +321,7 @@ def test_division_case_insensitive(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_timestamp_displayed(page: Page, division: str) -> None:
     """Test that data timestamp is displayed on division page."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Find timestamp
     timestamp = page.locator(".timestamp")
@@ -337,7 +337,7 @@ def test_timestamp_displayed(page: Page, division: str) -> None:
 @pytest.mark.parametrize("division", ["Atlantic", "Metropolitan", "Central", "Pacific"])
 def test_responsive_layout(page: Page, division: str) -> None:
     """Test that division detail page has responsive layout elements."""
-    page.goto(f"http://localhost:8000/divisions/{division}")
+    page.goto(f"http://localhost:5000/divisions/{division}")
 
     # Check that stat cards use grid layout
     stats_summary = page.locator(".stats-summary")

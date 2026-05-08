@@ -254,15 +254,23 @@ def test_interactive_elements_keyboard_accessible(teams_page: TeamsPage) -> None
     count = interactive_elements.count()
     assert count > 0, f"Page should have interactive elements, found {count}"
 
-    # Check each element can receive focus (test first 5 to keep test fast)
-    for i in range(min(5, count)):
+    # Check each element can receive focus (test first 5 visible elements to keep test fast)
+    tested_count = 0
+    for i in range(count):
+        if tested_count >= 5:
+            break
         element = interactive_elements.nth(i)
-        # Wait for element to be visible
-        element.wait_for(state="visible")
+        # Skip elements that are not visible (e.g., mobile nav toggle on desktop)
+        if not element.is_visible():
+            continue
         # Focus the element
         element.focus()
         # Verify it's focused
         expect(element).to_be_focused()
+        tested_count += 1
+
+    # Ensure we tested at least some elements
+    assert tested_count > 0, "Should have found at least one visible interactive element"
 
 
 @pytest.mark.accessibility
