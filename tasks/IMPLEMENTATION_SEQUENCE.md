@@ -28,19 +28,7 @@ Each task entry shows:
 
 ---
 
-## Phase 2: MEDIUM Priority - Platform Support (macOS) (3-4 hours)
-
-**Rationale**: Fix remaining macOS test failure to achieve cross-platform compatibility.
-
-```bash
-/implement-task testing/032-fix-macos-rate-limiter-timing.md  # 3-4h, Issue #538
-```
-
-**Phase Total**: 3-4 hours
-
----
-
-## Phase 3: MEDIUM Priority - Web Interface Foundation (34-48 hours)
+## Phase 2: MEDIUM Priority - Web Interface Foundation (34-48 hours)
 
 **Rationale**: Build foundation for web interface with core pages and grouping categories. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy), then add multi-dimensional grouping (nationality, position).
 
@@ -56,7 +44,7 @@ Each task entry shows:
 
 ---
 
-## Phase 4: MEDIUM Priority - I18n Quality & Testing (14-22 hours)
+## Phase 3: MEDIUM Priority - I18n Quality & Testing (14-22 hours)
 
 **Rationale**: Improve internationalization quality and coverage. Translation reviews should happen before comprehensive test suite to validate quality. Date/time formatting complements translation quality improvements.
 
@@ -72,7 +60,7 @@ Each task entry shows:
 
 ---
 
-## Phase 5: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
+## Phase 4: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
 
 **Rationale**: Low-effort documentation and tooling improvements. These are quick wins that improve developer experience without blocking other work.
 
@@ -87,7 +75,7 @@ Each task entry shows:
 
 ---
 
-## Phase 6: LOW Priority - I18n Visual Enhancements (2-3 hours)
+## Phase 5: LOW Priority - I18n Visual Enhancements (2-3 hours)
 
 **Rationale**: Visual improvements to locale selection. Low priority but enhances user experience. Do after core i18n quality work.
 
@@ -99,7 +87,7 @@ Each task entry shows:
 
 ---
 
-## Phase 7: LOW Priority - Translation Locales (Simple) (1-2 hours)
+## Phase 6: LOW Priority - Translation Locales (Simple) (1-2 hours)
 
 **Rationale**: Simple locale with minimal differences from en_US. Quick win for expanding locale coverage.
 
@@ -111,7 +99,7 @@ Each task entry shows:
 
 ---
 
-## Phase 8: LOW Priority - Translation Locales (Complex Languages) (42-56 hours)
+## Phase 7: LOW Priority - Translation Locales (Complex Languages) (42-56 hours)
 
 **Rationale**: Complex translations requiring professional translators. Group by estimated effort (simpler first). Can be parallelized if multiple translators available.
 
@@ -135,7 +123,7 @@ Each task entry shows:
 
 ---
 
-## Phase 9: LOW Priority - I18n Advanced Features (12-18 hours)
+## Phase 8: LOW Priority - I18n Advanced Features (12-18 hours)
 
 **Rationale**: Advanced i18n features that build on completed translations. Community platform enables collaborative translation. Locale-specific scoring adds fairness for international users.
 
@@ -148,7 +136,7 @@ Each task entry shows:
 
 ---
 
-## Phase 10: LOW Priority - Research & Evaluation (14-22 hours)
+## Phase 9: LOW Priority - Research & Evaluation (14-22 hours)
 
 **Rationale**: Research tasks that inform future decisions. No immediate implementation required, but valuable for strategic planning.
 
@@ -161,7 +149,7 @@ Each task entry shows:
 
 ---
 
-## Phase 11: LOW Priority - New Features (Infrastructure) (40-56 hours)
+## Phase 10: LOW Priority - New Features (Infrastructure) (40-56 hours)
 
 **Rationale**: Significant new features that add capabilities but aren't blocking current work. Group by complexity (simpler first).
 
