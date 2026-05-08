@@ -221,13 +221,13 @@ pytest tests/unit/test_historical_storage.py -v -rs
 
 ## Acceptance Criteria
 
-- [ ] Tests no longer fail on Windows (skipped or mocked)
-- [ ] Tests still pass on Ubuntu
-- [ ] Tests still pass on macOS
-- [ ] Skip reason clearly documented in code
-- [ ] Test coverage maintained (skipped tests don't reduce coverage on Windows)
-- [ ] No new test failures introduced
-- [ ] Docstrings explain Windows skip reason
+- [x] Tests no longer fail on Windows (skipped or mocked)
+- [x] Tests still pass on Ubuntu
+- [x] Tests still pass on macOS
+- [x] Skip reason clearly documented in code
+- [x] Test coverage maintained (skipped tests don't reduce coverage on Windows)
+- [x] No new test failures introduced
+- [x] Docstrings explain Windows skip reason
 
 ## Related Files
 
@@ -277,9 +277,140 @@ None - standalone bug fix
 
 ## Implementation Notes
 
-*To be filled during implementation:*
-- Approach chosen (skip vs mock vs ACL)
-- Number of tests modified
-- Skip decorator added to which classes/methods
-- Verification on all platforms
-- Date of fix completion
+**Implemented**: 2026-05-07
+**Commit**: 3c7b0c9 - fix(tests): resolve Windows platform test failures in nightly CI
+**Related PR**: #532 - https://github.com/bdperkin/nhl-scrabble/pull/532
+
+### Approach Chosen
+
+**Option 1: Skip Tests on Windows** (Recommended approach was implemented)
+
+Added `@pytest.mark.skipif(sys.platform == "win32", reason="...")` decorators to all 5 permission-based tests.
+
+### Tests Modified
+
+All 5 failing tests received the Windows skip decorator:
+
+1. **`TestHistoricalDataStoreInit::test_init_directory_creation_permission_error`** (Line 80-99)
+   - Decorator added before test method
+   - Reason: "chmod doesn't restrict permissions on Windows"
+
+2. **`TestSaveSeasonEdgeCases::test_save_season_write_fails_permission_denied`** (Line 178-197)
+   - Decorator added before test method
+   - Reason: "chmod doesn't restrict permissions on Windows"
+
+3. **`TestLoadSeasonEdgeCases::test_load_season_permission_denied`** (Line 284-303)
+   - Decorator added before test method
+   - Reason: "chmod doesn't restrict permissions on Windows"
+
+4. **`TestErrorMessages::test_save_error_message_includes_season`** (Line 624-640)
+   - Decorator added before test method
+   - Reason: "chmod doesn't restrict permissions on Windows"
+
+5. **`TestRecoveryLogic::test_load_after_save_failure`** (Line 678-701)
+   - Decorator added before test method
+   - Reason: "chmod doesn't restrict permissions on Windows"
+
+**Additional test modified:**
+
+6. **`TestRecoveryLogic::test_list_continues_after_individual_error`** (Line 703-718)
+   - Also uses chmod, so decorator added preventively
+   - Same skip reason
+
+### Skip Decorator Format
+
+```python
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="chmod doesn't restrict permissions on Windows",
+)
+def test_name(self, tmp_path: Path) -> None:
+    """Test docstring."""
+    # Test logic using chmod...
+```
+
+### Verification Results
+
+**Windows (via nightly CI):**
+- ✅ All 5 tests now skip instead of fail
+- ✅ Skip reason displayed: "chmod doesn't restrict permissions on Windows"
+- ✅ No permission-related test failures
+- ✅ Overall test suite passes on Windows
+
+**Ubuntu (via nightly CI):**
+- ✅ All 5 tests pass (not skipped)
+- ✅ Permission-based tests execute and validate correctly
+- ✅ Full test coverage maintained
+
+**macOS (via nightly CI):**
+- ✅ All 5 tests pass (not skipped)
+- ✅ Permission-based tests execute and validate correctly
+- ✅ Full test coverage maintained
+
+### Why Skip Approach Was Chosen
+
+1. **Simplicity**: Single decorator per test, minimal code change
+2. **Correctness**: Production code handles Windows permissions correctly; tests verify Unix behavior
+3. **Maintainability**: Clear, self-documenting reason for skip
+4. **Standard practice**: pytest and other projects use same approach
+5. **No false coverage**: Tests that can't validate behavior shouldn't run
+
+### Alternative Approaches Considered
+
+**Mock PermissionError (rejected):**
+- More complex (platform-specific logic in each test)
+- Doesn't actually test real permission behavior
+- Adds maintenance burden
+
+**Windows ACL Testing (rejected):**
+- Requires additional dependency (`pywin32`)
+- Significantly more complex implementation
+- Different test logic for Windows vs Unix
+- Overkill for this use case
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 4-6 hours
+- **Actual**: ~1 hour
+- **Variance**: Much faster than estimated
+- **Reason**:
+  - Solution was straightforward (skip decorators)
+  - No complex Windows ACL implementation needed
+  - No new dependencies required
+  - Pattern already established in codebase
+
+### Code Changes Summary
+
+**File modified**: `tests/unit/test_historical_storage.py`
+- **Lines changed**: +24 (6 decorators × 4 lines each)
+- **Tests modified**: 6 tests
+- **Tests fixed**: 5 originally failing + 1 preventive fix
+- **Approach**: Skip tests on Windows platform
+
+### Test Coverage Impact
+
+**Before fix:**
+- Windows: 5 test failures (blocking CI)
+- Unix: All tests passing
+- Coverage: Windows tests failed, so no coverage data
+
+**After fix:**
+- Windows: 5 tests skipped, 0 failures ✅
+- Unix: All tests passing (including permission tests)
+- Coverage: Maintained on Unix, Windows skips don't reduce coverage
+
+### Lessons Learned
+
+1. **Platform differences matter**: Windows ACLs vs Unix permissions require different approaches
+2. **Skip is valid**: Not all tests need to run on all platforms
+3. **Document why**: Skip reason helps future maintainers understand
+4. **Test the fix**: Verified on all 3 platforms via nightly CI
+5. **Simple is better**: Skip decorator > complex platform-specific logic
+
+### Related Issues Fixed
+
+This fix was part of broader Windows test failure resolution in PR #532, which also fixed:
+- Unicode encoding issues (separate task #030)
+- Other platform-specific test failures
+
+Issue #535 specifically tracks these 5 permission test failures.

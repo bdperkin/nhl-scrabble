@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Total Tasks**: 39 active tasks
-**Total Estimated Effort**: 227-307 hours
+**Total Tasks**: 38 active tasks
+**Total Estimated Effort**: 223-301 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -28,17 +28,16 @@ Each task entry shows:
 
 ---
 
-## Phase 2: MEDIUM Priority - Platform Support (Windows) (8-13 hours)
+## Phase 2: MEDIUM Priority - Platform Support (Windows) (5-7 hours)
 
-**Rationale**: Fix remaining Windows test failures to achieve cross-platform compatibility. Task 030 (unicode) is a dependency for these tests, so they follow in Phase 2.
+**Rationale**: Fix remaining Windows test failures to achieve cross-platform compatibility.
 
 ```bash
-/implement-task testing/029-fix-windows-permission-tests.md  # 4-6h, Issue #535
 /implement-task testing/031-fix-windows-recovery-logic-test.md  # 2-3h, Issue #537
 /implement-task testing/032-fix-macos-rate-limiter-timing.md  # 3-4h, Issue #538
 ```
 
-**Phase Total**: 9-13 hours
+**Phase Total**: 5-7 hours
 
 ---
 
