@@ -818,27 +818,32 @@ async def team_detail_page(
                 ) from e
 
         # Process roster and calculate scores
+        # Roster data has keys: 'forwards', 'defensemen', 'goalies'
         team_players: list[dict[str, Any]] = []
-        for roster_player in roster_data:
-            first_name = roster_player.get("firstName", {}).get("default", "")  # type: ignore[attr-defined,union-attr]
-            last_name = roster_player.get("lastName", {}).get("default", "")  # type: ignore[attr-defined,union-attr]
-
-            if not first_name or not last_name:
+        for position in ("forwards", "defensemen", "goalies"):
+            if position not in roster_data:
                 continue
 
-            first_score = scorer.calculate_score(first_name)
-            last_score = scorer.calculate_score(last_name)
-            full_score = first_score + last_score
+            for roster_player in roster_data[position]:
+                first_name = roster_player.get("firstName", {}).get("default", "")  # type: ignore[union-attr]
+                last_name = roster_player.get("lastName", {}).get("default", "")  # type: ignore[union-attr]
 
-            team_players.append(
-                {
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "score": full_score,
-                    "first_score": first_score,
-                    "last_score": last_score,
-                },
-            )
+                if not first_name or not last_name:
+                    continue
+
+                first_score = scorer.calculate_score(first_name)
+                last_score = scorer.calculate_score(last_name)
+                full_score = first_score + last_score
+
+                team_players.append(
+                    {
+                        "first_name": first_name,
+                        "last_name": last_name,
+                        "score": full_score,
+                        "first_score": first_score,
+                        "last_score": last_score,
+                    },
+                )
 
         # Sort by score (descending) and add rank
         team_players.sort(key=operator.itemgetter("score"), reverse=True)
