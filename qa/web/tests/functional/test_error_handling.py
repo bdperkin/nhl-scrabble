@@ -188,14 +188,16 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
 
     page_fixture.click("#analyzeBtn")
 
-    # Wait for table to be cleared or updated (WebKit sometimes caches)
-    # First wait for the row count to change from 10 (indicating refresh started)
-    page_fixture.wait_for_timeout(500)  # Give time for table to start updating
+    # Wait for HTMX loading indicator to appear (request started)
+    loading_indicator = page_fixture.locator("#loading")
+    expect(loading_indicator).to_be_visible(timeout=5000)
 
-    # Wait for results to update - use locator-based wait instead of string evaluation
-    # This avoids CSP violation from wait_for_function with string
-    # In WebKit, we need to wait longer and potentially for the table to be cleared first
-    expect(page_fixture.locator("#playersTable tbody tr")).to_have_count(5, timeout=30000)
+    # Wait for loading indicator to disappear (request completed)
+    expect(loading_indicator).to_be_hidden(timeout=30000)
+
+    # Now wait for the correct number of rows
+    # The table should have been replaced by HTMX with new content
+    expect(page_fixture.locator("#playersTable tbody tr")).to_have_count(5, timeout=5000)
 
     # Count rows from second submission - should be different
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()

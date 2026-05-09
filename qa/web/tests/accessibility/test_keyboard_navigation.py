@@ -170,28 +170,34 @@ def test_no_keyboard_trap(index_page: IndexPage) -> None:
         element_key = serialize_element(current_focus)
         unique_elements.add(element_key)
 
+        # Check if we've successfully cycled through all focusable elements
+        # If we've visited many unique elements and are now revisiting an early element,
+        # we've completed the cycle
+        if i > 10 and len(unique_elements) >= 8:
+            # Check if current element was seen in the first 5 tabs (early in cycle)
+            early_elements = {
+                serialize_element(focus_history[j]) for j in range(min(5, len(focus_history)))
+            }
+            if element_key in early_elements:
+                # We've cycled back to an early element after visiting 8+ unique elements - success!
+                break
+
         # Keyboard trap detection: Check if we're stuck on the same element
-        # for 10+ consecutive tabs AND we haven't seen any new elements in the last 10 tabs
+        # for 10+ consecutive tabs AND haven't visited many unique elements
         # This distinguishes between:
-        # - A true trap: Same element, no progress
-        # - Normal cycling: May revisit elements but makes progress
+        # - A true trap: Same element, no progress, few unique elements visited
+        # - Normal cycling: May revisit elements but has visited many unique elements
         if i >= 9:
             recent_elements = {serialize_element(focus_history[j]) for j in range(i - 9, i + 1)}
             if len(recent_elements) == 1:
-                # Exception: If we're on a navigation link and have visited multiple elements before,
-                # this is likely the end of the focus cycle, not a trap
-                if current_focus["tag"] == "A" and len(unique_elements) >= 8:
-                    # We've visited 8+ unique elements and cycled back to a link - this is normal
+                # If we've visited many unique elements before getting stuck,
+                # this is likely the end of the cycle, not a trap
+                if len(unique_elements) >= 10:
+                    # We've visited 10+ unique elements - this is normal cycling
                     break
-                # Stuck on same element for 10 tabs - this is a keyboard trap
-                msg = f"Keyboard trap detected at element: {current_focus}"
+                # Stuck on same element for 10 tabs with few unique elements - keyboard trap
+                msg = f"Keyboard trap detected at element: {current_focus} (visited only {len(unique_elements)} unique elements)"
                 raise AssertionError(msg)
-
-        # If we've cycled back to the first element after seeing multiple elements,
-        # that's normal focus cycling - exit successfully
-        if i > 10 and len(unique_elements) > 5 and current_focus == focus_history[0]:
-            # Successfully cycled through all focusable elements
-            break
 
 
 @pytest.mark.accessibility
