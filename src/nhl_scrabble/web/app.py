@@ -479,6 +479,7 @@ def _convert_players_to_dict(
             "full_name": player.full_name,
             "team": player.team,
             "score": player.full_score,
+            "player_id": player.player_id,
         }
         for player in players
     ]
@@ -588,10 +589,10 @@ def _build_entity_data(data: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
     players = [
         {
             "name": f"{player['first_name']} {player['last_name']}",
-            "id": player.get("id"),
+            "id": player.get("player_id"),
         }
         for player in data.get("top_players", [])
-        if player.get("id")
+        if player.get("player_id") and player.get("player_id") > 0
     ]
 
     return {
