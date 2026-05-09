@@ -158,4 +158,4 @@ def auto_link(text: str | Markup, entity_data: dict[str, Any], exclude: str = ""
 
     # Return as Markup to prevent double-escaping
     # Safe: result contains only HTML we generated from escaped entity names
-    return Markup(result)  # noqa: S704
+    return Markup(result)  # noqa: S704  # nosec B704
