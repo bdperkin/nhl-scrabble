@@ -70,7 +70,13 @@
                         <tr data-original-index="{{ loop.index }}">
                             <td data-value="{{ loop.index }}">{{ loop.index }}</td>
                             <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
-                                {{ player.first_name }} {{ player.last_name }}
+                                {% if player.player_id and player.player_id > 0 %}
+                                    <a href="/players/{{ player.player_id }}?lang={{ locale }}" class="team-link">
+                                        {{ player.first_name }} {{ player.last_name }}
+                                    </a>
+                                {% else %}
+                                    {{ player.first_name }} {{ player.last_name }}
+                                {% endif %}
                             </td>
                             <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
                             <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>

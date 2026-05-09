@@ -1061,3 +1061,142 @@ pre[data-copyable] {
         height: 80px;
     }
 }
+
+/* ===== Player Detail Page Styles ===== */
+
+/* Player Profile Header */
+.player-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+.player-photo-container {
+    flex-shrink: 0;
+}
+
+.player-photo {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--primary-color);
+}
+
+.player-info-container h2 {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+}
+
+.player-number-position {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.jersey-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.position-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.player-birthplace {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.country-flag {
+    width: 32px;
+    height: 24px;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+}
+
+/* Team Affiliation Section */
+.team-affiliation {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.team-logo-small {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.team-info h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.team-info h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.team-info h3 a:hover {
+    color: var(--primary-color);
+}
+
+/* Player Navigation */
+.player-navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+/* Responsive Design for Player Profile */
+@media (max-width: 768px) {
+    .player-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .player-photo {
+        width: 150px;
+        height: 150px;
+    }
+
+    .player-number-position {
+        justify-content: center;
+    }
+
+    .player-birthplace {
+        justify-content: center;
+    }
+
+    .player-navigation {
+        flex-direction: column;
+    }
+
+    .team-affiliation {
+        flex-direction: column;
+        text-align: center;
+    }
+}

@@ -733,6 +733,122 @@ class NHLApiClient:
         # Wrap with circuit breaker for DoS prevention
         return self.circuit_breaker.call(_fetch_roster)
 
+    def get_player_details(self, player_id: int) -> dict[str, Any]:
+        """Fetch detailed player information from NHL API.
+
+        Args:
+            player_id: NHL player ID (numeric)
+
+        Returns:
+            Player detail data including photo, birthplace, position, etc.
+
+        Raises:
+            NHLApiNotFoundError: If player not found
+            NHLApiConnectionError: If unable to connect to the API
+            NHLApiError: If API request fails
+
+        Examples:
+            >>> client = NHLApiClient()
+            >>> try:
+            ...     player = client.get_player_details(8478402)  # Connor McDavid
+            ...     assert "playerId" in player
+            ...     assert "firstName" in player
+            ... finally:
+            ...     client.close()
+        """
+        url = f"{self.base_url}/player/{player_id}/landing"
+
+        logger.debug(f"Fetching player details for player ID {player_id}")
+
+        # Validate URL with SSRF protection
+        self._validate_request_url(url)
+
+        @retry(
+            max_attempts=self.retries,
+            backoff_factor=self.backoff_factor,
+            max_backoff=self.max_backoff,
+            exceptions=(
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+            ),
+        )
+        def _fetch_player_details() -> dict[str, Any]:
+            """Fetch player details with retry logic."""
+            # Check if URL is cached
+            is_cached = self._is_url_cached(url)
+
+            # Only rate limit for actual API calls (not cached responses)
+            if not is_cached:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f"Rate limiting: acquiring token for player {player_id}")
+                self.rate_limiter.acquire()
+
+            try:
+                response = self.session.get(
+                    url,
+                    timeout=self.timeout,
+                    verify=self.ca_bundle,  # Explicit SSL verification with certifi CA bundle
+                )
+
+                # Handle 404 - player not found
+                if response.status_code == 404:
+                    logger.warning(f"Player {player_id} not found")
+                    raise NHLApiNotFoundError(f"Player {player_id} not found")
+
+                # Handle rate limiting (429)
+                if response.status_code == 429:
+                    retry_after = self._get_retry_after(response)
+                    logger.warning(f"Rate limited (429). Waiting {retry_after}s before retry.")
+                    time.sleep(retry_after)
+                    # Raise to trigger retry
+                    response.raise_for_status()
+
+                response.raise_for_status()
+                data = response.json()
+
+                # Validate response structure
+                validate_api_response_structure(
+                    data,
+                    required_keys=["playerId", "firstName", "lastName"],
+                )
+
+                logger.debug(f"Successfully fetched player details for {player_id}")
+
+                # Log cache status
+                from_cache = (
+                    hasattr(response, "from_cache")
+                    and isinstance(response.from_cache, bool)
+                    and response.from_cache
+                )
+                if from_cache:
+                    logger.debug("Cache hit - skipped rate limiting")
+                else:
+                    logger.debug("Real API request - rate limited")
+
+                return data  # type: ignore[no-any-return]
+
+            except requests.exceptions.SSLError as e:
+                logger.error(f"SSL certificate verification failed for player {player_id}: {e}")
+                raise NHLApiSSLError(
+                    f"SSL certificate verification failed for {url}: {e}",
+                ) from e
+            except requests.exceptions.HTTPError as e:
+                if e.response is not None and e.response.status_code == 404:
+                    raise NHLApiNotFoundError(f"Player {player_id} not found") from e
+                logger.error(f"HTTP error while fetching player {player_id}: {e}")
+                raise NHLApiError(f"HTTP error: {e}") from e
+            except (KeyError, ValueError) as e:
+                logger.error(f"Error parsing player details response: {e}")
+                raise NHLApiError(f"Invalid API response format: {e}") from e
+
+        try:
+            # Wrap with circuit breaker for DoS prevention
+            return self.circuit_breaker.call(_fetch_player_details)
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            # Convert to NHLApiConnectionError after retries exhausted
+            logger.error(f"Connection error after retries: {e}")
+            raise NHLApiConnectionError("Unable to connect to NHL API after retries") from e
+
     def get_rate_limit_stats(self) -> dict[str, Any]:
         """Get rate limiter statistics.
 

@@ -164,7 +164,7 @@ class ScrabbleScorer:
         Uses custom letter values if configured, otherwise uses default Scrabble values.
 
         Args:
-            player_data: Dictionary with 'firstName' and 'lastName' keys containing 'default' values
+            player_data: Dictionary with 'firstName', 'lastName', and optionally 'id' keys
             team: Team abbreviation
             division: Division name
             conference: Conference name
@@ -174,14 +174,19 @@ class ScrabbleScorer:
 
         Examples:
             >>> scorer = ScrabbleScorer()
-            >>> player = {"firstName": {"default": "Connor"}, "lastName": {"default": "McDavid"}}
+            >>> player = {"id": 8478402, "firstName": {"default": "Connor"}, "lastName": {"default": "McDavid"}}
             >>> result = scorer.score_player(player, "EDM", "Pacific", "Western")
             >>> result.full_score
             24
+            >>> result.player_id
+            8478402
         """
         first_name = player_data["firstName"]["default"]
         last_name = player_data["lastName"]["default"]
         full_name = f"{first_name} {last_name}"
+
+        # Extract player ID from NHL API data (0 if not provided for backwards compatibility)
+        player_id = player_data.get("id", 0)
 
         # Use custom scoring if custom values are set
         if self._letter_values is not self.LETTER_VALUES:
@@ -203,6 +208,7 @@ class ScrabbleScorer:
             team=team,
             division=division,
             conference=conference,
+            player_id=player_id,
         )
 
     @staticmethod

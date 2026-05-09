@@ -72,7 +72,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
                 "default-src 'self'; "
                 "style-src 'self' 'unsafe-inline'; "
                 "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
-                "img-src 'self' data: https://assets.nhle.com; "
+                "img-src 'self' data: https://assets.nhle.com https://flagcdn.com; "
                 "font-src 'self'; "
                 "connect-src 'self'"
             )
@@ -762,6 +762,126 @@ async def players_page(request: Request) -> HTMLResponse:
             status_code=500,
             detail=f"Failed to fetch NHL data: {e!s}",
         ) from e
+
+
+@app.get("/players/{player_id}", response_class=HTMLResponse)
+async def player_detail_page(
+    request: Request,
+    player_id: int,
+) -> HTMLResponse:
+    """Serve a player detail page with comprehensive information.
+
+    Args:
+        request: FastAPI request object
+        player_id: NHL player ID (numeric)
+
+    Returns:
+        Rendered player_detail.html template with player data
+
+    Raises:
+        HTTPException: If player not found or analysis fails
+    """
+    if templates is None:
+        raise HTTPException(status_code=500, detail="Templates not configured")
+
+    try:
+        # Fetch analysis data to get all players with scores
+        analysis_request = AnalysisRequest(top_players=100, use_cache=True)
+        data = await analyze_post(analysis_request)
+
+        # Find the player in top_players list by matching player_id
+        player_data = None
+        for player in data["top_players"]:
+            if player.get("player_id") == player_id:
+                player_data = player
+                break
+
+        if player_data is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Player {player_id} not found",
+            )
+
+        # Fetch extended player details from NHL API
+        with NHLApiClient() as nhl_client:
+            try:
+                nhl_data = nhl_client.get_player_details(player_id)
+            except NHLApiError as e:
+                logger.error("Failed to fetch player %s details: %s", player_id, e)
+                raise HTTPException(
+                    status_code=503,
+                    detail=f"Failed to fetch player details: {e!s}",
+                ) from e
+
+        # Extract birth location components with defaults
+        birth_city = nhl_data.get("birthCity", {})
+        birth_city_str = (
+            birth_city.get("default", "")
+            if isinstance(birth_city, dict)
+            else str(birth_city) if birth_city else ""
+        )
+
+        birth_state_prov = nhl_data.get("birthStateProvince", {})
+        birth_state_str = (
+            birth_state_prov.get("default", "")
+            if isinstance(birth_state_prov, dict)
+            else str(birth_state_prov) if birth_state_prov else ""
+        )
+
+        birth_country = nhl_data.get("birthCountry", "")
+
+        # Construct birthplace string
+        birthplace_parts = [p for p in (birth_city_str, birth_state_str, birth_country) if p]
+        birthplace = ", ".join(birthplace_parts) if birthplace_parts else "Unknown"
+
+        # Extract headshot URL
+        headshot = nhl_data.get("headshot", "")
+
+        # Extract position
+        position = nhl_data.get("position", "")
+
+        # Extract jersey number
+        sweater_number = nhl_data.get("sweaterNumber", 0)
+
+        # Extract player information
+        player_info = {
+            "player_id": player_id,
+            "full_name": player_data["name"],
+            "first_name": player_data["first_name"],
+            "last_name": player_data["last_name"],
+            "photo_url": headshot,
+            "birthplace": birthplace,
+            "birth_country": birth_country.lower() if birth_country else "",
+            "team_abbrev": player_data["team"],
+            "team_name": player_data.get("team_name", player_data["team"]),
+            "division": player_data["division"],
+            "conference": player_data["conference"],
+            "position": position,
+            "jersey_number": sweater_number,
+            "scrabble_score": player_data["score"],
+            "first_score": player_data["first_score"],
+            "last_score": player_data["last_score"],
+            "team_logo_url": f"https://assets.nhle.com/logos/nhl/svg/{player_data['team']}_light.svg",
+            "country_flag_url": (
+                f"https://flagcdn.com/w320/{birth_country.lower()}.png" if birth_country else ""
+            ),
+        }
+
+        context = setup_template_locale(request)
+        context.update(
+            {
+                "player": player_info,
+            },
+        )
+        return templates.TemplateResponse(
+            request=request,
+            name="player_detail.html",
+            context=context,
+        )
+
+    except NHLApiError as e:
+        logger.error("NHL API error during player detail page generation: %s", e)
+        raise HTTPException(status_code=503, detail=str(e)) from e
 
 
 @app.get("/teams", response_class=HTMLResponse)

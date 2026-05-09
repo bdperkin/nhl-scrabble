@@ -96,6 +96,7 @@ class TestPlayerScoreToDict:
         result = sample_player.to_dict()
 
         expected_fields = {
+            "player_id",
             "first_name",
             "last_name",
             "full_name",
@@ -113,6 +114,7 @@ class TestPlayerScoreToDict:
         """Verify to_dict() values match object attributes."""
         result = sample_player.to_dict()
 
+        assert result["player_id"] == 0
         assert result["first_name"] == "Alexander"
         assert result["last_name"] == "Ovechkin"
         assert result["full_name"] == "Alexander Ovechkin"
