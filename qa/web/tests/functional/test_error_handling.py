@@ -188,16 +188,18 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
 
     page_fixture.click("#analyzeBtn")
 
-    # Wait for HTMX loading indicator to appear (request started)
-    loading_indicator = page_fixture.locator("#loading")
-    expect(loading_indicator).to_be_visible(timeout=5000)
+    # Wait for HTMX to complete and table to update
+    # Check that row count changes from 10 first (indicating update started)
+    table_rows = page_fixture.locator("#playersTable tbody tr")
 
-    # Wait for loading indicator to disappear (request completed)
-    expect(loading_indicator).to_be_hidden(timeout=30000)
+    # Wait for row count to NOT be 10 (indicating table is being updated)
+    page_fixture.wait_for_function(
+        "() => document.querySelectorAll('#playersTable tbody tr').length !== 10",
+        timeout=30000,
+    )
 
-    # Now wait for the correct number of rows
-    # The table should have been replaced by HTMX with new content
-    expect(page_fixture.locator("#playersTable tbody tr")).to_have_count(5, timeout=5000)
+    # Now wait for exactly 5 rows
+    expect(table_rows).to_have_count(5, timeout=5000)
 
     # Count rows from second submission - should be different
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()
