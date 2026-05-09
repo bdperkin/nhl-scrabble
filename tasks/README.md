@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (35 active, 200 completed)
+**Total Tasks**: 235 tasks (34 active, 201 completed)
 
 ## Overview
 
@@ -248,7 +248,7 @@ Each task includes:
 | 048 | Add Conference Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours | Completed | [#541](https://github.com/bdperkin/nhl-scrabble/issues/541) | PR [#547](https://github.com/bdperkin/nhl-scrabble/pull/547), completed 2026-05-08 |
 | 049 | Add Division Detail Pages with Team Standings and Top Players | MEDIUM | 4-6 hours (actual: ~5h) | Completed | [#542](https://github.com/bdperkin/nhl-scrabble/issues/542) | PR [#548](https://github.com/bdperkin/nhl-scrabble/pull/548), completed 2026-05-07 |
 | 050 | Add Team Detail Pages with Player Rankings and Team Logo | MEDIUM | 4-6 hours (actual: ~6h) | Completed | [#543](https://github.com/bdperkin/nhl-scrabble/issues/543) | PR [#549](https://github.com/bdperkin/nhl-scrabble/pull/549), completed 2026-05-08 |
-| 051 | Add Player Detail Pages with Comprehensive Player Information | MEDIUM | 6-8 hours | Active | [#544](https://github.com/bdperkin/nhl-scrabble/issues/544) | - |
+| 051 | Add Player Detail Pages with Comprehensive Player Information | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#544](https://github.com/bdperkin/nhl-scrabble/issues/544) | PR [#562](https://github.com/bdperkin/nhl-scrabble/pull/562), completed 2026-05-09 |
 | 052 | Add Birthplace (Nationality) as Grouping Category | MEDIUM | 12-16 hours | Active | [#551](https://github.com/bdperkin/nhl-scrabble/issues/551) | - |
 | 053 | Add Player Position as Grouping Category | MEDIUM | 8-12 hours | Active | [#552](https://github.com/bdperkin/nhl-scrabble/issues/552) | - |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | PR [#496](https://github.com/bdperkin/nhl-scrabble/pull/496), completed 2026-05-05 |
