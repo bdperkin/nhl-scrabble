@@ -137,9 +137,14 @@ def test_no_keyboard_trap(index_page: IndexPage) -> None:
     index_page.navigate()
     index_page.wait_for_load()
 
-    # Track focus positions
-    focus_positions = []
+    # Track focus positions with unique element identification
+    focus_history = []
+    unique_elements = set()
     max_tabs = 50  # Reasonable limit to prevent infinite loop
+
+    # Serialize focus element for comparison
+    def serialize_element(el):
+        return f"{el['tag']}#{el['id']}.{el['class']}:{el['text']}"
 
     for i in range(max_tabs):
         # Press Tab
@@ -161,25 +166,25 @@ def test_no_keyboard_trap(index_page: IndexPage) -> None:
         }""",
         )
 
-        focus_positions.append(current_focus)
+        focus_history.append(current_focus)
+        element_key = serialize_element(current_focus)
+        unique_elements.add(element_key)
 
-        # Check if we've cycled back to an earlier element (normal behavior)
-        # Only flag as keyboard trap if stuck on same element for 5+ consecutive tabs
-        # and we haven't completed a full cycle (which would be normal)
-        if i >= 4 and len(focus_positions) >= 5:
-            if (
-                focus_positions[-1]
-                == focus_positions[-2]
-                == focus_positions[-3]
-                == focus_positions[-4]
-                == focus_positions[-5]
-            ):
-                # We're stuck on the same element for 5 tabs - keyboard trap
+        # Keyboard trap detection: Check if we're stuck on the same element
+        # for 10+ consecutive tabs AND we haven't seen any new elements in the last 10 tabs
+        # This distinguishes between:
+        # - A true trap: Same element, no progress
+        # - Normal cycling: May revisit elements but makes progress
+        if i >= 9:
+            recent_elements = {serialize_element(focus_history[j]) for j in range(i - 9, i + 1)}
+            if len(recent_elements) == 1:
+                # Stuck on same element for 10 tabs - this is a keyboard trap
                 msg = f"Keyboard trap detected at element: {current_focus}"
                 raise AssertionError(msg)
 
-        # If we've cycled back to the first element, that's normal - exit successfully
-        if i > 5 and current_focus == focus_positions[0]:
+        # If we've cycled back to the first element after seeing multiple elements,
+        # that's normal focus cycling - exit successfully
+        if i > 10 and len(unique_elements) > 5 and current_focus == focus_history[0]:
             # Successfully cycled through all focusable elements
             break
 
