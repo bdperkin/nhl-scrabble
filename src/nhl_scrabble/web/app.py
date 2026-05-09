@@ -478,7 +478,11 @@ def _convert_players_to_dict(
             "last_name": player.last_name,
             "full_name": player.full_name,
             "team": player.team,
+            "division": player.division,
+            "conference": player.conference,
             "score": player.full_score,
+            "first_score": player.first_score,
+            "last_score": player.last_score,
             "player_id": player.player_id,
         }
         for player in players
@@ -855,6 +859,13 @@ async def player_detail_page(
                 detail=f"Player {player_id} not found",
             )
 
+        # Get team name from team_standings
+        team_name = player_data["team"]  # Default to abbreviation
+        for team in data.get("team_standings", []):
+            if team["abbrev"] == player_data["team"]:
+                team_name = team["name"]
+                break
+
         # Fetch extended player details from NHL API
         with NHLApiClient() as nhl_client:
             try:
@@ -899,14 +910,14 @@ async def player_detail_page(
         # Extract player information
         player_info = {
             "player_id": player_id,
-            "full_name": player_data["name"],
+            "full_name": player_data["full_name"],
             "first_name": player_data["first_name"],
             "last_name": player_data["last_name"],
             "photo_url": headshot,
             "birthplace": birthplace,
             "birth_country": birth_country.lower() if birth_country else "",
             "team_abbrev": player_data["team"],
-            "team_name": player_data.get("team_name", player_data["team"]),
+            "team_name": team_name,
             "division": player_data["division"],
             "conference": player_data["conference"],
             "position": position,
