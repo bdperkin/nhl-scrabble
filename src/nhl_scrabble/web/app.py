@@ -608,7 +608,7 @@ def _build_entity_data(data: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
 
 
 @app.post("/api/analyze", response_model=AnalysisResponse)
-async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
+async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR0915
     """Run NHL Scrabble analysis.
 
     Fetches current NHL roster data, calculates Scrabble scores for all players,
@@ -683,6 +683,14 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
         # Convert player objects to dicts and sort by score
         all_players = _convert_players_to_dict(all_players_objects)
         all_players.sort(key=operator.itemgetter("score"), reverse=True)
+
+        # Add team names to players for display (lookup from team_scores_dict)
+        for player in all_players:
+            team_abbrev = player["team"]
+            if team_abbrev in team_scores_dict:
+                player["team_name"] = team_scores_dict[team_abbrev].name
+            else:
+                player["team_name"] = team_abbrev  # Fallback to abbreviation
 
         # Calculate playoff standings
         playoff_calc = PlayoffCalculator()

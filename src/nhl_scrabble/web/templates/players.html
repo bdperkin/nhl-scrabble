@@ -78,7 +78,7 @@
                                     {{ (player.first_name ~ " " ~ player.last_name) | auto_link(entity_data) | safe }}
                                 {% endif %}
                             </td>
-                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team | auto_link(entity_data) | safe }}</td>
+                            <td class="team-name" data-value="{{ player.team_name }}">{{ player.team_name | auto_link(entity_data) | safe }}</td>
                             <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
                         </tr>
                     {% endfor %}

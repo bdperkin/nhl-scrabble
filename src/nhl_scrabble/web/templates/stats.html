@@ -32,12 +32,12 @@
         <div class="stat-card">
             <h4>{% trans %}Top Team{% endtrans %}</h4>
             <p class="stat-value">{{ stats.highest_team_score }}</p>
-            <p class="stat-detail">{{ (stats.highest_team ~ " (" ~ stats.highest_team_name ~ ")") | auto_link(entity_data) | safe }}</p>
+            <p class="stat-detail">{{ stats.highest_team_name | auto_link(entity_data) | safe }}</p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Lowest Team{% endtrans %}</h4>
             <p class="stat-value">{{ stats.lowest_team }}</p>
-            <p class="stat-detail">{{ (stats.lowest_team ~ " (" ~ stats.lowest_team_name ~ ")") | auto_link(entity_data) | safe }}</p>
+            <p class="stat-detail">{{ stats.lowest_team_name | auto_link(entity_data) | safe }}</p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Data As Of{% endtrans %}</h4>
@@ -90,7 +90,7 @@
                             <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
                                 {{ (player.first_name ~ " " ~ player.last_name) | auto_link(entity_data) | safe }}
                             </td>
-                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team | auto_link(entity_data) | safe }}</td>
+                            <td class="team-name" data-value="{{ player.team_name }}">{{ player.team_name | auto_link(entity_data) | safe }}</td>
                             <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
                         </tr>
                     {% endfor %}
