@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans player_name=player.full_name %}{{ player_name }} - Player Profile{% endtrans %}{% endblock %}
+
+{% block og_title %}{{ player.full_name }} {% trans %}Player Profile{% endtrans %}{% endblock %}
+{% block twitter_title %}{{ player.full_name }} {% trans %}Player Profile{% endtrans %}{% endblock %}
+
+{% block content %}
+    <!-- Player Profile Header -->
+    <div class="player-header fade-on-scroll">
+        <div class="player-photo-container">
+            <img
+                src="{{ player.photo_url }}"
+                alt="{{ player.full_name }} photo"
+                class="player-photo"
+                loading="lazy"
+                onerror="this.src='/static/img/placeholder-player.png'; this.onerror=null;"
+            />
+        </div>
+        <div class="player-info-container">
+            <h2>{{ player.full_name }}</h2>
+            <div class="player-number-position">
+                <span class="jersey-number">#{{ player.jersey_number }}</span>
+                <span class="position-badge">{{ player.position }}</span>
+            </div>
+            <div class="player-birthplace">
+                {% if player.country_flag_url %}
+                <img
+                    src="{{ player.country_flag_url }}"
+                    alt="{{ player.birth_country }} flag"
+                    class="country-flag"
+                    loading="lazy"
+                    onerror="this.style.display='none'"
+                />
+                {% endif %}
+                <span>{{ player.birthplace }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Affiliation -->
+    <div class="team-affiliation fade-on-scroll">
+        <img
+            src="{{ player.team_logo_url }}"
+            alt="{{ player.team_name }} logo"
+            class="team-logo-small"
+            loading="lazy"
+            onerror="this.style.display='none'"
+        />
+        <div class="team-info">
+            <h3><a href="/teams/{{ player.team_abbrev }}?lang={{ locale }}">{{ player.team_name }}</a></h3>
+            <p class="team-meta">
+                <a href="/divisions/{{ player.division }}?lang={{ locale }}">{{ player.division }}</a> {% trans %}Division{% endtrans %} /
+                <a href="/conferences/{{ player.conference }}?lang={{ locale }}">{{ player.conference }}</a> {% trans %}Conference{% endtrans %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Scrabble Score Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Score{% endtrans %}</h4>
+            <p class="stat-value">{{ player.scrabble_score }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}First Name Score{% endtrans %}</h4>
+            <p class="stat-value">{{ player.first_score }}</p>
+            <p class="stat-detail">{{ player.first_name }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Last Name Score{% endtrans %}</h4>
+            <p class="stat-value">{{ player.last_score }}</p>
+            <p class="stat-detail">{{ player.last_name }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Position{% endtrans %}</h4>
+            <p class="stat-value">{{ player.position }}</p>
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <section class="info-section fade-on-scroll">
+        <div class="player-navigation">
+            <a href="/players?lang={{ locale }}" class="btn btn-secondary">
+                ← {% trans %}Back to All Players{% endtrans %}
+            </a>
+            <a href="/teams/{{ player.team_abbrev }}?lang={{ locale }}" class="btn btn-secondary">
+                {% trans %}View Team Roster{% endtrans %} →
+            </a>
+        </div>
+    </section>
+{% endblock %}

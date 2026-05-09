@@ -18,6 +18,7 @@ class PlayerScore:
         team: Team abbreviation (e.g., 'TOR', 'MTL')
         division: Division name
         conference: Conference name
+        player_id: NHL player ID (unique identifier, 0 if unknown)
     """
 
     first_name: str
@@ -29,6 +30,7 @@ class PlayerScore:
     team: str
     division: str
     conference: str
+    player_id: int = 0
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization.
@@ -44,6 +46,7 @@ class PlayerScore:
             Convert player to dictionary:
 
             >>> player = PlayerScore(
+            ...     player_id=8478402,
             ...     first_name="Connor",
             ...     last_name="McDavid",
             ...     full_name="Connor McDavid",
@@ -59,8 +62,11 @@ class PlayerScore:
             'Connor McDavid'
             >>> result['full_score']
             35
+            >>> result['player_id']
+            8478402
         """
         return {
+            "player_id": self.player_id,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "full_name": self.full_name,
@@ -79,6 +85,7 @@ class PlayerScore:
             String representation:
 
             >>> player = PlayerScore(
+            ...     player_id=8478402,
             ...     first_name="Connor",
             ...     last_name="McDavid",
             ...     full_name="Connor McDavid",
@@ -90,6 +97,6 @@ class PlayerScore:
             ...     conference="Western"
             ... )
             >>> repr(player)
-            "PlayerScore(name='Connor McDavid', score=35, team='EDM')"
+            "PlayerScore(id=8478402, name='Connor McDavid', score=35, team='EDM')"
         """
-        return f"PlayerScore(name='{self.full_name}', score={self.full_score}, team='{self.team}')"
+        return f"PlayerScore(id={self.player_id}, name='{self.full_name}', score={self.full_score}, team='{self.team}')"
