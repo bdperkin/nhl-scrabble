@@ -230,3 +230,134 @@ def test_player_detail_page_shows_country_flag(
     # Assertions
     assert response.status_code == 200
     assert b"flagcdn.com" in response.content
+
+
+@patch("nhl_scrabble.web.app.analyze_post")
+@patch("nhl_scrabble.web.app.NHLApiClient")
+def test_player_detail_page_nhl_api_error(
+    mock_nhl_client: MagicMock,
+    mock_analyze: MagicMock,
+    test_client: TestClient,
+    mock_analysis_data: dict,
+) -> None:
+    """Test handling of NHL API errors.
+
+    Args:
+        mock_nhl_client: Mock NHL API client
+        mock_analyze: Mock analysis endpoint
+        test_client: Test client fixture
+        mock_analysis_data: Mock analysis data
+    """
+    from nhl_scrabble.exceptions import NHLApiError
+
+    # Setup mocks
+    mock_analyze.return_value = mock_analysis_data
+    mock_client_instance = MagicMock()
+    mock_client_instance.get_player_details.side_effect = NHLApiError("API failed")
+    mock_nhl_client.return_value.__enter__.return_value = mock_client_instance
+    mock_nhl_client.return_value.__exit__.return_value = None
+
+    # Make request
+    response = test_client.get("/players/8478402")
+
+    # Should return 503 Service Unavailable
+    assert response.status_code == 503
+
+
+@patch("nhl_scrabble.web.app.analyze_post")
+def test_player_detail_page_analysis_error(
+    mock_analyze: MagicMock,
+    test_client: TestClient,
+) -> None:
+    """Test handling of analysis endpoint errors.
+
+    Args:
+        mock_analyze: Mock analysis endpoint
+        test_client: Test client fixture
+    """
+    from nhl_scrabble.exceptions import NHLApiError
+
+    # Setup mock to raise error
+    mock_analyze.side_effect = NHLApiError("Analysis failed")
+
+    # Make request
+    response = test_client.get("/players/8478402")
+
+    # Should return 503 Service Unavailable (NHL API error)
+    assert response.status_code == 503
+
+
+@patch("nhl_scrabble.web.app.analyze_post")
+@patch("nhl_scrabble.web.app.NHLApiClient")
+def test_player_detail_page_missing_birthplace_data(
+    mock_nhl_client: MagicMock,
+    mock_analyze: MagicMock,
+    test_client: TestClient,
+    mock_analysis_data: dict,
+) -> None:
+    """Test handling of missing birthplace data in NHL API response.
+
+    Args:
+        mock_nhl_client: Mock NHL API client
+        mock_analyze: Mock analysis endpoint
+        test_client: Test client fixture
+        mock_analysis_data: Mock analysis data
+    """
+    # Setup mocks with minimal player data
+    mock_analyze.return_value = mock_analysis_data
+    mock_client_instance = MagicMock()
+    mock_client_instance.get_player_details.return_value = {
+        "playerId": 8478402,
+        "firstName": {"default": "Connor"},
+        "lastName": {"default": "McDavid"},
+        # Missing birthCity, birthStateProvince, birthCountry
+        "position": "C",
+        "sweaterNumber": 97,
+    }
+    mock_nhl_client.return_value.__enter__.return_value = mock_client_instance
+    mock_nhl_client.return_value.__exit__.return_value = None
+
+    # Make request
+    response = test_client.get("/players/8478402")
+
+    # Should still return 200 with default values
+    assert response.status_code == 200
+    assert b"Unknown" in response.content  # Default birthplace
+
+
+@patch("nhl_scrabble.web.app.analyze_post")
+@patch("nhl_scrabble.web.app.NHLApiClient")
+def test_player_detail_page_no_country_flag(
+    mock_nhl_client: MagicMock,
+    mock_analyze: MagicMock,
+    test_client: TestClient,
+    mock_analysis_data: dict,
+) -> None:
+    """Test that no country flag URL is generated when country is missing.
+
+    Args:
+        mock_nhl_client: Mock NHL API client
+        mock_analyze: Mock analysis endpoint
+        test_client: Test client fixture
+        mock_analysis_data: Mock analysis data
+    """
+    # Setup mocks with no birth country
+    mock_analyze.return_value = mock_analysis_data
+    mock_client_instance = MagicMock()
+    mock_client_instance.get_player_details.return_value = {
+        "playerId": 8478402,
+        "firstName": {"default": "Connor"},
+        "lastName": {"default": "McDavid"},
+        "birthCity": {"default": "Richmond Hill"},
+        "birthCountry": "",  # Empty country
+        "position": "C",
+        "sweaterNumber": 97,
+    }
+    mock_nhl_client.return_value.__enter__.return_value = mock_client_instance
+    mock_nhl_client.return_value.__exit__.return_value = None
+
+    # Make request
+    response = test_client.get("/players/8478402")
+
+    # Should return 200 but no flag URL
+    assert response.status_code == 200

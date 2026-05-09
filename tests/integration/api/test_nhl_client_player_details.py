@@ -1,9 +1,17 @@
 """Integration tests for NHL API player details."""
 
+from unittest.mock import MagicMock, patch
+
 import pytest
+import requests
 
 from nhl_scrabble.api import NHLApiClient
-from nhl_scrabble.exceptions import NHLApiNotFoundError
+from nhl_scrabble.exceptions import (
+    NHLApiConnectionError,
+    NHLApiError,
+    NHLApiNotFoundError,
+    NHLApiSSLError,
+)
 
 
 @pytest.mark.slow
@@ -67,3 +75,99 @@ def test_get_player_details_cached() -> None:
 
     finally:
         client.close()
+
+
+def test_get_player_details_http_error() -> None:
+    """Test handling of HTTP errors (non-404)."""
+    client = NHLApiClient()
+
+    # Mock session to return 500 error
+    mock_response = MagicMock()
+    mock_response.status_code = 500
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError()
+
+    with (
+        patch.object(client.session, "get", return_value=mock_response),
+        pytest.raises(
+            NHLApiError,
+            match="HTTP error",
+        ),
+    ):
+        client.get_player_details(8478402)
+
+    client.close()
+
+
+def test_get_player_details_connection_error() -> None:
+    """Test handling of connection errors."""
+    client = NHLApiClient()
+
+    # Mock session to raise connection error
+    with (
+        patch.object(
+            client.session,
+            "get",
+            side_effect=requests.exceptions.ConnectionError("Connection failed"),
+        ),
+        pytest.raises(NHLApiConnectionError, match="Unable to connect"),
+    ):
+        client.get_player_details(8478402)
+
+    client.close()
+
+
+def test_get_player_details_timeout_error() -> None:
+    """Test handling of timeout errors."""
+    client = NHLApiClient()
+
+    # Mock session to raise timeout error
+    with (
+        patch.object(
+            client.session,
+            "get",
+            side_effect=requests.exceptions.Timeout("Request timed out"),
+        ),
+        pytest.raises(NHLApiConnectionError, match="Unable to connect"),
+    ):
+        client.get_player_details(8478402)
+
+    client.close()
+
+
+def test_get_player_details_ssl_error() -> None:
+    """Test handling of SSL certificate verification errors."""
+    client = NHLApiClient()
+
+    # Mock session to raise SSL error
+    with (
+        patch.object(
+            client.session,
+            "get",
+            side_effect=requests.exceptions.SSLError("Certificate verification failed"),
+        ),
+        pytest.raises(NHLApiSSLError, match="SSL certificate verification failed"),
+    ):
+        client.get_player_details(8478402)
+
+    client.close()
+
+
+def test_get_player_details_invalid_response() -> None:
+    """Test handling of invalid API response (missing required fields)."""
+    client = NHLApiClient()
+
+    # Mock session to return invalid response
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {"invalid": "data"}  # Missing required fields
+
+    with (
+        patch.object(client.session, "get", return_value=mock_response),
+        pytest.raises(
+            NHLApiError,
+            match="Invalid API response",
+        ),
+    ):
+        client.get_player_details(8478402)
+
+    client.close()
