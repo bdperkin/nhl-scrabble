@@ -1200,3 +1200,54 @@ pre[data-copyable] {
         text-align: center;
     }
 }
+
+/* ==========================================================================
+   Auto-Linked Entity Names
+   ========================================================================== */
+
+/* Auto-linked entity names in stat cards and detail sections */
+.stat-detail a,
+.stat-value a {
+    color: var(--link-color, #1e88e5);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--link-color, #1e88e5);
+    transition: all 0.2s ease;
+}
+
+.stat-detail a:hover,
+.stat-value a:hover {
+    border-bottom-color: transparent;
+    color: var(--link-hover-color, #1565c0);
+}
+
+/* Auto-linked entities in tables */
+.team-name a,
+.player-name a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--link-color, #1e88e5);
+    transition: all 0.2s ease;
+}
+
+.team-name a:hover,
+.player-name a:hover {
+    color: var(--link-color, #1e88e5);
+    border-bottom-color: transparent;
+}
+
+/* Prevent double-linking (if auto-link applied to already linked text) */
+a a {
+    pointer-events: none;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: none;
+}
+
+/* Focus styles for accessibility */
+.stat-detail a:focus,
+.stat-value a:focus,
+.team-name a:focus,
+.player-name a:focus {
+    outline: 2px solid var(--primary-color, #1e88e5);
+    outline-offset: 2px;
+}

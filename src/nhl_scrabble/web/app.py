@@ -30,6 +30,7 @@ from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors import PlayoffCalculator, TeamProcessor
 from nhl_scrabble.scoring import ScrabbleScorer
+from nhl_scrabble.web.utils.auto_link import auto_link
 
 if TYPE_CHECKING:
     from starlette.responses import Response
@@ -125,6 +126,9 @@ if TEMPLATES_DIR.exists():
         # Fallback to NullTranslations if .mo files not found
         null_translation = gettext.NullTranslations()
         templates.env.install_gettext_translations(null_translation, newstyle=True)  # type: ignore[attr-defined]
+
+    # Register custom filters
+    templates.env.filters["auto_link"] = auto_link
 
 # Cache storage (in-memory for now)
 _analysis_cache: dict[str, dict[str, Any]] = {}
@@ -551,6 +555,53 @@ def _group_teams_by_grouping(
     return divisions, conferences
 
 
+def _build_entity_data(data: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    """Build entity data for auto-linking from analysis results.
+
+    Args:
+        data: Analysis results dictionary containing team_standings and top_players
+
+    Returns:
+        Dictionary with entity lists for auto-linking:
+        {
+            'teams': [{'name': str, 'abbrev': str}, ...],
+            'divisions': [{'name': str}, ...],
+            'conferences': [{'name': str}, ...],
+            'players': [{'name': str, 'id': int}, ...]
+        }
+    """
+    # Extract unique teams
+    teams = [
+        {"name": team["name"], "abbrev": team["abbrev"]} for team in data.get("team_standings", [])
+    ]
+
+    # Extract unique divisions from teams
+    divisions_set = {team["division"] for team in data.get("team_standings", [])}
+    divisions = [{"name": div} for div in sorted(divisions_set)]
+
+    # Extract unique conferences from teams
+    conferences_set = {team["conference"] for team in data.get("team_standings", [])}
+    conferences = [{"name": conf} for conf in sorted(conferences_set)]
+
+    # Extract players with IDs (for player detail pages)
+    # Note: Player IDs come from the NHL API and are used for linking
+    players = [
+        {
+            "name": f"{player['first_name']} {player['last_name']}",
+            "id": player.get("id"),
+        }
+        for player in data.get("top_players", [])
+        if player.get("id")
+    ]
+
+    return {
+        "teams": teams,
+        "divisions": divisions,
+        "conferences": conferences,
+        "players": players,
+    }
+
+
 @app.post("/api/analyze", response_model=AnalysisResponse)
 async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:
     """Run NHL Scrabble analysis.
@@ -749,6 +800,7 @@ async def players_page(request: Request) -> HTMLResponse:
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -871,6 +923,7 @@ async def player_detail_page(
         context.update(
             {
                 "player": player_info,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -918,6 +971,7 @@ async def teams_page(request: Request) -> HTMLResponse:
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1056,6 +1110,7 @@ async def team_detail_page(
                 "team_players": team_players,
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1105,6 +1160,7 @@ async def divisions_page(request: Request) -> HTMLResponse:
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1216,6 +1272,7 @@ async def division_detail_page(request: Request, division_name: str) -> HTMLResp
                 },
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1265,6 +1322,7 @@ async def conferences_page(request: Request) -> HTMLResponse:
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1357,6 +1415,7 @@ async def conference_detail_page(
                 "conference_stats": conference_stats,
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1407,6 +1466,7 @@ async def league_page(request: Request) -> HTMLResponse:
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1460,6 +1520,7 @@ async def playoffs_page(request: Request) -> HTMLResponse:
                 "stats": data["stats"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1510,6 +1571,7 @@ async def stats_page(request: Request) -> HTMLResponse:
                 "team_standings": data["team_standings"],
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(
@@ -1621,6 +1683,7 @@ async def analyze_get(
                 "conference_standings": data["conference_standings"],
                 "playoff_bracket": data["playoff_bracket"],
                 "stats": data["stats"],
+                "entity_data": _build_entity_data(data),
             },
         )
         return templates.TemplateResponse(

@@ -25,7 +25,7 @@
         <div class="stat-card">
             <h4>{% trans %}Top Team{% endtrans %}</h4>
             <p class="stat-value">{{ conference_stats.highest_team_score }}</p>
-            <p class="stat-detail">{{ conference_stats.highest_team }} ({{ conference_stats.highest_team_name }})</p>
+            <p class="stat-detail">{{ (conference_stats.highest_team ~ " (" ~ conference_stats.highest_team_name ~ ")") | auto_link(entity_data) | safe }}</p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Total Players{% endtrans %}</h4>
@@ -34,7 +34,7 @@
         <div class="stat-card">
             <h4>{% trans %}Highest Player{% endtrans %}</h4>
             <p class="stat-value">{{ conference_stats.highest_player_score }}</p>
-            <p class="stat-detail">{{ conference_stats.highest_player_name }}</p>
+            <p class="stat-detail">{{ conference_stats.highest_player_name | auto_link(entity_data) | safe }}</p>
         </div>
     </div>
 

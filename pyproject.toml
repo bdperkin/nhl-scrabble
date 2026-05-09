@@ -602,6 +602,9 @@ types-requests = "types_requests"
 ty = "ty"
 uvicorn = "uvicorn"
 [tool.deptry.per_rule_ignores]
+DEP001 = [
+    "markupsafe", # Transitive dependency of jinja2, always available
+]
 DEP002 = [
     "babel",
     "bashate",
