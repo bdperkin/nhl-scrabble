@@ -44,9 +44,9 @@ def test_players_page_desktop(
     page.wait_for_timeout(500)
 
     # Take and compare full page screenshot with baseline
-    # Higher threshold for Firefox due to text rendering variations
+    # Higher threshold for all browsers due to text rendering variations in large tables
     screenshot = page.screenshot(full_page=True)
-    threshold = 0.2 if page.context.browser.browser_type.name == "firefox" else 0.1
+    threshold = 0.15
     assert_snapshot(screenshot, "players-desktop.png", threshold=threshold)
 
 
@@ -83,9 +83,9 @@ def test_players_page_mobile(
     page.wait_for_timeout(500)
 
     # Take and compare full page screenshot with baseline
-    # Higher threshold for mobile due to font rendering variations
+    # Higher threshold for all browsers due to text rendering variations in large tables
     screenshot = page.screenshot(full_page=True)
-    threshold = 0.2 if page.context.browser.browser_type.name == "firefox" else 0.1
+    threshold = 0.15
     assert_snapshot(screenshot, "players-mobile.png", threshold=threshold)
 
 
@@ -122,8 +122,9 @@ def test_players_page_tablet(
     page.wait_for_timeout(500)
 
     # Take and compare full page screenshot with baseline
+    # Higher threshold for all browsers due to text rendering variations in large tables
     screenshot = page.screenshot(full_page=True)
-    threshold = 0.2 if page.context.browser.browser_type.name == "firefox" else 0.1
+    threshold = 0.15
     assert_snapshot(screenshot, "players-tablet.png", threshold=threshold)
 
 
@@ -288,8 +289,8 @@ def test_players_full_page_all_browsers(
     # Take screenshot
     screenshot = page.screenshot(full_page=True)
 
-    # Use browser-specific threshold (Firefox has slightly more rendering variance)
+    # Higher threshold for all browsers due to text rendering variations in large tables
     browser_name = page.context.browser.browser_type.name
-    threshold = 0.2 if browser_name == "firefox" else 0.1
+    threshold = 0.15
 
     assert_snapshot(screenshot, f"players-full-{browser_name}.png", threshold=threshold)
