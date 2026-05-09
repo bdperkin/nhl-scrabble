@@ -41,7 +41,7 @@ class EntityLinker:
 
         # Players require player_id for linking (depends on task #051)
         self.player_patterns: list[tuple[str, int]] = [
-            (re.escape(player["name"]), player.get("id"))
+            (re.escape(player["name"]), int(player["id"]))
             for player in sorted(
                 self.entities.get("players", []),
                 key=lambda p: len(p["name"]),
@@ -65,7 +65,7 @@ class EntityLinker:
         self.entities = entities
         self._build_patterns()
 
-    def link_text(self, text: str, exclude_types: list[str] | None = None) -> str:
+    def link_text(self, text: str, exclude_types: list[str] | None = None) -> str:  # noqa: C901
         """Automatically link entity names in text.
 
         Args:
@@ -92,37 +92,45 @@ class EntityLinker:
         if "team" not in exclude_types:
             for pattern, abbrev in self.team_patterns:
                 regex = re.compile(rf"\b{pattern}\b", re.IGNORECASE)
-                result = regex.sub(
-                    lambda m, a=abbrev: f'<a href="/teams/{a}">{m.group(0)}</a>',
-                    result,
-                )
+
+                def team_replacer(m: re.Match[str], a: str = abbrev) -> str:
+                    """Replace team name with link to team detail page."""
+                    return f'<a href="/teams/{a}">{m.group(0)}</a>'
+
+                result = regex.sub(team_replacer, result)
 
         if "division" not in exclude_types:
             for pattern, name in self.division_patterns:
                 # Match "Atlantic" or "Atlantic Division"
                 regex = re.compile(rf"\b{pattern}(?:\s+Division)?\b", re.IGNORECASE)
-                result = regex.sub(
-                    lambda m, n=name: f'<a href="/divisions/{n}">{m.group(0)}</a>',
-                    result,
-                )
+
+                def division_replacer(m: re.Match[str], n: str = name) -> str:
+                    """Replace division name with link to division detail page."""
+                    return f'<a href="/divisions/{n}">{m.group(0)}</a>'
+
+                result = regex.sub(division_replacer, result)
 
         if "conference" not in exclude_types:
             for pattern, name in self.conference_patterns:
                 # Match "Eastern" or "Eastern Conference"
                 regex = re.compile(rf"\b{pattern}(?:\s+Conference)?\b", re.IGNORECASE)
-                result = regex.sub(
-                    lambda m, n=name: f'<a href="/conferences/{n}">{m.group(0)}</a>',
-                    result,
-                )
+
+                def conference_replacer(m: re.Match[str], n: str = name) -> str:
+                    """Replace conference name with link to conference detail page."""
+                    return f'<a href="/conferences/{n}">{m.group(0)}</a>'
+
+                result = regex.sub(conference_replacer, result)
 
         if "player" not in exclude_types:
             for pattern, player_id in self.player_patterns:
                 if player_id:  # Only link if we have a player ID
                     regex = re.compile(rf"\b{pattern}\b", re.IGNORECASE)
-                    result = regex.sub(
-                        lambda m, pid=player_id: f'<a href="/players/{pid}">{m.group(0)}</a>',
-                        result,
-                    )
+
+                    def player_replacer(m: re.Match[str], pid: int = player_id) -> str:
+                        """Replace player name with link to player detail page."""
+                        return f'<a href="/players/{pid}">{m.group(0)}</a>'
+
+                    result = regex.sub(player_replacer, result)
 
         return result
 
@@ -146,9 +154,8 @@ def auto_link(text: str | Markup, entity_data: dict[str, Any], exclude: str = ""
     text_str = str(text)
 
     exclude_types = [t.strip() for t in exclude.split(",") if t.strip()]
-    linker = EntityLinker(entity_data)
-    result = linker.link_text(text_str, exclude_types)
+    result = EntityLinker(entity_data).link_text(text_str, exclude_types)
 
     # Return as Markup to prevent double-escaping
     # Safe: result contains only HTML we generated from escaped entity names
-    return Markup(result)  # noqa: S704, B704
+    return Markup(result)  # noqa: S704
