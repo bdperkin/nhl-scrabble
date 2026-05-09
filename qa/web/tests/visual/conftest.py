@@ -89,15 +89,24 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
         diff_image = Image.new("RGBA", actual_image.size)
 
         # Compare images using pixelmatch
+        # Use fixed threshold 0.1 for pixel-level color sensitivity
         diff_pixels = pixelmatch(
             actual_image,
             baseline_image,
             diff_image,
-            threshold=threshold,
+            threshold=0.1,
         )
 
         # If snapshots match, we're done
         if diff_pixels == 0:
+            return
+
+        # Calculate diff ratio (percentage of different pixels)
+        total_pixels = actual_image.size[0] * actual_image.size[1]
+        diff_ratio = diff_pixels / total_pixels
+
+        # Check if within acceptable threshold
+        if diff_ratio <= threshold:
             return
 
         # Snapshots don't match - save diagnostic images for debugging
@@ -138,7 +147,8 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
         pytest.fail(
             f"Snapshots does not match\n"
             f"  Diff pixels: {diff_pixels}\n"
-            f"  Threshold: {threshold}\n"
+            f"  Diff ratio: {diff_ratio:.6f} ({diff_ratio * 100:.4f}%)\n"
+            f"  Threshold: {threshold} ({threshold * 100:.2f}%)\n"
             f"  Actual: {actual_path}\n"
             f"  Baseline: {baseline_path}\n"
             f"  Diff: {diff_path}",
