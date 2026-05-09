@@ -188,9 +188,18 @@ def test_results_replace_previous_results(page_fixture: Page) -> None:
 
     page_fixture.click("#analyzeBtn")
 
-    # Wait for results to update - use locator-based wait instead of string evaluation
-    # This avoids CSP violation from wait_for_function with string
-    expect(page_fixture.locator("#playersTable tbody tr")).to_have_count(5, timeout=30000)
+    # Wait for HTMX to complete and table to update
+    # Check that row count changes from 10 first (indicating update started)
+    table_rows = page_fixture.locator("#playersTable tbody tr")
+
+    # Wait for row count to NOT be 10 (indicating table is being updated)
+    page_fixture.wait_for_function(
+        "() => document.querySelectorAll('#playersTable tbody tr').length !== 10",
+        timeout=30000,
+    )
+
+    # Now wait for exactly 5 rows
+    expect(table_rows).to_have_count(5, timeout=5000)
 
     # Count rows from second submission - should be different
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()

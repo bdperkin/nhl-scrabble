@@ -1,7 +1,7 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Total Tasks**: 37 active tasks
+**Total Tasks**: 35 active tasks
 **Total Estimated Effort**: 221-298 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
@@ -33,14 +33,13 @@ Each task entry shows:
 **Rationale**: Build foundation for web interface with core pages and grouping categories. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy), then add multi-dimensional grouping (nationality, position).
 
 ```bash
-/implement-task new-features/046-add-players-menu-and-page.md  # 4-6h, Issue #539
-/implement-task new-features/051-add-player-detail-pages.md  # 6-8h, Issue #544, [Dependency: #539]
-/implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539, #541, #542, #543, #544]
+/implement-task new-features/051-add-player-detail-pages.md  # 6-8h, Issue #544, [Dependency: #539 ✅]
+/implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539 ✅, #541 ✅, #542 ✅, #543 ✅, #544]
 /implement-task new-features/052-add-birthplace-nationality-grouping.md  # 12-16h, Issue #551
 /implement-task new-features/053-add-position-grouping.md  # 8-12h, Issue #552
 ```
 
-**Phase Total**: 34-48 hours
+**Phase Total**: 30-42 hours
 
 ---
 

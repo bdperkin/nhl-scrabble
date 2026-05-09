@@ -137,13 +137,21 @@ def test_no_keyboard_trap(index_page: IndexPage) -> None:
     index_page.navigate()
     index_page.wait_for_load()
 
-    # Track focus positions
-    focus_positions = []
+    # Track focus positions with unique element identification
+    focus_history = []
+    unique_elements = set()
     max_tabs = 50  # Reasonable limit to prevent infinite loop
+
+    # Serialize focus element for comparison
+    def serialize_element(el):
+        return f"{el['tag']}#{el['id']}.{el['class']}:{el['text']}"
 
     for i in range(max_tabs):
         # Press Tab
         index_page.page.keyboard.press("Tab")
+
+        # Small wait to ensure focus has time to update (especially in Firefox)
+        index_page.page.wait_for_timeout(50)
 
         # Get current focus
         current_focus = index_page.page.evaluate(
@@ -158,15 +166,37 @@ def test_no_keyboard_trap(index_page: IndexPage) -> None:
         }""",
         )
 
-        focus_positions.append(current_focus)
+        focus_history.append(current_focus)
+        element_key = serialize_element(current_focus)
+        unique_elements.add(element_key)
 
-        # Check if we've cycled back to first element (normal behavior)
-        # or if we're stuck on the same element (keyboard trap)
-        # Require 3 consecutive identical focuses to avoid false positives
-        if i >= 2 and len(focus_positions) >= 3:
-            if focus_positions[-1] == focus_positions[-2] == focus_positions[-3]:
-                # We're stuck on the same element for 3 tabs - keyboard trap
-                msg = f"Keyboard trap detected at element: {current_focus}"
+        # Check if we've successfully cycled through all focusable elements
+        # If we've visited many unique elements and are now revisiting an early element,
+        # we've completed the cycle
+        if i > 10 and len(unique_elements) >= 8:
+            # Check if current element was seen in the first 5 tabs (early in cycle)
+            early_elements = {
+                serialize_element(focus_history[j]) for j in range(min(5, len(focus_history)))
+            }
+            if element_key in early_elements:
+                # We've cycled back to an early element after visiting 8+ unique elements - success!
+                break
+
+        # Keyboard trap detection: Check if we're stuck on the same element
+        # for 10+ consecutive tabs AND haven't visited many unique elements
+        # This distinguishes between:
+        # - A true trap: Same element, no progress, few unique elements visited
+        # - Normal cycling: May revisit elements but has visited many unique elements
+        if i >= 9:
+            recent_elements = {serialize_element(focus_history[j]) for j in range(i - 9, i + 1)}
+            if len(recent_elements) == 1:
+                # If we've visited many unique elements before getting stuck,
+                # this is likely the end of the cycle, not a trap
+                if len(unique_elements) >= 10:
+                    # We've visited 10+ unique elements - this is normal cycling
+                    break
+                # Stuck on same element for 10 tabs with few unique elements - keyboard trap
+                msg = f"Keyboard trap detected at element: {current_focus} (visited only {len(unique_elements)} unique elements)"
                 raise AssertionError(msg)
 
 

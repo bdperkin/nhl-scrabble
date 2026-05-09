@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans %}NHL Scrabble Analyzer - Top Players{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="page-header fade-on-scroll">
+        <h2>{% trans %}Top NHL Players by Scrabble Score{% endtrans %}</h2>
+        <p class="page-description">
+            {% trans %}Ranking of all NHL players based on the Scrabble value of their names. Higher scores indicate names with higher-value letters.{% endtrans %}
+        </p>
+        <p class="timestamp">
+            {% trans %}Data as of{% endtrans %}: {{ timestamp_date }} {{ timestamp_time }}
+        </p>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Highest Score{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.highest_score }}</p>
+            <p class="stat-detail">{{ stats.highest_player_name }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Average Score{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.avg_score|round(1) }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Lowest Score{% endtrans %}</h4>
+            <p class="stat-value">{{ stats.lowest_score }}</p>
+        </div>
+    </div>
+
+    <!-- Top Players Table -->
+    <section class="results-section fade-on-scroll">
+        <h3>{% trans %}Player Rankings{% endtrans %}</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-playersTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export player rankings table to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
+            </button>
+            <button id="export-playersTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export player rankings table to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="playersTable"
+                   class="results-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Top players by Scrabble score{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="name" data-sort-type="string">{% trans %}Player Name{% endtrans %}</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">{% trans %}Team{% endtrans %}</th>
+                        <th scope="col" data-sort="score" data-sort-type="number">{% trans %}Score{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in top_players %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
+                                {{ player.first_name }} {{ player.last_name }}
+                            </td>
+                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
+                            <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-info">
+            <p>{% trans %}Showing{% endtrans %} {{ top_players|length }} {% trans %}of{% endtrans %} {{ stats.total_players }} {% trans %}total players{% endtrans %}</p>
+        </div>
+    </section>
+
+    <!-- Scrabble Scoring Legend -->
+    <section class="legend-section fade-on-scroll">
+        <h3>{% trans %}Scrabble Letter Values{% endtrans %}</h3>
+        <div class="letter-values">
+            <div class="value-group">
+                <span class="value-label">1 {% trans %}point{% endtrans %}:</span>
+                <span class="letters">A, E, I, O, U, L, N, S, T, R</span>
+            </div>
+            <div class="value-group">
+                <span class="value-label">2 {% trans %}points{% endtrans %}:</span>
+                <span class="letters">D, G</span>
+            </div>
+            <div class="value-group">
+                <span class="value-label">3 {% trans %}points{% endtrans %}:</span>
+                <span class="letters">B, C, M, P</span>
+            </div>
+            <div class="value-group">
+                <span class="value-label">4 {% trans %}points{% endtrans %}:</span>
+                <span class="letters">F, H, V, W, Y</span>
+            </div>
+            <div class="value-group">
+                <span class="value-label">5 {% trans %}points{% endtrans %}:</span>
+                <span class="letters">K</span>
+            </div>
+            <div class="value-group">
+                <span class="value-label">8 {% trans %}points{% endtrans %}:</span>
+                <span class="letters">J, X</span>
+            </div>
+            <div class="value-group">
+                <span class="value-label">10 {% trans %}points{% endtrans %}:</span>
+                <span class="letters">Q, Z</span>
+            </div>
+        </div>
+    </section>
+{% endblock %}
