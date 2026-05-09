@@ -66,8 +66,8 @@
                             <td class="team-name" data-value="{{ team.name }}">
                                 <a href="/teams/{{ team.abbrev }}?lang={{ locale }}" class="team-link">{{ team.name }}</a>
                             </td>
-                            <td data-value="{{ team.division }}">{{ team.division | auto_link(entity_data) | safe }}</td>
-                            <td data-value="{{ team.conference }}">{{ team.conference | auto_link(entity_data) | safe }}</td>
+                            <td class="division-name" data-value="{{ team.division }}">{{ team.division | auto_link(entity_data) | safe }}</td>
+                            <td class="conference-name" data-value="{{ team.conference }}">{{ team.conference | auto_link(entity_data) | safe }}</td>
                             <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
                             <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
                             <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
