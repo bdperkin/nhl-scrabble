@@ -140,10 +140,13 @@ def test_players_table_displayed(page: Page, base_url: str) -> None:
     expect(headers).to_have_count(4)
 
     header_texts = [headers.nth(i).inner_text() for i in range(headers.count())]
-    assert "Rank" in header_texts
-    assert "Player Name" in header_texts
-    assert "Team" in header_texts
-    assert "Score" in header_texts
+    # Headers may contain emoji arrows and newlines, so check if text is contained
+    assert any("Rank" in text for text in header_texts), f"'Rank' not found in {header_texts}"
+    assert any(
+        "Player Name" in text for text in header_texts
+    ), f"'Player Name' not found in {header_texts}"
+    assert any("Team" in text for text in header_texts), f"'Team' not found in {header_texts}"
+    assert any("Score" in text for text in header_texts), f"'Score' not found in {header_texts}"
 
     # Check that table has rows
     rows = table.locator("tbody tr")
@@ -325,7 +328,10 @@ def test_players_accessibility_attributes(page: Page, base_url: str) -> None:
     # Check table ARIA attributes
     table = page.locator("#playersTable")
     expect(table).to_have_attribute("role", "table")
-    expect(table).to_have_attribute("aria-label")
+    expect(table).to_have_attribute(
+        "aria-label",
+        re.compile(r".+"),
+    )  # Has aria-label with any value
 
     # Check headers have scope
     headers = table.locator("thead th")
@@ -334,7 +340,13 @@ def test_players_accessibility_attributes(page: Page, base_url: str) -> None:
 
     # Check export buttons have aria-label
     csv_button = page.locator("#export-playersTable-csv")
-    expect(csv_button).to_have_attribute("aria-label")
+    expect(csv_button).to_have_attribute(
+        "aria-label",
+        re.compile(r".+"),
+    )  # Has aria-label with any value
 
     json_button = page.locator("#export-playersTable-json")
-    expect(json_button).to_have_attribute("aria-label")
+    expect(json_button).to_have_attribute(
+        "aria-label",
+        re.compile(r".+"),
+    )  # Has aria-label with any value
