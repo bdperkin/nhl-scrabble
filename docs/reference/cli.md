@@ -33,17 +33,19 @@ Fetches current NHL roster data from the official NHL API and calculates Scrabbl
 
 **Options**:
 
-| Option                   | Type   | Default | Description                                      |
-| ------------------------ | ------ | ------- | ------------------------------------------------ |
-| `-f, --format FORMAT`    | choice | `text`  | Output format: `text`, `json`, `csv`, `excel`    |
-| `-o, --output PATH`      | path   | stdout  | Output file path (writes to stdout if not given) |
-| `-v, --verbose`          | flag   | false   | Enable verbose logging (DEBUG level)             |
-| `-q, --quiet`            | flag   | false   | Suppress progress bars                           |
-| `--no-cache`             | flag   | false   | Disable API response caching                     |
-| `--clear-cache`          | flag   | false   | Clear API cache before running                   |
-| `--top-players INT`      | int    | 20      | Number of top players to show in rankings        |
-| `--top-team-players INT` | int    | 5       | Number of top players per team to show           |
-| `-h, --help`             | flag   | false   | Show command help and exit                       |
+| Option                   | Type   | Default | Description                                                       |
+| ------------------------ | ------ | ------- | ----------------------------------------------------------------- |
+| `-f, --format FORMAT`    | choice | `text`  | Output format: `text`, `json`, `csv`, `excel`                     |
+| `-o, --output PATH`      | path   | stdout  | Output file path (writes to stdout if not given)                  |
+| `-v, --verbose`          | flag   | false   | Enable verbose logging (DEBUG level)                              |
+| `-q, --quiet`            | flag   | false   | Suppress progress bars                                            |
+| `--no-cache`             | flag   | false   | Disable API response caching                                      |
+| `--clear-cache`          | flag   | false   | Clear API cache before running                                    |
+| `--top-players INT`      | int    | 20      | Number of top players to show in rankings                         |
+| `--top-team-players INT` | int    | 5       | Number of top players per team to show                            |
+| `--countries TEXT`       | text   | None    | Filter by countries (comma-separated codes: CAN,USA)              |
+| `--group-by CHOICE`      | choice | None    | Group players by: `team`, `division`, `conference`, `nationality` |
+| `-h, --help`             | flag   | false   | Show command help and exit                                        |
 
 **Examples**:
 
@@ -86,6 +88,18 @@ nhl-scrabble analyze -f json -o report.json -v --top-players 100
 
 # Mix short and long options (both work!)
 nhl-scrabble analyze -f json --output report.json -v
+
+# Filter by nationality/country (ISO 3166-1 alpha-3 codes)
+nhl-scrabble analyze --countries CAN,USA,SWE
+
+# Group players by nationality
+nhl-scrabble analyze --group-by nationality
+
+# Group by division
+nhl-scrabble analyze --group-by division
+
+# Combine filtering and grouping
+nhl-scrabble analyze --countries CAN,FIN,SWE --group-by nationality -f json
 ```
 
 **Output**:
