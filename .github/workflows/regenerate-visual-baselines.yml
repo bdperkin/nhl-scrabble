@@ -1,0 +1,298 @@
+name: Regenerate Visual Baselines
+
+on:
+  workflow_dispatch:
+    inputs:
+      browsers:
+        description: 'Browsers to regenerate baselines for'
+        required: true
+        type: choice
+        default: 'all'
+        options:
+          - 'all'
+          - 'chromium'
+          - 'firefox'
+          - 'webkit'
+      commit_message:
+        description: 'Custom commit message (optional)'
+        required: false
+        type: string
+        default: ''
+
+# Workflow-level permissions for baseline commits
+permissions:
+  contents: write  # Allow pushing baseline commits
+  pull-requests: write  # Allow commenting on PRs
+  actions: read  # Allow reading workflow runs
+
+jobs:
+  regenerate-baselines:
+    name: Regenerate Baselines (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false  # Generate all browser baselines even if one fails
+      matrix:
+        browser: >-
+          ${{
+            fromJSON(
+              github.event.inputs.browsers == 'all'
+              && '["chromium", "firefox", "webkit"]'
+              || format('["{0}"]', github.event.inputs.browsers)
+            )
+          }}
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Full history for version detection
+          ref: ${{ github.ref }}  # Checkout the branch that triggered this workflow
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - name: Install project dependencies
+        run: |
+          uv pip install -e ".[dev]" --system
+
+      - name: Install QA web dependencies
+        run: |
+          cd qa/web
+          uv pip install -e . --system
+
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io \
+              -u ${{ github.actor }} \
+              --password-stdin
+
+      - name: Pull Playwright Docker image
+        run: |
+          docker pull \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest
+
+      - name: Start web server in background
+        run: |
+          nhl-scrabble serve --host 0.0.0.0 --port 5000 &
+          echo $! > server.pid
+
+          # Wait for server to be ready (max 60 seconds)
+          echo "Waiting for server to start..."
+          for i in {1..60}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "✓ Server is ready"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "✗ Server failed to start within 60 seconds"
+              cat server.log || true
+              exit 1
+            fi
+            sleep 1
+          done
+        env:
+          PYTHONUNBUFFERED: "1"
+          NHL_SCRABBLE_TEST_MODE: "1"  # Use mocked fixture data for deterministic visual tests
+
+      - name: Prepare snapshot directory
+        run: |
+          # Create snapshot directory with correct permissions for Docker
+          # This allows the Docker container (running as pwuser) to write baseline screenshots
+          mkdir -p qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/linux
+          chmod -R 777 qa/web/tests/visual/__snapshots__
+
+          # Create output file with correct permissions
+          touch qa/web/visual-${{ matrix.browser }}-baseline-gen.xml
+          chmod 666 qa/web/visual-${{ matrix.browser }}-baseline-gen.xml
+
+      - name: Generate baseline screenshots
+        id: generate-baselines
+        run: |
+          echo "🔄 Generating baseline screenshots for ${{ matrix.browser }}..."
+
+          # Run pytest with --update-snapshots to regenerate baselines
+          docker run --rm \
+            --network host \
+            --volume "${{ github.workspace }}:/work:rw" \
+            --shm-size=2gb \
+            --workdir /work/qa/web \
+            --env "HOME=/home/pwuser" \
+            --env "PLAYWRIGHT_BROWSERS_PATH=/home/pwuser/.cache/ms-playwright" \
+            --env "BASE_URL=http://localhost:5000" \
+            --env "PYTHONUNBUFFERED=1" \
+            --env "PYTHONPATH=/work/src:/work/qa/web" \
+            ghcr.io/bdperkin/nhl-scrabble-playwright:latest \
+            bash -c "python3 -c 'import pathlib; \
+              p = pathlib.Path(\"/work/src/nhl_scrabble/_version.py\"); \
+              p.parent.mkdir(parents=True, exist_ok=True); \
+              p.touch() if not p.exists() else None; \
+              p.write_text(\"__version__ = \\\"0.0.0+local\\\"\\n\") \
+                if p.stat().st_size == 0 else None' && \
+              pytest -p no:cacheprovider tests/visual/ \
+                --browser=${{ matrix.browser }} \
+                --update-snapshots \
+                --verbose \
+                --tb=short \
+                --junit-xml=visual-${{ matrix.browser }}-baseline-gen.xml"
+
+          echo "✅ Baseline generation complete"
+
+      - name: Stop web server
+        if: always()
+        run: |
+          if [[ -f server.pid ]]; then
+            kill $(cat server.pid) || true
+            rm server.pid
+          fi
+
+      - name: Count generated baselines
+        id: count-baselines
+        run: |
+          BASELINE_COUNT=$(find qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/ \
+            -name "*.png" | wc -l)
+          echo "baseline_count=$BASELINE_COUNT" >> $GITHUB_OUTPUT
+          echo "Generated $BASELINE_COUNT baseline screenshot(s) for ${{ matrix.browser }}"
+
+      - name: Commit and push generated baselines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Reset file permissions (PNGs should be 644, not 755)
+          find qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/ \
+            -type f -name "*.png" -exec chmod 644 {} \;
+
+          # Stage only this browser's baselines
+          git add qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/
+
+          # Check if there are changes to commit
+          if git diff --cached --quiet; then
+            echo "ℹ️  No baseline changes for ${{ matrix.browser }}"
+            echo "Baselines were already up to date."
+          else
+            # Use custom commit message if provided, otherwise use default
+            if [[ -n "${{ github.event.inputs.commit_message }}" ]]; then
+              printf "%s\n" \
+                "${{ github.event.inputs.commit_message }}" \
+                > /tmp/commit-msg
+            else
+              printf "%s\n\n%s\n%s\n%s\n%s\n%s\n" \
+                "test(visual): regenerate ${{ matrix.browser }} baselines" \
+                "Generated by manual workflow trigger" \
+                "Workflow run: ${{ github.run_id }}" \
+                "Branch: ${{ github.ref_name }}" \
+                "Triggered by: ${{ github.actor }}" \
+                "Baseline count: ${{ steps.count-baselines.outputs.baseline_count }}" \
+                > /tmp/commit-msg
+            fi
+            git commit -F /tmp/commit-msg
+
+            # Push with retry logic for concurrent matrix jobs
+            for i in {1..5}; do
+              # Pull with rebase before pushing to avoid conflicts from concurrent jobs
+              if git pull --rebase origin ${{ github.ref_name }} && git push; then
+                echo "✅ Successfully pushed ${{ matrix.browser }} baselines"
+                break
+              elif [ $i -eq 5 ]; then
+                echo "❌ Failed to push after 5 attempts"
+                exit 1
+              else
+                echo "⚠️  Push failed, retrying in 5 seconds..."
+                sleep 5
+              fi
+            done
+          fi
+
+      - name: Upload generated baseline screenshots (backup)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-baselines-${{ matrix.browser }}
+          path: qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/
+          retention-days: 7
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-generation-results-${{ matrix.browser }}
+          path: qa/web/visual-${{ matrix.browser }}-baseline-gen.xml
+          retention-days: 7
+
+  summary:
+    name: Baseline Regeneration Summary
+    runs-on: ubuntu-latest
+    needs: regenerate-baselines
+    if: always()
+
+    env:
+      # Opt into Node.js 24 for GitHub Actions (addresses deprecation warnings)
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 5  # Get recent commits to show what was generated
+
+      - name: Generate summary
+        run: |
+          echo "# 📸 Visual Baseline Regeneration Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Browsers:** \`${{ github.event.inputs.browsers }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check if any commits were created
+          RECENT_COMMITS=$(git log --oneline --grep="regenerate.*baselines" -5 || echo "")
+          if [[ -n "$RECENT_COMMITS" ]]; then
+            echo "## ✅ Baselines Updated" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Recent baseline commits:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$RECENT_COMMITS" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ℹ️ No Changes" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Baselines were already up to date." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Backup artifacts available for download:" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ github.event.inputs.browsers }}" == "all" ]]; then
+            echo "- \`regenerated-baselines-chromium\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`regenerated-baselines-firefox\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`regenerated-baselines-webkit\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- \`regenerated-baselines-${{ github.event.inputs.browsers }}\`" \
+              >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔄 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Pull the updated baselines: \`git pull origin ${{ github.ref_name }}\`" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "2. Review the changes with: \`git log -p --grep='regenerate.*baselines' -1\`" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "3. Run visual regression tests locally to verify:" \
+            "\`cd qa/web && pytest tests/visual/\`" >> $GITHUB_STEP_SUMMARY
