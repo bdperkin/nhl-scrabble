@@ -19,6 +19,9 @@ class PlayerScore:
         division: Division name
         conference: Conference name
         player_id: NHL player ID (unique identifier, 0 if unknown)
+        birthplace: Birthplace city and state/province (e.g., 'Richmond Hill, ON')
+        birth_country: ISO country code (e.g., 'CAN', 'USA', 'SWE')
+        nationality: Full country name (e.g., 'Canada', 'United States', 'Sweden')
     """
 
     first_name: str
@@ -31,6 +34,9 @@ class PlayerScore:
     division: str
     conference: str
     player_id: int = 0
+    birthplace: str = ""
+    birth_country: str = ""
+    nationality: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization.
@@ -55,7 +61,10 @@ class PlayerScore:
             ...     full_score=35,
             ...     team="EDM",
             ...     division="Pacific",
-            ...     conference="Western"
+            ...     conference="Western",
+            ...     birthplace="Richmond Hill, ON",
+            ...     birth_country="CAN",
+            ...     nationality="Canada"
             ... )
             >>> result = player.to_dict()
             >>> result['full_name']
@@ -76,6 +85,9 @@ class PlayerScore:
             "team": self.team,
             "division": self.division,
             "conference": self.conference,
+            "birthplace": self.birthplace,
+            "birth_country": self.birth_country,
+            "nationality": self.nationality,
         }
 
     def __repr__(self) -> str:
@@ -94,7 +106,10 @@ class PlayerScore:
             ...     full_score=35,
             ...     team="EDM",
             ...     division="Pacific",
-            ...     conference="Western"
+            ...     conference="Western",
+            ...     birthplace="Richmond Hill, ON",
+            ...     birth_country="CAN",
+            ...     nationality="Canada"
             ... )
             >>> repr(player)
             "PlayerScore(id=8478402, name='Connor McDavid', score=35, team='EDM')"

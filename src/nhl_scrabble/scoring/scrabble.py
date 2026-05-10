@@ -7,6 +7,7 @@ from functools import lru_cache
 from typing import Any, ClassVar
 
 from nhl_scrabble.models.player import PlayerScore
+from nhl_scrabble.utils.countries import get_country_name
 
 logger = logging.getLogger(__name__)
 
@@ -164,13 +165,14 @@ class ScrabbleScorer:
         Uses custom letter values if configured, otherwise uses default Scrabble values.
 
         Args:
-            player_data: Dictionary with 'firstName', 'lastName', and optionally 'id' keys
+            player_data: Dictionary with 'firstName', 'lastName', and optionally 'id',
+                'birthCity', 'birthStateProvince', 'birthCountry' keys
             team: Team abbreviation
             division: Division name
             conference: Conference name
 
         Returns:
-            PlayerScore object with all scoring information
+            PlayerScore object with all scoring and birthplace information
 
         Examples:
             >>> scorer = ScrabbleScorer()
@@ -187,6 +189,30 @@ class ScrabbleScorer:
 
         # Extract player ID from NHL API data (0 if not provided for backwards compatibility)
         player_id = player_data.get("id", 0)
+
+        # Extract birthplace information (may not be available for all players)
+        birth_city = (
+            player_data.get("birthCity", {}).get("default", "")
+            if isinstance(player_data.get("birthCity"), dict)
+            else player_data.get("birthCity", "")
+        )
+        birth_state = (
+            player_data.get("birthStateProvince", {}).get("default", "")
+            if isinstance(player_data.get("birthStateProvince"), dict)
+            else player_data.get("birthStateProvince", "")
+        )
+        birth_country_code = player_data.get("birthCountry", "")
+
+        # Format birthplace as "City, State" or just "City" if no state
+        if birth_city and birth_state:
+            birthplace = f"{birth_city}, {birth_state}"
+        elif birth_city:
+            birthplace = birth_city
+        else:
+            birthplace = ""
+
+        # Convert country code to full name
+        nationality = get_country_name(birth_country_code) if birth_country_code else ""
 
         # Use custom scoring if custom values are set
         if self._letter_values is not self.LETTER_VALUES:
@@ -209,6 +235,9 @@ class ScrabbleScorer:
             division=division,
             conference=conference,
             player_id=player_id,
+            birthplace=birthplace,
+            birth_country=birth_country_code,
+            nationality=nationality,
         )
 
     @staticmethod

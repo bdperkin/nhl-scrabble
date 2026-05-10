@@ -528,6 +528,10 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     help=_("Exclude teams (comma-separated abbreviations: NYR,PHI)"),
 )
 @click.option(
+    "--countries",
+    help=_("Filter by countries (comma-separated codes: CAN,USA,SWE,FIN)"),
+)
+@click.option(
     "--min-score",
     type=int,
     help=_("Minimum player score to include"),
@@ -536,6 +540,11 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
     "--max-score",
     type=int,
     help=_("Maximum player score to include"),
+)
+@click.option(
+    "--group-by",
+    type=click.Choice(["team", "division", "conference", "nationality"], case_sensitive=False),
+    help=_("Group players by team, division, conference, or nationality"),
 )
 # === Locale Options ===
 @click.option(
@@ -564,8 +573,10 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     conferences: str | None,
     teams: str | None,
     exclude_teams: str | None,
+    countries: str | None,
     min_score: int | None,
     max_score: int | None,
+    group_by: str | None,
     locale: str | None,
 ) -> None:
     r"""Run the NHL Scrabble analysis.
@@ -646,6 +657,18 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
 
       Filter by score range:
         $ nhl-scrabble analyze --min-score 50 --max-score 100
+
+      Filter by country:
+        $ nhl-scrabble analyze --countries CAN
+
+      Filter by multiple countries:
+        $ nhl-scrabble analyze --countries CAN,USA,SWE
+
+      Group by nationality:
+        $ nhl-scrabble analyze --group-by nationality
+
+      Combine country filter with grouping:
+        $ nhl-scrabble analyze --countries CAN,USA --group-by nationality
 
       Exclude specific teams:
         $ nhl-scrabble analyze --exclude-teams BOS,NYR
@@ -739,6 +762,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             conference=conferences,
             teams=teams,
             exclude=exclude_teams,
+            countries=countries,
             min_score=min_score,
             max_score=max_score,
         )
@@ -770,6 +794,12 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
                             excluded=", ".join(sorted(filters.excluded_teams)),
                         ),
                     )
+                if filters.countries:
+                    console.print(
+                        _("  • Countries: {countries}").format(
+                            countries=", ".join(sorted(filters.countries)),
+                        ),
+                    )
                 if filters.min_score is not None:
                     console.print(
                         _("  • Min score: {min_score}").format(min_score=filters.min_score),
@@ -777,6 +807,10 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
                 if filters.max_score is not None:
                     console.print(
                         _("  • Max score: {max_score}").format(max_score=filters.max_score),
+                    )
+                if group_by:
+                    console.print(
+                        _("  • Group by: {group_by}").format(group_by=group_by),
                     )
                 console.print()
 
