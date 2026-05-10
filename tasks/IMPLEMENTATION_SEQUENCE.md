@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-09 (task 051 completed)
-**Total Tasks**: 34 active tasks
+**Updated**: 2026-05-10 (task 001 completed)
+**Total Tasks**: 33 active tasks
 **Total Estimated Effort**: 215-290 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
@@ -29,17 +29,16 @@ Each task entry shows:
 
 ---
 
-## Phase 2: MEDIUM Priority - Web Interface Foundation (34-48 hours)
+## Phase 2: MEDIUM Priority - Web Interface Foundation (20-28 hours)
 
-**Rationale**: Build foundation for web interface with core pages and grouping categories. These are foundational for other web enhancements and auto-linking features. Implement in logical order: league-wide → conference → division → team → player (top-down hierarchy), then add multi-dimensional grouping (nationality, position).
+**Rationale**: Build foundation for web interface with core pages and grouping categories. These are foundational for other web enhancements. Add multi-dimensional grouping (nationality, position).
 
 ```bash
-/implement-task enhancement/001-auto-link-entity-names.md  # 4-6h, Issue #545, [Dependencies: #539 ✅, #541 ✅, #542 ✅, #543 ✅, #544 ✅]
 /implement-task new-features/052-add-birthplace-nationality-grouping.md  # 12-16h, Issue #551
 /implement-task new-features/053-add-position-grouping.md  # 8-12h, Issue #552
 ```
 
-**Phase Total**: 24-34 hours
+**Phase Total**: 20-28 hours
 
 ---
 
@@ -177,9 +176,9 @@ Each task entry shows:
 ### HIGH Priority: 1 task (2-3 hours)
 - Critical unicode/data integrity fix for Windows platform
 
-### MEDIUM Priority: 17 tasks (92-135 hours)
+### MEDIUM Priority: 16 tasks (88-129 hours)
 - **Platform Support**: 5 Windows tests, 1 macOS test (14-22h)
-- **Web Interface**: 3 page implementations + 1 auto-linking + 2 grouping features (34-48h)
+- **Web Interface**: 2 grouping features (20-28h)
 - **I18n Quality**: 2 translation reviews, 1 test suite, 1 date/time, 1 monitoring (13-18h + ongoing)
 
 ### LOW Priority: 25 tasks (140-181 hours)
@@ -200,12 +199,12 @@ Phase 1 (HIGH): Unicode Fix #536
                           macOS Fix #538
 
 Phase 3 (MEDIUM): Web Interface Pages
-    #540 League (no deps)
-        └─> #541 Conference
-            └─> #542 Division
-                └─> #539 Players
-                    └─> #544 Player Detail
-                        └─> #545 Auto-Linking (depends on all pages)
+    #540 League (completed)
+        └─> #541 Conference (completed)
+            └─> #542 Division (completed)
+                └─> #539 Players (completed)
+                    └─> #544 Player Detail (completed)
+                        └─> #545 Auto-Linking (completed)
 
 Phase 4 (MEDIUM): I18n Quality
     #509, #510 Translation Reviews (no deps, can parallel)
