@@ -30,7 +30,7 @@ def mock_analysis_data() -> dict:
         "top_players": [
             {
                 "player_id": 8478402,
-                "name": "Connor McDavid",
+                "full_name": "Connor McDavid",
                 "first_name": "Connor",
                 "last_name": "McDavid",
                 "team": "EDM",
