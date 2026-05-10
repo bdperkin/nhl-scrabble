@@ -5,9 +5,29 @@ code, team, division, and conference.
 """
 
 from collections import defaultdict
-from typing import Any
+from typing import TypedDict
 
 from nhl_scrabble.models.player import PlayerScore
+
+
+class GroupStatistics(TypedDict):  # TypedDict attributes used as type annotations
+    """Statistics for a group of players.
+
+    Attributes:
+        player_count: Number of players in the group
+        total_score: Sum of all player scores
+        average_score: Mean score across all players
+        min_score: Lowest player score
+        max_score: Highest player score
+        top_player: Player with highest score (as dict), or None if no players
+    """
+
+    player_count: int
+    total_score: int
+    average_score: float
+    min_score: int
+    max_score: int
+    top_player: dict[str, int | str] | None
 
 
 def group_by_nationality(players: list[PlayerScore]) -> dict[str, list[PlayerScore]]:
@@ -201,7 +221,7 @@ def group_by_conference(players: list[PlayerScore]) -> dict[str, list[PlayerScor
     return grouped.copy()
 
 
-def calculate_group_statistics(players: list[PlayerScore]) -> dict[str, Any]:
+def calculate_group_statistics(players: list[PlayerScore]) -> GroupStatistics:
     """Calculate statistics for a group of players.
 
     Args:
