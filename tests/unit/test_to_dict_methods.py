@@ -106,6 +106,9 @@ class TestPlayerScoreToDict:
             "team",
             "division",
             "conference",
+            "birthplace",
+            "birth_country",
+            "nationality",
         }
 
         assert set(result.keys()) == expected_fields
@@ -124,6 +127,9 @@ class TestPlayerScoreToDict:
         assert result["team"] == "WSH"
         assert result["division"] == "Metropolitan"
         assert result["conference"] == "Eastern"
+        assert result["birthplace"] == ""
+        assert result["birth_country"] == ""
+        assert result["nationality"] == ""
 
     def test_to_dict_json_serializable(self, sample_player: PlayerScore) -> None:
         """Verify to_dict() output is JSON-serializable."""
