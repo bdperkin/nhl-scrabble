@@ -16,7 +16,7 @@
         <div class="stat-card">
             <h4>{% trans %}Top Seed{% endtrans %}</h4>
             <p class="stat-value">{{ stats.highest_team_score }}</p>
-            <p class="stat-detail">{{ stats.highest_team }} ({{ stats.highest_team_name }})</p>
+            <p class="stat-detail">{{ stats.highest_team_name | auto_link(entity_data) | safe }}</p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Total Players{% endtrans %}</h4>
@@ -30,7 +30,7 @@
         <div class="playoff-container">
             {% for conference, teams in playoff_bracket.items() %}
                 <div class="conference-bracket">
-                    <h4>{{ conference }} {% trans %}Conference{% endtrans %}</h4>
+                    <h4>{{ conference | auto_link(entity_data) | safe }} {% trans %}Conference{% endtrans %}</h4>
                     <div class="playoff-teams">
                         {% for team in teams %}
                             <div class="playoff-team">
@@ -47,7 +47,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="team-info">
-                                    <span class="team-abbrev">{{ team.abbrev }}</span>
+                                    <span class="team-abbrev">{{ team.abbrev | auto_link(entity_data) | safe }}</span>
                                     <span class="team-score">{{ team.total }}</span>
                                     <span class="team-avg">({% trans %}avg{% endtrans %}: {{ team.avg|round(1) }})</span>
                                 </div>

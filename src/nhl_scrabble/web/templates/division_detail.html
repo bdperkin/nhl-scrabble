@@ -25,7 +25,7 @@
         <div class="stat-card">
             <h4>{% trans %}Top Team{% endtrans %}</h4>
             <p class="stat-value">{{ division_stats.highest_team_score }}</p>
-            <p class="stat-detail">{{ division_stats.highest_team }} ({{ division_stats.highest_team_name }})</p>
+            <p class="stat-detail">{{ (division_stats.highest_team ~ " (" ~ division_stats.highest_team_name ~ ")") | auto_link(entity_data) | safe }}</p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Total Players{% endtrans %}</h4>
@@ -34,7 +34,7 @@
         <div class="stat-card">
             <h4>{% trans %}Highest Player{% endtrans %}</h4>
             <p class="stat-value">{{ division_stats.highest_player_score }}</p>
-            <p class="stat-detail">{{ division_stats.highest_player_name }}</p>
+            <p class="stat-detail">{{ division_stats.highest_player_name | auto_link(entity_data) | safe }}</p>
         </div>
     </div>
 
@@ -82,7 +82,7 @@
                     {% for team in division_teams %}
                         <tr data-original-index="{{ loop.index }}">
                             <td data-value="{{ loop.index }}">{{ loop.index }}</td>
-                            <td class="team-name" data-value="{{ team.name }}">{{ team.name }}</td>
+                            <td class="team-name" data-value="{{ team.name }}">{{ team.name | auto_link(entity_data) | safe }}</td>
                             <td class="score" data-value="{{ team.total_score }}">{{ team.total_score }}</td>
                             <td data-value="{{ team.avg_score|round(1) }}">{{ team.avg_score|round(1) }}</td>
                             <td data-value="{{ team.player_count }}">{{ team.player_count }}</td>
@@ -129,7 +129,7 @@
                         <tr data-original-index="{{ loop.index }}">
                             <td data-value="{{ loop.index }}">{{ loop.index }}</td>
                             <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
-                                {{ player.first_name }} {{ player.last_name }}
+                                {{ (player.first_name ~ " " ~ player.last_name) | auto_link(entity_data) | safe }}
                             </td>
                             <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
                             <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>

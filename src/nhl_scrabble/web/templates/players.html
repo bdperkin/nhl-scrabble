@@ -22,7 +22,7 @@
         <div class="stat-card">
             <h4>{% trans %}Highest Score{% endtrans %}</h4>
             <p class="stat-value">{{ stats.highest_score }}</p>
-            <p class="stat-detail">{{ stats.highest_player_name }}</p>
+            <p class="stat-detail">{{ stats.highest_player_name | auto_link(entity_data) | safe }}</p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Average Score{% endtrans %}</h4>
@@ -75,10 +75,10 @@
                                         {{ player.first_name }} {{ player.last_name }}
                                     </a>
                                 {% else %}
-                                    {{ player.first_name }} {{ player.last_name }}
+                                    {{ (player.first_name ~ " " ~ player.last_name) | auto_link(entity_data) | safe }}
                                 {% endif %}
                             </td>
-                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team }}</td>
+                            <td class="team-name" data-value="{{ player.team_name }}">{{ player.team_name | auto_link(entity_data) | safe }}</td>
                             <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
                         </tr>
                     {% endfor %}
