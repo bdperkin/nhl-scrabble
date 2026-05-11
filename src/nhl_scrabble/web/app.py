@@ -608,6 +608,29 @@ def _build_entity_data(data: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
         if player.get("player_id") and player.get("player_id") > 0
     ]
 
+    # Ensure highest and lowest players are in entity data for stat card linking
+    stats = data.get("stats", {})
+    if stats:
+        # Add highest player if not already in list
+        if stats.get("highest_player_id") and stats.get("highest_player_name"):
+            highest_exists = any(
+                p["id"] == stats["highest_player_id"] for p in players if p.get("id")
+            )
+            if not highest_exists:
+                players.append(
+                    {"name": stats["highest_player_name"], "id": stats["highest_player_id"]},
+                )
+
+        # Add lowest player if not already in list
+        if stats.get("lowest_player_id") and stats.get("lowest_player_name"):
+            lowest_exists = any(
+                p["id"] == stats["lowest_player_id"] for p in players if p.get("id")
+            )
+            if not lowest_exists:
+                players.append(
+                    {"name": stats["lowest_player_name"], "id": stats["lowest_player_id"]},
+                )
+
     return {
         "teams": teams,
         "divisions": divisions,
@@ -728,9 +751,11 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR
             "total_teams": len(teams_data),
             "highest_score": all_players[0]["score"] if all_players else 0,
             "highest_player_name": all_players[0]["full_name"] if all_players else None,
+            "highest_player_id": all_players[0].get("player_id") if all_players else None,
             "highest_player_team": highest_player_team_name,
             "lowest_score": all_players[-1]["score"] if all_players else 0,
             "lowest_player_name": all_players[-1]["full_name"] if all_players else None,
+            "lowest_player_id": all_players[-1].get("player_id") if all_players else None,
             "avg_score": total_score / len(all_players) if all_players else 0,
             "highest_team": teams_data[0]["abbrev"] if teams_data else None,
             "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
