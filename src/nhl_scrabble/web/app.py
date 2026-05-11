@@ -35,6 +35,7 @@ from nhl_scrabble.processors import (
     group_by_nationality,
 )
 from nhl_scrabble.scoring import ScrabbleScorer
+from nhl_scrabble.utils.countries import get_country_name
 from nhl_scrabble.web.utils.auto_link import auto_link
 
 if TYPE_CHECKING:
@@ -923,6 +924,9 @@ async def player_detail_page(
         # Extract jersey number
         sweater_number = nhl_data.get("sweaterNumber", 0)
 
+        # Get nationality from birth country code
+        nationality = get_country_name(birth_country) if birth_country else ""
+
         # Extract player information
         player_info = {
             "player_id": player_id,
@@ -932,6 +936,7 @@ async def player_detail_page(
             "photo_url": headshot,
             "birthplace": birthplace,
             "birth_country": birth_country.lower() if birth_country else "",
+            "nationality": nationality,
             "team_abbrev": player_data["team"],
             "team_name": team_name,
             "division": player_data["division"],
