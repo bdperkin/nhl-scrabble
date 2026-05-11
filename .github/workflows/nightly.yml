@@ -161,14 +161,54 @@ jobs:
           uv pip install safety --system
           safety check
 
-  notify-failures:
-    name: Notify on Failure
+  retry-on-failure:
+    name: Retry Failed Jobs
     needs: [comprehensive-test, performance-test, dependency-audit]
     if: failure()
     runs-on: ubuntu-latest
+    outputs:
+      should_create_issue: ${{ steps.check-attempt.outputs.should_create_issue }}
 
     steps:
-      - name: Create issue on failure
+      - name: Check if this is first attempt
+        id: check-attempt
+        run: |
+          echo "run_attempt=${{ github.run_attempt }}" >> $GITHUB_OUTPUT
+          if [ "${{ github.run_attempt }}" = "1" ]; then
+            echo "should_create_issue=false" >> $GITHUB_OUTPUT
+            echo "🔄 First failure detected - will retry automatically"
+          else
+            echo "should_create_issue=true" >> $GITHUB_OUTPUT
+            echo "❌ Retry also failed - will create issue"
+          fi
+
+      - name: Trigger automatic retry (first attempt only)
+        if: github.run_attempt == 1
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('🔄 Triggering automatic retry of failed jobs...');
+
+            // Wait 60 seconds before retrying to allow transient issues to resolve
+            await new Promise(resolve => setTimeout(resolve, 60000));
+
+            // Re-run only the failed jobs
+            await github.rest.actions.reRunWorkflowFailedJobs({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+
+            console.log('✅ Retry triggered successfully');
+
+  notify-failures:
+    name: Notify on Failure
+    needs: [comprehensive-test, performance-test, dependency-audit, retry-on-failure]
+    if: failure() && needs.retry-on-failure.outputs.should_create_issue == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create issue on persistent failure
         uses: actions/github-script@v7
         with:
           script: |
@@ -190,8 +230,9 @@ jobs:
 
             if (todayIssue) {
               // Update existing issue with new run info
-              let commentBody = '🔄 Another failure in this nightly run:\n\n';
-              commentBody += `**Workflow Run:** ${runUrl}`;
+              let commentBody = '🔄 Another persistent failure in this nightly run:\n\n';
+              commentBody += `**Workflow Run:** ${runUrl}\n\n`;
+              commentBody += '⚠️  **Note:** This failure persisted after automatic retry.';
 
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
@@ -201,21 +242,28 @@ jobs:
               });
             } else {
               // Build issue body
-              let issueBody = 'Nightly comprehensive tests failed.\n\n';
+              let issueBody = '⚠️  Nightly comprehensive tests failed ';
+              issueBody += '**after automatic retry**.\n\n';
+              issueBody += '> **Note:** The workflow automatically retried failed jobs once. ';
+              issueBody += 'This issue was created because the failure persisted after retry, ';
+              issueBody += 'indicating a non-transient problem.\n\n';
               issueBody += `**Workflow Run:** ${runUrl}\n\n`;
               issueBody += `**Date:** ${date}\n\n`;
+              issueBody += `**Attempts:** 2 (original + 1 retry)\n\n`;
               issueBody += '## Failed Jobs\n\n';
               issueBody += 'Please check the workflow run for details on which jobs failed:\n';
               issueBody += '- Comprehensive Tests (multi-platform, multi-version)\n';
               issueBody += '- Performance Benchmarks\n';
               issueBody += '- Dependency Security Audit\n\n';
               issueBody += '## Investigation Steps\n\n';
-              issueBody += '1. Review the workflow logs\n';
-              issueBody += '2. Check if this is a transient failure (retry workflow)\n';
-              issueBody += '3. Verify environment-specific issues\n';
-              issueBody += '4. Check for dependency updates that may have broken compatibility\n';
-              issueBody += '5. Fix the issue and close this issue\n\n';
+              issueBody += '1. Review the workflow logs (check both attempts)\n';
+              issueBody += '2. Identify if specific jobs failed consistently\n';
+              issueBody += '3. Check for recent code changes that may have introduced the issue\n';
+              issueBody += '4. Verify environment-specific issues\n';
+              issueBody += '5. Check for dependency updates that may have broken compatibility\n';
+              issueBody += '6. Fix the issue and verify with manual workflow dispatch\n\n';
               issueBody += '## Next Steps\n\n';
+              issueBody += '- [ ] Review logs from both attempts\n';
               issueBody += '- [ ] Identify root cause\n';
               issueBody += '- [ ] Fix the issue\n';
               issueBody += '- [ ] Verify fix with manual workflow dispatch\n';
