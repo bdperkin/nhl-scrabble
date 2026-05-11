@@ -787,10 +787,22 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR
         # Use fixed timestamp in TEST_MODE for deterministic visual tests
         timestamp = "2026-01-15T12:00:00+00:00" if TEST_MODE else datetime.now(UTC).isoformat()
 
+        # Build top players list, ensuring lowest player is included for stat card linking
+        top_players_list = all_players[: request.top_players]
+        if all_players:
+            lowest_player = all_players[-1]
+            # Check if lowest player is already in top players list
+            lowest_player_id = lowest_player.get("player_id")
+            if lowest_player_id and not any(
+                p.get("player_id") == lowest_player_id for p in top_players_list
+            ):
+                # Add lowest player to the list so detail page links work
+                top_players_list.append(lowest_player)
+
         result = {
             "timestamp": timestamp,
             "cache_hit": False,
-            "top_players": all_players[: request.top_players],
+            "top_players": top_players_list,
             "team_standings": teams_data,
             "division_standings": divisions,
             "conference_standings": conferences,
