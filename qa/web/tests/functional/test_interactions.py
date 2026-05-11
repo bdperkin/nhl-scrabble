@@ -239,7 +239,14 @@ def test_multiple_form_submissions(page_fixture: Page) -> None:
     # Second submission with different value
     page_fixture.fill("#topPlayers", "15")
     page_fixture.click("#analyzeBtn")
-    page_fixture.wait_for_timeout(1000)  # Wait for results to update
+
+    # Wait for HTMX to complete and table to update with new row count
+    # Use wait_for_function to poll until the table has exactly 15 rows
+    # This is more reliable than fixed timeouts, especially in webkit
+    page_fixture.wait_for_function(
+        "document.querySelectorAll('#playersTable tbody tr').length === 15",
+        timeout=30000,
+    )
 
     # Verify second results
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()
