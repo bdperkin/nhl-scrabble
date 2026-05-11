@@ -495,6 +495,9 @@ def _convert_players_to_dict(
             "birthplace": player.birthplace,
             "birth_country": player.birth_country,
             "nationality": player.nationality,
+            "position_code": player.position_code,
+            "position": player.position,
+            "position_type": player.position_type,
         }
         for player in players
     ]
