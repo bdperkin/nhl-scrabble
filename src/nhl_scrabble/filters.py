@@ -35,7 +35,7 @@ class AnalysisFilters:
     max_score: int | None = None
 
     @classmethod
-    def from_options(
+    def from_options(  # noqa: PLR0913  # Factory method mirrors CLI options
         cls,
         division: str | None = None,
         conference: str | None = None,
