@@ -19,6 +19,7 @@ class AnalysisFilters:
         conferences: Set of conference names to include (e.g., {'Eastern', 'Western'})
         teams: Set of team abbreviations to include (e.g., {'TOR', 'MTL'})
         excluded_teams: Set of team abbreviations to exclude (e.g., {'BOS', 'NYR'})
+        countries: Set of country codes to include (e.g., {'CAN', 'USA', 'SWE'})
         min_score: Minimum player score to include (inclusive)
         max_score: Maximum player score to include (inclusive)
     """
@@ -27,6 +28,7 @@ class AnalysisFilters:
     conferences: frozenset[str] | None = None
     teams: frozenset[str] | None = None
     excluded_teams: frozenset[str] | None = None
+    countries: frozenset[str] | None = None
     min_score: int | None = None
     max_score: int | None = None
 
@@ -37,6 +39,7 @@ class AnalysisFilters:
         conference: str | None = None,
         teams: str | None = None,
         exclude: str | None = None,
+        countries: str | None = None,
         min_score: int | None = None,
         max_score: int | None = None,
     ) -> AnalysisFilters:
@@ -47,6 +50,7 @@ class AnalysisFilters:
             conference: Comma-separated list of conference names
             teams: Comma-separated list of team abbreviations
             exclude: Comma-separated list of team abbreviations to exclude
+            countries: Comma-separated list of country codes (e.g., "CAN,USA,SWE")
             min_score: Minimum player score (inclusive)
             max_score: Maximum player score (inclusive)
 
@@ -57,6 +61,7 @@ class AnalysisFilters:
             >>> filters = AnalysisFilters.from_options(
             ...     division="Atlantic,Metropolitan",
             ...     teams="TOR,MTL",
+            ...     countries="CAN,USA",
             ...     min_score=50
             ... )
         """
@@ -68,6 +73,9 @@ class AnalysisFilters:
             teams=frozenset(t.strip().upper() for t in teams.split(",")) if teams else None,
             excluded_teams=(
                 frozenset(e.strip().upper() for e in exclude.split(",")) if exclude else None
+            ),
+            countries=(
+                frozenset(c.strip().upper() for c in countries.split(",")) if countries else None
             ),
             min_score=min_score,
             max_score=max_score,
@@ -92,6 +100,12 @@ class AnalysisFilters:
             >>> filters.is_active()
             True
 
+            Country filter active:
+
+            >>> filters = AnalysisFilters(countries=frozenset(['CAN', 'USA']))
+            >>> filters.is_active()
+            True
+
             Score filter active:
 
             >>> filters = AnalysisFilters(min_score=50)
@@ -104,6 +118,7 @@ class AnalysisFilters:
                 self.conferences,
                 self.teams,
                 self.excluded_teams,
+                self.countries,
                 self.min_score is not None,
                 self.max_score is not None,
             ],
@@ -162,13 +177,13 @@ class AnalysisFilters:
         return not (self.conferences and team.conference not in self.conferences)
 
     def should_include_player(self, player: PlayerScore) -> bool:
-        """Check if a player should be included based on score filters.
+        """Check if a player should be included based on score and country filters.
 
         Args:
             player: Player to check
 
         Returns:
-            True if player passes all active score filters, False otherwise
+            True if player passes all active score and country filters, False otherwise
 
         Examples:
             No score filters - include all:
@@ -200,7 +215,29 @@ class AnalysisFilters:
             >>> filters = AnalysisFilters(max_score=20)
             >>> filters.should_include_player(player)
             False
+
+            Country filter - player passes:
+
+            >>> player_can = PlayerScore(
+            ...     first_name="Connor",
+            ...     last_name="McDavid",
+            ...     full_name="Connor McDavid",
+            ...     team="EDM",
+            ...     division="Pacific",
+            ...     conference="Western",
+            ...     first_score=20,
+            ...     last_score=15,
+            ...     full_score=35,
+            ...     birth_country="CAN"
+            ... )
+            >>> filters = AnalysisFilters(countries=frozenset(['CAN']))
+            >>> filters.should_include_player(player_can)
+            True
         """
+        # Check country filter
+        if self.countries and player.birth_country not in self.countries:
+            return False
+
         # Check minimum score
         if self.min_score is not None and player.full_score < self.min_score:
             return False

@@ -89,7 +89,7 @@ def test_analyze_endpoint_validation(client: TestClient) -> None:
     # Invalid top_players (too high)
     response = client.post(
         "/api/analyze",
-        json={"top_players": 200},
+        json={"top_players": 2001},
     )
     assert response.status_code == 422  # Validation error
 

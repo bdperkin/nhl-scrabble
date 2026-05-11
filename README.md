@@ -64,6 +64,7 @@ A [Python](https://www.python.org/) application that fetches current NHL roster 
   - REST API with [OpenAPI](https://www.openapis.org/) documentation
   - Mobile-friendly responsive design (WCAG 2.1 AA)
 - 📊 **Comprehensive Reports** - Conference/division standings, playoff brackets, team scores, statistics
+- 🌍 **Nationality Grouping** - Filter and group players by country of birth with ISO 3166-1 alpha-3 codes
 - 📈 **Progress Tracking** - Real-time progress bars for long operations
 - 🎯 **Flexible Output** - Text, JSON, or HTML format
 - 🎨 **Colorized Logging** - Color-coded log levels with TTY detection and NO_COLOR support
@@ -228,6 +229,15 @@ nhl-scrabble analyze -f html -o report.html
 
 # Customize display
 nhl-scrabble analyze --top-players 50 --top-team-players 10
+
+# Filter by nationality/country
+nhl-scrabble analyze --countries CAN,USA,SWE
+
+# Group players by nationality
+nhl-scrabble analyze --group-by nationality
+
+# Combine filters and grouping
+nhl-scrabble analyze --countries CAN,FIN,SWE --group-by nationality
 ```
 
 ### Web Server

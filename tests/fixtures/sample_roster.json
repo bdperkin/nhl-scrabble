@@ -1,24 +1,40 @@
 {
   "forwards": [
     {
+      "id": 8478402,
       "firstName": {"default": "Connor"},
-      "lastName": {"default": "McDavid"}
+      "lastName": {"default": "McDavid"},
+      "birthCity": {"default": "Richmond Hill"},
+      "birthStateProvince": {"default": "ON"},
+      "birthCountry": "CAN"
     },
     {
+      "id": 8477934,
       "firstName": {"default": "Leon"},
-      "lastName": {"default": "Draisaitl"}
+      "lastName": {"default": "Draisaitl"},
+      "birthCity": {"default": "Cologne"},
+      "birthStateProvince": {"default": ""},
+      "birthCountry": "DEU"
     }
   ],
   "defensemen": [
     {
+      "id": 8480803,
       "firstName": {"default": "Evan"},
-      "lastName": {"default": "Bouchard"}
+      "lastName": {"default": "Bouchard"},
+      "birthCity": {"default": "Oakville"},
+      "birthStateProvince": {"default": "ON"},
+      "birthCountry": "CAN"
     }
   ],
   "goalies": [
     {
+      "id": 8477948,
       "firstName": {"default": "Stuart"},
-      "lastName": {"default": "Skinner"}
+      "lastName": {"default": "Skinner"},
+      "birthCity": {"default": "Edmonton"},
+      "birthStateProvince": {"default": "AB"},
+      "birthCountry": "CAN"
     }
   ]
 }

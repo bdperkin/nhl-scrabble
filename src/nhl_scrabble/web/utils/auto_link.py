@@ -50,6 +50,15 @@ class EntityLinker:
             if player.get("id")  # Only link players with IDs
         ]
 
+        self.nationality_patterns: list[tuple[str, str]] = [
+            (re.escape(nationality["name"]), nationality["name"])
+            for nationality in sorted(
+                self.entities.get("nationalities", []),
+                key=lambda n: len(n["name"]),
+                reverse=True,
+            )
+        ]
+
     def __init__(self, entities: dict[str, list[dict[str, Any]]]) -> None:
         """Initialize the entity linker with entity data.
 
@@ -59,7 +68,8 @@ class EntityLinker:
                     'teams': [{'name': 'Maple Leafs', 'abbrev': 'TOR'}, ...],
                     'divisions': [{'name': 'Atlantic'}, ...],
                     'conferences': [{'name': 'Eastern'}, ...],
-                    'players': [{'name': 'Connor McDavid', 'id': 8478402}, ...]
+                    'players': [{'name': 'Connor McDavid', 'id': 8478402}, ...],
+                    'nationalities': [{'name': 'Canada'}, ...]
                 }
         """
         self.entities = entities
@@ -70,7 +80,7 @@ class EntityLinker:
 
         Args:
             text: Text to process
-            exclude_types: Entity types to skip ('team', 'division', 'conference', 'player')
+            exclude_types: Entity types to skip ('team', 'division', 'conference', 'player', 'nationality')
 
         Returns:
             Text with entity names wrapped in <a> tags
@@ -87,7 +97,7 @@ class EntityLinker:
         exclude_types = exclude_types or []
         result = text
 
-        # Apply patterns in order: teams, divisions, conferences, players
+        # Apply patterns in order: teams, divisions, conferences, players, nationalities
         # Use word boundaries to avoid partial matches
         if "team" not in exclude_types:
             for pattern, abbrev in self.team_patterns:
@@ -132,6 +142,16 @@ class EntityLinker:
 
                     result = regex.sub(player_replacer, result)
 
+        if "nationality" not in exclude_types:
+            for pattern, name in self.nationality_patterns:
+                regex = re.compile(rf"\b{pattern}\b", re.IGNORECASE)
+
+                def nationality_replacer(m: re.Match[str], n: str = name) -> str:
+                    """Replace nationality name with link to nationality detail page."""
+                    return f'<a href="/nationalities/{n}">{m.group(0)}</a>'
+
+                result = regex.sub(nationality_replacer, result)
+
         return result
 
 
@@ -144,7 +164,7 @@ def auto_link(text: str | Markup, entity_data: dict[str, Any], exclude: str = ""
 
     Args:
         text: Text to process
-        entity_data: Entity data dictionary (teams, divisions, conferences, players)
+        entity_data: Entity data dictionary (teams, divisions, conferences, players, nationalities)
         exclude: Comma-separated list of entity types to exclude
 
     Returns:

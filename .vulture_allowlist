@@ -48,3 +48,11 @@ max_concurrent_requests  # Config.max_concurrent_requests - used by API client
 
 # Dependency Injection public API (used by external callers)
 create_dependencies  # di.create_dependencies - convenience function for creating all dependencies
+
+# TypedDict attributes (type annotations, not runtime variables)
+player_count  # GroupStatistics.player_count - TypedDict field
+total_score  # GroupStatistics.total_score - TypedDict field
+average_score  # GroupStatistics.average_score - TypedDict field
+min_score  # GroupStatistics.min_score - TypedDict field
+max_score  # GroupStatistics.max_score - TypedDict field
+top_player  # GroupStatistics.top_player - TypedDict field

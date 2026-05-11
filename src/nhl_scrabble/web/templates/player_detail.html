@@ -33,7 +33,12 @@
                     onerror="this.style.display='none'"
                 />
                 {% endif %}
-                <span>{{ player.birthplace }}</span>
+                <span>
+                    {{ player.birthplace }}
+                    {% if player.nationality %}
+                    (<a href="/nationalities/{{ player.nationality }}?lang={{ locale }}">{{ player.nationality }}</a>)
+                    {% endif %}
+                </span>
             </div>
         </div>
     </div>

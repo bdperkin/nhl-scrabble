@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans %}NHL Scrabble Analyzer - {{ nationality }} Players{% endtrans %}{% endblock %}
+
+{% block og_title %}{{ nationality }} {% trans %}Players{% endtrans %}{% endblock %}
+{% block twitter_title %}{{ nationality }} {% trans %}Players{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="page-header fade-on-scroll">
+        <h2>{{ nationality }} {% trans %}Players{% endtrans %}</h2>
+        <p class="page-description">
+            {% trans %}All {{ nationality }} players in the NHL ranked by Scrabble score.{% endtrans %}
+        </p>
+        <p class="timestamp">
+            {% trans %}Data as of{% endtrans %}: {{ timestamp_date }} {{ timestamp_time }}
+        </p>
+    </div>
+
+    <!-- Nationality Summary Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
+            <p class="stat-value">{{ nationality_stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Total Score{% endtrans %}</h4>
+            <p class="stat-value">{{ nationality_stats.total_score }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Average Score{% endtrans %}</h4>
+            <p class="stat-value">{{ nationality_stats.avg_score|round(1) }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Highest Player{% endtrans %}</h4>
+            <p class="stat-value">{{ nationality_stats.highest_player_score }}</p>
+            <p class="stat-detail">{{ nationality_stats.highest_player_name | auto_link(entity_data) | safe }}</p>
+        </div>
+    </div>
+
+    <!-- Players Table -->
+    <section class="results-section fade-on-scroll">
+        <h3>{% trans %}All {{ nationality }} Players by Scrabble Score{% endtrans %}</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-nationalityPlayersTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export players table to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
+            </button>
+            <button id="export-nationalityPlayersTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export players table to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="nationalityPlayersTable"
+                   class="results-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Players from {{ nationality }}{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="name" data-sort-type="string">{% trans %}Player Name{% endtrans %}</th>
+                        <th scope="col" data-sort="team" data-sort-type="string">{% trans %}Team{% endtrans %}</th>
+                        <th scope="col" data-sort="score" data-sort-type="number">{% trans %}Score{% endtrans %}</th>
+                        <th scope="col" data-sort="birthplace" data-sort-type="string">{% trans %}Birthplace{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in nationality_players %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="player-name" data-value="{{ player.first_name }} {{ player.last_name }}">
+                                {{ (player.first_name ~ " " ~ player.last_name) | auto_link(entity_data) | safe }}
+                            </td>
+                            <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team | auto_link(entity_data) | safe }}</td>
+                            <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
+                            <td data-value="{{ player.birthplace }}">{{ player.birthplace if player.birthplace else "—" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Team Distribution Section -->
+    <section class="results-section fade-on-scroll">
+        <h3>{% trans %}Team Distribution{% endtrans %}</h3>
+        <p class="section-description">
+            {% trans %}{{ nationality }} players are distributed across {{ team_count }} teams.{% endtrans %}
+        </p>
+
+        <div class="table-container">
+            <table class="results-table standings-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Team distribution for {{ nationality }} players{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="team" data-sort-type="string">{% trans %}Team{% endtrans %}</th>
+                        <th scope="col" data-sort="count" data-sort-type="number">{% trans %}Player Count{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team_info in team_distribution %}
+                        <tr>
+                            <td class="team-abbrev" data-value="{{ team_info.team }}">{{ team_info.team | auto_link(entity_data) | safe }}</td>
+                            <td data-value="{{ team_info.count }}">{{ team_info.count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Navigation Links -->
+    <section class="info-section fade-on-scroll">
+        <p>
+            <a href="/nationalities?lang={{ locale }}">{% trans %}← Back to All Nationalities{% endtrans %}</a>
+        </p>
+    </section>
+{% endblock %}

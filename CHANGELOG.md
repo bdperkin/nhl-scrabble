@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- (players): Add nationality and birthplace grouping with country filtering (#566)
+  - New `--countries` CLI option to filter players by birth country (ISO 3166-1 alpha-3 codes)
+  - New `--group-by nationality` option to organize players by country
+  - Extended PlayerScore model with birthplace, birth_country, and nationality fields
+  - Comprehensive country code mapping utility with 60+ countries
+  - Grouping utilities for nationality and birth country analysis
+  - Full test coverage with 53 new unit tests
+
 ## [0.0.16] - 2026-05-06
 
 ### Added
