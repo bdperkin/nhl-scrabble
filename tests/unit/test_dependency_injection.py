@@ -81,6 +81,7 @@ class MockScorer:
         team: str,
         division: str,
         conference: str,
+        position_category: str = "",
     ) -> PlayerScore:
         """Return mock player score."""
         first_name = player_data["firstName"]["default"]
@@ -97,6 +98,9 @@ class MockScorer:
             team=team,
             division=division,
             conference=conference,
+            position_code="C",
+            position="Center",
+            position_type="Forward",
         )
 
 
