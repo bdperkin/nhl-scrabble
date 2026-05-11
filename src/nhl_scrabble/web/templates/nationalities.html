@@ -16,7 +16,7 @@
         <div class="stat-card">
             <h4>{% trans %}Top Nationality{% endtrans %}</h4>
             <p class="stat-value">{{ nationality_stats.highest_nationality_score }}</p>
-            <p class="stat-detail">{{ nationality_stats.highest_nationality }}</p>
+            <p class="stat-detail"><a href="/nationalities/{{ nationality_stats.highest_nationality }}?lang={{ locale }}">{{ nationality_stats.highest_nationality }}</a></p>
         </div>
         <div class="stat-card">
             <h4>{% trans %}Highest Player{% endtrans %}</h4>
@@ -63,9 +63,7 @@
                         <tr data-original-index="{{ loop.index }}">
                             <td data-value="{{ loop.index }}">{{ loop.index }}</td>
                             <td class="nationality-name" data-value="{{ nationality_data.nationality }}">
-                                <a href="/nationalities/{{ nationality_data.nationality }}?lang={{ locale }}">
-                                    {{ nationality_data.nationality }}
-                                </a>
+                                {{ nationality_data.nationality | auto_link(entity_data) | safe }}
                             </td>
                             <td data-value="{{ nationality_data.player_count }}">{{ nationality_data.player_count }}</td>
                             <td class="score" data-value="{{ nationality_data.total_score }}">{{ nationality_data.total_score }}</td>

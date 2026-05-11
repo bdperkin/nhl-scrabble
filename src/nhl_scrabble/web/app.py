@@ -730,6 +730,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR
             "highest_player_name": all_players[0]["full_name"] if all_players else None,
             "highest_player_team": highest_player_team_name,
             "lowest_score": all_players[-1]["score"] if all_players else 0,
+            "lowest_player_name": all_players[-1]["full_name"] if all_players else None,
             "avg_score": total_score / len(all_players) if all_players else 0,
             "highest_team": teams_data[0]["abbrev"] if teams_data else None,
             "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
@@ -1404,6 +1405,12 @@ async def nationalities_page(request: Request) -> HTMLResponse:
         highest_player_name = highest_player.full_name
         highest_player_score = highest_player.full_score
 
+        # Build entity data with nationalities for auto-linking
+        entity_data = _build_entity_data(data)
+        entity_data["nationalities"] = [
+            {"name": str(ns["nationality"])} for ns in nationality_standings
+        ]
+
         context = setup_template_locale(request)
         context.update(
             {
@@ -1416,7 +1423,7 @@ async def nationalities_page(request: Request) -> HTMLResponse:
                     "highest_player_name": highest_player_name,
                     "highest_player_score": highest_player_score,
                 },
-                "entity_data": _build_entity_data(data),
+                "entity_data": entity_data,
             },
         )
         return templates.TemplateResponse(
@@ -1752,8 +1759,11 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         analysis_request = AnalysisRequest(top_players=20, top_team_players=5, use_cache=True)
         data = await analyze_post(analysis_request)
 
-        # Calculate total playoff teams
-        playoff_teams_count = sum(len(teams) for teams in data["playoff_bracket"].values())
+        # Calculate total playoff teams (only teams that made playoffs, not eliminated)
+        playoff_teams_count = sum(
+            sum(1 for team in teams if team.get("in_playoffs", False))
+            for teams in data["playoff_bracket"].values()
+        )
 
         # Format timestamp for display
         timestamp_str = data["timestamp"]
