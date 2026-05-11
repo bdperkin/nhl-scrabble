@@ -21,7 +21,7 @@
         <div class="stat-card">
             <h4>{% trans %}Lowest Score{% endtrans %}</h4>
             <p class="stat-value">{{ stats.lowest_score }}</p>
-            <p class="stat-detail">{{ stats.lowest_player_name | auto_link(entity_data) | safe }}</p>
+            <p class="stat-detail">{{ (stats.lowest_player_name ~ " (" ~ stats.lowest_player_team ~ ")") | auto_link(entity_data) | safe }}</p>
         </div>
     </div>
 

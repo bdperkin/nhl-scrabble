@@ -737,13 +737,18 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR
         # Calculate stats
         total_score: int | float = sum(int(p["score"]) for p in all_players) if all_players else 0
 
-        # Get highest player's team name
+        # Get highest and lowest player team names
         highest_player_team_name = None
+        lowest_player_team_name = None
         if all_players:
             highest_player_abbrev = all_players[0]["team"]
+            lowest_player_abbrev = all_players[-1]["team"]
             for team in teams_data:
                 if team["abbrev"] == highest_player_abbrev:
                     highest_player_team_name = team["name"]
+                if team["abbrev"] == lowest_player_abbrev:
+                    lowest_player_team_name = team["name"]
+                if highest_player_team_name and lowest_player_team_name:
                     break
 
         stats = {
@@ -756,6 +761,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR
             "lowest_score": all_players[-1]["score"] if all_players else 0,
             "lowest_player_name": all_players[-1]["full_name"] if all_players else None,
             "lowest_player_id": all_players[-1].get("player_id") if all_players else None,
+            "lowest_player_team": lowest_player_team_name,
             "avg_score": total_score / len(all_players) if all_players else 0,
             "highest_team": teams_data[0]["abbrev"] if teams_data else None,
             "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
