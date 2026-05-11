@@ -241,10 +241,14 @@ def test_multiple_form_submissions(page_fixture: Page) -> None:
     page_fixture.click("#analyzeBtn")
 
     # Wait for HTMX to complete and table to update with new row count
-    # Use wait_for_function to poll until the table has exactly 15 rows
-    # This is more reliable than fixed timeouts, especially in webkit
-    page_fixture.wait_for_function(
-        "document.querySelectorAll('#playersTable tbody tr').length === 15",
+    # Wait for networkidle to ensure HTMX request completes
+    page_fixture.wait_for_load_state("networkidle", timeout=30000)
+
+    # Wait for the 15th row to appear (using nth-child selector)
+    # This approach doesn't violate CSP like wait_for_function with a string does
+    page_fixture.wait_for_selector(
+        "#playersTable tbody tr:nth-child(15)",
+        state="visible",
         timeout=30000,
     )
 
