@@ -1492,6 +1492,7 @@ async def nationality_detail_page(request: Request, nationality_name: str) -> HT
             {"team": team, "count": count}
             for team, count in sorted(team_counts.items(), key=operator.itemgetter(1), reverse=True)
         ]
+        team_count = len(team_distribution)
 
         # Format timestamp for display
         timestamp_str = data["timestamp"]
@@ -1512,6 +1513,7 @@ async def nationality_detail_page(request: Request, nationality_name: str) -> HT
                     "highest_player_score": highest_player_score,
                 },
                 "team_distribution": team_distribution,
+                "team_count": team_count,
                 "timestamp_date": timestamp_date,
                 "timestamp_time": timestamp_time,
                 "entity_data": _build_entity_data(data),
