@@ -20,6 +20,7 @@ class AnalysisFilters:
         teams: Set of team abbreviations to include (e.g., {'TOR', 'MTL'})
         excluded_teams: Set of team abbreviations to exclude (e.g., {'BOS', 'NYR'})
         countries: Set of country codes to include (e.g., {'CAN', 'USA', 'SWE'})
+        positions: Set of position codes or types to include (e.g., {'C', 'D'} or {'Forward', 'Goalie'})
         min_score: Minimum player score to include (inclusive)
         max_score: Maximum player score to include (inclusive)
     """
@@ -29,6 +30,7 @@ class AnalysisFilters:
     teams: frozenset[str] | None = None
     excluded_teams: frozenset[str] | None = None
     countries: frozenset[str] | None = None
+    positions: frozenset[str] | None = None
     min_score: int | None = None
     max_score: int | None = None
 
@@ -40,6 +42,7 @@ class AnalysisFilters:
         teams: str | None = None,
         exclude: str | None = None,
         countries: str | None = None,
+        positions: str | None = None,
         min_score: int | None = None,
         max_score: int | None = None,
     ) -> AnalysisFilters:
@@ -51,6 +54,7 @@ class AnalysisFilters:
             teams: Comma-separated list of team abbreviations
             exclude: Comma-separated list of team abbreviations to exclude
             countries: Comma-separated list of country codes (e.g., "CAN,USA,SWE")
+            positions: Comma-separated list of position codes or types (e.g., "C,D,G" or "Forward,Goalie")
             min_score: Minimum player score (inclusive)
             max_score: Maximum player score (inclusive)
 
@@ -62,6 +66,7 @@ class AnalysisFilters:
             ...     division="Atlantic,Metropolitan",
             ...     teams="TOR,MTL",
             ...     countries="CAN,USA",
+            ...     positions="C,D",
             ...     min_score=50
             ... )
         """
@@ -77,6 +82,7 @@ class AnalysisFilters:
             countries=(
                 frozenset(c.strip().upper() for c in countries.split(",")) if countries else None
             ),
+            positions=(frozenset(p.strip() for p in positions.split(",")) if positions else None),
             min_score=min_score,
             max_score=max_score,
         )
@@ -119,6 +125,7 @@ class AnalysisFilters:
                 self.teams,
                 self.excluded_teams,
                 self.countries,
+                self.positions,
                 self.min_score is not None,
                 self.max_score is not None,
             ],
@@ -237,6 +244,18 @@ class AnalysisFilters:
         # Check country filter
         if self.countries and player.birth_country not in self.countries:
             return False
+
+        # Check position filter (matches position code, position type, or full position name)
+        if self.positions:
+            position_match = any(
+                [
+                    player.position_code in self.positions,
+                    player.position_type in self.positions,
+                    player.position in self.positions,
+                ],
+            )
+            if not position_match:
+                return False
 
         # Check minimum score
         if self.min_score is not None and player.full_score < self.min_score:

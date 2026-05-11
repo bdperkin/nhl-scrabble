@@ -543,8 +543,17 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 )
 @click.option(
     "--group-by",
-    type=click.Choice(["team", "division", "conference", "nationality"], case_sensitive=False),
-    help=_("Group players by team, division, conference, or nationality"),
+    type=click.Choice(
+        ["team", "division", "conference", "nationality", "position", "position-type"],
+        case_sensitive=False,
+    ),
+    help=_("Group players by team, division, conference, nationality, position, or position-type"),
+)
+@click.option(
+    "--positions",
+    help=_(
+        "Filter by positions (comma-separated codes: C,L,R,D,G or types: Forward,Defense,Goalie)",
+    ),
 )
 # === Locale Options ===
 @click.option(
@@ -577,6 +586,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
     min_score: int | None,
     max_score: int | None,
     group_by: str | None,
+    positions: str | None,
     locale: str | None,
 ) -> None:
     r"""Run the NHL Scrabble analysis.
@@ -763,6 +773,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
             teams=teams,
             exclude=exclude_teams,
             countries=countries,
+            positions=positions,
             min_score=min_score,
             max_score=max_score,
         )
@@ -798,6 +809,12 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
                     console.print(
                         _("  • Countries: {countries}").format(
                             countries=", ".join(sorted(filters.countries)),
+                        ),
+                    )
+                if filters.positions:
+                    console.print(
+                        _("  • Positions: {positions}").format(
+                            positions=", ".join(sorted(filters.positions)),
                         ),
                     )
                 if filters.min_score is not None:

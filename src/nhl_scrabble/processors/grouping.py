@@ -221,6 +221,139 @@ def group_by_conference(players: list[PlayerScore]) -> dict[str, list[PlayerScor
     return grouped.copy()
 
 
+def group_by_position(players: list[PlayerScore]) -> dict[str, list[PlayerScore]]:
+    """Group players by specific position (Center, Left Wing, Right Wing, Defense, Goalie).
+
+    Args:
+        players: List of player scores
+
+    Returns:
+        Dictionary mapping position name to list of players.
+        Empty string key contains players with unknown position.
+
+    Examples:
+        >>> from nhl_scrabble.models.player import PlayerScore
+        >>> players = [
+        ...     PlayerScore(
+        ...         first_name="Connor", last_name="McDavid",
+        ...         full_name="Connor McDavid", first_score=20, last_score=15,
+        ...         full_score=35, team="EDM", division="Pacific",
+        ...         conference="Western", position="Center", position_code="C",
+        ...         position_type="Forward"
+        ...     ),
+        ...     PlayerScore(
+        ...         first_name="Cale", last_name="Makar",
+        ...         full_name="Cale Makar", first_score=11, last_score=16,
+        ...         full_score=27, team="COL", division="Central",
+        ...         conference="Western", position="Defense", position_code="D",
+        ...         position_type="Defense"
+        ...     ),
+        ... ]
+        >>> grouped = group_by_position(players)
+        >>> len(grouped["Center"])
+        1
+        >>> len(grouped["Defense"])
+        1
+    """
+    grouped: dict[str, list[PlayerScore]] = defaultdict(list)
+    for player in players:
+        # Use "Unknown" for players without position data
+        key = player.position or "Unknown"
+        grouped[key].append(player)
+    return grouped.copy()
+
+
+def group_by_position_type(players: list[PlayerScore]) -> dict[str, list[PlayerScore]]:
+    """Group players by position type (Forward, Defense, Goalie).
+
+    Args:
+        players: List of player scores
+
+    Returns:
+        Dictionary mapping position type to list of players.
+        Empty string key contains players with unknown position type.
+
+    Examples:
+        >>> from nhl_scrabble.models.player import PlayerScore
+        >>> players = [
+        ...     PlayerScore(
+        ...         first_name="Connor", last_name="McDavid",
+        ...         full_name="Connor McDavid", first_score=20, last_score=15,
+        ...         full_score=35, team="EDM", division="Pacific",
+        ...         conference="Western", position="Center", position_code="C",
+        ...         position_type="Forward"
+        ...     ),
+        ...     PlayerScore(
+        ...         first_name="Leon", last_name="Draisaitl",
+        ...         full_name="Leon Draisaitl", first_score=18, last_score=24,
+        ...         full_score=42, team="EDM", division="Pacific",
+        ...         conference="Western", position="Left Wing", position_code="L",
+        ...         position_type="Forward"
+        ...     ),
+        ...     PlayerScore(
+        ...         first_name="Cale", last_name="Makar",
+        ...         full_name="Cale Makar", first_score=11, last_score=16,
+        ...         full_score=27, team="COL", division="Central",
+        ...         conference="Western", position="Defense", position_code="D",
+        ...         position_type="Defense"
+        ...     ),
+        ... ]
+        >>> grouped = group_by_position_type(players)
+        >>> len(grouped["Forward"])
+        2
+        >>> len(grouped["Defense"])
+        1
+    """
+    grouped: dict[str, list[PlayerScore]] = defaultdict(list)
+    for player in players:
+        # Use "Unknown" for players without position type data
+        key = player.position_type or "Unknown"
+        grouped[key].append(player)
+    return grouped.copy()
+
+
+def group_by_position_code(players: list[PlayerScore]) -> dict[str, list[PlayerScore]]:
+    """Group players by position code (C, L, R, D, G).
+
+    Args:
+        players: List of player scores
+
+    Returns:
+        Dictionary mapping position code to list of players.
+        Empty string key contains players with unknown position code.
+
+    Examples:
+        >>> from nhl_scrabble.models.player import PlayerScore
+        >>> players = [
+        ...     PlayerScore(
+        ...         first_name="Connor", last_name="McDavid",
+        ...         full_name="Connor McDavid", first_score=20, last_score=15,
+        ...         full_score=35, team="EDM", division="Pacific",
+        ...         conference="Western", position="Center", position_code="C",
+        ...         position_type="Forward"
+        ...     ),
+        ...     PlayerScore(
+        ...         first_name="Cale", last_name="Makar",
+        ...         full_name="Cale Makar", first_score=11, last_score=16,
+        ...         full_score=27, team="COL", division="Central",
+        ...         conference="Western", position="Defense", position_code="D",
+        ...         position_type="Defense"
+        ...     ),
+        ... ]
+        >>> grouped = group_by_position_code(players)
+        >>> len(grouped["C"])
+        1
+        >>> len(grouped["D"])
+        1
+    """
+    grouped: dict[str, list[PlayerScore]] = defaultdict(list)
+    for player in players:
+        # Use "Unknown" for players without position code data
+        key = player.position_code or "Unknown"
+        grouped[key].append(player)
+    return grouped.copy()
+
+
 def calculate_group_statistics(players: list[PlayerScore]) -> GroupStatistics:
     """Calculate statistics for a group of players.
 
