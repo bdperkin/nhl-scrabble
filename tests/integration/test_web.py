@@ -464,7 +464,7 @@ class TestFormValidation:
         response = client.post(
             "/api/analyze",
             json={
-                "top_players": 101,  # Invalid: must be <= 100
+                "top_players": 2001,  # Invalid: must be <= 2000
                 "top_team_players": 5,
             },
         )
