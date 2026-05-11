@@ -174,7 +174,7 @@ jobs:
 
       - name: Upload visual test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: visual-test-results-${{ matrix.browser }}
           path: qa/web/visual-${{ matrix.browser }}-results.xml
@@ -184,7 +184,7 @@ jobs:
         if: |
           steps.visual-tests.outcome == 'failure' &&
           github.event.inputs.update_baselines != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: visual-diffs-${{ matrix.browser }}
           path: qa/web/reports/visual-diffs/${{ matrix.browser }}/**/*.png
@@ -240,7 +240,7 @@ jobs:
 
       - name: Upload generated baseline screenshots (backup)
         if: github.event.inputs.update_baselines == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: generated-baselines-${{ matrix.browser }}
           path: qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/
@@ -250,7 +250,7 @@ jobs:
         if: |
           steps.visual-tests.outcome == 'failure' &&
           github.event.inputs.update_baselines != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: baseline-screenshots-${{ matrix.browser }}
           path: qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/**/*.png
