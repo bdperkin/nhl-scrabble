@@ -52,7 +52,6 @@
                     <tr>
                         <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
                         <th scope="col" data-sort="position" data-sort-type="string">{% trans %}Position{% endtrans %}</th>
-                        <th scope="col" data-sort="type" data-sort-type="string">{% trans %}Type{% endtrans %}</th>
                         <th scope="col" data-sort="players" data-sort-type="number">{% trans %}Players{% endtrans %}</th>
                         <th scope="col" data-sort="total" data-sort-type="number">{% trans %}Total Score{% endtrans %}</th>
                         <th scope="col" data-sort="avg" data-sort-type="number">{% trans %}Avg Score{% endtrans %}</th>
@@ -63,11 +62,8 @@
                     {% for position_data in position_standings %}
                         <tr data-original-index="{{ loop.index }}">
                             <td data-value="{{ loop.index }}">{{ loop.index }}</td>
-                            <td class="position-name" data-value="{{ position_data.position }}">
+                            <td class="team-abbrev" data-value="{{ position_data.position }}">
                                 <a href="/positions/detail/{{ position_data.position_code }}?lang={{ locale }}">{{ position_data.position }}</a>
-                            </td>
-                            <td data-value="{{ position_data.position_type }}">
-                                <a href="/positions/{{ position_data.position_type }}?lang={{ locale }}">{{ position_data.position_type }}</a>
                             </td>
                             <td data-value="{{ position_data.player_count }}">{{ position_data.player_count }}</td>
                             <td class="score" data-value="{{ position_data.total_score }}">{{ position_data.total_score }}</td>

@@ -772,6 +772,7 @@ async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR
             "highest_team_score": teams_data[0]["total_score"] if teams_data else 0,
             "highest_team_name": teams_data[0]["name"] if teams_data else None,
             "lowest_team": teams_data[-1]["abbrev"] if teams_data else None,
+            "lowest_team_score": teams_data[-1]["total_score"] if teams_data else 0,
             "lowest_team_name": teams_data[-1]["name"] if teams_data else None,
         }
 
