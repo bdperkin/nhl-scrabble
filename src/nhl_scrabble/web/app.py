@@ -489,6 +489,9 @@ def _convert_players_to_dict(
             "first_score": player.first_score,
             "last_score": player.last_score,
             "player_id": player.player_id,
+            "birthplace": player.birthplace,
+            "birth_country": player.birth_country,
+            "nationality": player.nationality,
         }
         for player in players
     ]
