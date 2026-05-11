@@ -22,6 +22,9 @@ class PlayerScore:
         birthplace: Birthplace city and state/province (e.g., 'Richmond Hill, ON')
         birth_country: ISO country code (e.g., 'CAN', 'USA', 'SWE')
         nationality: Full country name (e.g., 'Canada', 'United States', 'Sweden')
+        position_code: Single-letter position code (e.g., 'C', 'L', 'R', 'D', 'G')
+        position: Full position name (e.g., 'Center', 'Left Wing', 'Defense', 'Goalie')
+        position_type: Position category (e.g., 'Forward', 'Defense', 'Goalie')
     """
 
     first_name: str
@@ -37,6 +40,9 @@ class PlayerScore:
     birthplace: str = ""
     birth_country: str = ""
     nationality: str = ""
+    position_code: str = ""
+    position: str = ""
+    position_type: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization.
@@ -88,6 +94,9 @@ class PlayerScore:
             "birthplace": self.birthplace,
             "birth_country": self.birth_country,
             "nationality": self.nationality,
+            "position_code": self.position_code,
+            "position": self.position,
+            "position_type": self.position_type,
         }
 
     def __repr__(self) -> str:

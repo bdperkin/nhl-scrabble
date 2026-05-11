@@ -8,6 +8,7 @@ from typing import Any, ClassVar
 
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.utils.countries import get_country_name
+from nhl_scrabble.utils.positions import get_position_name, get_position_type
 
 logger = logging.getLogger(__name__)
 
@@ -159,6 +160,7 @@ class ScrabbleScorer:
         team: str,
         division: str,
         conference: str,
+        position_category: str = "",
     ) -> PlayerScore:
         """Score a player and return a PlayerScore object.
 
@@ -166,22 +168,33 @@ class ScrabbleScorer:
 
         Args:
             player_data: Dictionary with 'firstName', 'lastName', and optionally 'id',
-                'birthCity', 'birthStateProvince', 'birthCountry' keys
+                'birthCity', 'birthStateProvince', 'birthCountry', 'positionCode' keys
             team: Team abbreviation
             division: Division name
             conference: Conference name
+            position_category: Position category from API roster grouping
+                ('forwards', 'defensemen', or 'goalies')
 
         Returns:
             PlayerScore object with all scoring and birthplace information
 
         Examples:
             >>> scorer = ScrabbleScorer()
-            >>> player = {"id": 8478402, "firstName": {"default": "Connor"}, "lastName": {"default": "McDavid"}}
-            >>> result = scorer.score_player(player, "EDM", "Pacific", "Western")
+            >>> player = {
+            ...     "id": 8478402,
+            ...     "firstName": {"default": "Connor"},
+            ...     "lastName": {"default": "McDavid"},
+            ...     "positionCode": "C"
+            ... }
+            >>> result = scorer.score_player(player, "EDM", "Pacific", "Western", "forwards")
             >>> result.full_score
             24
             >>> result.player_id
             8478402
+            >>> result.position
+            'Center'
+            >>> result.position_type
+            'Forward'
         """
         first_name = player_data["firstName"]["default"]
         last_name = player_data["lastName"]["default"]
@@ -214,6 +227,21 @@ class ScrabbleScorer:
         # Convert country code to full name
         nationality = get_country_name(birth_country_code) if birth_country_code else ""
 
+        # Extract position information
+        position_code = player_data.get("positionCode", "")
+        position = get_position_name(position_code) if position_code else ""
+        position_type = get_position_type(position_code) if position_code else ""
+
+        # If position_type is Unknown but we have a category, infer from category
+        if position_type == "Unknown" and position_category:
+            # Map position category to position type
+            position_type_map = {
+                "forwards": "Forward",
+                "defensemen": "Defense",
+                "goalies": "Goalie",
+            }
+            position_type = position_type_map.get(position_category, "")
+
         # Use custom scoring if custom values are set
         if self._letter_values is not self.LETTER_VALUES:
             first_score = self.calculate_score_custom(first_name)
@@ -238,6 +266,9 @@ class ScrabbleScorer:
             birthplace=birthplace,
             birth_country=birth_country_code,
             nationality=nationality,
+            position_code=position_code,
+            position=position,
+            position_type=position_type,
         )
 
     @staticmethod

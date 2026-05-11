@@ -7,6 +7,9 @@ from nhl_scrabble.processors.grouping import (
     group_by_conference,
     group_by_division,
     group_by_nationality,
+    group_by_position,
+    group_by_position_code,
+    group_by_position_type,
     group_by_team,
 )
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
@@ -21,5 +24,8 @@ __all__ = [
     "group_by_conference",
     "group_by_division",
     "group_by_nationality",
+    "group_by_position",
+    "group_by_position_code",
+    "group_by_position_type",
     "group_by_team",
 ]

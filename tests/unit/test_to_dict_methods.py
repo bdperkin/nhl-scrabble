@@ -109,6 +109,9 @@ class TestPlayerScoreToDict:
             "birthplace",
             "birth_country",
             "nationality",
+            "position_code",
+            "position",
+            "position_type",
         }
 
         assert set(result.keys()) == expected_fields

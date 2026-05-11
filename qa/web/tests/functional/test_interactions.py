@@ -239,7 +239,18 @@ def test_multiple_form_submissions(page_fixture: Page) -> None:
     # Second submission with different value
     page_fixture.fill("#topPlayers", "15")
     page_fixture.click("#analyzeBtn")
-    page_fixture.wait_for_timeout(1000)  # Wait for results to update
+
+    # Wait for HTMX to complete and table to update with new row count
+    # Wait for networkidle to ensure HTMX request completes
+    page_fixture.wait_for_load_state("networkidle", timeout=30000)
+
+    # Wait for the 15th row to appear (using nth-child selector)
+    # This approach doesn't violate CSP like wait_for_function with a string does
+    page_fixture.wait_for_selector(
+        "#playersTable tbody tr:nth-child(15)",
+        state="visible",
+        timeout=30000,
+    )
 
     # Verify second results
     rows_2 = page_fixture.locator("#playersTable tbody tr").count()

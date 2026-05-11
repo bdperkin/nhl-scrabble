@@ -236,8 +236,21 @@ nhl-scrabble analyze --countries CAN,USA,SWE
 # Group players by nationality
 nhl-scrabble analyze --group-by nationality
 
+# Group players by position
+nhl-scrabble analyze --group-by position
+
+# Group players by position type (Forward/Defense/Goalie)
+nhl-scrabble analyze --group-by position-type
+
+# Filter by specific position
+nhl-scrabble analyze --positions C,D  # Centers and Defensemen only
+
+# Filter by position type
+nhl-scrabble analyze --positions Forward  # All forwards
+
 # Combine filters and grouping
 nhl-scrabble analyze --countries CAN,FIN,SWE --group-by nationality
+nhl-scrabble analyze --positions C --countries CAN --min-score 50
 ```
 
 ### Web Server

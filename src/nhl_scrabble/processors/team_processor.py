@@ -96,6 +96,7 @@ class TeamProcessor:
                     team_abbrev,
                     division,
                     conference,
+                    position_category=position,
                 )
                 team_players.append(player_score)
 

@@ -163,6 +163,7 @@ class ScorerProtocol(Protocol):
         team: str,
         division: str,
         conference: str,
+        position_category: str = "",
     ) -> PlayerScore:
         """Score a player and return a PlayerScore object.
 
@@ -171,6 +172,9 @@ class ScorerProtocol(Protocol):
             team: Team abbreviation
             division: Division name
             conference: Conference name
+            position_category: Position category from API roster grouping
+                ('forwards', 'defensemen', or 'goalies'). Used to infer position type
+                when position code is unavailable.
 
         Returns:
             PlayerScore object with all scoring information including first/last/full scores
@@ -179,6 +183,8 @@ class ScorerProtocol(Protocol):
             >>> player = {"firstName": {"default": "Connor"}, "lastName": {"default": "McDavid"}}
             >>> scorer.score_player(player, "EDM", "Pacific", "Western")
             PlayerScore(first_name="Connor", last_name="McDavid", full_score=24, ...)
+            >>> scorer.score_player(player, "EDM", "Pacific", "Western", position_category="forwards")
+            PlayerScore(first_name="Connor", last_name="McDavid", full_score=24, position_type="Forward", ...)
         """
         ...  # pragma: no cover
 

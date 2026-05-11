@@ -205,7 +205,8 @@ jobs:
             # Push with retry logic for concurrent matrix jobs
             for i in {1..5}; do
               # Pull with rebase before pushing to avoid conflicts from concurrent jobs
-              if git pull --rebase origin ${{ github.ref_name }} && git push; then
+              # Use --autostash to handle unstaged changes (e.g., test result XML files)
+              if git pull --rebase --autostash origin ${{ github.ref_name }} && git push; then
                 echo "✅ Successfully pushed ${{ matrix.browser }} baselines"
                 break
               elif [ $i -eq 5 ]; then
