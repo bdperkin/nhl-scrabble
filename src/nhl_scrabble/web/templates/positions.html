@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{% trans %}NHL Scrabble Analyzer - Position Standings{% endtrans %}{% endblock %}
+
+{% block content %}
+    <!-- Top Statistics -->
+    <div class="stats-summary fade-on-scroll">
+        <div class="stat-card">
+            <h4>{% trans %}Total Positions{% endtrans %}</h4>
+            <p class="stat-value">{{ position_stats.total_positions }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Total Players{% endtrans %}</h4>
+            <p class="stat-value">{{ position_stats.total_players }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Top Position{% endtrans %}</h4>
+            <p class="stat-value">{{ position_stats.highest_position_score }}</p>
+            <p class="stat-detail"><a href="/positions/detail/{{ position_stats.highest_position_code }}?lang={{ locale }}">{{ position_stats.highest_position }}</a></p>
+        </div>
+        <div class="stat-card">
+            <h4>{% trans %}Highest Player{% endtrans %}</h4>
+            <p class="stat-value">{{ position_stats.highest_player_score }}</p>
+            <p class="stat-detail">{{ position_stats.highest_player_name | auto_link(entity_data) | safe }}</p>
+        </div>
+    </div>
+
+    <!-- Position Standings -->
+    <section class="results-section">
+        <h3>{% trans %}Player Positions by Total Scrabble Score{% endtrans %}</h3>
+
+        <!-- Export buttons -->
+        <div class="export-buttons">
+            <button id="export-positionsTable-csv"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export position standings table to CSV format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📊</span> {% trans %}Export CSV{% endtrans %}
+            </button>
+            <button id="export-positionsTable-json"
+                    class="btn btn-secondary btn-sm"
+                    aria-label="{% trans %}Export position standings table to JSON format{% endtrans %}">
+                <span class="icon" aria-hidden="true">📄</span> {% trans %}Export JSON{% endtrans %}
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="positionsTable"
+                   class="results-table standings-table sortable"
+                   role="table"
+                   aria-label="{% trans %}Position standings{% endtrans %}">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="rank" data-sort-type="number">{% trans %}Rank{% endtrans %}</th>
+                        <th scope="col" data-sort="position" data-sort-type="string">{% trans %}Position{% endtrans %}</th>
+                        <th scope="col" data-sort="type" data-sort-type="string">{% trans %}Type{% endtrans %}</th>
+                        <th scope="col" data-sort="players" data-sort-type="number">{% trans %}Players{% endtrans %}</th>
+                        <th scope="col" data-sort="total" data-sort-type="number">{% trans %}Total Score{% endtrans %}</th>
+                        <th scope="col" data-sort="avg" data-sort-type="number">{% trans %}Avg Score{% endtrans %}</th>
+                        <th scope="col" data-sort="top_player" data-sort-type="string">{% trans %}Top Player{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for position_data in position_standings %}
+                        <tr data-original-index="{{ loop.index }}">
+                            <td data-value="{{ loop.index }}">{{ loop.index }}</td>
+                            <td class="position-name" data-value="{{ position_data.position }}">
+                                <a href="/positions/detail/{{ position_data.position_code }}?lang={{ locale }}">{{ position_data.position }}</a>
+                            </td>
+                            <td data-value="{{ position_data.position_type }}">
+                                <a href="/positions/{{ position_data.position_type }}?lang={{ locale }}">{{ position_data.position_type }}</a>
+                            </td>
+                            <td data-value="{{ position_data.player_count }}">{{ position_data.player_count }}</td>
+                            <td class="score" data-value="{{ position_data.total_score }}">{{ position_data.total_score }}</td>
+                            <td data-value="{{ position_data.avg_score|round(1) }}">{{ position_data.avg_score|round(1) }}</td>
+                            <td class="player-name" data-value="{{ position_data.top_player_name }}">
+                                {{ position_data.top_player_name | auto_link(entity_data) | safe }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
