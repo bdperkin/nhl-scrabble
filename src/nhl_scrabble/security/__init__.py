@@ -10,7 +10,7 @@ from nhl_scrabble.security.circuit_breaker import (
     CircuitState,
 )
 from nhl_scrabble.security.dos_protection import create_protected_session
-from nhl_scrabble.security.log_filter import SensitiveDataFilter
+from nhl_scrabble.security.log_filter import SensitiveDataFilter, sanitize_for_logging
 from nhl_scrabble.security.ssrf_protection import (
     ALLOWED_DOMAINS,
     BLOCKED_IP_RANGES,
@@ -34,6 +34,7 @@ __all__ = [
     "create_protected_session",
     "is_ip_blocked",
     "resolve_hostname",
+    "sanitize_for_logging",
     "validate_api_base_url",
     "validate_url_for_ssrf",
 ]

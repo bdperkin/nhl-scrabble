@@ -20,6 +20,7 @@ import socket
 from urllib.parse import urlparse
 
 from nhl_scrabble.exceptions import SSRFProtectionError
+from nhl_scrabble.security.log_filter import sanitize_for_logging
 
 logger = logging.getLogger(__name__)
 
@@ -226,8 +227,9 @@ def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
     # Check if hostname is in allowlist (preferred approach for security)
     if hostname not in ALLOWED_DOMAINS:
         logger.warning(
-            f"SSRF protection blocked request to non-allowed domain: {hostname}. "
-            f"Allowed domains: {', '.join(ALLOWED_DOMAINS)}",
+            "SSRF protection blocked request to non-allowed domain: %s. Allowed domains: %s",
+            sanitize_for_logging(hostname),
+            ", ".join(ALLOWED_DOMAINS),
         )
         raise SSRFProtectionError(
             f"Hostname '{hostname}' not in allowed domains list. "
@@ -236,7 +238,10 @@ def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
 
     # Check for blocked ports
     if port in BLOCKED_PORTS:
-        logger.warning(f"SSRF protection blocked request to blocked port: {port}")
+        logger.warning(
+            "SSRF protection blocked request to blocked port: %s",
+            sanitize_for_logging(port),
+        )
         raise SSRFProtectionError(f"Port {port} is blocked (commonly used for internal services)")
 
     # Resolve hostname to IPs (prevents DNS rebinding attacks)
@@ -248,8 +253,9 @@ def validate_url_for_ssrf(url: str, allow_private: bool = False) -> str:
         for ip in ip_addresses:
             if is_ip_blocked(ip):
                 logger.warning(
-                    f"SSRF protection blocked request: hostname '{hostname}' "
-                    f"resolves to blocked IP address: {ip}",
+                    "SSRF protection blocked request: hostname '%s' resolves to blocked IP address: %s",
+                    sanitize_for_logging(hostname),
+                    sanitize_for_logging(ip),
                 )
                 raise SSRFProtectionError(
                     f"Hostname '{hostname}' resolves to blocked IP address: {ip}. "

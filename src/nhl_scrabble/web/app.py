@@ -36,6 +36,7 @@ from nhl_scrabble.processors import (
     group_by_position,
 )
 from nhl_scrabble.scoring import ScrabbleScorer
+from nhl_scrabble.security.log_filter import sanitize_for_logging
 from nhl_scrabble.utils.countries import get_country_name
 from nhl_scrabble.utils.positions import get_position_name, get_position_type
 from nhl_scrabble.web.utils.auto_link import auto_link
@@ -928,7 +929,11 @@ async def player_detail_page(
             try:
                 nhl_data = nhl_client.get_player_details(player_id)
             except NHLApiError as e:
-                logger.error("Failed to fetch player %s details: %s", player_id, e)
+                logger.error(
+                    "Failed to fetch player %s details: %s",
+                    sanitize_for_logging(player_id),
+                    sanitize_for_logging(e),
+                )
                 raise HTTPException(
                     status_code=503,
                     detail=f"Failed to fetch player details: {e!s}",
@@ -1108,7 +1113,11 @@ async def team_detail_page(
             try:
                 roster_data = client.get_team_roster(team_abbrev_normalized)
             except NHLApiError as e:
-                logger.error("Failed to fetch roster for team %s: %s", team_abbrev_normalized, e)
+                logger.error(
+                    "Failed to fetch roster for team %s: %s",
+                    sanitize_for_logging(team_abbrev_normalized),
+                    sanitize_for_logging(e),
+                )
                 raise HTTPException(
                     status_code=503,
                     detail=f"Failed to fetch team roster: {e!s}",

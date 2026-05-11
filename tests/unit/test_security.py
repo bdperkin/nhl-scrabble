@@ -4,7 +4,7 @@ import logging
 
 import pytest
 
-from nhl_scrabble.security import SensitiveDataFilter
+from nhl_scrabble.security import SensitiveDataFilter, sanitize_for_logging
 
 
 class TestSensitiveDataFilter:
@@ -829,3 +829,136 @@ class TestSensitiveDataFilter:
         assert "Sidney Crosby" not in record.msg
         assert "api_key=***" in record.msg
         assert "[REDACTED-NAME]" in record.msg
+
+
+class TestSanitizeForLogging:
+    """Tests for sanitize_for_logging function (prevents log injection)."""
+
+    def test_normal_text_unchanged(self) -> None:
+        """Test that normal text without special characters is unchanged."""
+        text = "normal text without special characters"
+        result = sanitize_for_logging(text)
+        assert result == text
+
+    def test_unix_newline_escaped(self) -> None:
+        """Test that Unix newlines (LF) are escaped."""
+        text = "line1\nline2\nline3"
+        result = sanitize_for_logging(text)
+        assert result == "line1\\nline2\\nline3"
+        assert "\n" not in result
+
+    def test_windows_newline_escaped(self) -> None:
+        """Test that Windows newlines (CRLF) are escaped."""
+        text = "line1\r\nline2\r\nline3"
+        result = sanitize_for_logging(text)
+        assert result == "line1\\r\\nline2\\r\\nline3"
+        assert "\r\n" not in result
+
+    def test_mac_newline_escaped(self) -> None:
+        """Test that Mac newlines (CR) are escaped."""
+        text = "line1\rline2\rline3"
+        result = sanitize_for_logging(text)
+        assert result == "line1\\rline2\\rline3"
+        assert "\r" not in result
+
+    def test_tab_escaped(self) -> None:
+        """Test that tabs are escaped."""
+        text = "col1\tcol2\tcol3"
+        result = sanitize_for_logging(text)
+        assert result == "col1\\tcol2\\tcol3"
+        assert "\t" not in result
+
+    def test_control_characters_removed(self) -> None:
+        """Test that control characters are removed."""
+        # Include various control characters (0x00-0x1F, 0x7F)
+        text = "text\x00with\x01control\x02chars\x7f"
+        result = sanitize_for_logging(text)
+        assert result == "textwithcontrolchars"
+        # Verify no control characters remain
+        for char in result:
+            assert ord(char) >= 0x20
+            assert ord(char) != 0x7F
+
+    def test_integer_converted_to_string(self) -> None:
+        """Test that integers are converted to strings."""
+        value = 12345
+        result = sanitize_for_logging(value)
+        assert result == "12345"
+        assert isinstance(result, str)
+
+    def test_float_converted_to_string(self) -> None:
+        """Test that floats are converted to strings."""
+        value = 123.45
+        result = sanitize_for_logging(value)
+        assert result == "123.45"
+        assert isinstance(result, str)
+
+    def test_none_converted_to_string(self) -> None:
+        """Test that None is converted to string 'None'."""
+        value = None
+        result = sanitize_for_logging(value)
+        assert result == "None"
+        assert isinstance(result, str)
+
+    def test_exception_converted_and_sanitized(self) -> None:
+        """Test that exceptions are converted to strings and sanitized."""
+        exc = ValueError("Error message\nwith newline")
+        result = sanitize_for_logging(exc)
+        assert "Error message" in result
+        assert "\n" not in result
+        assert "\\n" in result
+
+    def test_log_injection_attack_prevented(self) -> None:
+        """Test that log injection attack is prevented."""
+        # Attacker tries to inject fake log entry
+        malicious_input = "valid input\n2024-01-01 ERROR Fake admin login from 192.168.1.1"
+        result = sanitize_for_logging(malicious_input)
+
+        # Newlines should be escaped, preventing log injection
+        assert "\n" not in result
+        assert "\\n" in result
+        # The malicious log entry is visible but escaped
+        assert result == "valid input\\n2024-01-01 ERROR Fake admin login from 192.168.1.1"
+
+    def test_multiple_attack_vectors(self) -> None:
+        """Test that multiple attack vectors are handled."""
+        # Combination of newlines, tabs, control chars
+        malicious = "user\nADMIN\ttrue\x00password=secret\rdeleted"
+        result = sanitize_for_logging(malicious)
+
+        # All dangerous characters should be escaped or removed
+        assert "\n" not in result
+        assert "\r" not in result
+        assert "\t" not in result
+        assert "\x00" not in result
+        # Escaped versions should be present
+        assert "\\n" in result
+        assert "\\r" in result
+        assert "\\t" in result
+
+    def test_empty_string(self) -> None:
+        """Test that empty string is handled."""
+        result = sanitize_for_logging("")
+        assert result == ""
+
+    def test_url_with_newline_injection(self) -> None:
+        """Test that URLs with newline injection are sanitized."""
+        # Attacker tries to inject via URL parameter
+        url = "https://api.example.com?user=admin\nX-Admin: true"
+        result = sanitize_for_logging(url)
+
+        assert "\n" not in result
+        assert "\\n" in result
+        assert result == "https://api.example.com?user=admin\\nX-Admin: true"
+
+    def test_team_abbreviation_safe(self) -> None:
+        """Test that normal team abbreviations work correctly."""
+        team = "TOR"
+        result = sanitize_for_logging(team)
+        assert result == "TOR"
+
+    def test_player_id_safe(self) -> None:
+        """Test that normal player IDs work correctly."""
+        player_id = 8478402
+        result = sanitize_for_logging(player_id)
+        assert result == "8478402"
