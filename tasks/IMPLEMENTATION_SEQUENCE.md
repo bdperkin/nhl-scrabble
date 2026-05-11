@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-10 (task 001 completed)
-**Total Tasks**: 33 active tasks
-**Total Estimated Effort**: 215-290 hours
+**Updated**: 2026-05-11 (tasks 001, 052 completed)
+**Total Tasks**: 32 active tasks
+**Total Estimated Effort**: 203-274 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -29,16 +29,15 @@ Each task entry shows:
 
 ---
 
-## Phase 2: MEDIUM Priority - Web Interface Foundation (20-28 hours)
+## Phase 2: MEDIUM Priority - Web Interface Foundation (8-12 hours)
 
-**Rationale**: Build foundation for web interface with core pages and grouping categories. These are foundational for other web enhancements. Add multi-dimensional grouping (nationality, position).
+**Rationale**: Complete multi-dimensional grouping by adding position-based categorization for players (forwards, defensemen, goalies).
 
 ```bash
-/implement-task new-features/052-add-birthplace-nationality-grouping.md  # 12-16h, Issue #551
 /implement-task new-features/053-add-position-grouping.md  # 8-12h, Issue #552
 ```
 
-**Phase Total**: 20-28 hours
+**Phase Total**: 8-12 hours
 
 ---
 
