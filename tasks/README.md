@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (32 active, 203 completed)
+**Total Tasks**: 235 tasks (31 active, 204 completed)
 
 ## Overview
 
@@ -250,7 +250,7 @@ Each task includes:
 | 050 | Add Team Detail Pages with Player Rankings and Team Logo | MEDIUM | 4-6 hours (actual: ~6h) | Completed | [#543](https://github.com/bdperkin/nhl-scrabble/issues/543) | PR [#549](https://github.com/bdperkin/nhl-scrabble/pull/549), completed 2026-05-08 |
 | 051 | Add Player Detail Pages with Comprehensive Player Information | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#544](https://github.com/bdperkin/nhl-scrabble/issues/544) | PR [#562](https://github.com/bdperkin/nhl-scrabble/pull/562), completed 2026-05-09 |
 | 052 | Add Birthplace (Nationality) as Grouping Category | MEDIUM | 12-16 hours (actual: ~14h) | Completed | [#551](https://github.com/bdperkin/nhl-scrabble/issues/551) | PR [#566](https://github.com/bdperkin/nhl-scrabble/pull/566), completed 2026-05-11 |
-| 053 | Add Player Position as Grouping Category | MEDIUM | 8-12 hours | Active | [#552](https://github.com/bdperkin/nhl-scrabble/issues/552) | - |
+| 053 | Add Player Position as Grouping Category | MEDIUM | 8-12 hours (actual: ~10h) | Completed | [#552](https://github.com/bdperkin/nhl-scrabble/issues/552) | PR [#568](https://github.com/bdperkin/nhl-scrabble/pull/568), completed 2026-05-11 |
 | 043 | Nightly Comprehensive Testing Workflow | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#310](https://github.com/bdperkin/nhl-scrabble/issues/310) | PR [#496](https://github.com/bdperkin/nhl-scrabble/pull/496), completed 2026-05-05 |
 | 044 | I18n Infrastructure Setup | LOW | 4-6 hours (actual: ~5h) | Completed | [#494](https://github.com/bdperkin/nhl-scrabble/issues/494) | PR [#495](https://github.com/bdperkin/nhl-scrabble/pull/495), completed 2026-05-06, sub-task 1 of #218 |
 | 001 | Build Web Interface with FastAPI | MEDIUM | 16-24 hours (actual: <15 min (web interface already implemented, only needed task documentation)) | Completed | [#50](https://github.com/bdperkin/nhl-scrabble/issues/50) | completed 2026-04-26 |
