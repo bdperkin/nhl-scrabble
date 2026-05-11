@@ -79,7 +79,7 @@
                             </td>
                             <td class="team-abbrev" data-value="{{ player.team }}">{{ player.team | auto_link(entity_data) | safe }}</td>
                             <td class="score" data-value="{{ player.score }}">{{ player.score }}</td>
-                            <td class="team-abbrev" data-value="{{ player.nationality }}">
+                            <td class="nationality-name" data-value="{{ player.nationality }}">
                                 {% if player.nationality %}
                                     <a href="/nationalities/{{ player.nationality }}?lang={{ locale }}">{{ player.nationality }}</a>
                                 {% else %}

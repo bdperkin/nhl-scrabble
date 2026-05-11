@@ -62,7 +62,7 @@
                     {% for position_data in position_standings %}
                         <tr data-original-index="{{ loop.index }}">
                             <td data-value="{{ loop.index }}">{{ loop.index }}</td>
-                            <td class="team-abbrev" data-value="{{ position_data.position }}">
+                            <td class="position-name" data-value="{{ position_data.position }}">
                                 <a href="/positions/detail/{{ position_data.position_code }}?lang={{ locale }}">{{ position_data.position }}</a>
                             </td>
                             <td data-value="{{ position_data.player_count }}">{{ position_data.player_count }}</td>
