@@ -409,8 +409,8 @@ class AnalysisRequest(BaseModel):
     top_players: int = Field(
         default=20,
         ge=1,
-        le=100,
-        description="Number of top players to include",
+        le=2000,
+        description="Number of top players to include (max 2000 to cover all NHL players)",
     )
     top_team_players: int = Field(default=5, ge=1, le=30, description="Top players per team")
     use_cache: bool = Field(default=True, description="Use cached results if available")
