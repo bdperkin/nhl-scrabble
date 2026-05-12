@@ -42,9 +42,160 @@ CVE-2026-29111
 CVE-2026-4878
 
 # ============================================================================
+# MEDIUM SEVERITY - System-Level CVEs (Not Application Code)
+# ============================================================================
+
+# CVE-2026-4046: glibc iconv() DoS
+# Justification:
+#   - Vulnerability in iconv() character set conversion function
+#   - Python application does not directly call iconv()
+#   - Risk: LOW (function not used by application)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-4046
+CVE-2026-4046
+
+# CVE-2026-4437: glibc DNS response parsing
+# Justification:
+#   - Vulnerability in DNS response parsing
+#   - Application uses Python's high-level requests library, not direct glibc DNS calls
+#   - Risk: LOW (vulnerable code path not directly exposed)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-4437
+CVE-2026-4437
+
+# CVE-2026-4438: glibc gethostbyaddr hostname validation
+# Justification:
+#   - Vulnerability in gethostbyaddr() function
+#   - Python application uses modern DNS resolution, not deprecated gethostbyaddr
+#   - Risk: LOW (function not used by application)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-4438
+CVE-2026-4438
+
+# CVE-2026-5435: glibc TSIG record OOB write
+# Justification:
+#   - Vulnerability in TSIG (DNS transaction signature) record processing
+#   - Application does not process TSIG records
+#   - Risk: LOW (feature not used)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-5435
+CVE-2026-5435
+
+# CVE-2026-5450: glibc scanf heap buffer overflow
+# Justification:
+#   - Vulnerability in C scanf() function with %mc format specifier
+#   - Python application does not use C scanf
+#   - Risk: LOW (function not used by application)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-5450
+CVE-2026-5450
+
+# CVE-2026-5928: glibc ungetwc info disclosure
+# Justification:
+#   - Vulnerability in ungetwc() wide character function
+#   - Python application does not use C wide character functions
+#   - Risk: LOW (function not used by application)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-5928
+CVE-2026-5928
+
+# CVE-2026-6238: glibc DNS response crash
+# Justification:
+#   - Vulnerability requires crafted DNS response
+#   - Application uses Python's requests library with controlled API endpoints
+#   - Risk: LOW (vulnerable code path not exposed to untrusted input)
+# Affected packages: libc6, libc-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-6238
+CVE-2026-6238
+
+# CVE-2026-27171: zlib CRC32 combine DoS
+# Justification:
+#   - Vulnerability in CRC32 combine functions (crc32_combine, crc32_combine64)
+#   - Python application uses zlib for compression, not CRC32 combine operations
+#   - Risk: LOW (specific function not used)
+# Affected packages: zlib1g
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-27171
+CVE-2026-27171
+
+# CVE-2026-27456: util-linux mount TOCTOU
+# Justification:
+#   - Vulnerability in mount command-line tool when setting up loop devices
+#   - Python application does not use mount command or manipulate loop devices
+#   - Risk: LOW (tool not used by application)
+# Affected packages: util-linux, libblkid1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-27456
+CVE-2026-27456
+
+# CVE-2026-3184: util-linux hostname canonicalization
+# Justification:
+#   - Vulnerability in hostname command access control
+#   - Python application does not use hostname command
+#   - Risk: LOW (tool not used by application)
+# Affected packages: util-linux, libblkid1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-3184
+CVE-2026-3184
+
+# CVE-2026-34743: xz buffer overflow DoS
+# Justification:
+#   - Vulnerability in xz archive decompression (index decoding)
+#   - Python application does not decompress xz archives
+#   - Risk: LOW (functionality not used)
+# Affected packages: liblzma5
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-34743
+CVE-2026-34743
+
+# CVE-2026-40225: systemd udev privilege escalation
+# Justification:
+#   - Vulnerability requires udev processing malicious hardware events
+#   - systemd/udev not running in container (Python is PID 1)
+#   - Container does not have access to host hardware devices
+#   - Risk: LOW (udev daemon not running)
+# Affected packages: libudev1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-40225
+CVE-2026-40225
+
+# CVE-2026-40226: systemd-nspawn escape-to-host
+# Justification:
+#   - Vulnerability in systemd-nspawn container runtime
+#   - Docker is used as container runtime, not systemd-nspawn
+#   - systemd-nspawn not running in container
+#   - Risk: LOW (tool not used)
+# Affected packages: libudev1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-40226
+CVE-2026-40226
+
+# CVE-2026-4105: systemd RegisterMachine D-Bus privilege escalation
+# Justification:
+#   - Vulnerability requires systemd D-Bus service running
+#   - systemd not running in container (Python is PID 1)
+#   - No D-Bus services exposed
+#   - Risk: LOW (systemd daemon and D-Bus not running)
+# Affected packages: libudev1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-4105
+CVE-2026-4105
+
+# CVE-2026-5704: tar hidden file injection
+# Justification:
+#   - Vulnerability in tar command when extracting crafted archives
+#   - Python application does not use tar command or extract archives
+#   - Risk: LOW (tool not used by application)
+# Affected packages: tar
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-5704
+CVE-2026-5704
+
+# CVE-2026-5958: sed symlink issue
+# Justification:
+#   - Vulnerability requires sed with -i and --follow-symlinks flags
+#   - Python application does not use sed command
+#   - Risk: LOW (tool not used by application)
+# Affected packages: sed
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-5958
+CVE-2026-5958
+
+# ============================================================================
 # Notes:
 # ============================================================================
-# - All HIGH severity alerts are in base Debian packages, not application code
+# - All HIGH and MEDIUM severity alerts are in base Debian packages, not application code
 # - These packages are dependencies of the Python base image
 # - Fixes require upstream Debian/Python base image updates
 # - Container security best practices are followed:
