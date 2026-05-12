@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 048 completed)
-**Total Tasks**: 28 active tasks
-**Total Estimated Effort**: 188-252 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 048 completed + tasks 033-040 added)
+**Total Tasks**: 36 active tasks
+**Total Estimated Effort**: 338-456 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -23,15 +23,52 @@ Each task entry shows:
 
 ---
 
-## Phase 1: HIGH Priority - Critical Fixes
+## Phase 1: HIGH Priority - Critical Test Coverage (56-76 hours)
 
-**Rationale**: No remaining HIGH priority tasks. All critical fixes have been completed.
+**Rationale**: Three HIGH priority test coverage tasks addressing critical untested areas. Task 040 (CLI) is the main entry point (0% coverage despite 2,621 lines of tests). Task 035 (business logic) ensures accuracy of NHL rules and scoring. Task 037 (security) prevents vulnerabilities. All three have similar investigation patterns - extensive tests exist but report 0% coverage.
+
+**Order**: CLI first (main entry point), then business logic (accuracy critical), then security (attack prevention).
+
+```bash
+/implement-task testing/040-expand-test-coverage-cli-module.md  # 24-32h, Issue #593, [⚠️ MAIN ENTRY POINT]
+/implement-task testing/035-expand-test-coverage-business-logic.md  # 20-28h, Issue #588, [Accuracy Critical]
+/implement-task testing/037-expand-test-coverage-security-modules.md  # 12-16h, Issue #590, [Security Critical]
+```
+
+**Phase Total**: 56-76 hours
+
+**Investigation Phase**: All three tasks require understanding why extensive tests exist but report 0% coverage (similar to tasks 036, 038, 039).
 
 ---
 
-## Phase 2: MEDIUM Priority - I18n Quality & Testing (11-18 hours)
+## Phase 2: MEDIUM Priority - Comprehensive Test Coverage (94-128 hours)
 
-**Rationale**: Improve internationalization quality and coverage. Translation reviews should happen before comprehensive test suite to validate quality.
+**Rationale**: Five MEDIUM priority test coverage tasks completing the comprehensive 8-task coverage initiative (033-040). These cover all remaining untested modules. Order by strategic foundation: infrastructure → application → final modules → interactive → web.
+
+**Coverage Goal**: Increase overall coverage from 90.21% to 97%+ by addressing ~4,317 untested statements across all 8 tasks combined.
+
+```bash
+/implement-task testing/033-expand-test-coverage-core-modules.md  # 16-24h, Issue #586, [Infrastructure foundation]
+/implement-task testing/034-expand-test-coverage-remaining-modules.md  # 24-32h, Issue #587, [Application modules]
+/implement-task testing/036-expand-test-coverage-final-modules.md  # 18-24h, Issue #589, [Config, analytics, exporters]
+/implement-task testing/038-expand-test-coverage-interactive-modules.md  # 16-20h, Issue #591, [REPL/shell]
+/implement-task testing/039-expand-test-coverage-web-modules.md  # 20-28h, Issue #592, [FastAPI app]
+```
+
+**Phase Total**: 94-128 hours
+
+**Note**: Tasks 036, 038, 039 all have same pattern - test files exist but 0% coverage (investigation required).
+
+**Dependencies**:
+- Phase 1 should complete first (HIGH priority test coverage)
+- Tasks within this phase are largely independent and can be parallelized
+- All 8 tasks (033-040) form a comprehensive coverage initiative
+
+---
+
+## Phase 3: MEDIUM Priority - I18n Quality & Testing (6-8 hours)
+
+**Rationale**: Improve internationalization quality and coverage. Translation reviews should happen before additional translations to validate quality baseline.
 
 ```bash
 /implement-task enhancement/046-native-speaker-review-fr-ca.md  # 3-4h, Issue #509
@@ -42,7 +79,7 @@ Each task entry shows:
 
 ---
 
-## Phase 3: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
+## Phase 4: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
 
 **Rationale**: Low-effort documentation and tooling improvements. These are quick wins that improve developer experience without blocking other work.
 
@@ -57,7 +94,7 @@ Each task entry shows:
 
 ---
 
-## Phase 4: LOW Priority - I18n Visual Enhancements (2-3 hours)
+## Phase 5: LOW Priority - I18n Visual Enhancements (2-3 hours)
 
 **Rationale**: Visual improvements to locale selection. Low priority but enhances user experience. Do after core i18n quality work.
 
@@ -69,7 +106,7 @@ Each task entry shows:
 
 ---
 
-## Phase 5: LOW Priority - Translation Locales (Simple) (1-2 hours)
+## Phase 6: LOW Priority - Translation Locales (Simple) (1-2 hours)
 
 **Rationale**: Simple locale with minimal differences from en_US. Quick win for expanding locale coverage.
 
@@ -81,7 +118,7 @@ Each task entry shows:
 
 ---
 
-## Phase 6: LOW Priority - Translation Locales (Complex Languages) (42-56 hours)
+## Phase 7: LOW Priority - Translation Locales (Complex Languages) (46-62 hours)
 
 **Rationale**: Complex translations requiring professional translators. Group by estimated effort (simpler first). Can be parallelized if multiple translators available.
 
@@ -105,7 +142,7 @@ Each task entry shows:
 
 ---
 
-## Phase 7: LOW Priority - I18n Advanced Features (12-18 hours)
+## Phase 8: LOW Priority - I18n Advanced Features (12-18 hours)
 
 **Rationale**: Advanced i18n features that build on completed translations. Community platform enables collaborative translation. Locale-specific scoring adds fairness for international users.
 
@@ -118,7 +155,7 @@ Each task entry shows:
 
 ---
 
-## Phase 8: LOW Priority - Research & Evaluation (14-22 hours)
+## Phase 9: LOW Priority - Research & Evaluation (14-22 hours)
 
 **Rationale**: Research tasks that inform future decisions. No immediate implementation required, but valuable for strategic planning.
 
@@ -131,7 +168,7 @@ Each task entry shows:
 
 ---
 
-## Phase 9: LOW Priority - New Features (Infrastructure) (40-56 hours)
+## Phase 10: LOW Priority - New Features (Infrastructure) (40-56 hours)
 
 **Rationale**: Significant new features that add capabilities but aren't blocking current work. Group by complexity (simpler first).
 
@@ -151,103 +188,41 @@ Each task entry shows:
 /implement-task new-features/008-database-backend.md  # 12-16h, Issue #151
 ```
 
-**Phase Total**: 47-64 hours
+**Phase Total**: 52-72 hours
 
 ---
 
-## Summary by Priority
+## Summary
 
-### HIGH Priority: 1 task (2-3 hours)
-- Critical unicode/data integrity fix for Windows platform
+**Total Active Tasks**: 36
+**Total Estimated Effort**: 338-456 hours
 
-### MEDIUM Priority: 16 tasks (88-129 hours)
-- **Platform Support**: 5 Windows tests, 1 macOS test (14-22h)
-- **Web Interface**: 2 grouping features (20-28h)
-- **I18n Quality**: 2 translation reviews, 1 test suite, 1 date/time, 1 monitoring (13-18h + ongoing)
+### By Priority:
+- **HIGH**: 3 tasks (56-76 hours) - Critical test coverage
+- **MEDIUM**: 7 tasks (100-136 hours) - Comprehensive test coverage + i18n quality
+- **LOW**: 26 tasks (182-244 hours) - Features, translations, research
 
-### LOW Priority: 25 tasks (140-181 hours)
-- **Documentation/Tooling**: 4 tasks (8-12h)
-- **Visual Enhancements**: 1 task (2-3h)
-- **Translations**: 8 locales (47-64h)
-- **I18n Advanced**: 2 tasks (12-18h)
-- **Research**: 2 tasks (14-22h)
-- **New Features**: 8 tasks (47-64h)
+### By Category:
+- **Testing**: 9 tasks (150-204 hours) - Comprehensive test coverage initiative
+- **Enhancement**: 8 tasks (41-61 hours) - I18n improvements, Sphinx extensions, evaluation
+- **New Features**: 18 tasks (144-188 hours) - Translations, infrastructure features
+- **Refactoring**: 1 task (0.5-1 hours) - Type checking enforcement
 
----
+### Strategic Focus:
+1. **Phases 1-2** (150-204 hours): Test coverage from 90.21% → 97%+
+   - Complete 8-task comprehensive coverage initiative
+   - Address all untested modules (~4,317 statements)
+   - Investigate 0% coverage patterns in existing tests
+2. **Phase 3** (6-8 hours): I18n quality validation
+3. **Phases 4-10** (182-244 hours): Features, translations, tooling
 
-## Dependency Chain Visualization
-
-```
-Phase 1 (HIGH): Unicode Fix #536
-    └─> Phase 2 (MEDIUM): Windows Test Fixes #533, #534, #535, #537
-                          macOS Fix #538
-
-Phase 3 (MEDIUM): Web Interface Pages
-    #540 League (completed)
-        └─> #541 Conference (completed)
-            └─> #542 Division (completed)
-                └─> #539 Players (completed)
-                    └─> #544 Player Detail (completed)
-                        └─> #545 Auto-Linking (completed)
-
-Phase 4 (MEDIUM): I18n Quality
-    #509, #510 Translation Reviews (no deps, can parallel)
-        └─> #512 Comprehensive i18n Tests
-    #511 Date/Time Formatting (independent)
-    #325 ty Validation Monitoring (ongoing, independent)
-        └─> #355 Make ty Blocking (Phase 5, depends on #325 completion)
-
-Phases 5-11: Mostly independent, can be tackled in any order within priority level
-```
+### Implementation Notes:
+- **Test Coverage Tasks** (033-040): Form cohesive initiative, but can be parallelized within priority groups
+- **Investigation Required**: Tasks 036, 038, 039, 040 have unusual 0% coverage despite extensive tests
+- **Translation Tasks**: Can be parallelized if multiple translators available
+- **Quick Wins**: Task 023 (15min) and 024 (30min-1h) can be completed quickly
 
 ---
 
-## Quick Wins (< 2 hours)
-
-Tasks that can be completed quickly for immediate value:
-
-1. `testing/023-make-qa-workflow-blocking.md` - 15 minutes, Issue #439
-2. `refactoring/024-make-ty-blocking.md` - 30min-1h, Issue #355 (after #325)
-3. `new-features/037-translate-to-en-ca.md` - 1-2h, Issue #513
-
-**Total Quick Wins**: ~2-3.25 hours
-
----
-
-## Parallelization Opportunities
-
-Tasks that can be worked on simultaneously (no dependencies):
-
-### Within Phase 2 (Windows/macOS fixes):
-- All 5 Windows tasks + macOS task can be parallelized after Phase 1
-
-### Within Phase 3 (Web pages):
-- Must follow dependency chain (league → conference → division → team → players → player detail → auto-link)
-
-### Within Phase 4 (I18n quality):
-- #509 and #510 (translation reviews) can be parallel
-- #511 (date/time) is independent
-- #325 (ty monitoring) is independent but ongoing
-
-### Within Phase 8 (Translations):
-- All 8 translation tasks can be fully parallelized if translators available
-
-### Within Phase 11 (New features):
-- All 8 features are independent and can be parallelized
-
----
-
-## Notes
-
-- **Translation Tasks**: Phase 8 translations (37-45) can benefit from task 049 (community platform) but don't strictly depend on it. Consider implementing 049 earlier if prioritizing community engagement.
-
-- **Docker Support**: Task 014 could be useful for task 017 (hosting) but isn't strictly required.
-
-- **Total Effort Range**: 234-319 hours represents approximately 6-8 weeks of full-time work, or 3-6 months of part-time development.
-
----
-
-## Last Updated
-
-2026-05-08 - Completed task 028 (fix Windows test_success_messages_translatable) - 39 active tasks
-2026-05-08 - Completed task 027 (fix Windows test_search_to_file) - 40 active tasks
+**Last Updated**: 2026-05-12
+**Next Review**: After completing Phase 1 (HIGH priority test coverage)
