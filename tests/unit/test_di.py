@@ -25,7 +25,7 @@ class TestDependencyContainer:
             max_backoff=30.0,
             cache_enabled=False,  # Disable cache for testing
             cache_expiry=3600,
-            cache_dir="/tmp/test_cache",  # noqa: PTH122
+            cache_dir="/tmp/test_cache",
             dos_max_connections=100,
             dos_max_per_host=10,
             dos_circuit_breaker_threshold=5,
@@ -65,7 +65,7 @@ class TestDependencyContainer:
     def test_create_api_client_cache_dir_override(self, container: DependencyContainer) -> None:
         """Test API client cache directory override."""
         # Create with custom cache directory
-        client = container.create_api_client(cache_dir="/tmp/custom_cache")  # noqa: PTH122
+        client = container.create_api_client(cache_dir="/tmp/custom_cache")
         assert client is not None
 
         # Clean up
@@ -158,7 +158,7 @@ class TestCreateDependenciesFunction:
             max_backoff=30.0,
             cache_enabled=False,
             cache_expiry=3600,
-            cache_dir="/tmp/test_cache",  # noqa: PTH122
+            cache_dir="/tmp/test_cache",
             dos_max_connections=100,
             dos_max_per_host=10,
             dos_circuit_breaker_threshold=5,
