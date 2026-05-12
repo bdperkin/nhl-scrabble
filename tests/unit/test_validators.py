@@ -78,6 +78,79 @@ class TestValidateFilePath:
         result = validate_file_path(".hidden")
         assert result.name == ".hidden"
 
+    def test_path_not_directory(self, tmp_path: Path) -> None:
+        """Test error when parent exists but is not a directory."""
+        # Create a regular file
+        not_a_dir = tmp_path / "notdir"
+        not_a_dir.write_text("content")
+
+        # Try to create file with non-directory parent
+        with pytest.raises(ValidationError, match="not a directory"):
+            validate_file_path(str(not_a_dir / "file.txt"))
+
+    def test_readonly_parent_directory(self, tmp_path: Path) -> None:
+        """Test error when parent directory is read-only."""
+        # Create read-only directory
+        readonly_dir = tmp_path / "readonly"
+        readonly_dir.mkdir()
+        readonly_dir.chmod(0o444)  # Read-only
+
+        try:
+            with pytest.raises(ValidationError, match="not writable"):
+                validate_file_path(str(readonly_dir / "file.txt"))
+        finally:
+            # Restore permissions for cleanup
+            readonly_dir.chmod(0o755)
+
+    def test_readonly_file_overwrite(self, tmp_path: Path) -> None:
+        """Test error when trying to overwrite read-only file."""
+        # Create read-only file
+        readonly_file = tmp_path / "readonly.txt"
+        readonly_file.write_text("content")
+        readonly_file.chmod(0o444)  # Read-only
+
+        try:
+            with pytest.raises(ValidationError, match="not writable"):
+                validate_file_path(str(readonly_file), allow_overwrite=True)
+        finally:
+            # Restore permissions for cleanup
+            readonly_file.chmod(0o644)
+
+    def test_complex_path_traversal_patterns(self) -> None:
+        """Test various path traversal attack patterns."""
+        patterns = [
+            "../etc/passwd",
+            "../../etc/passwd",
+            "../../../etc/passwd",
+            "/..",
+            "/../../etc/passwd",
+            "file/../../../etc/passwd",
+        ]
+        for pattern in patterns:
+            with pytest.raises(ValidationError, match="suspicious pattern"):
+                validate_file_path(pattern)
+
+    def test_invalid_path_value_error(self, tmp_path: Path) -> None:
+        """Test invalid path conversion raises ValidationError."""
+        # Null bytes in path cause ValueError in Path()
+        with pytest.raises(ValidationError, match="Invalid path"):
+            validate_file_path(str(tmp_path / "file\x00.txt"))
+
+    def test_path_resolution(self, tmp_path: Path) -> None:
+        """Test path is resolved to absolute path."""
+        # Use relative path within tmp_path
+        import os
+
+        original_cwd = Path.cwd()
+        try:
+            os.chdir(tmp_path)
+            result = validate_file_path("test.txt")
+            # Result should be absolute
+            assert result.is_absolute()
+            assert str(result).startswith(str(tmp_path))
+        finally:
+            os.chdir(original_cwd)
+
 
 class TestValidateFloatRange:
     """Tests for validate_float_range()."""
@@ -112,6 +185,46 @@ class TestValidateFloatRange:
         """Test string that can be converted to float."""
         result = validate_float_range("2.5", min_val=1.0, max_val=10.0)
         assert result == 2.5
+
+    def test_no_min_or_max(self) -> None:
+        """Test validation with no bounds."""
+        result = validate_float_range(999.9)
+        assert result == 999.9
+
+    def test_min_only(self) -> None:
+        """Test validation with only minimum bound."""
+        result = validate_float_range(100.0, min_val=50.0)
+        assert result == 100.0
+
+    def test_max_only(self) -> None:
+        """Test validation with only maximum bound."""
+        result = validate_float_range(5.0, max_val=10.0)
+        assert result == 5.0
+
+    def test_exact_minimum(self) -> None:
+        """Test value exactly at minimum (inclusive)."""
+        result = validate_float_range(1.0, min_val=1.0, max_val=10.0)
+        assert result == 1.0
+
+    def test_exact_maximum(self) -> None:
+        """Test value exactly at maximum (inclusive)."""
+        result = validate_float_range(10.0, min_val=1.0, max_val=10.0)
+        assert result == 10.0
+
+    def test_custom_parameter_name_in_error(self) -> None:
+        """Test custom parameter name appears in error message."""
+        with pytest.raises(ValidationError, match="timeout"):
+            validate_float_range(0.5, min_val=1.0, name="timeout")
+
+    def test_negative_values(self) -> None:
+        """Test validation with negative values."""
+        result = validate_float_range(-5.0, min_val=-10.0, max_val=0.0)
+        assert result == -5.0
+
+    def test_zero_value(self) -> None:
+        """Test validation with zero."""
+        result = validate_float_range(0.0, min_val=-1.0, max_val=1.0)
+        assert result == 0.0
 
 
 class TestValidateTeamAbbreviation:
@@ -412,6 +525,64 @@ class TestValidateUrl:
         with pytest.raises(ValidationError, match="scheme must be"):
             validate_url("http://example.com", allowed_schemes=["ws", "wss"])
 
+    def test_url_with_query_params(self) -> None:
+        """Test URL with query parameters."""
+        url = "https://api.example.com/v1/resource?param1=value1&param2=value2"
+        result = validate_url(url)
+        assert result == url
+
+    def test_url_with_fragment(self) -> None:
+        """Test URL with fragment identifier."""
+        url = "https://example.com/page#section"
+        result = validate_url(url)
+        assert result == url
+
+    def test_url_with_port(self) -> None:
+        """Test URL with port number."""
+        url = "https://example.com:8443/api"
+        result = validate_url(url)
+        assert result == url
+
+    def test_url_with_username_password(self) -> None:
+        """Test URL with authentication credentials."""
+        url = "https://user:pass@example.com"
+        result = validate_url(url)
+        assert result == url
+
+    def test_url_localhost(self) -> None:
+        """Test localhost URL."""
+        url = "http://localhost:8000"
+        result = validate_url(url)
+        assert result == url
+
+    def test_url_ip_address(self) -> None:
+        """Test URL with IP address."""
+        url = "http://192.168.1.1"
+        result = validate_url(url)
+        assert result == url
+
+    def test_no_scheme(self) -> None:
+        """Test URL without scheme."""
+        with pytest.raises(ValidationError, match="scheme must be"):
+            validate_url("example.com")
+
+    def test_empty_allowed_schemes(self) -> None:
+        """Test with empty allowed schemes list."""
+        with pytest.raises(ValidationError, match="scheme must be"):
+            validate_url("https://example.com", allowed_schemes=[])
+
+    def test_malformed_url(self) -> None:
+        """Test completely malformed URL."""
+        # Create a URL that would fail parsing
+        with pytest.raises(ValidationError):
+            # URL with only a scheme (no netloc)
+            validate_url("http://")
+
+    def test_relative_url_rejected(self) -> None:
+        """Test relative URL is rejected."""
+        with pytest.raises(ValidationError):
+            validate_url("/api/v1/resource")
+
 
 class TestValidateApiResponseStructure:
     """Tests for validate_api_response_structure()."""
@@ -460,6 +631,20 @@ class TestValidateApiResponseStructure:
         data = {"anything": "goes"}
         result = validate_api_response_structure(data, required_keys=[])
         assert result == data
+
+    def test_available_keys_in_error_message(self) -> None:
+        """Test error message lists available keys."""
+        data = {"available1": "data", "available2": 123}
+        with pytest.raises(ValidationError) as exc_info:
+            validate_api_response_structure(
+                data,
+                required_keys=["missing1", "missing2"],
+            )
+        error_msg = str(exc_info.value)
+        assert "available1" in error_msg
+        assert "available2" in error_msg
+        assert "missing1" in error_msg
+        assert "missing2" in error_msg
 
 
 class TestValidateOutputFormat:
