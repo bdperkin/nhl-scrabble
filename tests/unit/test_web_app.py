@@ -261,3 +261,121 @@ class TestSecurityHeaders:
         assert response.headers["X-Content-Type-Options"] == "nosniff"
         # But might have relaxed or no CSP for Swagger UI to work
         # (actual behavior depends on implementation)
+
+    def test_security_headers_on_redoc(self) -> None:
+        """Test security headers on ReDoc endpoint."""
+        client = TestClient(app)
+        response = client.get("/redoc")
+
+        # ReDoc should have security headers but may skip strict CSP
+        assert response.headers["X-Content-Type-Options"] == "nosniff"
+        assert response.headers["X-Frame-Options"] == "DENY"
+
+    def test_security_headers_on_openapi_json(self) -> None:
+        """Test security headers on OpenAPI JSON endpoint."""
+        client = TestClient(app)
+        response = client.get("/openapi.json")
+
+        # OpenAPI spec should have security headers
+        assert response.headers["X-Content-Type-Options"] == "nosniff"
+
+
+class TestFixtureLoadingErrorPaths:
+    """Test fixture loading error handling."""
+
+    @patch("nhl_scrabble.web.app.json.load")
+    @patch("nhl_scrabble.web.app.Path.open")
+    @patch("nhl_scrabble.web.app.Path.exists")
+    def test_load_fixture_invalid_standings_json(
+        self,
+        mock_exists: MagicMock,
+        mock_open: MagicMock,
+        mock_json_load: MagicMock,
+    ) -> None:
+        """Test fixture loading with invalid standings JSON."""
+        import json
+
+        mock_exists.return_value = True
+        # First call (standings) raises JSONDecodeError
+        mock_json_load.side_effect = json.JSONDecodeError("Invalid JSON", "", 0)
+
+        with pytest.raises(json.JSONDecodeError):
+            _load_fixture_data()
+
+    @patch("nhl_scrabble.web.app.json.load")
+    @patch("nhl_scrabble.web.app.Path.open")
+    @patch("nhl_scrabble.web.app.Path.exists")
+    def test_load_fixture_invalid_rosters_json(
+        self,
+        mock_exists: MagicMock,
+        mock_open: MagicMock,
+        mock_json_load: MagicMock,
+    ) -> None:
+        """Test fixture loading with invalid rosters JSON."""
+        import json
+
+        mock_exists.return_value = True
+        # First call succeeds, second call (rosters) raises JSONDecodeError
+        mock_json_load.side_effect = [
+            {"standings": []},
+            json.JSONDecodeError("Invalid JSON", "", 0),
+        ]
+
+        with pytest.raises(json.JSONDecodeError):
+            _load_fixture_data()
+
+
+class TestFaviconEndpoints:
+    """Test favicon endpoints."""
+
+    def test_favicon_svg(self) -> None:
+        """Test /favicon.svg endpoint."""
+        client = TestClient(app)
+        response = client.get("/favicon.svg")
+
+        assert response.status_code == 200
+        assert "image/svg+xml" in response.headers.get("content-type", "")
+
+    def test_favicon_ico(self) -> None:
+        """Test /favicon.ico returns SVG."""
+        client = TestClient(app)
+        response = client.get("/favicon.ico")
+
+        # Returns SVG content directly
+        assert response.status_code == 200
+        assert "image/svg+xml" in response.headers.get("content-type", "")
+
+
+class TestRobotsTxt:
+    """Test robots.txt endpoint."""
+
+    def test_robots_txt_exists(self) -> None:
+        """Test /robots.txt endpoint."""
+        client = TestClient(app)
+        response = client.get("/robots.txt")
+
+        assert response.status_code == 200
+        assert "text/plain" in response.headers.get("content-type", "")
+
+
+class TestCacheEndpoints:
+    """Test cache management endpoints."""
+
+    def test_clear_cache(self) -> None:
+        """Test DELETE /api/cache/clear endpoint."""
+        client = TestClient(app)
+        response = client.delete("/api/cache/clear")
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "message" in data
+        assert data["message"] == "Cache cleared successfully"
+
+    def test_cache_stats(self) -> None:
+        """Test GET /api/cache/stats endpoint."""
+        client = TestClient(app)
+        response = client.get("/api/cache/stats")
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "size" in data or "count" in data
