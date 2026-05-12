@@ -306,3 +306,4 @@ __pycache__/
 messages.pot
 # Stray compiled message catalog in root (legitimate .mo files are in locales/)
 /messages.mo
+coverage.json

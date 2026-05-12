@@ -289,6 +289,18 @@ class TestValidateSafePath:
             finally:
                 os.chdir(original_cwd)
 
+    def test_path_resolve_failure(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test handling of path resolution failures."""
+        from pathlib import Path
+
+        def mock_resolve(*args, **kwargs):
+            raise OSError("Symbolic link loop or permission denied")
+
+        monkeypatch.setattr(Path, "resolve", mock_resolve)
+
+        with pytest.raises(ConfigValidationError, match=r"Cannot resolve path"):
+            validate_safe_path("some_path.txt")
+
 
 class TestValidateEnum:
     """Test enum validation with injection protection."""
@@ -383,6 +395,11 @@ class TestValidateBoolean:
     def test_boolean_with_whitespace(self) -> None:
         """Test boolean with whitespace."""
         assert validate_boolean("  true  ") is True
+
+    def test_empty_string_as_false(self) -> None:
+        """Test empty string returns False."""
+        assert validate_boolean("") is False
+        assert validate_boolean("   ") is False  # Whitespace only
 
     def test_rejects_invalid_boolean(self) -> None:
         """Test rejection of invalid boolean value."""

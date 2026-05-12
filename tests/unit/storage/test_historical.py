@@ -62,6 +62,18 @@ class TestHistoricalDataStoreInit:
         assert store.data_dir == expected_dir
         assert expected_dir.exists()
 
+    def test_init_permission_error(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        """Test initialization raises error when directory creation fails."""
+        from pathlib import Path
+
+        def mock_mkdir(*args, **kwargs):
+            raise OSError("Permission denied")
+
+        monkeypatch.setattr(Path, "mkdir", mock_mkdir)
+
+        with pytest.raises(HistoricalDataStoreError, match="Failed to create data directory"):
+            HistoricalDataStore(data_dir=tmp_path / "test")
+
 
 class TestHistoricalDataStoreSave:
     """Tests for saving season data."""
@@ -103,6 +115,31 @@ class TestHistoricalDataStoreSave:
 
         loaded_data = store.load_season(season)
         assert loaded_data == data
+
+    def test_save_season_write_error(
+        self,
+        store: HistoricalDataStore,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Test save_season raises error when file write fails."""
+        from pathlib import Path
+
+        original_open = Path.open
+
+        def mock_open(self, *args, **kwargs):
+            # Fail on write mode
+            mode = kwargs.get("mode", args[0] if args else "r")
+            if "w" in mode:
+                raise OSError("Disk full")
+            return original_open(self, *args, **kwargs)
+
+        monkeypatch.setattr(Path, "open", mock_open)
+
+        season = "20222023"
+        data = {"teams": {}}
+
+        with pytest.raises(HistoricalDataStoreError, match="Failed to save season"):
+            store.save_season(season, data)
 
 
 class TestHistoricalDataStoreLoad:
@@ -179,6 +216,24 @@ class TestHistoricalDataStoreList:
         seasons = store.list_seasons()
         assert seasons == ["20222023"]
 
+    def test_list_seasons_permission_error(
+        self,
+        store: HistoricalDataStore,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Test list_seasons handles permission errors gracefully."""
+        from pathlib import Path
+
+        def mock_glob(*args, **kwargs):
+            raise OSError("Permission denied")
+
+        # Mock the glob method to raise OSError
+        monkeypatch.setattr(Path, "glob", mock_glob)
+
+        # Should return empty list instead of raising
+        seasons = store.list_seasons()
+        assert seasons == []
+
 
 class TestHistoricalDataStoreDelete:
     """Tests for deleting season data."""
@@ -198,6 +253,26 @@ class TestHistoricalDataStoreDelete:
         season = "20222023"
         result = store.delete_season(season)
         assert result is False
+
+    def test_delete_season_permission_error(
+        self,
+        store: HistoricalDataStore,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Test delete_season raises error on permission issues."""
+        from pathlib import Path
+
+        season = "20222023"
+        store.save_season(season, {"teams": {}})
+
+        def mock_unlink(*args, **kwargs):
+            raise OSError("Permission denied")
+
+        # Mock the unlink method to raise OSError
+        monkeypatch.setattr(Path, "unlink", mock_unlink)
+
+        with pytest.raises(HistoricalDataStoreError, match="Failed to delete season"):
+            store.delete_season(season)
 
 
 class TestHistoricalDataStoreClear:
@@ -226,3 +301,50 @@ class TestHistoricalDataStoreClear:
 
         assert store.data_dir.exists()
         assert store.data_dir.is_dir()
+
+    def test_clear_all_partial_failure(
+        self,
+        store: HistoricalDataStore,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Test clear_all continues on individual file deletion errors."""
+        from pathlib import Path
+
+        seasons = ["20222023", "20232024", "20242025"]
+        for season in seasons:
+            store.save_season(season, {"teams": {}})
+
+        # Save original unlink method
+        original_unlink = Path.unlink
+        call_count = 0
+
+        def mock_unlink(self):
+            nonlocal call_count
+            call_count += 1
+            # Fail on first file, succeed on others
+            if call_count == 1:
+                raise OSError("Permission denied")
+            # Call the original unlink for other files
+            return original_unlink(self)
+
+        monkeypatch.setattr(Path, "unlink", mock_unlink)
+
+        # Should delete 2 out of 3 files
+        count = store.clear_all()
+        assert count == 2
+
+    def test_clear_all_glob_error(
+        self,
+        store: HistoricalDataStore,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Test clear_all raises error when glob fails."""
+        from pathlib import Path
+
+        def mock_glob(*args, **kwargs):
+            raise OSError("Permission denied")
+
+        monkeypatch.setattr(Path, "glob", mock_glob)
+
+        with pytest.raises(HistoricalDataStoreError, match="Failed to clear cached data"):
+            store.clear_all()
