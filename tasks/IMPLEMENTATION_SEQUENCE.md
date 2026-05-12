@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 040, 048 completed + tasks 033-040 added)
-**Total Tasks**: 35 active tasks
-**Total Estimated Effort**: 314-424 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 035, 040, 048 completed + tasks 033-040 added)
+**Total Tasks**: 34 active tasks
+**Total Estimated Effort**: 294-396 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -23,20 +23,19 @@ Each task entry shows:
 
 ---
 
-## Phase 1: HIGH Priority - Critical Test Coverage (32-44 hours)
+## Phase 1: HIGH Priority - Critical Test Coverage (12-16 hours)
 
-**Rationale**: Two HIGH priority test coverage tasks addressing critical untested areas. Task 035 (business logic) ensures accuracy of NHL rules and scoring. Task 037 (security) prevents vulnerabilities.
+**Rationale**: HIGH priority test coverage task addressing critical untested security modules. Task 037 (security) prevents vulnerabilities.
 
-**Order**: Business logic first (accuracy critical), then security (attack prevention).
+~~**Task 035 (business logic)**: Completed 2026-05-12 - Coverage analysis revealed task based on outdated data. All modules exceed targets (95.79% average). See PR #595.~~
 
 ```bash
-/implement-task testing/035-expand-test-coverage-business-logic.md  # 20-28h, Issue #588, [Accuracy Critical]
 /implement-task testing/037-expand-test-coverage-security-modules.md  # 12-16h, Issue #590, [Security Critical]
 ```
 
-**Phase Total**: 32-44 hours
+**Phase Total**: 12-16 hours
 
-**Investigation Phase**: All three tasks require understanding why extensive tests exist but report 0% coverage (similar to tasks 036, 038, 039).
+**Investigation Phase**: Task 037 requires understanding why extensive tests exist but report 0% coverage (similar to tasks 036, 038, 039).
 
 ---
 
