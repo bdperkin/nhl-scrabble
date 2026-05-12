@@ -9,13 +9,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.0.17] - 2026-05-11
+
+### Security
+
+- (trivy): suppress non-applicable LOW severity CVEs with comprehensive documentation (#583)
+- (trivy): suppress non-applicable MEDIUM severity CVEs with comprehensive documentation (#582)
+- (trivy): suppress non-applicable HIGH severity CVEs with documentation (#581)
+- (codeql): replace ellipsis with NotImplementedError in Protocol methods (#580)
+- Fix Log Injection vulnerabilities (CWE-117) (#579)
+- (deps): upgrade urllib3 to 2.7.0 (#571)
+
+### Added
+
 - (players): Add nationality and birthplace grouping with country filtering (#566)
   - New `--countries` CLI option to filter players by birth country (ISO 3166-1 alpha-3 codes)
   - New `--group-by nationality` option to organize players by country
   - Extended PlayerScore model with birthplace, birth_country, and nationality fields
   - Comprehensive country code mapping utility with 60+ countries
   - Grouping utilities for nationality and birth country analysis
-  - Full test coverage with 53 new unit tests
+- (position): add position grouping support for players (#568)
+- (web): add automatic entity linking throughout web application (#564)
+- (web): add comprehensive player detail pages with NHL player data (#562)
+- (assets): Add Scrabble tile images with Git LFS and automation (#561)
+- (web): Add team detail pages with player rankings and team logo (#549)
+- (web): Add Division detail pages with team standings and top players (#548)
+- (web): add conference detail pages with team/player standings (#547)
+- (web): Add League menu item and League standings page (#546)
+- Add Players menu item and dedicated players page (#560)
+
+### Fixed
+
+- (i18n): add Windows compatibility for locale detection and formatting (#555)
+- (cli): add explicit UTF-8 encoding to write_text calls (#554)
+- (tests): add explicit UTF-8 encoding to all write_text calls (#553)
+- (tests): resolve Windows platform test failures in nightly CI
+- (tests): resolve remaining QA automation test failures
+- (qa): resolve 11 QA automation test failures
+- (tests): remove incorrect sphinx-build skip decorator
+- (tasks): correct task count in README.md to match filesystem
+- (ci): resolve nightly workflow failures (#532)
+- (ci): add contents write permission to Docker workflow for SBOM release attachment
+- (rate-limiter): fix macOS timing issues in test_fractional_tokens (#559)
+
+### Build / CI
+
+- bump docker/login-action from 3 to 4 (#576)
+- bump actions/dependency-review-action from 4 to 5 (#577)
+- bump actions/upload-artifact from 4 to 7 (#574)
+- bump docker/setup-buildx-action from 3 to 4 (#575)
+- bump actions/labeler from 5 to 6 (#573)
+- bump urllib3 from 2.6.3 to 2.7.0 in /qa/web (#572)
+- add automatic retry logic to nightly workflow to prevent false-positive issues
+
+### Tests
+
+- boost test coverage to 90.21% (exceeds 90% target) (#529)
 
 ## [0.0.16] - 2026-05-06
 
