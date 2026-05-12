@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (29 active, 206 completed)
+**Total Tasks**: 235 tasks (28 active, 207 completed)
 
 ## Overview
 
@@ -108,7 +108,7 @@ Each task includes:
 | 045 | Add Country Flag Icons to Locale Dropdown | LOW | 2-3 hours | Active | [#507](https://github.com/bdperkin/nhl-scrabble/issues/507) | - |
 | 046 | Native Speaker Review of French Canadian (fr_CA) Translations | MEDIUM | 3-4 hours | Active | [#509](https://github.com/bdperkin/nhl-scrabble/issues/509) | - |
 | 047 | Native Speaker Review of Swedish (sv_SE) Translations | MEDIUM | 3-4 hours | Active | [#510](https://github.com/bdperkin/nhl-scrabble/issues/510) | - |
-| 048 | Locale-Aware Date and Time Formatting | MEDIUM | 3-4 hours | Active | [#511](https://github.com/bdperkin/nhl-scrabble/issues/511) | - |
+| 048 | Locale-Aware Date and Time Formatting | MEDIUM | 3-4 hours (actual: ~3.5h) | Completed | [#511](https://github.com/bdperkin/nhl-scrabble/issues/511) | PR [#585](https://github.com/bdperkin/nhl-scrabble/pull/585), completed 2026-05-12 |
 | 049 | Set Up Community Translation Platform (Weblate/Crowdin) | LOW | 4-6 hours | Active | [#522](https://github.com/bdperkin/nhl-scrabble/issues/522) | - |
 | 050 | Implement Locale-Specific Scrabble Letter Values | LOW | 8-12 hours | Active | [#523](https://github.com/bdperkin/nhl-scrabble/issues/523) | - |
 | 001 | Auto-Link Entity Names Throughout Web Application | MEDIUM | 4-6 hours (actual: ~6h) | Completed | [#545](https://github.com/bdperkin/nhl-scrabble/issues/545) | PR [#564](https://github.com/bdperkin/nhl-scrabble/pull/564), completed 2026-05-10 |
