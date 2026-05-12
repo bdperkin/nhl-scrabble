@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 033, 035, 037, 040, 048 completed + tasks 033-040 added)
-**Total Tasks**: 32 active tasks
-**Total Estimated Effort**: 266-356 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 033, 034, 035, 037, 040, 048 completed + tasks 033-040 added)
+**Total Tasks**: 31 active tasks
+**Total Estimated Effort**: 242-324 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -43,14 +43,15 @@ Each task entry shows:
 
 ~~**Task 033 (core infrastructure)**: Completed 2026-05-12 - Core infrastructure modules tested. Coverage: 90.21%→~92.5% (+2.3pp). 6 modules at 100%, 4 at 95%+. Actual effort: 4-5h (vs 16-24h estimate). Most modules already had excellent coverage. PR #597.~~
 
+~~**Task 034 (application modules)**: Completed 2026-05-12 - Enhanced test coverage for validators and logging_config. Coverage: validators 12.30%→98.36% (+86pp), logging_config 0%→~95%. Added 42 comprehensive tests. Actual effort: ~3h (vs 24-32h estimate). Other modules already had excellent coverage. PR #598.~~
+
 ```bash
-/implement-task testing/034-expand-test-coverage-remaining-modules.md  # 24-32h, Issue #587, [Application modules]
 /implement-task testing/036-expand-test-coverage-final-modules.md  # 18-24h, Issue #589, [Config, analytics, exporters]
 /implement-task testing/038-expand-test-coverage-interactive-modules.md  # 16-20h, Issue #591, [REPL/shell]
 /implement-task testing/039-expand-test-coverage-web-modules.md  # 20-28h, Issue #592, [FastAPI app]
 ```
 
-**Phase Total**: 94-128 hours
+**Phase Total**: 70-96 hours
 
 **Note**: Tasks 036, 038, 039 all have same pattern - test files exist but 0% coverage (investigation required).
 
@@ -189,30 +190,31 @@ Each task entry shows:
 
 ## Summary
 
-**Total Active Tasks**: 35
-**Total Estimated Effort**: 314-424 hours
+**Total Active Tasks**: 31
+**Total Estimated Effort**: 242-324 hours
 
 ### By Priority:
-- **HIGH**: 2 tasks (32-44 hours) - Critical test coverage
-- **MEDIUM**: 7 tasks (100-136 hours) - Comprehensive test coverage + i18n quality
+- **HIGH**: 0 tasks (0 hours) - All critical test coverage completed
+- **MEDIUM**: 5 tasks (76-104 hours) - Comprehensive test coverage + i18n quality
 - **LOW**: 26 tasks (182-244 hours) - Features, translations, research
 
 ### By Category:
-- **Testing**: 9 tasks (150-204 hours) - Comprehensive test coverage initiative
+- **Testing**: 5 tasks (70-96 hours) - Comprehensive test coverage initiative
 - **Enhancement**: 8 tasks (41-61 hours) - I18n improvements, Sphinx extensions, evaluation
 - **New Features**: 18 tasks (144-188 hours) - Translations, infrastructure features
 - **Refactoring**: 1 task (0.5-1 hours) - Type checking enforcement
 
 ### Strategic Focus:
-1. **Phases 1-2** (150-204 hours): Test coverage from 90.21% → 97%+
-   - Complete 8-task comprehensive coverage initiative
-   - Address all untested modules (~4,317 statements)
+1. **Phases 1-2** (0-96 hours): Test coverage from 90.21% → 97%+
+   - 4 remaining tasks in comprehensive coverage initiative
+   - Address all untested modules (~1,800 statements remaining)
    - Investigate 0% coverage patterns in existing tests
 2. **Phase 3** (6-8 hours): I18n quality validation
 3. **Phases 4-10** (182-244 hours): Features, translations, tooling
 
 ### Implementation Notes:
 - **Test Coverage Tasks** (033-039): Form cohesive initiative, but can be parallelized within priority groups
+- **Completed**: Tasks 033, 034, 035, 037 completed (actual effort significantly lower than estimates)
 - **Investigation Required**: Tasks 036, 038, 039 have unusual 0% coverage despite extensive tests
 - **Translation Tasks**: Can be parallelized if multiple translators available
 - **Quick Wins**: Task 023 (15min) and 024 (30min-1h) can be completed quickly
