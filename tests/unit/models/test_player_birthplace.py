@@ -1,6 +1,7 @@
-"""Unit tests for PlayerScore birthplace fields."""
+"""Unit tests for PlayerScore birthplace fields and TeamScore model."""
 
 from nhl_scrabble.models.player import PlayerScore
+from nhl_scrabble.models.team import TeamScore
 
 
 class TestPlayerScoreBirthplaceFields:
@@ -95,3 +96,107 @@ class TestPlayerScoreBirthplaceFields:
         assert "8478402" in repr_str
         assert "35" in repr_str
         assert "EDM" in repr_str
+
+
+class TestTeamScore:
+    """Test TeamScore model methods."""
+
+    def test_to_dict_with_players(self) -> None:
+        """Test to_dict() includes players when include_players=True."""
+        player = PlayerScore(
+            first_name="Connor",
+            last_name="McDavid",
+            full_name="Connor McDavid",
+            first_score=20,
+            last_score=15,
+            full_score=35,
+            team="EDM",
+            division="Pacific",
+            conference="Western",
+        )
+
+        team = TeamScore(
+            abbrev="EDM",
+            name="Oilers",
+            total=35,
+            players=[player],
+            division="Pacific",
+            conference="Western",
+        )
+
+        result = team.to_dict(include_players=True)
+
+        assert "players" in result
+        assert len(result["players"]) == 1
+        assert result["abbrev"] == "EDM"
+        assert result["name"] == "Oilers"
+        assert result["total"] == 35
+        assert result["division"] == "Pacific"
+        assert result["conference"] == "Western"
+        assert result["avg_per_player"] == 35.0
+        assert result["player_count"] == 1
+
+    def test_to_dict_without_players(self) -> None:
+        """Test to_dict() excludes players when include_players=False."""
+        player = PlayerScore(
+            first_name="Connor",
+            last_name="McDavid",
+            full_name="Connor McDavid",
+            first_score=20,
+            last_score=15,
+            full_score=35,
+            team="EDM",
+            division="Pacific",
+            conference="Western",
+        )
+
+        team = TeamScore(
+            abbrev="EDM",
+            name="Oilers",
+            total=35,
+            players=[player],
+            division="Pacific",
+            conference="Western",
+        )
+
+        result = team.to_dict(include_players=False)
+
+        assert "players" not in result
+        assert result["abbrev"] == "EDM"
+        assert result["player_count"] == 1
+
+    def test_player_count_property(self) -> None:
+        """Test player_count property returns correct count."""
+        player1 = PlayerScore(
+            first_name="Connor",
+            last_name="McDavid",
+            full_name="Connor McDavid",
+            first_score=20,
+            last_score=15,
+            full_score=35,
+            team="EDM",
+            division="Pacific",
+            conference="Western",
+        )
+        player2 = PlayerScore(
+            first_name="Leon",
+            last_name="Draisaitl",
+            full_name="Leon Draisaitl",
+            first_score=15,
+            last_score=25,
+            full_score=40,
+            team="EDM",
+            division="Pacific",
+            conference="Western",
+        )
+
+        team = TeamScore(
+            abbrev="EDM",
+            name="Oilers",
+            total=75,
+            players=[player1, player2],
+            division="Pacific",
+            conference="Western",
+        )
+
+        assert team.player_count == 2
