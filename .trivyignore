@@ -1,0 +1,55 @@
+# Trivy Ignore File
+# This file documents security vulnerabilities that are accepted risks or not applicable
+# to this application. Each CVE is documented with justification.
+
+# ============================================================================
+# HIGH SEVERITY - System-Level CVEs (Not Application Code)
+# ============================================================================
+
+# CVE-2025-69720: ncurses buffer overflow in infocmp command
+# Justification:
+#   - Vulnerability is in the `infocmp` command-line tool, not the ncurses library
+#   - This application does not use or execute the infocmp tool
+#   - The ncurses library functions used by Python are not affected
+#   - Risk: LOW (tool not used by application)
+#   - Mitigation: Run container as non-root user (UID 1000)
+# Affected packages: libncursesw6, libtinfo6, ncurses-base, ncurses-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2025-69720
+CVE-2025-69720
+
+# CVE-2026-29111: systemd IPC API arbitrary code execution
+# Justification:
+#   - Vulnerability requires systemd running as PID 1
+#   - Docker containers do not run systemd as PID 1
+#   - This application uses Python as entrypoint, not systemd
+#   - systemd libraries may be present but systemd daemon is not running
+#   - Risk: LOW (systemd not running in container)
+#   - Mitigation: Container does not run systemd process
+# Affected packages: libsystemd0, libudev1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-29111
+CVE-2026-29111
+
+# CVE-2026-4878: libcap TOCTOU race condition in cap_set_file()
+# Justification:
+#   - Vulnerability requires write access to parent directory
+#   - Requires specific race condition timing to exploit
+#   - This application does not use file capabilities
+#   - Application runs as non-root user with limited permissions
+#   - Risk: LOW (feature not used, non-root container)
+#   - Mitigation: Run as non-root user, read-only filesystem where possible
+# Affected packages: libcap2
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-4878
+CVE-2026-4878
+
+# ============================================================================
+# Notes:
+# ============================================================================
+# - All HIGH severity alerts are in base Debian packages, not application code
+# - These packages are dependencies of the Python base image
+# - Fixes require upstream Debian/Python base image updates
+# - Container security best practices are followed:
+#   * Run as non-root user (UID 1000)
+#   * Minimal slim image with only required packages
+#   * Regular base image updates via `apt-get upgrade`
+# - Monitor Debian security tracker for updates
+# - Re-evaluate suppressions when base image is updated
