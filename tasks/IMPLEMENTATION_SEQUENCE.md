@@ -1,8 +1,8 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-11 (tasks 001, 052, 053 completed)
-**Total Tasks**: 31 active tasks
+**Updated**: 2026-05-12 (task 029 completed via /sync-tasks)
+**Total Tasks**: 30 active tasks
 **Total Estimated Effort**: 195-262 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
@@ -36,12 +36,10 @@ Each task entry shows:
 ```bash
 /implement-task enhancement/046-native-speaker-review-fr-ca.md  # 3-4h, Issue #509
 /implement-task enhancement/047-native-speaker-review-sv-se.md  # 3-4h, Issue #510
-/implement-task testing/025-comprehensive-i18n-test-suite.md  # 4-6h, Issue #512
 /implement-task enhancement/048-locale-aware-date-time-formatting.md  # 3-4h, Issue #511
-/implement-task enhancement/029-track-ty-validation-period.md  # 1-2 weeks (ongoing monitoring)
 ```
 
-**Phase Total**: 13-18 hours (plus 1-2 weeks ongoing monitoring for ty validation)
+**Phase Total**: 9-11 hours
 
 ---
 
@@ -241,8 +239,6 @@ Tasks that can be worked on simultaneously (no dependencies):
 ---
 
 ## Notes
-
-- **Ongoing Task**: `enhancement/029-track-ty-validation-period.md` is a 1-2 week monitoring task that runs in parallel with other work. Decision point at end determines if task 024 (make-ty-blocking) proceeds.
 
 - **Translation Tasks**: Phase 8 translations (37-45) can benefit from task 049 (community platform) but don't strictly depend on it. Consider implementing 049 earlier if prioritizing community engagement.
 
