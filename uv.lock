@@ -1816,6 +1816,7 @@ build = [
     { name = "build" },
 ]
 dev = [
+    { name = "babel" },
     { name = "bandit" },
     { name = "bashate" },
     { name = "beautifulsoup4" },
@@ -1917,6 +1918,7 @@ shell = [
     { name = "beautysh" },
 ]
 test = [
+    { name = "babel" },
     { name = "beautifulsoup4" },
     { name = "diff-cover" },
     { name = "polib" },
@@ -1948,7 +1950,9 @@ watch = [
 
 [package.metadata]
 requires-dist = [
+    { name = "babel", marker = "extra == 'dev'", specifier = ">=2.14.0" },
     { name = "babel", marker = "extra == 'i18n'", specifier = ">=2.14.0" },
+    { name = "babel", marker = "extra == 'test'", specifier = ">=2.14.0" },
     { name = "bandit", extras = ["toml"], marker = "extra == 'dev'", specifier = ">=1.7.5" },
     { name = "bandit", extras = ["toml"], marker = "extra == 'security'", specifier = ">=1.7.5" },
     { name = "bashate", marker = "extra == 'dev'", specifier = ">=2.1.1" },
