@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 235 tasks (30 active, 205 completed)
+**Total Tasks**: 235 tasks (29 active, 206 completed)
 
 ## Overview
 
@@ -194,7 +194,7 @@ Each task includes:
 | 022 | Generate Visual Regression Test Baselines | MEDIUM | 30 minutes (actual: ~45 minutes) | Completed | [#437](https://github.com/bdperkin/nhl-scrabble/issues/437) | Chromium + Firefox baselines generated (28 snapshots), WebKit deferred to CI, completed 2026-04-29 |
 | 023 | Make QA Workflow Blocking After All Tests Pass | LOW | 15 minutes | Active | [#439](https://github.com/bdperkin/nhl-scrabble/issues/439) | - |
 | 024 | Add Comprehensive Web Application Route Tests | MEDIUM | 4-6 hours (actual: ~2.5 hours) | Completed | [#457](https://github.com/bdperkin/nhl-scrabble/issues/457) | PR [#462](https://github.com/bdperkin/nhl-scrabble/pull/462), 38 new tests (33 integration + 5 functional), all browsers passing, completed 2026-04-29 |
-| 025 | Comprehensive I18n Test Suite for All Locales | MEDIUM | 4-6 hours | Active | [#512](https://github.com/bdperkin/nhl-scrabble/issues/512) | - |
+| 025 | Comprehensive I18n Test Suite for All Locales | MEDIUM | 4-6 hours (actual: ~5h) | Completed | [#512](https://github.com/bdperkin/nhl-scrabble/issues/512) | PR [#584](https://github.com/bdperkin/nhl-scrabble/pull/584), 198 tests across 12 locales (156 passed, 40 xfailed), completed 2026-05-12 |
 | 026 | Boost Test Coverage to 90%+ (Priority Files) | MEDIUM | 8-12 hours (actual: ~2h) | Completed | [#528](https://github.com/bdperkin/nhl-scrabble/issues/528) | PR [#529](https://github.com/bdperkin/nhl-scrabble/pull/529), 90.21% coverage achieved (+0.28%), interfaces.py 60%→100% (+40%), 21 new tests, completed 2026-05-07 |
 | 027 | Fix Windows Test Failure: test_search_to_file | MEDIUM | 2-4 hours (actual: ~1.5h) | Completed | [#533](https://github.com/bdperkin/nhl-scrabble/issues/533) | PR [#554](https://github.com/bdperkin/nhl-scrabble/pull/554), added UTF-8 encoding to 3 write_text() calls in cli.py (analyze, search, test-analytics commands), completed 2026-05-08 |
 | 028 | Fix Windows Test Failure: test_success_messages_translatable | MEDIUM | 3-5 hours (actual: ~1.5h) | Completed | [#534](https://github.com/bdperkin/nhl-scrabble/issues/534) | PR [#555](https://github.com/bdperkin/nhl-scrabble/pull/555), added Windows platform detection to i18n.py, skip setlocale() on Windows, use safe fallbacks, completed 2026-05-08 |

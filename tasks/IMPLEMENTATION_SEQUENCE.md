@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (task 029 completed via /sync-tasks)
-**Total Tasks**: 30 active tasks
-**Total Estimated Effort**: 195-262 hours
+**Updated**: 2026-05-12 (tasks 025, 029 completed via /sync-tasks)
+**Total Tasks**: 29 active tasks
+**Total Estimated Effort**: 191-256 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
