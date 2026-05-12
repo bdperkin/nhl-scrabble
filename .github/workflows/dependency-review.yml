@@ -27,7 +27,7 @@ jobs:
           fail-on-scopes: runtime
           # Allow common OSI-approved licenses
           # Added for QA deps: Artistic/GPL (text-unidecode), MPL-2.0 (bidict,
-          # pytest-base-url), PSF-2.0 (pywin32)
+          # pytest-base-url), PSF-2.0 (pywin32), HPND-Markus-Kuhn (wcwidth)
           allow-licenses: >-
             MIT,
             Apache-2.0,
@@ -41,18 +41,55 @@ jobs:
             GPL-2.0,
             GPL-2.0+,
             GPL-2.0-or-later,
-            MPL-2.0
+            MPL-2.0,
+            HPND-Markus-Kuhn
           comment-summary-in-pr: always
           # Allow QA dependencies with undetected/missing license metadata
           # These are verified OSI-approved: BSD-3 (Werkzeug), Apache-2 (Locust),
           # MIT (playwright, python-socketio, etc), ZPL-2.1 (zope.*)
+          # Dev/test tools with undetected licenses from uv.lock format:
+          # - Apache-2.0: mypy, pydantic, cryptography, requests, tox, uv
+          # - MIT: most others (authlib, build, coverage, idna, markdown-it-py,
+          #   regex, tomlkit, typer, virtualenv, etc)
+          # - BSD: ty
           allow-dependencies-licenses: >-
+            pkg:pypi/ast-serialize,
+            pkg:pypi/authlib,
+            pkg:pypi/build,
+            pkg:pypi/cachetools,
+            pkg:pypi/check-jsonschema,
+            pkg:pypi/coverage,
+            pkg:pypi/cryptography,
             pkg:pypi/geventhttpclient,
             pkg:pypi/greenlet,
+            pkg:pypi/idna,
+            pkg:pypi/joserfc,
+            pkg:pypi/librt,
             pkg:pypi/locust,
+            pkg:pypi/markdown-it-py,
+            pkg:pypi/mdit-py-plugins,
+            pkg:pypi/mypy,
+            pkg:pypi/pip,
             pkg:pypi/playwright,
+            pkg:pypi/pydantic,
+            pkg:pypi/pydantic-core,
+            pkg:pypi/pydantic-settings,
+            pkg:pypi/python-discovery,
             pkg:pypi/python-engineio,
             pkg:pypi/python-socketio,
+            pkg:pypi/regex,
+            pkg:pypi/requests,
+            pkg:pypi/requests-cache,
+            pkg:pypi/tomlkit,
+            pkg:pypi/tox,
+            pkg:pypi/tox-uv,
+            pkg:pypi/tox-uv-bare,
+            pkg:pypi/ty,
+            pkg:pypi/typer,
+            pkg:pypi/types-pyyaml,
+            pkg:pypi/types-requests,
+            pkg:pypi/uv,
+            pkg:pypi/virtualenv,
             pkg:pypi/werkzeug,
             pkg:pypi/zope-event,
             pkg:pypi/zope-interface

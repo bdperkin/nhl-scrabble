@@ -100,6 +100,7 @@ text = "MIT"
 test = [
     "beautifulsoup4",
     "diff-cover>=10.2.0",
+    "polib>=1.2.0",
     "pytest>=9.0.3",
     "pytest-benchmark>=5.2.3",
     "pytest-clarity>=1.0.1",
