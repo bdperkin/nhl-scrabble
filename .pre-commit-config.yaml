@@ -894,6 +894,44 @@ repos:
         stages: [manual]
 
   # ============================================================================
+  # Translation Quality - I18n Validation
+  # ============================================================================
+
+  - repo: local
+    hooks:
+      - id: validate-po-files
+        name: Validate .po translation files
+        # Validate .po files using msgfmt from gettext
+        # Manual run only until duplicate msgid entries are resolved
+        description: |
+          Validate .po translation files for syntax errors and
+          consistency issues using msgfmt from gettext package.
+
+          Checks:
+          - .po file syntax validity
+          - Placeholder consistency
+          - Format string correctness
+          - No duplicate msgid entries
+
+          Known issue: All locales currently have duplicate
+          "Data as of" entry (needs investigation/resolution).
+
+          Fast validation (<1s per file) suitable for pre-commit.
+          For comprehensive i18n testing run:
+            pytest tests/unit/test_i18n_comprehensive.py
+
+          Usage:
+            pre-commit run validate-po-files --all-files
+        entry: >-
+          bash -c 'for file in "$@"; do
+          msgfmt --check --statistics --verbose "$file" -o /dev/null || exit 1;
+          done' --
+        language: system
+        files: \.po$
+        pass_filenames: true
+        stages: [manual]
+
+  # ============================================================================
   # Security Scanning - CodeQL Analysis (Manual Run Only)
   # ============================================================================
 
