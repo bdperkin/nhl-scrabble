@@ -10,6 +10,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from nhl_scrabble.i18n import format_datetime
+
 
 class TemplateFormatter:
     """Format analysis data using custom Jinja2 templates.
@@ -112,7 +114,7 @@ class TemplateFormatter:
 
         # Add timestamp to data
         template_data = data | {
-            "timestamp": datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
+            "timestamp": format_datetime(datetime.now(tz=UTC), format="medium") + " UTC",
         }
 
         # Render template

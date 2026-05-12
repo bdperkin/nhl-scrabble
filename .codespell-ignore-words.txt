@@ -7,3 +7,5 @@ intervall
 som
 Varning
 Attribut
+Januar
+januari
