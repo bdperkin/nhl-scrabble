@@ -2,15 +2,21 @@
 
 import locale
 import os
+from datetime import date, datetime, time
 from pathlib import Path
 from unittest.mock import patch
+
+import pytest
 
 from nhl_scrabble.i18n import (
     DEFAULT_LOCALE,
     LOCALES_DIR,
     SUPPORTED_LOCALES,
     _,
+    format_date,
+    format_datetime,
     format_number,
+    format_time,
     get_system_locale,
     get_translator,
 )
@@ -103,6 +109,31 @@ class TestGetSystemLocale:
         # en_us (wrong case) should not match en_US
         with patch.dict(os.environ, {"LANG": "en_us.UTF-8"}, clear=True):
             assert get_system_locale() == DEFAULT_LOCALE
+
+    def test_get_system_locale_windows_fallback(self):
+        """Test get_system_locale on Windows returns default when env vars not set."""
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch("sys.platform", "win32"),
+        ):
+            # Windows path should return DEFAULT_LOCALE when env vars not set
+            result = get_system_locale()
+            assert result == DEFAULT_LOCALE
+
+    def test_get_system_locale_unix_getlocale_fallback(self):
+        """Test get_system_locale Unix fallback to getlocale() when env vars empty."""
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch("sys.platform", "linux"),
+            patch("locale.setlocale") as mock_setlocale,
+            patch("locale.getlocale", return_value=("en_US", "UTF-8")),
+        ):
+            # Mock setlocale to succeed
+            mock_setlocale.return_value = "C"
+
+            result = get_system_locale()
+            # Should use getlocale() fallback
+            assert result == "en_US"
 
 
 class TestGetTranslator:
@@ -254,6 +285,44 @@ class TestFormatNumber:
         # Verify locale restored
         after = locale.getlocale(locale.LC_NUMERIC)
         assert after == current
+
+    def test_format_number_windows_fallback(self):
+        """Test format_number on Windows uses fallback formatting."""
+        with patch("sys.platform", "win32"):
+            result = format_number(1234.56, "en_US")
+            # Windows should use fallback format
+            assert result == "1234.56"
+
+
+class TestDateTimeFormatting:
+    """Test date/time formatting functions requiring babel."""
+
+    def test_format_date_requires_babel(self):
+        """Test format_date raises ImportError when babel not available."""
+        # Mock babel as unavailable
+        with (
+            patch("nhl_scrabble.i18n._BABEL_AVAILABLE", new=False),
+            pytest.raises(ImportError, match="babel is required"),
+        ):
+            format_date(date(2026, 5, 12), "en_US")
+
+    def test_format_time_requires_babel(self):
+        """Test format_time raises ImportError when babel not available."""
+        # Mock babel as unavailable
+        with (
+            patch("nhl_scrabble.i18n._BABEL_AVAILABLE", new=False),
+            pytest.raises(ImportError, match="babel is required"),
+        ):
+            format_time(time(14, 30), "en_US")
+
+    def test_format_datetime_requires_babel(self):
+        """Test format_datetime raises ImportError when babel not available."""
+        # Mock babel as unavailable
+        with (
+            patch("nhl_scrabble.i18n._BABEL_AVAILABLE", new=False),
+            pytest.raises(ImportError, match="babel is required"),
+        ):
+            format_datetime(datetime(2026, 5, 12, 14, 30, tzinfo=None), "en_US")  # noqa: DTZ001
 
 
 class TestConvenienceFunction:
