@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 244 tasks (29 active, 215 completed)
+**Total Tasks**: 245 tasks (30 active, 215 completed)
 
 ## Overview
 
@@ -312,3 +312,4 @@ Each task includes:
 | 025 | Make 'refurb' Blocking After Validation Period | LOW | 30 minutes - 1 hour (actual: ~1.5 hours) | Completed | - | PR [#370](https://github.com/bdperkin/nhl-scrabble/pull/370), completed 2026-04-24 |
 | 026 | Make 'gitlint' Blocking (Everywhere Except GitHub CI Workflows) After Validation Period | LOW | 30 minutes - 1 hour (actual: ~45 minutes) | Completed | - | PR [#371](https://github.com/bdperkin/nhl-scrabble/pull/371), completed 2026-04-24 |
 | 027 | Audit and Adjust Logging Levels | LOW | 2-3 hours (actual: 2.5 hours) | Completed | [#364](https://github.com/bdperkin/nhl-scrabble/issues/364) | completed 2026-04-25 |
+| 028 | Refactor Large Modules into Smaller Importable Files | MEDIUM | 20-29 hours | Active | [#604](https://github.com/bdperkin/nhl-scrabble/issues/604) | Split 4 modules (cli.py 65KB, web/app.py 89KB, api/nhl_client.py 39KB, interactive/shell.py 27KB) into packages with focused modules <20KB each |
