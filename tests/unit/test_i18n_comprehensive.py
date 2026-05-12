@@ -66,13 +66,13 @@ class TestTranslationCompleteness:
         if locale in INCOMPLETE_LOCALES:
             pytest.xfail(
                 f"{locale} has known incomplete translations. "
-                "Remove from INCOMPLETE_LOCALES when 100% translated."
+                "Remove from INCOMPLETE_LOCALES when 100% translated.",
             )
 
         if locale in PARTIAL_LOCALES:
             pytest.xfail(
                 f"{locale} has known translation issues. "
-                "Remove from PARTIAL_LOCALES when fully complete."
+                "Remove from PARTIAL_LOCALES when fully complete.",
             )
 
         po_file = LOCALES_DIR / locale / "LC_MESSAGES" / "messages.po"
@@ -147,7 +147,7 @@ class TestPlaceholderPreservation:
                 errors.append(
                     f"  '{entry.msgid}'\n"
                     f"    Source: {sorted(src_placeholders)}\n"
-                    f"    Target: {sorted(tgt_placeholders)}"
+                    f"    Target: {sorted(tgt_placeholders)}",
                 )
 
         assert not errors, f"{locale}: Placeholder mismatches found:\n" + "\n".join(errors)
@@ -177,7 +177,7 @@ class TestPlaceholderPreservation:
                 errors.append(
                     f"  '{entry.msgid}'\n"
                     f"    Source: {sorted(src_placeholders)}\n"
-                    f"    Target: {sorted(tgt_placeholders)}"
+                    f"    Target: {sorted(tgt_placeholders)}",
                 )
 
         assert not errors, f"{locale}: % placeholder mismatches found:\n" + "\n".join(errors)
@@ -189,7 +189,7 @@ class TestRichMarkupPreservation:
     # Regex for Rich console markup: [color], [/color], [bold], etc.
     MARKUP_PATTERN = re.compile(
         r"\[(green|red|blue|yellow|cyan|magenta|white|black|bold|italic|underline|"
-        r"dim|blink|reverse|strikethrough|/\w+)\]"
+        r"dim|blink|reverse|strikethrough|/\w+)\]",
     )
 
     @pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
@@ -217,7 +217,7 @@ class TestRichMarkupPreservation:
                     errors.append(
                         f"  '{entry.msgid}'\n"
                         f"    Source markup: {sorted(src_markup)}\n"
-                        f"    Target markup: {sorted(tgt_markup)}"
+                        f"    Target markup: {sorted(tgt_markup)}",
                     )
 
         assert not errors, f"{locale}: Rich markup changes found:\n" + "\n".join(errors)
@@ -284,7 +284,7 @@ class TestTranslationQuality:
         """
         if locale in PARTIAL_LOCALES:
             pytest.xfail(
-                f"{locale} has known fuzzy translations. " "Review and resolve fuzzy entries."
+                f"{locale} has known fuzzy translations. " "Review and resolve fuzzy entries.",
             )
 
         po_file = LOCALES_DIR / locale / "LC_MESSAGES" / "messages.po"
@@ -293,7 +293,7 @@ class TestTranslationQuality:
         fuzzy = [e for e in po if "fuzzy" in e.flags]
         if fuzzy:
             fuzzy_examples = "\n".join(f"  - {e.msgid}" for e in fuzzy[:5])
-            assert False, (
+            raise AssertionError(
                 f"{locale}: {len(fuzzy)} fuzzy translations found:\n"
                 f"{fuzzy_examples}\n"
                 f"Run 'make i18n-update' and review fuzzy translations."
@@ -313,7 +313,8 @@ class TestTranslationQuality:
         """
         if locale in INCOMPLETE_LOCALES or locale in PARTIAL_LOCALES:
             pytest.xfail(
-                f"{locale} may have overly long translations. " "Review and shorten where possible."
+                f"{locale} may have overly long translations. "
+                "Review and shorten where possible.",
             )
 
         po_file = LOCALES_DIR / locale / "LC_MESSAGES" / "messages.po"
@@ -332,11 +333,11 @@ class TestTranslationQuality:
                 if ratio > max_ratio:
                     errors.append(
                         f"  '{entry.msgid[:50]}...' "
-                        f"({src_len} -> {tgt_len} chars, {ratio:.1f}x)"
+                        f"({src_len} -> {tgt_len} chars, {ratio:.1f}x)",
                     )
 
         assert not errors, f"{locale}: Translations exceeding {max_ratio}x length:\n" + "\n".join(
-            errors[:10]
+            errors[:10],
         )  # Show first 10
 
     @pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
@@ -360,7 +361,9 @@ class TestTranslationQuality:
 
         if empty:
             empty_examples = "\n".join(f"  - {e.msgid}" for e in empty[:5])
-            assert False, f"{locale}: {len(empty)} empty translations found:\n" f"{empty_examples}"
+            raise AssertionError(
+                f"{locale}: {len(empty)} empty translations found:\n" f"{empty_examples}"
+            )
 
 
 class TestLocaleMetadata:
@@ -533,7 +536,7 @@ class TestTranslationConsistency:
         """
         pytest.xfail(
             "All locales have known duplicate msgid entries. "
-            "Investigation needed - may be valid context-specific duplicates."
+            "Investigation needed - may be valid context-specific duplicates.",
         )
 
         po_file = LOCALES_DIR / locale / "LC_MESSAGES" / "messages.po"
@@ -605,7 +608,7 @@ class TestI18nInfrastructure:
         pot_file = LOCALES_DIR / "messages.pot"
         if not pot_file.exists():
             pytest.skip(
-                f"POT template not found: {pot_file}. " "Run 'make i18n-extract' to generate."
+                f"POT template not found: {pot_file}. " "Run 'make i18n-extract' to generate.",
             )
 
         # Verify it's a valid POT file
