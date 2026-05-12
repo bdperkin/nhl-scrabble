@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (trivy): suppress non-applicable HIGH severity CVEs with documentation (#581)
 - (codeql): replace ellipsis with NotImplementedError in Protocol methods (#580)
 - Fix Log Injection vulnerabilities (CWE-117) (#579)
-- (deps): upgrade urllib3 to 2.7.0 (#571)
+- (deps): pin urllib3 to >=2.6.3 for security (#571)
 
 ### Added
 
