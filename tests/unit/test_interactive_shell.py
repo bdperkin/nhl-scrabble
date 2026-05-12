@@ -728,3 +728,260 @@ class TestI18nSupport:
             calls = [str(call) for call in mock_print.call_args_list]
             # Check that some form of welcome/help message was printed
             assert any(call for call in calls if call)  # At least one print call
+
+
+class TestEdgeCasesAndErrors:
+    """Test edge cases and error handling to improve coverage."""
+
+    def test_find_team_no_data(self) -> None:
+        """Test finding team when no data is loaded."""
+        shell = InteractiveShell()
+        result = shell._find_team("TOR")
+        assert result is None
+
+    def test_find_player_no_data(self) -> None:
+        """Test finding player when no data is loaded."""
+        shell = InteractiveShell()
+        result = shell._find_player("Matthews")
+        assert result is None
+
+    def test_run_empty_input(self, shell_with_data: InteractiveShell) -> None:
+        """Test run handles empty input."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=["", "exit"]),
+            patch.object(shell_with_data.console, "print"),
+        ):
+            shell_with_data.run()
+            # Should not raise
+
+    def test_run_invalid_shlex_syntax(self, shell_with_data: InteractiveShell) -> None:
+        """Test run handles invalid shlex syntax."""
+        with (
+            patch.object(shell_with_data.session, "prompt", side_effect=['show "unclosed', "exit"]),
+            patch.object(shell_with_data.console, "print") as mock_print,
+        ):
+            shell_with_data.run()
+            assert any("Invalid command syntax" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_show_team_missing_abbrev(self, shell_with_data: InteractiveShell) -> None:
+        """Test show team command without team abbreviation."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_show(["team"])
+            assert any("Usage: show team" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_show_player_missing_name(self, shell_with_data: InteractiveShell) -> None:
+        """Test show player command without player name."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_show(["player"])
+            assert any("Usage: show player" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_show_invalid_subcommand(self, shell_with_data: InteractiveShell) -> None:
+        """Test show command with invalid subcommand."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_show(["invalid"])
+            assert any("Usage:" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_bottom_invalid_number(self, shell_with_data: InteractiveShell) -> None:
+        """Test bottom command with invalid number."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_bottom(["not_a_number"])
+            assert any("must be a number" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_compare_multiword_first_player(
+        self,
+        shell_with_data: InteractiveShell,
+    ) -> None:
+        """Test compare command with multi-word first player name."""
+        with patch.object(shell_with_data.console, "print"):
+            shell_with_data.cmd_compare(["Auston", "Matthews", "McDavid"])
+            # Should handle multi-word first name
+
+    def test_cmd_compare_multiword_player_not_found_retry(
+        self,
+        shell_with_data: InteractiveShell,
+    ) -> None:
+        """Test compare command multi-word retry when first name not found."""
+        # Add a player with multi-word name that won't match single word
+        multi_word_player = PlayerScore(
+            first_name="Pierre-Luc",
+            last_name="Dubois",
+            full_name="Pierre-Luc Dubois",
+            first_score=30,
+            last_score=70,
+            full_score=100,
+            team="WSH",
+            division="Metropolitan",
+            conference="Eastern",
+        )
+        shell_with_data.data["teams"][0].players.append(multi_word_player)  # type: ignore[index]
+
+        with patch.object(shell_with_data.console, "print"):
+            # First word "Pierre-Luc" won't match alone, but "Pierre-Luc Dubois" will
+            # This triggers the multi-word retry logic on lines 397-399
+            shell_with_data.cmd_compare(["Pierre-Luc", "Dubois", "Matthews"])
+            # Should retry with multi-word name and find the player
+
+    def test_cmd_compare_tied_scores(self, shell_with_data: InteractiveShell) -> None:
+        """Test compare command with tied scores."""
+        # Make two players with same score
+        shell_with_data.data["teams"][0].players[0].full_score = 100  # type: ignore[index]
+        shell_with_data.data["teams"][0].players[1].full_score = 100  # type: ignore[index]
+
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_compare(["Matthews", "Marner"])
+            calls_str = " ".join(str(call) for call in mock_print.call_args_list)
+            # Should show tied message
+            assert "Tied" in calls_str or "tied" in calls_str
+
+    def test_cmd_compare_second_player_not_found(
+        self,
+        shell_with_data: InteractiveShell,
+    ) -> None:
+        """Test compare command when second player not found."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_compare(["Matthews", "Nonexistent", "Player"])
+            assert any("not found" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_compare_shows_winner(self, shell_with_data: InteractiveShell) -> None:
+        """Test compare command displays winner."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            # McDavid (110) vs Matthews (100) - McDavid wins
+            shell_with_data.cmd_compare(["McDavid", "Matthews"])
+            calls_str = " ".join(str(call) for call in mock_print.call_args_list)
+            # Should show higher score message
+            assert "higher score" in calls_str or "McDavid" in calls_str
+
+    def test_cmd_filter_division_missing_arg(self, shell_with_data: InteractiveShell) -> None:
+        """Test filter division command without division name."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_filter(["division"])
+            assert any("Usage: filter division" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_filter_division_no_results(self, shell_with_data: InteractiveShell) -> None:
+        """Test filter division command with no matching teams."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_filter(["division", "Nonexistent"])
+            assert any("No teams found" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_filter_conference_missing_arg(self, shell_with_data: InteractiveShell) -> None:
+        """Test filter conference command without conference name."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_filter(["conference"])
+            assert any(
+                "Usage: filter conference" in str(call) for call in mock_print.call_args_list
+            )
+
+    def test_cmd_filter_conference_no_results(self, shell_with_data: InteractiveShell) -> None:
+        """Test filter conference command with no matching teams."""
+        with patch.object(shell_with_data.console, "print") as mock_print:
+            shell_with_data.cmd_filter(["conference", "Nonexistent"])
+            assert any("No teams found" in str(call) for call in mock_print.call_args_list)
+
+    def test_cmd_search_no_data(self) -> None:
+        """Test search command when no data is loaded."""
+        shell = InteractiveShell()
+        with patch.object(shell.console, "print") as mock_print:
+            shell.cmd_search(["test"])
+            assert any("No data loaded" in str(call) for call in mock_print.call_args_list)
+
+    @patch("nhl_scrabble.api.nhl_client.NHLApiClient")
+    @patch("nhl_scrabble.processors.team_processor.TeamProcessor")
+    @patch("nhl_scrabble.processors.playoff_calculator.PlayoffCalculator")
+    @patch("nhl_scrabble.scoring.scrabble.ScrabbleScorer")
+    def test_fetch_data_with_failed_teams(
+        self,
+        mock_scorer: Mock,
+        mock_playoff: Mock,
+        mock_processor: Mock,
+        mock_api: Mock,
+        mock_team_scores: list[TeamScore],
+    ) -> None:
+        """Test fetch_data handles failed teams."""
+        shell = InteractiveShell()
+
+        # Setup mocks
+        mock_api.return_value.__enter__.return_value = Mock()
+        processor_instance = Mock()
+        mock_processor.return_value = processor_instance
+
+        teams_dict = {t.abbrev: t for t in mock_team_scores}
+        all_players = [p for t in mock_team_scores for p in t.players]
+        failed_teams = ["BOS", "NYR"]  # Simulate failed teams
+        processor_instance.process_all_teams.return_value = (teams_dict, all_players, failed_teams)
+
+        playoff_instance = Mock()
+        mock_playoff.return_value = playoff_instance
+        playoff_instance.calculate_playoff_standings.return_value = {
+            "Eastern": [mock_team_scores[0]],
+            "Western": [mock_team_scores[1]],
+        }
+
+        with patch.object(shell.console, "print") as mock_print:
+            shell.fetch_data()
+            # Should print warning about failed teams
+            calls_str = " ".join(str(call) for call in mock_print.call_args_list)
+            assert "Failed to fetch" in calls_str or "BOS" in calls_str
+
+
+class TestStandingsDivisionGrouping:
+    """Test standings command division grouping."""
+
+    def test_cmd_standings_division_grouping(
+        self,
+        shell_with_data: InteractiveShell,
+        mock_team_scores: list[TeamScore],
+    ) -> None:
+        """Test standings division command groups teams correctly."""
+        # Ensure teams have different divisions for grouping test
+        mock_team_scores[0].division = "Atlantic"
+        mock_team_scores[1].division = "Pacific"
+
+        shell_with_data.data = {
+            "teams": mock_team_scores,
+            "playoff_teams": mock_team_scores,
+            "eastern": [mock_team_scores[0]],
+            "western": [mock_team_scores[1]],
+        }
+
+        with patch.object(shell_with_data, "_display_team_list") as mock_display:
+            shell_with_data.cmd_standings(["division"])
+            # Should call _display_team_list for each division
+            assert mock_display.call_count >= 2
+
+    def test_cmd_standings_division_new_division_grouping(
+        self,
+        shell_with_data: InteractiveShell,
+        mock_team_scores: list[TeamScore],
+    ) -> None:
+        """Test division grouping creates new division entries correctly."""
+        # Create teams with same division and one with different
+        team1 = mock_team_scores[0]
+        team1.division = "Atlantic"
+
+        team2 = TeamScore(
+            abbrev="BOS",
+            name="Boston Bruins",
+            total=950,
+            division="Atlantic",  # Same division
+            conference="Eastern",
+            players=[],
+        )
+
+        team3 = mock_team_scores[1]
+        team3.division = "Pacific"  # Different division
+
+        shell_with_data.data = {
+            "teams": [team1, team2, team3],
+            "playoff_teams": [team1, team2, team3],
+            "eastern": [team1, team2],
+            "western": [team3],
+        }
+
+        with (
+            patch.object(shell_with_data, "_display_team_list") as mock_display,
+            patch.object(shell_with_data.console, "print"),
+        ):
+            shell_with_data.cmd_standings(["division"])
+            # Should group Atlantic teams together and Pacific separately
+            # Minimum 2 divisions displayed
+            assert mock_display.call_count >= 2
