@@ -74,7 +74,7 @@ class APIClientProtocol(Protocol):
         Raises:
             NHLApiError: If unable to fetch teams data
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def get_team_roster(
         self,
@@ -95,14 +95,14 @@ class APIClientProtocol(Protocol):
             NHLApiNotFoundError: If roster is not found (404 response)
             NHLApiError: For other API errors
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def clear_cache(self) -> None:
         """Clear the HTTP cache.
 
         Clears all cached API responses, forcing fresh fetches on next requests.
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def close(self) -> None:
         """Close the client session and release resources.
@@ -110,7 +110,7 @@ class APIClientProtocol(Protocol):
         Should be called when the client is no longer needed to properly clean up network
         connections and resources.
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def __enter__(self) -> APIClientProtocol:
         """Enter context manager - returns self.
@@ -125,7 +125,7 @@ class APIClientProtocol(Protocol):
             ...     teams = client.get_teams()
             ...     # Session automatically closed on exit
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def __exit__(
         self,
@@ -143,7 +143,7 @@ class APIClientProtocol(Protocol):
             exc_val: Exception value if an exception was raised, None otherwise
             exc_tb: Exception traceback if an exception was raised, None otherwise
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
 
 @runtime_checkable
@@ -186,7 +186,7 @@ class ScorerProtocol(Protocol):
             >>> scorer.score_player(player, "EDM", "Pacific", "Western", position_category="forwards")
             PlayerScore(first_name="Connor", last_name="McDavid", full_score=24, position_type="Forward", ...)
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
 
 @runtime_checkable
@@ -228,7 +228,7 @@ class TeamProcessorProtocol(Protocol):
             >>> len(teams_2022) > 0
             True
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def calculate_division_standings(
         self,
@@ -247,7 +247,7 @@ class TeamProcessorProtocol(Protocol):
             >>> "Atlantic" in standings
             True
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def calculate_conference_standings(
         self,
@@ -266,4 +266,4 @@ class TeamProcessorProtocol(Protocol):
             >>> "Eastern" in standings
             True
         """
-        ...  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
