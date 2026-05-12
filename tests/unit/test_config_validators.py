@@ -293,7 +293,7 @@ class TestValidateSafePath:
         """Test handling of path resolution failures."""
         from pathlib import Path
 
-        def mock_resolve(*args, **kwargs):  # noqa: ANN002, ANN003, ARG001
+        def mock_resolve(*args, **kwargs):
             raise OSError("Symbolic link loop or permission denied")
 
         monkeypatch.setattr(Path, "resolve", mock_resolve)

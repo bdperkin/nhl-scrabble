@@ -66,7 +66,7 @@ class TestHistoricalDataStoreInit:
         """Test initialization raises error when directory creation fails."""
         from pathlib import Path
 
-        def mock_mkdir(*args, **kwargs):  # noqa: ANN002, ANN003, ARG001
+        def mock_mkdir(*args, **kwargs):
             raise OSError("Permission denied")
 
         monkeypatch.setattr(Path, "mkdir", mock_mkdir)
@@ -126,7 +126,7 @@ class TestHistoricalDataStoreSave:
 
         original_open = Path.open
 
-        def mock_open(self, *args, **kwargs):  # noqa: ANN001, ANN002, ANN003
+        def mock_open(self, *args, **kwargs):
             # Fail on write mode
             mode = kwargs.get("mode", args[0] if args else "r")
             if "w" in mode:
@@ -224,7 +224,7 @@ class TestHistoricalDataStoreList:
         """Test list_seasons handles permission errors gracefully."""
         from pathlib import Path
 
-        def mock_glob(*args, **kwargs):  # noqa: ANN002, ANN003, ARG001
+        def mock_glob(*args, **kwargs):
             raise OSError("Permission denied")
 
         # Mock the glob method to raise OSError
@@ -265,7 +265,7 @@ class TestHistoricalDataStoreDelete:
         season = "20222023"
         store.save_season(season, {"teams": {}})
 
-        def mock_unlink(*args, **kwargs):  # noqa: ANN002, ANN003, ARG001
+        def mock_unlink(*args, **kwargs):
             raise OSError("Permission denied")
 
         # Mock the unlink method to raise OSError
@@ -318,7 +318,7 @@ class TestHistoricalDataStoreClear:
         original_unlink = Path.unlink
         call_count = 0
 
-        def mock_unlink(self):  # noqa: ANN001, ANN202
+        def mock_unlink(self):
             nonlocal call_count
             call_count += 1
             # Fail on first file, succeed on others
@@ -341,7 +341,7 @@ class TestHistoricalDataStoreClear:
         """Test clear_all raises error when glob fails."""
         from pathlib import Path
 
-        def mock_glob(*args, **kwargs):  # noqa: ANN002, ANN003, ARG001
+        def mock_glob(*args, **kwargs):
             raise OSError("Permission denied")
 
         monkeypatch.setattr(Path, "glob", mock_glob)
