@@ -98,6 +98,7 @@ email = "bdperkin@gmail.com"
 text = "MIT"
 [project.optional-dependencies]
 test = [
+    "babel>=2.14.0",
     "beautifulsoup4",
     "diff-cover>=10.2.0",
     "polib>=1.2.0",

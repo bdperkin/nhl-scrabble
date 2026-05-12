@@ -2,17 +2,34 @@
 
 Note: Test datetimes use naive timezone (no tzinfo) to focus on format testing.
 Timezone handling is not the primary concern for these localization format tests.
+
+These tests require babel to be installed. They will be skipped if babel is not available.
+Install with: pip install nhl-scrabble[i18n]
 """
 
 from datetime import date, datetime, time
 
 import pytest
 
+# Check if babel is available
+try:
+    import babel.dates  # noqa: F401
+
+    BABEL_AVAILABLE = True
+except ImportError:
+    BABEL_AVAILABLE = False
+
 from nhl_scrabble.i18n import (
     SUPPORTED_LOCALES,
     format_date,
     format_datetime,
     format_time,
+)
+
+# Skip all tests in this module if babel is not available
+pytestmark = pytest.mark.skipif(
+    not BABEL_AVAILABLE,
+    reason="babel not installed (optional dependency for i18n features)",
 )
 
 

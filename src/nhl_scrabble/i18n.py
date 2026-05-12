@@ -55,9 +55,16 @@ from collections.abc import Callable
 from datetime import date, datetime, time
 from pathlib import Path
 
-from babel.dates import format_date as babel_format_date
-from babel.dates import format_datetime as babel_format_datetime
-from babel.dates import format_time as babel_format_time
+# Lazy import of babel.dates to support environments without i18n extras
+try:
+    from babel.dates import format_date as babel_format_date
+    from babel.dates import format_datetime as babel_format_datetime
+    from babel.dates import format_time as babel_format_time
+
+    _BABEL_AVAILABLE = True
+except ImportError:
+    _BABEL_AVAILABLE = False
+    # babel.dates functions not available - will raise ImportError if called
 
 # Supported locales (12 total covering major hockey markets)
 SUPPORTED_LOCALES = [
@@ -269,6 +276,9 @@ def format_date(
     Returns:
         Formatted date string with locale-appropriate conventions.
 
+    Raises:
+        ImportError: If babel is not installed (install with: pip install nhl-scrabble[i18n])
+
     Examples:
         >>> from datetime import date
         >>> d = date(2026, 1, 15)
@@ -289,7 +299,14 @@ def format_date(
         - Month names are translated according to locale
         - Date order (MM/DD vs DD/MM) follows locale conventions
         - Thread-safe (babel.dates is thread-safe)
+        - Requires babel package (install with: pip install nhl-scrabble[i18n])
     """
+    if not _BABEL_AVAILABLE:
+        raise ImportError(
+            "babel is required for date/time formatting. "
+            "Install with: pip install nhl-scrabble[i18n]",
+        )
+
     if locale_code is None:
         locale_code = get_system_locale()
 
@@ -318,6 +335,9 @@ def format_time(
     Returns:
         Formatted time string with locale-appropriate conventions.
 
+    Raises:
+        ImportError: If babel is not installed (install with: pip install nhl-scrabble[i18n])
+
     Examples:
         >>> from datetime import time
         >>> t = time(14, 30, 45)
@@ -338,7 +358,14 @@ def format_time(
         - US locales typically use 12-hour format with AM/PM
         - European locales typically use 24-hour format
         - Thread-safe (babel.dates is thread-safe)
+        - Requires babel package (install with: pip install nhl-scrabble[i18n])
     """
+    if not _BABEL_AVAILABLE:
+        raise ImportError(
+            "babel is required for date/time formatting. "
+            "Install with: pip install nhl-scrabble[i18n]",
+        )
+
     if locale_code is None:
         locale_code = get_system_locale()
 
@@ -368,6 +395,9 @@ def format_datetime(
     Returns:
         Formatted datetime string with locale-appropriate conventions.
 
+    Raises:
+        ImportError: If babel is not installed (install with: pip install nhl-scrabble[i18n])
+
     Examples:
         >>> from datetime import datetime
         >>> dt = datetime(2026, 1, 15, 14, 30, 45)
@@ -389,7 +419,14 @@ def format_datetime(
         - Month names and weekday names are translated
         - Thread-safe (babel.dates is thread-safe)
         - Timezone handling depends on datetime object's tzinfo
+        - Requires babel package (install with: pip install nhl-scrabble[i18n])
     """
+    if not _BABEL_AVAILABLE:
+        raise ImportError(
+            "babel is required for date/time formatting. "
+            "Install with: pip install nhl-scrabble[i18n]",
+        )
+
     if locale_code is None:
         locale_code = get_system_locale()
 
