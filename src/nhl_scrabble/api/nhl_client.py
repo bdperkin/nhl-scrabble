@@ -28,6 +28,7 @@ from nhl_scrabble.exceptions import (
 )
 from nhl_scrabble.rate_limiter import RateLimiter
 from nhl_scrabble.security.circuit_breaker import CircuitBreaker
+from nhl_scrabble.security.log_filter import sanitize_for_logging
 from nhl_scrabble.security.ssrf_protection import validate_url_for_ssrf
 from nhl_scrabble.utils.retry import retry
 from nhl_scrabble.validators import (
@@ -269,7 +270,11 @@ class NHLApiClient:
         try:
             validate_url_for_ssrf(url)
         except SSRFProtectionError as e:
-            logger.error(f"SSRF protection blocked request to {url}: {e}")
+            logger.error(
+                "SSRF protection blocked request to %s: %s",
+                sanitize_for_logging(url),
+                sanitize_for_logging(e),
+            )
             raise NHLApiError(f"Request blocked by security protection: {e}") from e
 
     def _get_retry_after(self, response: requests.Response) -> float:
@@ -590,7 +595,7 @@ class NHLApiClient:
             validated_abbrev = validate_team_abbreviation(team_abbrev)
         except ValidationError:
             # Re-raise validation errors for consistency with other API errors
-            logger.error(f"Invalid team abbreviation: {team_abbrev}")
+            logger.error("Invalid team abbreviation: %s", sanitize_for_logging(team_abbrev))
             raise
 
         # Use season-specific endpoint or current season endpoint
@@ -603,7 +608,11 @@ class NHLApiClient:
 
         season_desc = f"season {season}" if season else "current season"
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f"Fetching roster for {validated_abbrev} ({season_desc})")
+            logger.debug(
+                "Fetching roster for %s (%s)",
+                sanitize_for_logging(validated_abbrev),
+                sanitize_for_logging(season_desc),
+            )
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)
@@ -758,7 +767,7 @@ class NHLApiClient:
         """
         url = f"{self.base_url}/player/{player_id}/landing"
 
-        logger.debug(f"Fetching player details for player ID {player_id}")
+        logger.debug("Fetching player details for player ID %s", sanitize_for_logging(player_id))
 
         # Validate URL with SSRF protection
         self._validate_request_url(url)

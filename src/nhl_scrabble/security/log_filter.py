@@ -6,6 +6,59 @@ from re import compile as re_compile
 from typing import ClassVar
 
 
+def sanitize_for_logging(value: object) -> str:
+    r"""Sanitize user-provided values for safe logging (prevents log injection).
+
+    Removes or escapes newlines and control characters that could be used
+    to forge log entries, hide malicious activity, or confuse log analysis tools.
+
+    This prevents log injection attacks (CWE-117) where attackers inject
+    newline characters to create fake log entries or hide malicious activity.
+
+    Args:
+        value: Value to sanitize (will be converted to string).
+
+    Returns:
+        Sanitized string safe for logging (newlines replaced with \\n).
+
+    Examples:
+        >>> sanitize_for_logging("normal text")
+        'normal text'
+        >>> sanitize_for_logging("text\nwith\nnewlines")
+        'text\\nwith\\nnewlines'
+        >>> sanitize_for_logging("carriage\rreturn")
+        'carriage\\rreturn'
+        >>> sanitize_for_logging(12345)
+        '12345'
+        >>> sanitize_for_logging("tab\there")
+        'tab\\there'
+
+    Security:
+        Protects against log injection attacks:
+        - Newline injection: \\n, \\r, \\r\\n
+        - Tab injection: \\t
+        - Control characters: 0x00-0x1F, 0x7F
+
+    See Also:
+        - OWASP Log Injection: https://owasp.org/www-community/attacks/Log_Injection
+        - CWE-117: Improper Output Neutralization for Logs
+    """
+    # Convert to string first and chain replacements for newlines and tabs
+    text = (
+        str(value)
+        .replace("\r\n", "\\r\\n")  # Windows CRLF (must be first!)
+        .replace("\n", "\\n")  # Unix LF
+        .replace("\r", "\\r")  # Mac CR
+        .replace("\t", "\\t")  # Tab
+    )
+
+    # Remove other control characters (0x00-0x1F, 0x7F) except space (0x20)
+    # Use regex to remove characters in range 0x00-0x1F and 0x7F
+    text = re_compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]").sub("", text)
+
+    return text
+
+
 class SensitiveDataFilter(logging.Filter):
     """Filter to sanitize sensitive data from log messages.
 
