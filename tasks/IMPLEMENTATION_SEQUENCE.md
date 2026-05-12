@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 033, 034, 035, 036, 037, 040, 048 completed + tasks 033-040 added)
-**Total Tasks**: 30 active tasks
-**Total Estimated Effort**: 224-300 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 033, 034, 035, 036, 037, 040, 048 completed + tasks 033-040, 051 added)
+**Total Tasks**: 31 active tasks
+**Total Estimated Effort**: 185-259 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -76,7 +76,19 @@ Each task entry shows:
 
 ---
 
-## Phase 4: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
+## Phase 4: MEDIUM Priority - Testing Tool Enhancements (8-12 hours)
+
+**Rationale**: Extend test-analytics command with additional output formats. MEDIUM priority enhancement that improves test analytics flexibility and integration capabilities.
+
+```bash
+/implement-task enhancement/051-test-analytics-output-formats.md  # 8-12h, Issue #601
+```
+
+**Phase Total**: 8-12 hours
+
+---
+
+## Phase 5: LOW Priority - Documentation & Tooling (Quick Wins) (8-12 hours)
 
 **Rationale**: Low-effort documentation and tooling improvements. These are quick wins that improve developer experience without blocking other work.
 
@@ -91,7 +103,7 @@ Each task entry shows:
 
 ---
 
-## Phase 5: LOW Priority - I18n Visual Enhancements (2-3 hours)
+## Phase 6: LOW Priority - I18n Visual Enhancements (2-3 hours)
 
 **Rationale**: Visual improvements to locale selection. Low priority but enhances user experience. Do after core i18n quality work.
 
@@ -103,7 +115,7 @@ Each task entry shows:
 
 ---
 
-## Phase 6: LOW Priority - Translation Locales (Simple) (1-2 hours)
+## Phase 7: LOW Priority - Translation Locales (Simple) (1-2 hours)
 
 **Rationale**: Simple locale with minimal differences from en_US. Quick win for expanding locale coverage.
 
@@ -115,7 +127,7 @@ Each task entry shows:
 
 ---
 
-## Phase 7: LOW Priority - Translation Locales (Complex Languages) (46-62 hours)
+## Phase 8: LOW Priority - Translation Locales (Complex Languages) (46-62 hours)
 
 **Rationale**: Complex translations requiring professional translators. Group by estimated effort (simpler first). Can be parallelized if multiple translators available.
 
@@ -139,7 +151,7 @@ Each task entry shows:
 
 ---
 
-## Phase 8: LOW Priority - I18n Advanced Features (12-18 hours)
+## Phase 9: LOW Priority - I18n Advanced Features (12-18 hours)
 
 **Rationale**: Advanced i18n features that build on completed translations. Community platform enables collaborative translation. Locale-specific scoring adds fairness for international users.
 
@@ -152,7 +164,7 @@ Each task entry shows:
 
 ---
 
-## Phase 9: LOW Priority - Research & Evaluation (14-22 hours)
+## Phase 10: LOW Priority - Research & Evaluation (14-22 hours)
 
 **Rationale**: Research tasks that inform future decisions. No immediate implementation required, but valuable for strategic planning.
 
@@ -165,7 +177,7 @@ Each task entry shows:
 
 ---
 
-## Phase 10: LOW Priority - New Features (Infrastructure) (40-56 hours)
+## Phase 11: LOW Priority - New Features (Infrastructure) (40-56 hours)
 
 **Rationale**: Significant new features that add capabilities but aren't blocking current work. Group by complexity (simpler first).
 
@@ -192,26 +204,26 @@ Each task entry shows:
 ## Summary
 
 **Total Active Tasks**: 31
-**Total Estimated Effort**: 242-324 hours
+**Total Estimated Effort**: 185-259 hours
 
 ### By Priority:
 - **HIGH**: 0 tasks (0 hours) - All critical test coverage completed
-- **MEDIUM**: 5 tasks (76-104 hours) - Comprehensive test coverage + i18n quality
-- **LOW**: 26 tasks (182-244 hours) - Features, translations, research
+- **MEDIUM**: 6 tasks (84-116 hours) - Test coverage, i18n quality, test-analytics enhancement
+- **LOW**: 25 tasks (101-143 hours) - Features, translations, documentation, research
 
 ### By Category:
-- **Testing**: 5 tasks (70-96 hours) - Comprehensive test coverage initiative
-- **Enhancement**: 8 tasks (41-61 hours) - I18n improvements, Sphinx extensions, evaluation
-- **New Features**: 18 tasks (144-188 hours) - Translations, infrastructure features
+- **Testing**: 3 tasks (36-48 hours) - Comprehensive test coverage + QA workflow
+- **Enhancement**: 9 tasks (49-73 hours) - I18n improvements, Sphinx extensions, test-analytics, evaluation
+- **New Features**: 18 tasks (98-136 hours) - Translations, infrastructure features
 - **Refactoring**: 1 task (0.5-1 hours) - Type checking enforcement
 
 ### Strategic Focus:
-1. **Phases 1-2** (0-96 hours): Test coverage from 90.21% → 97%+
-   - 4 remaining tasks in comprehensive coverage initiative
-   - Address all untested modules (~1,800 statements remaining)
+1. **Phases 1-2** (36-48 hours): Test coverage from 90.21% → 97%+
+   - 2 remaining tasks in comprehensive coverage initiative
+   - Address all untested modules
    - Investigate 0% coverage patterns in existing tests
-2. **Phase 3** (6-8 hours): I18n quality validation
-3. **Phases 4-10** (182-244 hours): Features, translations, tooling
+2. **Phases 3-4** (14-20 hours): I18n quality validation + test-analytics enhancement
+3. **Phases 5-11** (135-191 hours): Features, translations, documentation, tooling
 
 ### Implementation Notes:
 - **Test Coverage Tasks** (033-039): Form cohesive initiative, but can be parallelized within priority groups
