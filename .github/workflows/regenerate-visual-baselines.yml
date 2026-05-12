@@ -221,7 +221,7 @@ jobs:
 
       - name: Upload generated baseline screenshots (backup)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: regenerated-baselines-${{ matrix.browser }}
           path: qa/web/tests/visual/__snapshots__/${{ matrix.browser }}/
@@ -229,7 +229,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: baseline-generation-results-${{ matrix.browser }}
           path: qa/web/visual-${{ matrix.browser }}-baseline-gen.xml
