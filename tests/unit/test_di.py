@@ -13,7 +13,7 @@ class TestDependencyContainer:
     """Test dependency injection container."""
 
     @pytest.fixture
-    def config(self) -> Config:
+    def config(self, tmp_path) -> Config:
         """Create test configuration."""
         return Config(
             api_base_url="https://api-web.nhle.com/v1",
@@ -25,7 +25,7 @@ class TestDependencyContainer:
             max_backoff=30.0,
             cache_enabled=False,  # Disable cache for testing
             cache_expiry=3600,
-            cache_dir="/tmp/test_cache",
+            cache_dir=str(tmp_path / "test_cache"),
             dos_max_connections=100,
             dos_max_per_host=10,
             dos_circuit_breaker_threshold=5,
@@ -62,10 +62,14 @@ class TestDependencyContainer:
         # Clean up
         client.close()
 
-    def test_create_api_client_cache_dir_override(self, container: DependencyContainer) -> None:
+    def test_create_api_client_cache_dir_override(
+        self,
+        container: DependencyContainer,
+        tmp_path,
+    ) -> None:
         """Test API client cache directory override."""
         # Create with custom cache directory
-        client = container.create_api_client(cache_dir="/tmp/custom_cache")
+        client = container.create_api_client(cache_dir=str(tmp_path / "custom_cache"))
         assert client is not None
 
         # Clean up
@@ -146,7 +150,7 @@ class TestCreateDependenciesFunction:
     """Test create_dependencies convenience function."""
 
     @pytest.fixture
-    def config(self) -> Config:
+    def config(self, tmp_path) -> Config:
         """Create test configuration."""
         return Config(
             api_base_url="https://api-web.nhle.com/v1",
@@ -158,7 +162,7 @@ class TestCreateDependenciesFunction:
             max_backoff=30.0,
             cache_enabled=False,
             cache_expiry=3600,
-            cache_dir="/tmp/test_cache",
+            cache_dir=str(tmp_path / "test_cache"),
             dos_max_connections=100,
             dos_max_per_host=10,
             dos_circuit_breaker_threshold=5,
