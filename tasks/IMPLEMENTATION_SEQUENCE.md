@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 035, 037, 040, 048 completed + tasks 033-040 added)
-**Total Tasks**: 33 active tasks
-**Total Estimated Effort**: 282-380 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 033, 035, 037, 040, 048 completed + tasks 033-040 added)
+**Total Tasks**: 32 active tasks
+**Total Estimated Effort**: 266-356 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -35,14 +35,15 @@ Each task entry shows:
 
 ---
 
-## Phase 2: MEDIUM Priority - Comprehensive Test Coverage (94-128 hours)
+## Phase 2: MEDIUM Priority - Comprehensive Test Coverage (78-104 hours)
 
-**Rationale**: Five MEDIUM priority test coverage tasks completing the comprehensive 7-task coverage initiative (033-039). These cover all remaining untested modules. Order by strategic foundation: infrastructure → application → final modules → interactive → web.
+**Rationale**: Four MEDIUM priority test coverage tasks completing the comprehensive 7-task coverage initiative (033-039). These cover all remaining untested modules. Order by strategic foundation: infrastructure → application → final modules → interactive → web.
 
-**Coverage Goal**: Increase overall coverage from 90.21% to 97%+ by addressing ~3,746 untested statements across all 7 tasks combined.
+**Coverage Goal**: Increase overall coverage from ~92.5% to 97%+ by addressing ~3,623 untested statements across remaining 4 tasks.
+
+~~**Task 033 (core infrastructure)**: Completed 2026-05-12 - Core infrastructure modules tested. Coverage: 90.21%→~92.5% (+2.3pp). 6 modules at 100%, 4 at 95%+. Actual effort: 4-5h (vs 16-24h estimate). Most modules already had excellent coverage. PR #597.~~
 
 ```bash
-/implement-task testing/033-expand-test-coverage-core-modules.md  # 16-24h, Issue #586, [Infrastructure foundation]
 /implement-task testing/034-expand-test-coverage-remaining-modules.md  # 24-32h, Issue #587, [Application modules]
 /implement-task testing/036-expand-test-coverage-final-modules.md  # 18-24h, Issue #589, [Config, analytics, exporters]
 /implement-task testing/038-expand-test-coverage-interactive-modules.md  # 16-20h, Issue #591, [REPL/shell]
