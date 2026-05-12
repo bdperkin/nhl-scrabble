@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 033, 034, 035, 037, 040, 048 completed + tasks 033-040 added)
-**Total Tasks**: 31 active tasks
-**Total Estimated Effort**: 242-324 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 033, 034, 035, 036, 037, 040, 048 completed + tasks 033-040 added)
+**Total Tasks**: 30 active tasks
+**Total Estimated Effort**: 224-300 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -45,15 +45,16 @@ Each task entry shows:
 
 ~~**Task 034 (application modules)**: Completed 2026-05-12 - Enhanced test coverage for validators and logging_config. Coverage: validators 12.30%→98.36% (+86pp), logging_config 0%→~95%. Added 42 comprehensive tests. Actual effort: ~3h (vs 24-32h estimate). Other modules already had excellent coverage. PR #598.~~
 
+~~**Task 036 (final modules)**: Completed 2026-05-12 - Investigation revealed all work already complete from prior PRs. Coverage: config.py 93.60% (PR #385), analytics 97-99% (PR #463), exporters/formatters 92-100% (PR #360). Task based on outdated snapshot. Actual effort: 1h investigation (vs 18-24h estimate). PR #600.~~
+
 ```bash
-/implement-task testing/036-expand-test-coverage-final-modules.md  # 18-24h, Issue #589, [Config, analytics, exporters]
 /implement-task testing/038-expand-test-coverage-interactive-modules.md  # 16-20h, Issue #591, [REPL/shell]
 /implement-task testing/039-expand-test-coverage-web-modules.md  # 20-28h, Issue #592, [FastAPI app]
 ```
 
-**Phase Total**: 70-96 hours
+**Phase Total**: 36-48 hours
 
-**Note**: Tasks 036, 038, 039 all have same pattern - test files exist but 0% coverage (investigation required).
+**Note**: Tasks 038, 039 have same pattern - test files exist but 0% coverage (investigation required, similar to task 036).
 
 **Dependencies**:
 - Phase 1 should complete first (HIGH priority test coverage)
@@ -214,8 +215,8 @@ Each task entry shows:
 
 ### Implementation Notes:
 - **Test Coverage Tasks** (033-039): Form cohesive initiative, but can be parallelized within priority groups
-- **Completed**: Tasks 033, 034, 035, 037 completed (actual effort significantly lower than estimates)
-- **Investigation Required**: Tasks 036, 038, 039 have unusual 0% coverage despite extensive tests
+- **Completed**: Tasks 033, 034, 035, 036, 037 completed (actual effort significantly lower than estimates)
+- **Investigation Required**: Tasks 038, 039 have unusual 0% coverage despite extensive tests (similar to 036)
 - **Translation Tasks**: Can be parallelized if multiple translators available
 - **Quick Wins**: Task 023 (15min) and 024 (30min-1h) can be completed quickly
 
