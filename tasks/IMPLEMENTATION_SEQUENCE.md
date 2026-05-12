@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-12 (tasks 025, 029, 048 completed + tasks 033-040 added)
-**Total Tasks**: 36 active tasks
-**Total Estimated Effort**: 338-456 hours
+**Updated**: 2026-05-12 (tasks 025, 029, 040, 048 completed + tasks 033-040 added)
+**Total Tasks**: 35 active tasks
+**Total Estimated Effort**: 314-424 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -23,19 +23,18 @@ Each task entry shows:
 
 ---
 
-## Phase 1: HIGH Priority - Critical Test Coverage (56-76 hours)
+## Phase 1: HIGH Priority - Critical Test Coverage (32-44 hours)
 
-**Rationale**: Three HIGH priority test coverage tasks addressing critical untested areas. Task 040 (CLI) is the main entry point (0% coverage despite 2,621 lines of tests). Task 035 (business logic) ensures accuracy of NHL rules and scoring. Task 037 (security) prevents vulnerabilities. All three have similar investigation patterns - extensive tests exist but report 0% coverage.
+**Rationale**: Two HIGH priority test coverage tasks addressing critical untested areas. Task 035 (business logic) ensures accuracy of NHL rules and scoring. Task 037 (security) prevents vulnerabilities.
 
-**Order**: CLI first (main entry point), then business logic (accuracy critical), then security (attack prevention).
+**Order**: Business logic first (accuracy critical), then security (attack prevention).
 
 ```bash
-/implement-task testing/040-expand-test-coverage-cli-module.md  # 24-32h, Issue #593, [⚠️ MAIN ENTRY POINT]
 /implement-task testing/035-expand-test-coverage-business-logic.md  # 20-28h, Issue #588, [Accuracy Critical]
 /implement-task testing/037-expand-test-coverage-security-modules.md  # 12-16h, Issue #590, [Security Critical]
 ```
 
-**Phase Total**: 56-76 hours
+**Phase Total**: 32-44 hours
 
 **Investigation Phase**: All three tasks require understanding why extensive tests exist but report 0% coverage (similar to tasks 036, 038, 039).
 
@@ -43,9 +42,9 @@ Each task entry shows:
 
 ## Phase 2: MEDIUM Priority - Comprehensive Test Coverage (94-128 hours)
 
-**Rationale**: Five MEDIUM priority test coverage tasks completing the comprehensive 8-task coverage initiative (033-040). These cover all remaining untested modules. Order by strategic foundation: infrastructure → application → final modules → interactive → web.
+**Rationale**: Five MEDIUM priority test coverage tasks completing the comprehensive 7-task coverage initiative (033-039). These cover all remaining untested modules. Order by strategic foundation: infrastructure → application → final modules → interactive → web.
 
-**Coverage Goal**: Increase overall coverage from 90.21% to 97%+ by addressing ~4,317 untested statements across all 8 tasks combined.
+**Coverage Goal**: Increase overall coverage from 90.21% to 97%+ by addressing ~3,746 untested statements across all 7 tasks combined.
 
 ```bash
 /implement-task testing/033-expand-test-coverage-core-modules.md  # 16-24h, Issue #586, [Infrastructure foundation]
@@ -62,7 +61,7 @@ Each task entry shows:
 **Dependencies**:
 - Phase 1 should complete first (HIGH priority test coverage)
 - Tasks within this phase are largely independent and can be parallelized
-- All 8 tasks (033-040) form a comprehensive coverage initiative
+- All 7 tasks (033-039) form a comprehensive coverage initiative
 
 ---
 
@@ -194,11 +193,11 @@ Each task entry shows:
 
 ## Summary
 
-**Total Active Tasks**: 36
-**Total Estimated Effort**: 338-456 hours
+**Total Active Tasks**: 35
+**Total Estimated Effort**: 314-424 hours
 
 ### By Priority:
-- **HIGH**: 3 tasks (56-76 hours) - Critical test coverage
+- **HIGH**: 2 tasks (32-44 hours) - Critical test coverage
 - **MEDIUM**: 7 tasks (100-136 hours) - Comprehensive test coverage + i18n quality
 - **LOW**: 26 tasks (182-244 hours) - Features, translations, research
 
@@ -217,8 +216,8 @@ Each task entry shows:
 3. **Phases 4-10** (182-244 hours): Features, translations, tooling
 
 ### Implementation Notes:
-- **Test Coverage Tasks** (033-040): Form cohesive initiative, but can be parallelized within priority groups
-- **Investigation Required**: Tasks 036, 038, 039, 040 have unusual 0% coverage despite extensive tests
+- **Test Coverage Tasks** (033-039): Form cohesive initiative, but can be parallelized within priority groups
+- **Investigation Required**: Tasks 036, 038, 039 have unusual 0% coverage despite extensive tests
 - **Translation Tasks**: Can be parallelized if multiple translators available
 - **Quick Wins**: Task 023 (15min) and 024 (30min-1h) can be completed quickly
 
