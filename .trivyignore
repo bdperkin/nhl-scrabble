@@ -193,14 +193,292 @@ CVE-2026-5704
 CVE-2026-5958
 
 # ============================================================================
+# LOW SEVERITY - System-Level CVEs (Not Application Code)
+# ============================================================================
+
+# === glibc (libc6, libc-bin) - Legacy/Theoretical Vulnerabilities ===
+
+# CVE-2010-4756: glibc glob DoS
+# Justification:
+#   - 16-year-old vulnerability in glob() pattern matching
+#   - Requires crafted glob expressions
+#   - Python application uses os.listdir/pathlib, not C glob()
+#   - Risk: LOW (function not used, old vulnerability)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2010-4756
+CVE-2010-4756
+
+# CVE-2018-20796: glibc regex uncontrolled recursion
+# Justification:
+#   - Vulnerability in glibc regex engine (posix/regexec.c)
+#   - Python uses its own 're' module, not glibc regex directly
+#   - Risk: LOW (Python regex implementation separate from glibc)
+# Affected packages: libc6
+# References: https://nvd.nist.gov/vuln/detail/CVE-2018-20796
+CVE-2018-20796
+
+# CVE-2019-1010022: glibc stack guard bypass
+# Justification:
+#   - Theoretical stack guard protection bypass
+#   - Requires specific exploit conditions
+#   - Python runtime provides additional stack protection
+#   - Container isolation limits exploit surface
+#   - Risk: LOW (theoretical vulnerability, container isolation)
+# Affected packages: libc6, libc-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2019-1010022
+CVE-2019-1010022
+
+# CVE-2019-1010023: glibc ldd malicious ELF execution
+# Justification:
+#   - Vulnerability in `ldd` command-line tool when analyzing malicious ELF files
+#   - Application does not use `ldd` command
+#   - No ELF binary analysis functionality
+#   - Risk: LOW (tool not used by application)
+# Affected packages: libc6, libc-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2019-1010023
+CVE-2019-1010023
+
+# CVE-2019-1010024: glibc ASLR bypass
+# Justification:
+#   - ASLR bypass using cache of thread stack and heap
+#   - Requires specific attack scenario
+#   - Container provides additional isolation
+#   - Python application does not expose memory layout
+#   - Risk: LOW (theoretical, container isolation, no memory exposure)
+# Affected packages: libc6, libc-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2019-1010024
+CVE-2019-1010024
+
+# CVE-2019-1010025: glibc pthread heap address disclosure
+# Justification:
+#   - Information disclosure of pthread heap addresses
+#   - Requires specific attack scenario
+#   - Container isolation limits exploit surface
+#   - No sensitive operations exposed via thread memory
+#   - Risk: LOW (information disclosure only, container isolation)
+# Affected packages: libc6, libc-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2019-1010025
+CVE-2019-1010025
+
+# CVE-2019-9192: glibc regex uncontrolled recursion
+# Justification:
+#   - Uncontrolled recursion in regex engine
+#   - Python uses its own 're' module, not glibc regex directly
+#   - Risk: LOW (Python regex implementation separate)
+# Affected packages: libc6, libc-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2019-9192
+CVE-2019-9192
+
+# === systemd (libudev1) - Daemon/Tool Vulnerabilities ===
+
+# CVE-2013-4392: systemd TOCTOU file permissions
+# Justification:
+#   - 13-year-old TOCTOU race condition in systemd file permission updates
+#   - systemd not running in container (Python is PID 1)
+#   - Application does not manipulate file permissions via systemd
+#   - Risk: LOW (systemd not running, old vulnerability)
+# Affected packages: libudev1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2013-4392
+CVE-2013-4392
+
+# CVE-2023-31437, CVE-2023-31438, CVE-2023-31439: systemd sealed credentials
+# Justification:
+#   - Vulnerabilities in systemd's sealed credentials feature
+#   - systemd not running in container (Python is PID 1)
+#   - Application does not use systemd sealed credentials
+#   - Risk: LOW (systemd not running, feature not used)
+# Affected packages: libudev1
+# References:
+#   - https://nvd.nist.gov/vuln/detail/CVE-2023-31437
+#   - https://nvd.nist.gov/vuln/detail/CVE-2023-31438
+#   - https://nvd.nist.gov/vuln/detail/CVE-2023-31439
+CVE-2023-31437
+CVE-2023-31438
+CVE-2023-31439
+
+# CVE-2026-40228: systemd-journald logger output
+# Justification:
+#   - systemd-journald unintended output via logger command
+#   - systemd-journald not running in container
+#   - Application uses Python logging, not systemd-journald
+#   - Risk: LOW (systemd not running)
+# Affected packages: libudev1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2026-40228
+CVE-2026-40228
+
+# === util-linux (util-linux, libblkid1) - Tool Vulnerabilities ===
+
+# CVE-2022-0563: util-linux chfn/chsh file disclosure
+# Justification:
+#   - Partial file disclosure in chfn and chsh commands when compiled with libreadline
+#   - Application does not use chfn or chsh commands
+#   - No user account modification functionality
+#   - Risk: LOW (tools not used by application)
+# Affected packages: util-linux, libblkid1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2022-0563
+CVE-2022-0563
+
+# CVE-2025-14104: util-linux setpwnam heap buffer overread
+# Justification:
+#   - Heap buffer overread in setpwnam() with 256-byte usernames
+#   - Application does not use setpwnam() function
+#   - No user account modification functionality
+#   - Risk: LOW (function not used)
+# Affected packages: util-linux, libblkid1
+# References: https://nvd.nist.gov/vuln/detail/CVE-2025-14104
+CVE-2025-14104
+
+# === sqlite (libsqlite3-0) - Database Vulnerabilities ===
+
+# CVE-2021-45346: sqlite crafted SQL query
+# Justification:
+#   - Information disclosure via crafted SQL query
+#   - Application does not use SQLite database
+#   - No SQL query functionality
+#   - Risk: LOW (SQLite not used by application)
+# Affected packages: libsqlite3-0
+# References: https://nvd.nist.gov/vuln/detail/CVE-2021-45346
+CVE-2021-45346
+
+# CVE-2025-70873: sqlite ZIP file info disclosure
+# Justification:
+#   - Information disclosure via crafted ZIP file in SQLite
+#   - Application does not use SQLite database
+#   - No ZIP file processing functionality
+#   - Risk: LOW (SQLite not used, ZIP processing not used)
+# Affected packages: libsqlite3-0
+# References: https://nvd.nist.gov/vuln/detail/CVE-2025-70873
+CVE-2025-70873
+
+# === Other System Utilities ===
+
+# CVE-2025-6141: ncurses stack buffer overflow
+# Justification:
+#   - Stack buffer overflow in ncurses library
+#   - Python terminal handling uses high-level abstractions
+#   - Application does not directly manipulate ncurses buffers
+#   - Risk: LOW (Python abstractions isolate from ncurses internals)
+# Affected packages: ncurses-bin
+# References: https://nvd.nist.gov/vuln/detail/CVE-2025-6141
+CVE-2025-6141
+
+# CVE-2007-5686: passwd insecure /var/log permissions
+# Justification:
+#   - 19-year-old vulnerability in rPath Linux initscripts
+#   - Not applicable to Debian/Docker environment
+#   - Application does not manipulate /var/log permissions
+#   - Risk: LOW (old vulnerability, not applicable to Debian)
+# Affected packages: passwd
+# References: https://nvd.nist.gov/vuln/detail/CVE-2007-5686
+CVE-2007-5686
+
+# CVE-2024-56433: shadow-utils subordinate ID config
+# Justification:
+#   - Default subordinate ID configuration issue in /etc/login.defs
+#   - Application does not use subordinate IDs or user namespaces
+#   - Container runs as single UID (1000)
+#   - Risk: LOW (feature not used)
+# Affected packages: passwd
+# References: https://nvd.nist.gov/vuln/detail/CVE-2024-56433
+CVE-2024-56433
+
+# TEMP-0628843-DBAD28: passwd temporary Debian issue
+# Justification:
+#   - Temporary Debian security issue related to CVE-2005-4890
+#   - Historical issue, not actively exploitable
+#   - Application does not manipulate user accounts
+#   - Risk: LOW (temporary/historical issue)
+# Affected packages: passwd
+TEMP-0628843-DBAD28
+
+# CVE-2011-4116: perl File::Temp insecure handling
+# Justification:
+#   - 15-year-old vulnerability in Perl File::Temp module
+#   - Application is Python-based, does not use Perl
+#   - perl-base only included for system scripts
+#   - Risk: LOW (Perl not used by application)
+# Affected packages: perl-base
+# References: https://nvd.nist.gov/vuln/detail/CVE-2011-4116
+CVE-2011-4116
+
+# TEMP-0517018-A83CE6: sysvinit no-root option
+# Justification:
+#   - Temporary Debian issue in sysvinit installer
+#   - Not applicable to Docker containers
+#   - Application does not use sysvinit
+#   - Risk: LOW (not applicable to containers)
+# Affected packages: sysvinit-utils
+TEMP-0517018-A83CE6
+
+# CVE-2005-2541: tar setuid/setgid warning
+# Justification:
+#   - 21-year-old issue: tar not warning about setuid/setgid extraction
+#   - Application does not use tar command
+#   - No archive extraction functionality
+#   - Risk: LOW (old vulnerability, tool not used)
+# Affected packages: tar
+# References: https://nvd.nist.gov/vuln/detail/CVE-2005-2541
+CVE-2005-2541
+
+# TEMP-0290435-0B57B5: tar rmt command side effects
+# Justification:
+#   - Temporary Debian issue: tar's rmt command side effects
+#   - Application does not use tar or rmt commands
+#   - Risk: LOW (tools not used)
+# Affected packages: tar
+TEMP-0290435-0B57B5
+
+# TEMP-0841856-B18BAF: bash privilege escalation
+# Justification:
+#   - Temporary Debian issue: bash privilege escalation to non-root users
+#   - Application does not execute bash scripts
+#   - Container runs as single user (UID 1000)
+#   - Risk: LOW (bash not used for scripting)
+# Affected packages: bash
+TEMP-0841856-B18BAF
+
+# CVE-2017-18018: coreutils chown/chgrp race condition
+# Justification:
+#   - Race condition in chown and chgrp commands
+#   - Application does not use chown or chgrp commands
+#   - No file ownership modification functionality
+#   - Risk: LOW (commands not used)
+# Affected packages: coreutils
+# References: https://nvd.nist.gov/vuln/detail/CVE-2017-18018
+CVE-2017-18018
+
+# CVE-2025-5278: coreutils sort heap buffer under-read
+# Justification:
+#   - Heap buffer under-read in sort command with key specification
+#   - Application does not use sort command
+#   - Python provides built-in sorting functionality
+#   - Risk: LOW (command not used)
+# Affected packages: coreutils
+# References: https://nvd.nist.gov/vuln/detail/CVE-2025-5278
+CVE-2025-5278
+
+# CVE-2011-3374: apt-key validation issue
+# Justification:
+#   - 15-year-old issue: apt-key not validating signatures correctly
+#   - Application does not use apt-key or APT package management
+#   - Container uses pre-built image, no runtime package installation
+#   - Risk: LOW (APT not used at runtime)
+# Affected packages: libapt-pkg7.0
+# References: https://nvd.nist.gov/vuln/detail/CVE-2011-3374
+CVE-2011-3374
+
+# ============================================================================
 # Notes:
 # ============================================================================
-# - All HIGH and MEDIUM severity alerts are in base Debian packages, not application code
+# - All HIGH, MEDIUM, and LOW severity alerts are in base Debian packages, not application code
 # - These packages are dependencies of the Python base image
 # - Fixes require upstream Debian/Python base image updates
 # - Container security best practices are followed:
 #   * Run as non-root user (UID 1000)
 #   * Minimal slim image with only required packages
 #   * Regular base image updates via `apt-get upgrade`
+#   * No system daemons running (Python is PID 1)
+#   * Python abstractions isolate from C library vulnerabilities
 # - Monitor Debian security tracker for updates
 # - Re-evaluate suppressions when base image is updated
+# - Many LOW severity CVEs are legacy/theoretical or affect unused tools/features
