@@ -1,7 +1,6 @@
 """Security utilities for sanitizing sensitive data from logs."""
 
 import logging
-import re
 from re import IGNORECASE, Pattern
 from re import compile as re_compile
 from typing import ClassVar
@@ -55,7 +54,7 @@ def sanitize_for_logging(value: object) -> str:
 
     # Remove other control characters (0x00-0x1F, 0x7F) except space (0x20)
     # Use regex to remove characters in range 0x00-0x1F and 0x7F
-    text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]", "", text)
+    text = re_compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]").sub("", text)
 
     return text
 
