@@ -52,7 +52,12 @@ import locale
 import os
 import sys
 from collections.abc import Callable
+from datetime import date, datetime, time
 from pathlib import Path
+
+from babel.dates import format_date as babel_format_date
+from babel.dates import format_datetime as babel_format_datetime
+from babel.dates import format_time as babel_format_time
 
 # Supported locales (12 total covering major hockey markets)
 SUPPORTED_LOCALES = [
@@ -244,6 +249,155 @@ def format_number(number: float, locale_code: str | None = None) -> str:
     except (locale.Error, ValueError, OSError):
         # Fallback to standard formatting
         return f"{number:.2f}"
+
+
+def format_date(
+    date_obj: date,
+    locale_code: str | None = None,
+    format: str = "medium",  # noqa: A002
+) -> str:
+    """Format date according to locale conventions.
+
+    Formats a date using locale-specific conventions for date order, separators,
+    and month names. Uses babel.dates for reliable cross-platform formatting.
+
+    Args:
+        date_obj: Date object to format.
+        locale_code: Locale code for formatting. If None, uses system locale.
+        format: Format length - 'full', 'long', 'medium', or 'short'.
+
+    Returns:
+        Formatted date string with locale-appropriate conventions.
+
+    Examples:
+        >>> from datetime import date
+        >>> d = date(2026, 1, 15)
+        >>> format_date(d, "en_US", "short")  # doctest: +SKIP
+        '1/15/26'
+
+        >>> format_date(d, "de_DE", "long")  # doctest: +SKIP
+        '15. Januar 2026'
+
+        >>> format_date(d, "fr_CA", "medium")  # doctest: +SKIP
+        '15 janv. 2026'
+
+    Notes:
+        - 'full': Wednesday, January 15, 2026
+        - 'long': January 15, 2026
+        - 'medium': Jan 15, 2026
+        - 'short': 1/15/26
+        - Month names are translated according to locale
+        - Date order (MM/DD vs DD/MM) follows locale conventions
+        - Thread-safe (babel.dates is thread-safe)
+    """
+    if locale_code is None:
+        locale_code = get_system_locale()
+
+    # Validate locale, fallback to default if invalid
+    if locale_code not in SUPPORTED_LOCALES:
+        locale_code = DEFAULT_LOCALE
+
+    return babel_format_date(date_obj, format=format, locale=locale_code)  # type: ignore[no-any-return]
+
+
+def format_time(
+    time_obj: datetime | time,
+    locale_code: str | None = None,
+    format: str = "medium",  # noqa: A002
+) -> str:
+    """Format time according to locale conventions.
+
+    Formats a time using locale-specific conventions for 12/24-hour format
+    and time separators. Uses babel.dates for reliable cross-platform formatting.
+
+    Args:
+        time_obj: Time or datetime object to format.
+        locale_code: Locale code for formatting. If None, uses system locale.
+        format: Format length - 'full', 'long', 'medium', or 'short'.
+
+    Returns:
+        Formatted time string with locale-appropriate conventions.
+
+    Examples:
+        >>> from datetime import time
+        >>> t = time(14, 30, 45)
+        >>> format_time(t, "en_US", "short")  # doctest: +SKIP
+        '2:30 PM'
+
+        >>> format_time(t, "de_DE", "medium")  # doctest: +SKIP
+        '14:30:45'
+
+        >>> format_time(t, "fr_CA", "long")  # doctest: +SKIP
+        '14:30:45 UTC'
+
+    Notes:
+        - 'full': 2:30:45 PM Eastern Standard Time
+        - 'long': 2:30:45 PM EST
+        - 'medium': 2:30:45 PM
+        - 'short': 2:30 PM
+        - US locales typically use 12-hour format with AM/PM
+        - European locales typically use 24-hour format
+        - Thread-safe (babel.dates is thread-safe)
+    """
+    if locale_code is None:
+        locale_code = get_system_locale()
+
+    # Validate locale, fallback to default if invalid
+    if locale_code not in SUPPORTED_LOCALES:
+        locale_code = DEFAULT_LOCALE
+
+    return babel_format_time(time_obj, format=format, locale=locale_code)  # type: ignore[no-any-return]
+
+
+def format_datetime(
+    dt: datetime,
+    locale_code: str | None = None,
+    format: str = "medium",  # noqa: A002
+) -> str:
+    """Format datetime according to locale conventions.
+
+    Formats a datetime using locale-specific conventions for date order,
+    time format, separators, and month names. Uses babel.dates for reliable
+    cross-platform formatting.
+
+    Args:
+        dt: Datetime object to format.
+        locale_code: Locale code for formatting. If None, uses system locale.
+        format: Format length - 'full', 'long', 'medium', or 'short'.
+
+    Returns:
+        Formatted datetime string with locale-appropriate conventions.
+
+    Examples:
+        >>> from datetime import datetime
+        >>> dt = datetime(2026, 1, 15, 14, 30, 45)
+        >>> format_datetime(dt, "en_US", "short")  # doctest: +SKIP
+        '1/15/26, 2:30 PM'
+
+        >>> format_datetime(dt, "de_DE", "long")  # doctest: +SKIP
+        '15. Januar 2026 um 14:30:45 MEZ'
+
+        >>> format_datetime(dt, "fr_CA", "medium")  # doctest: +SKIP
+        '15 janv. 2026, 14:30:45'
+
+    Notes:
+        - 'full': Wednesday, January 15, 2026 at 2:30:45 PM Eastern Standard Time
+        - 'long': January 15, 2026 at 2:30:45 PM EST
+        - 'medium': Jan 15, 2026, 2:30:45 PM
+        - 'short': 1/15/26, 2:30 PM
+        - Combines date and time formatting per locale
+        - Month names and weekday names are translated
+        - Thread-safe (babel.dates is thread-safe)
+        - Timezone handling depends on datetime object's tzinfo
+    """
+    if locale_code is None:
+        locale_code = get_system_locale()
+
+    # Validate locale, fallback to default if invalid
+    if locale_code not in SUPPORTED_LOCALES:
+        locale_code = DEFAULT_LOCALE
+
+    return babel_format_datetime(dt, format=format, locale=locale_code)  # type: ignore[no-any-return]
 
 
 def _(message: str) -> str:

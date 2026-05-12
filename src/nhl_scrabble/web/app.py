@@ -25,7 +25,13 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api import NHLApiClient, NHLApiError
-from nhl_scrabble.i18n import DEFAULT_LOCALE, LOCALES_DIR, SUPPORTED_LOCALES
+from nhl_scrabble.i18n import (
+    DEFAULT_LOCALE,
+    LOCALES_DIR,
+    SUPPORTED_LOCALES,
+    format_date,
+    format_time,
+)
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.team import TeamScore
 from nhl_scrabble.processors import (
@@ -851,8 +857,8 @@ async def players_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1039,8 +1045,8 @@ async def teams_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1178,8 +1184,8 @@ async def team_detail_page(
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1232,8 +1238,8 @@ async def divisions_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1333,8 +1339,8 @@ async def division_detail_page(request: Request, division_name: str) -> HTMLResp
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1557,8 +1563,8 @@ async def nationality_detail_page(request: Request, nationality_name: str) -> HT
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1785,8 +1791,8 @@ async def position_type_page(request: Request, position_type: str) -> HTMLRespon
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1900,8 +1906,8 @@ async def position_detail_page(request: Request, position_code: str) -> HTMLResp
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -1961,8 +1967,8 @@ async def conferences_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -2052,8 +2058,8 @@ async def conference_detail_page(
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -2105,8 +2111,8 @@ async def league_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -2161,8 +2167,8 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(
@@ -2212,8 +2218,8 @@ async def stats_page(request: Request) -> HTMLResponse:
         # Format timestamp for display
         timestamp_str = data["timestamp"]
         timestamp_dt = datetime.fromisoformat(timestamp_str)
-        timestamp_date = timestamp_dt.strftime("%B %d, %Y")
-        timestamp_time = timestamp_dt.strftime("%I:%M %p UTC")
+        timestamp_date = format_date(timestamp_dt.date(), format="long")
+        timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
         context = setup_template_locale(request)
         context.update(

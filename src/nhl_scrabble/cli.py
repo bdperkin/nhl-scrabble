@@ -26,7 +26,7 @@ from nhl_scrabble.di import DependencyContainer
 from nhl_scrabble.exceptions import ValidationError
 from nhl_scrabble.exporters.excel_exporter import ExcelExporter
 from nhl_scrabble.filters import AnalysisFilters
-from nhl_scrabble.i18n import SUPPORTED_LOCALES, _
+from nhl_scrabble.i18n import SUPPORTED_LOCALES, _, format_datetime
 from nhl_scrabble.logging_config import setup_logging
 from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.models.standings import (
@@ -1774,7 +1774,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
     with suppress(KeyboardInterrupt):
         while not shutdown_flag[0]:
             iteration += 1
-            timestamp = datetime.now(tz=UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
+            timestamp = format_datetime(datetime.now(tz=UTC), format="medium") + " UTC"
 
             console.print(f"\n[bold cyan]Update #{iteration}[/bold cyan] - {timestamp}")
             console.print("-" * 80)
