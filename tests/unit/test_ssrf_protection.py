@@ -294,3 +294,90 @@ class TestSSRFProtectionError:
         """Test that exception can be raised and caught."""
         with pytest.raises(SSRFProtectionError, match="test"):
             raise SSRFProtectionError("test")
+
+
+class TestValidateUrlForSsrfEdgeCases:
+    """Additional edge case tests for validate_url_for_ssrf to improve coverage."""
+
+    def test_malformed_url_exception_handling(self) -> None:
+        """Test that malformed URLs raise SSRFProtectionError with proper message."""
+        # Test invalid URL that causes parsing exception
+        with pytest.raises(SSRFProtectionError, match="Invalid URL format"):
+            validate_url_for_ssrf("http://[invalid")
+
+    def test_blocked_port_triggers_warning_log(self, caplog: pytest.LogCaptureFixture) -> None:
+        """Test that blocked ports trigger warning logs."""
+        import logging
+
+        # Test SSH port (22) blocking
+        with (
+            caplog.at_level(logging.WARNING),
+            pytest.raises(SSRFProtectionError, match="Port 22 is blocked"),
+        ):
+            validate_url_for_ssrf("http://api-web.nhle.com:22/api")
+
+        # Verify warning was logged
+        assert "SSRF protection blocked request to blocked port" in caplog.text
+
+    @patch("nhl_scrabble.security.ssrf_protection.resolve_hostname")
+    def test_dns_rebinding_attack_with_logging(
+        self,
+        mock_resolve: any,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Test DNS rebinding protection with logging verification."""
+        import logging
+
+        # Mock DNS resolution to return private IP
+        mock_resolve.return_value = ["192.168.1.1"]
+
+        with (
+            caplog.at_level(logging.WARNING),
+            pytest.raises(
+                SSRFProtectionError,
+                match=r"resolves to blocked IP address.*192.168.1.1",
+            ),
+        ):
+            validate_url_for_ssrf("http://api-web.nhle.com/api")
+
+        # Verify warning was logged with details
+        assert "SSRF protection blocked request" in caplog.text
+        assert "resolves to blocked IP address" in caplog.text
+
+    @patch("nhl_scrabble.security.ssrf_protection.resolve_hostname")
+    def test_multiple_ips_with_one_blocked(
+        self,
+        mock_resolve: any,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Test that any blocked IP in DNS results causes failure."""
+        import logging
+
+        # Mix of public and private IPs
+        mock_resolve.return_value = ["8.8.8.8", "192.168.1.1", "1.1.1.1"]
+
+        with (
+            caplog.at_level(logging.WARNING),
+            pytest.raises(SSRFProtectionError, match="resolves to blocked IP"),
+        ):
+            validate_url_for_ssrf("http://api-web.nhle.com/api")
+
+        # Should log the private IP that was found
+        assert "192.168.1.1" in caplog.text
+
+    def test_non_allowed_domain_triggers_warning_log(
+        self,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Test that non-allowed domains trigger warning logs."""
+        import logging
+
+        with (
+            caplog.at_level(logging.WARNING),
+            pytest.raises(SSRFProtectionError, match="not in allowed domains"),
+        ):
+            validate_url_for_ssrf("https://evil.com/api")
+
+        # Verify warning was logged with allowed domains list
+        assert "SSRF protection blocked request to non-allowed domain" in caplog.text
+        assert "evil.com" in caplog.text
