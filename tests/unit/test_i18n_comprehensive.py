@@ -15,6 +15,7 @@ Test Coverage:
 
 import re
 import shutil
+from typing import ClassVar
 
 import polib
 import pytest
@@ -296,7 +297,7 @@ class TestTranslationQuality:
             raise AssertionError(
                 f"{locale}: {len(fuzzy)} fuzzy translations found:\n"
                 f"{fuzzy_examples}\n"
-                f"Run 'make i18n-update' and review fuzzy translations."
+                f"Run 'make i18n-update' and review fuzzy translations.",
             )
 
     @pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
@@ -362,7 +363,7 @@ class TestTranslationQuality:
         if empty:
             empty_examples = "\n".join(f"  - {e.msgid}" for e in empty[:5])
             raise AssertionError(
-                f"{locale}: {len(empty)} empty translations found:\n" f"{empty_examples}"
+                f"{locale}: {len(empty)} empty translations found:\n" f"{empty_examples}",
             )
 
 
@@ -411,7 +412,7 @@ class TestHockeyTerminologyConsistency:
     """Test hockey-specific terminology is consistently translated."""
 
     # Common hockey terms that should be translated consistently
-    HOCKEY_TERMS = {
+    HOCKEY_TERMS: ClassVar[dict[str, None]] = {
         "Team": None,  # Should be translated
         "Player": None,
         "Score": None,
@@ -471,8 +472,9 @@ class TestCLILocaleSwitching:
         env = os.environ.copy()
         env["NHL_SCRABBLE_LANG"] = locale
 
+        # Safe: nhl-scrabble is this project's CLI installed in test environment
         result = subprocess.run(
-            ["nhl-scrabble", "--help"],
+            ["nhl-scrabble", "--help"],  # noqa: S607
             capture_output=True,
             text=True,
             env=env,
