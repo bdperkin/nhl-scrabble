@@ -17,7 +17,10 @@ console = Console()
 @click.option(
     "--format",
     "output_format",
-    type=click.Choice(["text", "json", "html"], case_sensitive=False),
+    type=click.Choice(
+        ["text", "json", "yaml", "xml", "html", "table", "markdown", "csv", "excel", "template"],
+        case_sensitive=False,
+    ),
     default="text",
     help="Output format (default: text)",
 )
@@ -26,6 +29,12 @@ console = Console()
     "--output",
     type=click.Path(),
     help="Output file path (default: stdout)",
+)
+@click.option(
+    "--template",
+    type=click.Path(exists=True, dir_okay=False),
+    default=None,
+    help="Template file path (required for --format template)",
 )
 @click.option(
     "--target-coverage",
@@ -55,10 +64,11 @@ console = Console()
 )
 @click.help_option("-h", "--help")
 @click.pass_context
-def test_analytics(  # noqa: PLR0913, PLR0915  # CLI function with many options and statements
+def test_analytics(  # noqa: PLR0913, PLR0915, C901  # CLI function with many options, statements, and conditional logic
     ctx: click.Context,
     output_format: str,
     output: str | None,
+    template: str | None,
     target_coverage: float,
     show_gaps: bool,
     show_slow_tests: bool,
@@ -95,15 +105,40 @@ def test_analytics(  # noqa: PLR0913, PLR0915  # CLI function with many options 
       Export to HTML:
         $ nhl-scrabble test-analytics --format html -o analytics.html
 
+      Export to YAML:
+        $ nhl-scrabble test-analytics --format yaml -o analytics.yaml
+
+      Export to XML:
+        $ nhl-scrabble test-analytics --format xml -o analytics.xml
+
+      Export to Markdown:
+        $ nhl-scrabble test-analytics --format markdown -o analytics.md
+
+      Export to CSV:
+        $ nhl-scrabble test-analytics --format csv -o analytics.csv
+
+      Export to Excel:
+        $ nhl-scrabble test-analytics --format excel -o analytics.xlsx
+
+      Export with custom template:
+        $ nhl-scrabble test-analytics --format template --template template.j2 -o report.txt
+
       Combine multiple analyses:
         $ nhl-scrabble test-analytics --show-gaps --show-slow-tests
     """
     from nhl_scrabble.analytics.analyzer import TestAnalyzer  # noqa: PLC0415
     from nhl_scrabble.analytics.codecov_client import CodecovClient, CodecovConfig  # noqa: PLC0415
     from nhl_scrabble.analytics.formatters import (  # noqa: PLC0415
+        CSVFormatter,
+        ExcelFormatter,
         HTMLFormatter,
         JSONFormatter,
+        MarkdownFormatter,
+        TableFormatter,
+        TemplateFormatter,
         TextFormatter,
+        XMLFormatter,
+        YAMLFormatter,
     )
 
     # Load configuration from environment
@@ -158,26 +193,51 @@ def test_analytics(  # noqa: PLR0913, PLR0915  # CLI function with many options 
 
         console.print("[green]✓ Analysis complete[/green]")
 
-        # Format output
-        formatter: JSONFormatter | HTMLFormatter | TextFormatter
-        if output_format == "json":
-            formatter = JSONFormatter()
-            output_text = formatter.format(report_data)
-        elif output_format == "html":
-            formatter = HTMLFormatter()
-            output_text = formatter.format(report_data)
-        else:
-            formatter = TextFormatter()
-            output_text = formatter.format(report_data)
+        # Validate format requirements
+        if output_format == "excel" and not output:
+            console.print(
+                "[red]Error: Excel format requires --output option[/red]",
+                style="bold",
+            )
+            ctx.exit(1)
+
+        if output_format == "template" and not template:
+            console.print(
+                "[red]Error: Template format requires --template option[/red]",
+                style="bold",
+            )
+            ctx.exit(1)
+
+        # Format output using formatter map
+        formatter_map = {
+            "json": JSONFormatter(),
+            "yaml": YAMLFormatter(),
+            "xml": XMLFormatter(),
+            "html": HTMLFormatter(),
+            "table": TableFormatter(),
+            "markdown": MarkdownFormatter(),
+            "csv": CSVFormatter(),
+            "excel": ExcelFormatter(),
+            "template": TemplateFormatter(template),
+            "text": TextFormatter(),
+        }
+
+        formatter = formatter_map.get(output_format, TextFormatter())
+        output_data = formatter.format(report_data)
 
         # Write or display output
         if output:
             output_path = Path(output)
-            output_path.write_text(output_text, encoding="utf-8")
+            if output_format == "excel":
+                # Excel returns bytes, write in binary mode
+                output_path.write_bytes(output_data)  # type: ignore[arg-type]
+            else:
+                # Other formats return str, write in text mode
+                output_path.write_text(output_data, encoding="utf-8")  # type: ignore[arg-type]
             console.print(f"[green]✓ Analytics report saved to {output}[/green]")
         else:
             console.print("\n" + "=" * 80)
-            console.print(output_text)
+            console.print(output_data)
             console.print("=" * 80)
 
     except Exception as e:

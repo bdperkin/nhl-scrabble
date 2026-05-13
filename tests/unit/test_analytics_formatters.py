@@ -1,11 +1,25 @@
 """Unit tests for analytics formatters."""
 
 import json
+import xml.etree.ElementTree as ET
+from io import BytesIO
+from pathlib import Path
 
 import pytest
 
 from nhl_scrabble.analytics.analyzer import CoverageGap, TestPerformance
-from nhl_scrabble.analytics.formatters import HTMLFormatter, JSONFormatter, TextFormatter
+from nhl_scrabble.analytics.formatters import (
+    CSVFormatter,
+    ExcelFormatter,
+    HTMLFormatter,
+    JSONFormatter,
+    MarkdownFormatter,
+    TableFormatter,
+    TemplateFormatter,
+    TextFormatter,
+    XMLFormatter,
+    YAMLFormatter,
+)
 
 
 class TestTextFormatter:
@@ -625,3 +639,642 @@ class TestHTMLFormatter:
         assert "<!DOCTYPE html>" in result
         assert "<h1>Test Analytics Report</h1>" in result
         assert "</html>" in result
+
+
+class TestYAMLFormatter:
+    """Tests for YAMLFormatter class."""
+
+    @pytest.fixture
+    def formatter(self) -> YAMLFormatter:
+        """Create YAMLFormatter instance."""
+        return YAMLFormatter()
+
+    @pytest.fixture
+    def sample_gaps(self) -> list[CoverageGap]:
+        """Create sample coverage gaps."""
+        return [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+    @pytest.fixture
+    def sample_tests(self) -> list[TestPerformance]:
+        """Create sample test performance data."""
+        return [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+    def test_format_coverage_gaps(
+        self,
+        formatter: YAMLFormatter,
+        sample_gaps: list[CoverageGap],
+    ) -> None:
+        """Test YAML formatting of coverage gaps."""
+        data = {"coverage_gaps": sample_gaps}
+        result = formatter.format(data)
+
+        # Parse YAML and verify structure
+        import yaml
+
+        parsed = yaml.safe_load(result)
+
+        assert "coverage_gaps" in parsed
+        assert len(parsed["coverage_gaps"]) == 1
+        assert parsed["coverage_gaps"][0]["module"] == "src/api/client.py"
+        assert parsed["coverage_gaps"][0]["current_coverage"] == 85.5
+        assert parsed["coverage_gaps"][0]["priority"] == "high"
+
+    def test_format_slow_tests(
+        self,
+        formatter: YAMLFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test YAML formatting of slow tests."""
+        data = {"slow_tests": sample_tests}
+        result = formatter.format(data)
+
+        import yaml
+
+        parsed = yaml.safe_load(result)
+
+        assert "slow_tests" in parsed
+        assert len(parsed["slow_tests"]) == 1
+        assert parsed["slow_tests"][0]["test_name"] == "test_api_fetch"
+        assert parsed["slow_tests"][0]["avg_duration"] == 2.45
+
+    def test_format_empty_data(
+        self,
+        formatter: YAMLFormatter,
+    ) -> None:
+        """Test YAML formatting with empty data."""
+        data = {}
+        result = formatter.format(data)
+
+        assert result == "{}\n"
+
+
+class TestXMLFormatter:
+    """Tests for XMLFormatter class."""
+
+    @pytest.fixture
+    def formatter(self) -> XMLFormatter:
+        """Create XMLFormatter instance."""
+        return XMLFormatter()
+
+    @pytest.fixture
+    def sample_gaps(self) -> list[CoverageGap]:
+        """Create sample coverage gaps."""
+        return [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+    @pytest.fixture
+    def sample_tests(self) -> list[TestPerformance]:
+        """Create sample test performance data."""
+        return [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+    def test_format_coverage_gaps(
+        self,
+        formatter: XMLFormatter,
+        sample_gaps: list[CoverageGap],
+    ) -> None:
+        """Test XML formatting of coverage gaps."""
+        data = {"coverage_gaps": sample_gaps}
+        result = formatter.format(data)
+
+        # Parse XML and verify structure
+        root = ET.fromstring(result)  # noqa: S314  # parsing our own generated XML, not untrusted data
+
+        assert root.tag == "test_analytics"
+        gaps = root.find("coverage_gaps")
+        assert gaps is not None
+        assert len(gaps.findall("gap")) == 1
+
+        gap = gaps.find("gap")
+        assert gap is not None
+        assert gap.find("module").text == "src/api/client.py"  # type: ignore[union-attr]
+        assert gap.find("current_coverage").text == "85.5"  # type: ignore[union-attr]
+        assert gap.find("priority").text == "high"  # type: ignore[union-attr]
+
+    def test_format_slow_tests(
+        self,
+        formatter: XMLFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test XML formatting of slow tests."""
+        data = {"slow_tests": sample_tests}
+        result = formatter.format(data)
+
+        root = ET.fromstring(result)  # noqa: S314  # parsing our own generated XML, not untrusted data
+        tests = root.find("slow_tests")
+        assert tests is not None
+        assert len(tests.findall("test")) == 1
+
+    def test_format_empty_data(
+        self,
+        formatter: XMLFormatter,
+    ) -> None:
+        """Test XML formatting with empty data."""
+        data = {}
+        result = formatter.format(data)
+
+        root = ET.fromstring(result)  # noqa: S314  # parsing our own generated XML, not untrusted data
+        assert root.tag == "test_analytics"
+        # Should have no child elements
+        assert len(list(root)) == 0
+
+
+class TestTableFormatter:
+    """Tests for TableFormatter class."""
+
+    @pytest.fixture
+    def formatter(self) -> TableFormatter:
+        """Create TableFormatter instance."""
+        return TableFormatter()
+
+    @pytest.fixture
+    def sample_gaps(self) -> list[CoverageGap]:
+        """Create sample coverage gaps."""
+        return [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+    @pytest.fixture
+    def sample_tests(self) -> list[TestPerformance]:
+        """Create sample test performance data."""
+        return [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+    def test_format_coverage_gaps(
+        self,
+        formatter: TableFormatter,
+        sample_gaps: list[CoverageGap],
+    ) -> None:
+        """Test table formatting of coverage gaps."""
+        data = {"coverage_gaps": sample_gaps}
+        result = formatter.format(data)
+
+        assert "Coverage Gaps" in result
+        assert "src/api/client.py" in result
+        assert "85.5%" in result
+        assert "HIGH" in result
+        assert "+" in result  # Grid table borders
+
+    def test_format_slow_tests(
+        self,
+        formatter: TableFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test table formatting of slow tests."""
+        data = {"slow_tests": sample_tests}
+        result = formatter.format(data)
+
+        assert "Slowest Tests" in result
+        assert "test_api_fetch" in result
+        assert "2.45s" in result
+
+    def test_format_empty_data(
+        self,
+        formatter: TableFormatter,
+    ) -> None:
+        """Test table formatting with empty data."""
+        data = {}
+        result = formatter.format(data)
+
+        # Empty string expected
+        assert result == ""
+
+
+class TestMarkdownFormatter:
+    """Tests for MarkdownFormatter class."""
+
+    @pytest.fixture
+    def formatter(self) -> MarkdownFormatter:
+        """Create MarkdownFormatter instance."""
+        return MarkdownFormatter()
+
+    @pytest.fixture
+    def sample_gaps(self) -> list[CoverageGap]:
+        """Create sample coverage gaps."""
+        return [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+    @pytest.fixture
+    def sample_tests(self) -> list[TestPerformance]:
+        """Create sample test performance data."""
+        return [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+    def test_format_coverage_gaps(
+        self,
+        formatter: MarkdownFormatter,
+        sample_gaps: list[CoverageGap],
+    ) -> None:
+        """Test markdown formatting of coverage gaps."""
+        data = {"coverage_gaps": sample_gaps}
+        result = formatter.format(data)
+
+        assert "# Test Analytics Report" in result
+        assert "## Coverage Gaps" in result
+        assert "| Module |" in result
+        assert "src/api/client.py" in result
+        assert "85.5%" in result
+        assert "HIGH" in result
+
+    def test_format_slow_tests(
+        self,
+        formatter: MarkdownFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test markdown formatting of slow tests."""
+        data = {"slow_tests": sample_tests}
+        result = formatter.format(data)
+
+        assert "## Slowest Tests" in result
+        assert "test_api_fetch" in result
+        assert "2.45s" in result
+
+    def test_format_trends(
+        self,
+        formatter: MarkdownFormatter,
+    ) -> None:
+        """Test markdown formatting of coverage trends."""
+        data = {
+            "coverage_trend": "improving",
+            "coverage_history": [
+                {"coverage": 90.0, "timestamp": "2026-05-01"},
+                {"coverage": 85.0, "timestamp": "2026-04-01"},
+            ],
+        }
+        result = formatter.format(data)
+
+        assert "## Coverage Trends" in result
+        assert "📈" in result
+        assert "IMPROVING" in result
+        assert "90.0%" in result
+
+    def test_format_empty_data(
+        self,
+        formatter: MarkdownFormatter,
+    ) -> None:
+        """Test markdown formatting with empty data."""
+        data = {}
+        result = formatter.format(data)
+
+        assert "# Test Analytics Report" in result
+
+
+class TestCSVFormatter:
+    """Tests for CSVFormatter class."""
+
+    @pytest.fixture
+    def formatter(self) -> CSVFormatter:
+        """Create CSVFormatter instance."""
+        return CSVFormatter()
+
+    @pytest.fixture
+    def sample_gaps(self) -> list[CoverageGap]:
+        """Create sample coverage gaps."""
+        return [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+    @pytest.fixture
+    def sample_tests(self) -> list[TestPerformance]:
+        """Create sample test performance data."""
+        return [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+    def test_format_coverage_gaps(
+        self,
+        formatter: CSVFormatter,
+        sample_gaps: list[CoverageGap],
+    ) -> None:
+        """Test CSV formatting of coverage gaps."""
+        data = {"coverage_gaps": sample_gaps}
+        result = formatter.format(data)
+
+        lines = result.strip().split("\n")
+
+        # Check header
+        assert "section" in lines[0]
+        assert "module" in lines[0]
+
+        # Check data
+        assert "coverage_gaps" in lines[1]
+        assert "src/api/client.py" in lines[1]
+        assert "85.5" in lines[1]
+
+    def test_format_slow_tests(
+        self,
+        formatter: CSVFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test CSV formatting of slow tests."""
+        data = {"slow_tests": sample_tests}
+        result = formatter.format(data)
+
+        lines = result.strip().split("\n")
+
+        # Check data
+        assert "slow_tests" in lines[1]
+        assert "test_api_fetch" in lines[1]
+        assert "2.45" in lines[1]
+
+    def test_format_empty_data(
+        self,
+        formatter: CSVFormatter,
+    ) -> None:
+        """Test CSV formatting with empty data."""
+        data = {}
+        result = formatter.format(data)
+
+        lines = result.strip().split("\n")
+        # Should only have header
+        assert len(lines) == 1
+        assert "section" in lines[0]
+
+
+class TestExcelFormatter:
+    """Tests for ExcelFormatter class."""
+
+    @pytest.fixture
+    def formatter(self) -> ExcelFormatter:
+        """Create ExcelFormatter instance."""
+        return ExcelFormatter()
+
+    @pytest.fixture
+    def sample_gaps(self) -> list[CoverageGap]:
+        """Create sample coverage gaps."""
+        return [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+    @pytest.fixture
+    def sample_tests(self) -> list[TestPerformance]:
+        """Create sample test performance data."""
+        return [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+    def test_format_coverage_gaps(
+        self,
+        formatter: ExcelFormatter,
+        sample_gaps: list[CoverageGap],
+    ) -> None:
+        """Test Excel formatting of coverage gaps."""
+        data = {"coverage_gaps": sample_gaps}
+        result = formatter.format(data)
+
+        # Verify binary output
+        assert isinstance(result, bytes)
+        assert len(result) > 0
+
+        # Parse Excel and verify structure
+        import openpyxl
+
+        wb = openpyxl.load_workbook(BytesIO(result))
+        assert "Coverage Gaps" in wb.sheetnames
+
+        ws = wb["Coverage Gaps"]
+        assert ws["A1"].value == "Module"
+        assert ws["A2"].value == "src/api/client.py"
+        assert ws["B2"].value == 85.5
+
+    def test_format_slow_tests(
+        self,
+        formatter: ExcelFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test Excel formatting of slow tests."""
+        data = {"slow_tests": sample_tests}
+        result = formatter.format(data)
+
+        import openpyxl
+
+        wb = openpyxl.load_workbook(BytesIO(result))
+        assert "Slow Tests" in wb.sheetnames
+
+        ws = wb["Slow Tests"]
+        assert ws["A1"].value == "Test"
+        assert ws["A2"].value == "test_api_fetch"
+
+    def test_format_multiple_sheets(
+        self,
+        formatter: ExcelFormatter,
+        sample_gaps: list[CoverageGap],
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test Excel formatting with multiple sheets."""
+        data = {
+            "coverage_gaps": sample_gaps,
+            "slow_tests": sample_tests,
+            "flaky_tests": sample_tests,
+        }
+        result = formatter.format(data)
+
+        import openpyxl
+
+        wb = openpyxl.load_workbook(BytesIO(result))
+        assert "Coverage Gaps" in wb.sheetnames
+        assert "Slow Tests" in wb.sheetnames
+        assert "Flaky Tests" in wb.sheetnames
+
+    def test_format_empty_data(
+        self,
+        formatter: ExcelFormatter,
+    ) -> None:
+        """Test Excel formatting with empty data."""
+        data = {}
+        result = formatter.format(data)
+
+        # Should still produce a valid Excel file
+        assert isinstance(result, bytes)
+        assert len(result) > 0
+
+
+class TestTemplateFormatter:
+    """Tests for TemplateFormatter class."""
+
+    def test_format_with_template(
+        self,
+        tmp_path: Path,
+    ) -> None:
+        """Test template formatting with custom template."""
+        template_file = tmp_path / "template.j2"
+        template_file.write_text(
+            "Gaps: {{ coverage_gaps|length }}\n" "Trend: {{ coverage_trend }}",
+        )
+
+        sample_gaps = [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+        formatter = TemplateFormatter(str(template_file))
+        data = {"coverage_gaps": sample_gaps, "coverage_trend": "improving"}
+        result = formatter.format(data)
+
+        assert "Gaps: 1" in result
+        assert "Trend: improving" in result
+
+    def test_format_without_template(
+        self,
+    ) -> None:
+        """Test template formatter requires template path."""
+        formatter = TemplateFormatter()
+        data = {"coverage_gaps": []}
+
+        with pytest.raises(ValueError, match="Template path required"):
+            formatter.format(data)
+
+    def test_format_with_timestamp(
+        self,
+        tmp_path: Path,
+    ) -> None:
+        """Test template includes timestamp."""
+        template_file = tmp_path / "template.j2"
+        template_file.write_text("Time: {{ timestamp }}")
+
+        formatter = TemplateFormatter(str(template_file))
+        result = formatter.format({})
+
+        assert "Time: " in result
+        # Should have ISO format timestamp
+        assert "T" in result  # ISO format separator
+
+    def test_format_with_all_data(
+        self,
+        tmp_path: Path,
+    ) -> None:
+        """Test template with all data types."""
+        template_file = tmp_path / "template.j2"
+        template_file.write_text(
+            "{% if coverage_gaps %}Gaps{% endif %}\n"
+            "{% if slow_tests %}Slow{% endif %}\n"
+            "{% if flaky_tests %}Flaky{% endif %}\n"
+            "{% if coverage_trend %}Trend{% endif %}",
+        )
+
+        sample_gaps = [
+            CoverageGap(
+                module="src/api/client.py",
+                current_coverage=85.5,
+                target_coverage=90.0,
+                lines_needed=12,
+                priority="high",
+            ),
+        ]
+
+        sample_tests = [
+            TestPerformance(
+                test_name="test_api_fetch",
+                avg_duration=2.45,
+                max_duration=3.21,
+                min_duration=1.89,
+                failure_rate=0.05,
+                flakiness_score=0.123,
+            ),
+        ]
+
+        formatter = TemplateFormatter(str(template_file))
+        data = {
+            "coverage_gaps": sample_gaps,
+            "slow_tests": sample_tests,
+            "flaky_tests": sample_tests,
+            "coverage_trend": "improving",
+        }
+        result = formatter.format(data)
+
+        assert "Gaps" in result
+        assert "Slow" in result
+        assert "Flaky" in result
+        assert "Trend" in result
