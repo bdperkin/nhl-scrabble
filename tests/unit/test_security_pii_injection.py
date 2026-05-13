@@ -2,8 +2,6 @@
 
 import logging
 
-import pytest
-
 from nhl_scrabble.security import SensitiveDataFilter, sanitize_for_logging
 
 
@@ -352,8 +350,6 @@ class TestSensitiveDataFilter:
 
 
 class TestSanitizeForLogging:
-
-
     """Tests for sanitize_for_logging function (prevents log injection)."""
 
     def test_normal_text_unchanged(self) -> None:
