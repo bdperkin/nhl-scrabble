@@ -117,7 +117,7 @@ async def positions_page(request: Request) -> HTMLResponse:
         # Build entity data with positions for auto-linking
         entity_data = _build_entity_data(data)
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -151,12 +151,14 @@ async def positions_page(request: Request) -> HTMLResponse:
 @router.get("/positions/{position_type}", response_class=HTMLResponse)
 async def position_type_page(
     request: Request,
-    position_type: str) -> HTMLResponse:
+    position_type: str,
+) -> HTMLResponse:
     """Serve the position type page with all players from that position type.
 
     Args:
         request: FastAPI request object
         position_type: Position type (e.g., "Forward", "Defense", "Goalie")
+
     Returns:
         Rendered position_type.html template with position type data
 
@@ -229,7 +231,7 @@ async def position_type_page(
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -266,12 +268,14 @@ async def position_type_page(
 @router.get("/positions/detail/{position_code}", response_class=HTMLResponse)
 async def position_detail_page(
     request: Request,
-    position_code: str) -> HTMLResponse:
+    position_code: str,
+) -> HTMLResponse:
     """Serve the position detail page with all players at that specific position.
 
     Args:
         request: FastAPI request object
         position_code: Position code (e.g., "C", "L", "R", "D", "G")
+
     Returns:
         Rendered position_detail.html template with position data
 
@@ -348,7 +352,7 @@ async def position_detail_page(
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(

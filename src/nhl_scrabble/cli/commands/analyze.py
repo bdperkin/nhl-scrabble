@@ -167,7 +167,7 @@ console = Console()
     help=_("Display locale (e.g., fr_CA for Canadian French)"),
 )
 @click.help_option("-h", "--help")
-def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
+def analyze(  # noqa: C901, PLR0912, PLR0913, PLR0915  # CLI function with many parameters/statements
     output_format: str,
     output: str | None,
     template: str | None,
@@ -459,7 +459,7 @@ def analyze(  # noqa: PLR0912, PLR0913, PLR0915  # CLI function with many parame
                 _("\n[green]✓[/green] Report saved to: {output}").format(output=validated_output),
             )
         elif isinstance(result, str):
-            print(result)
+            print(result)  # noqa: T201
         else:
             console.print(
                 _("\n[yellow]⚠[/yellow] CSV/Excel formats require --output option"),

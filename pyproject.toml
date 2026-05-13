@@ -446,10 +446,13 @@ per-file-ignores = [
     "tests/*:S101",
     "src/nhl_scrabble/api/nhl_client.py:C901",
     "src/nhl_scrabble/api_server/routes/players.py:C901",
-    "src/nhl_scrabble/validators.py:C901",
+    "src/nhl_scrabble/cli/commands/dashboard.py:C901",
     "src/nhl_scrabble/cli.py:TC003,C901",
     "src/nhl_scrabble/config_validators.py:C901",
+    "src/nhl_scrabble/validators.py:C901",
     "src/nhl_scrabble/web/app.py:C901",
+    "src/nhl_scrabble/web/fixtures.py:C901",
+    "src/nhl_scrabble/web/routes/players.py:C901",
     "scripts/update_dependencies.py:C901",
 ]
 max-complexity = 10

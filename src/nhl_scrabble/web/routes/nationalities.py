@@ -117,7 +117,7 @@ async def nationalities_page(request: Request) -> HTMLResponse:
             {"name": str(ns["nationality"])} for ns in nationality_standings
         ]
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -150,12 +150,14 @@ async def nationalities_page(request: Request) -> HTMLResponse:
 @router.get("/nationalities/{nationality_name}", response_class=HTMLResponse)
 async def nationality_detail_page(
     request: Request,
-    nationality_name: str) -> HTMLResponse:
+    nationality_name: str,
+) -> HTMLResponse:
     """Serve the nationality detail page with all players from that nationality.
 
     Args:
         request: FastAPI request object
         nationality_name: Name of the nationality (e.g., "Canada", "United States")
+
     Returns:
         Rendered nationality_detail.html template with nationality data
 
@@ -222,7 +224,7 @@ async def nationality_detail_page(
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(

@@ -147,7 +147,7 @@ def fetch_dashboard_data(
     help=_("Filter by conference (Eastern or Western)"),
 )
 @click.help_option("-h", "--help")
-def dashboard(
+def dashboard(  # CLI function with conditional logic
     verbose: bool,
     quiet: bool,
     no_cache: bool,

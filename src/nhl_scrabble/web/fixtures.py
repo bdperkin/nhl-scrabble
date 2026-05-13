@@ -1,7 +1,7 @@
 """Fixture data loading for test mode.
 
-This module provides utilities to load and process NHL API fixture data from JSON files
-when the application is running in TEST_MODE.
+This module provides utilities to load and process NHL API fixture data from JSON files when the
+application is running in TEST_MODE.
 """
 
 from __future__ import annotations

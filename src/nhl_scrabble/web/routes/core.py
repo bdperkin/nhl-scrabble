@@ -107,7 +107,7 @@ async def root(request: Request) -> HTMLResponse:
     if templates is None:
         raise HTTPException(status_code=500, detail="Templates not configured")
 
-    from nhl_scrabble.web.locale import setup_template_locale
+    from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
     context = setup_template_locale(request, templates)
     return templates.TemplateResponse(
@@ -118,7 +118,7 @@ async def root(request: Request) -> HTMLResponse:
 
 
 @router.post("/api/analyze", response_model=AnalysisResponse)
-async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: PLR0915
+async def analyze_post(request: AnalysisRequest) -> dict[str, Any]:  # noqa: C901, PLR0912, PLR0915
     """Run NHL Scrabble analysis.
 
     Fetches current NHL roster data, calculates Scrabble scores for all players,

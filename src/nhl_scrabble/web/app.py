@@ -122,7 +122,7 @@ if TEMPLATES_DIR.exists():
 app.state.templates = templates
 
 # Register all routes
-from nhl_scrabble.web.routes import register_routes
+from nhl_scrabble.web.routes import register_routes  # noqa: E402 - Avoid circular imports
 
 register_routes(app, templates)
 

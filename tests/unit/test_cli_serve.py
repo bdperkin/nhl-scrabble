@@ -19,6 +19,7 @@ from nhl_scrabble.cli import cli
 if TYPE_CHECKING:
     from pathlib import Path
 
+
 class TestServeCommand:
     """Test serve command implementation."""
 

@@ -276,7 +276,6 @@ class NHLApiClient:
             )
             raise NHLApiError(f"Request blocked by security protection: {e}") from e
 
-
     def _is_url_cached(self, url: str) -> bool:
         """Check if a URL response is cached and not expired.
 

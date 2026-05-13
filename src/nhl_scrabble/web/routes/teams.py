@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 import operator
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import HTMLResponse
@@ -55,7 +55,7 @@ async def teams_page(request: Request) -> HTMLResponse:
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -81,14 +81,16 @@ async def teams_page(request: Request) -> HTMLResponse:
 
 
 @router.get("/teams/{team_abbrev}", response_class=HTMLResponse)
-async def team_detail_page(
+async def team_detail_page(  # noqa: C901  # Route handler with team roster processing
     request: Request,
-    team_abbrev: str) -> HTMLResponse:
+    team_abbrev: str,
+) -> HTMLResponse:
     """Serve a team detail page with player rankings and team logo.
 
     Args:
         request: FastAPI request object
         team_abbrev: Team abbreviation (e.g., 'TOR', 'MTL', 'BOS')
+
     Returns:
         Rendered team_detail.html template with team data
 
@@ -195,7 +197,7 @@ async def team_detail_page(
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(

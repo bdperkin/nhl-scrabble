@@ -195,7 +195,7 @@ def generate_search_json(
     help=_("Filter by conference name (Eastern or Western)"),
 )
 @click.help_option("-h", "--help")
-def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and parameters
+def search(  # noqa: C901, PLR0912, PLR0913  # CLI function with many branches and parameters
     query: str | None,
     fuzzy: bool,
     limit: int,
@@ -344,7 +344,7 @@ def search(  # noqa: PLR0912, PLR0913  # CLI function with many branches and par
                 if not quiet:
                     console.print(f"\n[green]✓[/green] Results saved to: {output}")
             else:
-                print(output_text)
+                print(output_text)  # noqa: T201
 
             if not quiet:
                 console.print("\n" + "=" * 80)

@@ -53,7 +53,7 @@ async def divisions_page(request: Request) -> HTMLResponse:
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -81,12 +81,14 @@ async def divisions_page(request: Request) -> HTMLResponse:
 @router.get("/divisions/{division_name}", response_class=HTMLResponse)
 async def division_detail_page(
     request: Request,
-    division_name: str) -> HTMLResponse:
+    division_name: str,
+) -> HTMLResponse:
     """Serve the division detail page with team standings and top players.
 
     Args:
         request: FastAPI request object
         division_name: Name of the division (e.g., "Atlantic", "Metropolitan")
+
     Returns:
         Rendered division_detail.html template with division data
 
@@ -158,7 +160,7 @@ async def division_detail_page(
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
