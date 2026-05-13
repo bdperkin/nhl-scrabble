@@ -81,7 +81,7 @@ cli/
     ├── dashboard.py    # Statistics dashboard
     ├── watch.py        # Auto-refresh watch mode
     ├── interactive_cmd.py  # Interactive shell launcher
-    └── test_analytics.py   # Coverage analytics
+    └── analytics.py        # Coverage analytics
 ```
 
 **Benefits**: Each command is self-contained, easier to test and maintain independently.

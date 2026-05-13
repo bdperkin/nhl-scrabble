@@ -14,6 +14,7 @@ from __future__ import annotations
 import click
 
 from nhl_scrabble import __version__
+from nhl_scrabble.cli.commands.analytics import test_analytics
 
 # Import commands
 from nhl_scrabble.cli.commands.analyze import analyze
@@ -21,7 +22,6 @@ from nhl_scrabble.cli.commands.dashboard import dashboard
 from nhl_scrabble.cli.commands.interactive_cmd import interactive
 from nhl_scrabble.cli.commands.search import search
 from nhl_scrabble.cli.commands.serve import serve
-from nhl_scrabble.cli.commands.test_analytics import test_analytics
 from nhl_scrabble.cli.commands.watch import watch
 
 # Import utilities for public API
