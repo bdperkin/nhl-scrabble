@@ -18,8 +18,6 @@ from click.testing import CliRunner
 from nhl_scrabble.cli import cli, validate_cli_arguments, validate_output_path
 
 
-
-
 class TestGenerateFunctions:
     """Tests for report generation functions."""
 
@@ -85,7 +83,7 @@ class TestGenerateFunctions:
 
     def test_generate_search_text(self) -> None:
         """Test search text generation."""
-        from nhl_scrabble.cli import generate_search_text
+        from nhl_scrabble.cli.commands.search import generate_search_text
         from nhl_scrabble.models.player import PlayerScore
 
         players = [
@@ -118,7 +116,7 @@ class TestGenerateFunctions:
 
     def test_generate_search_text_fuzzy(self) -> None:
         """Test search text generation with fuzzy matching."""
-        from nhl_scrabble.cli import generate_search_text
+        from nhl_scrabble.cli.commands.search import generate_search_text
 
         result = generate_search_text(
             results=[],
@@ -137,7 +135,7 @@ class TestGenerateFunctions:
 
     def test_generate_search_json(self) -> None:
         """Test search JSON generation."""
-        from nhl_scrabble.cli import generate_search_json
+        from nhl_scrabble.cli.commands.search import generate_search_json
         from nhl_scrabble.models.player import PlayerScore
 
         players = [

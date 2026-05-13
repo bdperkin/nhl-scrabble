@@ -18,8 +18,6 @@ from click.testing import CliRunner
 from nhl_scrabble.cli import cli, validate_cli_arguments, validate_output_path
 
 
-
-
 class TestAPIClientSessionCleanup:
     """Tests for API client session cleanup using context manager."""
 
@@ -127,7 +125,7 @@ class TestAPIClientSessionCleanup:
 
         Ensures dashboard data fetching also properly closes API client sessions.
         """
-        from nhl_scrabble.cli import fetch_dashboard_data
+        from nhl_scrabble.cli.commands.dashboard import fetch_dashboard_data
         from nhl_scrabble.config import Config
 
         # Create mock api_client with context manager support

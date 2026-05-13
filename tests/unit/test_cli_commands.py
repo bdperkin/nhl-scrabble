@@ -14,7 +14,8 @@ from unittest.mock import MagicMock, patch
 from click.testing import CliRunner
 
 # CRITICAL: Import cli module directly to ensure coverage
-from nhl_scrabble.cli import _interruptible_sleep, cli
+from nhl_scrabble.cli import cli
+from nhl_scrabble.cli.commands.watch import _interruptible_sleep
 
 
 class TestInterruptibleSleep:

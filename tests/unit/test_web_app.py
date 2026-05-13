@@ -219,7 +219,7 @@ class TestHealthEndpoint:
         # Run async function
         import asyncio
 
-        from nhl_scrabble.web.app import health
+        from nhl_scrabble.web.routes.core import health
 
         result = asyncio.run(health())
 
