@@ -939,8 +939,162 @@ This implementation provides a foundation for:
 
 ## Implementation Notes
 
-*To be filled during implementation:*
-- Actual approach taken
-- Challenges encountered
-- Deviations from plan
-- Actual effort vs estimated
+**Implemented**: 2026-05-13
+**Branch**: enhancement/051-test-analytics-output-formats
+**PR**: #608 - https://github.com/bdperkin/nhl-scrabble/pull/608
+**Commits**: 3 commits (c8d6f3a, 2f2e5f1, 8a4b9c3)
+
+### Actual Implementation
+
+Followed the proposed solution closely with one significant architectural change:
+
+#### File Size Refactoring
+
+The initial implementation created a single 38KB `formatters.py` file containing all 10 formatter classes, which exceeded the project's 20KB file size limit enforced by the `check_file_size.sh` pre-commit hook.
+
+**Refactored to modular structure**:
+- Split `src/nhl_scrabble/analytics/formatters.py` (38KB) into 11 separate modules:
+  - `formatters/__init__.py` (1.2KB) - Re-exports for backward compatibility
+  - `formatters/csv_formatter.py` (2.7KB)
+  - `formatters/excel_formatter.py` (4.7KB)
+  - `formatters/html_formatter.py` (6.4KB)
+  - `formatters/json_formatter.py` (2.3KB)
+  - `formatters/markdown_formatter.py` (3.5KB)
+  - `formatters/table_formatter.py` (2.9KB)
+  - `formatters/template_formatter.py` (4.1KB)
+  - `formatters/text_formatter.py` (6.3KB)
+  - `formatters/xml_formatter.py` (2.6KB)
+  - `formatters/yaml_formatter.py` (2.9KB)
+
+- Split `tests/unit/test_analytics_formatters.py` (38KB) into 10 separate test files:
+  - `test_csv_formatter.py` (2.0KB)
+  - `test_excel_formatter.py` (2.7KB)
+  - `test_html_formatter.py` (2.5KB)
+  - `test_json_formatter.py` (2.1KB)
+  - `test_markdown_formatter.py` (2.4KB)
+  - `test_table_formatter.py` (2.0KB)
+  - `test_template_formatter.py` (2.7KB)
+  - `test_text_formatter.py` (5.7KB)
+  - `test_xml_formatter.py` (2.4KB)
+  - `test_yaml_formatter.py` (2.2KB)
+
+**Benefits of refactored structure**:
+- Better code organization and maintainability
+- Easier to locate and modify specific formatters
+- Faster IDE navigation and search
+- Cleaner git history for formatter-specific changes
+- All files now well under 20KB limit (largest is 6.4KB)
+
+#### Dependencies
+
+Added 4 new dependencies to `pyproject.toml` `export` optional dependency group:
+- `PyYAML>=6.0.2` - YAML formatter
+- `tabulate>=0.9.0` - Table formatter
+- `openpyxl>=3.1.5` - Excel formatter
+- `Jinja2>=3.1.4` - Template formatter
+
+Used lazy imports (`import` inside methods) for all optional dependencies to avoid hard requirements.
+
+#### Type Safety
+
+Added type hints throughout and resolved mypy errors:
+- ExcelFormatter returns `bytes` instead of `str` for binary Excel workbook
+- Added `# type: ignore[attr-defined]` for formatter protocol usage in CLI
+- All formatters properly typed with return type annotations
+
+#### Security
+
+Implemented security best practices:
+- Jinja2 templates use `autoescape=select_autoescape()` to prevent XSS
+- XML parsing uses stdlib ElementTree (no XXE vulnerability)
+- Template path validation via Click's `Path(exists=True, dir_okay=False)`
+- All user data properly escaped in formatters
+
+### Challenges Encountered
+
+1. **File Size Enforcement**
+   - Initial commit exceeded 20KB limit for formatters.py and test file
+   - Required complete refactoring into modular structure
+   - Learned to check file sizes proactively during implementation
+
+2. **Pre-commit Hook Iterations**
+   - Multiple rounds of linting fixes (PLC0415, PERF401, C901, etc.)
+   - Added noqa comments with justifications for unavoidable complexity
+   - Bash script linting required modernizing test syntax and quoting
+
+3. **Git Workflow**
+   - Remote contained work not in local branch
+   - Required `git pull --rebase` to resolve
+   - Learned to check remote state before pushing
+
+4. **Type Checking**
+   - Formatter protocol inference issues in mypy
+   - Resolved with targeted `# type: ignore[attr-defined]` comments
+   - Maintained strict type checking elsewhere
+
+### Deviations from Plan
+
+**Minor deviations**:
+
+1. **Module Structure**: Refactored from single file to multi-module package
+   - **Why**: File size enforcement requirement
+   - **Impact**: Better than original plan, improved maintainability
+
+2. **Dependencies in Optional Group**: Placed new dependencies in `export` optional group instead of main dependencies
+   - **Why**: Avoids forcing all users to install formatting libraries they may not use
+   - **Impact**: Users must `pip install nhl-scrabble[export]` to use new formats
+
+3. **Enhanced Error Messages**: Added detailed error messages for missing dependencies
+   - **Why**: Better user experience when optional deps not installed
+   - **Impact**: Clearer guidance for users
+
+### Actual vs Estimated Effort
+
+- **Estimated**: 8-12 hours
+- **Actual**: ~10 hours (within estimate)
+- **Breakdown**:
+  - Initial implementation: 4 hours
+  - File size refactoring: 2 hours
+  - Pre-commit hook fixes: 2 hours
+  - Git workflow resolution: 1 hour
+  - Type checking fixes: 1 hour
+
+### Related PRs
+
+- #608 - Main implementation
+
+### Testing
+
+**Unit Tests**: 54 total tests across 10 test files
+- All formatters have comprehensive test coverage
+- Tests for success cases, empty data, edge cases
+- Excel and template format error handling tested
+
+**Integration Tests**: 8 new integration tests
+- All 10 formats tested end-to-end
+- File output validation for each format
+- Error cases (Excel without --output, template without --template)
+
+**Coverage**: Maintained >90% coverage (currently 90.21%)
+
+### Pre-Flight Validation
+
+**Pre-commit Hooks**: All 87 hooks passing ✅
+- File quality, Python quality, type checking, formatters, linters
+- Bash script quality (12 hooks)
+- Documentation validation
+
+**Mypy**: All type checks passing ✅
+
+**Pytest**: All 1,722 tests passing ✅
+- Including 54 new formatter tests
+
+**Tox**: Validation completed with disk space issues resolved
+
+### Lessons Learned
+
+1. **Proactive File Size Monitoring**: Check file sizes during implementation, not at commit time
+2. **Modular Architecture**: Breaking large files into focused modules improves maintainability
+3. **Optional Dependencies**: Use lazy imports and optional dependency groups for format-specific libraries
+4. **Pre-commit Hooks**: Understand hook requirements before writing code (Bash modernization, noqa placement)
+5. **Git Workflow**: Always check remote state before pushing, especially with team collaboration

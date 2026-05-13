@@ -610,6 +610,7 @@ repos:
         additional_dependencies:
           - types-requests
           - types-PyYAML
+          - types-tabulate
           - pydantic
           - pydantic-settings
           - rich
@@ -617,6 +618,7 @@ repos:
           - fastapi
           - starlette
           - uvicorn
+          - tabulate
         args: []  # Config is in pyproject.toml
         exclude: ^(qa|tests|scripts)/  # Exclude QA, tests, and utility scripts
 
