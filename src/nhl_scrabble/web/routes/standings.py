@@ -52,7 +52,7 @@ async def league_page(request: Request) -> HTMLResponse:
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -110,7 +110,7 @@ async def playoffs_page(request: Request) -> HTMLResponse:
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(
@@ -163,7 +163,7 @@ async def stats_page(request: Request) -> HTMLResponse:
         timestamp_date = format_date(timestamp_dt.date(), format="long")
         timestamp_time = format_time(timestamp_dt, format="short") + " UTC"
 
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(

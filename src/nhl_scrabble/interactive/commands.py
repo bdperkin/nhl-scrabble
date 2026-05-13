@@ -21,16 +21,16 @@ _ = get_translator()
 class CommandHandler:
     """Handles command execution for interactive shell."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         data: dict[str, Any],
         console: Console,
-        find_team_fn: Any,
-        find_player_fn: Any,
-        fetch_data_fn: Any,
-        display_team_fn: Any,
-        display_player_fn: Any,
-        display_team_list_fn: Any,
+        find_team_fn: Any,  # noqa: ANN401
+        find_player_fn: Any,  # noqa: ANN401
+        fetch_data_fn: Any,  # noqa: ANN401
+        display_team_fn: Any,  # noqa: ANN401
+        display_player_fn: Any,  # noqa: ANN401
+        display_team_list_fn: Any,  # noqa: ANN401
     ) -> None:
         """Initialize command handler.
 

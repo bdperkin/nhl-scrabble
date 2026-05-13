@@ -219,7 +219,7 @@ class InteractiveShell:
                     f"{', '.join(failed_teams)}[/yellow]",
                 )
 
-    def run(self) -> None:  # noqa: C901, PLR0912
+    def run(self) -> None:  # noqa: C901, PLR0912, PLR0915
         """Run interactive shell."""
         self.console.print(f"\n[bold cyan]{_('NHL Scrabble Interactive Mode')}[/bold cyan]")
         self.console.print(f"{_('Type')} [yellow]'help'[/yellow] {_('for available commands')}")
@@ -448,7 +448,7 @@ class InteractiveShell:
                 f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
             )
 
-    def cmd_refresh(self, args: list[str]) -> None:
+    def cmd_refresh(self, args: list[str]) -> None:  # noqa: ARG002
         """Re-fetch data from NHL API (proxy to command handler).
 
         Args:
@@ -468,7 +468,7 @@ class InteractiveShell:
         else:
             self._show_basic_help()
 
-    def get_completer(self) -> Any:
+    def get_completer(self) -> Any:  # noqa: ANN401
         """Get command completer with team/player names (proxy to completion module).
 
         Returns:

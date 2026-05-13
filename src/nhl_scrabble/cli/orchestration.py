@@ -63,7 +63,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
         NHLApiError: If there are issues fetching data from NHL API
     """
     # Import generate_excel_report locally to avoid circular imports
-    from nhl_scrabble.cli.excel import generate_excel_report
+    from nhl_scrabble.cli.excel import generate_excel_report  # noqa: PLC0415
 
     # Create dependency container
     container = DependencyContainer(config)
@@ -114,7 +114,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
 
         # Apply filters if specified
         if filters and filters.is_active():
-            from nhl_scrabble.filters import (
+            from nhl_scrabble.filters import (  # noqa: PLC0415
                 filter_conference_standings,
                 filter_division_standings,
                 filter_players,
@@ -165,7 +165,7 @@ def run_analysis(  # noqa: PLR0913  # Complex analysis orchestration function wi
             return report_generator.get_report(report_filter)
 
         # For all other formats, use the formatter factory
-        from nhl_scrabble.formatters import get_formatter
+        from nhl_scrabble.formatters import get_formatter  # noqa: PLC0415
 
         # Prepare data dictionary for formatters
         teams_data = {

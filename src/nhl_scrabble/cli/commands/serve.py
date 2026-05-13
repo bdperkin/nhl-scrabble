@@ -70,7 +70,7 @@ def serve(host: str, port: int, reload: bool, log_file: Path | None, verbose: bo
         $ nhl-scrabble serve --host 0.0.0.0 --port 5000 --reload --log-file logs/dev.log
     """
     try:
-        import uvicorn
+        import uvicorn  # noqa: PLC0415
     except ImportError:
         click.echo(
             "Error: uvicorn not installed. Install with: pip install nhl-scrabble[web]",
@@ -110,7 +110,7 @@ def serve(host: str, port: int, reload: bool, log_file: Path | None, verbose: bo
         )
     else:
         # Import here to avoid loading FastAPI when not needed
-        from nhl_scrabble.web.app import app
+        from nhl_scrabble.web.app import app  # noqa: PLC0415
 
         uvicorn.run(
             app,

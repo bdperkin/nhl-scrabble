@@ -98,9 +98,13 @@ def test_analytics(  # noqa: PLR0913, PLR0915  # CLI function with many options 
       Combine multiple analyses:
         $ nhl-scrabble test-analytics --show-gaps --show-slow-tests
     """
-    from nhl_scrabble.analytics.analyzer import TestAnalyzer
-    from nhl_scrabble.analytics.codecov_client import CodecovClient, CodecovConfig
-    from nhl_scrabble.analytics.formatters import HTMLFormatter, JSONFormatter, TextFormatter
+    from nhl_scrabble.analytics.analyzer import TestAnalyzer  # noqa: PLC0415
+    from nhl_scrabble.analytics.codecov_client import CodecovClient, CodecovConfig  # noqa: PLC0415
+    from nhl_scrabble.analytics.formatters import (  # noqa: PLC0415
+        HTMLFormatter,
+        JSONFormatter,
+        TextFormatter,
+    )
 
     # Load configuration from environment
     config = CodecovConfig.from_env()

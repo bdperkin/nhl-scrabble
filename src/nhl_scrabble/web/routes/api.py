@@ -67,7 +67,7 @@ async def analyze_get(
 
     if is_htmx and templates is not None:
         # Return HTML fragment for HTMX
-        from nhl_scrabble.web.locale import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
         context = setup_template_locale(request, templates)
         context.update(

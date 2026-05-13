@@ -59,7 +59,7 @@ def interactive(no_fetch: bool, verbose: bool, no_cache: bool) -> None:
         $ nhl-scrabble interactive --no-fetch --verbose
         $ nhl-scrabble interactive --no-fetch --no-cache
     """
-    from nhl_scrabble.interactive import InteractiveShell
+    from nhl_scrabble.interactive import InteractiveShell  # noqa: PLC0415
 
     # Load configuration
     try:
