@@ -9,7 +9,7 @@ import logging
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
 from nhl_scrabble.api import NHLApiClient, NHLApiError
@@ -20,7 +20,7 @@ from nhl_scrabble.web.converters import _build_entity_data
 from nhl_scrabble.web.routes.core import AnalysisRequest, analyze_post
 
 if TYPE_CHECKING:
-    from fastapi import Request
+    pass
 
 logger = logging.getLogger(__name__)
 
