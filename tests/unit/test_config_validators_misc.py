@@ -16,6 +16,7 @@ from nhl_scrabble.config_validators import (
     validate_url,
 )
 
+
 class TestValidateSafePath:
     """Test path validation with traversal and injection protection."""
 

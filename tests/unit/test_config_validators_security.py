@@ -16,6 +16,7 @@ from nhl_scrabble.config_validators import (
     validate_url,
 )
 
+
 class TestInjectionScenarios:
     """Test comprehensive injection attack scenarios."""
 

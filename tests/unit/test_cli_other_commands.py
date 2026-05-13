@@ -18,8 +18,6 @@ from click.testing import CliRunner
 from nhl_scrabble.cli import cli, validate_cli_arguments, validate_output_path
 
 
-
-
 class TestOtherCommands:
     """Tests for other CLI commands."""
 

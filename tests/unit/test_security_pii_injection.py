@@ -7,8 +7,6 @@ import pytest
 from nhl_scrabble.security import SensitiveDataFilter, sanitize_for_logging
 
 
-
-
 class TestSensitiveDataFilter:
     """Tests for SensitiveDataFilter class (PII protection)."""
 

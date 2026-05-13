@@ -9,6 +9,8 @@ from unittest.mock import patch
 import colorlog
 
 from nhl_scrabble.logging_config import JSONFormatter, setup_logging
+
+
 class TestFileLogging:
     """Tests for file logging functionality."""
 

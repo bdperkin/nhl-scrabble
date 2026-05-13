@@ -17,7 +17,6 @@ from nhl_scrabble.validators import (
 )
 
 
-
 class TestValidateUrl:
     """Tests for validate_url()."""
 
