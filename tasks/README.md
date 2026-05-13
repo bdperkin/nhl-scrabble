@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 245 tasks (26 active, 219 completed)
+**Total Tasks**: 245 tasks (25 active, 220 completed)
 
 ## Overview
 
@@ -105,7 +105,7 @@ Each task includes:
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour (actual: ~25 minutes) | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | PR [#464](https://github.com/bdperkin/nhl-scrabble/pull/464), completed 2026-04-29 |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
 | 044 | Implement Mocked API Data for Visual Regression Tests | LOW | 6-8 hours (actual: ~6h) | Completed | [#476](https://github.com/bdperkin/nhl-scrabble/issues/476) | PR [#479](https://github.com/bdperkin/nhl-scrabble/pull/479), completed 2026-05-02 |
-| 045 | Add Country Flag Icons to Locale Dropdown | LOW | 2-3 hours | Active | [#507](https://github.com/bdperkin/nhl-scrabble/issues/507) | - |
+| 045 | Add Country Flag Icons to Locale Dropdown | LOW | 2-3 hours (actual: ~2.5h) | Completed | [#507](https://github.com/bdperkin/nhl-scrabble/issues/507) | PR [#611](https://github.com/bdperkin/nhl-scrabble/pull/611), completed 2026-05-13 |
 | 046 | Native Speaker Review of French Canadian (fr_CA) Translations | MEDIUM | 3-4 hours | Active | [#509](https://github.com/bdperkin/nhl-scrabble/issues/509) | - |
 | 047 | Native Speaker Review of Swedish (sv_SE) Translations | MEDIUM | 3-4 hours | Active | [#510](https://github.com/bdperkin/nhl-scrabble/issues/510) | - |
 | 048 | Locale-Aware Date and Time Formatting | MEDIUM | 3-4 hours (actual: ~3.5h) | Completed | [#511](https://github.com/bdperkin/nhl-scrabble/issues/511) | PR [#585](https://github.com/bdperkin/nhl-scrabble/pull/585), completed 2026-05-12 |

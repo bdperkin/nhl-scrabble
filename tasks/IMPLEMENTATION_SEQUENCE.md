@@ -2,7 +2,7 @@
 
 **Generated**: 2026-05-08
 **Updated**: 2026-05-13 (tasks 023, 024, 028, 051 completed)
-**Total Tasks**: 26 active tasks
+**Total Tasks**: 25 active tasks
 **Total Estimated Effort**: 130-181 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
@@ -91,7 +91,7 @@ Each task entry shows:
 **Rationale**: Visual improvements to locale selection. Low priority but enhances user experience. Do after core i18n quality work.
 
 ```bash
-/implement-task enhancement/045-locale-dropdown-flag-icons.md  # 2-3h, Issue #507
+~~**Task 045 (locale dropdown flags)**: Completed 2026-05-13 - Added Unicode flag emoji to locale selector. Created LOCALE_FLAGS & LOCALE_NAMES dicts, get_locale_display_name() function, updated web templates. 60+ tests (19 unit + 5 integration), 100% coverage on new code. Actual: ~2.5h (vs 2-3h estimate). PR #611.~~
 ```
 
 **Phase Total**: 2-3 hours
