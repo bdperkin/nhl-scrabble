@@ -106,10 +106,10 @@ def mock_playoff_standings() -> dict[str, list[PlayoffTeam]]:
 class TestRunAnalysisBasics:
     """Test basic run_analysis() function behavior."""
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
-    @patch("nhl_scrabble.cli.ReportGenerator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.ReportGenerator")
     def test_run_analysis_basic_text_format(
         self,
         mock_report_gen: MagicMock,
@@ -153,9 +153,9 @@ class TestRunAnalysisBasics:
         mock_api_client.get_teams.assert_called_once()
         mock_team_processor.process_all_teams.assert_called_once()
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
     def test_run_analysis_clear_cache(
         self,
         mock_playoff_calc: MagicMock,
@@ -182,16 +182,16 @@ class TestRunAnalysisBasics:
         mock_playoff_calc.return_value.calculate_playoff_standings.return_value = {}
 
         # Run analysis with clear_cache
-        with patch("nhl_scrabble.cli.ReportGenerator") as mock_report_gen:
+        with patch("nhl_scrabble.cli.orchestration.ReportGenerator") as mock_report_gen:
             mock_report_gen.return_value.get_report.return_value = "Test"
             run_analysis(mock_config, clear_cache=True, quiet=True)
 
         # Verify cache was cleared
         mock_api_client.clear_cache.assert_called_once()
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
     def test_run_analysis_with_season(
         self,
         mock_playoff_calc: MagicMock,
@@ -218,7 +218,7 @@ class TestRunAnalysisBasics:
         mock_playoff_calc.return_value.calculate_playoff_standings.return_value = {}
 
         # Run analysis with specific season
-        with patch("nhl_scrabble.cli.ReportGenerator") as mock_report_gen:
+        with patch("nhl_scrabble.cli.orchestration.ReportGenerator") as mock_report_gen:
             mock_report_gen.return_value.get_report.return_value = "Test"
             run_analysis(mock_config, season="20222023", quiet=True)
 

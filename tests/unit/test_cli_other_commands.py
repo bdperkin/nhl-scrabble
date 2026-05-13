@@ -159,7 +159,7 @@ class TestOtherCommands:
         assert result.exit_code == 0
         assert "dashboard" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.StatisticsDashboard")
+    @patch("nhl_scrabble.cli.commands.dashboard.StatisticsDashboard")
     @patch("nhl_scrabble.di.TeamProcessor")
     @patch("nhl_scrabble.di.NHLApiClient")
     def test_dashboard_basic(

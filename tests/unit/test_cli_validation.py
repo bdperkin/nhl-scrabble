@@ -41,7 +41,7 @@ class TestCLIBasics:
 class TestAnalyzeCommand:
     """Tests for the analyze command."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_default_options(self, mock_run: MagicMock) -> None:
         """Test analyze with default options."""
         mock_run.return_value = "Test output"
@@ -50,7 +50,7 @@ class TestAnalyzeCommand:
         assert result.exit_code == 0
         mock_run.assert_called_once()
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_verbose_mode(self, mock_run: MagicMock) -> None:
         """Test analyze with verbose logging."""
         mock_run.return_value = "Test output"
@@ -58,7 +58,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--verbose"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_quiet_mode(self, mock_run: MagicMock) -> None:
         """Test analyze with quiet mode."""
         mock_run.return_value = "Test output"
@@ -66,7 +66,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--quiet"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_custom_player_counts(self, mock_run: MagicMock) -> None:
         """Test analyze with custom player count options."""
         mock_run.return_value = "Test output"
@@ -74,7 +74,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--top-players", "50", "--top-team-players", "10"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_json_format_stdout(self, mock_run: MagicMock) -> None:
         """Test JSON format output to stdout."""
         mock_run.return_value = '{"teams": []}'
@@ -82,7 +82,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--format", "json"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_csv_format_to_file(self, mock_run: MagicMock, tmp_path: Path) -> None:
         """Test CSV format output to file."""
         output_file = tmp_path / "output.csv"
@@ -93,7 +93,7 @@ class TestAnalyzeCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_excel_format_to_file(self, mock_run: MagicMock, tmp_path: Path) -> None:
         """Test Excel format output to file."""
         output_file = tmp_path / "output.xlsx"
@@ -143,7 +143,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--top-players", "10000"])
         assert result.exit_code != 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_filters(self, mock_run: MagicMock) -> None:
         """Test analyze with division/conference/team filters."""
         mock_run.return_value = "Test output"
@@ -168,7 +168,7 @@ class TestAnalyzeCommand:
         )
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_specific_report(self, mock_run: MagicMock) -> None:
         """Test analyze with specific report filter."""
         mock_run.return_value = "Test output"
@@ -176,7 +176,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--report", "team"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_season(self, mock_run: MagicMock) -> None:
         """Test analyze with specific season."""
         mock_run.return_value = "Test output"
@@ -184,7 +184,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--season", "20222023"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_no_cache(self, mock_run: MagicMock) -> None:
         """Test analyze with --no-cache flag."""
         mock_run.return_value = "Test output"
@@ -192,7 +192,7 @@ class TestAnalyzeCommand:
         result = runner.invoke(cli, ["analyze", "--no-cache"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_clear_cache(self, mock_run: MagicMock) -> None:
         """Test analyze with --clear-cache flag."""
         mock_run.return_value = "Test output"

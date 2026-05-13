@@ -81,3 +81,38 @@ def sample_team_score(sample_player: PlayerScore) -> TeamScore:
         division="Pacific",
         conference="Western",
     )
+
+
+@pytest.fixture
+def mock_config() -> Any:
+    """Return a mock Config object for testing."""
+    from unittest.mock import MagicMock
+
+    from nhl_scrabble.config import Config
+
+    config = MagicMock(spec=Config)
+    config.output_format = "text"
+    config.api_timeout = 30
+    config.api_retries = 3
+    config.rate_limit_delay = 0.3
+    config.verbose = False
+    config.sanitize_logs = False
+    config.top_players_count = 20
+    config.top_team_players_count = 5
+    return config
+
+
+@pytest.fixture
+def mock_team_scores(sample_team_score: TeamScore) -> dict[str, TeamScore]:
+    """Return a dictionary of mock TeamScore objects for testing."""
+    return {
+        "EDM": sample_team_score,
+        "TOR": TeamScore(
+            abbrev="TOR",
+            name="Toronto Maple Leafs",
+            total=95,
+            players=[],
+            division="Atlantic",
+            conference="Eastern",
+        ),
+    }

@@ -100,12 +100,10 @@ class TestLocaleDetection:
 class TestTemplateLocaleSetup:
     """Test template locale setup with translations."""
 
-    @patch("nhl_scrabble.web.app.templates")
-    @patch("nhl_scrabble.web.app.gettext.translation")
+    @patch("nhl_scrabble.web.locale.gettext.translation")
     def test_setup_template_locale_success(
         self,
         mock_translation: MagicMock,
-        mock_templates: MagicMock,
     ) -> None:
         """Test successful template locale setup."""
         request = MagicMock(spec=Request)
@@ -114,9 +112,11 @@ class TestTemplateLocaleSetup:
 
         mock_trans = MagicMock()
         mock_translation.return_value = mock_trans
+
+        mock_templates = MagicMock()
         mock_templates.env = MagicMock()
 
-        context = setup_template_locale(request)
+        context = setup_template_locale(request, mock_templates)
 
         assert context["locale"] == "fr_CA"
         assert context["request"] == request
@@ -124,12 +124,10 @@ class TestTemplateLocaleSetup:
         assert context["get_locale"]() == "fr_CA"
         assert context["SUPPORTED_LOCALES"] is not None
 
-    @patch("nhl_scrabble.web.app.templates")
-    @patch("nhl_scrabble.web.app.gettext.translation")
+    @patch("nhl_scrabble.web.locale.gettext.translation")
     def test_setup_template_locale_file_not_found(
         self,
         mock_translation: MagicMock,
-        mock_templates: MagicMock,
     ) -> None:
         """Test template locale setup when .mo file not found."""
         request = MagicMock(spec=Request)
@@ -138,17 +136,18 @@ class TestTemplateLocaleSetup:
 
         # Simulate FileNotFoundError when .mo file doesn't exist
         mock_translation.side_effect = FileNotFoundError("Translation file not found")
+
+        mock_templates = MagicMock()
         mock_templates.env = MagicMock()
 
         # Should not raise, should fall back gracefully
-        context = setup_template_locale(request)
+        context = setup_template_locale(request, mock_templates)
 
         # Should still return valid context
         assert context["locale"] == "en_US"
         assert "request" in context
         assert callable(context["get_locale"])
 
-    @patch("nhl_scrabble.web.app.templates", None)
     def test_setup_template_locale_no_templates(self) -> None:
         """Test template locale setup when templates not initialized."""
         request = MagicMock(spec=Request)
@@ -156,7 +155,7 @@ class TestTemplateLocaleSetup:
         request.headers.get.return_value = ""
 
         # Should not raise even if templates is None
-        context = setup_template_locale(request)
+        context = setup_template_locale(request, None)
 
         assert context["locale"] == "en_US"
 
@@ -164,9 +163,9 @@ class TestTemplateLocaleSetup:
 class TestFixtureDataLoading:
     """Test fixture data loading for TEST_MODE."""
 
-    @patch("nhl_scrabble.web.app.json.load")
-    @patch("nhl_scrabble.web.app.Path.open")
-    @patch("nhl_scrabble.web.app.Path.exists")
+    @patch("nhl_scrabble.web.fixtures.json.load")
+    @patch("nhl_scrabble.web.fixtures.Path.open")
+    @patch("nhl_scrabble.web.fixtures.Path.exists")
     def test_load_fixture_data_success(
         self,
         mock_exists: MagicMock,
@@ -193,7 +192,7 @@ class TestFixtureDataLoading:
         assert isinstance(rosters, dict)
         assert "standings" in standings
 
-    @patch("nhl_scrabble.web.app.Path.exists")
+    @patch("nhl_scrabble.web.fixtures.Path.exists")
     def test_load_fixture_data_directory_not_found(self, mock_exists: MagicMock) -> None:
         """Test fixture data loading when directory not found."""
         # Mock all paths as not existing
@@ -280,9 +279,9 @@ class TestSecurityHeaders:
 class TestFixtureLoadingErrorPaths:
     """Test fixture loading error handling."""
 
-    @patch("nhl_scrabble.web.app.json.load")
-    @patch("nhl_scrabble.web.app.Path.open")
-    @patch("nhl_scrabble.web.app.Path.exists")
+    @patch("nhl_scrabble.web.fixtures.json.load")
+    @patch("nhl_scrabble.web.fixtures.Path.open")
+    @patch("nhl_scrabble.web.fixtures.Path.exists")
     def test_load_fixture_invalid_standings_json(
         self,
         mock_exists: MagicMock,
@@ -299,9 +298,9 @@ class TestFixtureLoadingErrorPaths:
         with pytest.raises(json.JSONDecodeError):
             _load_fixture_data()
 
-    @patch("nhl_scrabble.web.app.json.load")
-    @patch("nhl_scrabble.web.app.Path.open")
-    @patch("nhl_scrabble.web.app.Path.exists")
+    @patch("nhl_scrabble.web.fixtures.json.load")
+    @patch("nhl_scrabble.web.fixtures.Path.open")
+    @patch("nhl_scrabble.web.fixtures.Path.exists")
     def test_load_fixture_invalid_rosters_json(
         self,
         mock_exists: MagicMock,

@@ -7,18 +7,14 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import TYPE_CHECKING
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
 from nhl_scrabble.api import NHLApiError
 from nhl_scrabble.i18n import format_date, format_time
 from nhl_scrabble.web.converters import _build_entity_data
 from nhl_scrabble.web.routes.core import AnalysisRequest, analyze_post
-
-if TYPE_CHECKING:
-    from fastapi import Request
 
 logger = logging.getLogger(__name__)
 

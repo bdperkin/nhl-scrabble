@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 class TestServeCommand:
     """Test serve command implementation."""
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.serve.Config")
     def test_serve_basic_execution(
         self,
         mock_config_class: MagicMock,
@@ -44,7 +44,7 @@ class TestServeCommand:
             assert result.exit_code == 0
             assert mock_uvicorn.run.called
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.serve.Config")
     def test_serve_with_custom_host_port(
         self,
         mock_config_class: MagicMock,
@@ -71,7 +71,7 @@ class TestServeCommand:
             assert call_kwargs["host"] == "0.0.0.0"  # noqa: S104
             assert call_kwargs["port"] == 5000
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.serve.Config")
     def test_serve_with_reload(
         self,
         mock_config_class: MagicMock,
@@ -96,7 +96,7 @@ class TestServeCommand:
             assert isinstance(call_args[0][0], str)
             assert call_args[1]["reload"] is True
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.serve.Config")
     def test_serve_with_log_file(
         self,
         mock_config_class: MagicMock,
@@ -118,7 +118,7 @@ class TestServeCommand:
 
             assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.serve.Config")
     def test_serve_with_verbose(
         self,
         mock_config_class: MagicMock,
@@ -147,7 +147,7 @@ class TestServeCommand:
             # Should abort when uvicorn not available
             assert result.exit_code != 0
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.serve.Config")
     def test_serve_config_validation_error(self, mock_config_class: MagicMock) -> None:
         """Test serve handles config validation errors."""
         mock_config_class.from_env.side_effect = ValueError("Invalid config")

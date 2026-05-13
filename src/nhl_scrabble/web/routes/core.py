@@ -10,9 +10,9 @@ import logging
 import operator
 import os
 from datetime import UTC, datetime, timedelta
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
@@ -26,9 +26,6 @@ from nhl_scrabble.web.converters import (
     _group_teams_by_grouping,
 )
 from nhl_scrabble.web.fixtures import _process_fixture_data
-
-if TYPE_CHECKING:
-    from fastapi import Request
 
 logger = logging.getLogger(__name__)
 

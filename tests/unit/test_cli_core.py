@@ -136,7 +136,7 @@ class TestOutputPathValidation:
         # Should not raise during validation (will fail on write later)
         validate_output_path(str(tmp_path))
 
-    @patch("nhl_scrabble.cli.logger")
+    @patch("nhl_scrabble.cli.validators.logger")
     def test_validate_output_path_warns_on_overwrite(
         self,
         mock_logger: MagicMock,
@@ -178,7 +178,7 @@ class TestCLIArgumentsValidation:
         assert isinstance(result, Path)
         assert result == output_path
 
-    @patch("nhl_scrabble.cli.validate_file_path")
+    @patch("nhl_scrabble.cli.validators.validate_file_path")
     def test_validate_cli_arguments_validation_error(
         self,
         mock_validate: MagicMock,
@@ -191,7 +191,7 @@ class TestCLIArgumentsValidation:
 
         assert "Invalid path" in str(exc_info.value)
 
-    @patch("nhl_scrabble.cli.validate_file_path")
+    @patch("nhl_scrabble.cli.validators.validate_file_path")
     def test_validate_cli_arguments_calls_validator(
         self,
         mock_validate: MagicMock,
@@ -217,14 +217,13 @@ class TestCLIHelperFunctions:
         assert hasattr(cli_module, "cli")
         assert hasattr(cli_module, "validate_output_path")
         assert hasattr(cli_module, "validate_cli_arguments")
-        assert hasattr(cli_module, "console")
-        assert hasattr(cli_module, "logger")
+        assert hasattr(cli_module, "run_analysis")
 
     def test_cli_module_constants(self) -> None:
         """Test module-level constants are defined."""
-        # Verify console and logger are initialized
-        assert cli_module.console is not None
-        assert cli_module.logger is not None
+        # Verify cli group is initialized
+        assert cli_module.cli is not None
+        assert callable(cli_module.cli)
 
     def test_cli_module_has_version(self) -> None:
         """Test module imports version correctly."""

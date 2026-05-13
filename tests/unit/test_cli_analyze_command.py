@@ -67,8 +67,8 @@ class TestAnalyzeCommandValidation:
         assert result.exit_code != 0
         assert "requires --template" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli.ScoringConfig")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.ScoringConfig")
     def test_analyze_with_custom_scoring_config(
         self,
         mock_scoring_config: MagicMock,
@@ -108,7 +108,7 @@ class TestAnalyzeCommandValidation:
         # Click validates path existence
         assert result.exit_code != 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_wordle_scoring(self, mock_run: MagicMock) -> None:
         """Test analyze with built-in wordle scoring system."""
         mock_run.return_value = "Test output"
@@ -119,7 +119,7 @@ class TestAnalyzeCommandValidation:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_uniform_scoring(self, mock_run: MagicMock) -> None:
         """Test analyze with built-in uniform scoring system."""
         mock_run.return_value = "Test output"
@@ -134,7 +134,7 @@ class TestAnalyzeCommandValidation:
 class TestAnalyzeCommandOptions:
     """Test analyze command various options."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_locale_option(self, mock_run: MagicMock) -> None:
         """Test analyze with locale option."""
         mock_run.return_value = "Test output"
@@ -145,7 +145,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_divisions_filter(self, mock_run: MagicMock) -> None:
         """Test analyze with divisions filter."""
         mock_run.return_value = "Test output"
@@ -156,7 +156,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_conferences_filter(self, mock_run: MagicMock) -> None:
         """Test analyze with conferences filter."""
         mock_run.return_value = "Test output"
@@ -167,7 +167,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_teams_filter(self, mock_run: MagicMock) -> None:
         """Test analyze with teams filter."""
         mock_run.return_value = "Test output"
@@ -178,7 +178,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_exclude_teams(self, mock_run: MagicMock) -> None:
         """Test analyze with exclude teams option."""
         mock_run.return_value = "Test output"
@@ -189,7 +189,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_countries_filter(self, mock_run: MagicMock) -> None:
         """Test analyze with countries filter."""
         mock_run.return_value = "Test output"
@@ -200,7 +200,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_positions_filter(self, mock_run: MagicMock) -> None:
         """Test analyze with positions filter."""
         mock_run.return_value = "Test output"
@@ -211,7 +211,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_min_max_score(self, mock_run: MagicMock) -> None:
         """Test analyze with min/max score filters."""
         mock_run.return_value = "Test output"
@@ -222,7 +222,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_group_by(self, mock_run: MagicMock) -> None:
         """Test analyze with group-by option."""
         mock_run.return_value = "Test output"
@@ -233,7 +233,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_report_filter(self, mock_run: MagicMock) -> None:
         """Test analyze with specific report filter."""
         mock_run.return_value = "Test output"
@@ -244,7 +244,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_season(self, mock_run: MagicMock) -> None:
         """Test analyze with specific season."""
         mock_run.return_value = "Test output"
@@ -255,7 +255,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_top_players_custom(self, mock_run: MagicMock) -> None:
         """Test analyze with custom top players count."""
         mock_run.return_value = "Test output"
@@ -266,7 +266,7 @@ class TestAnalyzeCommandOptions:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_top_team_players_custom(self, mock_run: MagicMock) -> None:
         """Test analyze with custom top team players count."""
         mock_run.return_value = "Test output"
@@ -281,7 +281,7 @@ class TestAnalyzeCommandOptions:
 class TestAnalyzeCommandOutputHandling:
     """Test analyze command output handling."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_output_file(self, mock_run: MagicMock, tmp_path: Path) -> None:
         """Test analyze writing to output file."""
         output_file = tmp_path / "output.txt"
@@ -294,7 +294,7 @@ class TestAnalyzeCommandOutputHandling:
         assert output_file.exists()
         assert "Test report" in output_file.read_text()
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_invalid_output_path(self, mock_run: MagicMock) -> None:
         """Test analyze with invalid output path."""
         runner = CliRunner()
@@ -303,7 +303,7 @@ class TestAnalyzeCommandOutputHandling:
         assert result.exit_code != 0
         assert "does not exist" in result.output.lower() or "error" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_verbose_flag(self, mock_run: MagicMock) -> None:
         """Test analyze with verbose logging."""
         mock_run.return_value = "Test output"
@@ -314,7 +314,7 @@ class TestAnalyzeCommandOutputHandling:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_quiet_flag(self, mock_run: MagicMock) -> None:
         """Test analyze with quiet mode."""
         mock_run.return_value = "Test output"
@@ -325,7 +325,7 @@ class TestAnalyzeCommandOutputHandling:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_clear_cache_flag(self, mock_run: MagicMock) -> None:
         """Test analyze with clear cache flag."""
         mock_run.return_value = "Test output"
@@ -339,7 +339,7 @@ class TestAnalyzeCommandOutputHandling:
         call_kwargs = mock_run.call_args[1]
         assert call_kwargs["clear_cache"] is True
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_with_no_cache_flag(self, mock_run: MagicMock) -> None:
         """Test analyze with no-cache flag."""
         mock_run.return_value = "Test output"
@@ -354,7 +354,7 @@ class TestAnalyzeCommandOutputHandling:
 class TestAnalyzeCommandErrorHandling:
     """Test analyze command error handling."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_handles_api_error(self, mock_run: MagicMock) -> None:
         """Test analyze handles API errors gracefully."""
         from nhl_scrabble.api.nhl_client import NHLApiError
@@ -367,7 +367,7 @@ class TestAnalyzeCommandErrorHandling:
         assert result.exit_code != 0
         assert "error" in result.output.lower() or "api" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_analyze_handles_generic_exception(self, mock_run: MagicMock) -> None:
         """Test analyze handles generic exceptions."""
         mock_run.side_effect = Exception("Unexpected error")

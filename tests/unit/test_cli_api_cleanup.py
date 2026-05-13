@@ -16,9 +16,9 @@ from nhl_scrabble.cli import cli
 class TestAPIClientSessionCleanup:
     """Tests for API client session cleanup using context manager."""
 
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ReportGenerator")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ReportGenerator")
     def test_run_analysis_uses_api_client_context_manager(
         self,
         mock_report_gen: MagicMock,
@@ -77,7 +77,7 @@ class TestAPIClientSessionCleanup:
         # Verify result
         assert result == "Test Report"
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
     def test_search_command_uses_api_client_context_manager(
         self,
         mock_container_class: MagicMock,
@@ -111,7 +111,7 @@ class TestAPIClientSessionCleanup:
         mock_api_client.__enter__.assert_called_once()
         mock_api_client.__exit__.assert_called_once()
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.dashboard.DependencyContainer")
     def test_fetch_dashboard_data_uses_api_client_context_manager(
         self,
         mock_container_class: MagicMock,

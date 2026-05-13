@@ -23,10 +23,10 @@ if TYPE_CHECKING:
 class TestSearchCommand:
     """Test search command implementation."""
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_text")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_text")
     def test_search_basic_execution(
         self,
         mock_gen_text: MagicMock,
@@ -66,10 +66,10 @@ class TestSearchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_json")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_json")
     def test_search_json_format(
         self,
         mock_gen_json: MagicMock,
@@ -107,10 +107,10 @@ class TestSearchCommand:
         assert result.exit_code == 0
         assert mock_gen_json.called
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_text")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_text")
     def test_search_with_query(
         self,
         mock_gen_text: MagicMock,
@@ -149,10 +149,10 @@ class TestSearchCommand:
         # Verify search was called with query
         mock_search.search.assert_called_once()
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_text")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_text")
     def test_search_with_fuzzy_matching(
         self,
         mock_gen_text: MagicMock,
@@ -189,10 +189,10 @@ class TestSearchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_text")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_text")
     def test_search_with_score_filters(
         self,
         mock_gen_text: MagicMock,
@@ -229,10 +229,10 @@ class TestSearchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_text")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_text")
     def test_search_with_limit(
         self,
         mock_gen_text: MagicMock,
@@ -271,10 +271,10 @@ class TestSearchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
-    @patch("nhl_scrabble.cli.generate_search_text")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.generate_search_text")
     def test_search_with_output_file(
         self,
         mock_gen_text: MagicMock,
@@ -315,8 +315,8 @@ class TestSearchCommand:
         assert output_file.exists()
         assert "Search results content" in output_file.read_text()
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
     def test_search_handles_api_error(
         self,
         mock_container_class: MagicMock,
@@ -347,7 +347,7 @@ class TestSearchCommand:
         assert result.exit_code == 1
         assert "error" in result.output.lower() or "api" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.Config")
+    @patch("nhl_scrabble.cli.commands.search.Config")
     def test_search_config_validation_error(self, mock_config_class: MagicMock) -> None:
         """Test search handles config validation errors."""
         mock_config_class.from_env.side_effect = ValueError("Invalid config")
@@ -358,9 +358,9 @@ class TestSearchCommand:
         assert result.exit_code != 0
         assert "configuration error" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.Config")
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.PlayerSearch")
+    @patch("nhl_scrabble.cli.commands.search.Config")
+    @patch("nhl_scrabble.cli.commands.search.DependencyContainer")
+    @patch("nhl_scrabble.cli.commands.search.PlayerSearch")
     def test_search_with_quiet_mode(
         self,
         mock_search_class: MagicMock,

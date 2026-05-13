@@ -8,9 +8,8 @@ from __future__ import annotations
 import logging
 import operator
 from datetime import datetime
-from typing import TYPE_CHECKING
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
 from nhl_scrabble.api import NHLApiError
@@ -19,9 +18,6 @@ from nhl_scrabble.models.player import PlayerScore
 from nhl_scrabble.processors import calculate_group_statistics, group_by_nationality
 from nhl_scrabble.web.converters import _build_entity_data
 from nhl_scrabble.web.routes.core import AnalysisRequest, analyze_post
-
-if TYPE_CHECKING:
-    from fastapi import Request
 
 logger = logging.getLogger(__name__)
 

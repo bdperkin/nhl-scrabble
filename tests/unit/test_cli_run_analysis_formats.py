@@ -26,9 +26,9 @@ if TYPE_CHECKING:
 class TestRunAnalysisOutputFormats:
     """Test run_analysis() with different output formats."""
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
     @patch("nhl_scrabble.formatters.get_formatter")  # Patch in formatters module
     def test_run_analysis_json_format(
         self,
@@ -69,10 +69,10 @@ class TestRunAnalysisOutputFormats:
         assert result == '{"teams": []}'
         mock_get_formatter.assert_called_once_with("json")
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
-    @patch("nhl_scrabble.cli.generate_excel_report")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.excel.generate_excel_report")
     def test_run_analysis_excel_format(
         self,
         mock_excel: MagicMock,
@@ -110,9 +110,9 @@ class TestRunAnalysisOutputFormats:
         assert result is None
         mock_excel.assert_called_once()
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
     def test_run_analysis_excel_without_output_raises(
         self,
         mock_playoff_calc: MagicMock,
@@ -148,10 +148,10 @@ class TestRunAnalysisOutputFormats:
 class TestRunAnalysisWithFilters:
     """Test run_analysis() with filters applied."""
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
-    @patch("nhl_scrabble.cli.ReportGenerator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.ReportGenerator")
     @patch("nhl_scrabble.filters.filter_teams")  # Patch in filters module
     @patch("nhl_scrabble.filters.filter_players")
     @patch("nhl_scrabble.filters.filter_division_standings")
@@ -215,7 +215,7 @@ class TestRunAnalysisWithFilters:
 class TestGenerateExcelReport:
     """Test generate_excel_report() helper function."""
 
-    @patch("nhl_scrabble.cli.ExcelExporter")
+    @patch("nhl_scrabble.cli.excel.ExcelExporter")
     def test_generate_excel_report_basic(
         self,
         mock_exporter_class: MagicMock,
@@ -241,7 +241,7 @@ class TestGenerateExcelReport:
         # Verify exporter was called
         mock_exporter.export_full_report.assert_called_once()
 
-    @patch("nhl_scrabble.cli.ExcelExporter")
+    @patch("nhl_scrabble.cli.excel.ExcelExporter")
     def test_generate_excel_report_import_error(
         self,
         mock_exporter_class: MagicMock,
@@ -269,11 +269,11 @@ class TestGenerateExcelReport:
 class TestRunAnalysisProgressDisplay:
     """Test run_analysis() progress display and logging."""
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
-    @patch("nhl_scrabble.cli.console")
-    @patch("nhl_scrabble.cli.ReportGenerator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.console")
+    @patch("nhl_scrabble.cli.orchestration.ReportGenerator")
     def test_run_analysis_quiet_mode_suppresses_output(
         self,
         mock_report_gen: MagicMock,
@@ -308,11 +308,11 @@ class TestRunAnalysisProgressDisplay:
         # Verify progress manager was created with quiet mode
         mock_progress.assert_called_once_with(enabled=False)
 
-    @patch("nhl_scrabble.cli.DependencyContainer")
-    @patch("nhl_scrabble.cli.ProgressManager")
-    @patch("nhl_scrabble.cli.PlayoffCalculator")
-    @patch("nhl_scrabble.cli.console")
-    @patch("nhl_scrabble.cli.ReportGenerator")
+    @patch("nhl_scrabble.cli.orchestration.DependencyContainer")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.PlayoffCalculator")
+    @patch("nhl_scrabble.cli.orchestration.console")
+    @patch("nhl_scrabble.cli.orchestration.ReportGenerator")
     def test_run_analysis_displays_failed_teams(
         self,
         mock_report_gen: MagicMock,

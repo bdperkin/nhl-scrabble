@@ -59,8 +59,8 @@ class TestCLI:
             "invalid value" in result.output.lower() or "not in the range" in result.output.lower()
         )
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli.time.sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.time.sleep")
     def test_watch_basic_iteration(self, mock_sleep: MagicMock, mock_run: MagicMock) -> None:
         """Test watch mode basic iteration.
 
@@ -90,8 +90,8 @@ class TestCLI:
         # Should display watch mode header
         assert "Watch Mode" in result.output or "watch" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli.signal.signal")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.signal.signal")
     def test_watch_signal_handler(self, mock_signal: MagicMock, mock_run: MagicMock) -> None:
         """Test watch mode registers signal handler."""
         mock_run.side_effect = KeyboardInterrupt

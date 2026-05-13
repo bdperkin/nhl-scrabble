@@ -20,7 +20,7 @@ class TestOutputPathValidation:
         """Test that output to stdout (no --output) works."""
         runner = CliRunner()
 
-        with patch("nhl_scrabble.cli.run_analysis") as mock_run:
+        with patch("nhl_scrabble.cli.commands.analyze.run_analysis") as mock_run:
             mock_run.return_value = "Test report"
 
             result = runner.invoke(cli, ["analyze"])
@@ -88,8 +88,8 @@ class TestOutputPathValidation:
         existing_file.write_text("old content")
 
         with (
-            patch("nhl_scrabble.cli.run_analysis") as mock_run,
-            patch("nhl_scrabble.cli.logger") as mock_logger,
+            patch("nhl_scrabble.cli.commands.analyze.run_analysis") as mock_run,
+            patch("nhl_scrabble.cli.validators.logger") as mock_logger,
         ):
             mock_run.return_value = "new content"
 
@@ -114,7 +114,7 @@ class TestOutputPathValidation:
 
         output_file = tmp_path / "output.txt"
 
-        with patch("nhl_scrabble.cli.run_analysis") as mock_run:
+        with patch("nhl_scrabble.cli.commands.analyze.run_analysis") as mock_run:
             mock_run.return_value = "Test report content"
 
             result = runner.invoke(cli, ["analyze", "--output", str(output_file)])
@@ -127,7 +127,7 @@ class TestOutputPathValidation:
         """Test that validation happens before making API calls."""
         runner = CliRunner()
 
-        with patch("nhl_scrabble.cli.run_analysis") as mock_run:
+        with patch("nhl_scrabble.cli.commands.analyze.run_analysis") as mock_run:
             # Invalid output path
             result = runner.invoke(cli, ["analyze", "--output", "/nonexistent/dir/output.txt"])
 
@@ -142,7 +142,7 @@ class TestOutputPathValidation:
         output_file = tmp_path / "new_file.txt"
         assert not output_file.exists()
 
-        with patch("nhl_scrabble.cli.run_analysis") as mock_run:
+        with patch("nhl_scrabble.cli.commands.analyze.run_analysis") as mock_run:
             mock_run.return_value = "New file content"
 
             result = runner.invoke(cli, ["analyze", "--output", str(output_file)])
@@ -160,7 +160,7 @@ class TestOutputPathValidation:
         os.chdir(tmp_path)
 
         try:
-            with patch("nhl_scrabble.cli.run_analysis") as mock_run:
+            with patch("nhl_scrabble.cli.commands.analyze.run_analysis") as mock_run:
                 mock_run.return_value = "Relative path content"
 
                 result = runner.invoke(cli, ["analyze", "--output", "relative_output.txt"])

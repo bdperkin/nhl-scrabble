@@ -11,7 +11,12 @@ from nhl_scrabble.i18n import SUPPORTED_LOCALES
 @pytest.fixture
 def mock_nhl_client():
     """Mock NHL API client with fixture data."""
-    with patch("nhl_scrabble.web.app.NHLApiClient") as mock_client_class:
+    # Need to patch NHLApiClient in all route modules where it's imported
+    with (
+        patch("nhl_scrabble.web.routes.core.NHLApiClient") as mock_core,
+        patch("nhl_scrabble.web.routes.teams.NHLApiClient") as mock_teams,
+        patch("nhl_scrabble.web.routes.players.NHLApiClient") as mock_players,
+    ):
         mock_client = Mock()
         mock_client.__enter__ = Mock(return_value=mock_client)
         mock_client.__exit__ = Mock(return_value=False)
@@ -34,7 +39,10 @@ def mock_nhl_client():
             "goalies": [],
         }
 
-        mock_client_class.return_value = mock_client
+        # All patches return the same mock client
+        mock_core.return_value = mock_client
+        mock_teams.return_value = mock_client
+        mock_players.return_value = mock_client
         yield mock_client
 
 
@@ -240,7 +248,7 @@ class TestSetupTemplateLocale:
         """Test setup_template_locale returns proper context."""
         from starlette.requests import Request
 
-        from nhl_scrabble.web.app import setup_template_locale
+        from nhl_scrabble.web.locale import setup_template_locale
 
         scope = {
             "type": "http",
@@ -250,7 +258,8 @@ class TestSetupTemplateLocale:
             "headers": [],
         }
         request = Request(scope)
-        context = setup_template_locale(request)
+        # Pass None for templates since we're just testing the context dict
+        context = setup_template_locale(request, None)
 
         assert "request" in context
         assert "locale" in context

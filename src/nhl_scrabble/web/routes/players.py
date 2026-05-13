@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -18,9 +18,6 @@ from nhl_scrabble.security.log_filter import sanitize_for_logging
 from nhl_scrabble.utils.countries import get_country_name
 from nhl_scrabble.web.converters import _build_entity_data
 from nhl_scrabble.web.routes.core import AnalysisRequest, analyze_post
-
-if TYPE_CHECKING:
-    pass
 
 logger = logging.getLogger(__name__)
 
