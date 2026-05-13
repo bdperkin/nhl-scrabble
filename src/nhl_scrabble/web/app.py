@@ -127,5 +127,3 @@ from nhl_scrabble.web.routes import register_routes
 register_routes(app, templates)
 
 __all__ = ["app"]
-# Re-export routes for backward compatibility
-from nhl_scrabble.web.routes.core import health  # noqa: F401

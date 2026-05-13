@@ -61,7 +61,7 @@ def get_request_locale(request: Request) -> str:
     return "en_US"
 
 
-def setup_template_locale(request: Request, templates: Jinja2Templates | None = None) -> dict[str, Any]:
+def setup_template_locale(request: Request, templates: Jinja2Templates | None) -> dict[str, Any]:
     """Set up template context with locale-specific translator.
 
     Args:
