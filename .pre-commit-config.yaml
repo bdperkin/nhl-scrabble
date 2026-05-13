@@ -429,19 +429,24 @@ repos:
     hooks:
       - id: uv-lock
 
-  # Auto-upgrade lock files when dependencies change
+  # Auto-upgrade lock files when dependencies change (local only)
   - repo: local
     hooks:
       - id: upgrade-lock-files
         name: Upgrade UV lock files when dependencies change
         # Automatically upgrades both main and QA web app lock files to latest
-        # compatible versions when pyproject.toml is modified
+        # compatible versions when pyproject.toml is modified (local dev only).
+        # In CI, the hook only validates that lock files are up-to-date.
         description: |
           Upgrade UV lock files to latest compatible versions:
           - Main project: uv.lock
           - QA web app: qa/web/uv.lock
-          Ensures lock files stay current with dependency changes.
-        entry: bash scripts/upgrade_lock_files.sh --upgrade
+          Local: Upgrades lock files when pyproject.toml changes
+          CI: Only validates lock files are current (no modifications)
+        entry: >-
+          bash -c 'if [ -n "${CI:-}" ]; then
+          bash scripts/upgrade_lock_files.sh --check;
+          else bash scripts/upgrade_lock_files.sh --upgrade; fi'
         language: system
         pass_filenames: false
         # Only run when pyproject.toml changes (not lock files themselves)
