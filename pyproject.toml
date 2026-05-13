@@ -124,6 +124,7 @@ type = [
     "ty",
     "types-pyyaml>=6.0.12.20260408",
     "types-requests>=2.33.0.20260408",
+    "types-tabulate>=0.9.0.20240106",
 ]
 security = [
     "bandit[toml]>=1.7.5",
@@ -137,6 +138,7 @@ branding = [
 ]
 export = [
     "openpyxl>=3.1.5",
+    "tabulate>=0.9.0",
 ]
 i18n = [
     "babel>=2.14.0",

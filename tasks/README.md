@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 245 tasks (29 active, 216 completed)
+**Total Tasks**: 245 tasks (28 active, 217 completed)
 
 ## Overview
 
@@ -111,7 +111,7 @@ Each task includes:
 | 048 | Locale-Aware Date and Time Formatting | MEDIUM | 3-4 hours (actual: ~3.5h) | Completed | [#511](https://github.com/bdperkin/nhl-scrabble/issues/511) | PR [#585](https://github.com/bdperkin/nhl-scrabble/pull/585), completed 2026-05-12 |
 | 049 | Set Up Community Translation Platform (Weblate/Crowdin) | LOW | 4-6 hours | Active | [#522](https://github.com/bdperkin/nhl-scrabble/issues/522) | - |
 | 050 | Implement Locale-Specific Scrabble Letter Values | LOW | 8-12 hours | Active | [#523](https://github.com/bdperkin/nhl-scrabble/issues/523) | - |
-| 051 | Extend test-analytics Output Formats | MEDIUM | 8-12 hours | Active | [#601](https://github.com/bdperkin/nhl-scrabble/issues/601) | Add 7 new output formats: yaml, xml, table, markdown, csv, excel, template |
+| 051 | Extend test-analytics Output Formats | MEDIUM | 8-12 hours (actual: ~10h) | Completed | [#601](https://github.com/bdperkin/nhl-scrabble/issues/601) | PR [#608](https://github.com/bdperkin/nhl-scrabble/pull/608), completed 2026-05-13 |
 | 001 | Auto-Link Entity Names Throughout Web Application | MEDIUM | 4-6 hours (actual: ~6h) | Completed | [#545](https://github.com/bdperkin/nhl-scrabble/issues/545) | PR [#564](https://github.com/bdperkin/nhl-scrabble/pull/564), completed 2026-05-10 |
 | 035 | Add Comprehensive Bash Script Quality Tooling | MEDIUM | 6-8 hours (actual: ~7h) | Completed | [#424](https://github.com/bdperkin/nhl-scrabble/issues/424) | PR [#429](https://github.com/bdperkin/nhl-scrabble/pull/429), completed 2026-04-28 |
 | 001 | Implement HTML Output Format | MEDIUM | 4-6 hours (actual: ~4h) | Completed | [#46](https://github.com/bdperkin/nhl-scrabble/issues/46) | PR [#92](https://github.com/bdperkin/nhl-scrabble/pull/92), completed 2026-04-16 |
