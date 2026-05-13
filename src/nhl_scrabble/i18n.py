@@ -88,6 +88,38 @@ DEFAULT_LOCALE = "en_US"
 # Locales directory
 LOCALES_DIR = Path(__file__).parent / "locales"
 
+# Country flag emoji for each locale (Unicode regional indicators)
+LOCALE_FLAGS = {
+    "en_US": "🇺🇸",
+    "en_CA": "🇨🇦",
+    "fr_CA": "🇨🇦",
+    "sv_SE": "🇸🇪",
+    "ru_RU": "🇷🇺",
+    "fi_FI": "🇫🇮",
+    "cs_CZ": "🇨🇿",
+    "de_DE": "🇩🇪",
+    "de_CH": "🇨🇭",
+    "it_CH": "🇨🇭",
+    "sk_SK": "🇸🇰",
+    "lv_LV": "🇱🇻",
+}
+
+# Display names for each locale (in their native language)
+LOCALE_NAMES = {
+    "en_US": "English (US)",
+    "en_CA": "English (Canada)",
+    "fr_CA": "Français (Canada)",
+    "sv_SE": "Svenska (Sweden)",
+    "ru_RU": "Русский (Russia)",
+    "fi_FI": "Suomi (Finland)",
+    "cs_CZ": "Čeština (Czech Republic)",
+    "de_DE": "Deutsch (Germany)",
+    "de_CH": "Deutsch (Switzerland)",
+    "it_CH": "Italiano (Switzerland)",
+    "sk_SK": "Slovenčina (Slovakia)",
+    "lv_LV": "Latviešu (Latvia)",
+}
+
 
 def get_system_locale() -> str:
     """Detect system locale.
@@ -134,6 +166,45 @@ def get_system_locale() -> str:
             locale.setlocale(locale.LC_CTYPE, saved_locale)
 
     return DEFAULT_LOCALE
+
+
+def get_locale_display_name(locale_code: str) -> str:
+    """Get display name with flag emoji for a locale.
+
+    Returns the locale's native name prefixed with its country flag emoji.
+    This is primarily used for displaying locale options in the WebUI dropdown
+    with visual country indicators.
+
+    Args:
+        locale_code: Locale code (e.g., 'en_US', 'fr_CA').
+
+    Returns:
+        Display name with flag emoji (e.g., '🇺🇸 English (US)').
+        Returns the locale code if it's not in LOCALE_NAMES.
+
+    Examples:
+        >>> get_locale_display_name("en_US")
+        '🇺🇸 English (US)'
+
+        >>> get_locale_display_name("fr_CA")
+        '🇨🇦 Français (Canada)'
+
+        >>> get_locale_display_name("sv_SE")
+        '🇸🇪 Svenska (Sweden)'
+
+        >>> get_locale_display_name("unknown")
+        'unknown'
+
+    Notes:
+        - Flag emoji use Unicode regional indicator symbols
+        - Flag rendering depends on OS/browser support
+        - Modern browsers (Chrome 90+, Firefox 88+, Safari 14+) support flag emoji
+        - Fallback to locale code for unknown locales
+        - Flag emoji are 2-4 bytes each (negligible performance impact)
+    """
+    flag = LOCALE_FLAGS.get(locale_code, "")
+    name = LOCALE_NAMES.get(locale_code, locale_code)
+    return f"{flag} {name}" if flag else name
 
 
 def get_translator(locale_code: str | None = None) -> Callable[[str], str]:

@@ -8,7 +8,7 @@ from __future__ import annotations
 import gettext
 from typing import TYPE_CHECKING, Any
 
-from nhl_scrabble.i18n import LOCALES_DIR, SUPPORTED_LOCALES
+from nhl_scrabble.i18n import LOCALES_DIR, SUPPORTED_LOCALES, get_locale_display_name
 
 if TYPE_CHECKING:
     from fastapi import Request
@@ -90,5 +90,6 @@ def setup_template_locale(request: Request, templates: Jinja2Templates | None) -
         "request": request,
         "locale": locale,
         "get_locale": lambda: locale,
+        "get_locale_display_name": get_locale_display_name,
         "SUPPORTED_LOCALES": SUPPORTED_LOCALES,
     }
