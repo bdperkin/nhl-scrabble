@@ -84,7 +84,102 @@ class TestYAMLFormatter:
         formatter: YAMLFormatter,
     ) -> None:
         """Test YAML formatting with empty data."""
-        data = {}
+        from typing import Any
+
+        data: dict[str, Any] = {}
         result = formatter.format(data)
 
         assert result == "{}\n"
+
+    def test_format_flaky_tests(
+        self,
+        formatter: YAMLFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test YAML formatting of flaky tests."""
+        data = {"flaky_tests": sample_tests}
+        result = formatter.format(data)
+
+        import yaml
+
+        parsed = yaml.safe_load(result)
+
+        assert "flaky_tests" in parsed
+        assert len(parsed["flaky_tests"]) == 1
+        assert parsed["flaky_tests"][0]["test_name"] == "test_api_fetch"
+        assert parsed["flaky_tests"][0]["flakiness_score"] == 0.123
+        assert parsed["flaky_tests"][0]["failure_rate"] == 0.05
+
+    def test_format_coverage_trend(
+        self,
+        formatter: YAMLFormatter,
+    ) -> None:
+        """Test YAML formatting of coverage trend."""
+        trend_data = {
+            "direction": "increasing",
+            "change_rate": 0.5,
+            "recent_values": [85.0, 87.5, 90.0],
+        }
+        data = {"coverage_trend": trend_data}
+        result = formatter.format(data)
+
+        import yaml
+
+        parsed = yaml.safe_load(result)
+
+        assert "coverage_trend" in parsed
+        assert parsed["coverage_trend"]["direction"] == "increasing"
+        assert parsed["coverage_trend"]["change_rate"] == 0.5
+
+    def test_format_coverage_history(
+        self,
+        formatter: YAMLFormatter,
+    ) -> None:
+        """Test YAML formatting of coverage history."""
+        history_data = [
+            {"date": "2024-01-01", "coverage": 85.0},
+            {"date": "2024-01-02", "coverage": 87.5},
+        ]
+        data = {"coverage_history": history_data}
+        result = formatter.format(data)
+
+        import yaml
+
+        parsed = yaml.safe_load(result)
+
+        assert "coverage_history" in parsed
+        assert len(parsed["coverage_history"]) == 2
+        assert parsed["coverage_history"][0]["date"] == "2024-01-01"
+        assert parsed["coverage_history"][0]["coverage"] == 85.0
+
+    def test_format_combined_data(
+        self,
+        formatter: YAMLFormatter,
+        sample_gaps: list[CoverageGap],
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test YAML formatting with multiple data types."""
+        data = {
+            "coverage_gaps": sample_gaps,
+            "slow_tests": sample_tests,
+            "flaky_tests": sample_tests,
+            "coverage_trend": {
+                "direction": "stable",
+                "change_rate": 0.0,
+            },
+            "coverage_history": [{"date": "2024-01-01", "coverage": 90.0}],
+        }
+        result = formatter.format(data)
+
+        import yaml
+
+        parsed = yaml.safe_load(result)
+
+        assert "coverage_gaps" in parsed
+        assert "slow_tests" in parsed
+        assert "flaky_tests" in parsed
+        assert "coverage_trend" in parsed
+        assert "coverage_history" in parsed
+        assert len(parsed["coverage_gaps"]) == 1
+        assert len(parsed["slow_tests"]) == 1
+        assert len(parsed["flaky_tests"]) == 1
