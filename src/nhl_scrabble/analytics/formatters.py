@@ -1083,7 +1083,7 @@ class TemplateFormatter:
             loader=FileSystemLoader(template_path.parent),
             autoescape=select_autoescape(),  # Enable autoescape for security
         )
-        template = env.get_template(template_path.name)  # noqa: FURB184  # clearer without chaining
+        template = env.get_template(template_path.name)  # clearer without chaining
 
         # Convert dataclasses to dicts for template rendering
 
