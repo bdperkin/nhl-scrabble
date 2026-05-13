@@ -420,13 +420,33 @@ repos:
           ]
 
   # ============================================================================
-  # UV - Dependency Lock File Validation
+  # UV - Dependency Lock File Management
   # ============================================================================
 
+  # Validate lock files are up-to-date with pyproject.toml
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.11.6  # ci: autoupdate-freeze (0.11.7 not available in PyPI mirror yet)
     hooks:
       - id: uv-lock
+
+  # Auto-upgrade lock files when dependencies change
+  - repo: local
+    hooks:
+      - id: upgrade-lock-files
+        name: Upgrade UV lock files when dependencies change
+        # Automatically upgrades both main and QA web app lock files to latest
+        # compatible versions when pyproject.toml is modified
+        description: |
+          Upgrade UV lock files to latest compatible versions:
+          - Main project: uv.lock
+          - QA web app: qa/web/uv.lock
+          Ensures lock files stay current with dependency changes.
+        entry: bash scripts/upgrade_lock_files.sh --upgrade
+        language: system
+        pass_filenames: false
+        # Only run when pyproject.toml changes (not lock files themselves)
+        files: ^(pyproject\.toml|qa/web/pyproject\.toml)$
+        stages: [pre-commit]
 
   # ============================================================================
   # Python Linting - Code Quality Checks

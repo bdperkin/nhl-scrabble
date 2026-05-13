@@ -51,7 +51,7 @@ NC := \033[0m # No Color
         changelog-preview changelog-update changelog-tag \
         qa-install qa-test qa-functional qa-visual qa-performance qa-load-test qa-accessibility qa-clean \
         git-prune-local git-prune-remote-refs git-prune-closed-prs git-status-branches git-cleanup git-cleanup-all \
-        deps-check deps-update deps-update-full \
+        deps-check deps-update deps-update-full lock-check lock-upgrade lock-outdated \
         licenses-check licenses-update licenses-validate \
         i18n-extract i18n-init i18n-update i18n-compile i18n-stats \
         count tree all release
@@ -810,6 +810,21 @@ deps-update-full: ## Update dependencies with full tox validation
 	@printf "$(BLUE)🔄 Updating dependencies with full validation...$(NC)\n"
 	@$(PYTHON) scripts/update_dependencies.py --apply --test --tox
 	@printf "$(GREEN)✅ Full dependency update complete$(NC)\n"
+
+lock-check: ## Verify lock files are up-to-date
+	@printf "$(BLUE)🔍 Checking lock files are current...$(NC)\n"
+	@bash scripts/upgrade_lock_files.sh --check
+	@printf "$(GREEN)✅ All lock files are up-to-date$(NC)\n"
+
+lock-upgrade: ## Upgrade all lock files to latest compatible versions
+	@printf "$(BLUE)🔄 Upgrading lock files (uv.lock, qa/web/uv.lock)...$(NC)\n"
+	@bash scripts/upgrade_lock_files.sh --upgrade
+	@printf "$(GREEN)✅ Lock files upgraded$(NC)\n"
+
+lock-outdated: ## Check for outdated packages in lock files
+	@printf "$(BLUE)🔍 Checking for outdated packages...$(NC)\n"
+	@bash scripts/upgrade_lock_files.sh --check-outdated
+	@printf "$(GREEN)✅ Outdated check complete$(NC)\n"
 
 ###################
 # License Management
