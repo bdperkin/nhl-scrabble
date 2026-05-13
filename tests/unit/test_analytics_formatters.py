@@ -771,7 +771,7 @@ class TestXMLFormatter:
 
         # Parse XML and verify structure
         root = ET.fromstring(
-            result
+            result,
         )  # noqa: S314  # parsing our own generated XML, not untrusted data
 
         assert root.tag == "test_analytics"
@@ -795,7 +795,7 @@ class TestXMLFormatter:
         result = formatter.format(data)
 
         root = ET.fromstring(
-            result
+            result,
         )  # noqa: S314  # parsing our own generated XML, not untrusted data
         tests = root.find("slow_tests")
         assert tests is not None
@@ -810,7 +810,7 @@ class TestXMLFormatter:
         result = formatter.format(data)
 
         root = ET.fromstring(
-            result
+            result,
         )  # noqa: S314  # parsing our own generated XML, not untrusted data
         assert root.tag == "test_analytics"
         # Should have no child elements
