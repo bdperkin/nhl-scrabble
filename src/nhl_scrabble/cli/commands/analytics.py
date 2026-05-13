@@ -223,17 +223,17 @@ def test_analytics(  # noqa: PLR0913, PLR0915, C901  # CLI function with many op
         }
 
         formatter = formatter_map.get(output_format, TextFormatter())
-        output_data = formatter.format(report_data)
+        output_data = formatter.format(report_data)  # type: ignore[attr-defined]
 
         # Write or display output
         if output:
             output_path = Path(output)
             if output_format == "excel":
                 # Excel returns bytes, write in binary mode
-                output_path.write_bytes(output_data)  # type: ignore[arg-type]
+                output_path.write_bytes(output_data)
             else:
                 # Other formats return str, write in text mode
-                output_path.write_text(output_data, encoding="utf-8")  # type: ignore[arg-type]
+                output_path.write_text(output_data, encoding="utf-8")
             console.print(f"[green]✓ Analytics report saved to {output}[/green]")
         else:
             console.print("\n" + "=" * 80)
