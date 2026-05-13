@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-13 (tasks 023, 028, 051 completed)
-**Total Tasks**: 27 active tasks
-**Total Estimated Effort**: 133-186 hours
+**Updated**: 2026-05-13 (tasks 023, 024, 028, 051 completed)
+**Total Tasks**: 26 active tasks
+**Total Estimated Effort**: 130-181 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -80,10 +80,9 @@ Each task entry shows:
 ```bash
 /implement-task testing/023-make-qa-workflow-blocking.md  # 15min, Issue #439
 /implement-task refactoring/024-make-ty-blocking.md  # 30min-1h, Issue #355, [Dependency: #325 ty validation]
-/implement-task enhancement/024-extend-sphinx-extensions.md  # 3-5h, Issue #332
 ```
 
-**Phase Total**: 4-6.25 hours
+**Phase Total**: 0.75-1.25 hours
 
 ---
 

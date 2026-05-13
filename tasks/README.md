@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 245 tasks (27 active, 218 completed)
+**Total Tasks**: 245 tasks (26 active, 219 completed)
 
 ## Overview
 
@@ -100,7 +100,7 @@ Each task includes:
 | --- | ----- | -------- | ------ | ------ | ------------ | ----- |
 | 022 | Comprehensive GitHub Workflows Enhancement | MEDIUM | 24-32 hours (actual: ~23h) | Completed | [#298](https://github.com/bdperkin/nhl-scrabble/issues/298) | Coordination of 12 sub-tasks (032-043), completed 2026-04-26 to 2026-05-05 |
 | 023 | Extend Sphinx Builder Functionality | LOW | 4-6 hours (actual: ~4h) | Completed | [#331](https://github.com/bdperkin/nhl-scrabble/issues/331) | PR [#609](https://github.com/bdperkin/nhl-scrabble/pull/609), completed 2026-05-13, added 6 Sphinx builders (EPUB, singlehtml, dirhtml, JSON, XML, gettext) |
-| 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours | Completed | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | - |
+| 024 | Extend Sphinx Extension Functionality | LOW | 3-5 hours (actual: ~3.5h) | Completed | [#332](https://github.com/bdperkin/nhl-scrabble/issues/332) | PR [#610](https://github.com/bdperkin/nhl-scrabble/pull/610), completed 2026-05-13, added 9 Sphinx extensions (autosummary, graphviz, inheritance_diagram, mathjax, ifconfig, extlinks, duration, autosectionlabel, linkcode) |
 | 029 | Track ty Type Checker Validation Period (1-2 weeks) | MEDIUM | 2 weeks | Completed | [#325](https://github.com/bdperkin/nhl-scrabble/issues/325) | Validation completed 2026-05-06, dual type checker strategy adopted |
 | 033 | Enhance Version Badge Display in README | LOW | 30 minutes - 1 hour (actual: ~25 minutes) | Completed | [#382](https://github.com/bdperkin/nhl-scrabble/issues/382) | PR [#464](https://github.com/bdperkin/nhl-scrabble/pull/464), completed 2026-04-29 |
 | 034 | Evaluate semantic-release for Fully Automated Releases | LOW | 6-10 hours (comprehensive evaluation + POC + recommendation) | Completed | [#383](https://github.com/bdperkin/nhl-scrabble/issues/383) | - |
