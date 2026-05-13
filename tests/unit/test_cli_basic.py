@@ -1,11 +1,9 @@
 """Basic CLI functionality tests (version, help, basic analyze options)."""
 
 import re
-import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
 from click.testing import CliRunner
 
 from nhl_scrabble.cli import cli

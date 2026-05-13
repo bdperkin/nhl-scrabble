@@ -8,7 +8,6 @@ from pathlib import Path
 
 from rich.console import Console
 
-from nhl_scrabble.api.nhl_client import NHLApiError
 from nhl_scrabble.config import Config
 from nhl_scrabble.di import DependencyContainer
 from nhl_scrabble.filters import AnalysisFilters

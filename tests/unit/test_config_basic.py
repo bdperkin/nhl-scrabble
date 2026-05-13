@@ -1,7 +1,5 @@
 """Unit tests for basic configuration management."""
 
-import pytest
-
 from nhl_scrabble.config import Config
 
 

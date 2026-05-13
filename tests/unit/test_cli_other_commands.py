@@ -6,16 +6,12 @@ parsing, option combinations, error handling, output formats, and environment va
 Target: Improve CLI coverage from ~50% to 90%+
 """
 
-import sys
 from pathlib import Path
-from typing import Any
 from unittest.mock import MagicMock, patch
 
-import click
-import pytest
 from click.testing import CliRunner
 
-from nhl_scrabble.cli import cli, validate_cli_arguments, validate_output_path
+from nhl_scrabble.cli import cli
 
 
 class TestOtherCommands:

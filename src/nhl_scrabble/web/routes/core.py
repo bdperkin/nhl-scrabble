@@ -21,7 +21,6 @@ from nhl_scrabble.api import NHLApiClient, NHLApiError
 from nhl_scrabble.processors import PlayoffCalculator, TeamProcessor
 from nhl_scrabble.scoring import ScrabbleScorer
 from nhl_scrabble.web.converters import (
-    _build_entity_data,
     _convert_players_to_dict,
     _convert_teams_to_dict,
     _group_teams_by_grouping,
@@ -30,7 +29,6 @@ from nhl_scrabble.web.fixtures import _process_fixture_data
 
 if TYPE_CHECKING:
     from fastapi import Request
-    from fastapi.templating import Jinja2Templates
 
 logger = logging.getLogger(__name__)
 

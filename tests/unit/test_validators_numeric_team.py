@@ -1,19 +1,12 @@
 """Unit tests for input validation utilities."""
 
-from pathlib import Path
 
 import pytest
 
 from nhl_scrabble.validators import (
     ValidationError,
-    normalize_player_name,
-    validate_api_response_structure,
-    validate_file_path,
     validate_float_range,
-    validate_output_format,
-    validate_player_name,
     validate_team_abbreviation,
-    validate_url,
 )
 
 

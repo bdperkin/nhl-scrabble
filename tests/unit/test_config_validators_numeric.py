@@ -1,19 +1,12 @@
 """Unit tests for configuration validators and injection protection."""
 
-import sys
-import tempfile
-from pathlib import Path
 
 import pytest
 
 from nhl_scrabble.config_validators import (
     ConfigValidationError,
-    validate_boolean,
-    validate_enum,
     validate_positive_float,
     validate_positive_int,
-    validate_safe_path,
-    validate_url,
 )
 
 

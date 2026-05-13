@@ -4,7 +4,7 @@ import logging
 
 import pytest
 
-from nhl_scrabble.security import SensitiveDataFilter, sanitize_for_logging
+from nhl_scrabble.security import SensitiveDataFilter
 
 
 class TestSensitiveDataFilter:

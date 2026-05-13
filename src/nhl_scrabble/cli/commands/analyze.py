@@ -12,7 +12,6 @@ from rich.console import Console
 
 from nhl_scrabble import __version__
 from nhl_scrabble.api.nhl_client import NHLApiError
-from nhl_scrabble.cli.excel import generate_excel_report
 from nhl_scrabble.cli.orchestration import run_analysis
 from nhl_scrabble.cli.validators import validate_cli_arguments, validate_output_path
 from nhl_scrabble.config import Config

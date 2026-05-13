@@ -6,10 +6,9 @@ This module provides functions for detecting and configuring locales in the Fast
 from __future__ import annotations
 
 import gettext
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from nhl_scrabble.i18n import DEFAULT_LOCALE, LOCALES_DIR, SUPPORTED_LOCALES
+from nhl_scrabble.i18n import LOCALES_DIR, SUPPORTED_LOCALES
 
 if TYPE_CHECKING:
     from fastapi import Request
