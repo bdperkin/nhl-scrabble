@@ -269,3 +269,101 @@ class TestSetupTemplateLocale:
         assert context["get_locale"]() == "fr_CA"
         assert "SUPPORTED_LOCALES" in context
         assert context["SUPPORTED_LOCALES"] == SUPPORTED_LOCALES
+
+    def test_includes_get_locale_display_name(self, mock_nhl_client):
+        """Test setup_template_locale includes get_locale_display_name function."""
+        from starlette.requests import Request
+
+        from nhl_scrabble.web.locale import setup_template_locale
+
+        scope = {
+            "type": "http",
+            "method": "GET",
+            "path": "/",
+            "query_string": b"lang=en_US",
+            "headers": [],
+        }
+        request = Request(scope)
+        context = setup_template_locale(request, None)
+
+        assert "get_locale_display_name" in context
+        assert callable(context["get_locale_display_name"])
+        # Test it works
+        assert context["get_locale_display_name"]("en_US") == "🇺🇸 English (US)"
+
+
+class TestLocaleDropdownFlags:
+    """Test that locale dropdown includes flag emoji."""
+
+    def test_locale_dropdown_has_flags(self, mock_nhl_client):
+        """Test that locale dropdown includes flag emoji."""
+        from nhl_scrabble.web.app import app
+
+        client = TestClient(app)
+        response = client.get("/")
+
+        assert response.status_code == 200
+        html = response.text
+
+        # Check for flag emoji in dropdown
+        assert "🇺🇸 English (US)" in html
+        assert "🇨🇦 English (Canada)" in html
+        assert "🇨🇦 Français (Canada)" in html
+        assert "🇸🇪 Svenska (Sweden)" in html
+        assert "🇷🇺 Русский (Russia)" in html
+        assert "🇫🇮 Suomi (Finland)" in html
+        assert "🇨🇿 Čeština (Czech Republic)" in html
+        assert "🇩🇪 Deutsch (Germany)" in html
+        assert "🇨🇭 Deutsch (Switzerland)" in html
+        assert "🇨🇭 Italiano (Switzerland)" in html
+        assert "🇸🇰 Slovenčina (Slovakia)" in html
+        assert "🇱🇻 Latviešu (Latvia)" in html
+
+    def test_all_supported_locales_have_flags_in_html(self, mock_nhl_client):
+        """Test all supported locales appear with flags in HTML."""
+        from nhl_scrabble.i18n import get_locale_display_name
+        from nhl_scrabble.web.app import app
+
+        client = TestClient(app)
+        response = client.get("/")
+
+        assert response.status_code == 200
+        html = response.text
+
+        # Every supported locale should appear with its flag
+        for locale in SUPPORTED_LOCALES:
+            display_name = get_locale_display_name(locale)
+            assert display_name in html
+
+    def test_flags_appear_in_options(self, mock_nhl_client):
+        """Test flags appear within <option> tags."""
+        from nhl_scrabble.web.app import app
+
+        client = TestClient(app)
+        response = client.get("/")
+
+        assert response.status_code == 200
+        html = response.text
+
+        # Check flags appear in option elements
+        # Look for flag emoji followed by space and locale name
+        assert '<option value="en_US"' in html
+        assert "🇺🇸 English (US)" in html
+        assert '<option value="fr_CA"' in html
+        assert "🇨🇦 Français (Canada)" in html
+
+    def test_selected_locale_has_flag(self, mock_nhl_client):
+        """Test selected locale option includes flag emoji."""
+        from nhl_scrabble.web.app import app
+
+        client = TestClient(app)
+        response = client.get("/?lang=sv_SE")
+
+        assert response.status_code == 200
+        html = response.text
+
+        # Swedish locale should be selected and have flag
+        assert "sv_SE" in html
+        assert "🇸🇪 Svenska (Sweden)" in html
+        # Should have selected attribute near sv_SE
+        assert "selected" in html

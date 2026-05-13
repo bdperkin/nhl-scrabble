@@ -112,18 +112,11 @@
                     <div class="language-selector">
                         <label for="languageSelect" class="sr-only">{% trans %}Select Language{% endtrans %}</label>
                         <select id="languageSelect" aria-label="{% trans %}Select language{% endtrans %}" onchange="changeLanguage(this.value)">
-                            <option value="en_US" {% if get_locale() == 'en_US' %}selected{% endif %}>English (US)</option>
-                            <option value="en_CA" {% if get_locale() == 'en_CA' %}selected{% endif %}>English (Canada)</option>
-                            <option value="fr_CA" {% if get_locale() == 'fr_CA' %}selected{% endif %}>Français (Canada)</option>
-                            <option value="sv_SE" {% if get_locale() == 'sv_SE' %}selected{% endif %}>Svenska</option>
-                            <option value="fi_FI" {% if get_locale() == 'fi_FI' %}selected{% endif %}>Suomi</option>
-                            <option value="cs_CZ" {% if get_locale() == 'cs_CZ' %}selected{% endif %}>Čeština</option>
-                            <option value="de_DE" {% if get_locale() == 'de_DE' %}selected{% endif %}>Deutsch (Deutschland)</option>
-                            <option value="de_CH" {% if get_locale() == 'de_CH' %}selected{% endif %}>Deutsch (Schweiz)</option>
-                            <option value="it_CH" {% if get_locale() == 'it_CH' %}selected{% endif %}>Italiano (Svizzera)</option>
-                            <option value="sk_SK" {% if get_locale() == 'sk_SK' %}selected{% endif %}>Slovenčina</option>
-                            <option value="ru_RU" {% if get_locale() == 'ru_RU' %}selected{% endif %}>Русский</option>
-                            <option value="lv_LV" {% if get_locale() == 'lv_LV' %}selected{% endif %}>Latviešu</option>
+                            {% for locale_code in SUPPORTED_LOCALES %}
+                            <option value="{{ locale_code }}" {% if get_locale() == locale_code %}selected{% endif %}>
+                                {{ get_locale_display_name(locale_code) }}
+                            </option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
