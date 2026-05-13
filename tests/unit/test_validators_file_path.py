@@ -122,8 +122,9 @@ class TestValidateFilePath:
 
     def test_invalid_path_value_error(self, tmp_path: Path) -> None:
         """Test invalid path conversion raises ValidationError."""
-        # Null bytes in path cause ValueError in Path()
-        with pytest.raises(ValidationError, match="Invalid path"):
+        # Null bytes in path cause ValueError in Path() on Unix
+        # On Windows, the regex validation catches it first as "invalid characters"
+        with pytest.raises(ValidationError, match=r"Invalid path|contains invalid characters"):
             validate_file_path(str(tmp_path / "file\x00.txt"))
 
     def test_path_resolution(self, tmp_path: Path) -> None:

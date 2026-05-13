@@ -8,6 +8,7 @@ Target: Improve CLI coverage from 56.33% to 95%+
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -94,6 +95,7 @@ class TestOutputPathValidation:
             validate_output_path("/nonexistent/directory/output.txt")
         assert "does not exist" in str(exc_info.value).lower()
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="chmod doesn't work on Windows")
     def test_validate_output_path_readonly_directory(self, tmp_path: Path) -> None:
         """Test validation fails for read-only parent directory."""
         readonly_dir = tmp_path / "readonly"
@@ -246,6 +248,7 @@ class TestCLIErrorMessages:
         # Should suggest creating directory
         assert "mkdir" in error_msg.lower() or "create" in error_msg.lower()
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="chmod doesn't work on Windows")
     def test_readonly_directory_error_message(self, tmp_path: Path) -> None:
         """Test error message for read-only directory is helpful."""
         readonly_dir = tmp_path / "readonly"
