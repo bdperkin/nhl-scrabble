@@ -20,7 +20,7 @@ def register_routes(app: FastAPI, templates: Jinja2Templates | None) -> None:
         templates: Jinja2 templates instance (optional)
     """
     # Import route modules
-    from nhl_scrabble.web.routes import (
+    from nhl_scrabble.web.routes import (  # noqa: PLC0415 - Avoid circular imports
         api,
         cache,
         conferences,
@@ -36,6 +36,11 @@ def register_routes(app: FastAPI, templates: Jinja2Templates | None) -> None:
 
     # Create dependency injection wrapper for templates
     def get_templates() -> Jinja2Templates | None:
+        """Return templates instance for dependency injection.
+
+        Returns:
+            Jinja2 templates instance or None
+        """
         return templates
 
     # Register core routes (/, /health, /api/analyze POST)
