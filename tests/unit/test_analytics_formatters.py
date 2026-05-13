@@ -770,7 +770,9 @@ class TestXMLFormatter:
         result = formatter.format(data)
 
         # Parse XML and verify structure
-        root = ET.fromstring(result)  # noqa: S314  # parsing our own generated XML, not untrusted data
+        root = ET.fromstring(
+            result
+        )  # noqa: S314  # parsing our own generated XML, not untrusted data
 
         assert root.tag == "test_analytics"
         gaps = root.find("coverage_gaps")
@@ -792,7 +794,9 @@ class TestXMLFormatter:
         data = {"slow_tests": sample_tests}
         result = formatter.format(data)
 
-        root = ET.fromstring(result)  # noqa: S314  # parsing our own generated XML, not untrusted data
+        root = ET.fromstring(
+            result
+        )  # noqa: S314  # parsing our own generated XML, not untrusted data
         tests = root.find("slow_tests")
         assert tests is not None
         assert len(tests.findall("test")) == 1
@@ -805,7 +809,9 @@ class TestXMLFormatter:
         data = {}
         result = formatter.format(data)
 
-        root = ET.fromstring(result)  # noqa: S314  # parsing our own generated XML, not untrusted data
+        root = ET.fromstring(
+            result
+        )  # noqa: S314  # parsing our own generated XML, not untrusted data
         assert root.tag == "test_analytics"
         # Should have no child elements
         assert len(list(root)) == 0
