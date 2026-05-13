@@ -110,6 +110,7 @@ __pycache__/
 # Sphinx
 /docs/_build/
 /_build/
+**/_autosummary/
 
 # MkDocs
 /site
