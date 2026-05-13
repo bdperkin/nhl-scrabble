@@ -378,6 +378,9 @@ def _configure_doctest_exclusions(app: "Sphinx") -> None:
                 "api/nhl-api.rst",
                 "api/processors.rst",
                 "api/scoring.rst",
+                # Exclude autosummary-generated API reference pages (enhancement/024)
+                # These contain doctest examples that require external API access
+                "**/_autosummary/*",
             ],
         )
 
