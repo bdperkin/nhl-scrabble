@@ -10,7 +10,7 @@ from nhl_scrabble.cli import cli
 class TestCLIProgress:
     """Test suite for CLI progress bar integration."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_cli_default_shows_progress(self, mock_run_analysis: Mock) -> None:
         """Test CLI shows progress bars by default."""
         mock_run_analysis.return_value = "Test report output"
@@ -26,7 +26,7 @@ class TestCLIProgress:
         call_kwargs = mock_run_analysis.call_args[1]
         assert call_kwargs["quiet"] is False
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_cli_quiet_mode(self, mock_run_analysis: Mock) -> None:
         """Test CLI --quiet suppresses progress."""
         mock_run_analysis.return_value = "Test report output"
@@ -42,7 +42,7 @@ class TestCLIProgress:
         call_kwargs = mock_run_analysis.call_args[1]
         assert call_kwargs["quiet"] is True
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_cli_quiet_short_flag(self, mock_run_analysis: Mock) -> None:
         """Test CLI -q short flag suppresses progress."""
         mock_run_analysis.return_value = "Test report output"
@@ -58,7 +58,7 @@ class TestCLIProgress:
         call_kwargs = mock_run_analysis.call_args[1]
         assert call_kwargs["quiet"] is True
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_cli_verbose_with_progress(self, mock_run_analysis: Mock) -> None:
         """Test CLI verbose mode still shows progress."""
         mock_run_analysis.return_value = "Test report output"
@@ -74,7 +74,7 @@ class TestCLIProgress:
         call_kwargs = mock_run_analysis.call_args[1]
         assert call_kwargs["quiet"] is False
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_cli_verbose_and_quiet(self, mock_run_analysis: Mock) -> None:
         """Test CLI --verbose --quiet combination (quiet wins)."""
         mock_run_analysis.return_value = "Test report output"
@@ -91,7 +91,7 @@ class TestCLIProgress:
         assert call_kwargs["quiet"] is True
 
     @patch("nhl_scrabble.di.NHLApiClient")
-    @patch("nhl_scrabble.cli.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
     def test_progress_manager_created_with_quiet_flag(
         self,
         mock_progress_manager: Mock,
@@ -125,7 +125,7 @@ class TestCLIProgress:
 
     @patch("nhl_scrabble.di.NHLApiClient")
     @patch("nhl_scrabble.di.TeamProcessor")
-    @patch("nhl_scrabble.cli.ProgressManager")
+    @patch("nhl_scrabble.cli.orchestration.ProgressManager")
     def test_progress_callback_passed_to_team_processor(
         self,
         mock_progress_manager: Mock,

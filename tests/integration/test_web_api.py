@@ -18,8 +18,9 @@ pytestmark = pytest.mark.xdist_group("web_api_sequential")
 def clear_cache() -> None:
     """Clear analysis cache before each test."""
     # Get the module object
-    web_app_module = sys.modules["nhl_scrabble.web.app"]
-    web_app_module._analysis_cache.clear()  # Test fixture needs cache access
+    core_module = sys.modules.get("nhl_scrabble.web.routes.core")
+    if core_module:
+        core_module._analysis_cache.clear()  # Test fixture needs cache access
 
 
 @pytest.fixture

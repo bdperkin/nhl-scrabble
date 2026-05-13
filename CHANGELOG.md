@@ -11,7 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING (internal)**: Refactored 4 large source modules into 46 modular files (#604)
+  - CLI module: `cli.py` (65KB) → `cli/` package with 12 files (validators, excel, orchestration, 7 command modules)
+  - Web app: `web/app.py` (89KB) → `web/` package with 17 files (locale, fixtures, converters, 10 route modules)
+  - API client: `api/nhl_client.py` (39KB) → `api/` package with 4 files (errors, retry utilities)
+  - Interactive shell: `interactive/shell.py` (27KB) → `interactive/` package with 5 files (commands, completion, formatting)
+  - All refactored files under 20KB (96% compliance, one exception: api/nhl_client.py at 37KB)
+  - Clear separation of concerns with focused, maintainable modules
+  - **Note**: Internal imports changed. If you import from these modules, use new paths:
+    - `from nhl_scrabble.cli.commands.search import generate_search_text`
+    - `from nhl_scrabble.web.routes.core import health`
+    - etc.
+
 ### Fixed
+
+### Tests
+
+- Split 13 large test files (20-40KB each) into 36 focused test modules (#604)
+  - Average test file size reduced from 25KB to 10KB
+  - Better test organization by testing concern
+  - All test files under 20KB for easier navigation
 
 ## [0.0.17] - 2026-05-11
 

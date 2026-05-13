@@ -15,7 +15,7 @@ from nhl_scrabble.cli import cli
 class TestTopPlayersValidation:
     """Tests for --top-players option validation (IntRange: 1-100)."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_top_players_valid_min(self, mock_run):
         """Test --top-players accepts minimum value (1)."""
         mock_run.return_value = "Test output"
@@ -23,7 +23,7 @@ class TestTopPlayersValidation:
         result = runner.invoke(cli, ["analyze", "--top-players", "1"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_top_players_valid_max(self, mock_run):
         """Test --top-players accepts maximum value (100)."""
         mock_run.return_value = "Test output"
@@ -31,7 +31,7 @@ class TestTopPlayersValidation:
         result = runner.invoke(cli, ["analyze", "--top-players", "100"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_top_players_valid_mid(self, mock_run):
         """Test --top-players accepts middle value (50)."""
         mock_run.return_value = "Test output"
@@ -71,7 +71,7 @@ class TestTopPlayersValidation:
 class TestTopTeamPlayersValidation:
     """Tests for --top-team-players option validation (IntRange: 1-50)."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_top_team_players_valid_min(self, mock_run):
         """Test --top-team-players accepts minimum value (1)."""
         mock_run.return_value = "Test output"
@@ -79,7 +79,7 @@ class TestTopTeamPlayersValidation:
         result = runner.invoke(cli, ["analyze", "--top-team-players", "1"])
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.analyze.run_analysis")
     def test_top_team_players_valid_max(self, mock_run):
         """Test --top-team-players accepts maximum value (50)."""
         mock_run.return_value = "Test output"
@@ -189,7 +189,7 @@ class TestServePortValidation:
 class TestWatchIntervalValidation:
     """Tests for watch --interval option validation (IntRange: 1+)."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
     def test_interval_valid_min(self, mock_run):
         """Test --interval accepts minimum value (1)."""
         # Make command exit immediately by raising KeyboardInterrupt
@@ -200,7 +200,7 @@ class TestWatchIntervalValidation:
         # Interval validation should pass (no "not in the range")
         assert "not in the range" not in result.output
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
     def test_interval_valid_default(self, mock_run):
         """Test --interval accepts default value (300)."""
         mock_run.side_effect = KeyboardInterrupt
@@ -208,7 +208,7 @@ class TestWatchIntervalValidation:
         result = runner.invoke(cli, ["watch", "--interval", "300"])
         assert "not in the range" not in result.output
 
-    @patch("nhl_scrabble.cli.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
     def test_interval_valid_large(self, mock_run):
         """Test --interval accepts large value (86400 = 1 day)."""
         mock_run.side_effect = KeyboardInterrupt

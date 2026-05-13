@@ -1,6 +1,6 @@
 """Tests for player detail page routes."""
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -72,11 +72,11 @@ def mock_nhl_player_details() -> dict:
     }
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post", new_callable=AsyncMock)
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_loads(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
     mock_nhl_player_details: dict,
@@ -85,7 +85,7 @@ def test_player_detail_page_loads(
 
     Args:
         mock_nhl_client: Mock NHL API client
-        mock_analyze: Mock analysis endpoint
+        mock_analyze: Mock async analysis endpoint
         test_client: Test client fixture
         mock_analysis_data: Mock analysis data
         mock_nhl_player_details: Mock NHL player details
@@ -108,11 +108,11 @@ def test_player_detail_page_loads(
     assert b"player-header" in response.content
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post", new_callable=AsyncMock)
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_shows_photo(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
     mock_nhl_player_details: dict,
@@ -142,9 +142,9 @@ def test_player_detail_page_shows_photo(
     assert b"assets.nhle.com/mugs/nhl/8478402.png" in response.content
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
+@patch("nhl_scrabble.web.routes.players.analyze_post", new_callable=AsyncMock)
 def test_player_detail_page_invalid_player(
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
 ) -> None:
@@ -165,11 +165,11 @@ def test_player_detail_page_invalid_player(
     assert response.status_code == 404
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post")
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_shows_team_logo(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
     mock_nhl_player_details: dict,
@@ -199,11 +199,11 @@ def test_player_detail_page_shows_team_logo(
     assert b"assets.nhle.com/logos/nhl/svg/EDM_light.svg" in response.content
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post")
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_shows_country_flag(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
     mock_nhl_player_details: dict,
@@ -232,11 +232,11 @@ def test_player_detail_page_shows_country_flag(
     assert b"flagcdn.com" in response.content
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post")
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_nhl_api_error(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
 ) -> None:
@@ -264,9 +264,9 @@ def test_player_detail_page_nhl_api_error(
     assert response.status_code == 503
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
+@patch("nhl_scrabble.web.routes.players.analyze_post")
 def test_player_detail_page_analysis_error(
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
 ) -> None:
     """Test handling of analysis endpoint errors.
@@ -287,11 +287,11 @@ def test_player_detail_page_analysis_error(
     assert response.status_code == 503
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post")
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_missing_birthplace_data(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
 ) -> None:
@@ -325,11 +325,11 @@ def test_player_detail_page_missing_birthplace_data(
     assert b"Unknown" in response.content  # Default birthplace
 
 
-@patch("nhl_scrabble.web.app.analyze_post")
-@patch("nhl_scrabble.web.app.NHLApiClient")
+@patch("nhl_scrabble.web.routes.players.analyze_post")
+@patch("nhl_scrabble.web.routes.players.NHLApiClient")
 def test_player_detail_page_no_country_flag(
     mock_nhl_client: MagicMock,
-    mock_analyze: MagicMock,
+    mock_analyze: AsyncMock,
     test_client: TestClient,
     mock_analysis_data: dict,
 ) -> None:

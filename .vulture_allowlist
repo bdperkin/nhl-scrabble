@@ -56,3 +56,27 @@ average_score  # GroupStatistics.average_score - TypedDict field
 min_score  # GroupStatistics.min_score - TypedDict field
 max_score  # GroupStatistics.max_score - TypedDict field
 top_player  # GroupStatistics.top_player - TypedDict field
+
+# FastAPI route handlers (called by FastAPI framework via decorators)
+get_templates  # web/routes/__init__.py - dependency injection wrapper for templates
+analyze_get  # web/routes/api.py - GET /api/analyze route
+cache_stats  # web/routes/cache.py - GET /cache/stats route
+conferences_page  # web/routes/conferences.py - GET /conferences route
+conference_detail_page  # web/routes/conferences.py - GET /conferences/{conference} route
+divisions_page  # web/routes/divisions.py - GET /divisions route
+division_detail_page  # web/routes/divisions.py - GET /divisions/{division} route
+nationalities_page  # web/routes/nationalities.py - GET /nationalities route
+nationality_detail_page  # web/routes/nationalities.py - GET /nationalities/{code} route
+players_page  # web/routes/players.py - GET /players route
+player_detail_page  # web/routes/players.py - GET /players/{player_id} route
+get_player  # web/routes/players.py - GET /api/players/{player_id} route
+positions_page  # web/routes/positions.py - GET /positions route
+position_type_page  # web/routes/positions.py - GET /positions/{type} route
+position_detail_page  # web/routes/positions.py - GET /positions/detail/{code} route
+league_page  # web/routes/standings.py - GET /standings route
+playoffs_page  # web/routes/standings.py - GET /playoffs route
+stats_page  # web/routes/standings.py - GET /stats route
+favicon_ico  # web/routes/static.py - GET /favicon.ico route
+robots_txt  # web/routes/static.py - GET /robots.txt route
+teams_page  # web/routes/teams.py - GET /teams route
+team_detail_page  # web/routes/teams.py - GET /teams/{team_abbrev} route

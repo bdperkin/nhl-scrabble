@@ -14,7 +14,8 @@ from unittest.mock import MagicMock, patch
 from click.testing import CliRunner
 
 # CRITICAL: Import cli module directly to ensure coverage
-from nhl_scrabble.cli import _interruptible_sleep, cli
+from nhl_scrabble.cli import cli
+from nhl_scrabble.cli.commands.watch import _interruptible_sleep
 
 
 class TestInterruptibleSleep:
@@ -38,7 +39,7 @@ class TestInterruptibleSleep:
             if call_count[0] >= 3:
                 shutdown_flag[0] = True
 
-        with patch("nhl_scrabble.cli.time.sleep", side_effect=mock_sleep):
+        with patch("nhl_scrabble.cli.commands.watch.time.sleep", side_effect=mock_sleep):
             _interruptible_sleep(10, shutdown_flag)
 
         # Should have checked 3 times before shutdown
@@ -48,8 +49,8 @@ class TestInterruptibleSleep:
 class TestWatchCommand:
     """Test watch command implementation."""
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli.time.sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.time.sleep")
     def test_watch_basic_execution(
         self,
         mock_sleep: MagicMock,
@@ -66,8 +67,8 @@ class TestWatchCommand:
         assert result.exit_code == 0
         assert mock_run.called
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_with_interval(
         self,
         mock_sleep: MagicMock,
@@ -83,8 +84,8 @@ class TestWatchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_with_json_format(
         self,
         mock_sleep: MagicMock,
@@ -99,8 +100,8 @@ class TestWatchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_with_report_filter(
         self,
         mock_sleep: MagicMock,
@@ -115,8 +116,8 @@ class TestWatchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_with_quiet_mode(
         self,
         mock_sleep: MagicMock,
@@ -131,8 +132,8 @@ class TestWatchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_with_verbose_mode(
         self,
         mock_sleep: MagicMock,
@@ -147,8 +148,8 @@ class TestWatchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_with_no_cache(
         self,
         mock_sleep: MagicMock,
@@ -163,8 +164,8 @@ class TestWatchCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_handles_api_error(
         self,
         mock_sleep: MagicMock,
@@ -184,8 +185,8 @@ class TestWatchCommand:
         assert result.exit_code == 0
         assert "API Error" in result.output or "error" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_handles_generic_exception(
         self,
         mock_sleep: MagicMock,
@@ -202,9 +203,9 @@ class TestWatchCommand:
         assert result.exit_code == 0
         assert "error" in result.output.lower()
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli.signal.signal")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch.signal.signal")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_registers_signal_handler(
         self,
         mock_sleep: MagicMock,
@@ -223,8 +224,8 @@ class TestWatchCommand:
         # First argument should be signal.SIGINT
         assert mock_signal.call_args[0][0] == signal.SIGINT
 
-    @patch("nhl_scrabble.cli.run_analysis")
-    @patch("nhl_scrabble.cli._interruptible_sleep")
+    @patch("nhl_scrabble.cli.commands.watch.run_analysis")
+    @patch("nhl_scrabble.cli.commands.watch._interruptible_sleep")
     def test_watch_custom_player_limits(
         self,
         mock_sleep: MagicMock,
@@ -246,8 +247,8 @@ class TestWatchCommand:
 class TestDashboardCommand:
     """Test dashboard command implementation."""
 
-    @patch("nhl_scrabble.cli.fetch_dashboard_data")
-    @patch("nhl_scrabble.cli.StatisticsDashboard")
+    @patch("nhl_scrabble.cli.commands.dashboard.fetch_dashboard_data")
+    @patch("nhl_scrabble.cli.commands.dashboard.StatisticsDashboard")
     def test_dashboard_static_mode(
         self,
         mock_dashboard: MagicMock,
@@ -267,8 +268,8 @@ class TestDashboardCommand:
         assert result.exit_code == 0
         assert mock_dashboard.return_value.display_static.called
 
-    @patch("nhl_scrabble.cli.fetch_dashboard_data")
-    @patch("nhl_scrabble.cli.StatisticsDashboard")
+    @patch("nhl_scrabble.cli.commands.dashboard.fetch_dashboard_data")
+    @patch("nhl_scrabble.cli.commands.dashboard.StatisticsDashboard")
     def test_dashboard_with_duration(
         self,
         mock_dashboard: MagicMock,
@@ -287,8 +288,8 @@ class TestDashboardCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.fetch_dashboard_data")
-    @patch("nhl_scrabble.cli.StatisticsDashboard")
+    @patch("nhl_scrabble.cli.commands.dashboard.fetch_dashboard_data")
+    @patch("nhl_scrabble.cli.commands.dashboard.StatisticsDashboard")
     def test_dashboard_with_filters(
         self,
         mock_dashboard: MagicMock,
@@ -307,7 +308,7 @@ class TestDashboardCommand:
 
         assert result.exit_code == 0
 
-    @patch("nhl_scrabble.cli.fetch_dashboard_data")
+    @patch("nhl_scrabble.cli.commands.dashboard.fetch_dashboard_data")
     def test_dashboard_handles_fetch_failure(
         self,
         mock_fetch: MagicMock,

@@ -3,11 +3,9 @@
 import atexit
 import logging
 import os
-import random
 import time
 import types
 import weakref
-from contextlib import suppress
 from datetime import timedelta
 from pathlib import Path
 from typing import Any, ClassVar
@@ -18,6 +16,7 @@ import requests
 import requests_cache
 from requests.adapters import HTTPAdapter
 
+from nhl_scrabble.api.retry import get_retry_after
 from nhl_scrabble.exceptions import (
     NHLApiConnectionError,
     NHLApiError,
@@ -30,7 +29,7 @@ from nhl_scrabble.rate_limiter import RateLimiter
 from nhl_scrabble.security.circuit_breaker import CircuitBreaker
 from nhl_scrabble.security.log_filter import sanitize_for_logging
 from nhl_scrabble.security.ssrf_protection import validate_url_for_ssrf
-from nhl_scrabble.utils.retry import retry
+from nhl_scrabble.utils.retry import _calculate_backoff_delay, retry
 from nhl_scrabble.validators import (
     validate_api_response_structure,
     validate_player_name,
@@ -277,67 +276,6 @@ class NHLApiClient:
             )
             raise NHLApiError(f"Request blocked by security protection: {e}") from e
 
-    def _get_retry_after(self, response: requests.Response) -> float:
-        """Extract Retry-After header value from 429 response.
-
-        Args:
-            response: HTTP response with 429 status
-
-        Returns:
-            Seconds to wait before retry
-
-        Examples:
-            >>> client = NHLApiClient()
-            >>> from unittest.mock import Mock
-            >>> response = Mock()
-            >>> response.headers = {"Retry-After": "60"}
-            >>> client._get_retry_after(response)
-            60.0
-        """
-        retry_after = response.headers.get("Retry-After")
-
-        if retry_after:
-            # Try as integer (seconds)
-            # Could be HTTP date format, but uncommon for 429 - default to exponential backoff
-            with suppress(ValueError):
-                return float(retry_after)
-
-        # No Retry-After header, use exponential backoff
-        # Start with 1 second
-        return 1.0
-
-    def _calculate_backoff_delay(self, attempt: int, retry_after: int | None = None) -> float:
-        """Calculate backoff delay with exponential backoff and jitter.
-
-        Args:
-            attempt: Current attempt number (0-indexed)
-            retry_after: Optional Retry-After header value from 429 response
-
-        Returns:
-            Delay in seconds with jitter applied
-
-        Examples:
-            >>> client = NHLApiClient()
-            >>> client._calculate_backoff_delay(0)  # First retry
-            0.75  # ~1.0 * (2.0 ** 0) with ±25% jitter
-            >>> client._calculate_backoff_delay(3)  # Fourth retry
-            6.5   # ~8.0 * (2.0 ** 3) with ±25% jitter, capped at max_backoff
-        """
-        if retry_after is not None:
-            # Respect Retry-After header from API (429 responses)
-            return min(float(retry_after), self.max_backoff)
-
-        # Exponential backoff: base_delay * (backoff_factor ** attempt)
-        base_delay = 1.0
-        delay = min(base_delay * (self.backoff_factor**attempt), self.max_backoff)
-
-        # Add jitter: randomize ±25% to prevent thundering herd
-        # Safe: Using random for jitter, not cryptography
-        jitter = delay * 0.25
-        delay = delay + random.uniform(-jitter, jitter)  # noqa: S311
-
-        return max(0, delay)
-
     def _is_url_cached(self, url: str) -> bool:
         """Check if a URL response is cached and not expired.
 
@@ -444,7 +382,7 @@ class NHLApiClient:
 
                 # Handle rate limiting (429)
                 if response.status_code == 429:
-                    retry_after = self._get_retry_after(response)
+                    retry_after = get_retry_after(response)
                     logger.warning(f"Rate limited (429). Waiting {retry_after}s before retry.")
                     time.sleep(retry_after)
                     # Raise to trigger retry
@@ -643,7 +581,7 @@ class NHLApiClient:
                     # Handle 429 rate limiting with exponential backoff
                     if response.status_code == 429:
                         if attempt < self.retries - 1:
-                            retry_after = self._get_retry_after(response)
+                            retry_after = get_retry_after(response)
                             logger.warning(
                                 f"Rate limited (429) for {team_abbrev} "
                                 f"(attempt {attempt + 1}/{self.retries}), "
@@ -697,7 +635,11 @@ class NHLApiClient:
 
                 except requests.exceptions.Timeout:
                     if attempt < self.retries - 1:
-                        backoff_delay = self._calculate_backoff_delay(attempt)
+                        backoff_delay = _calculate_backoff_delay(
+                            attempt=attempt,
+                            backoff_factor=self.backoff_factor,
+                            max_backoff=self.max_backoff,
+                        )
                         logger.warning(
                             f"Timeout fetching {team_abbrev} "
                             f"(attempt {attempt + 1}/{self.retries}), "
@@ -719,7 +661,11 @@ class NHLApiClient:
 
                 except requests.exceptions.ConnectionError:
                     if attempt < self.retries - 1:
-                        backoff_delay = self._calculate_backoff_delay(attempt)
+                        backoff_delay = _calculate_backoff_delay(
+                            attempt=attempt,
+                            backoff_factor=self.backoff_factor,
+                            max_backoff=self.max_backoff,
+                        )
                         logger.warning(
                             f"Connection error for {team_abbrev} "
                             f"(attempt {attempt + 1}/{self.retries}), "
@@ -806,7 +752,7 @@ class NHLApiClient:
 
                 # Handle rate limiting (429)
                 if response.status_code == 429:
-                    retry_after = self._get_retry_after(response)
+                    retry_after = get_retry_after(response)
                     logger.warning(f"Rate limited (429). Waiting {retry_after}s before retry.")
                     time.sleep(retry_after)
                     # Raise to trigger retry

@@ -58,9 +58,101 @@ NHL Scrabble follows a layered architecture with clear separation of concerns:
                     └──────────────────┘
 ```
 
+## Module Organization (May 2026 Refactoring)
+
+As of version 0.0.18, large monolithic modules have been refactored into focused, maintainable packages. All source modules are now under 20KB (with one exception) for easier navigation and testing.
+
+### CLI Package (`cli/`)
+
+**Original**: Single 65KB `cli.py` file
+**Refactored**: 12 modular files organized by responsibility
+
+```
+cli/
+├── __init__.py          # CLI group, command registration
+├── validators.py        # Argument validation (paths, etc.)
+├── excel.py            # Excel report generation
+├── orchestration.py    # Main analysis workflow (run_analysis)
+└── commands/           # Individual CLI commands
+    ├── __init__.py
+    ├── analyze.py      # Main analysis command (largest, 15.6KB)
+    ├── search.py       # Player/team search
+    ├── serve.py        # Web server launcher
+    ├── dashboard.py    # Statistics dashboard
+    ├── watch.py        # Auto-refresh watch mode
+    ├── interactive_cmd.py  # Interactive shell launcher
+    └── analytics.py        # Coverage analytics
+```
+
+**Benefits**: Each command is self-contained, easier to test and maintain independently.
+
+### Web Package (`web/`)
+
+**Original**: Single 89KB `web/app.py` file
+**Refactored**: 17 modular files with dedicated routes package
+
+```
+web/
+├── __init__.py
+├── app.py              # FastAPI app, middleware (4.3KB)
+├── locale.py           # i18n locale detection
+├── fixtures.py         # TEST_MODE fixture loading
+├── converters.py       # Data conversion utilities
+└── routes/            # Route modules by resource
+    ├── __init__.py     # Route registration
+    ├── core.py         # /, /health, /api/analyze
+    ├── players.py      # Player routes
+    ├── teams.py        # Team routes
+    ├── divisions.py    # Division routes
+    ├── conferences.py  # Conference routes
+    ├── positions.py    # Position routes (largest, 14.7KB)
+    ├── nationalities.py  # Nationality routes
+    ├── standings.py    # League/playoffs/stats
+    ├── static.py       # Favicons, robots.txt
+    ├── cache.py        # Cache management
+    └── api.py          # HTMX API endpoints
+```
+
+**Benefits**: Routes grouped by resource type, easier to add new endpoints, better separation of concerns.
+
+### API Package (`api/`)
+
+**Original**: Single 39KB `api/nhl_client.py` file
+**Refactored**: 4 modules with extracted utilities
+
+```
+api/
+├── __init__.py
+├── nhl_client.py       # Core NHLApiClient class (37KB)*
+├── errors.py           # Error handling utilities (2.9KB)
+└── retry.py            # Retry logic utilities (1.5KB)
+```
+
+\***Note**: `nhl_client.py` still exceeds 20KB target (37KB) but is reduced from original 39KB. Further splitting would risk breaking core API functionality.
+
+**Benefits**: Error handling and retry logic can be tested independently, cleaner client code.
+
+### Interactive Package (`interactive/`)
+
+**Original**: Single 27KB `interactive/shell.py` file
+**Refactored**: 5 focused modules
+
+```
+interactive/
+├── __init__.py
+├── shell.py            # Core InteractiveShell class (15.7KB)
+├── commands.py         # Command handlers (17.8KB)
+├── completion.py       # Tab completion logic (1.1KB)
+└── formatting.py       # Display utilities (2.8KB)
+```
+
+**Benefits**: Command logic separated from shell infrastructure, easier to add new commands.
+
 ## Layer Responsibilities
 
-### 1. CLI Layer (`cli.py`)
+### 1. CLI Layer (`cli/` package)
+
+**Note**: Now a package instead of single file.
 
 **Purpose**: User interface and command orchestration.
 
@@ -264,7 +356,7 @@ class Player(BaseModel):
 - **JSON serialization**: Easy API handling
 - **Documentation**: Self-documenting code
 
-#### API Client (`api/nhl_client.py`)
+#### API Client (`api/` package)
 
 **Purpose**: Interact with NHL API reliably.
 

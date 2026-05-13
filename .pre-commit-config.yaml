@@ -606,6 +606,9 @@ repos:
           - pydantic-settings
           - rich
           - jinja2
+          - fastapi
+          - starlette
+          - uvicorn
         args: []  # Config is in pyproject.toml
         exclude: ^(qa|tests|scripts)/  # Exclude QA, tests, and utility scripts
 
