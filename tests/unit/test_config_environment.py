@@ -1,65 +1,10 @@
-"""Unit tests for configuration management."""
+"""Unit tests for Config environment variable loading."""
 
 import os
 
 import pytest
 
 from nhl_scrabble.config import Config
-
-
-class TestConfig:
-    """Tests for Config class."""
-
-    def test_config_defaults(self) -> None:
-        """Test Config with default values."""
-        config = Config()
-        assert config.api_timeout == 10
-        assert config.api_retries == 3
-        assert config.rate_limit_max_requests == 30
-        assert config.rate_limit_window == 60.0
-        assert config.max_concurrent_requests == 5
-        assert config.top_players_count == 20
-        assert config.top_team_players_count == 5
-        assert config.verbose is False
-        assert config.output_format == "text"
-
-    def test_config_custom_values(self) -> None:
-        """Test Config with custom values."""
-        config = Config(
-            api_timeout=30,
-            api_retries=5,
-            rate_limit_max_requests=50,
-            rate_limit_window=120.0,
-            max_concurrent_requests=10,
-            top_players_count=50,
-            top_team_players_count=10,
-            verbose=True,
-            output_format="json",
-        )
-        assert config.api_timeout == 30
-        assert config.api_retries == 5
-        assert config.rate_limit_max_requests == 50
-        assert config.rate_limit_window == 120.0
-        assert config.max_concurrent_requests == 10
-        assert config.top_players_count == 50
-        assert config.top_team_players_count == 10
-        assert config.verbose is True
-        assert config.output_format == "json"
-
-    def test_to_dict(self) -> None:
-        """Test Config.to_dict() method."""
-        config = Config(api_timeout=15, verbose=True)
-        config_dict = config.to_dict()
-        assert config_dict["api_timeout"] == 15
-        assert config_dict["verbose"] is True
-        assert config_dict["api_retries"] == 3  # default
-
-    def test_repr(self) -> None:
-        """Test Config.__repr__() method."""
-        config = Config()
-        repr_str = repr(config)
-        assert "Config(" in repr_str
-        assert "api_timeout" in repr_str
 
 
 class TestConfigFromEnv:
@@ -281,122 +226,6 @@ class TestConfigFromEnv:
         with pytest.raises(ValueError, match=r"NHL_SCRABBLE_OUTPUT_FORMAT"):
             Config.from_env()
 
-
-class TestConfigOutputFormats:
-    """Tests for Config output format validation (CLI-Config consistency)."""
-
-    def test_config_accepts_all_cli_format_options(self) -> None:
-        """Test Config accepts all formats offered by CLI.
-
-        This test ensures Config validation stays in sync with CLI --format choices.
-        Prevents pydantic ValidationError crashes when users select CLI-advertised formats.
-
-        Related to issue #366 - Output format validation mismatch between CLI and Config.
-        """
-        # All formats advertised in CLI --format option (src/nhl_scrabble/cli.py line 408)
-        cli_formats = [
-            "text",
-            "json",
-            "yaml",
-            "xml",
-            "html",
-            "table",
-            "markdown",
-            "csv",
-            "excel",
-            "template",
-        ]
-
-        for fmt in cli_formats:
-            # Each format should be accepted by Config without ValidationError
-            config = Config(output_format=fmt)
-            assert config.output_format == fmt.lower()
-
-    def test_config_output_format_rejects_invalid(self) -> None:
-        """Test invalid formats are rejected with clear error message."""
-        with pytest.raises(ValueError, match=r"Invalid value.*Allowed values"):
-            Config(output_format="invalid_format")
-
-    def test_config_output_format_case_insensitive(self) -> None:
-        """Test output format is case-insensitive."""
-        # Test various case combinations
-        test_cases = [
-            ("MARKDOWN", "markdown"),
-            ("Json", "json"),
-            ("YaML", "yaml"),
-            ("XML", "xml"),
-            ("TaBLe", "table"),
-        ]
-
-        for input_format, expected in test_cases:
-            config = Config(output_format=input_format)
-            assert config.output_format == expected
-
-    @pytest.mark.parametrize(
-        "output_format",
-        [
-            "text",
-            "json",
-            "yaml",
-            "xml",
-            "html",
-            "table",
-            "markdown",
-            "csv",
-            "excel",
-            "template",
-        ],
-    )
-    def test_config_individual_format_validation(self, output_format: str) -> None:
-        """Test each format individually is accepted."""
-        config = Config(output_format=output_format)
-        assert config.output_format == output_format
-
-    def test_from_env_accepts_all_cli_formats(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        """Test Config.from_env() accepts all CLI formats."""
-        cli_formats = [
-            "text",
-            "json",
-            "yaml",
-            "xml",
-            "html",
-            "table",
-            "markdown",
-            "csv",
-            "excel",
-            "template",
-        ]
-
-        for fmt in cli_formats:
-            # Clear any previous value
-            monkeypatch.delenv("NHL_SCRABBLE_OUTPUT_FORMAT", raising=False)
-            monkeypatch.setenv("NHL_SCRABBLE_OUTPUT_FORMAT", fmt)
-
-            config = Config.from_env()
-            assert config.output_format == fmt.lower()
-
-
-class TestConfigLogging:
-    """Tests for Config logging configuration fields."""
-
-    def test_config_logging_defaults(self) -> None:
-        """Test Config logging fields have correct default values."""
-        config = Config()
-        assert config.log_file is None
-        assert config.log_max_bytes == 10485760  # 10MB
-        assert config.log_backup_count == 5
-
-    def test_config_logging_custom_values(self) -> None:
-        """Test Config with custom logging values."""
-        config = Config(
-            log_file="logs/app.log",
-            log_max_bytes=20971520,  # 20MB
-            log_backup_count=10,
-        )
-        assert config.log_file == "logs/app.log"
-        assert config.log_max_bytes == 20971520
-        assert config.log_backup_count == 10
-
     def test_from_env_logging_file_path(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test Config.from_env() with log file path."""
         monkeypatch.setenv("NHL_SCRABBLE_LOG_FILE", "logs/nhl-scrabble.log")
@@ -482,15 +311,3 @@ class TestConfigLogging:
             match=r"NHL_SCRABBLE_LOG_BACKUP_COUNT.*outside allowed range",
         ):
             Config.from_env()
-
-    def test_logging_config_in_to_dict(self) -> None:
-        """Test that logging config fields appear in to_dict()."""
-        config = Config(log_file="logs/app.log", log_max_bytes=20971520, log_backup_count=10)
-        config_dict = config.to_dict()
-
-        assert "log_file" in config_dict
-        assert "log_max_bytes" in config_dict
-        assert "log_backup_count" in config_dict
-        assert config_dict["log_file"] == "logs/app.log"
-        assert config_dict["log_max_bytes"] == 20971520
-        assert config_dict["log_backup_count"] == 10
