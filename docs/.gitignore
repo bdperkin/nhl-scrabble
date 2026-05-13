@@ -27,3 +27,16 @@ _build/
 
 # AsciiDoc output artifacts
 *.adoc
+
+# EPUB build artifacts
+*.epub
+
+# JSON/XML artifacts
+*.json
+*.xml
+*.fjson
+
+# Gettext artifacts
+*.pot
+*.po
+*.mo
