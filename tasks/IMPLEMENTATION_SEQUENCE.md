@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-13 (tasks 028, 051 completed)
-**Total Tasks**: 28 active tasks
-**Total Estimated Effort**: 137-190 hours
+**Updated**: 2026-05-13 (tasks 023, 028, 051 completed)
+**Total Tasks**: 27 active tasks
+**Total Estimated Effort**: 133-186 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -80,11 +80,10 @@ Each task entry shows:
 ```bash
 /implement-task testing/023-make-qa-workflow-blocking.md  # 15min, Issue #439
 /implement-task refactoring/024-make-ty-blocking.md  # 30min-1h, Issue #355, [Dependency: #325 ty validation]
-/implement-task enhancement/023-extend-sphinx-builders.md  # 4-6h, Issue #331
 /implement-task enhancement/024-extend-sphinx-extensions.md  # 3-5h, Issue #332
 ```
 
-**Phase Total**: 8-12.25 hours
+**Phase Total**: 4-6.25 hours
 
 ---
 
@@ -215,7 +214,7 @@ Each task entry shows:
 - **Completed**: Tasks 033, 034, 035, 036, 037, 038, 039 completed (actual effort significantly lower than estimates)
 - **Investigation Pattern**: Multiple tasks (035, 036, 038, 039) were based on outdated data - actual coverage was much higher than claimed
 - **Translation Tasks**: Can be parallelized if multiple translators available
-- **Quick Wins**: Task 023 (15min) and 024 (30min-1h) can be completed quickly
+- **Quick Wins**: Task testing/023 (15min) and refactoring/024 (30min-1h) can be completed quickly
 - **Major Refactoring**: Task 028 (20-29h) splits 4 large modules - significant code organization effort
 
 ---
