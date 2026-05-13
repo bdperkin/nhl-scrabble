@@ -61,12 +61,10 @@ class TemplateFormatter:
             )
             raise ValueError(msg)
 
-        template_path = Path(self.template_path)
-        env = Environment(
-            loader=FileSystemLoader(template_path.parent),
-            autoescape=select_autoescape(),  # Enable autoescape for security
-        )
-        template = env.get_template(template_path.name)  # clearer without chaining
+        template = Environment(
+            loader=FileSystemLoader(Path(self.template_path).parent),
+            autoescape=select_autoescape(),
+        ).get_template(Path(self.template_path).name)
 
         # Convert dataclasses to dicts for template rendering
 

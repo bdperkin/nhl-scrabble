@@ -24,7 +24,9 @@ class TableFormatter:
         Returns:
             str: ASCII table-formatted string.
         """
-        from tabulate import tabulate  # noqa: PLC0415  # lazy import for optional dependency
+        from tabulate import (  # type: ignore[import-untyped]  # noqa: PLC0415  # lazy import for optional dependency
+            tabulate,
+        )
 
         output = []
 

@@ -40,7 +40,7 @@ class ExcelFormatter:
         # Coverage Gaps sheet
         if data.get("coverage_gaps"):
             ws = wb.active
-            if ws is not None:  # type: ignore[union-attr]  # openpyxl returns None when no sheets
+            if ws is not None:
                 ws.title = "Coverage Gaps"
                 ws.append(["Module", "Current", "Target", "Lines Needed", "Priority"])
 
