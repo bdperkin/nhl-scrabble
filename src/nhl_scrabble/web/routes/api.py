@@ -80,7 +80,7 @@ async def analyze_get(
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="results.html",
             context=context,

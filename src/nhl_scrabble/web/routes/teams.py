@@ -64,7 +64,7 @@ async def teams_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="teams.html",
             context=context,
@@ -210,7 +210,7 @@ async def team_detail_page(  # noqa: C901  # Route handler with team roster proc
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="team_detail.html",
             context=context,

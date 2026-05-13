@@ -65,7 +65,7 @@ async def players_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="players.html",
             context=context,
@@ -208,7 +208,7 @@ async def player_detail_page(  # Route handler with player data processing
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="player_detail.html",
             context=context,

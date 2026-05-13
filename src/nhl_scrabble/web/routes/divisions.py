@@ -61,7 +61,7 @@ async def divisions_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="divisions.html",
             context=context,
@@ -179,7 +179,7 @@ async def division_detail_page(
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="division_detail.html",
             context=context,

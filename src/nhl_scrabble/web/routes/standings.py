@@ -60,7 +60,7 @@ async def league_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="league.html",
             context=context,
@@ -119,7 +119,7 @@ async def playoffs_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="playoffs.html",
             context=context,
@@ -172,7 +172,7 @@ async def stats_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="stats.html",
             context=context,

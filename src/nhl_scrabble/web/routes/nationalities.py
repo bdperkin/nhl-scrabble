@@ -130,7 +130,7 @@ async def nationalities_page(request: Request) -> HTMLResponse:
                 "entity_data": entity_data,
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="nationalities.html",
             context=context,
@@ -241,7 +241,7 @@ async def nationality_detail_page(
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="nationality_detail.html",
             context=context,

@@ -80,11 +80,11 @@ def setup_template_locale(request: Request, templates: Jinja2Templates | None) -
                 localedir=str(LOCALES_DIR),
                 languages=[locale],
             )
-            templates.env.install_gettext_translations(translation, newstyle=True)
+            templates.env.install_gettext_translations(translation, newstyle=True)  # type: ignore[attr-defined]
         except FileNotFoundError:
             # Fallback to NullTranslations if locale not found
             null_translation = gettext.NullTranslations()
-            templates.env.install_gettext_translations(null_translation, newstyle=True)
+            templates.env.install_gettext_translations(null_translation, newstyle=True)  # type: ignore[attr-defined]
 
     return {
         "request": request,

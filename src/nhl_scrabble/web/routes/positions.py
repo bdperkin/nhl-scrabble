@@ -131,7 +131,7 @@ async def positions_page(request: Request) -> HTMLResponse:
                 "entity_data": entity_data,
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="positions.html",
             context=context,
@@ -248,7 +248,7 @@ async def position_type_page(
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="position_type.html",
             context=context,
@@ -371,7 +371,7 @@ async def position_detail_page(
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="position_detail.html",
             context=context,

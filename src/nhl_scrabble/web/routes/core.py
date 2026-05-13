@@ -107,7 +107,7 @@ async def root(request: Request) -> HTMLResponse:
     from nhl_scrabble.web.locale import setup_template_locale  # noqa: PLC0415
 
     context = setup_template_locale(request, templates)
-    return templates.TemplateResponse(
+    return templates.TemplateResponse(  # type: ignore[no-any-return]
         request=request,
         name="index.html",
         context=context,

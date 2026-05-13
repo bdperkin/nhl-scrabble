@@ -60,7 +60,7 @@ async def conferences_page(request: Request) -> HTMLResponse:
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="conferences.html",
             context=context,
@@ -156,7 +156,7 @@ async def conference_detail_page(
                 "entity_data": _build_entity_data(data),
             },
         )
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[no-any-return]
             request=request,
             name="conference_detail.html",
             context=context,
