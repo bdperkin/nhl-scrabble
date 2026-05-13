@@ -21,7 +21,7 @@ _ = get_translator()
 class CommandHandler:
     """Handles command execution for interactive shell."""
 
-    def __init__(  # noqa: PLR0913
+    def __init__(  # noqa: PLR0913  # type: ignore[explicit-any]
         self,
         data: dict[str, Any],
         console: Console,

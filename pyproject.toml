@@ -704,6 +704,7 @@ check_untyped_defs = false
 [[tool.mypy.overrides]]
 module = [
     "nhl_scrabble.cli",
+    "nhl_scrabble.cli.*",
     "nhl_scrabble.web.*",
     "nhl_scrabble.api_server.*",
 ]
@@ -740,7 +741,7 @@ module = [
     "nhl_scrabble.dashboard",
     "nhl_scrabble.logging_config",
     "nhl_scrabble.processors.team_processor",
-    "nhl_scrabble.interactive.shell",
+    "nhl_scrabble.interactive.*",
 ]
 # Allow explicit Any for legitimate use cases:
 # - Abstract base classes with generic methods

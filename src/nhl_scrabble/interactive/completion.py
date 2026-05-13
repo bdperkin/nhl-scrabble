@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from nhl_scrabble.models.team import TeamScore
 
 
-def get_completer(commands: list[str], data: dict[str, Any] | None) -> WordCompleter:
+def get_completer(commands: list[str], data: dict[str, Any] | None) -> WordCompleter:  # type: ignore[explicit-any]
     """Get command completer with team/player names.
 
     Args:

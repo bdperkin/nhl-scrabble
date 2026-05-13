@@ -147,8 +147,8 @@ async def team_detail_page(  # noqa: C901  # Route handler with team roster proc
                 continue
 
             for roster_player in roster_data[position]:
-                first_name = roster_player.get("firstName", {}).get("default", "")  # type: ignore[union-attr]
-                last_name = roster_player.get("lastName", {}).get("default", "")  # type: ignore[union-attr]
+                first_name = roster_player.get("firstName", {}).get("default", "")
+                last_name = roster_player.get("lastName", {}).get("default", "")
 
                 if not first_name or not last_name:
                     continue
