@@ -371,6 +371,14 @@ repos:
         args: []  # Config is in pyproject.toml
         additional_dependencies: [tomli]  # Required to read pyproject.toml
 
+  - repo: local
+    hooks:
+      - id: check-file-size
+        name: Check Python File Size
+        entry: ./scripts/check_file_size.sh
+        language: script
+        files: \.py$
+
   - repo: https://github.com/osprey-oss/deptry
     rev: 0.24.0  # ci: autoupdate-freeze (0.25.1 requires Rust 1.94, system has 1.93.1)
     hooks:
