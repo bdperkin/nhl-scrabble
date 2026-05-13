@@ -282,6 +282,24 @@ latex_elements = {
 text_newlines = "unix"
 text_sectionchars = '*=-~"+`'
 
+# EPUB configuration
+epub_basename = "nhl-scrabble"
+epub_title = project
+epub_author = author
+epub_publisher = "Brandon Perkins"
+epub_copyright = copyright
+epub_exclude_files = ["search.html"]
+epub_tocdepth = 3
+epub_tocdup = True
+epub_show_urls = "footnote"
+epub_use_index = True
+
+# Gettext configuration (for i18n)
+gettext_compact = False
+gettext_uuid = True
+gettext_location = True
+gettext_auto_build = True
+
 
 def _configure_doctest_exclusions(app: "Sphinx") -> None:
     """Exclude API autodoc files from doctest builder.
@@ -299,10 +317,32 @@ def _configure_doctest_exclusions(app: "Sphinx") -> None:
         )
 
 
+def _configure_builder_extensions(app: "Sphinx") -> None:
+    """Configure extensions based on builder type.
+
+    Some extensions are HTML-specific and should not run for other builders. Disconnect their event
+    handlers to prevent errors.
+    """
+    # Builders that don't support HTML-specific extensions
+    non_html_builders = ["json", "xml", "pickle", "pseudoxml", "gettext", "text"]
+
+    if app.builder.name in non_html_builders:
+        # Disconnect HTML-specific event handlers for non-HTML builders
+        # This prevents extensions like opengraph from trying to process non-HTML output
+        try:
+            # Remove all handlers for html-page-context event (used by opengraph, etc.)
+            if "html-page-context" in app.events.listeners:
+                app.events.listeners["html-page-context"].clear()
+        except (AttributeError, KeyError):
+            # If the event doesn't exist or structure changed, silently continue
+            pass
+
+
 # -- Builder-specific configuration -----------------------------------------
 
 
 def setup(app: "Sphinx") -> None:
     """Sphinx setup hook for builder-specific configuration."""
-    # Connect to builder-inited event to configure doctest exclusions
+    # Connect to builder-inited event to configure extensions and exclusions
+    app.connect("builder-inited", _configure_builder_extensions)
     app.connect("builder-inited", _configure_doctest_exclusions)

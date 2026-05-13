@@ -355,6 +355,8 @@ make serve-docs     # http://localhost:8000
 make docs-api       # Regenerate API docs
 ```
 
+**Available Formats:** 12 documentation formats supported (HTML, man pages, Texinfo, PDF/LaTeX, plain text, AsciiDoc, EPUB, single-page HTML, directory HTML, JSON, XML, gettext)
+
 ## Internationalization (I18n)
 
 **Supported:** 12 locales covering major hockey markets (North America, Nordic, Central/Eastern Europe)

@@ -44,7 +44,7 @@ NC := \033[0m # No Color
         ruff-check ruff-format black-check black-format mypy ty type-check refurb refurb-report modernization trailing-comma quality check pre-commit ci \
         security-audit pip-audit bandit safety security-report \
         build check-wheel package publish publish-test \
-        docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-all \
+        docs serve-docs docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-epub docs-singlehtml docs-dirhtml docs-json docs-xml docs-gettext docs-all \
         docs-doctest docs-doctest-verbose docs-linkcheck docs-linkcheck-verbose docs-coverage docs-quality \
         run run-verbose run-json \
         shell watch init info status version \
@@ -570,7 +570,37 @@ docs-asciidoc: check-venv ## Build AsciiDoc documentation (requires pandoc)
 	@cd docs && find . -name "*.rst" -type f ! -path "./_build/*" -exec sh -c 'pandoc -f rst -t asciidoc "{}" -o "_build/asciidoc/$$(basename {} .rst).adoc"' \;
 	@printf "$(GREEN)✓ AsciiDoc: docs/_build/asciidoc/$(NC)\n"
 
-docs-all: docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc ## Build all documentation formats
+docs-epub: check-venv ## Build EPUB e-book documentation
+	@printf "$(BLUE)Building EPUB documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b epub . _build/epub
+	@printf "$(GREEN)✓ EPUB: docs/_build/epub/nhl-scrabble.epub$(NC)\n"
+
+docs-singlehtml: check-venv ## Build single-page HTML documentation
+	@printf "$(BLUE)Building single-page HTML documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b singlehtml . _build/singlehtml
+	@printf "$(GREEN)✓ Single HTML: docs/_build/singlehtml/index.html$(NC)\n"
+
+docs-dirhtml: check-venv ## Build directory-based HTML documentation
+	@printf "$(BLUE)Building directory HTML documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b dirhtml . _build/dirhtml
+	@printf "$(GREEN)✓ Directory HTML: docs/_build/dirhtml/$(NC)\n"
+
+docs-json: check-venv ## Build JSON documentation
+	@printf "$(BLUE)Building JSON documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b json . _build/json
+	@printf "$(GREEN)✓ JSON: docs/_build/json/$(NC)\n"
+
+docs-xml: check-venv ## Build XML documentation
+	@printf "$(BLUE)Building XML documentation...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b xml . _build/xml
+	@printf "$(GREEN)✓ XML: docs/_build/xml/$(NC)\n"
+
+docs-gettext: check-venv ## Extract translatable messages (i18n)
+	@printf "$(BLUE)Extracting translatable messages...$(NC)\n"
+	@cd docs && $(BIN)/sphinx-build -b gettext . _build/gettext
+	@printf "$(GREEN)✓ Gettext: docs/_build/gettext/$(NC)\n"
+
+docs-all: docs-html docs-man docs-texinfo docs-pdf docs-text docs-asciidoc docs-epub docs-singlehtml docs-dirhtml docs-json docs-xml docs-gettext ## Build all documentation formats
 	@printf "$(GREEN)✓ All documentation formats built successfully!$(NC)\n"
 
 ###################

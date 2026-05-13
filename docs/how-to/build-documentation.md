@@ -4,14 +4,23 @@ This guide explains how to build NHL Scrabble documentation in various output fo
 
 ## Overview
 
-The project uses Sphinx to generate documentation in multiple formats:
+The project uses Sphinx to generate documentation in 12 different formats:
 
+**Core Formats:**
 - **HTML** - Web documentation (default, deployed to GitHub Pages)
 - **Man Pages** - Unix man page format for terminal viewing
 - **Texinfo** - GNU Info format for Emacs/Info readers
 - **PDF** - Portable document format via LaTeX (requires additional tools)
 - **Plain Text** - Simple text-only format
 - **AsciiDoc** - AsciiDoc format via pandoc (requires pandoc)
+
+**Additional Formats:**
+- **EPUB** - E-book format for e-readers and mobile devices
+- **Single-Page HTML** - Entire documentation in one HTML file for offline viewing
+- **Directory HTML** - HTML with clean URLs (e.g., `/page/` instead of `/page.html`)
+- **JSON** - Serialized format for programmatic access
+- **XML** - XML output for integration with other tools
+- **Gettext** - Message extraction for internationalization (i18n)
 
 ## Quick Start
 
@@ -211,6 +220,200 @@ sudo dnf install pandoc
 - Supports three AsciiDoc variants: asciidoc, asciidoc_legacy, asciidoctor
 - Useful for integration with AsciiDoc-based documentation systems
 
+### EPUB E-Book
+
+Build EPUB format for e-readers:
+
+```bash
+make docs-epub
+```
+
+Output: `docs/_build/epub/nhl-scrabble.epub`
+
+**Compatible with:**
+
+- Amazon Kindle (via conversion)
+- Apple Books
+- Google Play Books
+- Adobe Digital Editions
+- Most e-reader apps
+
+**View locally:**
+
+```bash
+# Open with default e-reader app
+open docs/_build/epub/nhl-scrabble.epub  # macOS
+xdg-open docs/_build/epub/nhl-scrabble.epub  # Linux
+
+# Or use command-line EPUB reader
+ebook-viewer docs/_build/epub/nhl-scrabble.epub  # Calibre
+```
+
+**Use cases:**
+
+- Offline reading on mobile devices
+- E-reader distribution
+- Professional e-book publishing
+- Portable documentation for tablets
+
+### Single-Page HTML
+
+Build entire documentation as single HTML file:
+
+```bash
+make docs-singlehtml
+```
+
+Output: `docs/_build/singlehtml/index.html`
+
+**View locally:**
+
+```bash
+# Open in browser
+open docs/_build/singlehtml/index.html  # macOS
+xdg-open docs/_build/singlehtml/index.html  # Linux
+start docs/_build/singlehtml/index.html  # Windows
+```
+
+**Use cases:**
+
+- Offline viewing
+- Printing entire documentation
+- PDF conversion via browser print
+- Email distribution
+- Self-contained documentation archives
+
+**Note:** File size may be large (>1 MB) for comprehensive documentation.
+
+### Directory HTML
+
+Build HTML with directory structure for cleaner URLs:
+
+```bash
+make docs-dirhtml
+```
+
+Output: `docs/_build/dirhtml/`
+
+**View locally:**
+
+```bash
+# Serve with Python HTTP server
+cd docs/_build/dirhtml
+python -m http.server 8000
+
+# Or use make target
+make serve-docs
+```
+
+**Benefits:**
+
+- URLs like `/installation/` instead of `/installation.html`
+- Better for web servers (Apache, nginx)
+- Cleaner URL structure
+- Improved SEO
+
+**Use cases:**
+
+- Web server deployment with clean URLs
+- Production documentation hosting
+- Professional documentation sites
+
+### JSON Documentation
+
+Build serialized JSON format:
+
+```bash
+make docs-json
+```
+
+Output: `docs/_build/json/` (*.fjson files)
+
+**View locally:**
+
+```bash
+# View JSON structure
+cat docs/_build/json/index.fjson | jq .
+
+# View all JSON files
+ls -lh docs/_build/json/*.fjson
+```
+
+**Use cases:**
+
+- Programmatic documentation access
+- Search index generation
+- Documentation analysis tools
+- Custom documentation processing
+- API documentation integration
+
+**Format:** Sphinx JSON uses `.fjson` extension (Sphinx JSON format).
+
+### XML Documentation
+
+Build XML format:
+
+```bash
+make docs-xml
+```
+
+Output: `docs/_build/xml/` (*.xml files)
+
+**View locally:**
+
+```bash
+# View XML structure
+cat docs/_build/xml/index.xml
+
+# Validate XML
+xmllint docs/_build/xml/index.xml
+
+# View all XML files
+ls -lh docs/_build/xml/*.xml
+```
+
+**Use cases:**
+
+- Integration with other documentation tools
+- XSLT transformations
+- Documentation processing pipelines
+- DocBook integration
+- Enterprise documentation systems
+
+### Gettext (i18n)
+
+Extract translatable messages for internationalization:
+
+```bash
+make docs-gettext
+```
+
+Output: `docs/_build/gettext/` (*.pot files)
+
+**View locally:**
+
+```bash
+# View message catalog
+less docs/_build/gettext/index.pot
+
+# Count translatable strings
+grep -c "^msgid" docs/_build/gettext/index.pot
+```
+
+**Use cases:**
+
+- Preparing documentation for translation
+- Multi-language documentation
+- Localization workflows
+- Translation memory creation
+
+**Workflow:**
+
+1. Extract messages: `make docs-gettext`
+1. Create language catalogs: `sphinx-intl update -p docs/_build/gettext -l fr_CA`
+1. Translate `.po` files
+1. Build localized docs: `sphinx-build -b html -D language=fr_CA docs docs/_build/html-fr`
+
 ## Building All Formats
 
 Build all documentation formats at once:
@@ -227,6 +430,12 @@ This runs all individual build targets in sequence:
 1. PDF (if LaTeX available)
 1. Plain text
 1. AsciiDoc (if pandoc available)
+1. EPUB e-book
+1. Single-page HTML
+1. Directory HTML
+1. JSON format
+1. XML format
+1. Gettext messages
 
 **Output locations:**
 
@@ -243,8 +452,20 @@ docs/_build/
 │   └── nhl-scrabble.pdf
 ├── text/              # Plain text
 │   └── index.txt
-└── asciidoc/          # AsciiDoc
-    └── *.adoc
+├── asciidoc/          # AsciiDoc
+│   └── *.adoc
+├── epub/              # EPUB e-book
+│   └── nhl-scrabble.epub
+├── singlehtml/        # Single-page HTML
+│   └── index.html
+├── dirhtml/           # Directory HTML
+│   └── index.html
+├── json/              # JSON format
+│   └── *.fjson
+├── xml/               # XML format
+│   └── *.xml
+└── gettext/           # Gettext messages
+    └── *.pot
 ```
 
 ## Advanced Usage
