@@ -16,7 +16,7 @@
 # Define limit in bytes (e.g., 50KB = 51200)
 # 20KB = 20480
 MAX_SIZE=20480
-FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(py)$' | grep -v -E "(src/nhl_scrabble/api/nhl_client\.py|src/nhl_scrabble/analytics/formatters\.py|tests/unit/test_analytics_formatters\.py)$")
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(py)$' | grep -v -E "(src/nhl_scrabble/api/nhl_client\.py)$")
 
 for FILE in ${FILES}; do
   if [[ -f "$FILE" ]]; then
