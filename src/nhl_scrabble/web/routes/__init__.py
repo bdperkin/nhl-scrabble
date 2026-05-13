@@ -34,15 +34,6 @@ def register_routes(app: FastAPI, templates: Jinja2Templates | None) -> None:
         teams,
     )
 
-    # Create dependency injection wrapper for templates
-    def get_templates() -> Jinja2Templates | None:
-        """Return templates instance for dependency injection.
-
-        Returns:
-            Jinja2 templates instance or None
-        """
-        return templates
-
     # Register core routes (/, /health, /api/analyze POST)
     app.include_router(core.router, tags=["core"])
 

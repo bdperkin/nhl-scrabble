@@ -4,12 +4,9 @@ This module provides NHL API-specific retry logic, including handling of Retry-A
 429 (rate limit) responses.
 """
 
-import logging
 from contextlib import suppress
 
 import requests
-
-logger = logging.getLogger(__name__)
 
 __all__ = [
     "get_retry_after",
