@@ -4,16 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from nhl_scrabble.filters import (
-    AnalysisFilters,
-    filter_conference_standings,
-    filter_division_standings,
-    filter_players,
-    filter_playoff_standings,
-    filter_teams,
-)
+from nhl_scrabble.filters import AnalysisFilters, filter_players, filter_teams
 from nhl_scrabble.models.player import PlayerScore
-from nhl_scrabble.models.standings import DivisionStandings, PlayoffTeam
 from nhl_scrabble.models.team import TeamScore
 
 

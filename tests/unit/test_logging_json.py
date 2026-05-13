@@ -2,13 +2,8 @@
 
 import json
 import logging
-from logging.handlers import RotatingFileHandler
-from pathlib import Path
-from unittest.mock import patch
 
-import colorlog
-
-from nhl_scrabble.logging_config import JSONFormatter, setup_logging
+from nhl_scrabble.logging_config import JSONFormatter
 
 
 class TestJSONFormatter:

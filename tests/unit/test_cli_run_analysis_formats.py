@@ -9,7 +9,7 @@ Target: Improve coverage of run_analysis() function (lines 240-420)
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -17,8 +17,6 @@ import pytest
 from nhl_scrabble.cli import generate_excel_report, run_analysis
 from nhl_scrabble.config import Config
 from nhl_scrabble.filters import AnalysisFilters
-from nhl_scrabble.models.player import PlayerScore
-from nhl_scrabble.models.standings import ConferenceStandings, DivisionStandings, PlayoffTeam
 from nhl_scrabble.models.team import TeamScore
 
 if TYPE_CHECKING:
