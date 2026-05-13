@@ -447,6 +447,8 @@ per-file-ignores = [
     "src/nhl_scrabble/api/nhl_client.py:C901",
     "src/nhl_scrabble/api_server/routes/players.py:C901",
     "src/nhl_scrabble/cli/commands/dashboard.py:C901",
+    "src/nhl_scrabble/cli/commands/test_analytics.py:C901",
+    "src/nhl_scrabble/cli/commands/watch.py:C901",
     "src/nhl_scrabble/cli.py:TC003,C901",
     "src/nhl_scrabble/config_validators.py:C901",
     "src/nhl_scrabble/validators.py:C901",
