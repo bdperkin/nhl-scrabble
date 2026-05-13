@@ -52,10 +52,26 @@ class TestRetryLogic:
         max_backoff = 30.0
 
         # Test exponential growth (with jitter tolerance)
-        delay_0 = _calculate_backoff_delay(0, backoff_factor=backoff_factor, max_backoff=max_backoff)
-        delay_1 = _calculate_backoff_delay(1, backoff_factor=backoff_factor, max_backoff=max_backoff)
-        delay_2 = _calculate_backoff_delay(2, backoff_factor=backoff_factor, max_backoff=max_backoff)
-        delay_3 = _calculate_backoff_delay(3, backoff_factor=backoff_factor, max_backoff=max_backoff)
+        delay_0 = _calculate_backoff_delay(
+            0,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+        )
+        delay_1 = _calculate_backoff_delay(
+            1,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+        )
+        delay_2 = _calculate_backoff_delay(
+            2,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+        )
+        delay_3 = _calculate_backoff_delay(
+            3,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+        )
 
         # Attempt 0: 1.0 * (2.0 ** 0) = 1.0 ± 25%
         assert 0.75 <= delay_0 <= 1.25
@@ -94,11 +110,21 @@ class TestRetryLogic:
         max_backoff = 30.0
 
         # Retry-After value should override exponential backoff
-        delay = _calculate_backoff_delay(0, backoff_factor=backoff_factor, max_backoff=max_backoff, retry_after=10)
+        delay = _calculate_backoff_delay(
+            0,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+            retry_after=10,
+        )
         assert delay == 10.0
 
         # Retry-After should still respect max_backoff
-        delay_capped = _calculate_backoff_delay(0, backoff_factor=backoff_factor, max_backoff=max_backoff, retry_after=50)
+        delay_capped = _calculate_backoff_delay(
+            0,
+            backoff_factor=backoff_factor,
+            max_backoff=max_backoff,
+            retry_after=50,
+        )
         assert delay_capped == 30.0  # Capped at max_backoff
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")

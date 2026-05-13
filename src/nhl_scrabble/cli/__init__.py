@@ -53,16 +53,16 @@ cli.add_command(test_analytics)
 
 # Public API exports
 __all__ = [
-    "cli",
-    "validate_output_path",
-    "validate_cli_arguments",
-    "generate_excel_report",
-    "run_analysis",
     "analyze",
+    "cli",
+    "dashboard",
+    "generate_excel_report",
     "interactive",
+    "run_analysis",
     "search",
     "serve",
-    "dashboard",
-    "watch",
     "test_analytics",
+    "validate_cli_arguments",
+    "validate_output_path",
+    "watch",
 ]

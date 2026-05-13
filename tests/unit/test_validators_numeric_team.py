@@ -1,6 +1,5 @@
 """Unit tests for input validation utilities."""
 
-
 import pytest
 
 from nhl_scrabble.validators import (

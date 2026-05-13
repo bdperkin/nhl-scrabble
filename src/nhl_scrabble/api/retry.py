@@ -1,7 +1,7 @@
 """NHL API retry logic with Retry-After header support.
 
-This module provides NHL API-specific retry logic, including handling
-of Retry-After headers from 429 (rate limit) responses.
+This module provides NHL API-specific retry logic, including handling of Retry-After headers from
+429 (rate limit) responses.
 """
 
 import logging

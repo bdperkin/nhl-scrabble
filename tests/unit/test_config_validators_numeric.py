@@ -1,6 +1,5 @@
 """Unit tests for configuration validators and injection protection."""
 
-
 import pytest
 
 from nhl_scrabble.config_validators import (

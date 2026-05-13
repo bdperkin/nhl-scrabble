@@ -8,13 +8,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Annotated, Any
 
 from fastapi import APIRouter, Query
-from fastapi.responses import HTMLResponse
 
 from nhl_scrabble.web.converters import _build_entity_data
 from nhl_scrabble.web.routes.core import AnalysisRequest, analyze_post
 
 if TYPE_CHECKING:
     from fastapi import Request
+    from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 

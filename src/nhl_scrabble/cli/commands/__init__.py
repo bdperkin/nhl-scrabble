@@ -1,7 +1,7 @@
 """CLI commands for NHL Scrabble.
 
-This package contains individual command modules for the NHL Scrabble CLI.
-Each command is defined in its own module for better organization and maintainability.
+This package contains individual command modules for the NHL Scrabble CLI. Each command is defined
+in its own module for better organization and maintainability.
 """
 
 from __future__ import annotations

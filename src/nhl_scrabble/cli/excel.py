@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import click
 
@@ -15,6 +15,9 @@ from nhl_scrabble.models.standings import (
     PlayoffTeam,
 )
 from nhl_scrabble.models.team import TeamScore
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

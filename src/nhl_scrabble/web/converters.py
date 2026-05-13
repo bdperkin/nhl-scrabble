@@ -1,7 +1,7 @@
 """Data conversion utilities for web responses.
 
-This module provides functions to convert internal data models to dictionaries
-suitable for JSON/HTML responses.
+This module provides functions to convert internal data models to dictionaries suitable for
+JSON/HTML responses.
 """
 
 from __future__ import annotations

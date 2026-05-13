@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import asdict
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from rich.console import Console
 
@@ -15,6 +15,9 @@ from nhl_scrabble.i18n import _
 from nhl_scrabble.processors.playoff_calculator import PlayoffCalculator
 from nhl_scrabble.reports.generator import ReportGenerator
 from nhl_scrabble.ui.progress import ProgressManager
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 console = Console()

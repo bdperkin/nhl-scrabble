@@ -1,7 +1,7 @@
 """NHL API-specific error handling and utilities.
 
-This module provides NHL API-specific error handling utilities,
-complementing the base exceptions defined in nhl_scrabble.exceptions.
+This module provides NHL API-specific error handling utilities, complementing the base exceptions
+defined in nhl_scrabble.exceptions.
 """
 
 import logging
@@ -18,12 +18,12 @@ from nhl_scrabble.exceptions import (
 logger = logging.getLogger(__name__)
 
 __all__ = [
-    "NHLApiError",
     "NHLApiConnectionError",
+    "NHLApiError",
     "NHLApiNotFoundError",
     "NHLApiSSLError",
-    "handle_http_error",
     "handle_connection_error",
+    "handle_http_error",
 ]
 
 

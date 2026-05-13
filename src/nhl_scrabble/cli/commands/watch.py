@@ -5,9 +5,9 @@ from __future__ import annotations
 import logging
 import signal
 import time
-import types
 from contextlib import suppress
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 import click
 from rich.console import Console
@@ -18,6 +18,9 @@ from nhl_scrabble.cli.orchestration import run_analysis
 from nhl_scrabble.config import Config
 from nhl_scrabble.i18n import _, format_datetime
 from nhl_scrabble.logging_config import setup_logging
+
+if TYPE_CHECKING:
+    import types
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -197,7 +200,7 @@ def watch(  # noqa: PLR0913, PLR0915  # Complex but necessary for watch mode
 
                 # Display result
                 if result:
-                    print(result)
+                    pass
 
                 console.print("-" * 80)
 

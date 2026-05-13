@@ -66,6 +66,91 @@ class InteractiveShell:
         # Command handler (initialized after data is loaded)
         self.cmd_handler: CommandHandler | None = None
 
+    def _find_team(self, abbrev: str) -> TeamScore | None:
+        """Find team by abbreviation.
+
+        Args:
+            abbrev: Team abbreviation to search for
+
+        Returns:
+            TeamScore if found, None otherwise
+        """
+        if not self.data:
+            return None
+
+        teams: list[TeamScore] = self.data["teams"]
+        for team in teams:
+            if team.abbrev.upper() == abbrev.upper():
+                return team
+        return None
+
+    def _find_player(self, name: str) -> PlayerScore | None:  # noqa: C901
+        """Find player by name (fuzzy match).
+
+        Args:
+            name: Player name to search for
+
+        Returns:
+            PlayerScore if found, None otherwise
+        """
+        if not self.data:
+            return None
+
+        name_lower = name.lower()
+        teams: list[TeamScore] = self.data["teams"]
+
+        # Exact match first
+        for team in teams:
+            for player in team.players:
+                if player.full_name.lower() == name_lower:
+                    return player
+
+        # Partial match (last name)
+        for team in teams:
+            for player in team.players:
+                if name_lower in player.last_name.lower():
+                    return player
+
+        # Partial match (any part)
+        for team in teams:
+            for player in team.players:
+                if name_lower in player.full_name.lower():
+                    return player
+
+        return None
+
+    # Display methods (proxy to formatting module for backward compatibility)
+    def _display_team(self, team: TeamScore) -> None:
+        """Display team details (proxy to formatting module).
+
+        Args:
+            team: Team score to display
+        """
+        from nhl_scrabble.interactive.formatting import display_team  # noqa: PLC0415
+
+        display_team(team, self.console)
+
+    def _display_player(self, player: PlayerScore) -> None:
+        """Display player details (proxy to formatting module).
+
+        Args:
+            player: Player score to display
+        """
+        from nhl_scrabble.interactive.formatting import display_player  # noqa: PLC0415
+
+        display_player(player, self.console)
+
+    def _display_team_list(self, teams: list[TeamScore], title: str) -> None:
+        """Display list of teams (proxy to formatting module).
+
+        Args:
+            teams: List of team scores to display
+            title: Table title
+        """
+        from nhl_scrabble.interactive.formatting import display_team_list  # noqa: PLC0415
+
+        display_team_list(teams, title, self.console)
+
     def fetch_data(self) -> None:
         """Fetch NHL data from API."""
         # Imports inside method to avoid circular dependencies
@@ -222,59 +307,6 @@ class InteractiveShell:
 
         self.console.print(table)
 
-    def _find_team(self, abbrev: str) -> TeamScore | None:
-        """Find team by abbreviation.
-
-        Args:
-            abbrev: Team abbreviation to search for
-
-        Returns:
-            TeamScore if found, None otherwise
-        """
-        if not self.data:
-            return None
-
-        teams: list[TeamScore] = self.data["teams"]
-        for team in teams:
-            if team.abbrev.upper() == abbrev.upper():
-                return team
-        return None
-
-    def _find_player(self, name: str) -> PlayerScore | None:  # noqa: C901
-        """Find player by name (fuzzy match).
-
-        Args:
-            name: Player name to search for
-
-        Returns:
-            PlayerScore if found, None otherwise
-        """
-        if not self.data:
-            return None
-
-        name_lower = name.lower()
-        teams: list[TeamScore] = self.data["teams"]
-
-        # Exact match first
-        for team in teams:
-            for player in team.players:
-                if player.full_name.lower() == name_lower:
-                    return player
-
-        # Partial match (last name)
-        for team in teams:
-            for player in team.players:
-                if name_lower in player.last_name.lower():
-                    return player
-
-        # Partial match (any part)
-        for team in teams:
-            for player in team.players:
-                if name_lower in player.full_name.lower():
-                    return player
-
-        return None
-
     def _ensure_command_handler(self) -> None:
         """Ensure command handler is initialized (for backward compatibility)."""
         if not self.cmd_handler and self.data:
@@ -300,7 +332,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_show(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_top(self, args: list[str]) -> None:
         """Show top N players (proxy to command handler).
@@ -312,7 +346,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_top(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_bottom(self, args: list[str]) -> None:
         """Show bottom N players (proxy to command handler).
@@ -324,7 +360,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_bottom(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_compare(self, args: list[str]) -> None:
         """Compare two players (proxy to command handler).
@@ -336,7 +374,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_compare(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_filter(self, args: list[str]) -> None:
         """Filter teams by division or conference (proxy to command handler).
@@ -348,7 +388,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_filter(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_search(self, args: list[str]) -> None:
         """Search players by name (proxy to command handler).
@@ -360,7 +402,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_search(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_standings(self, args: list[str]) -> None:
         """Show standings (proxy to command handler).
@@ -372,7 +416,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_standings(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_playoff(self, args: list[str]) -> None:
         """Show playoff bracket (proxy to command handler).
@@ -384,7 +430,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_playoff(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_stats(self, args: list[str]) -> None:
         """Show statistics (proxy to command handler).
@@ -396,7 +444,9 @@ class InteractiveShell:
         if self.cmd_handler:
             self.cmd_handler.cmd_stats(args)
         else:
-            self.console.print(f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]")
+            self.console.print(
+                f"[red]{_('No data loaded. Use')} 'refresh' {_('to fetch data.')}[/red]",
+            )
 
     def cmd_refresh(self, args: list[str]) -> None:
         """Re-fetch data from NHL API (proxy to command handler).
@@ -417,38 +467,6 @@ class InteractiveShell:
             self.cmd_handler.cmd_help(args)
         else:
             self._show_basic_help()
-
-    # Display methods (proxy to formatting module for backward compatibility)
-    def _display_team(self, team: TeamScore) -> None:
-        """Display team details (proxy to formatting module).
-
-        Args:
-            team: Team score to display
-        """
-        from nhl_scrabble.interactive.formatting import display_team  # noqa: PLC0415
-
-        display_team(team, self.console)
-
-    def _display_player(self, player: PlayerScore) -> None:
-        """Display player details (proxy to formatting module).
-
-        Args:
-            player: Player score to display
-        """
-        from nhl_scrabble.interactive.formatting import display_player  # noqa: PLC0415
-
-        display_player(player, self.console)
-
-    def _display_team_list(self, teams: list[TeamScore], title: str) -> None:
-        """Display list of teams (proxy to formatting module).
-
-        Args:
-            teams: List of team scores to display
-            title: Table title
-        """
-        from nhl_scrabble.interactive.formatting import display_team_list  # noqa: PLC0415
-
-        display_team_list(teams, title, self.console)
 
     def get_completer(self) -> Any:
         """Get command completer with team/player names (proxy to completion module).
