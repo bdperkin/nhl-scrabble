@@ -35,6 +35,16 @@ extensions = [
     "sphinx.ext.coverage",  # Check documentation coverage
     "sphinx.ext.doctest",  # Test code examples in docstrings
     "sphinx.ext.githubpages",  # Create .nojekyll for GitHub Pages
+    # Additional Sphinx extensions (enhancement/024)
+    "sphinx.ext.autosummary",  # Auto-generate summary tables
+    "sphinx.ext.graphviz",  # Diagram support
+    "sphinx.ext.inheritance_diagram",  # Class hierarchy visualization
+    "sphinx.ext.mathjax",  # Math equation support
+    "sphinx.ext.ifconfig",  # Conditional content
+    "sphinx.ext.extlinks",  # Shortened external links
+    "sphinx.ext.duration",  # Build time tracking
+    "sphinx.ext.autosectionlabel",  # Auto section labels
+    "sphinx.ext.linkcode",  # Advanced source code links
     # Third-party extensions
     "sphinx_autodoc_typehints",  # Use type hints in signatures
     "sphinx_copybutton",  # Copy button for code blocks
@@ -234,6 +244,42 @@ doctest_test_doctest_blocks = "default"  # Test >>> blocks in docstrings
 # Note: API autodoc examples are skipped because they test external APIs
 # and environment-specific behavior that's unreliable in CI
 
+# -- Additional extension configuration (enhancement/024) -------------------
+
+# Autosummary configuration
+autosummary_generate = True  # Generate stub pages automatically
+autosummary_imported_members = False  # Don't include imported members
+autosummary_ignore_module_all = False  # Respect __all__
+
+# Graphviz configuration
+graphviz_output_format = "svg"  # SVG for better quality
+graphviz_dot_args = ["-Grankdir=LR"]  # Left-to-right layout
+
+# Inheritance diagram configuration
+inheritance_graph_attrs = {"rankdir": "TB", "size": '"8.0, 10.0"'}
+inheritance_node_attrs = {"shape": "box", "fontsize": 11, "height": 0.75}
+
+# MathJax configuration
+mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+mathjax3_config = {
+    "tex": {
+        "inlineMath": [["$", "$"], ["\\(", "\\)"]],
+        "displayMath": [["$$", "$$"], ["\\[", "\\]"]],
+    },
+}
+
+# External links configuration
+extlinks = {
+    "issue": ("https://github.com/bdperkin/nhl-scrabble/issues/%s", "issue #%s"),
+    "pr": ("https://github.com/bdperkin/nhl-scrabble/pull/%s", "PR #%s"),
+    "commit": ("https://github.com/bdperkin/nhl-scrabble/commit/%s", "commit %s"),
+    "nhl-api": ("https://api-web.nhle.com/v1/%s", "NHL API: %s"),
+}
+
+# Autosectionlabel configuration
+autosectionlabel_prefix_document = True  # Prefix with document name
+autosectionlabel_maxdepth = 3  # Max heading depth
+
 # -- Options for multiple output formats ------------------------------------
 
 # Man page configuration
@@ -301,6 +347,25 @@ gettext_location = True
 gettext_auto_build = True
 
 
+def linkcode_resolve(domain: str, info: dict[str, str]) -> str | None:
+    """Link to GitHub source code.
+
+    Args:
+        domain: The language domain (e.g., 'py' for Python)
+        info: Information about the object being documented
+
+    Returns:
+        URL to the source code on GitHub, or None if not applicable
+    """
+    if domain != "py":
+        return None
+    if not info["module"]:
+        return None
+
+    filename = info["module"].replace(".", "/")
+    return f"https://github.com/bdperkin/nhl-scrabble/blob/main/src/{filename}.py"
+
+
 def _configure_doctest_exclusions(app: "Sphinx") -> None:
     """Exclude API autodoc files from doctest builder.
 
@@ -313,6 +378,9 @@ def _configure_doctest_exclusions(app: "Sphinx") -> None:
                 "api/nhl-api.rst",
                 "api/processors.rst",
                 "api/scoring.rst",
+                # Exclude autosummary-generated API reference pages (enhancement/024)
+                # These contain doctest examples that require external API access
+                "**/_autosummary/*",
             ],
         )
 
@@ -346,3 +414,7 @@ def setup(app: "Sphinx") -> None:
     # Connect to builder-inited event to configure extensions and exclusions
     app.connect("builder-inited", _configure_builder_extensions)
     app.connect("builder-inited", _configure_doctest_exclusions)
+
+    # Add configuration values for ifconfig extension
+    app.add_config_value("include_dev_docs", default=False, rebuild="html")
+    app.add_config_value("include_internal_notes", default=False, rebuild="html")
