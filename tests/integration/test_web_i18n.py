@@ -181,7 +181,7 @@ class TestGetRequestLocale:
         """Test locale detection priority: ?lang > Accept-Language > default."""
         from starlette.requests import Request
 
-        from nhl_scrabble.web.app import get_request_locale
+        from nhl_scrabble.web.locale import get_request_locale
 
         # Test query parameter (highest priority)
         scope = {
@@ -220,7 +220,7 @@ class TestGetRequestLocale:
         """Test unsupported locale falls back to default."""
         from starlette.requests import Request
 
-        from nhl_scrabble.web.app import get_request_locale
+        from nhl_scrabble.web.locale import get_request_locale
 
         scope = {
             "type": "http",

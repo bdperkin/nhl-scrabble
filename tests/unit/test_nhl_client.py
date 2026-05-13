@@ -11,6 +11,7 @@ import requests
 import requests_cache
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError, NHLApiNotFoundError
+from nhl_scrabble.utils.retry import _calculate_backoff_delay
 
 
 class TestNHLApiClient:
@@ -490,19 +491,15 @@ class TestNHLApiClient:
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_calculate_backoff_delay_exponential(self):
         """Test that backoff delay increases exponentially."""
-        client = NHLApiClient(
-            cache_enabled=False,
-            backoff_factor=2.0,
-            max_backoff=30.0,
-            rate_limit_max_requests=1000,
-            rate_limit_window=1.0,
-        )
+        # Use utility function directly
+        backoff_factor = 2.0
+        max_backoff = 30.0
 
         # Test exponential growth (with jitter tolerance)
-        delay_0 = client._calculate_backoff_delay(0)
-        delay_1 = client._calculate_backoff_delay(1)
-        delay_2 = client._calculate_backoff_delay(2)
-        delay_3 = client._calculate_backoff_delay(3)
+        delay_0 = _calculate_backoff_delay(0, backoff_factor=backoff_factor, max_backoff=max_backoff)
+        delay_1 = _calculate_backoff_delay(1, backoff_factor=backoff_factor, max_backoff=max_backoff)
+        delay_2 = _calculate_backoff_delay(2, backoff_factor=backoff_factor, max_backoff=max_backoff)
+        delay_3 = _calculate_backoff_delay(3, backoff_factor=backoff_factor, max_backoff=max_backoff)
 
         # Attempt 0: 1.0 * (2.0 ** 0) = 1.0 ± 25%
         assert 0.75 <= delay_0 <= 1.25
@@ -519,48 +516,34 @@ class TestNHLApiClient:
         # Verify exponential growth
         assert delay_0 < delay_1 < delay_2 < delay_3
 
-        client.close()
-
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_calculate_backoff_delay_respects_max(self):
         """Test that backoff delay respects max_backoff limit."""
-        client = NHLApiClient(
-            cache_enabled=False,
-            backoff_factor=2.0,
-            max_backoff=5.0,
-            rate_limit_max_requests=1000,
-            rate_limit_window=1.0,
-        )
+        # Use utility function directly
+        backoff_factor = 2.0
+        max_backoff = 5.0
 
         # High attempt number would normally give huge delay
         # 1.0 * (2.0 ** 10) = 1024.0, but max_backoff = 5.0
-        delay = client._calculate_backoff_delay(10)
+        delay = _calculate_backoff_delay(10, backoff_factor=backoff_factor, max_backoff=max_backoff)
 
         # Should be capped at max_backoff ± jitter (25% of 5.0 = 1.25)
         assert 0.0 <= delay <= 6.25  # max_backoff + jitter
 
-        client.close()
-
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_calculate_backoff_delay_respects_retry_after(self):
         """Test that backoff delay respects Retry-After header."""
-        client = NHLApiClient(
-            cache_enabled=False,
-            backoff_factor=2.0,
-            max_backoff=30.0,
-            rate_limit_max_requests=1000,
-            rate_limit_window=1.0,
-        )
+        # Use utility function directly
+        backoff_factor = 2.0
+        max_backoff = 30.0
 
         # Retry-After value should override exponential backoff
-        delay = client._calculate_backoff_delay(0, retry_after=10)
+        delay = _calculate_backoff_delay(0, backoff_factor=backoff_factor, max_backoff=max_backoff, retry_after=10)
         assert delay == 10.0
 
         # Retry-After should still respect max_backoff
-        delay_capped = client._calculate_backoff_delay(0, retry_after=50)
+        delay_capped = _calculate_backoff_delay(0, backoff_factor=backoff_factor, max_backoff=max_backoff, retry_after=50)
         assert delay_capped == 30.0  # Capped at max_backoff
-
-        client.close()
 
     @patch("nhl_scrabble.api.nhl_client.requests.Session.get")
     @pytest.mark.flaky(reruns=3, reruns_delay=2)

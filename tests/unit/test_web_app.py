@@ -13,12 +13,9 @@ import pytest
 from fastapi import Request
 from fastapi.testclient import TestClient
 
-from nhl_scrabble.web.app import (
-    _load_fixture_data,
-    app,
-    get_request_locale,
-    setup_template_locale,
-)
+from nhl_scrabble.web.app import app
+from nhl_scrabble.web.fixtures import _load_fixture_data
+from nhl_scrabble.web.locale import get_request_locale, setup_template_locale
 
 
 class TestLocaleDetection:

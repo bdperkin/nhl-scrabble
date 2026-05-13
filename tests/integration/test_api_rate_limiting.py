@@ -6,6 +6,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from nhl_scrabble.api.nhl_client import NHLApiClient, NHLApiConnectionError
+from nhl_scrabble.api.retry import get_retry_after
 
 
 class TestApiClientRateLimiting:
@@ -300,21 +301,19 @@ class TestApiClientRateLimiting:
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_get_retry_after_method(self) -> None:
-        """Test _get_retry_after method extracts header correctly."""
-        client = NHLApiClient()
-
+        """Test get_retry_after function extracts header correctly."""
         # Test with valid Retry-After header
         response = Mock()
         response.headers = {"Retry-After": "60"}
-        assert client._get_retry_after(response) == 60.0
+        assert get_retry_after(response) == 60.0
 
         # Test with missing Retry-After header
         response.headers = {}
-        assert client._get_retry_after(response) == 1.0  # Default
+        assert get_retry_after(response) == 1.0  # Default
 
         # Test with invalid Retry-After value
         response.headers = {"Retry-After": "invalid"}
-        assert client._get_retry_after(response) == 1.0  # Default
+        assert get_retry_after(response) == 1.0  # Default
 
     @pytest.mark.flaky(reruns=3, reruns_delay=2)
     def test_rate_limiter_initialization(self) -> None:
