@@ -45,6 +45,34 @@ pip install -e ".[dev]"
 pre-commit install
 ```
 
+### Optional System Dependencies
+
+Some documentation features require optional system packages:
+
+**Graphviz (for diagrams and inheritance visualization):**
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install graphviz
+
+# macOS
+brew install graphviz
+
+# Fedora/RHEL
+sudo dnf install graphviz
+
+# Windows (via Chocolatey)
+choco install graphviz
+```
+
+**Features enabled with Graphviz:**
+
+- Architecture diagrams in documentation
+- Class inheritance diagrams
+- Workflow visualizations
+
+**Note:** Documentation will build successfully without Graphviz, but diagrams will be omitted.
+
 ### Python Version Support
 
 The project supports [Python](https://www.python.org/) 3.12 through 3.14. We also test against Python 3.15-dev to ensure forward compatibility, but this version is experimental and may fail CI checks without blocking merges.

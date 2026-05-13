@@ -357,6 +357,35 @@ make docs-api       # Regenerate API docs
 
 **Available Formats:** 12 documentation formats supported (HTML, man pages, Texinfo, PDF/LaTeX, plain text, AsciiDoc, EPUB, single-page HTML, directory HTML, JSON, XML, gettext)
 
+**Sphinx Extensions** (25 total):
+
+**Core Extensions (16):**
+
+- autodoc, napoleon, viewcode, intersphinx - API documentation
+- todo, coverage, doctest, githubpages - Development tools
+- autosummary, graphviz, inheritance_diagram - Visualization
+- mathjax, ifconfig, extlinks - Advanced features
+- duration, autosectionlabel, linkcode - Quality of life
+
+**Third-Party (9):**
+
+- sphinx_autodoc_typehints, sphinx_copybutton, sphinx_design - UX
+- sphinxcontrib.programoutput, sphinxcontrib.spelling - Testing
+- sphinxext.opengraph, sphinx_sitemap - SEO
+- myst_parser - Markdown support
+
+**Advanced Features** (see `docs/how-to/use-sphinx-extensions.md`):
+
+- Autosummary: Auto-generate API summary tables
+- Graphviz: Architecture diagrams (requires system `graphviz` package)
+- Inheritance diagrams: Class hierarchy visualization
+- MathJax: LaTeX-style math equations (CDN-based)
+- Conditional content: Dev/prod doc separation via ifconfig
+- Shortened links: `:issue:`123`` , `:pr:`456 ``, `:commit:`abc\`\`
+- Build duration: Performance tracking
+- Auto section labels: Reference by title
+- GitHub linkcode: Source links to repository
+
 ## Internationalization (I18n)
 
 **Supported:** 12 locales covering major hockey markets (North America, Nordic, Central/Eastern Europe)

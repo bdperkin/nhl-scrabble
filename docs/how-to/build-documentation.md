@@ -150,6 +150,49 @@ cat docs/_build/latex/nhl-scrabble.log
 # - Compilation errors: Check .log file for details
 ```
 
+### Graphviz Diagrams (Optional)
+
+Some documentation features use Graphviz for diagram generation:
+
+**Requirements:**
+
+- `graphviz` - System package for diagram and inheritance visualization
+
+**Install Graphviz:**
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install graphviz
+
+# macOS
+brew install graphviz
+
+# Fedora/RHEL
+sudo dnf install graphviz
+
+# Windows (via Chocolatey)
+choco install graphviz
+```
+
+**Features enabled with Graphviz:**
+
+- Architecture diagrams (`:graphviz:` directive)
+- Class inheritance diagrams (`:inheritance-diagram:` directive)
+- Workflow visualizations
+- System architecture documentation
+
+**Note:** Documentation will build successfully without Graphviz, but diagrams will be omitted from output.
+
+**Verify installation:**
+
+```bash
+# Check if graphviz is available
+which dot  # Should show path to dot executable
+
+# Test diagram generation
+echo 'digraph G { A -> B; }' | dot -Tsvg > test.svg
+```
+
 ### Plain Text
 
 Build plain text documentation:

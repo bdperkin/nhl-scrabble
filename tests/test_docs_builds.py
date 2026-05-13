@@ -1,18 +1,4 @@
-"""Tests for Sphinx documentation builds in multiple formats.
-
-This module tests the various Sphinx documentation output formats:
-- HTML (web documentation)
-- Man pages (Unix man page format)
-- Texinfo (GNU Info format)
-- PDF (via LaTeX - optional, requires pdflatex)
-- Plain text (simple text format)
-- EPUB (e-book format)
-- Single-page HTML (offline viewing)
-- Directory HTML (clean URLs)
-- JSON (programmatic access)
-- XML (tool integration)
-- Gettext (i18n support)
-"""
+"""Tests for Sphinx documentation builds in 12 output formats."""
 
 import shutil
 import subprocess
@@ -25,11 +11,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 
 
 class TestDocumentationBuilds:
-    """Test suite for Sphinx documentation builds.
-
-    Tests build documentation in multiple formats and verify outputs are created.
-    Uses the shared docs/_build directory - does not clean up to avoid conflicts.
-    """
+    """Test Sphinx builds in 12 formats using shared docs/_build directory."""
 
     @pytest.mark.skipif(
         shutil.which("sphinx-build") is None,
@@ -152,11 +134,7 @@ class TestDocumentationBuilds:
         reason="pandoc not found (required for AsciiDoc conversion)",
     )
     def test_asciidoc_build(self):
-        """Test AsciiDoc documentation build.
-
-        Note: This uses pandoc to convert RST files to AsciiDoc format.
-        Requires pandoc to be installed on the system.
-        """
+        """Test AsciiDoc build via pandoc."""
         # Build AsciiDoc documentation
         # Safe: pandoc is trusted tool, find is trusted system tool
         result = subprocess.run(
@@ -187,12 +165,7 @@ class TestDocumentationBuilds:
         reason="sphinx-build not found (docs dependencies not installed)",
     )
     def test_latex_build(self):
-        """Test LaTeX documentation build (PDF generation step 1).
-
-        Note: This tests LaTeX generation only, not PDF compilation.
-        PDF compilation requires pdflatex and may fail due to image format
-        compatibility issues (e.g., SVG images not supported by LaTeX).
-        """
+        """Test LaTeX build (PDF step 1, pdflatex not required)."""
         # Build LaTeX documentation
         # Safe: sphinx-build is trusted tool from project dependencies
         result = subprocess.run(  # noqa: S603
@@ -223,15 +196,7 @@ class TestDocumentationBuilds:
         reason="sphinx-build, pdflatex, or make not found (PDF build requires LaTeX)",
     )
     def test_pdf_compilation(self):
-        """Test PDF compilation from LaTeX (optional - may fail due to images).
-
-        This test is marked as xfail because PDF compilation may fail due to:
-        - SVG images not supported by LaTeX (requires PNG/PDF)
-        - Missing LaTeX packages
-        - LaTeX compilation errors
-
-        The test is informational to track PDF build capability.
-        """
+        """Test PDF compilation from LaTeX (optional, may fail on SVG images)."""
         # First build LaTeX
         # Safe: sphinx-build is trusted tool from project dependencies
         subprocess.run(  # noqa: S603
@@ -507,3 +472,36 @@ class TestDocumentationBuilds:
         assert "*.json" in gitignore_content, "*.json not excluded"
         assert "*.xml" in gitignore_content, "*.xml not excluded"
         assert "*.pot" in gitignore_content, "*.pot not excluded"
+
+    def test_sphinx_extensions_configured(self):
+        """Test enhancement/024 Sphinx extensions are configured."""
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("conf", PROJECT_ROOT / "docs" / "conf.py")
+        assert spec is not None
+        assert spec.loader is not None
+        conf = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(conf)
+
+        # Verify new extensions enabled
+        expected = [
+            "sphinx.ext.autosummary",
+            "sphinx.ext.graphviz",
+            "sphinx.ext.inheritance_diagram",
+            "sphinx.ext.mathjax",
+            "sphinx.ext.ifconfig",
+            "sphinx.ext.extlinks",
+            "sphinx.ext.duration",
+            "sphinx.ext.autosectionlabel",
+            "sphinx.ext.linkcode",
+        ]
+        for ext in expected:
+            assert ext in conf.extensions
+
+        # Verify configuration
+        assert conf.autosummary_generate is True
+        assert conf.graphviz_output_format == "svg"
+        assert "mathjax" in conf.mathjax_path.lower()
+        assert all(k in conf.extlinks for k in ["issue", "pr"])
+        assert conf.autosectionlabel_prefix_document is True
+        assert callable(conf.linkcode_resolve)
