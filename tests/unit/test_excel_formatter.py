@@ -1,11 +1,18 @@
 """Unit tests for ExcelFormatter class."""
 
+from importlib.util import find_spec
 from io import BytesIO
 
 import pytest
 
 from nhl_scrabble.analytics.analyzer import CoverageGap, TestPerformance
 from nhl_scrabble.analytics.formatters import ExcelFormatter
+
+# Skip all tests if openpyxl (optional dependency) is not installed
+pytestmark = pytest.mark.skipif(
+    find_spec("openpyxl") is None,
+    reason="openpyxl not found (optional 'export' dependencies not installed)",
+)
 
 
 class TestExcelFormatter:

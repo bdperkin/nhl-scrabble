@@ -1,9 +1,17 @@
 """Unit tests for TableFormatter class."""
 
+from importlib.util import find_spec
+
 import pytest
 
 from nhl_scrabble.analytics.analyzer import CoverageGap, TestPerformance
 from nhl_scrabble.analytics.formatters import TableFormatter
+
+# Skip all tests if tabulate (optional dependency) is not installed
+pytestmark = pytest.mark.skipif(
+    find_spec("tabulate") is None,
+    reason="tabulate not found (optional 'export' dependencies not installed)",
+)
 
 
 class TestTableFormatter:
