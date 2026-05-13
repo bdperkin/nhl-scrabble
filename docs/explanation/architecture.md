@@ -64,7 +64,7 @@ As of version 0.0.18, large monolithic modules have been refactored into focused
 
 ### CLI Package (`cli/`)
 
-**Original**: Single 65KB `cli.py` file  
+**Original**: Single 65KB `cli.py` file
 **Refactored**: 12 modular files organized by responsibility
 
 ```
@@ -88,7 +88,7 @@ cli/
 
 ### Web Package (`web/`)
 
-**Original**: Single 89KB `web/app.py` file  
+**Original**: Single 89KB `web/app.py` file
 **Refactored**: 17 modular files with dedicated routes package
 
 ```
@@ -117,7 +117,7 @@ web/
 
 ### API Package (`api/`)
 
-**Original**: Single 39KB `api/nhl_client.py` file  
+**Original**: Single 39KB `api/nhl_client.py` file
 **Refactored**: 4 modules with extracted utilities
 
 ```
@@ -134,7 +134,7 @@ api/
 
 ### Interactive Package (`interactive/`)
 
-**Original**: Single 27KB `interactive/shell.py` file  
+**Original**: Single 27KB `interactive/shell.py` file
 **Refactored**: 5 focused modules
 
 ```
