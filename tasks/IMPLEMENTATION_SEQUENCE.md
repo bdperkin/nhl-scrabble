@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-14 (tasks 023, 024, 028, 037, 038, 039, 040, 041, 042, 043, 051 completed)
-**Total Tasks**: 18 active tasks
-**Total Estimated Effort**: 95-133 hours
+**Updated**: 2026-05-14 (tasks 023, 024, 028, 037, 038, 039, 040, 041, 042, 043, 044, 051 completed)
+**Total Tasks**: 17 active tasks
+**Total Estimated Effort**: 89-125 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -126,13 +126,14 @@ Each task entry shows:
 
 ~~**Task 043 (it_CH)**: Completed 2026-05-13 - Italian (Switzerland) translation. All 254 strings translated with Swiss Italian NLA/NLB terminology. Actual effort: ~6.5h (within 6-8h estimate). PR #628.~~
 
+~~**Task 044 (sk_SK)**: Completed 2026-05-14 - Slovak (Slovakia) translation. All 254 strings translated with Slovak Extraliga terminology. Actual effort: ~7h (within 6-8h estimate). PR #629.~~
+
 **Remaining Full Translations** (6-8h each):
 ```bash
-/implement-task new-features/044-translate-to-sk-sk.md  # 6-8h, Issue #520
 /implement-task new-features/045-translate-to-lv-lv.md  # 6-8h, Issue #521
 ```
 
-**Phase Total**: 12-16 hours
+**Phase Total**: 6-8 hours
 
 ---
 
@@ -188,13 +189,13 @@ Each task entry shows:
 
 ## Summary
 
-**Total Active Tasks**: 18
-**Total Estimated Effort**: 95-133 hours
+**Total Active Tasks**: 17
+**Total Estimated Effort**: 89-125 hours
 
 ### By Priority:
 - **HIGH**: 0 tasks (0 hours) - All critical test coverage completed
 - **MEDIUM**: 4 tasks (34-49 hours) - I18n quality, test-analytics enhancement, code quality refactoring
-- **LOW**: 14 tasks (61-84 hours) - Features, translations, documentation, research
+- **LOW**: 13 tasks (55-76 hours) - Features, translations, documentation, research
 
 ### By Category:
 - **Testing**: 2 tasks (8.25-12.25 hours) - QA workflow + test-analytics
@@ -220,5 +221,5 @@ Each task entry shows:
 
 ---
 
-**Last Updated**: 2026-05-12
+**Last Updated**: 2026-05-14
 **Next Review**: After completing Phase 1 (HIGH priority test coverage)
