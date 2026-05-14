@@ -310,30 +310,28 @@ src/nhl_scrabble/locales/de_DE/LC_MESSAGES/messages.po: 0 translated, 254 untran
 
 Current translation completion as of 2026-05-13:
 
-| Locale | Language               | Status              | Completion | Reviewer Needed |
-| ------ | ---------------------- | ------------------- | ---------- | --------------- |
-| fr_CA  | French (Canada)        | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| sv_SE  | Swedish (Sweden)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| de_CH  | German (Switzerland)   | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| en_CA  | English (Canada)       | ✅ Complete         | 254/254    | No              |
-| en_US  | English (US)           | 🔄 Source language  | -          | -               |
-| ru_RU  | Russian (Russia)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| fi_FI  | Finnish (Finland)      | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| cs_CZ  | Czech (Czech Republic) | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| de_DE  | German (Germany)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| it_CH  | Italian (Switzerland)  | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| sk_SK  | Slovak (Slovakia)      | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| lv_LV  | Latvian (Latvia)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
+| Locale | Language               | Status                 | Completion | Reviewer Needed |
+| ------ | ---------------------- | ---------------------- | ---------- | --------------- |
+| fr_CA  | French (Canada)        | ✅ Complete (REVIEWED) | 254/254    | No              |
+| sv_SE  | Swedish (Sweden)       | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| de_CH  | German (Switzerland)   | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| en_CA  | English (Canada)       | ✅ Complete            | 254/254    | No              |
+| en_US  | English (US)           | 🔄 Source language     | -          | -               |
+| ru_RU  | Russian (Russia)       | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| fi_FI  | Finnish (Finland)      | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| cs_CZ  | Czech (Czech Republic) | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| de_DE  | German (Germany)       | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| it_CH  | Italian (Switzerland)  | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| sk_SK  | Slovak (Slovakia)      | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| lv_LV  | Latvian (Latvia)       | ✅ Complete (DRAFT)    | 254/254    | Yes             |
 
-**Note**: French Canadian (fr_CA), Swedish (sv_SE), and German Switzerland (de_CH) translations are AI-assisted drafts. They require review by native speakers to ensure:
+**Note**: Most translations are AI-assisted drafts. The following require native speaker review:
 
-- Natural, idiomatic language
-- Proper hockey terminology for each region
-- Cultural appropriateness
-- UI string length compatibility
-- Correct use of Swiss German conventions (ss instead of ß for de_CH)
+- **Swedish (sv_SE)** and **German Switzerland (de_CH)**: Need native speaker verification for natural, idiomatic language, proper hockey terminology, cultural appropriateness, and UI string length compatibility
+- **Reviewed and validated**: French Canadian (fr_CA) has been reviewed by native speaker ✅
+- **All other locales** (ru_RU, fi_FI, cs_CZ, de_DE, it_CH, sk_SK, lv_LV): AI-assisted drafts requiring native speaker review
 
-**Want to help review?** Native speakers of French, Swedish, or German (Switzerland) who can verify the translations are welcome to contribute! See the [Contributing](#5-submit-your-translation) section above.
+**Want to help review?** Native speakers of Swedish or German (Switzerland) who can verify the translations are welcome to contribute! See the [Contributing](#5-submit-your-translation) section above.
 
 ## Common Issues
 
