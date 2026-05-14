@@ -131,6 +131,23 @@ class TestValidateSafePath:
             finally:
                 os.chdir(original_cwd)
 
+    def test_invalid_path_format_type_error(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Test handling of invalid path format (TypeError from Path)."""
+        from pathlib import Path as PathClass
+
+        original_new = PathClass.__new__
+
+        def mock_new(cls, *args, **kwargs):
+            # Trigger TypeError for a specific input
+            if args and args[0] == "trigger-type-error":
+                raise TypeError("Invalid path type")
+            return original_new(cls, *args, **kwargs)
+
+        monkeypatch.setattr(PathClass, "__new__", mock_new)
+
+        with pytest.raises(ConfigValidationError, match=r"Invalid path format"):
+            validate_safe_path("trigger-type-error")
+
     def test_path_resolve_failure(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test handling of path resolution failures."""
         from pathlib import Path
