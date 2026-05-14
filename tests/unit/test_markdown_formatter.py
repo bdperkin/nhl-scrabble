@@ -70,6 +70,20 @@ class TestMarkdownFormatter:
         assert "test_api_fetch" in result
         assert "2.45s" in result
 
+    def test_format_flaky_tests(
+        self,
+        formatter: MarkdownFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test markdown formatting of flaky tests."""
+        data = {"flaky_tests": sample_tests}
+        result = formatter.format(data)
+
+        assert "## Flaky Tests" in result
+        assert "test_api_fetch" in result
+        assert "0.123" in result  # Flakiness score
+        assert "5.0%" in result  # Failure rate
+
     def test_format_trends(
         self,
         formatter: MarkdownFormatter,

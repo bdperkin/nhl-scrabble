@@ -77,6 +77,23 @@ class TestCSVFormatter:
         assert "test_api_fetch" in lines[1]
         assert "2.45" in lines[1]
 
+    def test_format_flaky_tests(
+        self,
+        formatter: CSVFormatter,
+        sample_tests: list[TestPerformance],
+    ) -> None:
+        """Test CSV formatting of flaky tests."""
+        data = {"flaky_tests": sample_tests}
+        result = formatter.format(data)
+
+        lines = result.strip().split("\n")
+
+        # Check data
+        assert "flaky_tests" in lines[1]
+        assert "test_api_fetch" in lines[1]
+        assert "0.123" in lines[1]  # Flakiness score
+        assert "0.05" in lines[1]  # Failure rate
+
     def test_format_empty_data(
         self,
         formatter: CSVFormatter,
