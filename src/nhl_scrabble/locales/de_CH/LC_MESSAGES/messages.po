@@ -1522,36 +1522,3 @@ msgstr "%(team_conference)s Conference anzeigen"
 #: src/nhl_scrabble/web/templates/teams.html:3
 msgid "NHL Scrabble Analyzer - Team Standings"
 msgstr "NHL Scrabble Analysegerät - Mannschafts-Tabelle"
-
-#~ msgid ""
-#~ "Complete NHL standings ranked by total Scrabble score across all teams in "
-#~ "the league."
-#~ msgstr ""
-#~ "Vollständige NHL-Tabelle nach Gesamt-Scrabble-Punktzahl aller Mannschaften "
-#~ "in der Liga geordnet."
-
-#~ msgid "Data as of"
-#~ msgstr "Datenstand"
-
-#~ msgid "League Standings"
-#~ msgstr "Liga-Tabelle"
-
-#~ msgid "NHL League Standings by Scrabble Score"
-#~ msgstr "NHL Liga-Tabelle nach Scrabble-Punktzahl"
-
-#~ msgid "About League Standings"
-#~ msgstr "Über Liga-Tabelle"
-
-#~ msgid ""
-#~ "Teams are ranked by their total Scrabble score, calculated by summing the "
-#~ "Scrabble letter values of all players' names on each roster. This league-"
-#~ "wide view shows the complete standings without division or conference "
-#~ "groupings."
-#~ msgstr ""
-#~ "Mannschaften werden nach ihrer Gesamt-Scrabble-Punktzahl geordnet, die durch"
-#~ " Summierung der Scrabble-Buchstabenwerte aller Spielernamen im jeweiligen "
-#~ "Kader berechnet wird. Diese ligaweite Ansicht zeigt die vollständige Tabelle"
-#~ " ohne Divisions- oder Conference-Gruppierungen."
-
-#~ msgid "For grouped standings, see:"
-#~ msgstr "Für gruppierte Tabellen siehe:"
