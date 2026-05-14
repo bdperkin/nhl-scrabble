@@ -308,14 +308,14 @@ src/nhl_scrabble/locales/de_DE/LC_MESSAGES/messages.po: 0 translated, 254 untran
 
 ## Translation Status
 
-Current translation completion as of 2026-05-06:
+Current translation completion as of 2026-05-13:
 
 | Locale | Language               | Status              | Completion | Reviewer Needed |
 | ------ | ---------------------- | ------------------- | ---------- | --------------- |
 | fr_CA  | French (Canada)        | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | sv_SE  | Swedish (Sweden)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
+| en_CA  | English (Canada)       | ✅ Complete         | 254/254    | No              |
 | en_US  | English (US)           | 🔄 Source language  | -          | -               |
-| en_CA  | English (Canada)       | ⏳ Pending          | 0/254      | Yes             |
 | ru_RU  | Russian (Russia)       | ⏳ Pending          | 0/254      | Yes             |
 | fi_FI  | Finnish (Finland)      | ⏳ Pending          | 0/254      | Yes             |
 | cs_CZ  | Czech (Czech Republic) | ⏳ Pending          | 0/254      | Yes             |
