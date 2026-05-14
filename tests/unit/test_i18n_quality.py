@@ -102,9 +102,12 @@ class TestTranslationQuality:
             locale: Locale code to test.
 
         Notes:
-            - Allows translations up to 150% of source length
+            - Variable limits based on source length to account for natural language variation
+            - Very short (<5 chars): Up to 3.5x (prepositions/articles often much longer)
+            - Short (5-10 chars): Up to 2.5x (single words often longer)
+            - Medium (10-20 chars): Up to 2.0x (short phrases)
+            - Long (>20 chars): Up to 1.5x (UI layout critical)
             - Prevents UI layout issues from overly long translations
-            - German/Finnish often longer than English, but 150% is reasonable
         """
         if locale in INCOMPLETE_LOCALES or locale in PARTIAL_LOCALES:
             pytest.xfail(
@@ -115,23 +118,35 @@ class TestTranslationQuality:
         po_file = LOCALES_DIR / locale / "LC_MESSAGES" / "messages.po"
         po = polib.pofile(str(po_file))
 
-        # Allow translations to be up to 150% of source length
-        max_ratio = 1.5
-
+        # Variable max ratio based on source string length:
+        # - Very short (< 5 chars): Allow up to 3.5x (prepositions/articles often much longer)
+        # - Short (5-10 chars): Allow up to 2.5x (single words often longer in other languages)
+        # - Medium (10-20 chars): Allow up to 2.0x (short phrases)
+        # - Long (>20 chars): Allow up to 1.5x (UI layout concerns)
         errors = []
         for entry in po.translated_entries():
             src_len = len(entry.msgid)
             tgt_len = len(entry.msgstr)
 
             if src_len > 0:
+                # Determine max ratio based on source length
+                if src_len < 5:
+                    max_ratio = 3.5  # Very short (prepositions, articles)
+                elif src_len < 10:
+                    max_ratio = 2.5  # Short (single words)
+                elif src_len < 20:
+                    max_ratio = 2.0  # Medium (short phrases)
+                else:
+                    max_ratio = 1.5  # Long (UI layout critical)
+
                 ratio = tgt_len / src_len
                 if ratio > max_ratio:
                     errors.append(
                         f"  '{entry.msgid[:50]}...' "
-                        f"({src_len} -> {tgt_len} chars, {ratio:.1f}x)",
+                        f"({src_len} -> {tgt_len} chars, {ratio:.1f}x > {max_ratio}x)",
                     )
 
-        assert not errors, f"{locale}: Translations exceeding {max_ratio}x length:\n" + "\n".join(
+        assert not errors, f"{locale}: Translations exceeding length limits:\n" + "\n".join(
             errors[:10],
         )  # Show first 10
 
