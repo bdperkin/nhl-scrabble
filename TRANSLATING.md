@@ -317,7 +317,7 @@ Current translation completion as of 2026-05-13:
 | de_CH  | German (Switzerland)   | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | en_CA  | English (Canada)       | ✅ Complete         | 254/254    | No              |
 | en_US  | English (US)           | 🔄 Source language  | -          | -               |
-| ru_RU  | Russian (Russia)       | ⏳ Pending          | 0/254      | Yes             |
+| ru_RU  | Russian (Russia)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | fi_FI  | Finnish (Finland)      | ⏳ Pending          | 0/254      | Yes             |
 | cs_CZ  | Czech (Czech Republic) | ⏳ Pending          | 0/254      | Yes             |
 | de_DE  | German (Germany)       | ⏳ Pending          | 0/254      | Yes             |
