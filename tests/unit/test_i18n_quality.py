@@ -17,7 +17,6 @@ PARTIAL_LOCALES = [
 # Locales with known incomplete translations
 INCOMPLETE_LOCALES = [
     "en_US",  # Source locale
-    "en_CA",  # Not yet translated
     "ru_RU",  # Not yet translated
     "fi_FI",  # Not yet translated
     "cs_CZ",  # Not yet translated

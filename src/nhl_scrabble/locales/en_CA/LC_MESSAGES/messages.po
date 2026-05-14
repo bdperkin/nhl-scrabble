@@ -195,10 +195,12 @@ msgid ""
 "\n"
 "[yellow]⚠[/yellow] CSV/Excel formats require --output option"
 msgstr ""
+"\n"
+"[yellow]⚠[/yellow] CSV/Excel formats require --output option"
 
 #: src/nhl_scrabble/cli.py:814
 msgid "\n"
-msgstr "\n"
+msgstr ""
 
 #: src/nhl_scrabble/cli.py:815
 msgid "[green]✓ Analysis complete![/green]"
