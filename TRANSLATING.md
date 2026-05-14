@@ -313,7 +313,7 @@ Current translation completion as of 2026-05-13:
 | Locale | Language               | Status                 | Completion | Reviewer Needed |
 | ------ | ---------------------- | ---------------------- | ---------- | --------------- |
 | fr_CA  | French (Canada)        | ✅ Complete (REVIEWED) | 254/254    | No              |
-| sv_SE  | Swedish (Sweden)       | ✅ Complete (DRAFT)    | 254/254    | Yes             |
+| sv_SE  | Swedish (Sweden)       | ✅ Complete (REVIEWED) | 254/254    | No              |
 | de_CH  | German (Switzerland)   | ✅ Complete (DRAFT)    | 254/254    | Yes             |
 | en_CA  | English (Canada)       | ✅ Complete            | 254/254    | No              |
 | en_US  | English (US)           | 🔄 Source language     | -          | -               |
@@ -327,11 +327,11 @@ Current translation completion as of 2026-05-13:
 
 **Note**: Most translations are AI-assisted drafts. The following require native speaker review:
 
-- **Swedish (sv_SE)** and **German Switzerland (de_CH)**: Need native speaker verification for natural, idiomatic language, proper hockey terminology, cultural appropriateness, and UI string length compatibility
-- **Reviewed and validated**: French Canadian (fr_CA) has been reviewed by native speaker ✅
+- **Reviewed and validated**: French Canadian (fr_CA) and Swedish (sv_SE) have been reviewed by native speakers ✅
+- **German Switzerland (de_CH)**: Needs native speaker verification for natural, idiomatic language, proper hockey terminology, cultural appropriateness, and UI string length compatibility
 - **All other locales** (ru_RU, fi_FI, cs_CZ, de_DE, it_CH, sk_SK, lv_LV): AI-assisted drafts requiring native speaker review
 
-**Want to help review?** Native speakers of Swedish or German (Switzerland) who can verify the translations are welcome to contribute! See the [Contributing](#5-submit-your-translation) section above.
+**Want to help review?** Native speakers of German (Switzerland) who can verify the translations are welcome to contribute! See the [Contributing](#5-submit-your-translation) section above.
 
 ## Common Issues
 
