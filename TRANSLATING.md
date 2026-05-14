@@ -320,7 +320,7 @@ Current translation completion as of 2026-05-13:
 | ru_RU  | Russian (Russia)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | fi_FI  | Finnish (Finland)      | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | cs_CZ  | Czech (Czech Republic) | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| de_DE  | German (Germany)       | ⏳ Pending          | 0/254      | Yes             |
+| de_DE  | German (Germany)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | it_CH  | Italian (Switzerland)  | ⏳ Pending          | 0/254      | Yes             |
 | sk_SK  | Slovak (Slovakia)      | ⏳ Pending          | 0/254      | Yes             |
 | lv_LV  | Latvian (Latvia)       | ⏳ Pending          | 0/254      | Yes             |
