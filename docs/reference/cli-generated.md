@@ -37,12 +37,13 @@ Options:
   -h, --help     Show this message and exit.
 
 Commands:
-  analyze      Run the NHL Scrabble analysis.
-  dashboard    Launch interactive statistics dashboard.
-  interactive  Start interactive mode for exploring NHL Scrabble data.
-  search       Search for players by name and filter by attributes.
-  serve        Start web interface server.
-  watch        Watch mode - automatically refresh data at intervals.
+  analyze         Run the NHL Scrabble analysis.
+  dashboard       Launch interactive statistics dashboard.
+  interactive     Start interactive mode for exploring NHL Scrabble data.
+  search          Search for players by name and filter by attributes.
+  serve           Start web interface server.
+  test-analytics  Analyze test analytics and coverage data from Codecov.
+  watch           Watch mode - automatically refresh data at intervals.
 ```
 
 ______________________________________________________________________
@@ -113,40 +114,54 @@ Usage: nhl-scrabble analyze [OPTIONS]
     Use custom scoring configuration:     $ nhl-scrabble analyze --scoring-
     config custom_values.json
 
-    Filter by division:     $ nhl-scrabble analyze --division Atlantic
+    Filter by division:     $ nhl-scrabble analyze --divisions Atlantic
 
-    Filter by conference:     $ nhl-scrabble analyze --conference Eastern
+    Filter by conference:     $ nhl-scrabble analyze --conferences Eastern
 
     Filter by specific teams:     $ nhl-scrabble analyze --teams TOR,MTL,OTT
 
     Filter by score range:     $ nhl-scrabble analyze --min-score 50 --max-
     score 100
 
-    Exclude specific teams:     $ nhl-scrabble analyze --exclude BOS,NYR
+    Filter by country:     $ nhl-scrabble analyze --countries CAN
+
+    Filter by multiple countries:     $ nhl-scrabble analyze --countries
+    CAN,USA,SWE
+
+    Group by nationality:     $ nhl-scrabble analyze --group-by nationality
+
+    Combine country filter with grouping:     $ nhl-scrabble analyze
+    --countries CAN,USA --group-by nationality
+
+    Exclude specific teams:     $ nhl-scrabble analyze --exclude-teams BOS,NYR
 
     Analyze specific season:     $ nhl-scrabble analyze --season 20222023
 
     Combine multiple options:     $ nhl-scrabble analyze --format json
-    --output report.json --verbose     $ nhl-scrabble analyze --division
+    --output report.json --verbose     $ nhl-scrabble analyze --divisions
     Atlantic --min-score 60 --output atlantic.txt
 
 Options:
   -f, --format [text|json|yaml|xml|html|table|markdown|csv|excel|template]
                                   Output format (default: text)
+  -o, --output PATH               Output file path (default: stdout)
   --template FILE                 Custom template file path (required for
                                   --format template)
   --sheets TEXT                   Comma-separated list of sheets for Excel
                                   export (teams,players,divisions,conferences,
                                   playoffs)
-  -o, --output PATH               Output file path (default: stdout)
   -v, --verbose                   Enable verbose logging
-  -q, --quiet                     Suppress progress bars
+  -q, --quiet                     Suppress progress bars and status messages
   --no-cache                      Disable API response caching (always fetch
                                   fresh data)
   --clear-cache                   Clear API cache before running
-  --top-players INTEGER           Number of top players to show (default: 20)
-  --top-team-players INTEGER      Number of top players per team to show
-                                  (default: 5)
+  --season TEXT                   Analyze specific season (format: YYYYYYYY,
+                                  e.g., 20222023 for 2022-23)
+  --top-players INTEGER RANGE     Number of top players to show (default: 20,
+                                  range: 1-100)  [1<=x<=100]
+  --top-team-players INTEGER RANGE
+                                  Number of top players per team to show
+                                  (default: 5, range: 1-50)  [1<=x<=50]
   --report [conference|division|playoff|team|stats]
                                   Generate specific report only (default: all
                                   reports)
@@ -155,18 +170,26 @@ Options:
                                   scrabble)
   --scoring-config FILE           Path to custom scoring configuration JSON
                                   file
-  --division TEXT                 Filter by division (comma-separated:
+  --divisions TEXT                Filter by divisions (comma-separated:
                                   Atlantic,Metropolitan,Central,Pacific)
-  --conference TEXT               Filter by conference (comma-separated:
+  --conferences TEXT              Filter by conferences (comma-separated:
                                   Eastern,Western)
   --teams TEXT                    Filter by teams (comma-separated
                                   abbreviations: TOR,MTL,BOS)
-  --exclude TEXT                  Exclude teams (comma-separated
+  --exclude-teams TEXT            Exclude teams (comma-separated
                                   abbreviations: NYR,PHI)
+  --countries TEXT                Filter by countries (comma-separated codes:
+                                  CAN,USA,SWE,FIN)
   --min-score INTEGER             Minimum player score to include
   --max-score INTEGER             Maximum player score to include
-  --season TEXT                   Analyze specific season (format: YYYYYYYY,
-                                  e.g., 20222023 for 2022-23)
+  --group-by [team|division|conference|nationality|position|position-type]
+                                  Group players by team, division, conference,
+                                  nationality, position, or position-type
+  --positions TEXT                Filter by positions (comma-separated codes:
+                                  C,L,R,D,G or types: Forward,Defense,Goalie)
+  -l, --locale [en_US|en_CA|fr_CA|sv_SE|ru_RU|fi_FI|cs_CZ|de_DE|de_CH|it_CH|sk_SK|lv_LV]
+                                  Display locale (e.g., fr_CA for Canadian
+                                  French)
   -h, --help                      Show this message and exit.
 ```
 
