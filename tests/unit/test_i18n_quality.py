@@ -10,8 +10,9 @@ from nhl_scrabble.i18n import DEFAULT_LOCALE, LOCALES_DIR, SUPPORTED_LOCALES, ge
 
 # Locales with partial translations (fuzzy entries or minor issues)
 PARTIAL_LOCALES = [
-    "fr_CA",  # 8 untranslated, 25 fuzzy
-    "sv_SE",  # 8 untranslated, 25 fuzzy
+    "fr_CA",  # AI-assisted draft, requires native speaker review
+    "sv_SE",  # AI-assisted draft, requires native speaker review
+    "de_CH",  # AI-assisted draft, requires native speaker review
 ]
 
 # Locales with known incomplete translations
@@ -21,7 +22,6 @@ INCOMPLETE_LOCALES = [
     "fi_FI",  # Not yet translated
     "cs_CZ",  # Not yet translated
     "de_DE",  # Not yet translated
-    "de_CH",  # Not yet translated
     "it_CH",  # Not yet translated
     "sk_SK",  # Not yet translated
     "lv_LV",  # Not yet translated
