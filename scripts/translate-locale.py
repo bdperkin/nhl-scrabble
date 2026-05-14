@@ -24,7 +24,6 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict
 
 try:
     import polib
@@ -281,8 +280,8 @@ def translate_string(text: str, locale: str) -> str:
 
     For strings not in database, returns the original (will be marked untranslated).
     """
-    if not text or text in ['""', '\n', '=']:
-        return text if text != '\n' else ''
+    if not text or text in ['""', "\n", "="]:
+        return text if text != "\n" else ""
 
     trans_db = TRANSLATIONS.get(locale, {})
     return trans_db.get(text, text)
@@ -322,10 +321,10 @@ def translate_locale(locale: str, skip_untranslated: bool = False) -> int:
             continue
 
         # Special strings
-        if entry.msgid == '\n':
+        if entry.msgid == "\n":
             continue  # Leave untranslated
-        if entry.msgid == '=':
-            entry.msgstr = '='
+        if entry.msgid == "=":
+            entry.msgstr = "="
             translated += 1
             continue
 
@@ -339,11 +338,11 @@ def translate_locale(locale: str, skip_untranslated: bool = False) -> int:
             translated += 1
 
     # Update metadata
-    po.metadata['Project-Id-Version'] = 'nhl-scrabble 2.0.0'
-    po.metadata['Report-Msgid-Bugs-To'] = 'bdperkin@gmail.com'
-    po.metadata['PO-Revision-Date'] = '2026-05-13 12:00-0400'
-    po.metadata['Last-Translator'] = 'AI-Assisted (DRAFT) <bdperkin@gmail.com>'
-    po.metadata['Language-Team'] = f'{LANGUAGE_NAMES.get(locale, locale)} <{locale}@li.org>'
+    po.metadata["Project-Id-Version"] = "nhl-scrabble 2.0.0"
+    po.metadata["Report-Msgid-Bugs-To"] = "bdperkin@gmail.com"
+    po.metadata["PO-Revision-Date"] = "2026-05-13 12:00-0400"
+    po.metadata["Last-Translator"] = "AI-Assisted (DRAFT) <bdperkin@gmail.com>"
+    po.metadata["Language-Team"] = f"{LANGUAGE_NAMES.get(locale, locale)} <{locale}@li.org>"
 
     po.save()
     return translated
@@ -351,16 +350,17 @@ def translate_locale(locale: str, skip_untranslated: bool = False) -> int:
 
 def compile_translations() -> bool:
     """Compile all translation files."""
-    result = subprocess.run(['make', 'i18n-compile'], cwd=ROOT, capture_output=True)
+    result = subprocess.run(["make", "i18n-compile"], cwd=ROOT, capture_output=True, check=False)
     return result.returncode == 0
 
 
 def run_tests() -> bool:
     """Run i18n translation tests."""
     result = subprocess.run(
-        ['pytest', 'tests/unit/test_i18n_translations.py', '--no-cov', '-q'],
+        ["pytest", "tests/unit/test_i18n_translations.py", "--no-cov", "-q"],
         cwd=ROOT,
         capture_output=True,
+        check=False,
     )
     return result.returncode == 0
 
@@ -373,7 +373,7 @@ def update_test_config(locale: str) -> None:
     if f'"{locale}"' not in content:
         # Find PARTIAL_LOCALES list
         partial_match = re.search(
-            r'PARTIAL_LOCALES = \[(.*?)\]',
+            r"PARTIAL_LOCALES = \[(.*?)\]",
             content,
             re.DOTALL,
         )
@@ -381,8 +381,8 @@ def update_test_config(locale: str) -> None:
             existing = partial_match.group(1)
             new_entry = f'    "{locale}",  # AI-assisted draft, requires native speaker review\n'
             new_content = content.replace(
-                f'PARTIAL_LOCALES = [{existing}]',
-                f'PARTIAL_LOCALES = [{existing}{new_entry}]',
+                f"PARTIAL_LOCALES = [{existing}]",
+                f"PARTIAL_LOCALES = [{existing}{new_entry}]",
             )
             TEST_QUALITY_PY.write_text(new_content)
 
@@ -390,7 +390,7 @@ def update_test_config(locale: str) -> None:
     content = TEST_QUALITY_PY.read_text()
     incomplete_pattern = rf'    "{locale}",  # Not yet translated\n'
     if incomplete_pattern in content:
-        new_content = content.replace(incomplete_pattern, '')
+        new_content = content.replace(incomplete_pattern, "")
         TEST_QUALITY_PY.write_text(new_content)
 
 
@@ -402,27 +402,31 @@ def update_translating_md(locale: str) -> None:
 
     # Update status table
     # Find the line for this locale and update it
-    old_pattern = rf'\| {locale}\s+\| {re.escape(lang_name)}\s+\| ⏳ Pending\s+\| 0/254\s+\| Yes\s+\|'
-    new_line = f'| {locale}  | {lang_name:<22} | ✅ Complete (DRAFT) | 254/254    | Yes             |'
+    old_pattern = (
+        rf"\| {locale}\s+\| {re.escape(lang_name)}\s+\| ⏳ Pending\s+\| 0/254\s+\| Yes\s+\|"
+    )
+    new_line = (
+        f"| {locale}  | {lang_name:<22} | ✅ Complete (DRAFT) | 254/254    | Yes             |"
+    )
 
     if re.search(old_pattern, content):
         content = re.sub(old_pattern, new_line, content)
         TRANSLATING_MD.write_text(content)
 
     # Update note about AI-assisted drafts
-    note_pattern = r'\*\*Note\*\*: ([^*]+) translations are AI-assisted drafts\.'
+    note_pattern = r"\*\*Note\*\*: ([^*]+) translations are AI-assisted drafts\."
     match = re.search(note_pattern, content)
     if match:
         existing_locales = match.group(1)
         if locale not in existing_locales:
             # Add to list
-            parts = existing_locales.split(' and ')
+            parts = existing_locales.split(" and ")
             if len(parts) == 2:
                 # "X and Y" -> "X, Y, and Z"
                 new_list = f"{parts[0]}, {parts[1]}, and {lang_name} ({locale})"
             else:
                 # "X, Y, and Z" -> "X, Y, Z, and W"
-                new_list = existing_locales.replace(' and ', ', ') + f", and {lang_name} ({locale})"
+                new_list = existing_locales.replace(" and ", ", ") + f", and {lang_name} ({locale})"
 
             new_note = match.group(0).replace(existing_locales, new_list)
             content = content.replace(match.group(0), new_note)
@@ -444,12 +448,12 @@ def git_workflow(locale: str, create_pr: bool = True) -> bool:
     branch = f"new-features/translate-to-{locale.lower().replace('_', '-')}"
 
     # Create branch
-    subprocess.run(['git', 'checkout', 'main'], cwd=ROOT, check=True)
-    subprocess.run(['git', 'pull'], cwd=ROOT, check=True)
-    subprocess.run(['git', 'checkout', '-b', branch], cwd=ROOT, check=True)
+    subprocess.run(["git", "checkout", "main"], cwd=ROOT, check=True)
+    subprocess.run(["git", "pull"], cwd=ROOT, check=True)
+    subprocess.run(["git", "checkout", "-b", branch], cwd=ROOT, check=True)
 
     # Stage changes
-    subprocess.run(['git', 'add', '-A'], cwd=ROOT, check=True)
+    subprocess.run(["git", "add", "-A"], cwd=ROOT, check=True)
 
     # Commit
     commit_msg = f"""feat(i18n): complete {lang_name} translation ({locale})
@@ -476,21 +480,24 @@ Status: DRAFT - Requires native {lang_name} speaker review
 Issue: Closes #{issue_num}
 """
 
-    subprocess.run(['git', 'commit', '-m', commit_msg], cwd=ROOT, check=True)
+    subprocess.run(["git", "commit", "-m", commit_msg], cwd=ROOT, check=True)
 
     # Push
-    subprocess.run(['git', 'push', '-u', 'origin', branch], cwd=ROOT, check=True)
+    subprocess.run(["git", "push", "-u", "origin", branch], cwd=ROOT, check=True)
 
     # Create PR
     if create_pr:
         pr_title = f"feat(i18n): complete {lang_name} translation ({locale})"
-        pr_body = f"AI-assisted DRAFT translation (requires native speaker review). Closes #{issue_num}"
+        pr_body = (
+            f"AI-assisted DRAFT translation (requires native speaker review). Closes #{issue_num}"
+        )
 
         result = subprocess.run(
-            ['gh', 'pr', 'create', '--title', pr_title, '--body', pr_body],
+            ["gh", "pr", "create", "--title", pr_title, "--body", pr_body],
             cwd=ROOT,
             capture_output=True,
             text=True,
+            check=False,
         )
 
         if result.returncode == 0:
@@ -500,21 +507,25 @@ Issue: Closes #{issue_num}
             return False
 
     # Return to main
-    subprocess.run(['git', 'checkout', 'main'], cwd=ROOT, check=True)
+    subprocess.run(["git", "checkout", "main"], cwd=ROOT, check=True)
 
     return True
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate AI-assisted translation for a locale",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument('locale', help='Locale code (e.g., ru_RU, fi_FI)')
-    parser.add_argument('--skip-git', action='store_true', help='Skip git operations')
-    parser.add_argument('--pr-only', action='store_true', help='Only create PR (assume translation done)')
-    parser.add_argument('--no-pr', action='store_true', help='Skip PR creation')
+    parser.add_argument("locale", help="Locale code (e.g., ru_RU, fi_FI)")
+    parser.add_argument("--skip-git", action="store_true", help="Skip git operations")
+    parser.add_argument(
+        "--pr-only",
+        action="store_true",
+        help="Only create PR (assume translation done)",
+    )
+    parser.add_argument("--no-pr", action="store_true", help="Skip PR creation")
 
     args = parser.parse_args()
     locale = args.locale
@@ -574,5 +585,5 @@ def main():
     print("=" * 70)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
