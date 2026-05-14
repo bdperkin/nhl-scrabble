@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 245 tasks (20 active, 225 completed)
+**Total Tasks**: 245 tasks (19 active, 226 completed)
 
 ## Overview
 
@@ -247,7 +247,7 @@ Each task includes:
 | 038 | Translate to Russian (Russia) - ru_RU | LOW | 6-8 hours (actual: ~6h) | Completed | [#514](https://github.com/bdperkin/nhl-scrabble/issues/514) | PR [#624](https://github.com/bdperkin/nhl-scrabble/pull/624), completed 2026-05-13 |
 | 039 | Translate to Finnish (Finland) - fi_FI | LOW | 6-8 hours (actual: ~6.5h) | Completed | [#515](https://github.com/bdperkin/nhl-scrabble/issues/515) | PR [#625](https://github.com/bdperkin/nhl-scrabble/pull/625), completed 2026-05-13 |
 | 040 | Translate to Czech (Czech Republic) - cs_CZ | LOW | 6-8 hours (actual: ~7h) | Completed | [#516](https://github.com/bdperkin/nhl-scrabble/issues/516) | PR [#626](https://github.com/bdperkin/nhl-scrabble/pull/626), completed 2026-05-13 |
-| 041 | Translate to German (Germany) - de_DE | LOW | 6-8 hours | Active | [#517](https://github.com/bdperkin/nhl-scrabble/issues/517) | - |
+| 041 | Translate to German (Germany) - de_DE | LOW | 6-8 hours (actual: ~7h) | Completed | [#517](https://github.com/bdperkin/nhl-scrabble/issues/517) | PR [#627](https://github.com/bdperkin/nhl-scrabble/pull/627), completed 2026-05-13 |
 | 042 | Translate to German (Switzerland) - de_CH | LOW | 4-6 hours (actual: ~4h) | Completed | [#518](https://github.com/bdperkin/nhl-scrabble/issues/518) | PR [#623](https://github.com/bdperkin/nhl-scrabble/pull/623), completed 2026-05-13 |
 | 043 | Translate to Italian (Switzerland) - it_CH | LOW | 6-8 hours | Active | [#519](https://github.com/bdperkin/nhl-scrabble/issues/519) | - |
 | 044 | Translate to Slovak (Slovakia) - sk_SK | LOW | 6-8 hours | Active | [#520](https://github.com/bdperkin/nhl-scrabble/issues/520) | - |

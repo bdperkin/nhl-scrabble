@@ -1,9 +1,9 @@
 # Task Implementation Sequence
 
 **Generated**: 2026-05-08
-**Updated**: 2026-05-14 (tasks 023, 024, 028, 037, 038, 039, 040, 042, 051 completed)
-**Total Tasks**: 20 active tasks
-**Total Estimated Effort**: 107-149 hours
+**Updated**: 2026-05-14 (tasks 023, 024, 028, 037, 038, 039, 040, 041, 042, 051 completed)
+**Total Tasks**: 19 active tasks
+**Total Estimated Effort**: 101-141 hours
 
 This document provides the optimal implementation sequence for all active tasks, organized by priority, dependencies, and strategic value. Tasks are grouped into logical phases with clear rationales.
 
@@ -108,7 +108,7 @@ Each task entry shows:
 
 ---
 
-## Phase 7: LOW Priority - Translation Locales (Complex Languages) (24-32 hours)
+## Phase 7: LOW Priority - Translation Locales (Complex Languages) (18-24 hours)
 
 **Rationale**: Complex translations requiring professional translators. Group by estimated effort (simpler first). Can be parallelized if multiple translators available.
 
@@ -122,15 +122,16 @@ Each task entry shows:
 
 ~~**Task 040 (cs_CZ)**: Completed 2026-05-13 - Czech (Czech Republic) translation. All 254 strings translated with complex declensions. Actual effort: ~7h (within 6-8h estimate). PR #626.~~
 
+~~**Task 041 (de_DE)**: Completed 2026-05-13 - German (Germany) translation. All 254 strings translated with compound words and DEL terminology. Actual effort: ~7h (within 6-8h estimate). PR #627.~~
+
 **Remaining Full Translations** (6-8h each):
 ```bash
-/implement-task new-features/041-translate-to-de-de.md  # 6-8h, Issue #517
 /implement-task new-features/043-translate-to-it-ch.md  # 6-8h, Issue #519
 /implement-task new-features/044-translate-to-sk-sk.md  # 6-8h, Issue #520
 /implement-task new-features/045-translate-to-lv-lv.md  # 6-8h, Issue #521
 ```
 
-**Phase Total**: 24-32 hours
+**Phase Total**: 18-24 hours
 
 ---
 
@@ -186,18 +187,18 @@ Each task entry shows:
 
 ## Summary
 
-**Total Active Tasks**: 20
-**Total Estimated Effort**: 107-149 hours
+**Total Active Tasks**: 19
+**Total Estimated Effort**: 101-141 hours
 
 ### By Priority:
 - **HIGH**: 0 tasks (0 hours) - All critical test coverage completed
 - **MEDIUM**: 4 tasks (34-49 hours) - I18n quality, test-analytics enhancement, code quality refactoring
-- **LOW**: 16 tasks (73-100 hours) - Features, translations, documentation, research
+- **LOW**: 15 tasks (67-92 hours) - Features, translations, documentation, research
 
 ### By Category:
 - **Testing**: 2 tasks (8.25-12.25 hours) - QA workflow + test-analytics
 - **Enhancement**: 5 tasks (49-73 hours) - I18n improvements, Sphinx extensions, test-analytics, evaluation
-- **New Features**: 13 tasks (30-45 hours) - Translations, infrastructure features
+- **New Features**: 12 tasks (24-37 hours) - Translations, infrastructure features
 - **Refactoring**: 1 task (20-29 hours) - Module split refactoring
 
 ### Strategic Focus:
