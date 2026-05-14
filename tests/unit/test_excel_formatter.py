@@ -113,6 +113,30 @@ class TestExcelFormatter:
         assert "Slow Tests" in wb.sheetnames
         assert "Flaky Tests" in wb.sheetnames
 
+    def test_format_coverage_history(
+        self,
+        formatter: ExcelFormatter,
+    ) -> None:
+        """Test Excel formatting of coverage history trends."""
+        data = {
+            "coverage_history": [
+                {"timestamp": "2026-05-01", "coverage": 90.0},
+                {"timestamp": "2026-04-01", "coverage": 85.0},
+            ],
+        }
+        result = formatter.format(data)
+
+        import openpyxl
+
+        wb = openpyxl.load_workbook(BytesIO(result))
+        assert "Coverage Trends" in wb.sheetnames
+
+        ws = wb["Coverage Trends"]
+        assert ws["A1"].value == "Timestamp"
+        assert ws["B1"].value == "Coverage"
+        assert ws["A2"].value == "2026-05-01"
+        assert ws["B2"].value == 90.0
+
     def test_format_empty_data(
         self,
         formatter: ExcelFormatter,
