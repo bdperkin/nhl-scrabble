@@ -2,7 +2,7 @@
 
 This directory contains all tasks for the NHL Scrabble project, organized by category and implementation status.
 
-**Total Tasks**: 245 tasks (23 active, 222 completed)
+**Total Tasks**: 245 tasks (22 active, 223 completed)
 
 ## Overview
 
@@ -244,7 +244,7 @@ Each task includes:
 | 035 | PR Auto-Labeling Workflow | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#302](https://github.com/bdperkin/nhl-scrabble/issues/302) | PR [#485](https://github.com/bdperkin/nhl-scrabble/pull/485), completed 2026-05-03 |
 | 036 | PR Size Checker Workflow | LOW | 1-2 hours (actual: ~45 minutes) | Completed | [#303](https://github.com/bdperkin/nhl-scrabble/issues/303) | PR [#486](https://github.com/bdperkin/nhl-scrabble/pull/486), completed 2026-05-04 |
 | 037 | Translate to English (Canada) - en_CA | LOW | 1-2 hours (actual: ~1.5h) | Completed | [#513](https://github.com/bdperkin/nhl-scrabble/issues/513) | PR [#622](https://github.com/bdperkin/nhl-scrabble/pull/622), completed 2026-05-13 |
-| 038 | Translate to Russian (Russia) - ru_RU | LOW | 6-8 hours | Active | [#514](https://github.com/bdperkin/nhl-scrabble/issues/514) | - |
+| 038 | Translate to Russian (Russia) - ru_RU | LOW | 6-8 hours (actual: ~6h) | Completed | [#514](https://github.com/bdperkin/nhl-scrabble/issues/514) | PR [#624](https://github.com/bdperkin/nhl-scrabble/pull/624), completed 2026-05-13 |
 | 039 | Translate to Finnish (Finland) - fi_FI | LOW | 6-8 hours | Active | [#515](https://github.com/bdperkin/nhl-scrabble/issues/515) | - |
 | 040 | Translate to Czech (Czech Republic) - cs_CZ | LOW | 6-8 hours | Active | [#516](https://github.com/bdperkin/nhl-scrabble/issues/516) | - |
 | 041 | Translate to German (Germany) - de_DE | LOW | 6-8 hours | Active | [#517](https://github.com/bdperkin/nhl-scrabble/issues/517) | - |
