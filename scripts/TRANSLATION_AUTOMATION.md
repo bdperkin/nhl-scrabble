@@ -2,6 +2,10 @@
 
 Automated AI-assisted translation generation for NHL Scrabble localization.
 
+## Status: ✅ ALL 12 LOCALES COMPLETE (as of 2026-05-14)
+
+These scripts successfully completed 7 of 12 locale translations. All 12 supported locales now have complete translations!
+
 ## ⚠️ Important Note
 
 **All AI-generated translations are DRAFTS** requiring native speaker review before release. They:
@@ -11,56 +15,63 @@ Automated AI-assisted translation generation for NHL Scrabble localization.
 - May have cultural inappropriateness
 - Should be reviewed line-by-line by native speakers
 
+**Best practice**: Follow fr_CA and sv_SE examples - both have been reviewed by native speakers! ✅
+
+## All Supported Locales (12 total)
+
+### Automated via These Scripts (7 locales)
+
+| Locale | Language               | Issue | Status              | PR   |
+| ------ | ---------------------- | ----- | ------------------- | ---- |
+| ru_RU  | Russian (Russia)       | #514  | ✅ Complete (DRAFT) | #624 |
+| fi_FI  | Finnish (Finland)      | #515  | ✅ Complete (DRAFT) | #625 |
+| cs_CZ  | Czech (Czech Republic) | #516  | ✅ Complete (DRAFT) | #626 |
+| de_DE  | German (Germany)       | #517  | ✅ Complete (DRAFT) | #627 |
+| it_CH  | Italian (Switzerland)  | #519  | ✅ Complete (DRAFT) | #628 |
+| sk_SK  | Slovak (Slovakia)      | #520  | ✅ Complete (DRAFT) | #629 |
+| lv_LV  | Latvian (Latvia)       | #521  | ✅ Complete (DRAFT) | #630 |
+
+### Manual/Earlier (5 locales)
+
+| Locale | Language             | Issue | Status              | PR   |
+| ------ | -------------------- | ----- | ------------------- | ---- |
+| en_US  | English (US)         | -     | Source              | -    |
+| en_CA  | English (Canada)     | #513  | ✅ Complete         | #622 |
+| fr_CA  | French (Canada)      | #508  | ✅ REVIEWED ✅      | #508 |
+| sv_SE  | Swedish (Sweden)     | #508  | ✅ REVIEWED ✅      | #508 |
+| de_CH  | German (Switzerland) | #518  | ✅ Complete (DRAFT) | #623 |
+
 ## Quick Start
 
-### Translate All Remaining Locales
+### For New Locales
 
 ```bash
-# Complete all 7 remaining translations (ru_RU, fi_FI, cs_CZ, de_DE, it_CH, sk_SK, lv_LV)
+# If adding new locales in the future:
+# 1. Add translation database to translate-locale.py
+# 2. Add locale to LOCALES array in translate-all-remaining.sh
+# 3. Run automation:
+
+./scripts/translate-locale.py NEW_LOCALE
+
+# OR translate multiple at once:
 ./scripts/translate-all-remaining.sh
 ```
 
-This will:
-
-1. Translate each locale using AI-assisted translation database
-1. Compile translations to .mo files
-1. Update test configuration
-1. Update TRANSLATING.md
-1. Run i18n tests
-1. Create git branch
-1. Commit changes
-1. Push to remote
-1. Create GitHub PR
-
-**Time estimate**: ~20-30 minutes for all 7 locales
-
-### Translate Single Locale
+### Translation Workflow Options
 
 ```bash
 # Full workflow (translate, commit, push, create PR)
-./scripts/translate-locale.py ru_RU
+./scripts/translate-locale.py pt_PT
 
 # Just translate (no git operations)
-./scripts/translate-locale.py ru_RU --skip-git
+./scripts/translate-locale.py pt_PT --skip-git
 
 # Just create PR (translation already done)
-./scripts/translate-locale.py ru_RU --pr-only
+./scripts/translate-locale.py pt_PT --pr-only
 
 # Commit but don't create PR
-./scripts/translate-locale.py ru_RU --no-pr
+./scripts/translate-locale.py pt_PT --no-pr
 ```
-
-## Supported Locales
-
-| Locale | Language               | Issue | Status     |
-| ------ | ---------------------- | ----- | ---------- |
-| ru_RU  | Russian (Russia)       | #514  | ⏳ Pending |
-| fi_FI  | Finnish (Finland)      | #515  | ⏳ Pending |
-| cs_CZ  | Czech (Czech Republic) | #516  | ⏳ Pending |
-| de_DE  | German (Germany)       | #517  | ⏳ Pending |
-| it_CH  | Italian (Switzerland)  | #519  | ⏳ Pending |
-| sk_SK  | Slovak (Slovakia)      | #520  | ⏳ Pending |
-| lv_LV  | Latvian (Latvia)       | #521  | ⏳ Pending |
 
 ## How It Works
 

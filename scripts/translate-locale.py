@@ -3,6 +3,16 @@
 
 This script creates DRAFT translations that require native speaker review.
 
+Supported Locales (12 total):
+    - North America: en_US (source), en_CA, fr_CA
+    - Nordic: sv_SE, fi_FI
+    - Central Europe: cs_CZ, de_DE, de_CH, it_CH, sk_SK
+    - Eastern Europe: ru_RU, lv_LV
+
+Translation Databases Available:
+    This script has built-in databases for: ru_RU, fi_FI, cs_CZ, de_DE, it_CH, sk_SK, lv_LV
+    Other locales (en_CA, fr_CA, sv_SE, de_CH) were translated separately.
+
 Usage:
     ./scripts/translate-locale.py ru_RU
     ./scripts/translate-locale.py fi_FI --skip-git
