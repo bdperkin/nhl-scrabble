@@ -322,7 +322,7 @@ Current translation completion as of 2026-05-13:
 | cs_CZ  | Czech (Czech Republic) | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | de_DE  | German (Germany)       | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | it_CH  | Italian (Switzerland)  | ✅ Complete (DRAFT) | 254/254    | Yes             |
-| sk_SK  | Slovak (Slovakia)      | ⏳ Pending          | 0/254      | Yes             |
+| sk_SK  | Slovak (Slovakia)      | ✅ Complete (DRAFT) | 254/254    | Yes             |
 | lv_LV  | Latvian (Latvia)       | ⏳ Pending          | 0/254      | Yes             |
 
 **Note**: French Canadian (fr_CA), Swedish (sv_SE), and German Switzerland (de_CH) translations are AI-assisted drafts. They require review by native speakers to ensure:
