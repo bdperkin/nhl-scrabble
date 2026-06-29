@@ -54,7 +54,7 @@ jobs:
         run: brew install enchant
 
       - name: Cache tool directories
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             .pytest_cache
