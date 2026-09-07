@@ -56,7 +56,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
-    rev: v0.0.3
+    rev: v0.0.5
     hooks:
       - id: sync-pre-commit-deps
 
@@ -139,7 +139,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pycqa/isort
-    rev: 8.0.1  # ci: autoupdate-freeze (9.0.0a3 has breaking formatting)
+    rev: 9.0.1  # ci: autoupdate-freeze (9.0.0a3 has breaking formatting)
     hooks:
       - id: isort
         # Comprehensive import sorting (matches ruff's ALL rules philosophy)
@@ -158,7 +158,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.21.1
+    rev: v2.29.3
     hooks:
       - id: pyproject-fmt
         name: pyproject-fmt
@@ -171,21 +171,21 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.25
+    rev: '0.26'
     hooks:
       - id: validate-pyproject
         # Comprehensive validation (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
   - repo: https://github.com/regebro/pyroma
-    rev: "5.0.1"
+    rev: "5.1b1"
     hooks:
       - id: pyroma
         # Comprehensive Python package metadata quality check (matches ruff's ALL rules philosophy)
         args: ['-d', '.']
 
   - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: 1.7.1
+    rev: 1.9.0
     hooks:
       # Comprehensive tox.ini formatting (matches ruff's ALL rules philosophy)
       # Formats tox.ini to a standard, consistent structure
@@ -229,7 +229,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.1
+    rev: 0.38.0
     hooks:
       # GitHub Actions workflows
       - id: check-github-workflows
@@ -272,7 +272,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
+    rev: v2.4.3
     hooks:
       - id: codespell
         # Ignore: aNULL (OpenSSL), foreign language words in i18n docs
@@ -284,7 +284,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.36
+    rev: v0.9.39
     hooks:
       - id: pymarkdown
         args: [scan]  # Config is in pyproject.toml
@@ -311,7 +311,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.36.4
+    rev: v1.46.0
     hooks:
       - id: djlint-reformat-jinja
         name: djlint (reformat Jinja2 templates)
@@ -336,7 +336,7 @@ repos:
         files: \.(rst|txt)$
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.5
+    rev: v6.3.0
     hooks:
       - id: rstcheck
         # Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
@@ -380,7 +380,7 @@ repos:
         files: \.py$
 
   - repo: https://github.com/osprey-oss/deptry
-    rev: 0.24.0  # ci: autoupdate-freeze (0.25.1 requires Rust 1.94, system has 1.93.1)
+    rev: 0.25.1  # ci: autoupdate-freeze (0.25.1 requires Rust 1.94, system has 1.93.1)
     hooks:
       - id: deptry
         # Comprehensive dependency checker (matches ruff's ALL rules philosophy)
@@ -390,7 +390,7 @@ repos:
         language: python
 
   - repo: https://github.com/hakancelikdev/unimport
-    rev: 1.3.1
+    rev: 1.4.0
     hooks:
       - id: unimport
         language_version: python3.12  # Force Python 3.12 to prevent caching issues
@@ -425,7 +425,7 @@ repos:
 
   # Validate lock files are up-to-date with pyproject.toml
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.6  # ci: autoupdate-freeze (0.11.7 not available in PyPI mirror yet)
+    rev: 0.12.10  # ci: autoupdate-freeze (0.11.7 not available in PyPI mirror yet)
     hooks:
       - id: uv-lock
 
@@ -504,7 +504,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/bwhmather/ssort
-    rev: 0.16.0
+    rev: 0.17.0
     hooks:
       - id: ssort
         name: ssort
@@ -517,7 +517,7 @@ repos:
         exclude: ^(tests/fixtures/|migrations/)
 
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.3
+    rev: v2.4.0
     hooks:
       - id: autoflake
         # Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
@@ -532,7 +532,7 @@ repos:
           ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 26.3.1
+    rev: 26.5.1
     hooks:
       - id: black
         # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
@@ -551,7 +551,7 @@ repos:
         stages: [pre-commit]
 
   - repo: https://github.com/PyCQA/docformatter
-    rev: v1.7.7  # ci: autoupdate-freeze (1.7.8 removes blank lines, conflicts with flake8)
+    rev: v1.7.8  # ci: autoupdate-freeze (1.7.8 removes blank lines, conflicts with flake8)
     hooks:
       - id: docformatter
         # Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
@@ -572,7 +572,7 @@ repos:
         description: Add trailing commas to Python structures
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.10  # ci: autoupdate-freeze (0.15.12 not available in PyPI mirror yet)
+    rev: v0.16.6  # ci: autoupdate-freeze (0.15.12 not available in PyPI mirror yet)
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
@@ -629,7 +629,7 @@ repos:
   # ============================================================================
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.1  # ci: autoupdate-freeze (1.20.2 not available in PyPI mirror yet)
+    rev: v2.3.1  # ci: autoupdate-freeze (1.20.2 not available in PyPI mirror yet)
     hooks:
       - id: mypy
         additional_dependencies:
