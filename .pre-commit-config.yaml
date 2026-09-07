@@ -12,14 +12,14 @@
 # Default Python version for all hooks (ensures consistency across environments)
 # Matches project's minimum supported version (3.12)
 default_language_version:
-  python: python3.12
+    python: python3.12
 
 # Default stages when hooks run (can be overridden per-hook)
 # - pre-commit: Run when executing 'git commit' (default for most hooks)
 # - pre-push: Run when executing 'git push' (for expensive checks)
 default_stages:
-  - pre-commit
-  - pre-push
+-   pre-commit
+-   pre-push
 
 # Stop running hooks on first failure (fail-fast mode)
 # Saves time by not running remaining hooks after first error
@@ -28,107 +28,108 @@ fail_fast: true
 
 # Pre-commit.ci specific configuration
 ci:
-  skip:
+    skip:
     # Requires python3-venv package not available in pre-commit.ci Python 3.12
-    - pyroma
-    - check-wheel-contents
+    -   pyroma
+    -   check-wheel-contents
     # Requires network access to json.schemastore.org (unreliable in CI)
-    - check-github-workflows
-    - check-dependabot
-    - check-jsonschema
+    -   check-github-workflows
+    -   check-dependabot
+    -   check-jsonschema
     # Fails on documentation pseudo-code and illustrative examples
-    - mdformat
+    -   mdformat
     # Executable not found in pre-commit.ci environment
-    - safety
+    -   safety
 
 # ============================================================================
 # Meta Hooks - Configuration Validation
 # ============================================================================
 
 repos:
-  - repo: meta
+-   repo: meta
     hooks:
-      - id: check-hooks-apply
-      - id: check-useless-excludes
+    -   id: check-hooks-apply
+    -   id: check-useless-excludes
 
   # ============================================================================
   # Dependency Management - Sync Hook Versions
   # ============================================================================
 
-  - repo: https://github.com/pre-commit/sync-pre-commit-deps
+-   repo: https://github.com/pre-commit/sync-pre-commit-deps
     rev: v0.0.5
     hooks:
-      - id: sync-pre-commit-deps
+    -   id: sync-pre-commit-deps
 
   # ============================================================================
   # File Quality - General File Checks
   # ============================================================================
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
+-   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       # Whitespace and file formatting
-      - id: trailing-whitespace
+    -   id: trailing-whitespace
         exclude: ^docs/reference/api/  # Exclude generated API docs
-      - id: end-of-file-fixer
+    -   id: end-of-file-fixer
         exclude: ^docs/reference/api/  # Exclude generated API docs
-      - id: mixed-line-ending
-      - id: fix-byte-order-marker
+    -   id: mixed-line-ending
+    -   id: fix-byte-order-marker
 
       # File content checks
-      - id: check-yaml
-      - id: check-toml
-      - id: check-json
+    -   id: check-yaml
+    -   id: check-toml
+    -   id: check-json
 
       # Python-specific checks
-      - id: check-ast
-      - id: check-builtin-literals
-      - id: check-docstring-first
-      - id: debug-statements
-      - id: name-tests-test
+    -   id: check-ast
+    -   id: check-builtin-literals
+    -   id: check-docstring-first
+    -   id: debug-statements
+    -   id: name-tests-test
         args: [--pytest-test-first]
         exclude: locustfile\.py  # Locust load testing script, not a pytest file
 
       # Security checks
-      - id: detect-private-key
+    -   id: detect-private-key
 
       # Git checks
-      - id: check-added-large-files
+    -   id: check-added-large-files
         exclude: ^qa/web/tests/visual/fixtures/  # Allow large fixture files (NHL API data)
-      - id: check-merge-conflict
-      - id: check-case-conflict
-      - id: destroyed-symlinks
+    -   id: check-merge-conflict
+    -   id: check-case-conflict
+    -   id: destroyed-symlinks
 
       # Executable checks
-      - id: check-shebang-scripts-are-executable
+    -   id: check-shebang-scripts-are-executable
 
   # ============================================================================
   # Python Quality - Code Pattern Checks
   # ============================================================================
 
-  - repo: https://github.com/pre-commit/pygrep-hooks
+-   repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
       # Python code quality checks
-      - id: python-check-blanket-noqa
-      - id: python-check-blanket-type-ignore
-      - id: python-check-mock-methods
-      - id: python-no-eval
-      - id: python-no-log-warn
-      - id: python-use-type-annotations
+    -   id: python-check-blanket-noqa
+    -   id: python-check-blanket-type-ignore
+    -   id: python-check-mock-methods
+    -   id: python-no-eval
+    -   id: python-no-log-warn
+    -   id: python-use-type-annotations
 
       # Text content checks
-      - id: text-unicode-replacement-char
+    -   id: text-unicode-replacement-char
 
   # ============================================================================
   # Sensitive Information Prevention - Custom Content Checks
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-sensitive-strings
+    -   id: check-sensitive-strings
         name: Check for sensitive strings
-        description: Prevent commits containing sensitive corporate/personal identifiers
+        description: Prevent commits containing sensitive corporate/personal 
+            identifiers
         entry: '(?i)(red\s*hat|bperkins)'
         language: pygrep
         types: [text]
@@ -138,17 +139,17 @@ repos:
   # Python Imports - Import Organization
   # ============================================================================
 
-  - repo: https://github.com/pycqa/isort
+-   repo: https://github.com/pycqa/isort
     rev: 9.0.1  # ci: autoupdate-freeze (9.0.0a3 has breaking formatting)
     hooks:
-      - id: isort
+    -   id: isort
         # Comprehensive import sorting (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
-  - repo: https://github.com/MarcoGorelli/absolufy-imports
+-   repo: https://github.com/MarcoGorelli/absolufy-imports
     rev: v0.3.1
     hooks:
-      - id: absolufy-imports
+    -   id: absolufy-imports
         # Convert relative imports to absolute (matches ruff's ALL rules philosophy)
         args: [--application-directories=src]
         files: ^src/
@@ -157,10 +158,10 @@ repos:
   # Configuration Formatting - pyproject.toml
   # ============================================================================
 
-  - repo: https://github.com/tox-dev/pyproject-fmt
+-   repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.29.3
     hooks:
-      - id: pyproject-fmt
+    -   id: pyproject-fmt
         name: pyproject-fmt
         description: Format pyproject.toml
         # Auto-fix enabled (modifies file in place)
@@ -170,44 +171,44 @@ repos:
   # Project Validation - Configuration Validation
   # ============================================================================
 
-  - repo: https://github.com/abravalheri/validate-pyproject
+-   repo: https://github.com/abravalheri/validate-pyproject
     rev: '0.26'
     hooks:
-      - id: validate-pyproject
+    -   id: validate-pyproject
         # Comprehensive validation (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
-  - repo: https://github.com/regebro/pyroma
+-   repo: https://github.com/regebro/pyroma
     rev: "5.1b1"
     hooks:
-      - id: pyroma
+    -   id: pyroma
         # Comprehensive Python package metadata quality check (matches ruff's ALL rules philosophy)
         args: ['-d', '.']
 
-  - repo: https://github.com/tox-dev/tox-ini-fmt
+-   repo: https://github.com/tox-dev/tox-ini-fmt
     rev: 1.9.0
     hooks:
       # Comprehensive tox.ini formatting (matches ruff's ALL rules philosophy)
       # Formats tox.ini to a standard, consistent structure
-      - id: tox-ini-fmt
+    -   id: tox-ini-fmt
 
   # ============================================================================
   # Package Validation - Wheel Contents
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-wheel-contents
+    -   id: check-wheel-contents
         name: check wheel contents
         description: Validate Python wheel package contents
         entry: >
-          bash -c 'rm -rf build/ dist/ &&
-          python -m build --wheel &&
-          check-wheel-contents dist/*.whl --ignore W002 --toplevel nhl_scrabble'
+            bash -c 'rm -rf build/ dist/ &&
+            python -m build --wheel &&
+            check-wheel-contents dist/*.whl --ignore W002 --toplevel nhl_scrabble'
         language: python
         additional_dependencies:
-          - build
-          - check-wheel-contents>=0.6.0
+        -   build
+        -   check-wheel-contents>=0.6.0
         pass_filenames: false
         # Only run when wheel-related files change
         files: ^(pyproject\.toml|setup\.py|MANIFEST\.in|src/.*\.py)$
@@ -217,10 +218,10 @@ repos:
   # YAML Linting - YAML File Validation
   # ============================================================================
 
-  - repo: https://github.com/adrienverge/yamllint
+-   repo: https://github.com/adrienverge/yamllint
     rev: v1.38.0
     hooks:
-      - id: yamllint
+    -   id: yamllint
         # Comprehensive YAML linting (matches ruff's ALL rules philosophy)
         args: []  # Config is in .yamllint
 
@@ -228,53 +229,45 @@ repos:
   # JSON/YAML Schema Validation - Schema Compliance Checks
   # ============================================================================
 
-  - repo: https://github.com/python-jsonschema/check-jsonschema
+-   repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.38.0
     hooks:
       # GitHub Actions workflows
-      - id: check-github-workflows
+    -   id: check-github-workflows
         name: check GitHub Actions workflows
         description: Validate GitHub workflow files against official schema
         args: [--verbose]
 
       # Dependabot configuration
-      - id: check-dependabot
+    -   id: check-dependabot
         name: check Dependabot config
         description: Validate Dependabot config against official schema
         args: [--verbose]
 
       # Codecov configuration
-      - id: check-jsonschema
+    -   id: check-jsonschema
         name: check Codecov config
         description: Validate .codecov.yml against Codecov schema
         files: ^\.codecov\.ya?ml$
-        args:
-          [
-            --schemafile,
-            https://json.schemastore.org/codecov.json,
-            --verbose,
-          ]
+        args: [--schemafile, https://json.schemastore.org/codecov.json, 
+                --verbose]
 
       # Pre-commit configuration
-      - id: check-jsonschema
+    -   id: check-jsonschema
         name: check pre-commit config
         description: Validate .pre-commit-config.yaml against schema
         files: ^\.pre-commit-config\.ya?ml$
-        args:
-          [
-            --schemafile,
-            https://json.schemastore.org/pre-commit-config.json,
-            --verbose,
-          ]
+        args: [--schemafile, https://json.schemastore.org/pre-commit-config.json,
+            --verbose]
 
   # ============================================================================
   # Spelling - Code and Documentation Spell Checking
   # ============================================================================
 
-  - repo: https://github.com/codespell-project/codespell
+-   repo: https://github.com/codespell-project/codespell
     rev: v2.4.3
     hooks:
-      - id: codespell
+    -   id: codespell
         # Ignore: aNULL (OpenSSL), foreign language words in i18n docs
         args: ['-L', 'aNULL,Avantage,avantage,Presse,Tre,Januar']
         exclude: ^docs/reference/api/  # Exclude generated API docs
@@ -283,42 +276,43 @@ repos:
   # Markdown - Markdown Linting and Formatting
   # ============================================================================
 
-  - repo: https://github.com/jackdewinter/pymarkdown
+-   repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.39
     hooks:
-      - id: pymarkdown
+    -   id: pymarkdown
         args: [scan]  # Config is in pyproject.toml
         # Exclude GitHub issue templates (YAML frontmatter incompatible)
         # Exclude tasks (Python code examples trigger MD011 false positives)
         exclude: ^(\.github/ISSUE_TEMPLATE/|tasks/)
 
-  - repo: https://github.com/executablebooks/mdformat
+-   repo: https://github.com/executablebooks/mdformat
     rev: 1.0.0
     hooks:
-      - id: mdformat
+    -   id: mdformat
         # Comprehensive markdown formatting (matches ruff's ALL rules philosophy)
         additional_dependencies:
-          - mdformat-black  # Code block formatting
-          - mdformat-gfm  # GitHub Flavored Markdown support
-          - mdformat-ruff  # Python code block linting integration
-          - mdformat-web  # HTML/CSS/JS block formatting
+        -   mdformat-black  # Code block formatting
+        -   mdformat-gfm  # GitHub Flavored Markdown support
+        -   mdformat-ruff  # Python code block linting integration
+        -   mdformat-web  # HTML/CSS/JS block formatting
         args: []  # Config is in pyproject.toml
         # Exclude files with pseudo-code and generated docs (matches blacken-docs)
-        exclude: ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md|tasks/|\.claude/commands/|docs/(how-to/(run-tests|migrate-csv-exporter|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/|testing/))
+        exclude: 
+            ^(\.github/ISSUE_TEMPLATE/|docs/reference/cli-generated\.md|tasks/|\.claude/commands/|docs/(how-to/(run-tests|migrate-csv-exporter|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/|testing/))
 
   # ============================================================================
   # HTML/Template Linting - djlint for HTML and Jinja2 Templates
   # ============================================================================
 
-  - repo: https://github.com/Riverside-Healthcare/djLint
+-   repo: https://github.com/Riverside-Healthcare/djLint
     rev: v1.46.0
     hooks:
-      - id: djlint-reformat-jinja
+    -   id: djlint-reformat-jinja
         name: djlint (reformat Jinja2 templates)
         description: Lint and format HTML templates with Jinja2 syntax
         # Reformat automatically
 
-      - id: djlint-jinja
+    -   id: djlint-jinja
         name: djlint (check Jinja2 templates)
         description: Lint HTML templates with Jinja2 syntax
         # Check only (don't auto-fix)
@@ -327,126 +321,123 @@ repos:
   # Documentation - RST File Linting and Validation
   # ============================================================================
 
-  - repo: https://github.com/PyCQA/doc8
+-   repo: https://github.com/PyCQA/doc8
     rev: v2.0.0
     hooks:
-      - id: doc8
+    -   id: doc8
         # Comprehensive RST documentation linting (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
         files: \.(rst|txt)$
 
-  - repo: https://github.com/rstcheck/rstcheck
+-   repo: https://github.com/rstcheck/rstcheck
     rev: v6.3.0
     hooks:
-      - id: rstcheck
+    -   id: rstcheck
         # Comprehensive RST syntax checking (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
         additional_dependencies: [sphinx]
 
-  - repo: https://github.com/asottile/blacken-docs
+-   repo: https://github.com/asottile/blacken-docs
     rev: 1.20.0
     hooks:
-      - id: blacken-docs
+    -   id: blacken-docs
         # Format code blocks in documentation (RST, Markdown)
         # Exclude files with pseudo-code, doctest examples, and files that conflict with mdformat
         args: [--line-length=100]
-        additional_dependencies: [black==26.3.1]
-        exclude: ^(tasks/|\.claude/commands/|docs/(how-to/(run-tests|migrate-csv-exporter|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/))
+        additional_dependencies: [black==26.5.1]
+        exclude: 
+            ^(tasks/|\.claude/commands/|docs/(how-to/(run-tests|migrate-csv-exporter|build-documentation)\.md|tutorials/01-getting-started\.md|explanation/|contributing/))
 
-  - repo: https://github.com/econchick/interrogate
+-   repo: https://github.com/econchick/interrogate
     rev: 1.7.0
     hooks:
-      - id: interrogate
+    -   id: interrogate
         # Comprehensive docstring coverage checking (matches ruff's ALL rules philosophy)
         # Requires 100% docstring coverage for all Python code
         args: []  # Config is in pyproject.toml
         pass_filenames: false  # Check entire project for coverage percentage
 
-  - repo: https://github.com/PyCQA/pydocstyle
+-   repo: https://github.com/PyCQA/pydocstyle
     rev: 6.3.0
     hooks:
-      - id: pydocstyle
+    -   id: pydocstyle
         # Comprehensive docstring style checking (matches ruff's ALL rules philosophy)
         # Checks docstring format and style per PEP 257
         args: []  # Config is in pyproject.toml
         additional_dependencies: [tomli]  # Required to read pyproject.toml
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-file-size
+    -   id: check-file-size
         name: Check Python File Size
         entry: ./scripts/check_file_size.sh
         language: script
         files: \.py$
 
-  - repo: https://github.com/osprey-oss/deptry
+-   repo: https://github.com/osprey-oss/deptry
     rev: 0.25.1  # ci: autoupdate-freeze (0.25.1 requires Rust 1.94, system has 1.93.1)
     hooks:
-      - id: deptry
+    -   id: deptry
         # Comprehensive dependency checker (matches ruff's ALL rules philosophy)
         # Detects: obsolete, missing, transitive, and misplaced dev dependencies
         args: [.]  # Additional config in pyproject.toml
         exclude: ^qa/  # Exclude QA directory (separate package)
         language: python
 
-  - repo: https://github.com/hakancelikdev/unimport
+-   repo: https://github.com/hakancelikdev/unimport
     rev: 1.4.0
     hooks:
-      - id: unimport
+    -   id: unimport
         language_version: python3.12  # Force Python 3.12 to prevent caching issues
         # Comprehensive unused import checker (matches ruff's ALL rules philosophy)
         # Finds and reports unused import statements
         args: [--check, --diff]  # Additional config in pyproject.toml
 
-  - repo: https://github.com/jendrikseipp/vulture
+-   repo: https://github.com/jendrikseipp/vulture
     rev: v2.16
     hooks:
-      - id: vulture
+    -   id: vulture
         # Comprehensive dead code detection (matches ruff's ALL rules philosophy)
         # Finds unused functions, classes, variables, imports, and properties
         args: [src, .vulture_allowlist]  # Config is in pyproject.toml, allowlist for public APIs
 
-  - repo: https://github.com/PrincetonUniversity/blocklint
+-   repo: https://github.com/PrincetonUniversity/blocklint
     rev: v0.3.0
     hooks:
-      - id: blocklint
+    -   id: blocklint
         # Comprehensive inclusive language checker (matches ruff's ALL rules philosophy)
         # Detects non-inclusive terminology related to hierarchical and access control terms
         # Promotes respectful and inclusive code and documentation
-        args:
-          [
-            --skip-files,
-            ".git,.tox,.venv,venv,build,dist,*.egg-info,__pycache__,coverage.xml,htmlcov,.coverage,.pytest_cache,.mypy_cache,.ruff_cache,*.log,*.tmp",
-          ]
+        args: [--skip-files, ".git,.tox,.venv,venv,build,dist,*.egg-info,__pycache__,coverage.xml,htmlcov,.coverage,.pytest_cache,.mypy_cache,.ruff_cache,*.log,*.tmp"]
 
   # ============================================================================
   # UV - Dependency Lock File Management
   # ============================================================================
 
   # Validate lock files are up-to-date with pyproject.toml
-  - repo: https://github.com/astral-sh/uv-pre-commit
+-   repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.12.10  # ci: autoupdate-freeze (0.11.7 not available in PyPI mirror yet)
     hooks:
-      - id: uv-lock
+    -   id: uv-lock
 
   # Auto-upgrade lock files when dependencies change (local only)
-  - repo: local
+-   repo: local
     hooks:
-      - id: upgrade-lock-files
+    -   id: upgrade-lock-files
         name: Upgrade UV lock files when dependencies change
         # Automatically upgrades both main and QA web app lock files to latest
         # compatible versions when pyproject.toml is modified (local dev only).
         # In CI, the hook only validates that lock files are up-to-date.
         description: |
-          Upgrade UV lock files to latest compatible versions:
-          - Main project: uv.lock
-          - QA web app: qa/web/uv.lock
-          Local: Upgrades lock files when pyproject.toml changes
-          CI: Only validates lock files are current (no modifications)
+            Upgrade UV lock files to latest compatible versions:
+            - Main project: uv.lock
+            - QA web app: qa/web/uv.lock
+            Local: Upgrades lock files when pyproject.toml changes
+            CI: Only validates lock files are current (no modifications)
         entry: >-
-          bash -c 'if [ -n "${CI:-}" ]; then
-          bash scripts/upgrade_lock_files.sh --check;
-          else bash scripts/upgrade_lock_files.sh --upgrade; fi'
+            bash -c 'if [ -n "${CI:-}" ]; then
+            bash scripts/upgrade_lock_files.sh --check;
+            else bash scripts/upgrade_lock_files.sh --upgrade; fi'
         language: system
         pass_filenames: false
         # Only run when pyproject.toml changes (not lock files themselves)
@@ -457,10 +448,10 @@ repos:
   # Python Linting - Code Quality Checks
   # ============================================================================
 
-  - repo: https://github.com/pycqa/flake8
+-   repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
-      - id: flake8
+    -   id: flake8
         # Comprehensive linting (matches ruff's ALL rules philosophy)
         additional_dependencies: [flake8-pyproject]
         args: []  # Config is in pyproject.toml via flake8-pyproject
@@ -469,15 +460,15 @@ repos:
   # Python Formatting - Code and Docstring Formatting
   # ============================================================================
 
-  - repo: https://github.com/asottile/pyupgrade
+-   repo: https://github.com/asottile/pyupgrade
     rev: v3.21.2
     hooks:
-      - id: pyupgrade
+    -   id: pyupgrade
         name: pyupgrade
         # Modernize Python syntax for Python 3.12+ (project minimum version)
         description: Automatically upgrade syntax for newer Python versions
         args:
-          - --py312-plus  # Target Python 3.12+ syntax (matches requires-python)
+        -   --py312-plus  # Target Python 3.12+ syntax (matches requires-python)
 
   # ============================================================================
   # Python Modernization - Semantic Code Improvements
@@ -487,26 +478,26 @@ repos:
   # Complements pyupgrade (syntax) with semantic improvements
   # Docs: https://github.com/dosisod/refurb
 
-  - repo: https://github.com/dosisod/refurb
+-   repo: https://github.com/dosisod/refurb
     rev: v2.3.1
     hooks:
-      - id: refurb
+    -   id: refurb
         # Comprehensive code modernization (matches ruff's ALL rules philosophy)
         # Blocking: Enforces modern Python idioms and patterns
         # Configuration is read automatically from pyproject.toml
         args: ["--enable-all"]
         files: ^src/
         additional_dependencies:
-          - pydantic>=2.0  # Required for mypy plugin support
+        -   pydantic>=2.0  # Required for mypy plugin support
 
   # ============================================================================
   # Python Statement Sorting - Class Member Organization
   # ============================================================================
 
-  - repo: https://github.com/bwhmather/ssort
+-   repo: https://github.com/bwhmather/ssort
     rev: 0.17.0
     hooks:
-      - id: ssort
+    -   id: ssort
         name: ssort
         # Comprehensive Python statement sorting (matches ruff's ALL rules philosophy)
         # Automatically sorts class members (dunder, classmethod, property, public, private)
@@ -516,31 +507,26 @@ repos:
         # Exclude files where order matters
         exclude: ^(tests/fixtures/|migrations/)
 
-  - repo: https://github.com/PyCQA/autoflake
+-   repo: https://github.com/PyCQA/autoflake
     rev: v2.4.0
     hooks:
-      - id: autoflake
+    -   id: autoflake
         # Comprehensive unused import/variable removal (matches ruff's ALL rules philosophy)
         # Aligns with ruff's F401 (unused imports) and F841 (unused variables) rules
-        args:
-          [
-            --in-place,
-            --remove-all-unused-imports,
-            --remove-unused-variables,
-            --remove-duplicate-keys,
-            --ignore-init-module-imports,
-          ]
+        args: [--in-place, --remove-all-unused-imports, 
+                --remove-unused-variables, --remove-duplicate-keys, 
+                --ignore-init-module-imports]
 
-  - repo: https://github.com/psf/black-pre-commit-mirror
+-   repo: https://github.com/psf/black-pre-commit-mirror
     rev: 26.5.1
     hooks:
-      - id: black
+    -   id: black
         # Comprehensive Python code formatting (matches ruff's ALL rules philosophy)
         args: []  # Config is in pyproject.toml
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-branch-protection
+    -   id: check-branch-protection
         name: Check Branch Protection
         # Warn when committing directly to main/master
         description: Warn about committing to protected branches
@@ -550,10 +536,10 @@ repos:
         pass_filenames: false
         stages: [pre-commit]
 
-  - repo: https://github.com/PyCQA/docformatter
+-   repo: https://github.com/PyCQA/docformatter
     rev: v1.7.8  # ci: autoupdate-freeze (1.7.8 removes blank lines, conflicts with flake8)
     hooks:
-      - id: docformatter
+    -   id: docformatter
         # Comprehensive docstring formatting (matches ruff's ALL rules philosophy)
         args: [--in-place, --wrap-summaries, "100", --wrap-descriptions, "100"]
         exclude: ^src/nhl_scrabble/formatters/html_formatter\.py$  # Contains HTML template strings
@@ -562,19 +548,19 @@ repos:
   # Python Formatting - Trailing Commas
   # ============================================================================
 
-  - repo: https://github.com/asottile/add-trailing-comma
+-   repo: https://github.com/asottile/add-trailing-comma
     rev: v4.0.0
     hooks:
-      - id: add-trailing-comma
+    -   id: add-trailing-comma
         name: add-trailing-comma
         # Add trailing commas to multi-line Python structures for better diffs
         # Run after black but before ruff-format
         description: Add trailing commas to Python structures
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
+-   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.6  # ci: autoupdate-freeze (0.15.12 not available in PyPI mirror yet)
     hooks:
-      - id: ruff-check
+    -   id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
         # NOTE: ruff-format disabled - using black as authoritative formatter
         # to avoid formatting conflicts between black and ruff on assert statements
@@ -584,21 +570,17 @@ repos:
   # Python Security - Security Vulnerability Detection
   # ============================================================================
 
-  - repo: https://github.com/PyCQA/bandit
+-   repo: https://github.com/PyCQA/bandit
     rev: 1.9.4
     hooks:
-      - id: bandit
+    -   id: bandit
         name: bandit
         # Comprehensive security vulnerability detection (matches ruff's ALL rules philosophy)
         # Detects: SQL injection, hardcoded secrets, weak crypto, shell injection, unsafe YAML
         description: Security vulnerability detection for Python code
         additional_dependencies: ["bandit[toml]"]
-        args:
-          [
-            --configfile, pyproject.toml,
-            --severity-level, medium,
-            --confidence-level, medium,
-          ]
+        args: [--configfile, pyproject.toml, --severity-level, medium, 
+                --confidence-level, medium]
         # Skip tests directory (test code uses assert, mock patterns)
         exclude: ^tests/
 
@@ -606,19 +588,15 @@ repos:
   # Python Security - Dependency Vulnerability Scanning
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: safety
+    -   id: safety
         name: safety
         # Comprehensive dependency vulnerability scanning (matches ruff's ALL rules philosophy)
         # Scans installed packages against CVE databases for known vulnerabilities
         description: Scan dependencies for known security vulnerabilities
         entry: safety
-        args:
-          [
-            check,
-            --continue-on-error,  # Don't block commit, just warn
-          ]
+        args: [check, --continue-on-error]
         language: system
         pass_filenames: false
         # Only run when dependency files change
@@ -628,22 +606,22 @@ repos:
   # Type Checking - Static Type Analysis
   # ============================================================================
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
+-   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v2.3.1  # ci: autoupdate-freeze (1.20.2 not available in PyPI mirror yet)
     hooks:
-      - id: mypy
+    -   id: mypy
         additional_dependencies:
-          - types-requests
-          - types-PyYAML
-          - types-tabulate
-          - pydantic
-          - pydantic-settings
-          - rich
-          - jinja2
-          - fastapi
-          - starlette
-          - uvicorn
-          - tabulate
+        -   types-requests
+        -   types-PyYAML
+        -   types-tabulate
+        -   pydantic
+        -   pydantic-settings
+        -   rich
+        -   jinja2
+        -   fastapi
+        -   starlette
+        -   uvicorn
+        -   tabulate
         args: []  # Config is in pyproject.toml
         exclude: ^(qa|tests|scripts)/  # Exclude QA, tests, and utility scripts
 
@@ -656,9 +634,9 @@ repos:
   # Uses local hook (no official pre-commit repo yet, see: github.com/astral-sh/ty/issues/269)
   # Docs: https://docs.astral.sh/ty/
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: ty
+    -   id: ty
         name: ty - Astral type checker (validation mode - non-blocking)
         entry: bash -c 'ty check src || true'
         language: system
@@ -673,10 +651,10 @@ repos:
   # Git Commit Messages - Commit Message Linting
   # ============================================================================
 
-  - repo: https://github.com/jorisroovers/gitlint
+-   repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:
-      - id: gitlint
+    -   id: gitlint
         # Comprehensive commit message linting (matches ruff's ALL rules philosophy)
         # Enforces consistent commit message style and documentation
         # Config is in .gitlint file
@@ -686,9 +664,9 @@ repos:
   # Documentation Generation - Auto-Generated Documentation Check
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-generated-docs
+    -   id: check-generated-docs
         name: Check generated documentation is up-to-date
         # Ensures API and CLI reference docs are regenerated after code changes
         description: Verify auto-generated documentation matches current code
@@ -703,18 +681,18 @@ repos:
   # Version Validation - Dynamic Versioning Consistency
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-version-consistency
+    -   id: check-version-consistency
         name: Check version consistency (hatch-vcs)
         # Validates version configuration for hatch-vcs dynamic versioning
         # Prevents common version-related errors before they reach CI
         description: |
-          Validate version configuration for hatch-vcs dynamic versioning:
-          - Auto-generated _version.py not committed
-          - pyproject.toml has dynamic = ["version"]
-          - No hardcoded version strings in key files
-          - Git tags follow semantic versioning (vX.Y.Z)
+            Validate version configuration for hatch-vcs dynamic versioning:
+            - Auto-generated _version.py not committed
+            - pyproject.toml has dynamic = ["version"]
+            - No hardcoded version strings in key files
+            - Git tags follow semantic versioning (vX.Y.Z)
         entry: python .pre-commit-hooks/check-version-consistency.py
         language: system
         pass_filenames: false
@@ -725,59 +703,60 @@ repos:
   # Task Documentation Validation - Consistency Checks
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: validate-task-docs
+    -   id: validate-task-docs
         name: Validate task documentation consistency
         # Ensures task counts match across README.md, IMPLEMENTATION_SEQUENCE.md, and filesystem
         description: |
-          Validate task documentation consistency:
-          - Filesystem task counts match tasks/README.md
-          - tasks/IMPLEMENTATION_SEQUENCE.md matches filesystem
-          - No orphaned or duplicate task files
-          - Prevents documentation drift
+            Validate task documentation consistency:
+            - Filesystem task counts match tasks/README.md
+            - tasks/IMPLEMENTATION_SEQUENCE.md matches filesystem
+            - No orphaned or duplicate task files
+            - Prevents documentation drift
         entry: python scripts/validate_task_docs.py
         language: python
         pass_filenames: false
         # Only run if task files or documentation changed
-        files: ^tasks/(README\.md|IMPLEMENTATION_SEQUENCE\.md|TASK_ANALYSIS\.md|[^/]+/[0-9]+.*\.md|completed/.*/[0-9]+.*\.md)$
+        files: 
+            ^tasks/(README\.md|IMPLEMENTATION_SEQUENCE\.md|TASK_ANALYSIS\.md|[^/]+/[0-9]+.*\.md|completed/.*/[0-9]+.*\.md)$
         stages: [pre-commit]
 
   # ============================================================================
   # Shell Script Quality - Formatting & Linting
   # ============================================================================
 
-  - repo: https://github.com/lovesegfault/beautysh
+-   repo: https://github.com/lovesegfault/beautysh
     rev: v6.4.3
     hooks:
-      - id: beautysh
+    -   id: beautysh
         name: beautysh - Format Bash scripts
         # Auto-format Bash scripts with consistent style
         description: |
-          Python-based Bash beautifier for consistent code style:
-          - 2-space indentation (project standard)
-          - Standardized spacing around operators
-          - Aligned continuation lines
-          - Function style enforcement (fnonly = function name, bashate-compliant)
+            Python-based Bash beautifier for consistent code style:
+            - 2-space indentation (project standard)
+            - Standardized spacing around operators
+            - Aligned continuation lines
+            - Function style enforcement (fnonly = function name, bashate-compliant)
         args: ["--indent-size", "2", "--force-function-style", "fnonly"]
         files: \.sh$
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: bashate
+    -   id: bashate
         name: bashate - Bash style checker
         # Check Bash scripts for style violations and syntax errors
         description: |
-          OpenStack Bash style checker (Python) for detecting style violations:
-          - Trailing whitespace, tab indentation
-          - Files must end with newline
-          - Line length limit (100 chars, matching Python)
-          - Consistent do/then placement
-          - Syntax error detection
+            OpenStack Bash style checker (Python) for detecting style violations:
+            - Trailing whitespace, tab indentation
+            - Files must end with newline
+            - Line length limit (100 chars, matching Python)
+            - Consistent do/then placement
+            - Syntax error detection
 
-          Ignores:
-          - E003: Indent not multiple of 4 (we use 2 spaces)
-          - E006: Line starting with space (allow for alignment)
+            Ignores:
+            - E003: Indent not multiple of 4 (we use 2 spaces)
+            - E006: Line starting with space (allow for alignment)
         entry: bashate
         language: python
         additional_dependencies: ["bashate>=2.1.1"]
@@ -788,101 +767,101 @@ repos:
   # Shell Script Security - Bash Best Practices
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: bash-check-set-errexit
+    -   id: bash-check-set-errexit
         name: Bash - require error handling (set -e/-u/-o pipefail)
         # Ensure scripts use proper error handling flags
         description: |
-          Ensure scripts use proper error handling flags.
-          Scripts should start with: set -euo pipefail
-          - set -e: Exit on error
-          - set -u: Exit on undefined variable
-          - set -o pipefail: Exit on pipe failures
+            Ensure scripts use proper error handling flags.
+            Scripts should start with: set -euo pipefail
+            - set -e: Exit on error
+            - set -u: Exit on undefined variable
+            - set -o pipefail: Exit on pipe failures
         entry: '^(?!.*set\s+-[euo]|.*set\s+-o\s+(errexit|nounset|pipefail))'
         language: pygrep
         files: \.sh$
         args: ["--negate"]
 
-      - id: bash-no-eval
+    -   id: bash-no-eval
         name: Bash - prohibit eval usage
         # Detect dangerous eval usage (security risk)
         description: |
-          Detect dangerous eval usage (code injection risk).
-          eval executes arbitrary code and should be avoided.
-          Use arrays or explicit parameter expansion instead.
+            Detect dangerous eval usage (code injection risk).
+            eval executes arbitrary code and should be avoided.
+            Use arrays or explicit parameter expansion instead.
         entry: '\beval\b'
         language: pygrep
         files: \.sh$
 
-      - id: bash-check-curl-fail
+    -   id: bash-check-curl-fail
         name: Bash - ensure curl uses --fail flag
         # curl should use --fail to catch HTTP errors
         description: |
-          curl should use --fail to catch HTTP errors.
-          Without --fail, curl succeeds even on HTTP 404/500 errors.
-          Add --fail to make curl exit non-zero on HTTP errors.
+            curl should use --fail to catch HTTP errors.
+            Without --fail, curl succeeds even on HTTP 404/500 errors.
+            Add --fail to make curl exit non-zero on HTTP errors.
         entry: 'curl\s+(?!.*--fail)'
         language: pygrep
         files: \.sh$
 
-      - id: bash-check-wget-quiet
+    -   id: bash-check-wget-quiet
         name: Bash - ensure wget uses --quiet/-q flag
         # wget should use --quiet for cleaner CI output
         description: |
-          wget should use --quiet for cleaner CI output.
-          Add --quiet or -q to suppress verbose progress output.
+            wget should use --quiet for cleaner CI output.
+            Add --quiet or -q to suppress verbose progress output.
         entry: 'wget\s+(?!.*(-q|--quiet))'
         language: pygrep
         files: \.sh$
 
-      - id: bash-no-hardcoded-tmp
+    -   id: bash-no-hardcoded-tmp
         name: Bash - no hardcoded /tmp paths
         # Use $TMPDIR or mktemp instead of hardcoded /tmp
         description: |
-          Use $TMPDIR or mktemp instead of hardcoded /tmp.
-          Hardcoded /tmp paths are not portable and may have permission issues.
-          Use: mktemp or ${TMPDIR:-/tmp}
+            Use $TMPDIR or mktemp instead of hardcoded /tmp.
+            Hardcoded /tmp paths are not portable and may have permission issues.
+            Use: mktemp or ${TMPDIR:-/tmp}
         entry: '(?<!#).*(?<!\$)\b/tmp/'
         language: pygrep
         files: \.sh$
 
-      - id: bash-prefer-command-substitution
+    -   id: bash-prefer-command-substitution
         name: Bash - prefer $() over backticks
         # Use modern command substitution syntax $() instead of backticks
         description: |
-          Use modern command substitution syntax $() instead of backticks.
-          $() is more readable, nestable, and easier to escape.
-          Modern: result=$(command)
-          Deprecated: result=`command`
+            Use modern command substitution syntax $() instead of backticks.
+            $() is more readable, nestable, and easier to escape.
+            Modern: result=$(command)
+            Deprecated: result=`command`
         entry: '`[^`]+`'
         language: pygrep
         files: \.sh$
 
-      - id: bash-prefer-modern-test
+    -   id: bash-prefer-modern-test
         name: Bash - prefer [[ ]] over [ ]
         # Use modern test syntax [[ ]] for better safety
         description: |
-          Use modern test syntax [[ ]] for better safety.
-          [[ ]] prevents word splitting, supports pattern matching,
-          and has more consistent behavior than [ ].
-          Modern: [[ "$var" == "value" ]]
-          Old: [ "$var" = "value" ]
+            Use modern test syntax [[ ]] for better safety.
+            [[ ]] prevents word splitting, supports pattern matching,
+            and has more consistent behavior than [ ].
+            Modern: [[ "$var" == "value" ]]
+            Old: [ "$var" = "value" ]
         entry: '(?<!#)(?<!\[)\[\s+'
         language: pygrep
         files: \.sh$
 
-      - id: bash-check-quoted-variables
+    -   id: bash-check-quoted-variables
         name: Bash - check for potentially unquoted variables
         # Variables should generally be quoted to prevent word splitting
         description: |
-          Variables should generally be quoted to prevent word splitting.
-          Unquoted variables can cause unexpected behavior with spaces.
-          Safe: "$VARIABLE"
-          Risky: $VARIABLE
-          This is informational - may have false positives.
+            Variables should generally be quoted to prevent word splitting.
+            Unquoted variables can cause unexpected behavior with spaces.
+            Safe: "$VARIABLE"
+            Risky: $VARIABLE
+            This is informational - may have false positives.
 
-          Excludes: assignments, command substitutions, braced syntax, and escaped variables.
+            Excludes: assignments, command substitutions, braced syntax, and escaped variables.
         entry: '(?<![\w"=\\])\$[A-Z_][A-Z0-9_]*(?![}\"\[])'
         language: pygrep
         files: \.sh$
@@ -891,40 +870,40 @@ repos:
   # Shell Script Documentation - Completeness Checks
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: check-bash-docs
+    -   id: check-bash-docs
         name: Check Bash script documentation
         # Validate Bash script documentation completeness
         description: |
-          Validate Bash script documentation completeness:
-          - File headers with purpose/description
-          - Usage documentation for scripts with arguments
-          - Function documentation
-          - Exit code documentation
-          - Dependency documentation
+            Validate Bash script documentation completeness:
+            - File headers with purpose/description
+            - Usage documentation for scripts with arguments
+            - Function documentation
+            - Exit code documentation
+            - Dependency documentation
 
-          Ensures all Bash scripts are properly documented.
+            Ensures all Bash scripts are properly documented.
         entry: python scripts/check_bash_docs.py
         language: python
         pass_filenames: false
         files: \.sh$
 
-      - id: check-bash-deps
+    -   id: check-bash-deps
         name: Check Bash script dependencies
         # Detect and validate external command dependencies
         description: |
-          Detect and validate external command dependencies.
-          Identifies external commands used and checks if
-          scripts validate command availability before use.
+            Detect and validate external command dependencies.
+            Identifies external commands used and checks if
+            scripts validate command availability before use.
 
-          Suggests adding availability checks like:
-            if ! command -v COMMAND &> /dev/null; then
-                echo "Error: COMMAND not found" >&2
-                exit 1
-            fi
+            Suggests adding availability checks like:
+              if ! command -v COMMAND &> /dev/null; then
+                  echo "Error: COMMAND not found" >&2
+                  exit 1
+              fi
 
-          Manual run only (informational).
+            Manual run only (informational).
         entry: python scripts/check_bash_deps.py
         language: python
         pass_filenames: false
@@ -935,35 +914,35 @@ repos:
   # Translation Quality - I18n Validation
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: validate-po-files
+    -   id: validate-po-files
         name: Validate .po translation files
         # Validate .po files using msgfmt from gettext
         # Manual run only until duplicate msgid entries are resolved
         description: |
-          Validate .po translation files for syntax errors and
-          consistency issues using msgfmt from gettext package.
+            Validate .po translation files for syntax errors and
+            consistency issues using msgfmt from gettext package.
 
-          Checks:
-          - .po file syntax validity
-          - Placeholder consistency
-          - Format string correctness
-          - No duplicate msgid entries
+            Checks:
+            - .po file syntax validity
+            - Placeholder consistency
+            - Format string correctness
+            - No duplicate msgid entries
 
-          Known issue: All locales currently have duplicate
-          "Data as of" entry (needs investigation/resolution).
+            Known issue: All locales currently have duplicate
+            "Data as of" entry (needs investigation/resolution).
 
-          Fast validation (<1s per file) suitable for pre-commit.
-          For comprehensive i18n testing run:
-            pytest tests/unit/test_i18n_comprehensive.py
+            Fast validation (<1s per file) suitable for pre-commit.
+            For comprehensive i18n testing run:
+              pytest tests/unit/test_i18n_comprehensive.py
 
-          Usage:
-            pre-commit run validate-po-files --all-files
+            Usage:
+              pre-commit run validate-po-files --all-files
         entry: >-
-          bash -c 'for file in "$@"; do
-          msgfmt --check --statistics --verbose "$file" -o /dev/null || exit 1;
-          done' --
+            bash -c 'for file in "$@"; do
+            msgfmt --check --statistics --verbose "$file" -o /dev/null || exit 1;
+            done' --
         language: system
         files: \.po$
         pass_filenames: true
@@ -973,23 +952,23 @@ repos:
   # Security Scanning - CodeQL Analysis (Manual Run Only)
   # ============================================================================
 
-  - repo: local
+-   repo: local
     hooks:
-      - id: codeql-analyze
+    -   id: codeql-analyze
         name: CodeQL Security Analysis
         # CodeQL static security analysis for Python code
         # Manual run only due to performance (1-2 minutes per run)
         # Run before pushing with: pre-commit run codeql-analyze --hook-stage manual
         description: |
-          Run CodeQL security analysis locally before pushing to GitHub.
-          Catches security vulnerabilities early in development cycle.
-          Analysis time: ~1-2 minutes (too slow for auto-run)
+            Run CodeQL security analysis locally before pushing to GitHub.
+            Catches security vulnerabilities early in development cycle.
+            Analysis time: ~1-2 minutes (too slow for auto-run)
 
-          Usage:
-            pre-commit run codeql-analyze --hook-stage manual
-            OR: make codeql-check
+            Usage:
+              pre-commit run codeql-analyze --hook-stage manual
+              OR: make codeql-check
 
-          Requires: CodeQL CLI installed (make install-codeql)
+            Requires: CodeQL CLI installed (make install-codeql)
         entry: bash -c 'make codeql-check'
         language: system
         pass_filenames: false
